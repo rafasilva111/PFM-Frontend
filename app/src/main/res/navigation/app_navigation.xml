@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_navigation"
+    app:startDestination="@id/receitaListingFragment">
+
+    <fragment
+        android:id="@+id/receitaListingFragment"
+        android:name="com.example.projectfoodmanager.recipe.ReceitaListingFragment"
+        android:label="fragment_receita_listing"
+        tools:layout="@layout/fragment_receita_listing" >
+        <action
+            android:id="@+id/action_receitaListingFragment_to_receitaDetailFragment"
+            app:destination="@id/receitaDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/receitaDetailFragment"
+        android:name="com.example.projectfoodmanager.recipe.ReceitaDetailFragment"
+        android:label="fragment_receita_detail"
+        tools:layout="@layout/fragment_receita_detail" />
+
+</navigation>
