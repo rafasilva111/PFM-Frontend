@@ -7,8 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.projectfoodmanager.databinding.FragmentReceitaDetailBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ReceitaDetailFragment : Fragment() {
     val TAG: String = "ReceitaDetailFragment"
     lateinit var binding: FragmentReceitaDetailBinding

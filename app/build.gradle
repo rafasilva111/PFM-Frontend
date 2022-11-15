@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -48,7 +50,7 @@ dependencies {
 
     //fragment
     implementation 'androidx.fragment:fragment-ktx:1.5.4'
-    
+
     //Jetpack Navigation Component
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
@@ -63,4 +65,14 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.0.3')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-firestore:24.1.2'
+
+    //dagger hilt
+    implementation 'com.google.dagger:hilt-android:2.44.2'
+    kapt 'com.google.dagger:hilt-compiler:2.44.2'
+
+
+}
+
+kapt {
+    correctErrorTypes true
 }
