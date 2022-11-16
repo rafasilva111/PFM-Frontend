@@ -1,12 +1,13 @@
 package com.example.projectfoodmanager.recipe
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.util.UiState
 import com.example.projectfoodmanager.util.hide
@@ -21,9 +22,17 @@ class RecipeListingFragment : Fragment() {
     lateinit var binding: FragmentRecipeListingBinding
     val viewModel: RecipeViewModel by viewModels()
     val adapter by lazy {
-        NoteListingAdapter{
-            
-        }
+        RecipeListingAdapter(
+            onItemClicked = {pos,item ->
+
+            },
+            onDeleteClicked = {pos,item->
+
+            },
+            onEditClicked = { pos, item ->
+            }
+
+        )
     }
 
     override fun onCreateView(
@@ -37,6 +46,10 @@ class RecipeListingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.recyclerView.adapter = adapter
+        binding.button.setOnClickListener{
+            findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment)
+        }
         viewModel.getRecipes()
         viewModel.recipe.observe(viewLifecycleOwner){state ->
             when(state){
@@ -46,6 +59,7 @@ class RecipeListingFragment : Fragment() {
                 }
                 is UiState.Success -> {
                     binding.progressBar.hide()
+                    adapter.updateList(state.data.toMutableList())
                 }
                 is UiState.Failure -> {
                     binding.progressBar.hide()

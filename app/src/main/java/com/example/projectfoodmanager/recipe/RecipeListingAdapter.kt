@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.data.repository.models.Recipe
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 
-class NoteListingAdapter(
+class RecipeListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit,
     val onEditClicked: (Int, Recipe) -> Unit,
     val onDeleteClicked: (Int, Recipe) -> Unit
-) : RecyclerView.Adapter<NoteListingAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<RecipeListingAdapter.MyViewHolder>() {
 
     private var list: MutableList<Recipe> = arrayListOf()
 

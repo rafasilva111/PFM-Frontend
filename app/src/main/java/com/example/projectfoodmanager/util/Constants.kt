@@ -1,4 +1,5 @@
 package com.example.projectfoodmanager.util
 
-class Constants {
+object FireStoreTables {
+    val RECIPE ="recipe"
 }

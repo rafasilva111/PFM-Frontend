@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/receitaListingFragment"
-        android:name="com.example.projectfoodmanager.recipe.ReceitaListingFragment"
+        android:name="com.example.projectfoodmanager.recipe.RecipeListingFragment"
         android:label="fragment_receita_listing"
-        tools:layout="@layout/fragment_receita_listing" >
+        tools:layout="@layout/fragment_recipe_listing" >
         <action
             android:id="@+id/action_receitaListingFragment_to_receitaDetailFragment"
             app:destination="@id/receitaDetailFragment" />
@@ -17,8 +17,8 @@
 
     <fragment
         android:id="@+id/receitaDetailFragment"
-        android:name="com.example.projectfoodmanager.recipe.ReceitaDetailFragment"
+        android:name="com.example.projectfoodmanager.recipe.RecipeDetailFragment"
         android:label="fragment_receita_detail"
-        tools:layout="@layout/fragment_receita_detail" />
+        tools:layout="@layout/fragment_recipe_detail" />
 
 </navigation>
