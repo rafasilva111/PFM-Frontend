@@ -9,6 +9,13 @@ data class Recipe(
     val title: String = "",
     val description: String = "",
     val imageRef: String = "",
+    val preparacao: String = "",
+    val ingredients: String = "",
+    val tempPreparacao: String = "",
+    val difficulty: String= "",
+    val nrPersons: String="",
+    val remote_rating: String="",
+    val app_rating: String="",
     @ServerTimestamp
     val date: Date = Date(),
 )
