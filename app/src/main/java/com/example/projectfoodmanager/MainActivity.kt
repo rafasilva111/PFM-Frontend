@@ -6,8 +6,16 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.NavigationUI.setupWithNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.projectfoodmanager.databinding.ActivityMainMenuBinding
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
 import com.example.projectfoodmanager.ui.LoginActivity
@@ -23,48 +31,28 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainMenuBinding
+    private lateinit var binding: ActivityMainMenuBinding
+    private lateinit var bottomNav: BottomNavigationView
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
+
     val TAG: String = "ReceitaListingFragment"
     protected var session: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val ss:String = intent.getStringExtra("Key").toString()
-        this.session == "ss"
-        if (session != "value") {
-            startActivity(Intent(this, LoginActivity::class.java))
-        }
-
-
-
-
+        var ss:String = intent.getStringExtra("Key").toString()
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        replaceFragment(RecipeListingFragment())
-        binding.bottomNavigationView.setOnItemSelectedListener {
 
-            when (it.itemId) {
-
-                R.id.recipes ->replaceFragment(RecipeListingFragment())
-                R.id.calender ->replaceFragment(CalenderFragment())
-                R.id.favorites ->replaceFragment(FavoritesFragment())
-                R.id.goal ->replaceFragment(GoalFragment())
-                R.id.profile ->replaceFragment(ProfileFragment())
-                else -> {
-                    Log.d(TAG, "onCreate: ")
-                }
-            }
-            true
-        }
-
+        bottomNav = findViewById(R.id.bottomNavigationView)
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
+        navController = navHostFragment.navController
+        setupWithNavController(bottomNav,navController)
 
     }
 
-    private fun replaceFragment(fragment: Fragment){
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frameLayout,fragment)
-        fragmentTransaction.commit()
-    }
+
 
 }

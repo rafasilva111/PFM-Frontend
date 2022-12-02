@@ -1,5 +1,6 @@
 package com.example.projectfoodmanager.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
@@ -58,8 +60,9 @@ class RegisterFragment : Fragment() {
                     binding.registerBtn.setText("Register")
                     binding.registerProgress.hide()
                     toast(state.data)
-                    //todo
-                    //findNavController().navigate(R.id.action_registerFragment_to_receitaListingFragment)
+                    startActivity(Intent(this.context, MainActivity::class.java).apply {
+                        putExtra("Key", "value")
+                    })
                 }
             }
         }

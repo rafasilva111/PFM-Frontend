@@ -47,4 +47,8 @@ class AuthViewModel @Inject constructor(
             _login.value = it
         }
     }
+
+    fun getSession(result: (User?) -> Unit){
+        repository.getSession(result)
+    }
 }

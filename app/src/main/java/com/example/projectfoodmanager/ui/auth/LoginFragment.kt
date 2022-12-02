@@ -47,8 +47,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.registerLabel.setOnClickListener {
-            //todo
-            //findNavController().navigate(R.id. action_loginFragment_to_registerFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
     }
 
@@ -68,12 +67,22 @@ class LoginFragment : Fragment() {
                     binding.loginBtn.setText("Login")
                     binding.loginProgress.hide()
                     toast(state.data)
-
                     startActivity(Intent(this.context, MainActivity::class.java).apply {
                         putExtra("Key", "value")
                     })
                 }
             }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.getSession { user ->
+                if (user !=null){
+                    startActivity(Intent(this.context, MainActivity::class.java).apply {
+                        putExtra("Key", "value")
+                    })
+                }
         }
     }
 
