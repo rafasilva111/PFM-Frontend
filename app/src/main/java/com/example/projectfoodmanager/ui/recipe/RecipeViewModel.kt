@@ -1,11 +1,11 @@
-package com.example.projectfoodmanager.recipe
+package com.example.projectfoodmanager.ui.recipe
 
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.projectfoodmanager.data.repository.RecipeRepository
-import com.example.projectfoodmanager.data.repository.models.Recipe
+import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

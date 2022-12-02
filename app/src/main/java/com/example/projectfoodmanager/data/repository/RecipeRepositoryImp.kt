@@ -1,7 +1,7 @@
 package com.example.projectfoodmanager.data.repository
 
-import com.example.projectfoodmanager.data.repository.models.Recipe
-import com.example.projectfoodmanager.util.FireStoreTables
+import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.util.FireStoreCollection
 import com.example.projectfoodmanager.util.UiState
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -11,7 +11,7 @@ class RecipeRepositoryImp(
 ): RecipeRepository {
 
     override fun getRecipes(result: (UiState<List<Recipe>>) -> Unit) {
-        database.collection(FireStoreTables.RECIPE)
+        database.collection(FireStoreCollection.RECIPE_PROD)
             .get()
             .addOnSuccessListener {
                 val notes = arrayListOf<Recipe>()
@@ -33,7 +33,7 @@ class RecipeRepositoryImp(
     }
 
     override fun addRecipe(recipe: Recipe, result: (UiState<String>) -> Unit) {
-        database.collection(FireStoreTables.RECIPE)
+        database.collection(FireStoreCollection.RECIPE_PROD)
             .add(recipe)
             .addOnSuccessListener {
                 result.invoke(

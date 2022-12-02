@@ -14,7 +14,14 @@
         android:theme="@style/Theme.ProjectFoodManager"
         tools:targetApi="31">
         <activity
-            android:name=".views.ReceitasViewActivity"
+            android:name=".ui.LoginActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ui.views.ReceitasViewActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

@@ -1,12 +1,13 @@
-package com.example.projectfoodmanager.recipe
+package com.example.projectfoodmanager.ui.recipe
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.util.UiState
@@ -40,7 +41,8 @@ class RecipeListingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentRecipeListingBinding.inflate(layoutInflater)
-        // Inflate the layout for this fragment
+
+        // Inflate the layout for this fragmen
         return binding.root
         }
 

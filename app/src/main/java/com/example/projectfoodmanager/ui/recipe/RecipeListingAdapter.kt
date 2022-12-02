@@ -1,9 +1,9 @@
-package com.example.projectfoodmanager.recipe
+package com.example.projectfoodmanager.ui.recipe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectfoodmanager.data.repository.models.Recipe
+import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 
 class RecipeListingAdapter(
@@ -40,7 +40,7 @@ class RecipeListingAdapter(
 
     inner class MyViewHolder(val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Recipe){
-            binding.recipeId.text = item.id
+            binding.recipeId.text = item.id.toString()
             binding.msg.text = item.description
             binding.dateLabel.text = item.date.toString()
             binding.edit.setOnClickListener { onEditClicked.invoke(adapterPosition,item) }

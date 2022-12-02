@@ -1,14 +1,14 @@
-package com.example.projectfoodmanager.views
+package com.example.projectfoodmanager.ui
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
 import com.example.projectfoodmanager.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ReceitasViewActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_receitas_view)
+        setContentView(R.layout.activity_login)
     }
 }

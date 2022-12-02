@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.recipe
+package com.example.projectfoodmanager.ui.recipe
 
 
 import android.os.Bundle
@@ -7,14 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.example.projectfoodmanager.data.repository.models.Recipe
+import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.UiState
 import com.example.projectfoodmanager.util.hide
 import com.example.projectfoodmanager.util.show
 import com.example.projectfoodmanager.util.toast
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
@@ -32,16 +31,17 @@ class RecipeDetailFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
         binding.button.setOnClickListener{
             if (validation()){
                 viewModel.addRecipe(
                     Recipe(
-                        id = "",
+                        id = 123,
                         description = binding.noteMsg.text.toString(),
                         imageRef = "",
                         title = "Not implemented yet",
-                        date = Date()
+                        date = ""
                     )
                 )
             }

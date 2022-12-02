@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/receitaListingFragment"
-        android:name="com.example.projectfoodmanager.recipe.RecipeListingFragment"
+        android:name="com.example.projectfoodmanager.ui.recipe.RecipeListingFragment"
         android:label="fragment_receita_listing"
         tools:layout="@layout/fragment_recipe_listing" >
         <action
@@ -17,8 +17,8 @@
 
     <fragment
         android:id="@+id/receitaDetailFragment"
-        android:name="com.example.projectfoodmanager.recipe.RecipeDetailFragment"
-        android:label="fragment_receita_detail"
+        android:name="com.example.projectfoodmanager.ui.recipe.RecipeDetailFragment"
+        android:label="fragment_recipe_detail"
         tools:layout="@layout/fragment_recipe_detail" />
 
 </navigation>

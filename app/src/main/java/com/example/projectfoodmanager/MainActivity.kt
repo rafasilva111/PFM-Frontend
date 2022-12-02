@@ -4,26 +4,41 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.replace
-import com.example.projectfoodmanager.databinding.ActivityTestMainMenuBinding
-import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
-import com.example.projectfoodmanager.recipe.RecipeListingFragment
-import com.example.projectfoodmanager.views.*
+import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
+import com.example.projectfoodmanager.databinding.ActivityMainMenuBinding
+import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
+import com.example.projectfoodmanager.ui.LoginActivity
+import com.example.projectfoodmanager.ui.profile.ProfileFragment
+import com.example.projectfoodmanager.ui.recipe.RecipeListingFragment
+import com.example.projectfoodmanager.ui.views.CalenderFragment
+import com.example.projectfoodmanager.ui.views.FavoritesFragment
+import com.example.projectfoodmanager.ui.views.GoalFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
-    lateinit var binding: ActivityTestMainMenuBinding
+    lateinit var binding: ActivityMainMenuBinding
     val TAG: String = "ReceitaListingFragment"
+    protected var session: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityTestMainMenuBinding.inflate(layoutInflater)
+        val ss:String = intent.getStringExtra("Key").toString()
+        this.session == "ss"
+        if (session != "value") {
+            startActivity(Intent(this, LoginActivity::class.java))
+        }
+
+
+
+
+        binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         replaceFragment(RecipeListingFragment())
         binding.bottomNavigationView.setOnItemSelectedListener {
@@ -41,14 +56,6 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-        //TODO
-
-        //check internet
-
-
-        //send login
-
-
 
 
     }
@@ -59,4 +66,5 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.frameLayout,fragment)
         fragmentTransaction.commit()
     }
+
 }
