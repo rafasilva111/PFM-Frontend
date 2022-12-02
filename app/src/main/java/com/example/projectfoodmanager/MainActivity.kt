@@ -45,14 +45,32 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+
         bottomNav = findViewById(R.id.bottomNavigationView)
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
         navController = navHostFragment.navController
         setupWithNavController(bottomNav,navController)
 
+        bottomNav.setOnItemSelectedListener {
+            when (it.itemId){
+                R.id.recipes -> replaceFragment(RecipeListingFragment())
+                R.id.profile -> replaceFragment(ProfileFragment())
+            }
+            true
+        }
+
     }
 
+    private fun replaceFragment(fragment : Fragment){
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.nav_host,fragment)
+        fragmentTransaction.commit()
+
+
+    }
 
 
 }
