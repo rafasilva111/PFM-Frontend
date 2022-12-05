@@ -28,6 +28,15 @@ class RecipeViewModel @Inject constructor (
 
     }
 
+    fun getRecipesPaginated(){
+        _recipes.value = UiState.Loading
+        repository.getRecipesPaginated {
+            _recipes.value = UiState.Loading
+            repository.getRecipesPaginated { _recipes.value = it }
+        }
+
+    }
+
     private val _addRecipe = MutableLiveData<UiState<String>>()
     val addRecipe: LiveData<UiState<String>>
         get() = _addRecipe

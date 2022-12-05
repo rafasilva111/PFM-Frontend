@@ -47,5 +47,27 @@ class RecipeRepositoryImp(
             }
     }
 
+    override fun getRecipesPaginated(result: (UiState<List<Recipe>>) -> Unit) {
+        database.collection(FireStoreCollection.RECIPE_PROD)
+            .get()
+            .addOnSuccessListener {
+                val notes = arrayListOf<Recipe>()
+                for(document in it){
+                    val note = document.toObject(Recipe::class.java)
+                    notes.add(note)
+                }
+                result.invoke(
+                    UiState.Success(notes)
+                )
+            }
+            .addOnFailureListener {
+                result.invoke(
+                    UiState.Failure(
+                        it.localizedMessage
+                    )
+                )
+            }
+    }
+
 
 }

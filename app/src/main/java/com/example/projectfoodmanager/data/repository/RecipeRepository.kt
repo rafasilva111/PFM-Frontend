@@ -5,5 +5,6 @@ import com.example.projectfoodmanager.util.UiState
 
 interface RecipeRepository {
     fun getRecipes(result: (UiState<List<Recipe>>) -> Unit)
+    fun getRecipesPaginated(result: (UiState<List<Recipe>>) -> Unit)
     fun addRecipe(recipe: Recipe, result: (UiState<String> )-> Unit)
 }
