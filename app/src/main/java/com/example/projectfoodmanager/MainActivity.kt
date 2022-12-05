@@ -68,8 +68,6 @@ class MainActivity : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.nav_host,fragment)
         fragmentTransaction.commit()
-
-
     }
 
 
