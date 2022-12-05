@@ -24,9 +24,10 @@ class RecipeListingFragment : Fragment() {
 
     private var page = 1
     private var isLoading = false
+    var manager: LinearLayoutManager? = null
 
     private val lastVisibleItemPosition: Int
-        get() = LinearLayoutManager.findLastVisibleItemPosition()
+        get() = LinearLayoutManager.()
 
     val TAG: String = "ReceitaListingFragment"
     lateinit var binding: FragmentRecipeListingBinding
@@ -57,6 +58,8 @@ class RecipeListingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.adapter = adapter
+
+        manager = LinearLayoutManager(this.requireContext())
         var scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(binding.recyclerView, newState)
