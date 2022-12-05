@@ -19,16 +19,18 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class RecipeListingFragment : Fragment() {
 
+    private var page = 1
+    private var isLoading = false
+
     val TAG: String = "ReceitaListingFragment"
     lateinit var binding: FragmentRecipeListingBinding
     val viewModel: RecipeViewModel by viewModels()
     val adapter by lazy {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
-
-            },
-            onDeleteClicked = {pos,item->
-
+                findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
+                    putParcelable("note",item)
+                })
             },
             onEditClicked = { pos, item ->
             }
@@ -49,9 +51,6 @@ class RecipeListingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.adapter = adapter
-        binding.button.setOnClickListener{
-            findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment)
-        }
         viewModel.getRecipes()
         viewModel.recipe.observe(viewLifecycleOwner){state ->
             when(state){

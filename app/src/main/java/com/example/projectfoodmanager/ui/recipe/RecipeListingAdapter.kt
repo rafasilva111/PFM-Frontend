@@ -9,8 +9,9 @@ import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 class RecipeListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit,
     val onEditClicked: (Int, Recipe) -> Unit,
-    val onDeleteClicked: (Int, Recipe) -> Unit
 ) : RecyclerView.Adapter<RecipeListingAdapter.MyViewHolder>() {
+
+
 
     private var list: MutableList<Recipe> = arrayListOf()
 
@@ -40,11 +41,8 @@ class RecipeListingAdapter(
 
     inner class MyViewHolder(val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Recipe){
-            binding.recipeId.text = item.id.toString()
-            binding.msg.text = item.description
             binding.dateLabel.text = item.date.toString()
-            binding.edit.setOnClickListener { onEditClicked.invoke(adapterPosition,item) }
-            binding.delete.setOnClickListener { onDeleteClicked.invoke(adapterPosition,item) }
+            binding.like.setOnClickListener { onEditClicked.invoke(adapterPosition,item) }
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition,item) }
         }
     }

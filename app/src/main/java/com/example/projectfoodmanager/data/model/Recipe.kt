@@ -1,5 +1,10 @@
 package com.example.projectfoodmanager.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+
+@Parcelize
 data class Recipe(
     val id: Long? = null,
     val title: String = "",
@@ -13,4 +18,4 @@ data class Recipe(
     val app_rating: String="",
     val date: String="",
     val ingredients: HashMap<String,String> = HashMap<String,String>(),
-)
+) : Parcelable
