@@ -28,11 +28,12 @@ class RecipeViewModel @Inject constructor (
 
     }
 
-    fun getRecipesPaginated(){
+    fun getRecipesPaginated(page: Long){
         _recipes.value = UiState.Loading
-        repository.getRecipesPaginated {
+        repository.getRecipesPaginated(page) {
+
             _recipes.value = UiState.Loading
-            repository.getRecipesPaginated { _recipes.value = it }
+            repository.getRecipesPaginated(page){ _recipes.value = it }
         }
 
     }

@@ -42,6 +42,7 @@ class RecipeListingAdapter(
     inner class MyViewHolder(val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Recipe){
             binding.dateLabel.text = item.date.toString()
+            binding.recipeTitle.text = item.title.toString()
             binding.like.setOnClickListener { onEditClicked.invoke(adapterPosition,item) }
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition,item) }
         }

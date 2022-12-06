@@ -39,7 +39,6 @@ class RecipeDetailFragment : Fragment() {
                     Recipe(
                         id = 123,
                         description = binding.noteMsg.text.toString(),
-                        imageRef = "",
                         title = "Not implemented yet",
                         date = ""
                     )
