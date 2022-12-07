@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.data.model.Recipe_info
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +37,7 @@ class RecipeListingFragment : Fragment() {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
                 findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
-                    putParcelable("note",item)
+                    put("note",item)
                 })
             },
             onEditClicked = { pos, item ->

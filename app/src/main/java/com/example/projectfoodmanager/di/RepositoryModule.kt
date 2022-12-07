@@ -8,6 +8,7 @@ import com.example.projectfoodmanager.data.repository.RecipeRepository
 import com.example.projectfoodmanager.data.repository.RecipeRepositoryImp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -21,10 +22,12 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideRecipeRepository(
-        database: FirebaseFirestore
+        database: FirebaseFirestore,
+        storage: FirebaseStorage
     ): RecipeRepository{
-        return RecipeRepositoryImp(database)
+        return RecipeRepositoryImp(database,storage)
     }
+
 
 
     @Provides

@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.data.model.Recipe_info
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.UiState
 import com.example.projectfoodmanager.util.hide
@@ -34,16 +34,16 @@ class RecipeDetailFragment : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
         binding.button.setOnClickListener{
-            if (validation()){
-                viewModel.addRecipe(
-                    Recipe(
-                        id = 123,
-                        description = binding.noteMsg.text.toString(),
-                        title = "Not implemented yet",
-                        date = ""
-                    )
-                )
-            }
+//            if (validation()){
+//                viewModel.addRecipe(
+//                    Recipe_info(
+//                        id = 123,
+//                        description = binding.noteMsg.text.toString(),
+//                        title = "Not implemented yet",
+//                        date = ""
+//                    )
+//                )
+//            }
         }
         viewModel.addRecipe.observe(viewLifecycleOwner){state ->
             when(state){

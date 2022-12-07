@@ -1,11 +1,17 @@
 package com.example.projectfoodmanager.data.model
 
 import android.os.Parcelable
+import com.google.firebase.storage.StorageReference
 import kotlinx.parcelize.Parcelize
+
+data class Recipe(
+    val info: Recipe_info,
+    var storageReference: StorageReference,
+)
 
 
 @Parcelize
-data class Recipe(
+data class Recipe_info(
     val id: Long? = null,
     val title: String = "",
     val desc: String = "",
@@ -14,7 +20,6 @@ data class Recipe(
     val company: String = "",
     val description: String = "",
     val img: String = "",
-    val preparacao: String = "",
     val time: String = "",
     val difficulty: String= "",
     val nrPersons: String="",
@@ -26,3 +31,4 @@ data class Recipe(
     val nutrition_table: HashMap<String,String> = HashMap<String,String>(),
     val preparation: HashMap<String,String> = HashMap<String,String>(),
 ) : Parcelable
+

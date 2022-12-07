@@ -3,8 +3,11 @@ package com.example.projectfoodmanager.ui.recipe
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.data.model.Recipe_info
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
+
 
 class RecipeListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit,
@@ -41,10 +44,14 @@ class RecipeListingAdapter(
 
     inner class MyViewHolder(val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Recipe){
-            binding.dateLabel.text = item.date.toString()
-            binding.recipeTitle.text = item.title.toString()
+
+            binding.dateLabel.text = item.info.date.toString()
+            binding.recipeTitle.text = item.info.title.toString()
             binding.like.setOnClickListener { onEditClicked.invoke(adapterPosition,item) }
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition,item) }
+
+            Glide.with(binding.imageView.context).load(item.storageReference).into(binding.imageView)
+
         }
     }
 }
