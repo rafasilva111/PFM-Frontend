@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var ss:String = intent.getStringExtra("Key").toString()
+
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

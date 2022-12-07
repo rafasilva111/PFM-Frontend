@@ -2,7 +2,6 @@ package com.example.projectfoodmanager.data.repository
 
 import android.util.Log
 import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.model.Recipe_info
 import com.example.projectfoodmanager.util.FireStoreCollection
 import com.example.projectfoodmanager.util.FireStorePaginations
 import com.example.projectfoodmanager.util.UiState
@@ -11,8 +10,7 @@ import com.google.firebase.storage.FirebaseStorage
 
 
 class RecipeRepositoryImp(
-    val database: FirebaseFirestore,
-    val storage: FirebaseStorage
+    val database: FirebaseFirestore
 ): RecipeRepository {
     val TAG: String = "RecipeRepositoryImp"
 
@@ -22,12 +20,10 @@ class RecipeRepositoryImp(
             .addOnSuccessListener {
                 val notes = arrayListOf<Recipe>()
                 for (document in it) {
-                    val recipe_info = document.toObject(Recipe_info::class.java)
+                    val recipe = document.toObject(Recipe::class.java)
 
-                    if (recipe_info != null) {
-                        val recipe_image_ref = storage.reference.child(recipe_info.img)
+                    if (recipe != null) {
 
-                        val recipe = Recipe(recipe_info,recipe_image_ref)
                         notes.add(recipe)
                     } else {
                         Log.d(TAG, "Problem on recipe -> " + document.toString())
@@ -69,12 +65,10 @@ class RecipeRepositoryImp(
 
                     val notes = arrayListOf<Recipe>()
                     for (document in documentSnapshots.documents) {
-                        val recipe_info = document.toObject(Recipe_info::class.java)
+                        val recipe = document.toObject(Recipe::class.java)
 
-                        if (recipe_info != null) {
-                            val recipe_image_ref = storage.reference.child(recipe_info.img)
+                        if (recipe != null) {
 
-                            val recipe = Recipe(recipe_info,recipe_image_ref)
                             notes.add(recipe)
                         } else {
                             Log.d(TAG, "Problem on recipe -> " + document.toString())
@@ -100,12 +94,10 @@ class RecipeRepositoryImp(
 
                     val notes = arrayListOf<Recipe>()
                     for (document in documentSnapshots.documents) {
-                        val recipe_info = document.toObject(Recipe_info::class.java)
+                        val recipe = document.toObject(Recipe::class.java)
 
-                        if (recipe_info != null) {
-                            val recipe_image_ref = storage.reference.child(recipe_info.img)
+                        if (recipe != null) {
 
-                            val recipe = Recipe(recipe_info,recipe_image_ref)
                             notes.add(recipe)
                         } else {
                             Log.d(TAG, "Problem on recipe -> " + document.toString())

@@ -4,9 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.model.Recipe_info
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
+import com.example.projectfoodmanager.di.FirebaseModule
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 
 
 class RecipeListingAdapter(
@@ -43,14 +47,20 @@ class RecipeListingAdapter(
     }
 
     inner class MyViewHolder(val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Recipe){
 
-            binding.dateLabel.text = item.info.date.toString()
-            binding.recipeTitle.text = item.info.title.toString()
+
+        fun bind(item: Recipe){
+            val imgRef = Firebase.storage.reference.child(item.img)
+            imgRef.downloadUrl.addOnSuccessListener {Uri->
+                val imageURL = Uri.toString()
+                Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
+            }
+            binding.dateLabel.text = item.date.toString()
+            binding.recipeTitle.text = item.title.toString()
             binding.like.setOnClickListener { onEditClicked.invoke(adapterPosition,item) }
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition,item) }
 
-            Glide.with(binding.imageView.context).load(item.storageReference).into(binding.imageView)
+
 
         }
     }

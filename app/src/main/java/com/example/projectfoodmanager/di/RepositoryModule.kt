@@ -22,10 +22,9 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideRecipeRepository(
-        database: FirebaseFirestore,
-        storage: FirebaseStorage
+        database: FirebaseFirestore
     ): RecipeRepository{
-        return RecipeRepositoryImp(database,storage)
+        return RecipeRepositoryImp(database)
     }
 
 
