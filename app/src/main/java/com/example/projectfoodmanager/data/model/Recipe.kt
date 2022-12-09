@@ -12,7 +12,6 @@ data class Recipe(
     val portion: String = "",
     val source: String = "",
     val company: String = "",
-    val description: String = "",
     val img: String = "",
     val time: String = "",
     val difficulty: String= "",
@@ -21,7 +20,7 @@ data class Recipe(
     val app_rating: String="",
     val date: String="",
     val tags: String="",
-    val ingredients: HashMap<String,String> = HashMap<String,String>(),
+    val ingredients: HashMap<String,String> = HashMap(),
     val nutrition_table: HashMap<String,String> = HashMap<String,String>(),
     val preparation: HashMap<String,String> = HashMap<String,String>(),
 ) : Parcelable

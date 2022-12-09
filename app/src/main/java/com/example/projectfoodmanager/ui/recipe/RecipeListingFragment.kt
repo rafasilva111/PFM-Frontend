@@ -49,16 +49,20 @@ class RecipeListingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        if (this::binding.isInitialized){
+            return binding.root
+        }else {
+            binding = FragmentRecipeListingBinding.inflate(layoutInflater)
+            manager = LinearLayoutManager(activity)
+            binding.recyclerView.layoutManager = manager
 
-        binding = FragmentRecipeListingBinding.inflate(layoutInflater)
-        manager = LinearLayoutManager(activity)
-        binding.recyclerView.layoutManager = manager
-
-        setRecyclerViewScrollListener()
+            setRecyclerViewScrollListener()
 
 
 
-        return binding.root
+            return binding.root
+        }
+
         }
 
     private fun setRecyclerViewScrollListener() {
