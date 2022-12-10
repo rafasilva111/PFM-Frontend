@@ -23,7 +23,6 @@ class RecipeRepositoryImp(
                     val recipe = document.toObject(Recipe::class.java)
 
                     if (recipe != null) {
-
                         notes.add(recipe)
                     } else {
                         Log.d(TAG, "Problem on recipe -> " + document.toString())

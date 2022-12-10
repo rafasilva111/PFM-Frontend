@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.User
@@ -60,9 +59,7 @@ class RegisterFragment : Fragment() {
                     binding.registerBtn.setText("Register")
                     binding.registerProgress.hide()
                     toast(state.data)
-                    startActivity(Intent(this.context, MainActivity::class.java).apply {
-                        putExtra("Key", "value")
-                    })
+                    startActivity(Intent(this.context, MainActivity::class.java))
                 }
             }
         }
@@ -75,6 +72,7 @@ class RegisterFragment : Fragment() {
             last_name = binding.lastNameEt.text.toString(),
             job_title = binding.jobTitleEt.text.toString(),
             email = binding.emailEt.text.toString(),
+            favorite_recipes = arrayListOf<String>(),
         )
     }
 

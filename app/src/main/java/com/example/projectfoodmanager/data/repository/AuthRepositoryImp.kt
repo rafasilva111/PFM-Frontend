@@ -1,6 +1,8 @@
 package com.example.projectfoodmanager.data.repository
 
 import android.content.SharedPreferences
+import android.util.Log
+import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.util.FireStoreCollection
 import com.example.projectfoodmanager.util.SharedPrefConstants
@@ -11,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlin.reflect.typeOf
 
 class AuthRepositoryImp(
     val auth: FirebaseAuth,
@@ -18,7 +22,7 @@ class AuthRepositoryImp(
     val appPreferences: SharedPreferences,
     val gson: Gson
 ) : AuthRepository {
-
+    val TAG: String = "AuthRepositoryImp"
     override fun registerUser(
         email: String,
         password: String,
@@ -131,12 +135,145 @@ class AuthRepositoryImp(
     }
 
     override fun getSession(result: (User?) -> Unit) {
-        val user_str = appPreferences.getString(SharedPrefConstants.USER_SESSION,null)
+        val user_str = getUserStringInSharedPreferences()
         if (user_str == null){
             result.invoke(null)
         }else{
             val user = gson.fromJson(user_str,User::class.java)
             result.invoke(user)
         }
+    }
+
+    override fun removeFavoriteRecipe(
+        recipe: Recipe,
+        result: (UiState<Pair<User, String>>?) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addFavoriteRecipe(recipe: Recipe, result: (UiState<Pair<User, String>>?) -> Unit) {
+        //todo
+        //check if user is user auth (pensar na segurança)
+
+        val userUUID = auth.currentUser?.uid ?: null
+
+        //save on profile reference
+
+        val user_str = getUserStringInSharedPreferences()
+        var user:User? = getUserInSharedPreferences()
+
+        if(user == null){
+            result.invoke(null)
+            return
+        }
+
+        user.addFavoriteRecipe(recipe)
+        storeUserInSharedPreferences(user)
+
+
+        if (user_str != null) {
+            database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
+                Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+            }
+        }
+
+
+        //save recipe reference for future loading
+        val recipe_str = getRecipesStringInSharedPreferences()
+        if (recipe_str.isNullOrEmpty()){
+            Log.d(TAG, "addFavoriteRecipe: nothing on shared preferences")
+        }
+        var recipes_list: MutableList<String> = ArrayList()
+        if (recipe_str != null) {
+            recipes_list.add(gson.toJson(recipe))
+        }
+        var stored_recipes = storeRecipesInSharedPreferences(recipes_list)
+
+        Log.d(TAG, "Recipe has been added successfully "+stored_recipes)
+
+        result.invoke(
+            UiState.Success(Pair(user,"Recipe has been added successfully"))
+        )
+
+
+    }
+
+
+    override fun getFavoritesRecipeClass(result: (UiState<ArrayList<Recipe>?>) -> Unit) {
+        val recipes = getRecipesClassInSharedPreferences()
+        result.invoke(UiState.Success(recipes))
+    }
+
+
+    override fun getFavoritesRecipeString(result: (UiState<ArrayList<String>?>) -> Unit) {
+        val user = getUserInSharedPreferences()
+        if (user != null) {
+            if (user.favorite_recipes != null){
+                result.invoke(UiState.Success(user.favorite_recipes))
+            }
+        }
+        result.invoke(UiState.Failure("Utilizador não tem receitas nos favoritos."))
+    }
+
+
+    override fun getUserSession(result: (UiState<User?>) -> Unit) {
+        val userUUID = auth.currentUser?.uid ?: null
+        if (userUUID!=null){
+            database.collection(FireStoreCollection.USER).document(userUUID).get().addOnSuccessListener {
+                val user:User? = it.toObject(User::class.java)
+                if (user != null){
+                    storeUserInSharedPreferences(user)
+                    result.invoke(UiState.Success(user))
+                }
+                else{
+                    result.invoke(UiState.Failure("Objeto impossivel de parcelar (parcelize)."))
+                }
+            }.addOnFailureListener {
+                result.invoke(UiState.Failure(it.toString()))
+                Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+            }
+        }
+        else{
+            removeUserInSharedPreferences()
+            result.invoke(UiState.Failure("Sessão expirou."))
+        }
+
+    }
+
+    private fun getRecipesClassInSharedPreferences(): ArrayList<Recipe>? {
+
+        val recipes_string = getRecipesStringInSharedPreferences()
+        if (recipes_string != null){
+            var array = ArrayList<Recipe>()
+            for(item in recipes_string){
+                array.add(gson.fromJson(item,Recipe::class.java))
+            }
+            return array
+        }
+        return null
+    }
+
+    private fun getRecipesStringInSharedPreferences(): Array<String>? {
+
+        return  gson.fromJson(appPreferences.getString(SharedPrefConstants.FAVORITE_RECIPES_SESSION,null), Array<String>::class.java)
+    }
+
+    private fun storeRecipesInSharedPreferences(recipe: MutableList<String>) {
+        return appPreferences.edit().putString(SharedPrefConstants.FAVORITE_RECIPES_SESSION,gson.toJson(recipe)).apply()
+    }
+
+    private fun getUserInSharedPreferences(): User? {
+        return  gson.fromJson(appPreferences.getString(SharedPrefConstants.USER_SESSION,null),User::class.java)
+    }
+    private fun getUserStringInSharedPreferences(): String? {
+        return  appPreferences.getString(SharedPrefConstants.USER_SESSION,null)
+    }
+
+    private fun storeUserInSharedPreferences(user:User) {
+        return appPreferences.edit().putString(SharedPrefConstants.USER_SESSION,gson.toJson(user)).apply()
+    }
+
+    private fun removeUserInSharedPreferences() {
+        return appPreferences.edit().remove(SharedPrefConstants.USER_SESSION).apply()
     }
 }

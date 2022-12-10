@@ -12,7 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipeViewModel @Inject constructor (
-    val repository: RecipeRepository
+    val recipeRepository: RecipeRepository
+
 ): ViewModel() {
     private val _recipes = MutableLiveData<UiState<List<Recipe>>>()
 
@@ -21,19 +22,19 @@ class RecipeViewModel @Inject constructor (
 
     fun getRecipes(){
         _recipes.value = UiState.Loading
-        repository.getRecipes {
+        recipeRepository.getRecipes {
             _recipes.value = UiState.Loading
-            repository.getRecipes { _recipes.value = it }
+            recipeRepository.getRecipes { _recipes.value = it }
         }
 
     }
 
     fun getRecipesPaginated(page: Long){
         _recipes.value = UiState.Loading
-        repository.getRecipesPaginated(page) {
+        recipeRepository.getRecipesPaginated(page) {
 
             _recipes.value = UiState.Loading
-            repository.getRecipesPaginated(page){ _recipes.value = it }
+            recipeRepository.getRecipesPaginated(page){ _recipes.value = it }
         }
 
     }
@@ -45,6 +46,8 @@ class RecipeViewModel @Inject constructor (
 
     fun addRecipe(recipe: Recipe){
         _addRecipe.value = UiState.Loading
-        repository.addRecipe(recipe) { _addRecipe.value = it}
+        recipeRepository.addRecipe(recipe) { _addRecipe.value = it}
     }
+
+
 }

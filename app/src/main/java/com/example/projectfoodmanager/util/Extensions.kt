@@ -1,5 +1,6 @@
 package com.example.projectfoodmanager.util
 
+import android.app.Activity
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -15,6 +16,10 @@ fun View.show(){
 
 fun Fragment.toast(msg: String?){
     Toast.makeText(requireContext(),msg,Toast.LENGTH_LONG).show()
+}
+
+fun Activity.toast(msg: String?){
+    Toast.makeText(baseContext,msg,Toast.LENGTH_LONG).show()
 }
 
 fun String.isValidEmail() =

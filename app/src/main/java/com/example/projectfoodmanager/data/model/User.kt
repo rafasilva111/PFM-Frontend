@@ -10,5 +10,14 @@ data class User(
     val last_name: String = "",
     val job_title: String = "",
     val email: String = "",
-    val favorite_recipes: List<String>,
-) : Parcelable
+    var favorite_recipes: ArrayList<String> = arrayListOf(),
+) : Parcelable {
+    fun addFavoriteRecipe(recipe: Recipe): Recipe? {
+
+
+            this.favorite_recipes = ArrayList<String>()
+            this.favorite_recipes.add(recipe.id.toString())
+
+        return recipe
+    }
+}

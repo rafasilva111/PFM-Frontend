@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Recipe(
-    val id: Long? = null,
+    var id: String? = null,
     val title: String = "",
     val desc: String = "",
     val portion: String = "",

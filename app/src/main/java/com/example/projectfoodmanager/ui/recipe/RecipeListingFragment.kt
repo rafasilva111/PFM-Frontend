@@ -1,5 +1,8 @@
 package com.example.projectfoodmanager.ui.recipe
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -41,7 +44,6 @@ class RecipeListingFragment : Fragment() {
             },
             onEditClicked = { pos, item ->
             }
-
         )
     }
 
@@ -49,20 +51,15 @@ class RecipeListingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (this::binding.isInitialized){
-            return binding.root
-        }else {
-            binding = FragmentRecipeListingBinding.inflate(layoutInflater)
-            manager = LinearLayoutManager(activity)
-            binding.recyclerView.layoutManager = manager
-
-            setRecyclerViewScrollListener()
+        //todo check for internet connection
 
 
+        binding = FragmentRecipeListingBinding.inflate(layoutInflater)
+        manager = LinearLayoutManager(activity)
+        binding.recyclerView.layoutManager = manager
 
-            return binding.root
-        }
-
+        setRecyclerViewScrollListener()
+        return binding.root
         }
 
     private fun setRecyclerViewScrollListener() {
@@ -102,6 +99,8 @@ class RecipeListingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.adapter = adapter
 
+
+
         viewModel.getRecipesPaginated(0)
 
         viewModel.recipe.observe(viewLifecycleOwner){state ->
@@ -125,5 +124,25 @@ class RecipeListingFragment : Fragment() {
         }
     }
 
-
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
+    }
 }

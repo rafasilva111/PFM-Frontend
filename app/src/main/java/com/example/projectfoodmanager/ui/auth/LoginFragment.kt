@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
-import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
+import com.example.projectfoodmanager.ui.LoginActivity
 import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,7 +21,7 @@ class LoginFragment : Fragment() {
 
     val TAG: String = "RegisterFragment"
     lateinit var binding: FragmentLoginBinding
-    val viewModel: AuthViewModel by viewModels()
+    val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +36,7 @@ class LoginFragment : Fragment() {
         observer()
         binding.loginBtn.setOnClickListener {
             if (validation()) {
-                viewModel.login(
+                authViewModel.login(
                     email = binding.emailEt.text.toString(),
                     password = binding.passEt.text.toString()
                 )
@@ -52,7 +53,7 @@ class LoginFragment : Fragment() {
     }
 
     fun observer(){
-        viewModel.login.observe(viewLifecycleOwner) { state ->
+        authViewModel.login.observe(viewLifecycleOwner) { state ->
             when(state){
                 is UiState.Loading -> {
                     binding.loginBtn.setText("")
@@ -67,9 +68,19 @@ class LoginFragment : Fragment() {
                     binding.loginBtn.setText("Login")
                     binding.loginProgress.hide()
                     toast(state.data)
-                    startActivity(Intent(this.context, MainActivity::class.java).apply {
-                        putExtra("Key", "value")
-                    })
+                    startActivity(Intent(this.context, MainActivity::class.java))
+                }
+            }
+        }
+        authViewModel.getUserSession.observe(viewLifecycleOwner) { state ->
+            when(state){
+                is UiState.Loading -> {
+                }
+                is UiState.Failure -> {
+                }
+                is UiState.Success -> {
+                    toast("Bem-vindo de volta!")
+                    startActivity(Intent(this.context, MainActivity::class.java))
                 }
             }
         }
@@ -77,13 +88,7 @@ class LoginFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.getSession { user ->
-                if (user !=null){
-                    startActivity(Intent(this.context, MainActivity::class.java).apply {
-                        putExtra("Key", "value")
-                    })
-                }
-        }
+        authViewModel.getUserSession{}
     }
 
     fun validation(): Boolean {

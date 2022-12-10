@@ -10,6 +10,52 @@
         android:layout_height="match_parent"
         android:paddingBottom="20dp">
 
+        <com.like.LikeButton
+            android:id="@+id/save"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            app:icon_size="10dp"
+            app:icon_type="star"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.13"
+            app:layout_constraintStart_toEndOf="@+id/heart"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3">
+
+        </com.like.LikeButton>
+
+        <com.like.LikeButton
+            android:id="@+id/heart"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="15dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"
+            app:icon_type="heart"
+            app:icon_size="10dp">
+
+        </com.like.LikeButton>
+
+        <com.like.LikeButton
+            android:id="@+id/like"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="15dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="center"
+            app:icon_type="thumb"
+            app:icon_size="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/heart"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"/>
+
+
+
         <TextView
             android:id="@+id/tvRateInt"
             android:layout_width="wrap_content"
@@ -181,38 +227,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvSource" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="128dp"
-            android:layout_marginTop="28dp"
-            android:src="@drawable/like"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
-
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="28dp"
-            android:src="@drawable/icon_heart"
-            app:layout_constraintStart_toEndOf="@+id/imageView4"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="29dp"
-            android:layout_marginEnd="128dp"
-            android:src="@drawable/save_icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView5"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

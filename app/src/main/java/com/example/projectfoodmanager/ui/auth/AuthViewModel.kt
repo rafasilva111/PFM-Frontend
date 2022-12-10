@@ -3,6 +3,7 @@ package com.example.projectfoodmanager.ui.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.data.repository.AuthRepository
 import com.example.projectfoodmanager.util.UiState
@@ -21,6 +22,18 @@ class AuthViewModel @Inject constructor(
     private val _login = MutableLiveData<UiState<String>>()
     val login: LiveData<UiState<String>>
         get() = _login
+
+    private val _updateFavoriteList = MutableLiveData<UiState<Pair<User,String>>>()
+    val updateFavoriteList: LiveData<UiState<Pair<User,String>>>
+        get() = _updateFavoriteList
+
+    private val _getFavoriteRecipeList = MutableLiveData<UiState<ArrayList<Recipe>?>>()
+    val getFavoriteRecipeList: LiveData<UiState<ArrayList<Recipe>?>>
+        get() = _getFavoriteRecipeList
+
+    private val _getUserSession = MutableLiveData<UiState<User?>>()
+    val getUserSession: LiveData<UiState<User?>>
+        get() = _getUserSession
 
     fun register(
         email: String,
@@ -50,5 +63,27 @@ class AuthViewModel @Inject constructor(
 
     fun getSession(result: (User?) -> Unit){
         repository.getSession(result)
+    }
+
+
+    fun getFavoriteRecipe(){
+        _getFavoriteRecipeList.value = UiState.Loading
+        repository.getFavoritesRecipeClass { _getFavoriteRecipeList.value = it}
+    }
+
+    fun addFavoriteRecipe(recipe: Recipe) {
+        _updateFavoriteList.value = UiState.Loading
+        repository.addFavoriteRecipe(recipe) { _updateFavoriteList.value = it}
+
+    }
+
+    fun removeFavoriteRecipe(recipe: Recipe) {
+        _updateFavoriteList.value = UiState.Loading
+        repository.removeFavoriteRecipe(recipe) { _updateFavoriteList.value = it}
+    }
+
+    fun getUserSession(result: (User?) -> Unit){
+        _getUserSession.value  = UiState.Loading
+        repository.getUserSession() { _getUserSession.value = it}
     }
 }

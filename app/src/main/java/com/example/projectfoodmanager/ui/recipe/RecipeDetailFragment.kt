@@ -2,14 +2,17 @@ package com.example.projectfoodmanager.ui.recipe
 
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
+import com.example.projectfoodmanager.ui.auth.AuthViewModel
 
 import com.example.projectfoodmanager.util.UiState
 import com.example.projectfoodmanager.util.hide
@@ -17,6 +20,8 @@ import com.example.projectfoodmanager.util.show
 import com.example.projectfoodmanager.util.toast
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.like.LikeButton
+import com.like.OnLikeListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,6 +30,7 @@ class RecipeDetailFragment : Fragment() {
     lateinit var binding: FragmentRecipeDetailBinding
     var objRecipe: Recipe? = null
     val viewModel: RecipeViewModel by viewModels()
+    val authModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,7 +75,57 @@ class RecipeDetailFragment : Fragment() {
                 Glide.with(binding.imageView3.context).load(imageURL).into(binding.imageView3)
             }
 
-            binding
+
+            binding.heart.setOnLikeListener(object : OnLikeListener {
+                override fun liked(likeButton: LikeButton?) {
+                    toast("Adicionas-te a receita aos favoritos!")
+                    objRecipe?.let { authModel.addFavoriteRecipe(it) }
+
+                }
+
+                override fun unLiked(likeButton: LikeButton?) {
+                    toast("Removes-te a receita dos favoritos...")
+                }
+            })
+
+            binding.like.setOnLikeListener(object : OnLikeListener {
+                override fun liked(likeButton: LikeButton?) {
+                    toast("Not Implemented")
+                }
+
+                override fun unLiked(likeButton: LikeButton?) {
+                    toast("Not Implemented")
+                }
+            })
+
+            binding.save.setOnLikeListener(object : OnLikeListener {
+                override fun liked(likeButton: LikeButton?) {
+                    toast("Not Implemented")
+                }
+
+                override fun unLiked(likeButton: LikeButton?) {
+                    toast("Not Implemented")
+                }
+            })
+
+        }
+    }
+
+    private fun observer() {
+        authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Loading -> {
+                    //todo
+                }
+                is UiState.Failure -> {
+
+                    toast(state.error)
+                }
+                is UiState.Success -> {
+                    toast(state.data.second)
+                    binding.heart.isLiked = true
+                }
+            }
         }
     }
 
