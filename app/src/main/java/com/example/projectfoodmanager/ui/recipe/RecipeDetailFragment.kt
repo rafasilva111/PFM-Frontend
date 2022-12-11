@@ -58,7 +58,7 @@ class RecipeDetailFragment : Fragment() {
         objRecipe = arguments?.getParcelable("note")
 
         objRecipe?.let { recipe ->
-            binding.tvTitle.text = recipe.title
+            /*binding.tvTitle.text = recipe.title
             binding.tvTime.text = "Tempo: "+recipe.time
             binding.tvdifficulty.text = "Dificuldade: "+recipe.difficulty
             binding.tvPortion.text = "Nrº de porções "+recipe.portion
@@ -74,7 +74,7 @@ class RecipeDetailFragment : Fragment() {
             imgRef.downloadUrl.addOnSuccessListener {Uri->
                 val imageURL = Uri.toString()
                 Glide.with(binding.imageView3.context).load(imageURL).into(binding.imageView3)
-            }
+            }*/
 
 
             authModel.getSession { user ->
