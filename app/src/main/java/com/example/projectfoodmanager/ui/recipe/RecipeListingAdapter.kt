@@ -57,6 +57,7 @@ class RecipeListingAdapter(
             }
             binding.dateLabel.text = item.date.toString()
             binding.recipeTitle.text = item.title.toString()
+            binding.TVDescription.text = item.desc.toString()
             binding.like.setOnClickListener { onEditClicked.invoke(adapterPosition,item) }
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition,item) }
 

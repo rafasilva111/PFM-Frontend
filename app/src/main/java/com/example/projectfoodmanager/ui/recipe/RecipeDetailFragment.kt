@@ -21,8 +21,7 @@ import com.example.projectfoodmanager.util.show
 import com.example.projectfoodmanager.util.toast
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.like.LikeButton
-import com.like.OnLikeListener
+
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -77,45 +76,7 @@ class RecipeDetailFragment : Fragment() {
             }*/
 
 
-            authModel.getSession { user ->
-                if (user != null){
-                    if (!user.favorite_recipes.isNullOrEmpty() && user.favorite_recipes.indexOf(recipe.id)!=1){
-                        binding.heart.isLiked=true
-                    }
-                }
-            }
 
-            binding.heart.setOnLikeListener(object : OnLikeListener {
-                override fun liked(likeButton: LikeButton?) {
-                    toast("Adicionas-te a receita aos favoritos!")
-                    objRecipe?.let { authModel.addFavoriteRecipe(it) }
-
-                }
-
-                override fun unLiked(likeButton: LikeButton?) {
-                    toast("Removes-te a receita dos favoritos...")
-                }
-            })
-
-            binding.like.setOnLikeListener(object : OnLikeListener {
-                override fun liked(likeButton: LikeButton?) {
-                    toast("Not Implemented")
-                }
-
-                override fun unLiked(likeButton: LikeButton?) {
-                    toast("Not Implemented")
-                }
-            })
-
-            binding.save.setOnLikeListener(object : OnLikeListener {
-                override fun liked(likeButton: LikeButton?) {
-                    toast("Not Implemented")
-                }
-
-                override fun unLiked(likeButton: LikeButton?) {
-                    toast("Not Implemented")
-                }
-            })
 
         }
     }
@@ -132,7 +93,6 @@ class RecipeDetailFragment : Fragment() {
                 }
                 is UiState.Success -> {
                     toast(state.data.second)
-                    binding.heart.isLiked = true
                 }
             }
         }

@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_height="match_parent"
+    android:outlineProvider="none"
+    android:backgroundTint="#00000000"
+    android:padding="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="30dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/CV_image_recipe"
@@ -26,7 +28,7 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="200dp"
                 android:background="@drawable/layout_bg"
                 android:scaleType="fitXY"
                 android:src="@drawable/good_food_display___nci_visuals_online"
@@ -34,32 +36,76 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/like"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/layout_bg_low"
+            android:elevation="3dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_favorito"
+            app:layout_constraintEnd_toEndOf="@+id/CV_image_recipe"
+            app:layout_constraintTop_toTopOf="@+id/CV_image_recipe" />
+
+        <ImageView
+            android:id="@+id/favorites"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/layout_bg_low"
+            android:elevation="3dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_favorite"
+            app:layout_constraintEnd_toEndOf="@+id/like"
+            app:layout_constraintTop_toBottomOf="@+id/like" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="300dp"
-            android:layout_height="200dp"
+            android:layout_height="300dp"
             android:background="@drawable/layout_item_recipes"
             android:elevation="5dp"
+            android:outlineProvider="none"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:layout_marginTop="-50dp"
+            android:layout_marginTop="-70dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/CV_image_recipe">
 
             <TextView
                 android:id="@+id/recipe_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
                 android:fontFamily="@font/fedoka"
                 android:text="Recipe Title"
                 android:textColor="@color/black"
-                android:textSize="18dp"
+                android:textSize="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="8dp" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/TV_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:text="Descrição"
+                android:textAlignment="gravity"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/recipe_title"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_title" />
+
 
             <TextView
                 android:id="@+id/textView4"
@@ -79,6 +125,7 @@
                 android:alpha="0.7"
                 android:text="02/03/2022"
                 android:padding="2dp"
+                android:layout_marginBottom="20dp"
                 android:textAlignment="center"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -86,33 +133,6 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
 
-            <ImageView
-                android:id="@+id/like"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginEnd="20dp"
-                android:src="@drawable/ic_favorito"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/recipe_title" />
-
-            <ImageView
-                android:id="@+id/favorites"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginTop="15dp"
-                android:src="@drawable/ic_favorite"
-                app:layout_constraintEnd_toEndOf="@+id/like"
-                app:layout_constraintTop_toBottomOf="@+id/like" />
-
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Descrição"
-                app:layout_constraintStart_toStartOf="@+id/recipe_title"
-                app:layout_constraintTop_toBottomOf="@+id/recipe_title" />
 
 
             <TextView
@@ -129,7 +149,7 @@
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="30dp"
                 android:isIndicator="true"
                 android:max="5"
                 app:layout_constraintBottom_toBottomOf="@+id/date_label"

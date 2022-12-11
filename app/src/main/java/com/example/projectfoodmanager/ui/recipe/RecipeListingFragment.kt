@@ -1,5 +1,6 @@
 package com.example.projectfoodmanager.ui.recipe
 
+import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -56,6 +57,8 @@ class RecipeListingFragment : Fragment() {
 
         binding = FragmentRecipeListingBinding.inflate(layoutInflater)
         manager = LinearLayoutManager(activity)
+        manager.orientation=LinearLayoutManager.HORIZONTAL
+        manager.reverseLayout=false
         binding.recyclerView.layoutManager = manager
 
         setRecyclerViewScrollListener()

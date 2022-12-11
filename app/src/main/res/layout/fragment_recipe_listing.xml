@@ -8,6 +8,15 @@
     tools:context=".ui.recipe.RecipeListingFragment"
     android:background="#1E749C">
 
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/drink"
+        app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvWelcome"
@@ -35,127 +44,138 @@
         app:layout_constraintStart_toStartOf="@+id/tvWelcome"
         app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
 
-
-    <HorizontalScrollView
-        android:id="@+id/HSV_filter_1"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvName"
-        android:scrollbars="none">
+        app:layout_constraintTop_toBottomOf="@+id/tvName">
 
-        <LinearLayout
+        <HorizontalScrollView
+            android:id="@+id/HSV_filter_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvName">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#E3E3E4"
-                android:padding="2dp"
-                android:text="Sugestões"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#E3E3E4"
-                android:paddingTop="2dp"
-                android:text="Melhor classificadas"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#E3E3E4"
-                android:paddingTop="2dp"
-                android:text="Mais recentes"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#E3E3E4"
-                android:paddingTop="2dp"
-                android:text="Sugestões personalizadas"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-
-    </HorizontalScrollView>
-
-
-    <HorizontalScrollView
-        android:id="@+id/HSV_list_recipes"
-        android:layout_width="match_parent"
-        android:layout_height="430dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/HSV_filter_1"
-        android:scrollbars="none">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:indeterminateTint="@color/black"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
-                app:layout_constraintTop_toTopOf="@+id/progress_bar" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:padding="10dp">
 
-    </HorizontalScrollView>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_bg"
+                    android:backgroundTint="#E3E3E4"
+                    android:padding="2dp"
+                    android:text="Sugestões"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/layout_bg"
+                    android:backgroundTint="#E3E3E4"
+                    android:paddingTop="2dp"
+                    android:text="Melhor classificadas"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/layout_bg"
+                    android:backgroundTint="#E3E3E4"
+                    android:paddingTop="2dp"
+                    android:text="Mais recentes"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/layout_bg"
+                    android:backgroundTint="#E3E3E4"
+                    android:paddingTop="2dp"
+                    android:text="Sugestões personalizadas"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+        </HorizontalScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:indeterminateTint="#9C27B0"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:flow_verticalAlign="center"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/HSV_list_recipes"
-        app:layout_constraintVertical_bias="0.0">
+        android:paddingBottom="30dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_gravity="center"
             android:padding="10dp">
 
 
@@ -163,11 +183,11 @@
                 android:id="@+id/TV_Filt_meat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Carne"
-                android:textColor="#FFFFFF"
-                android:textAllCaps="true"
-                android:textSize="10sp"
                 android:fontFamily="@font/fedoka"
+                android:text="Carne"
+                android:textAllCaps="true"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/IB_Meat"
                 app:layout_constraintStart_toStartOf="@+id/IB_Meat"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -189,10 +209,10 @@
                 android:id="@+id/TV_Filt_Fish"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Peixe"
-                android:textColor="#FFFFFF"
                 android:fontFamily="@font/fedoka"
+                android:text="Peixe"
                 android:textAllCaps="true"
+                android:textColor="#FFFFFF"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/IB_Fish"
                 app:layout_constraintStart_toStartOf="@+id/IB_Fish"
@@ -216,10 +236,10 @@
                 android:id="@+id/TV_Filt_Soup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sopa"
-                android:textColor="#FFFFFF"
                 android:fontFamily="@font/fedoka"
+                android:text="Sopa"
                 android:textAllCaps="true"
+                android:textColor="#FFFFFF"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/IB_Soup"
                 app:layout_constraintStart_toStartOf="@+id/IB_Soup"
@@ -243,10 +263,10 @@
                 android:id="@+id/TV_Filt_Vegi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Salada"
-                android:textColor="#FFFFFF"
                 android:fontFamily="@font/fedoka"
+                android:text="Salada"
                 android:textAllCaps="true"
+                android:textColor="#FFFFFF"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/IB_Vegi"
                 app:layout_constraintStart_toStartOf="@+id/IB_Vegi"
@@ -270,10 +290,10 @@
                 android:id="@+id/TV_Filt_Fruit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Fruta"
-                android:textColor="#FFFFFF"
                 android:fontFamily="@font/fedoka"
+                android:text="Fruta"
                 android:textAllCaps="true"
+                android:textColor="#FFFFFF"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/IB_Fruit"
                 app:layout_constraintStart_toStartOf="@+id/IB_Fruit"
@@ -298,10 +318,10 @@
                 android:id="@+id/TV_Filt_Drink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bebida"
-                android:textColor="#FFFFFF"
                 android:fontFamily="@font/fedoka"
+                android:text="Bebida"
                 android:textAllCaps="true"
+                android:textColor="#FFFFFF"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/IB_Drink"
                 app:layout_constraintStart_toStartOf="@+id/IB_Drink"
