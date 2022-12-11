@@ -57,23 +57,23 @@ class RecipeDetailFragment : Fragment() {
         objRecipe = arguments?.getParcelable("note")
 
         objRecipe?.let { recipe ->
-            /*binding.tvTitle.text = recipe.title
-            binding.tvTime.text = "Tempo: "+recipe.time
-            binding.tvdifficulty.text = "Dificuldade: "+recipe.difficulty
-            binding.tvPortion.text = "Nrº de porções "+recipe.portion
-            binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
-            binding.tvRateInt.text = "not implemented"
-            binding.tvDesc.text = recipe.desc
-            binding.tvIngridientsinfo.text = parse_hash_maps(recipe.ingredients)
-            binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
-            binding.tvSourceCompany.text = recipe.company
-            binding.tvSourceLink.text = recipe.source
-            binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
+            binding.TVTitle.text = recipe.title
+            binding.TVTime.text = recipe.time
+            binding.TVDifficulty.text = recipe.difficulty
+            binding.TVPortion.text = recipe.portion
+          //  binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
+          //  binding.tvRateInt.text = "not implemented"
+            binding.TVDescriptionInfo.text = recipe.desc
+            binding.TVIngridientsInfo.text = parse_hash_maps(recipe.ingredients)
+           // binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
+           // binding.tvSourceCompany.text = recipe.company
+            //binding.tvSourceLink.text = recipe.source
+           // binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
             val imgRef = Firebase.storage.reference.child(recipe.img)
             imgRef.downloadUrl.addOnSuccessListener {Uri->
                 val imageURL = Uri.toString()
-                Glide.with(binding.imageView3.context).load(imageURL).into(binding.imageView3)
-            }*/
+                Glide.with(binding.IVRecipe.context).load(imageURL).into(binding.IVRecipe)
+            }
 
 
 

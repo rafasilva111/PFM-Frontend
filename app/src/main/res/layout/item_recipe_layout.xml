@@ -67,7 +67,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_height="250dp"
             android:background="@drawable/layout_item_recipes"
             android:elevation="5dp"
             android:outlineProvider="none"
@@ -93,19 +93,27 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/TV_description"
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:text="Descrição"
-                android:textAlignment="gravity"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/textView4"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/recipe_title"
-                app:layout_constraintTop_toBottomOf="@+id/recipe_title" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_title"
+                app:layout_constraintVertical_bias="0.206">
 
+                <TextView
+                    android:id="@+id/TV_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Descrição"
+                    android:textAlignment="gravity" />
+
+
+            </ScrollView>
 
             <TextView
                 android:id="@+id/textView4"

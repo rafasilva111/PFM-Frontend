@@ -9,12 +9,11 @@
     android:background="#1E749C">
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:src="@drawable/drink"
-        app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout"
+        android:src="@drawable/img_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,7 +47,7 @@
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvName">
@@ -58,6 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none"
+            android:layout_marginBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,10 +71,9 @@
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:background="@drawable/layout_bg"
                     android:backgroundTint="#E3E3E4"
-                    android:padding="2dp"
                     android:text="Sugestões"
                     android:textColor="@color/black"
                     android:textSize="10sp"
@@ -82,7 +81,7 @@
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_marginStart="10dp"
                     android:background="@drawable/layout_bg"
                     android:backgroundTint="#E3E3E4"
@@ -94,7 +93,7 @@
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_marginStart="10dp"
                     android:background="@drawable/layout_bg"
                     android:backgroundTint="#E3E3E4"
@@ -106,7 +105,7 @@
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:layout_marginStart="10dp"
                     android:background="@drawable/layout_bg"
                     android:backgroundTint="#E3E3E4"
@@ -137,7 +136,9 @@
             android:id="@+id/progressBar"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:indeterminateTint="#9C27B0"
+            android:elevation="7dp"
+            android:indeterminateTint="#FF6410"
+            android:outlineProvider="none"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
             app:layout_constraintEnd_toEndOf="parent"
@@ -169,7 +170,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:paddingBottom="30dp">
+        android:paddingBottom="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
