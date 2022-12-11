@@ -75,6 +75,7 @@ class RegisterFragment : Fragment() {
             last_name = binding.lastNameEt.text.toString(),
             job_title = binding.jobTitleEt.text.toString(),
             email = binding.emailEt.text.toString(),
+            favorite_recipes = listOf()
         )
     }
 
