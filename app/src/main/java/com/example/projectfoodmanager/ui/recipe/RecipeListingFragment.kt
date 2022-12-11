@@ -56,7 +56,7 @@ class RecipeListingFragment : Fragment() {
             manager = LinearLayoutManager(activity)
             binding.recyclerView.layoutManager = manager
 
-            setRecyclerViewScrollListener()
+            //setRecyclerViewScrollListener()
 
 
 

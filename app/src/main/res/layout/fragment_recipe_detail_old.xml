@@ -7,7 +7,7 @@
     tools:context=".ui.recipe.RecipeDetailFragment"
     app:layout_scrollFlags="scroll">
 
-<!--    <ScrollView
+   <ScrollView
         android:id="@+id/SRL_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">-->
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -132,7 +132,7 @@
                         android:layout_height="match_parent">
 
                         <ImageView
-                            android:id="@+id/IV_1"
+                            android:id="@+id/imageView3"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:src="@drawable/ic_clock"
@@ -143,7 +143,7 @@
                             app:layout_constraintVertical_bias="0.228" />
 
                         <TextView
-                            android:id="@+id/TV_2"
+                            android:id="@+id/textView2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="14 min"
@@ -151,9 +151,9 @@
                             android:textSize="17sp"
                             android:textColor="#598820"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/IV_1"
-                            app:layout_constraintStart_toStartOf="@+id/IV_1"
-                            app:layout_constraintTop_toBottomOf="@+id/IV_1" />
+                            app:layout_constraintEnd_toEndOf="@+id/imageView3"
+                            app:layout_constraintStart_toStartOf="@+id/imageView3"
+                            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
@@ -175,7 +175,7 @@
                         android:layout_height="match_parent">
 
                         <ImageView
-                            android:id="@+id/IV_3"
+                            android:id="@+id/imageView3"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:src="@drawable/ic_temp"
@@ -186,7 +186,7 @@
                             app:layout_constraintVertical_bias="0.228" />
 
                         <TextView
-                            android:id="@+id/TV_3"
+                            android:id="@+id/textView2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="34ºc"
@@ -194,9 +194,9 @@
                             android:textSize="17sp"
                             android:textColor="#DAA507"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/IV_3"
-                            app:layout_constraintStart_toStartOf="@+id/IV_3"
-                            app:layout_constraintTop_toBottomOf="@+id/IV_3" />
+                            app:layout_constraintEnd_toEndOf="@+id/imageView3"
+                            app:layout_constraintStart_toStartOf="@+id/imageView3"
+                            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
@@ -274,9 +274,8 @@
                     android:text="Preparação:"
                     android:textColor="#000000"
                     android:textSize="18sp"
-                    android:layout_marginTop="40dp"
                     app:layout_constraintStart_toStartOf="@+id/tvIngridients"
-                    app:layout_constraintTop_toBottomOf="@+id/tvIngridientsinfo" />
+                    tools:layout_editor_absoluteY="339dp" />
 
                 <ListView
                     android:layout_width="0dp"

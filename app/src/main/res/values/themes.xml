@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.ProjectFoodManager" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryDark">@color/purple_500</item>
+        <item name="colorPrimary">#E3E3E4</item>
+        <item name="colorPrimaryDark">#E3E3E4</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="android:navigationBarColor">@color/purple_500</item>
