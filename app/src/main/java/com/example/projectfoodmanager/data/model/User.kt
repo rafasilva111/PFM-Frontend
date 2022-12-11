@@ -12,12 +12,11 @@ data class User(
     val email: String = "",
     var favorite_recipes: ArrayList<String> = arrayListOf(),
 ) : Parcelable {
-    fun addFavoriteRecipe(recipe: Recipe): Recipe? {
+    fun addFavoriteRecipe(recipe: Recipe){
+        this.favorite_recipes.add(recipe.id.toString())
+    }
 
-
-            this.favorite_recipes = ArrayList<String>()
-            this.favorite_recipes.add(recipe.id.toString())
-
-        return recipe
+    fun removeFavoriteRecipe(recipe: Recipe) {
+        this.favorite_recipes.remove(recipe.id.toString())
     }
 }

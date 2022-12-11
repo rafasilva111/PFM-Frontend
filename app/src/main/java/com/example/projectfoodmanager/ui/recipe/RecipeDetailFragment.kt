@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
@@ -75,6 +76,14 @@ class RecipeDetailFragment : Fragment() {
                 Glide.with(binding.imageView3.context).load(imageURL).into(binding.imageView3)
             }
 
+
+            authModel.getSession { user ->
+                if (user != null){
+                    if (!user.favorite_recipes.isNullOrEmpty() && user.favorite_recipes.indexOf(recipe.id)!=1){
+                        binding.heart.isLiked=true
+                    }
+                }
+            }
 
             binding.heart.setOnLikeListener(object : OnLikeListener {
                 override fun liked(likeButton: LikeButton?) {
