@@ -55,6 +55,9 @@ class RecipeListingAdapter(
                 val imageURL = Uri.toString()
                 Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
             }
+            .addOnFailureListener {
+                Glide.with(binding.imageView.context).load(R.drawable.default_food).into(binding.imageView)
+            }
             binding.dateLabel.text = item.date.toString()
             binding.recipeTitle.text = item.title.toString()
             binding.like.setOnClickListener { onEditClicked.invoke(adapterPosition,item) }

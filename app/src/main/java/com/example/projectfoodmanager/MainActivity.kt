@@ -1,6 +1,9 @@
 package com.example.projectfoodmanager
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -63,12 +66,20 @@ class MainActivity : AppCompatActivity() {
 
         bottomNav.setOnItemSelectedListener {
             when (it.itemId){
-                R.id.recipes -> replaceFragment(RecipeListingFragment())
+                R.id.recipes -> {
+                    val connected_to_internet:Boolean = isOnline(this)
+                    val fragment:Fragment = RecipeListingFragment()
+                    fragment.arguments = Bundle().apply {
+                        putBoolean("connectivity",connected_to_internet)
+                    }
+                    replaceFragment(RecipeListingFragment())
+                }
                 R.id.profile -> replaceFragment(ProfileFragment())
             }
             true
         }
     }
+
 
     private fun observer() {
 
@@ -97,5 +108,26 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.commit()
     }
 
+    private fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities =
+                    connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
+    }
 
 }

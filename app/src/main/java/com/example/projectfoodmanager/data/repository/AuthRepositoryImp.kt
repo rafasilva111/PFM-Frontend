@@ -35,7 +35,7 @@ class AuthRepositoryImp(
                     updateUserInfo(user) { state ->
                         when(state){
                             is UiState.Success -> {
-                                storeSession(id = it.result.user?.uid ?: "") {
+                                storeSession() {
                                     if (it == null){
                                         result.invoke(UiState.Failure("User register successfully but session failed to store"))
                                     }else{
@@ -100,7 +100,7 @@ class AuthRepositoryImp(
         auth.signInWithEmailAndPassword(email,password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    storeSession(id = task.result.user?.uid ?: ""){
+                    storeSession(){
                         if (it == null){
                             result.invoke(UiState.Failure("Failed to store local session"))
                         }else{
@@ -113,33 +113,56 @@ class AuthRepositoryImp(
             }
     }
 
-    override fun forgotPassword(user: User, result: (UiState<String>) -> Unit) {
-
+    override fun logout(result: () -> Unit) {
+        auth.signOut()
+        removeUserInSharedPreferences()
+        result.invoke()
     }
 
-    override fun storeSession(id: String, result: (User?) -> Unit) {
-        database.collection(FireStoreCollection.USER).document(id)
-            .get()
-            .addOnCompleteListener {
-                if (it.isSuccessful){
-                    val user = it.result.toObject(User::class.java)
-                    appPreferences.edit().putString(SharedPrefConstants.USER_SESSION,gson.toJson(user)).apply()
-                    result.invoke(user)
-                }else{
-                    result.invoke(null)
+    override fun forgotPassword(email: String, result: (UiState<String>) -> Unit) {
+        auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        result.invoke(UiState.Success("Foi-lhe enviado um email para restauro."))
+
+                    } else {
+                        result.invoke(UiState.Failure(task.exception?.message))
+                    }
+                }.addOnFailureListener {
+                    result.invoke(UiState.Failure("Autentificação falhou, email errado."))
                 }
-            }
-            .addOnFailureListener {
-                result.invoke(null)
-            }
+    }
+
+    override fun storeSession( result: (User?) -> Unit) {
+        var user:User? = validateSession()
+        if (user!=null) {
+            database.collection(FireStoreCollection.USER).document(user.id)
+                    .get()
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            val user = it.result.toObject(User::class.java)
+                            appPreferences.edit().putString(SharedPrefConstants.USER_SESSION, gson.toJson(user)).apply()
+                            result.invoke(user)
+                        } else {
+                            result.invoke(null)
+                        }
+                    }
+                    .addOnFailureListener {
+                        result.invoke(null)
+                    }
+        }
+        else{
+            result.invoke(null)
+        }
     }
 
     override fun getSession(result: (User?) -> Unit) {
-        val user_str = getUserStringInSharedPreferences()
-        if (user_str == null){
+        var user:User? = validateSession()
+
+        if (user == null){
+            removeUserInSharedPreferences()
             result.invoke(null)
         }else{
-            val user = gson.fromJson(user_str,User::class.java)
             result.invoke(user)
         }
     }
@@ -153,7 +176,8 @@ class AuthRepositoryImp(
         val user_str = getUserStringInSharedPreferences()
 
         if(user == null){
-            result.invoke(null)
+            removeUserInSharedPreferences()
+            result.invoke(UiState.Failure("Sessão expirou."))
             return
         }
 
@@ -191,7 +215,8 @@ class AuthRepositoryImp(
         val user_str = getUserStringInSharedPreferences()
 
         if(user == null){
-            result.invoke(null)
+            removeUserInSharedPreferences()
+            result.invoke(UiState.Failure("Sessão expirou."))
             return
         }
 
@@ -227,8 +252,14 @@ class AuthRepositoryImp(
 
 
     override fun getFavoritesRecipeClass(result: (UiState<ArrayList<Recipe>?>) -> Unit) {
-        val recipes = getRecipesClassInSharedPreferences()
-        result.invoke(UiState.Success(recipes))
+        val user: User? = validateSession()
+        if (user != null) {
+            val recipes = getRecipesClassInSharedPreferences()
+            result.invoke(UiState.Success(recipes))
+            return
+        }
+        removeUserInSharedPreferences()
+        result.invoke(UiState.Failure("Sessão expirou."))
     }
 
 
@@ -237,10 +268,13 @@ class AuthRepositoryImp(
         if (user != null) {
             if (user.favorite_recipes != null){
                 result.invoke(UiState.Success(user.favorite_recipes))
+                return
             }
             result.invoke(UiState.Failure("Utilizador não tem receitas nos favoritos."))
+            return
         }
-        result.invoke(UiState.Failure("Sessão não é válida"))
+        removeUserInSharedPreferences()
+        result.invoke(UiState.Failure("Sessão expirou."))
     }
 
 

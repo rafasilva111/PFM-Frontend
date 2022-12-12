@@ -83,6 +83,9 @@ class RecipeDetailFragment : Fragment() {
                         binding.heart.isLiked=true
                     }
                 }
+                else{
+
+                }
             }
 
             binding.heart.setOnLikeListener(object : OnLikeListener {

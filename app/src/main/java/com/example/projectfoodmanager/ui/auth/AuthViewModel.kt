@@ -86,4 +86,7 @@ class AuthViewModel @Inject constructor(
         _getUserSession.value  = UiState.Loading
         repository.getUserSession() { _getUserSession.value = it}
     }
+    fun logout(result: () -> Unit){
+        repository.logout(result)
+    }
 }
