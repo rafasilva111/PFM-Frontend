@@ -1,5 +1,6 @@
 package com.example.projectfoodmanager.di
 
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -21,13 +22,13 @@ object FirebaseModule {
 
     @Provides
     @Singleton
-    fun providerFirebaseStorageInstance(): FirebaseStorage{
+    fun providerFirebaseStorageInstance(): FirebaseStorage {
         return FirebaseStorage.getInstance()
     }
 
     @Provides
     @Singleton
-    fun providerFirebaseAuthInstance(): FirebaseAuth{
+    fun providerFirebaseAuthInstance(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
 }

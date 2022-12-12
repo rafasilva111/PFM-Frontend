@@ -152,6 +152,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             app:flow_verticalAlign="center"
+            app:flow_horizontalAlign="center"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

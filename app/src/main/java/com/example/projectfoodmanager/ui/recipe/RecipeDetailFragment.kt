@@ -2,26 +2,21 @@ package com.example.projectfoodmanager.ui.recipe
 
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
-
 import com.example.projectfoodmanager.util.UiState
-import com.example.projectfoodmanager.util.hide
-import com.example.projectfoodmanager.util.show
 import com.example.projectfoodmanager.util.toast
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,6 +26,7 @@ class RecipeDetailFragment : Fragment() {
     var objRecipe: Recipe? = null
     val viewModel: RecipeViewModel by viewModels()
     val authModel: AuthViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +60,14 @@ class RecipeDetailFragment : Fragment() {
           //  binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
           //  binding.tvRateInt.text = "not implemented"
             binding.TVDescriptionInfo.text = recipe.desc
-            binding.TVIngridientsInfo.text = parse_hash_maps(recipe.ingredients)
+
+            binding.LVIngridientsInfo.isClickable = false
+
+            val itemsAdapter: ArrayAdapter<String>? =
+                this.context?.let { ArrayAdapter<String>(it, R.layout.item_recipe_ingredients_layout, parse_hash_maps(recipe.ingredients)) }
+            binding.LVIngridientsInfo.adapter = itemsAdapter
+
+                //binding.TVIngridientsInfo.text = parse_hash_maps(recipe.ingredients)
            // binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
            // binding.tvSourceCompany.text = recipe.company
             //binding.tvSourceLink.text = recipe.source
@@ -98,13 +101,14 @@ class RecipeDetailFragment : Fragment() {
         }
     }
 
-    private fun parse_hash_maps(ingredients: HashMap<String, String>): CharSequence? {
-        var helper_text: String = ""
+    private fun parse_hash_maps(ingredients: HashMap<String, String>): ArrayList<String> {
+
+        var arrayList = ArrayList<String>()
         for (item in ingredients.keys){
 
-            helper_text = helper_text + item+": " + ingredients.get(item) + "\n"
+            arrayList.add(item+": " + ingredients.get(item))
         }
-        return helper_text
+        return arrayList
     }
 
 
