@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ListAdapter
+import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -26,6 +28,7 @@ class RecipeDetailFragment : Fragment() {
     var objRecipe: Recipe? = null
     val viewModel: RecipeViewModel by viewModels()
     val authModel: AuthViewModel by viewModels()
+
 
 
     override fun onCreateView(
@@ -63,9 +66,11 @@ class RecipeDetailFragment : Fragment() {
 
             binding.LVIngridientsInfo.isClickable = false
 
-            val itemsAdapter: ArrayAdapter<String>? =
-                this.context?.let { ArrayAdapter<String>(it, R.layout.item_recipe_ingredients_layout, parse_hash_maps(recipe.ingredients)) }
+            val itemsAdapter: IngridientsListingAdapter? =
+                this.context?.let { IngridientsListingAdapter(it,parse_hash_maps(recipe.ingredients)) }
             binding.LVIngridientsInfo.adapter = itemsAdapter
+
+            setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
 
                 //binding.TVIngridientsInfo.text = parse_hash_maps(recipe.ingredients)
            // binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
@@ -111,5 +116,19 @@ class RecipeDetailFragment : Fragment() {
         return arrayList
     }
 
+    fun setListViewHeightBasedOnChildren(myListView: ListView?) {
+        val adapter: ListAdapter = myListView!!.getAdapter()
+        if (myListView != null) {
+            var totalHeight = 0
+            for (i in 0 until adapter.getCount()) {
+                val item: View = adapter.getView(i, null, myListView)
+                item.measure(0, 0)
+                totalHeight += item.measuredHeight
+            }
+            val params: ViewGroup.LayoutParams = myListView.getLayoutParams()
+            params.height = totalHeight + myListView.getDividerHeight() * (adapter.getCount() - 1)
+            myListView.setLayoutParams(params)
+        }
+    }
 
 }
