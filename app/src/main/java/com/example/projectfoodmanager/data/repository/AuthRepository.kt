@@ -32,4 +32,10 @@ interface AuthRepository {
     //session
     fun storeSession(result: (User?) -> Unit)
     fun getSession(result: (User?) -> Unit)
+
+    //metadata
+    fun getMetadata(result: (HashMap<String,String>?) -> Unit)
+    fun updateMetadata(key:String,value:String,result: (HashMap<String,String>?) -> Unit)
+    fun removeMetadata(key:String,value:String,result: (HashMap<String,String>?) -> Unit)
+    fun removeMetadata(result: () -> Unit)
 }

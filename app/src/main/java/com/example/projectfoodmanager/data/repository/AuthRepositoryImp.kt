@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.util.FireStoreCollection
+import com.example.projectfoodmanager.util.MetadataConstants
 import com.example.projectfoodmanager.util.SharedPrefConstants
 import com.example.projectfoodmanager.util.UiState
 import com.google.firebase.auth.FirebaseAuth
@@ -13,8 +14,6 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import kotlin.reflect.typeOf
 
 class AuthRepositoryImp(
     val auth: FirebaseAuth,
@@ -300,6 +299,43 @@ class AuthRepositoryImp(
             result.invoke(UiState.Failure("Sessão expirou."))
         }
 
+    }
+
+    override fun updateMetadata(key: String, value: String, result: (HashMap<String,String>?) -> Unit) {
+        if (key != MetadataConstants.FIRST_TIME_LOGIN) {
+            result.invoke(null)
+        }
+
+        var map_old = getMetadataFunction()
+        if (map_old!=null){
+            map_old.put(key, value)
+            appPreferences.edit().putString(SharedPrefConstants.METADATA,gson.toJson(map_old)).apply()
+            result.invoke(map_old)
+        }
+        else{
+            var map:HashMap<String,String> = HashMap()
+            map.put(key, value)
+            appPreferences.edit().putString(SharedPrefConstants.METADATA,gson.toJson(map)).apply()
+            result.invoke(map)
+        }
+
+    }
+
+    override fun getMetadata(result: (HashMap<String,String>?) -> Unit){
+        result.invoke(getMetadataFunction())
+    }
+
+    override fun removeMetadata(key: String, value: String, result: (HashMap<String,String>?) -> Unit) {
+        TODO("Not yet implemented")
+    }
+
+    override fun removeMetadata(result: () -> Unit) {
+        return appPreferences.edit().remove(SharedPrefConstants.METADATA).apply()
+    }
+
+    private fun getMetadataFunction(): HashMap<String,String>? {
+        val serializedHashMap = appPreferences.getString(SharedPrefConstants.METADATA, null)
+        return  gson.fromJson(serializedHashMap, HashMap::class.java) as HashMap<String, String>?
     }
 
     private fun validateSession(): User? {

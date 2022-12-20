@@ -8,28 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.projectfoodmanager.databinding.ActivityMainMenuBinding
-import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
-import com.example.projectfoodmanager.ui.LoginActivity
+import com.example.projectfoodmanager.ui.auth.LoginActivity
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import com.example.projectfoodmanager.ui.profile.ProfileFragment
 import com.example.projectfoodmanager.ui.recipe.RecipeListingFragment
-import com.example.projectfoodmanager.ui.views.CalenderFragment
-import com.example.projectfoodmanager.ui.views.FavoritesFragment
-import com.example.projectfoodmanager.ui.views.GoalFragment
 import com.example.projectfoodmanager.util.UiState
 import com.example.projectfoodmanager.util.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -82,7 +70,6 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun observer() {
-
         authViewModel.getUserSession.observe(this) { state ->
             when(state){
                 is UiState.Loading -> {

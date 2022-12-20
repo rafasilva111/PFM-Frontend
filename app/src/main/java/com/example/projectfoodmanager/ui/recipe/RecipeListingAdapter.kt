@@ -62,9 +62,6 @@ class RecipeListingAdapter(
             binding.recipeTitle.text = item.title.toString()
             binding.like.setOnClickListener { onEditClicked.invoke(adapterPosition,item) }
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition,item) }
-
-
-
         }
     }
 }
