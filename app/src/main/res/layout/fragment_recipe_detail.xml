@@ -1,233 +1,326 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.recipe.RecipeDetailFragment">
+
+    <ScrollView
+            android:id="@+id/SRL_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:fillViewport="true">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="20dp">
+        android:layout_height="wrap_content">
 
-        <com.like.LikeButton
-            android:id="@+id/save"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="12dp"
-            app:icon_size="10dp"
-            app:icon_type="star"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.13"
-            app:layout_constraintStart_toEndOf="@+id/heart"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3">
-
-        </com.like.LikeButton>
-
-        <com.like.LikeButton
-            android:id="@+id/heart"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="15dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3"
-            app:icon_type="heart"
-            app:icon_size="10dp">
-
-        </com.like.LikeButton>
-
-        <com.like.LikeButton
-            android:id="@+id/like"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="15dp"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="20dp"
-            android:gravity="center"
-            app:icon_type="thumb"
-            app:icon_size="10dp"
-            app:layout_constraintEnd_toStartOf="@+id/heart"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3"/>
-
-
-
-        <TextView
-            android:id="@+id/tvRateInt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            android:text="Rate_interno"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.189"
-            app:layout_constraintStart_toEndOf="@+id/tvRateExt"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
-
-        <TextView
-            android:id="@+id/tvSourceLink"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="20dp"
-            android:text="Source Link"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvSourceCompany" />
+        <ImageButton
+            android:id="@+id/backIB"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#00000000"
+            android:elevation="1dp"
+            android:outlineProvider="none"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="@+id/IV_Recipe"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="257dp"
-            android:layout_height="224dp"
-            android:layout_marginTop="56dp"
-            android:src="@drawable/default_food"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvdifficulty" />
-
-        <TextView
-            android:id="@+id/tvRateExt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="116dp"
-            android:layout_marginTop="64dp"
-            android:text="Rate_externo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
-
-        <TextView
-            android:id="@+id/tvPreparation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Preparation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.113"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvIngridientsinfo" />
-
-        <TextView
-            android:id="@+id/tvIngridientsinfo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="20dp"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.454"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvIngridients" />
-
-        <TextView
-            android:id="@+id/tvPreparationInfo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="20dp"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.454"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPreparation" />
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="title"
-            android:textColor="@color/black"
-            android:textSize="16dp"
+            android:id="@+id/IV_Recipe"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:adjustViewBounds="true"
+            android:foreground="#83807F7F"
+            android:scaleType="fitXY"
+            android:src="@drawable/good_food_display___nci_visuals_online"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvdifficulty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="24dp"
-            android:text="Dificuldade"
-            app:layout_constraintStart_toEndOf="@+id/tvTime"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
-        <TextView
-            android:id="@+id/tvTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="76dp"
-            android:layout_marginTop="24dp"
-            android:text="Tempo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
-
-        <TextView
-            android:id="@+id/tvPortion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Portion"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.254"
-            app:layout_constraintStart_toEndOf="@+id/tvdifficulty"
-            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
-
-        <TextView
-            android:id="@+id/tvIngridients"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Ingridients"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.111"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDesc" />
-
-        <TextView
-            android:id="@+id/tvDesc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="80dp"
-            android:layout_marginEnd="20dp"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="parent"
+        <ImageButton
+            android:id="@+id/favoritesIB"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/layout_bg_low"
+            android:elevation="2dp"
+            android:padding="30dp"
+            android:src="@drawable/ic_favorito_black"
+            app:layout_constraintEnd_toEndOf="@+id/calendarIB"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+            app:layout_constraintStart_toStartOf="@+id/calendarIB"
+            app:layout_constraintTop_toBottomOf="@+id/calendarIB" />
 
-        <TextView
-            android:id="@+id/tvSource"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:text="Origem"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.111"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPreparationInfo" />
+        <ImageButton
+            android:id="@+id/likeIB"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/layout_bg_low"
+            android:elevation="2dp"
+            android:padding="30dp"
+            android:src="@drawable/ic_like_black"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+            app:layout_constraintEnd_toEndOf="@+id/favoritesIB"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/favoritesIB"
+            app:layout_constraintTop_toBottomOf="@+id/favoritesIB"
+            app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/tvSourceCompany"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+        <ImageButton
+            android:id="@+id/calendarIB"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="20dp"
-            android:text="Company"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/layout_bg_low"
+            android:elevation="2dp"
+            android:padding="30dp"
+            android:src="@drawable/ic_calendar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvSource" />
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="190dp"
+
+            android:background="@drawable/layout_body_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/IV_Recipe">
+
+            <TextView
+                android:id="@+id/TV_Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/fedoka"
+                android:text="Nome produto"
+                android:textColor="#000000"
+                android:textSize="25sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
+                android:layout_width="110dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#D6EFB8"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TV_Title">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/IV_1"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_clock"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.228" />
+
+                    <TextView
+                        android:id="@+id/TV_Time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="14 min"
+                        android:textColor="#598820"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/IV_1"
+                        app:layout_constraintStart_toStartOf="@+id/IV_1"
+                        app:layout_constraintTop_toBottomOf="@+id/IV_1" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView3"
+                android:layout_width="110dp"
+                android:layout_height="120dp"
+                android:backgroundTint="#F6E1A3"
+                android:elevation="8dp"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/cardView2"
+                app:layout_constraintEnd_toStartOf="@+id/cardView4"
+                app:layout_constraintStart_toEndOf="@+id/cardView2"
+                app:layout_constraintTop_toTopOf="@+id/cardView2">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/IV_3"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_dificulties"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.228" />
+
+                    <TextView
+                        android:id="@+id/TV_Difficulty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="34ºc"
+                        android:textColor="#DAA507"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/IV_3"
+                        app:layout_constraintStart_toStartOf="@+id/IV_3"
+                        app:layout_constraintTop_toBottomOf="@+id/IV_3" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView4"
+                android:layout_width="110dp"
+                android:layout_height="120dp"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="#9FD0F8"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/cardView3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cardView3">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_peoples"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.228" />
+
+                    <TextView
+                        android:id="@+id/TV_Portion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2 Pessoas"
+                        android:textColor="#127CD3"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+                        app:layout_constraintStart_toStartOf="@+id/imageView3"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
+                android:id="@+id/TV_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/fedoka"
+                android:text="Descrição:"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/cardView2"
+                app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+            <TextView
+                android:id="@+id/TV_description_Info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:justificationMode="inter_word"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="@+id/cardView4"
+                app:layout_constraintStart_toStartOf="@+id/TV_description"
+                app:layout_constraintTop_toBottomOf="@+id/TV_description" />
+
+            <TextView
+                android:id="@+id/tvIngridients"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/fedoka"
+                android:text="Ingredientes:"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/TV_description_Info"
+                app:layout_constraintTop_toBottomOf="@+id/TV_description_Info" />
+
+
+          <!--  <ListView
+                android:id="@+id/LV_Ingridients_Info"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:cacheColorHint="#00000000"
+                android:divider="@null"
+                android:listSelector="#00000000"
+                app:layout_constraintTop_toBottomOf="@+id/tvIngridients"
+                tools:layout_editor_absoluteX="16dp" />
+            -->
+
+
+            <ListView
+                android:id="@+id/LV_Ingridients_Info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvIngridients" />
+
+            <TextView
+                android:id="@+id/tvPreparation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="80dp"
+                android:fontFamily="@font/fedoka"
+                android:text="Preparação:"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/LV_Ingridients_Info" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</ScrollView>
+    </ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

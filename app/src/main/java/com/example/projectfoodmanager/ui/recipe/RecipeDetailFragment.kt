@@ -2,27 +2,23 @@ package com.example.projectfoodmanager.ui.recipe
 
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.ArrayAdapter
+import android.widget.ListAdapter
+import android.widget.ListView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
-
 import com.example.projectfoodmanager.util.UiState
-import com.example.projectfoodmanager.util.hide
-import com.example.projectfoodmanager.util.show
 import com.example.projectfoodmanager.util.toast
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.like.LikeButton
-import com.like.OnLikeListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +28,8 @@ class RecipeDetailFragment : Fragment() {
     var objRecipe: Recipe? = null
     val viewModel: RecipeViewModel by viewModels()
     val authModel: AuthViewModel by viewModels()
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,64 +56,35 @@ class RecipeDetailFragment : Fragment() {
         objRecipe = arguments?.getParcelable("note")
 
         objRecipe?.let { recipe ->
-            binding.tvTitle.text = recipe.title
-            binding.tvTime.text = "Tempo: "+recipe.time
-            binding.tvdifficulty.text = "Dificuldade: "+recipe.difficulty
-            binding.tvPortion.text = "Nrº de porções "+recipe.portion
-            binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
-            binding.tvRateInt.text = "not implemented"
-            binding.tvDesc.text = recipe.desc
-            binding.tvIngridientsinfo.text = parse_hash_maps(recipe.ingredients)
-            binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
-            binding.tvSourceCompany.text = recipe.company
-            binding.tvSourceLink.text = recipe.source
-            binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
+            binding.TVTitle.text = recipe.title
+            binding.TVTime.text = recipe.time
+            binding.TVDifficulty.text = recipe.difficulty
+            binding.TVPortion.text = recipe.portion
+          //  binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
+          //  binding.tvRateInt.text = "not implemented"
+            binding.TVDescriptionInfo.text = recipe.desc
+
+            binding.LVIngridientsInfo.isClickable = false
+
+            val itemsAdapter: IngridientsListingAdapter? =
+                this.context?.let { IngridientsListingAdapter(it,parse_hash_maps(recipe.ingredients)) }
+            binding.LVIngridientsInfo.adapter = itemsAdapter
+
+            setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
+
+                //binding.TVIngridientsInfo.text = parse_hash_maps(recipe.ingredients)
+           // binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
+           // binding.tvSourceCompany.text = recipe.company
+            //binding.tvSourceLink.text = recipe.source
+           // binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
             val imgRef = Firebase.storage.reference.child(recipe.img)
             imgRef.downloadUrl.addOnSuccessListener {Uri->
                 val imageURL = Uri.toString()
-                Glide.with(binding.imageView3.context).load(imageURL).into(binding.imageView3)
+                Glide.with(binding.IVRecipe.context).load(imageURL).into(binding.IVRecipe)
             }
 
 
-            authModel.getSession { user ->
-                if (user != null){
-                    if (!user.favorite_recipes.isNullOrEmpty() && user.favorite_recipes.indexOf(recipe.id)!=1){
-                        binding.heart.isLiked=true
-                    }
-                }
-            }
 
-            binding.heart.setOnLikeListener(object : OnLikeListener {
-                override fun liked(likeButton: LikeButton?) {
-                    toast("Adicionas-te a receita aos favoritos!")
-                    objRecipe?.let { authModel.addFavoriteRecipe(it) }
-
-                }
-
-                override fun unLiked(likeButton: LikeButton?) {
-                    toast("Removes-te a receita dos favoritos...")
-                }
-            })
-
-            binding.like.setOnLikeListener(object : OnLikeListener {
-                override fun liked(likeButton: LikeButton?) {
-                    toast("Not Implemented")
-                }
-
-                override fun unLiked(likeButton: LikeButton?) {
-                    toast("Not Implemented")
-                }
-            })
-
-            binding.save.setOnLikeListener(object : OnLikeListener {
-                override fun liked(likeButton: LikeButton?) {
-                    toast("Not Implemented")
-                }
-
-                override fun unLiked(likeButton: LikeButton?) {
-                    toast("Not Implemented")
-                }
-            })
 
         }
     }
@@ -132,20 +101,34 @@ class RecipeDetailFragment : Fragment() {
                 }
                 is UiState.Success -> {
                     toast(state.data.second)
-                    binding.heart.isLiked = true
                 }
             }
         }
     }
 
-    private fun parse_hash_maps(ingredients: HashMap<String, String>): CharSequence? {
-        var helper_text: String = ""
+    private fun parse_hash_maps(ingredients: HashMap<String, String>): ArrayList<String> {
+
+        var arrayList = ArrayList<String>()
         for (item in ingredients.keys){
 
-            helper_text = helper_text + item+": " + ingredients.get(item) + "\n"
+            arrayList.add(item+": " + ingredients.get(item))
         }
-        return helper_text
+        return arrayList
     }
 
+    fun setListViewHeightBasedOnChildren(myListView: ListView?) {
+        val adapter: ListAdapter = myListView!!.getAdapter()
+        if (myListView != null) {
+            var totalHeight = 0
+            for (i in 0 until adapter.getCount()) {
+                val item: View = adapter.getView(i, null, myListView)
+                item.measure(0, 0)
+                totalHeight += item.measuredHeight
+            }
+            val params: ViewGroup.LayoutParams = myListView.getLayoutParams()
+            params.height = totalHeight + myListView.getDividerHeight() * (adapter.getCount() - 1)
+            myListView.setLayoutParams(params)
+        }
+    }
 
 }

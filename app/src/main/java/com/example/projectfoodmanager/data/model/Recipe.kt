@@ -15,7 +15,6 @@ data class Recipe(
     val img: String = "",
     val time: String = "",
     val difficulty: String= "",
-    val nrPersons: String="",
     val remote_rating: String="",
     val app_rating: String="",
     val date: String="",

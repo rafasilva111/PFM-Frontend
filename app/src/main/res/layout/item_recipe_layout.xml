@@ -4,80 +4,167 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_height="match_parent"
+    android:outlineProvider="none"
+    android:backgroundTint="#00000000"
+    android:padding="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        >
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="30dp">
 
-
-        <TextView
-            android:id="@+id/recipe_title"
-            android:layout_width="wrap_content"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/CV_image_recipe"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:alpha="0.7"
-            android:text="Recipe Title"
-            android:textColor="@color/black"
-            android:textSize="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider" />
+            app:cardCornerRadius="30dp"
+            app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+            app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/date_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:alpha="0.7"
-            android:text="date"
-            android:textColor="@color/black"
-            android:textSize="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipe_title" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/layout_bg"
+                android:scaleType="fitXY"
+                android:src="@drawable/good_food_display___nci_visuals_online"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="#26000000"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        </androidx.cardview.widget.CardView>
 
         <ImageView
             android:id="@+id/like"
-            android:layout_width="36dp"
-            android:layout_height="33dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"
-            android:src="@drawable/icon_heart"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider"
-            app:tint="@color/black" />
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/layout_bg_low"
+            android:elevation="3dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_favorito"
+            app:layout_constraintEnd_toEndOf="@+id/CV_image_recipe"
+            app:layout_constraintTop_toTopOf="@+id/CV_image_recipe" />
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:id="@+id/favorites"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/default_food"
+            android:background="@drawable/layout_bg_low"
+            android:elevation="3dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_favorite"
+            app:layout_constraintEnd_toEndOf="@+id/like"
+            app:layout_constraintTop_toBottomOf="@+id/like" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="300dp"
+            android:layout_height="250dp"
+            android:background="@drawable/layout_item_recipes"
+            android:elevation="5dp"
+            android:outlineProvider="none"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:layout_marginTop="-70dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toBottomOf="@+id/CV_image_recipe">
+
+            <TextView
+                android:id="@+id/recipe_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/fedoka"
+                android:text="Recipe Title"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/textView4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_title"
+                app:layout_constraintVertical_bias="0.206">
+
+                <TextView
+                    android:id="@+id/TV_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="Descrição"
+                    android:textAlignment="gravity" />
+
+
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/date_label"
+                app:layout_constraintStart_toStartOf="@+id/date_label" />
+
+            <TextView
+                android:id="@+id/date_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:alpha="0.7"
+                android:text="02/03/2022"
+                android:padding="2dp"
+                android:layout_marginBottom="20dp"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Avaliação"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/ratingBar2"
+                app:layout_constraintStart_toStartOf="@+id/ratingBar2" />
+
+            <RatingBar
+                android:id="@+id/ratingBar2"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:isIndicator="true"
+                android:max="5"
+                app:layout_constraintBottom_toBottomOf="@+id/date_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/date_label" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
