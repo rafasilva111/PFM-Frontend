@@ -133,9 +133,9 @@ class AuthRepositoryImp(
     }
 
     override fun storeSession( result: (User?) -> Unit) {
-        var user:User? = validateSession()
+        var user:String? = validateSessionUUID()
         if (user!=null) {
-            database.collection(FireStoreCollection.USER).document(user.id)
+            database.collection(FireStoreCollection.USER).document(user)
                     .get()
                     .addOnCompleteListener {
                         if (it.isSuccessful) {
@@ -384,5 +384,13 @@ class AuthRepositoryImp(
 
     private fun removeUserInSharedPreferences() {
         return appPreferences.edit().remove(SharedPrefConstants.USER_SESSION).apply()
+    }
+
+    private fun validateSessionUUID(): String? {
+        val userUUID = auth.currentUser?.uid ?: null
+        if (userUUID != null) {
+            return userUUID
+        }
+        return null
     }
 }

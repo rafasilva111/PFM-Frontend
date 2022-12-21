@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -39,7 +40,9 @@ class RecipeListingFragment : Fragment() {
     val adapter by lazy {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
+                Log.d(TAG, "olaaa: "+findNavController())
                 findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
+
                     putParcelable("note",item)
                 })
             },
