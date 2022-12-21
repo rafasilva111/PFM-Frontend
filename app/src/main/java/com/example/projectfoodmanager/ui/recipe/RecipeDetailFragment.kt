@@ -10,6 +10,7 @@ import android.widget.ListAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
@@ -83,7 +84,24 @@ class RecipeDetailFragment : Fragment() {
                 Glide.with(binding.IVRecipe.context).load(imageURL).into(binding.IVRecipe)
             }
 
+            binding.favoritesIB.setOnClickListener {
+                authModel.getSession { user ->
+                    if (user != null){
+                        if ( user.favorite_recipes.indexOf(recipe.id)!=-1){
+                            authModel.removeFavoriteRecipe(recipe)
+                            toast("Receita removida dos favoritos.")
+                        }
+                        else{
+                            authModel.addFavoriteRecipe(recipe)
+                            toast("Receita adicionada aos favoritos.")
+                        }
+                    }
+                }
+            }
 
+            binding.backIB.setOnClickListener {
+                findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaListingFragment)
+            }
 
 
         }
