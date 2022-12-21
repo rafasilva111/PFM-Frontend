@@ -70,7 +70,6 @@ class RegisterFragment : Fragment() {
             id = "",
             first_name = binding.firstNameEt.hint.toString(),
             last_name = binding.lastNameEt.text.toString(),
-            job_title = binding.jobTitleEt.text.toString(),
             email = binding.emailEt.text.toString(),
             favorite_recipes = arrayListOf<String>(),
         )
@@ -87,11 +86,6 @@ class RegisterFragment : Fragment() {
         if (binding.lastNameEt.text.isNullOrEmpty()){
             isValid = false
             toast(getString(R.string.enter_last_name))
-        }
-
-        if (binding.jobTitleEt.text.isNullOrEmpty()){
-            isValid = false
-            toast(getString(R.string.enter_job_title))
         }
 
         if (binding.emailEt.text.isNullOrEmpty()){

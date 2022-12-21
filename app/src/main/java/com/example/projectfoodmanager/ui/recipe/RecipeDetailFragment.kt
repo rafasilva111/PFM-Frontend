@@ -90,20 +90,6 @@ class RecipeDetailFragment : Fragment() {
                 val imageURL = Uri.toString()
                 Glide.with(binding.IVRecipe.context).load(imageURL).into(binding.IVRecipe)
             }
-
-
-            authModel.getSession { user ->
-                if (user != null){
-                    if (!user.favorite_recipes.isNullOrEmpty() && user.favorite_recipes.indexOf(recipe.id)!=1){
-                        binding.heart.isLiked=true
-                    }
-                }
-                else{
-
-                }
-            }
-
-
         }
     }
 

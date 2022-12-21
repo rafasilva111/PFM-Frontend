@@ -73,7 +73,7 @@ class BasicDataFragment : Fragment() {
         fun getUserObj(): User {
             return User(
                 id = "",
-                first_name = binding.firstNameEt.text.toString(),
+                first_name = binding.firstNameEt.hint.toString(),
                 last_name = binding.lastNameEt.text.toString(),
                 email = binding.emailEt.text.toString(),
                 favorite_recipes = arrayListOf<String>(),
@@ -83,7 +83,7 @@ class BasicDataFragment : Fragment() {
         fun validation(): Boolean {
             var isValid = true
 
-            if (binding.firstNameEt.text.isNullOrEmpty()){
+            if (binding.firstNameEt.hint.isNullOrEmpty()){
                 isValid = false
                 toast(getString(R.string.enter_first_name))
             }
