@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:fontFamily="@font/titillium_web_bold"
-        android:text="Registo"
+        android:text="Registration"
         android:textColor="@color/black"
         android:textSize="22dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/titillium_web_regular"
-        android:text="Por favor inserir as suas informações para criação de uma conta."
+        android:text="Note taking app where you save words"
         android:textColor="@color/black"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -96,6 +96,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/last_name_label" />
 
+    <TextView
+        android:id="@+id/job_title_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/titillium_web_regular"
+        android:text="Job Title"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/last_name_et" />
+
+    <EditText
+        android:id="@+id/job_title_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/black_white_rect_bg"
+        android:ems="10"
+        android:fontFamily="@font/titillium_web_regular"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/job_title_label" />
 
     <TextView
         android:id="@+id/email_label"
@@ -108,7 +140,7 @@
         android:textColor="@color/black"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/last_name_et" />
+        app:layout_constraintTop_toBottomOf="@+id/job_title_et" />
 
     <EditText
         android:id="@+id/email_et"
@@ -175,7 +207,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/black_rect_bg"
-            android:text="Registar"
+            android:text="Register"
             android:textAllCaps="false"
             android:textAppearance="@style/SubTitleStyle"
             android:textColor="@color/white"

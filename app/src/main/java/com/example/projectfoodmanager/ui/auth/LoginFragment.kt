@@ -2,7 +2,6 @@ package com.example.projectfoodmanager.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
-import com.example.projectfoodmanager.ui.LoginActivity
 import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,7 +44,6 @@ class LoginFragment : Fragment() {
         binding.forgotPassLabel.setOnClickListener {
 
         }
-
         binding.registerLabel.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }

@@ -84,6 +84,16 @@ class RecipeDetailFragment : Fragment() {
             }
 
 
+            authModel.getSession { user ->
+                if (user != null){
+                    if (!user.favorite_recipes.isNullOrEmpty() && user.favorite_recipes.indexOf(recipe.id)!=1){
+                        binding.heart.isLiked=true
+                    }
+                }
+                else{
+
+                }
+            }
 
 
         }

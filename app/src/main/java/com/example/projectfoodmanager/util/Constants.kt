@@ -18,4 +18,11 @@ object SharedPrefConstants {
     val LOCAL_SHARED_PREF = "local_shared_pref"
     val USER_SESSION = "user_session"
     val FAVORITE_RECIPES_SESSION = "favorite_recipes_session"
+
+    var METADATA = "metadata"
+}
+
+object MetadataConstants{
+    val FIRST_TIME_LOGIN = "first_time_login"
+
 }
