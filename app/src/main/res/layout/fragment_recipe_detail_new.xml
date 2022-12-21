@@ -30,7 +30,7 @@
                 android:backgroundTint="#00000000"
                 android:elevation="1dp"
                 android:outlineProvider="none"
-                android:src="@drawable/ic_back"
+                android:src="@drawable/ic_back_white"
                 app:layout_constraintStart_toStartOf="@+id/imageVie6"
                 app:layout_constraintTop_toTopOf="parent" />
 

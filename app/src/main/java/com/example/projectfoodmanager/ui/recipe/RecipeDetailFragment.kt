@@ -66,11 +66,19 @@ class RecipeDetailFragment : Fragment() {
 
             binding.LVIngridientsInfo.isClickable = false
 
-            val itemsAdapter: IngridientsListingAdapter? =
+            val itemsAdapterIngrtedients: IngridientsListingAdapter? =
                 this.context?.let { IngridientsListingAdapter(it,parse_hash_maps(recipe.ingredients)) }
-            binding.LVIngridientsInfo.adapter = itemsAdapter
+            binding.LVIngridientsInfo.adapter = itemsAdapterIngrtedients
 
             setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
+
+            binding.LVPreparationInfo.isClickable = false
+            val itemsAdapterPreparation: PreparationListingAdapter? =
+                this.context?.let { PreparationListingAdapter(it,recipe.preparation) }
+            binding.LVPreparationInfo.adapter = itemsAdapterPreparation
+
+            setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
+
 
                 //binding.TVIngridientsInfo.text = parse_hash_maps(recipe.ingredients)
            // binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
@@ -125,6 +133,9 @@ class RecipeDetailFragment : Fragment() {
         }
         return arrayList
     }
+
+
+
 
     fun setListViewHeightBasedOnChildren(myListView: ListView?) {
         val adapter: ListAdapter = myListView!!.getAdapter()

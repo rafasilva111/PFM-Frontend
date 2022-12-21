@@ -12,7 +12,7 @@ import com.example.projectfoodmanager.R
 class IngridientsListingAdapter(
     val context: Context,
     private val items: List<String>
-    ):
+):
     BaseAdapter() {
     private val inflater: LayoutInflater
             = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -59,5 +59,3 @@ class IngridientsListingAdapter(
 private class ViewHolder(view: View?) {
     val tvTitle: TextView = view?.findViewById<TextView>(R.id.TV_IngredINFO) as TextView
 }
-
-
