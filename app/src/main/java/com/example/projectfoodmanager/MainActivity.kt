@@ -42,17 +42,20 @@ class MainActivity : AppCompatActivity() {
 
         startUI()
 
-
     }
 
-    private fun startUI() {
-        binding = ActivityMainMenuBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        bottomNav = findViewById(R.id.bottomNavigationView)
+    private fun setNavController(){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
         navController = navHostFragment.navController
         setupWithNavController(bottomNav,navController)
+    }
 
+    private fun startUI() {
+
+        binding = ActivityMainMenuBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        bottomNav = findViewById(R.id.bottomNavigationView)
+        setNavController()
         bottomNav.setOnItemSelectedListener {
             when (it.itemId){
                 R.id.recipes -> {
@@ -67,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
     }
 
 

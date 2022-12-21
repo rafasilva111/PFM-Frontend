@@ -8,20 +8,21 @@ import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
-import com.example.projectfoodmanager.di.FirebaseModule
+import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 
 
 class RecipeListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit,
-    val onEditClicked: (Int, Recipe) -> Unit,
+    private val authModel: AuthViewModel
 ) : RecyclerView.Adapter<RecipeListingAdapter.MyViewHolder>() {
 
 
 
+
     private var list: MutableList<Recipe> = arrayListOf()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = ItemRecipeLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
@@ -56,14 +57,44 @@ class RecipeListingAdapter(
                 val imageURL = Uri.toString()
                 Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
             }
-            .addOnFailureListener {
-                Glide.with(binding.imageView.context).load(R.drawable.default_food).into(binding.imageView)
-            }
-            binding.dateLabel.text = item.date.toString()
-            binding.recipeTitle.text = item.title.toString()
+                .addOnFailureListener {
+                    Glide.with(binding.imageView.context).load(R.drawable.good_food_display___nci_visuals_online).into(binding.imageView)
+                }
+            binding.dateLabel.text = item.date
+            binding.recipeTitle.text = item.title
             binding.TVDescription.text = item.desc.toString()
-            binding.like.setOnClickListener { onEditClicked.invoke(adapterPosition,item) }
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition,item) }
+            authModel.getSession { user ->
+                if (user != null) {
+                    if ( user.favorite_recipes.indexOf(item.id)!=-1){
+                        binding.like.setImageResource(R.drawable.ic_favorito_filled)
+                    }
+                }
+            }
+
+
+
+
+
+            binding.like.setOnClickListener {
+                authModel.getSession { user ->
+                    if (user != null){
+                        if ( user.favorite_recipes.indexOf(item.id)!=-1){
+                            authModel.removeFavoriteRecipe(item)
+                            binding.like.setImageResource(R.drawable.ic_favorito)
+                            Toast.makeText(it.context,"Receita removida dos favoritos.", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            authModel.addFavoriteRecipe(item)
+                            binding.like.setImageResource(R.drawable.ic_favorito_filled)
+                            Toast.makeText(it.context,"Receita adicionada aos favoritos.", Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+                }
+            }
+
+
         }
     }
 }

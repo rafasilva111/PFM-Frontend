@@ -1,6 +1,5 @@
 package com.example.projectfoodmanager.ui.recipe
 
-import android.app.Activity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
+import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.floor
@@ -37,7 +37,8 @@ class RecipeListingFragment : Fragment() {
 
     lateinit var binding: FragmentRecipeListingBinding
     val viewModel: RecipeViewModel by viewModels()
-    val adapter by lazy {
+    private val authModel: AuthViewModel by viewModels()
+    private val adapter by lazy {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
                 Log.d(TAG, "olaaa: "+findNavController())
@@ -46,8 +47,7 @@ class RecipeListingFragment : Fragment() {
                     putParcelable("note",item)
                 })
             },
-            onEditClicked = { pos, item ->
-            }
+            this.authModel
         )
     }
 
@@ -108,11 +108,14 @@ class RecipeListingFragment : Fragment() {
 
 
         viewModel.getRecipesPaginated(0)
-
+        var firstTimeLoading = true
         viewModel.recipe.observe(viewLifecycleOwner){state ->
+
             when(state){
                 is UiState.Loading ->{
+                    if (firstTimeLoading)
                         binding.progressBar.show()
+                        firstTimeLoading = false
 
                 }
                 is UiState.Success -> {
