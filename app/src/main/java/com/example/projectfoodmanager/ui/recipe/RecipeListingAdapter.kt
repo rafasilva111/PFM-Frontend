@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.ui.recipe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
@@ -55,14 +56,14 @@ class RecipeListingAdapter(
                 val imageURL = Uri.toString()
                 Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
             }
+            .addOnFailureListener {
+                Glide.with(binding.imageView.context).load(R.drawable.default_food).into(binding.imageView)
+            }
             binding.dateLabel.text = item.date.toString()
             binding.recipeTitle.text = item.title.toString()
             binding.TVDescription.text = item.desc.toString()
             binding.like.setOnClickListener { onEditClicked.invoke(adapterPosition,item) }
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition,item) }
-
-
-
         }
     }
 }

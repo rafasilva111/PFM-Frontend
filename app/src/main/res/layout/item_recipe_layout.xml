@@ -146,20 +146,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Avaliação"
+                android:text="Nº Gostos"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                app:layout_constraintBottom_toTopOf="@+id/ratingBar2"
-                app:layout_constraintStart_toStartOf="@+id/ratingBar2" />
+                app:layout_constraintBottom_toTopOf="@+id/TV_rate"
+                app:layout_constraintStart_toStartOf="@+id/TV_rate" />
 
-            <RatingBar
-                android:id="@+id/ratingBar2"
-                style="?android:attr/ratingBarStyleSmall"
+            <TextView
+                android:id="@+id/TV_rate"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
-                android:isIndicator="true"
-                android:max="5"
+                android:text="1 gosto"
                 app:layout_constraintBottom_toBottomOf="@+id/date_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/date_label" />

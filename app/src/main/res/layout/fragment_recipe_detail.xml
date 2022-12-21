@@ -29,7 +29,7 @@
             android:backgroundTint="#00000000"
             android:elevation="1dp"
             android:outlineProvider="none"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_back_white"
             app:layout_constraintStart_toStartOf="@+id/IV_Recipe"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -94,7 +94,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="190dp"
-
             android:background="@drawable/layout_body_bg"
             app:layout_constraintEnd_toEndOf="parent"
 
@@ -295,7 +294,7 @@
                 android:id="@+id/LV_Ingridients_Info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -305,16 +304,26 @@
                 android:id="@+id/tvPreparation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="30dp"
                 android:fontFamily="@font/fedoka"
                 android:text="Preparação:"
                 android:textColor="#000000"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvIngridients"
                 app:layout_constraintTop_toBottomOf="@+id/LV_Ingridients_Info" />
 
-
+            <ListView
+                android:id="@+id/LV_Preparation_Info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPreparation" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

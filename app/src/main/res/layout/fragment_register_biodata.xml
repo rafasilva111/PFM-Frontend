@@ -5,66 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
-    <ImageButton
-        android:id="@+id/backIB"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:backgroundTint="#00000000"
-        android:elevation="1dp"
-        android:outlineProvider="none"
-        android:src="@drawable/ic_back_black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/fedoka"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/titillium_web_bold"
         android:text="Registration"
         android:textColor="@color/black"
         android:textSize="22dp"
-        app:layout_constraintBottom_toBottomOf="@+id/backIB"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.347"
-        app:layout_constraintStart_toEndOf="@+id/backIB"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/headline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
         android:fontFamily="@font/titillium_web_regular"
-        android:text="Por favor inserir as suas informações para criação de uma conta."
+        android:text="Note taking app where you save words"
         android:textColor="@color/black"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/first_name_et"
-        android:layout_width="391dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="104dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="hint" />
-
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/first_name_label"
@@ -79,7 +43,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headline" />
 
-   <!-- <EditText
+    <EditText
         android:id="@+id/first_name_et"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -98,7 +62,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/first_name_label" />
--->
+
     <TextView
         android:id="@+id/last_name_label"
         android:layout_width="wrap_content"
@@ -132,6 +96,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/last_name_label" />
 
+    <TextView
+        android:id="@+id/job_title_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/titillium_web_regular"
+        android:text="Job Title"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/last_name_et" />
+
+    <EditText
+        android:id="@+id/job_title_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/black_white_rect_bg"
+        android:ems="10"
+        android:fontFamily="@font/titillium_web_regular"
+        android:inputType="textPersonName"
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/job_title_label" />
 
     <TextView
         android:id="@+id/email_label"
@@ -144,7 +140,7 @@
         android:textColor="@color/black"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/last_name_et" />
+        app:layout_constraintTop_toBottomOf="@+id/job_title_et" />
 
     <EditText
         android:id="@+id/email_et"
@@ -211,7 +207,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/black_rect_bg"
-            android:text="Registar"
+            android:text="Register"
             android:textAllCaps="false"
             android:textAppearance="@style/SubTitleStyle"
             android:textColor="@color/white"
@@ -229,21 +225,5 @@
             android:visibility="invisible" />
 
     </RelativeLayout>
-
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:hint="First Name"
-        app:helperText="required"
-        android:drawableStart="@drawable/ic_peoples"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headline" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

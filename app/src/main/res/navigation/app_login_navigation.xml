@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.projectfoodmanager.ui.auth.RegisterFragment"
+        android:name="com.example.projectfoodmanager.ui.auth.registerFragments.BasicDataFragment"
         android:label="RegisterFragment" >
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"

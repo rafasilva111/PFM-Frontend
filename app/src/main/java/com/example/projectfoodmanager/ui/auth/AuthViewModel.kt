@@ -35,6 +35,10 @@ class AuthViewModel @Inject constructor(
     val getUserSession: LiveData<UiState<User?>>
         get() = _getUserSession
 
+    private val _getMetadata = MutableLiveData<UiState<HashMap<String,String>?>>()
+    val getMetadata: LiveData<UiState<HashMap<String,String>?>>
+        get() = _getMetadata
+
     fun register(
         email: String,
         password: String,
@@ -85,5 +89,18 @@ class AuthViewModel @Inject constructor(
     fun getUserSession(result: (User?) -> Unit){
         _getUserSession.value  = UiState.Loading
         repository.getUserSession() { _getUserSession.value = it}
+    }
+    fun logout(result: () -> Unit){
+        repository.logout(result)
+    }
+
+    fun storeMetadata(key:String , value:String,result: (HashMap<String,String>?) -> Unit) {
+        _getMetadata.value  = UiState.Loading
+        repository.updateMetadata(key,value,result)
+    }
+
+    fun getMetadata(result: (HashMap<String,String>?) -> Unit) {
+        _getMetadata.value  = UiState.Loading
+        repository.getMetadata(result)
     }
 }

@@ -68,9 +68,8 @@ class RegisterFragment : Fragment() {
     fun getUserObj(): User {
         return User(
             id = "",
-            first_name = binding.firstNameEt.text.toString(),
+            first_name = binding.firstNameEt.hint.toString(),
             last_name = binding.lastNameEt.text.toString(),
-            job_title = binding.jobTitleEt.text.toString(),
             email = binding.emailEt.text.toString(),
             favorite_recipes = arrayListOf<String>(),
         )
@@ -79,7 +78,7 @@ class RegisterFragment : Fragment() {
     fun validation(): Boolean {
         var isValid = true
 
-        if (binding.firstNameEt.text.isNullOrEmpty()){
+        if (binding.firstNameEt.hint.isNullOrEmpty()){
             isValid = false
             toast(getString(R.string.enter_first_name))
         }
@@ -87,11 +86,6 @@ class RegisterFragment : Fragment() {
         if (binding.lastNameEt.text.isNullOrEmpty()){
             isValid = false
             toast(getString(R.string.enter_last_name))
-        }
-
-        if (binding.jobTitleEt.text.isNullOrEmpty()){
-            isValid = false
-            toast(getString(R.string.enter_job_title))
         }
 
         if (binding.emailEt.text.isNullOrEmpty()){
