@@ -147,7 +147,7 @@ class RecipeDetailFragment : Fragment() {
             }
 
             binding.backIB.setOnClickListener {
-                findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaListingFragment)
+                findNavController().navigateUp()
             }
 
 
@@ -170,6 +170,8 @@ class RecipeDetailFragment : Fragment() {
             }
         }
     }
+
+
 
     private fun parse_hash_maps(ingredients: HashMap<String, String>): ArrayList<String> {
 

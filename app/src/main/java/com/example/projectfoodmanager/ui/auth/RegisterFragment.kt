@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.User
@@ -59,7 +60,7 @@ class RegisterFragment : Fragment() {
                     binding.registerBtn.setText("Register")
                     binding.registerProgress.hide()
                     toast(state.data)
-                    startActivity(Intent(this.context, MainActivity::class.java))
+                    findNavController().navigate(R.id.action_registerFragment_to_home_navigation)
                 }
             }
         }

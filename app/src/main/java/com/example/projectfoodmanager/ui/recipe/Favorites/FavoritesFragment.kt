@@ -17,7 +17,6 @@ import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
-import com.example.projectfoodmanager.ui.auth.LoginActivity
 import com.example.projectfoodmanager.ui.recipe.RecipeListingAdapter
 import com.example.projectfoodmanager.ui.recipe.RecipeViewModel
 import com.example.projectfoodmanager.util.*
@@ -41,7 +40,7 @@ class FavoritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.logoutIB.setOnClickListener {
             authViewModel.logout {
-                startActivity(Intent(activity, LoginActivity::class.java))
+                findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
             }
         }
     }

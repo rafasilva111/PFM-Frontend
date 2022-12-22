@@ -11,8 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
-import com.example.projectfoodmanager.ui.auth.LoginActivity
+
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,9 +38,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.logoutIB.setOnClickListener {
-            authViewModel.logout {
-                startActivity(Intent(activity, LoginActivity::class.java))
-            }
+            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
         }
     }
 }
