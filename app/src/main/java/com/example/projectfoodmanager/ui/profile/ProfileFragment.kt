@@ -16,7 +16,7 @@ import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
-
+private const val ARG_PARAM1 = "param1"
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -40,5 +40,15 @@ class ProfileFragment : Fragment() {
         binding.logoutIB.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
         }
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: String) =
+            ProfileFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                }
+            }
     }
 }

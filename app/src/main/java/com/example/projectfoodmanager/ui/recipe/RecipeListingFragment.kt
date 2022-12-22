@@ -24,7 +24,7 @@ import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.floor
-
+private const val ARG_PARAM1 = "param1"
 @AndroidEntryPoint
 class RecipeListingFragment : Fragment() {
 
@@ -136,6 +136,15 @@ class RecipeListingFragment : Fragment() {
                 }
             }
         }
+    }
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: String) =
+            RecipeListingFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                }
+            }
     }
 
 }
