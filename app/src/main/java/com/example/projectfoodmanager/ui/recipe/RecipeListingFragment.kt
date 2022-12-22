@@ -11,6 +11,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,7 +33,7 @@ class RecipeListingFragment : Fragment() {
     lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
     private var list: MutableList<Recipe> = arrayListOf()
-
+    private lateinit var navController: NavController
 
     val TAG: String = "RecipeListingFragment"
 
@@ -41,8 +44,8 @@ class RecipeListingFragment : Fragment() {
     private val adapter by lazy {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
-                Log.d(TAG, "olaaa: "+findNavController())
-                findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
+
+                Fragment.findNavCon troller().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
 
                     putParcelable("note",item)
                 })
@@ -57,7 +60,6 @@ class RecipeListingFragment : Fragment() {
     ): View? {
         //todo check for internet connection
 
-
         binding = FragmentRecipeListingBinding.inflate(layoutInflater)
         manager = LinearLayoutManager(activity)
         manager.orientation=LinearLayoutManager.HORIZONTAL
@@ -67,6 +69,8 @@ class RecipeListingFragment : Fragment() {
         setRecyclerViewScrollListener()
         return binding.root
         }
+
+
 
     private fun setRecyclerViewScrollListener() {
         scrollListener = object : RecyclerView.OnScrollListener(){

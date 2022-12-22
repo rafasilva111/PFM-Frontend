@@ -172,7 +172,7 @@ class AuthRepositoryImp(
     ) {
         //save on profile reference
         var user:User? = validateSession() //check if user is user auth (pensar na segurança)
-        val user_str = getUserStringInSharedPreferences()
+
 
         if(user == null){
             removeUserInSharedPreferences()
@@ -182,11 +182,11 @@ class AuthRepositoryImp(
 
         user.removeFavoriteRecipe(recipe)
         storeUserInSharedPreferences(user)
-        if (user_str != null) {
-            database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
-                Log.d(TAG, "addFavoriteRecipe: "+it.toString())
-            }
+
+        database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
+            Log.d(TAG, "addFavoriteRecipe: "+it.toString())
         }
+
 
 
         //save recipe reference for future loading
@@ -211,7 +211,6 @@ class AuthRepositoryImp(
     override fun addFavoriteRecipe(recipe: Recipe, result: (UiState<Pair<User, String>>?) -> Unit) {
         //save on profile reference
         var user:User? = validateSession() //check if user is user auth (pensar na segurança)
-        val user_str = getUserStringInSharedPreferences()
 
         if(user == null){
             removeUserInSharedPreferences()
@@ -222,12 +221,10 @@ class AuthRepositoryImp(
         user.addFavoriteRecipe(recipe)
         storeUserInSharedPreferences(user)
 
-
-        if (user_str != null) {
-            database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
-                Log.d(TAG, "addFavoriteRecipe: "+it.toString())
-            }
+        database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
+            Log.d(TAG, "addFavoriteRecipe: "+it.toString())
         }
+
 
 
         //save recipe reference for future loading
@@ -331,6 +328,55 @@ class AuthRepositoryImp(
 
     override fun removeMetadata(result: () -> Unit) {
         return appPreferences.edit().remove(SharedPrefConstants.METADATA).apply()
+    }
+
+    override fun removeLikeRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit) {
+        //save on profile reference
+        var user:User? = validateSession() //check if user is user auth (pensar na segurança)
+
+        if(user == null){
+            removeUserInSharedPreferences()
+            result.invoke(UiState.Failure("Sessão expirou."))
+            return
+        }
+
+        user.removeLikeRecipe(recipe)
+        storeUserInSharedPreferences(user)
+
+
+        database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
+            Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+        }
+
+        Log.d(TAG, "Recipe has been liked successfully.")
+
+        result.invoke(
+            UiState.Success(Pair(user,"Receita adicionada com sucesso!"))
+        )
+    }
+
+    override fun addLikeRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit) {
+        //save on profile reference
+        var user:User? = validateSession() //check if user is user auth (pensar na segurança)
+
+        if(user == null){
+            removeUserInSharedPreferences()
+            result.invoke(UiState.Failure("Sessão expirou."))
+            return
+        }
+
+        user.addLikeRecipe(recipe)
+        storeUserInSharedPreferences(user)
+
+        database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
+            Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+        }
+
+        Log.d(TAG, "Recipe has been liked successfully.")
+
+        result.invoke(
+            UiState.Success(Pair(user,"Receita adicionada com sucesso!"))
+        )
     }
 
     private fun getMetadataFunction(): HashMap<String,String>? {

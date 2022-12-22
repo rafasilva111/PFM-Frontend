@@ -67,7 +67,7 @@ class RecipeListingAdapter(
             authModel.getSession { user ->
                 if (user != null) {
                     if ( user.favorite_recipes.indexOf(item.id)!=-1){
-                        binding.like.setImageResource(R.drawable.ic_favorito_filled)
+                        binding.like.setImageResource(R.drawable.ic_like_red)
                     }
                 }
             }
@@ -86,7 +86,7 @@ class RecipeListingAdapter(
                         }
                         else{
                             authModel.addFavoriteRecipe(item)
-                            binding.like.setImageResource(R.drawable.ic_favorito_filled)
+                            binding.like.setImageResource(R.drawable.ic_like_red)
                             Toast.makeText(it.context,"Receita adicionada aos favoritos.", Toast.LENGTH_SHORT).show()
 
                         }

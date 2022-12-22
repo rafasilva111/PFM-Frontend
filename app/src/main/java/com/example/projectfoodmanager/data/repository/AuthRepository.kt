@@ -38,4 +38,6 @@ interface AuthRepository {
     fun updateMetadata(key:String,value:String,result: (HashMap<String,String>?) -> Unit)
     fun removeMetadata(key:String,value:String,result: (HashMap<String,String>?) -> Unit)
     fun removeMetadata(result: () -> Unit)
+    fun removeLikeRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit)
+    fun addLikeRecipe(recipe: Recipe, result:(UiState<Pair<User,String>>?) -> Unit)
 }

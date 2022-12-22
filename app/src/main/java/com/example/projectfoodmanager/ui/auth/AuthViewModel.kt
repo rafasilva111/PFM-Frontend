@@ -27,6 +27,10 @@ class AuthViewModel @Inject constructor(
     val updateFavoriteList: LiveData<UiState<Pair<User,String>>>
         get() = _updateFavoriteList
 
+    private val _updateLikeList = MutableLiveData<UiState<Pair<User,String>>>()
+    val updateLikeList: LiveData<UiState<Pair<User,String>>>
+        get() = _updateLikeList
+
     private val _getFavoriteRecipeList = MutableLiveData<UiState<ArrayList<Recipe>?>>()
     val getFavoriteRecipeList: LiveData<UiState<ArrayList<Recipe>?>>
         get() = _getFavoriteRecipeList
@@ -102,5 +106,15 @@ class AuthViewModel @Inject constructor(
     fun getMetadata(result: (HashMap<String,String>?) -> Unit) {
         _getMetadata.value  = UiState.Loading
         repository.getMetadata(result)
+    }
+
+    fun removeLikeOnRecipe(recipe: Recipe) {
+        _updateLikeList.value = UiState.Loading
+        repository.removeLikeRecipe(recipe) { _updateLikeList.value = it}
+    }
+
+    fun addLikeOnRecipe(recipe: Recipe) {
+        _updateLikeList.value = UiState.Loading
+        repository.addLikeRecipe(recipe) { _updateLikeList.value = it}
     }
 }
