@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Recipe(
-    var id: String? = null,
+    var id: String = "",
     val title: String = "",
     val desc: String = "",
     val portion: String = "",
@@ -19,8 +19,16 @@ data class Recipe(
     val app_rating: String="",
     val date: String="",
     val tags: String="",
+    var likes: Int=0,
     val ingredients: HashMap<String,String> = HashMap(),
     val nutrition_table: HashMap<String,String> = HashMap<String,String>(),
     val preparation: HashMap<String,String> = HashMap<String,String>(),
-) : Parcelable
+) : Parcelable {
+    fun addLike() {
+        this.likes += 1
+    }
+    fun removeLike() {
+        this.likes -= 1
+    }
+}
 

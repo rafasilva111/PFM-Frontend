@@ -50,7 +50,8 @@ class RecipeListingFragment : Fragment() {
                     putParcelable("note",item)
                 })
             },
-            this.authModel
+            this.authModel,
+            this.viewModel
         )
     }
 

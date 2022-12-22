@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.ui.profile
+package com.example.projectfoodmanager.ui.recipe.Favorites
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,16 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
-import com.example.projectfoodmanager.ui.auth.LoginActivity
+import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
-import dagger.hilt.android.AndroidEntryPoint
+import com.example.projectfoodmanager.ui.auth.LoginActivity
+import com.example.projectfoodmanager.ui.recipe.RecipeListingAdapter
+import com.example.projectfoodmanager.ui.recipe.RecipeViewModel
+import com.example.projectfoodmanager.util.*
+import kotlin.math.floor
 
 
-@AndroidEntryPoint
-class ProfileFragment : Fragment() {
+class FavoritesFragment : Fragment() {
     lateinit var binding: FragmentProfileBinding
     val authViewModel: AuthViewModel by viewModels()
     val TAG: String = "ProfileFragment"
@@ -26,11 +32,8 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
 
-    ): View? {
+        ): View? {
         binding = FragmentProfileBinding.inflate(layoutInflater)
-        // Inflate the layout for this fragment
-        Log.d(TAG, "olaaa: ")
-        Log.d(TAG, "olaaa: "+findNavController())
         return binding.root
     }
 

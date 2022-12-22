@@ -19,6 +19,7 @@ import com.example.projectfoodmanager.databinding.ActivityMainMenuBinding
 import com.example.projectfoodmanager.ui.auth.LoginActivity
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import com.example.projectfoodmanager.ui.profile.ProfileFragment
+import com.example.projectfoodmanager.ui.recipe.Favorites.FavoritesFragment
 import com.example.projectfoodmanager.ui.recipe.RecipeListingFragment
 import com.example.projectfoodmanager.util.UiState
 import com.example.projectfoodmanager.util.toast
@@ -31,17 +32,15 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainMenuBinding
     private lateinit var bottomNav: BottomNavigationView
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
     val authViewModel: AuthViewModel by viewModels()
 
     val TAG: String = "ReceitaListingFragment"
-    protected var session: String = ""
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         startUI()
-
     }
 
     private fun setNavController(){
@@ -67,30 +66,13 @@ class MainActivity : AppCompatActivity() {
                     replaceFragment(RecipeListingFragment())
                 }
                 R.id.profile -> replaceFragment(ProfileFragment())
+                R.id.favorites -> replaceFragment(FavoritesFragment())
             }
             true
         }
 
     }
 
-
-    private fun observer() {
-        authViewModel.getUserSession.observe(this) { state ->
-            when(state){
-                is UiState.Loading -> {
-                }
-                is UiState.Failure -> {
-                    toast("Sessão inválida, por favor fazer login outra vez, desculpe o incómodo.")
-                    Log.d(TAG, "observer: "+ state.error)
-                    startActivity(Intent(this, LoginActivity::class.java))
-                }
-                is UiState.Success -> {
-                    toast("Bem-vindo de volta!")
-                }
-            }
-        }
-
-    }
 
     private fun replaceFragment(fragment : Fragment){
 

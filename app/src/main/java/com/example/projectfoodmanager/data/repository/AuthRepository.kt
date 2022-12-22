@@ -24,6 +24,9 @@ interface AuthRepository {
     fun getFavoritesRecipeClass(result: (UiState<ArrayList<Recipe>?>) -> Unit)
     fun getFavoritesRecipeString(result: (UiState<ArrayList<String>?>) -> Unit)
 
+    // user likes
+    fun removeLikeRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit)
+    fun addLikeRecipe(recipe: Recipe, result:(UiState<Pair<User,String>>?) -> Unit)
 
     //simple functions
     //auth
@@ -38,6 +41,5 @@ interface AuthRepository {
     fun updateMetadata(key:String,value:String,result: (HashMap<String,String>?) -> Unit)
     fun removeMetadata(key:String,value:String,result: (HashMap<String,String>?) -> Unit)
     fun removeMetadata(result: () -> Unit)
-    fun removeLikeRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit)
-    fun addLikeRecipe(recipe: Recipe, result:(UiState<Pair<User,String>>?) -> Unit)
+
 }

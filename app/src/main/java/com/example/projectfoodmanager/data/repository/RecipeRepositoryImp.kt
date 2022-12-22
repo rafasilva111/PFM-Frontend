@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.data.repository
 
 import android.util.Log
 import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.util.FireStoreCollection
 import com.example.projectfoodmanager.util.FireStorePaginations
 import com.example.projectfoodmanager.util.UiState
@@ -118,5 +119,36 @@ class RecipeRepositoryImp(
         }
     }
 
+    override fun addLikeOnRecipe(
+        recipe: Recipe,
+        result: (UiState<Pair<Recipe, String>>?) -> Unit
+    ) {
 
+        recipe.addLike()
+        database.collection(FireStoreCollection.RECIPE_PROD).document(recipe.id).set(recipe).addOnFailureListener {
+            Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+        }
+
+        Log.d(TAG, "Recipe has been liked successfully.")
+
+        result.invoke(
+            UiState.Success(Pair(recipe,"Receita gostada com sucesso!"))
+        )
+    }
+
+    override fun removeLikeOnRecipe(
+        recipe: Recipe,
+        result: (UiState<Pair<Recipe, String>>?) -> Unit
+    ) {
+        recipe.removeLike()
+        database.collection(FireStoreCollection.RECIPE_PROD).document(recipe.id).set(recipe).addOnFailureListener {
+            Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+        }
+
+        Log.d(TAG, "Recipe has been unliked successfully.")
+
+        result.invoke(
+            UiState.Success(Pair(recipe,"Receita gosto retirado com sucesso!"))
+        )
+    }
 }

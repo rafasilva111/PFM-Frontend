@@ -182,7 +182,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@drawable/ic_favorito" />
+                    tools:src="@drawable/ic_like" />
 
                 <TextView
                     android:id="@+id/favoritosTV"
