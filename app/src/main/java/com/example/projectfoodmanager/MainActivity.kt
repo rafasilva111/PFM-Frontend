@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     private fun isOnline(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (connectivityManager != null) {
+
             val capabilities =
                 connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             if (capabilities != null) {
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                     return true
                 }
             }
-        }
+        
         return false
     }
 }
