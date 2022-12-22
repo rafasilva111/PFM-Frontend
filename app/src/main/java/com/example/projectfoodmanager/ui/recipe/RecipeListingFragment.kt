@@ -45,7 +45,7 @@ class RecipeListingFragment : Fragment() {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
 
-                Fragment.findNavCon troller().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
+                findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
 
                     putParcelable("note",item)
                 })
