@@ -29,5 +29,8 @@ object MetadataConstants{
 
 enum class HomeTabs(val index: Int, val key: String) {
     RECEITAS(0, "Receitas"),
-    PROFILE(1, "Perfil"),
+    FAVORITES(1, "Favoritos"),
+    CALENDER(2, "Calendario"),
+    GOALS(3, "Objetivos"),
+    PROFILE(4, "Perfil"),
 }

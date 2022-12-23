@@ -16,4 +16,7 @@
     <string name="receitas">Receitas</string>
     <string name="perfile">Perfil</string>
     <string name="_0_gostos">0 Gostos</string>
+    <string name="goals">Objetivos</string>
+    <string name="calender">Calendário</string>
+    <string name="favorites">Favoritos</string>
 </resources>

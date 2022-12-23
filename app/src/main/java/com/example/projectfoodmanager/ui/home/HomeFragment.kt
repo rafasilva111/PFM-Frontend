@@ -53,6 +53,21 @@ class HomeFragment : Fragment() {
                     textViewTitle.text = getString(R.string.receitas)
                     tab.onSelection(true)
                 }
+                HomeTabs.FAVORITES.index -> {
+                    tab.customView = view
+                    textViewTitle.text = getString(R.string.favorites)
+                    tab.onSelection(false)
+                }
+                HomeTabs.CALENDER.index -> {
+                    tab.customView = view
+                    textViewTitle.text = getString(R.string.calender)
+                    tab.onSelection(false)
+                }
+                HomeTabs.GOALS.index -> {
+                    tab.customView = view
+                    textViewTitle.text = getString(R.string.goals)
+                    tab.onSelection(false)
+                }
                 HomeTabs.PROFILE.index -> {
                     tab.customView = view
                     textViewTitle.text = getString(R.string.perfile)

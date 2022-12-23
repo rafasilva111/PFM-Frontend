@@ -60,7 +60,9 @@ class RecipeListingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         //todo check for internet connection
-
+        if (this::binding.isInitialized){
+            return binding.root
+        }else {
         binding = FragmentRecipeListingBinding.inflate(layoutInflater)
         manager = LinearLayoutManager(activity)
         manager.reverseLayout=false
@@ -68,6 +70,7 @@ class RecipeListingFragment : Fragment() {
 
         setRecyclerViewScrollListener()
         return binding.root
+        }
         }
 
 
@@ -78,7 +81,7 @@ class RecipeListingFragment : Fragment() {
 
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     if (isFirstTimeCall) {
-                        isFirstTimeCall = false;
+                        isFirstTimeCall = false
 
                         binding.recyclerView.removeOnScrollListener(scrollListener)
                         val visibleItemCount: Int = manager.childCount
@@ -95,7 +98,7 @@ class RecipeListingFragment : Fragment() {
                 }
 
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    isFirstTimeCall = true;
+                    isFirstTimeCall = true
                 }
 
                 super.onScrollStateChanged(recyclerView, newState)
