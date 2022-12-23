@@ -36,7 +36,7 @@ class PreparationListingAdapter(
         if (convertView == null) {
             val layoutInflater = LayoutInflater.from(context)
 
-            view = layoutInflater.inflate(R.layout.item_recipe_preparation_layout, parent, false)
+            view = layoutInflater.inflate(R.layout.item_recipe_preparation_layout_new, parent, false)
             vh = ViewHolderPreparation(view)
             if (view != null) {
                 view.tag = vh
@@ -48,7 +48,7 @@ class PreparationListingAdapter(
 
         //vh.tvTitle.text = items[position].toString()
         vh.tvNumber.text = (position + 1).toString()
-        vh.tvInfo.text = items.get((position+1).toString()).toString()
+        vh.tvTitle.text = items.get((position+1).toString()).toString()
 
         return view
     }
@@ -58,8 +58,8 @@ class PreparationListingAdapter(
 
 
 private class ViewHolderPreparation(view: View?) {
+    val tvTitle: TextView = view?.findViewById<TextView>(R.id.TV_Info) as TextView
     val tvNumber: TextView = view?.findViewById<TextView>(R.id.TV_number) as TextView
-    val tvInfo: TextView = view?.findViewById<TextView>(R.id.TV_Info) as TextView
 }
 
 

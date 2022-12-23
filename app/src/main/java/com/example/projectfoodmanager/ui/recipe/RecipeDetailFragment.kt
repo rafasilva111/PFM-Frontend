@@ -190,13 +190,16 @@ class RecipeDetailFragment : Fragment() {
         val adapter: ListAdapter = myListView!!.getAdapter()
         if (myListView != null) {
             var totalHeight = 0
+            val teste = adapter.getCount()
             for (i in 0 until adapter.getCount()) {
                 val item: View = adapter.getView(i, null, myListView)
-                item.measure(0, 0)
+                val teste_3 = item.measure(0, 0)
+                val teste_4 = item.measuredHeight
                 totalHeight += item.measuredHeight
             }
             val params: ViewGroup.LayoutParams = myListView.getLayoutParams()
             params.height = totalHeight + myListView.getDividerHeight() * (adapter.getCount() - 1)
+            val teste_totalHeight = params.height
             myListView.setLayoutParams(params)
         }
     }

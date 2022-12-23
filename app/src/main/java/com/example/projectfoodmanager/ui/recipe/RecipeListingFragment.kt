@@ -63,7 +63,6 @@ class RecipeListingFragment : Fragment() {
 
         binding = FragmentRecipeListingBinding.inflate(layoutInflater)
         manager = LinearLayoutManager(activity)
-        manager.orientation=LinearLayoutManager.HORIZONTAL
         manager.reverseLayout=false
         binding.recyclerView.layoutManager = manager
 
