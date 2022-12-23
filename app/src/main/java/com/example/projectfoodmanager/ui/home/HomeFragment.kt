@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentHomeBinding
@@ -49,14 +48,14 @@ class HomeFragment : Fragment() {
             val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_tab_layout, null)
             val textViewTitle: TextView = view.findViewById<TextView>(R.id.tabTitle)
             when (position) {
-                HomeTabs.NOTES.index -> {
+                HomeTabs.RECEITAS.index -> {
                     tab.customView = view
-                    textViewTitle.text = getString(R.string.notes)
+                    textViewTitle.text = getString(R.string.receitas)
                     tab.onSelection(true)
                 }
-                HomeTabs.TASKS.index -> {
+                HomeTabs.PROFILE.index -> {
                     tab.customView = view
-                    textViewTitle.text = getString(R.string.tasks)
+                    textViewTitle.text = getString(R.string.perfile)
                     tab.onSelection(false)
                 }
             }

@@ -408,6 +408,7 @@ class AuthRepositoryImp(
         return null
     }
 
+
     private fun getRecipesStringInSharedPreferences(): Array<String>? {
 
         return  gson.fromJson(appPreferences.getString(SharedPrefConstants.FAVORITE_RECIPES_SESSION,null), Array<String>::class.java)

@@ -13,8 +13,8 @@ class HomePagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            HomeTabs.NOTES.index -> RecipeListingFragment.newInstance(HomeTabs.NOTES.name)
-            HomeTabs.TASKS.index -> ProfileFragment.newInstance(HomeTabs.TASKS.name)
+            HomeTabs.RECEITAS.index -> RecipeListingFragment.newInstance(HomeTabs.RECEITAS.name)
+            HomeTabs.PROFILE.index -> ProfileFragment.newInstance(HomeTabs.PROFILE.name)
             else -> throw IllegalStateException("Fragment not found")
         }
     }
