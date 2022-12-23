@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.ui.profile
+package com.example.projectfoodmanager.ui.recipe.Favorites
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,17 +9,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
-
+import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
-import dagger.hilt.android.AndroidEntryPoint
-private const val ARG_PARAM1 = "param1"
+import com.example.projectfoodmanager.ui.recipe.RecipeListingAdapter
+import com.example.projectfoodmanager.ui.recipe.RecipeViewModel
+import com.example.projectfoodmanager.util.*
+import kotlin.math.floor
 
-@AndroidEntryPoint
-class ProfileFragment : Fragment() {
+
+class FavoritesFragment : Fragment() {
     lateinit var binding: FragmentProfileBinding
     val authViewModel: AuthViewModel by viewModels()
     val TAG: String = "ProfileFragment"
@@ -27,28 +31,17 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
 
-    ): View? {
+        ): View? {
         binding = FragmentProfileBinding.inflate(layoutInflater)
-        // Inflate the layout for this fragment
-        Log.d(TAG, "olaaa: ")
-        Log.d(TAG, "olaaa: "+findNavController())
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.logoutIB.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-        }
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String) =
-            ProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                }
+            authViewModel.logout {
+                findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
             }
+        }
     }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ListAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
@@ -64,7 +63,6 @@ class RecipeDetailFragment : Fragment() {
           //  binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
           //  binding.tvRateInt.text = "not implemented"
             binding.TVDescriptionInfo.text = recipe.desc
-
             binding.LVIngridientsInfo.isClickable = false
 
             val itemsAdapterIngrtedients: IngridientsListingAdapter? =
@@ -92,15 +90,56 @@ class RecipeDetailFragment : Fragment() {
                 Glide.with(binding.IVRecipe.context).load(imageURL).into(binding.IVRecipe)
             }
 
+            //like function
+
+            authModel.getSession { user ->
+                if (user != null) {
+                    if ( user.liked_recipes.indexOf(recipe.id)!=-1){
+                        binding.likeIB.setImageResource(R.drawable.ic_like_red)
+                    }
+                }
+            }
+
+            binding.likeIB.setOnClickListener {
+                authModel.getSession { user ->
+                    if (user != null){
+                        if ( user.liked_recipes.indexOf(recipe.id)!=-1){
+                            authModel.removeLikeOnRecipe(recipe)
+                            viewModel.removeLikeOnRecipe(recipe)
+                            binding.likeIB.setImageResource(R.drawable.ic_like_black)
+                            toast("Removido o seu gosto da receita...")
+                        }
+                        else{
+                            authModel.addLikeOnRecipe(recipe)
+                            viewModel.addLikeOnRecipe(recipe)
+                            binding.likeIB.setImageResource(R.drawable.ic_like_red)
+                            toast("Adicionado o seu gosto à receita.")
+                        }
+                    }
+                }
+            }
+
+            //favorite function
+
+            authModel.getSession { user ->
+                if (user != null) {
+                    if ( user.favorite_recipes.indexOf(recipe.id)!=-1){
+                        binding.favoritesIB.setImageResource(R.drawable.ic_favorito_white)
+                    }
+                }
+            }
+
             binding.favoritesIB.setOnClickListener {
                 authModel.getSession { user ->
                     if (user != null){
                         if ( user.favorite_recipes.indexOf(recipe.id)!=-1){
                             authModel.removeFavoriteRecipe(recipe)
+                            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
                             toast("Receita removida dos favoritos.")
                         }
                         else{
                             authModel.addFavoriteRecipe(recipe)
+                            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_white)
                             toast("Receita adicionada aos favoritos.")
                         }
                     }
@@ -108,7 +147,7 @@ class RecipeDetailFragment : Fragment() {
             }
 
             binding.backIB.setOnClickListener {
-                findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaListingFragment)
+                findNavController().navigateUp()
             }
 
 
@@ -131,6 +170,8 @@ class RecipeDetailFragment : Fragment() {
             }
         }
     }
+
+
 
     private fun parse_hash_maps(ingredients: HashMap<String, String>): ArrayList<String> {
 

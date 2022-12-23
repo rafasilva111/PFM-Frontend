@@ -13,4 +13,7 @@
     <string name="enter_password">Enter password</string>
     <string name="invalid_password">Your password must be at least 8 characters</string>
     <string name="ingredients">Ingredients</string>
+    <string name="receitas">Receitas</string>
+    <string name="perfile">Perfil</string>
+    <string name="_0_gostos">0 Gostos</string>
 </resources>

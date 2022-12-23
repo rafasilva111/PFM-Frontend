@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.data.repository.RecipeRepository
 import com.example.projectfoodmanager.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,29 +13,32 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipeViewModel @Inject constructor (
-    val recipeRepository: RecipeRepository
+    val repository: RecipeRepository
 
 ): ViewModel() {
     private val _recipes = MutableLiveData<UiState<List<Recipe>>>()
-
     val recipe: LiveData<UiState<List<Recipe>>>
             get() = _recipes
 
+    private val _updateRecipe = MutableLiveData<UiState<Pair<Recipe,String>>>()
+    val updateRecipe: LiveData<UiState<Pair<Recipe,String>>>
+        get() = _updateRecipe
+
     fun getRecipes(){
         _recipes.value = UiState.Loading
-        recipeRepository.getRecipes {
+        repository.getRecipes {
             _recipes.value = UiState.Loading
-            recipeRepository.getRecipes { _recipes.value = it }
+            repository.getRecipes { _recipes.value = it }
         }
 
     }
 
     fun getRecipesPaginated(page: Long){
         _recipes.value = UiState.Loading
-        recipeRepository.getRecipesPaginated(page) {
+        repository.getRecipesPaginated(page) {
 
             _recipes.value = UiState.Loading
-            recipeRepository.getRecipesPaginated(page){ _recipes.value = it }
+            repository.getRecipesPaginated(page){ _recipes.value = it }
         }
 
     }
@@ -46,7 +50,17 @@ class RecipeViewModel @Inject constructor (
 
     fun addRecipe(recipe: Recipe){
         _addRecipe.value = UiState.Loading
-        recipeRepository.addRecipe(recipe) { _addRecipe.value = it}
+        repository.addRecipe(recipe) { _addRecipe.value = it}
+    }
+
+    fun removeLikeOnRecipe(recipe: Recipe) {
+        _updateRecipe.value = UiState.Loading
+        repository.removeLikeOnRecipe(recipe) { _updateRecipe.value = it}
+    }
+
+    fun addLikeOnRecipe(recipe: Recipe) {
+        _updateRecipe.value = UiState.Loading
+        repository.addLikeOnRecipe(recipe) { _updateRecipe.value = it}
     }
 
 

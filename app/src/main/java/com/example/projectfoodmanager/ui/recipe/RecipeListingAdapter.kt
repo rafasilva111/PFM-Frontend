@@ -15,7 +15,8 @@ import com.google.firebase.storage.ktx.storage
 
 class RecipeListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit,
-    private val authModel: AuthViewModel
+    private val authModel: AuthViewModel,
+    private val recipeModel: RecipeViewModel
 ) : RecyclerView.Adapter<RecipeListingAdapter.MyViewHolder>() {
 
 
@@ -48,7 +49,7 @@ class RecipeListingAdapter(
         return list.size
     }
 
-    inner class MyViewHolder(val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MyViewHolder(private val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
 
         fun bind(item: Recipe){
@@ -64,37 +65,72 @@ class RecipeListingAdapter(
             binding.recipeTitle.text = item.title
             binding.TVDescription.text = item.desc.toString()
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition,item) }
+
+            // favorite function
+
             authModel.getSession { user ->
                 if (user != null) {
                     if ( user.favorite_recipes.indexOf(item.id)!=-1){
-                        binding.like.setImageResource(R.drawable.ic_favorito_filled)
+                        binding.favorites.setImageResource(R.drawable.ic_favorito_white)
                     }
                 }
             }
-
-
-
-
 
             binding.like.setOnClickListener {
                 authModel.getSession { user ->
                     if (user != null){
                         if ( user.favorite_recipes.indexOf(item.id)!=-1){
                             authModel.removeFavoriteRecipe(item)
-                            binding.like.setImageResource(R.drawable.ic_favorito)
+                            binding.favorites.setImageResource(R.drawable.ic_favorite)
                             Toast.makeText(it.context,"Receita removida dos favoritos.", Toast.LENGTH_SHORT).show()
                         }
                         else{
                             authModel.addFavoriteRecipe(item)
-                            binding.like.setImageResource(R.drawable.ic_favorito_filled)
+                            binding.favorites.setImageResource(R.drawable.ic_favorito_white)
                             Toast.makeText(it.context,"Receita adicionada aos favoritos.", Toast.LENGTH_SHORT).show()
-
                         }
                     }
                 }
             }
 
+            // like function
 
+            if (item.likes == 1){
+                binding.TVRate.text = "1 Gosto"
+            }
+            else{
+                binding.TVRate.text = item.likes.toString()+" Gosto"
+            }
+            binding.dateLabel.text = item.date
+
+            authModel.getSession { user ->
+                if (user != null) {
+                    if ( user.liked_recipes.indexOf(item.id)!=-1){
+                        binding.like.setImageResource(R.drawable.ic_like_red)
+                    }
+                }
+            }
+
+            binding.like.setOnClickListener {
+                authModel.getSession { user ->
+                    if (user != null){
+                        if ( user.liked_recipes.indexOf(item.id)!=-1){
+                            authModel.removeLikeOnRecipe(item)
+                            recipeModel.removeLikeOnRecipe(item)
+                            binding.like.setImageResource(R.drawable.ic_like)
+                            Toast.makeText(it.context,"Removido gosto da receita.", Toast.LENGTH_SHORT).show()
+                            notifyDataSetChanged()
+                        }
+                        else{
+                            authModel.addLikeOnRecipe(item)
+                            recipeModel.addLikeOnRecipe(item)
+                            binding.like.setImageResource(R.drawable.ic_like_red)
+                            Toast.makeText(it.context,"Adicionado gosto á receita.", Toast.LENGTH_SHORT).show()
+                            notifyDataSetChanged()
+                        }
+                    }
+                }
+            }
         }
     }
 }

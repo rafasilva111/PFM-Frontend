@@ -48,7 +48,7 @@
             android:background="@drawable/layout_bg_low"
             android:elevation="3dp"
             android:padding="5dp"
-            android:src="@drawable/ic_favorito"
+            android:src="@drawable/ic_like"
             app:layout_constraintEnd_toEndOf="@+id/CV_image_recipe"
             app:layout_constraintTop_toTopOf="@+id/CV_image_recipe" />
 
@@ -157,7 +157,7 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="30dp"
-                android:text="1 gosto"
+                android:text="@string/_0_gostos"
                 app:layout_constraintBottom_toBottomOf="@+id/date_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/date_label" />

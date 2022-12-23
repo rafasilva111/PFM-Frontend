@@ -3,56 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_navigation"
-    app:startDestination="@id/receitaListingFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/receitaListingFragment"
-        android:name="com.example.projectfoodmanager.ui.recipe.RecipeListingFragment"
-        android:label="fragment_receita_listing"
-        tools:layout="@layout/fragment_recipe_listing" >
+        android:id="@+id/homeFragment"
+        android:name="com.example.projectfoodmanager.ui.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_receitaListingFragment_to_receitaDetailFragment"
-            app:destination="@id/receitaDetailFragment" />
-        <action
-            android:id="@+id/action_receitaListingFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            android:id="@+id/action_homeFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+
     </fragment>
+
+    <action
+        android:id="@+id/action_receitaListingFragment_to_receitaDetailFragment"
+        app:destination="@id/receitaDetailFragment" />
+
+    <action
+        android:id="@+id/action_homeFragment_to_profileFragment"
+        app:destination="@id/profileFragment" />
 
     <fragment
         android:id="@+id/receitaDetailFragment"
         android:name="com.example.projectfoodmanager.ui.recipe.RecipeDetailFragment"
         android:label="fragment_recipe_detail"
         tools:layout="@layout/fragment_recipe_detail" >
-        <action
-            android:id="@+id/action_receitaDetailFragment_to_receitaListingFragment"
-            app:destination="@id/receitaListingFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.projectfoodmanager.ui.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
-        <action
-            android:id="@+id/action_profileFragment_to_receitaListingFragment"
-            app:destination="@id/receitaListingFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/calenderFragment"
-        android:name="com.example.projectfoodmanager.ui.views.CalenderFragment"
-        android:label="fragment_calender"
-        tools:layout="@layout/fragment_calender" >
-    </fragment>
-    <fragment
-        android:id="@+id/favoritesFragment"
-        android:name="com.example.projectfoodmanager.ui.views.FavoritesFragment"
-        android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" >
-    </fragment>
-    <fragment
-        android:id="@+id/goalFragment"
-        android:name="com.example.projectfoodmanager.ui.views.GoalFragment"
-        android:label="fragment_goal"
-        tools:layout="@layout/fragment_goal" >
-    </fragment>
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>

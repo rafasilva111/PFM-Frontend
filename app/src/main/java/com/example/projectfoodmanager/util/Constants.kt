@@ -26,3 +26,8 @@ object MetadataConstants{
     val FIRST_TIME_LOGIN = "first_time_login"
 
 }
+
+enum class HomeTabs(val index: Int, val key: String) {
+    RECEITAS(0, "Receitas"),
+    PROFILE(1, "Perfil"),
+}

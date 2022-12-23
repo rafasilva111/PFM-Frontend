@@ -5,6 +5,7 @@
     android:id="@+id/app_navigation"
     app:startDestination="@id/loginFragment">
 
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.projectfoodmanager.ui.auth.LoginFragment"
@@ -13,6 +14,9 @@
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_home_navigation"
+            app:destination="@id/app_navigation" />
     </fragment>
 
     <fragment
@@ -20,9 +24,10 @@
         android:name="com.example.projectfoodmanager.ui.auth.registerFragments.BasicDataFragment"
         android:label="RegisterFragment" >
         <action
-            android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_registerFragment_to_home_navigation"
+            app:destination="@id/app_navigation" />
     </fragment>
 
+    <include app:graph="@navigation/app_navigation" />
 
 </navigation>
