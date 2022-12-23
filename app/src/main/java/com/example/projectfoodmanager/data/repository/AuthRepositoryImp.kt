@@ -158,11 +158,19 @@ class AuthRepositoryImp(
     override fun getSession(result: (User?) -> Unit) {
         var user:User? = validateSession()
 
+        var user_in_preferences:User? = getUserInSharedPreferences()
+
         if (user == null){
             removeUserInSharedPreferences()
             result.invoke(null)
         }else{
-            result.invoke(user)
+            if(user == user_in_preferences) {
+                result.invoke(user)
+            }else{
+                storeUserInSharedPreferences(user)
+                result.invoke(user)
+            }
+
         }
     }
 
