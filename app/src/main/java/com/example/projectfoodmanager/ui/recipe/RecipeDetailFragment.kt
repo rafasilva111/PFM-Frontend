@@ -73,17 +73,11 @@ class RecipeDetailFragment : Fragment() {
 
             binding.LVPreparationInfo.isClickable = false
             val itemsAdapterPreparation: PreparationListingAdapter? =
-                this.context?.let { PreparationListingAdapter(it,parse_hash_maps(recipe.preparation)) }
+                this.context?.let { PreparationListingAdapter(it,recipe.preparation) }
             binding.LVPreparationInfo.adapter = itemsAdapterPreparation
 
-           ////////// setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
+           setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
 
-
-                //binding.TVIngridientsInfo.text = parse_hash_maps(recipe.ingredients)
-           // binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
-           // binding.tvSourceCompany.text = recipe.company
-            //binding.tvSourceLink.text = recipe.source
-           // binding.tvPreparationInfo.text = parse_hash_maps(recipe.preparation)
             val imgRef = Firebase.storage.reference.child(recipe.img)
             imgRef.downloadUrl.addOnSuccessListener {Uri->
                 val imageURL = Uri.toString()
