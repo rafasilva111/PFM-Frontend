@@ -14,7 +14,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
@@ -27,6 +30,7 @@ class RecipeListingFragment : Fragment() {
 
 
     private var isFirstTimeCall = true
+    private var snapHelper : SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
     private var list: MutableList<Recipe> = arrayListOf()
@@ -63,7 +67,7 @@ class RecipeListingFragment : Fragment() {
         manager.orientation=LinearLayoutManager.HORIZONTAL
         manager.reverseLayout=false
         binding.recyclerView.layoutManager = manager
-
+        snapHelper.attachToRecyclerView(binding.recyclerView)
         setRecyclerViewScrollListener()
         return binding.root
         }
@@ -75,7 +79,6 @@ class RecipeListingFragment : Fragment() {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     if (isFirstTimeCall) {
                         isFirstTimeCall = false;
-
                         binding.recyclerView.removeOnScrollListener(scrollListener)
                         val visibleItemCount: Int = manager.childCount
                         val pastVisibleItem:Int = manager.findLastCompletelyVisibleItemPosition()

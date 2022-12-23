@@ -10,15 +10,11 @@
             android:id="@+id/SRL_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:fillViewport="true">
+        android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageButton
             android:id="@+id/backIB"
@@ -292,12 +288,13 @@
 
             <ListView
                 android:id="@+id/LV_Ingridients_Info"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="5dp"
+                app:layout_constraintEnd_toEndOf="@+id/TV_description_Info"
+                app:layout_constraintStart_toStartOf="@+id/TV_description_Info"
                 app:layout_constraintTop_toBottomOf="@+id/tvIngridients" />
 
             <TextView
@@ -312,18 +309,22 @@
                 app:layout_constraintStart_toStartOf="@+id/tvIngridients"
                 app:layout_constraintTop_toBottomOf="@+id/LV_Ingridients_Info" />
 
-            <ListView
-                android:id="@+id/LV_Preparation_Info"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="5dp"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvPreparation" />
+                app:layout_constraintTop_toBottomOf="@+id/tvPreparation">
+                <ListView
+                    android:id="@+id/LV_Preparation_Info"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="5dp" />
+            </LinearLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

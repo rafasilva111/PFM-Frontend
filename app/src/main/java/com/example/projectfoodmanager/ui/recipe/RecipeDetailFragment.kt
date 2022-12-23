@@ -74,10 +74,10 @@ class RecipeDetailFragment : Fragment() {
 
             binding.LVPreparationInfo.isClickable = false
             val itemsAdapterPreparation: PreparationListingAdapter? =
-                this.context?.let { PreparationListingAdapter(it,recipe.preparation) }
+                this.context?.let { PreparationListingAdapter(it,parse_hash_maps(recipe.preparation)) }
             binding.LVPreparationInfo.adapter = itemsAdapterPreparation
 
-            setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
+           ////////// setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
 
 
                 //binding.TVIngridientsInfo.text = parse_hash_maps(recipe.ingredients)
@@ -135,6 +135,7 @@ class RecipeDetailFragment : Fragment() {
             val params: ViewGroup.LayoutParams = myListView.getLayoutParams()
             params.height = totalHeight + myListView.getDividerHeight() * (adapter.getCount() - 1)
             myListView.setLayoutParams(params)
+            myListView.requestLayout()
         }
     }
 
