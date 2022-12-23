@@ -11,7 +11,7 @@ import com.example.projectfoodmanager.R
 
 class PreparationListingAdapter(
     val context: Context,
-    private val items: HashMap<String,String>
+    private val items: List<String>
     ):
     BaseAdapter() {
     private val inflater: LayoutInflater
@@ -22,19 +22,19 @@ class PreparationListingAdapter(
     }
 
     override fun getItem(p0: Int): Any {
-        return items.get(p0.toString()).toString()
+        return p0
     }
 
-    override fun getItemId(p0: Int): Long {
-        return p0.toLong()
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
 
-        val view: View
+        var convertView2 = convertView
         val vh: ViewHolderPreparation
-        if (convertView == null) {
-            val layoutInflater = LayoutInflater.from(context)
+        //if (convertView2 == null) {
+            var layoutInflater = LayoutInflater.from(context)
 
             view = layoutInflater.inflate(R.layout.item_recipe_preparation_layout_new, parent, false)
             vh = ViewHolderPreparation(view)
@@ -50,7 +50,7 @@ class PreparationListingAdapter(
         vh.tvNumber.text = (position + 1).toString()
         vh.tvTitle.text = items.get((position+1).toString()).toString()
 
-        return view
+        return convertView2
     }
 
 }
