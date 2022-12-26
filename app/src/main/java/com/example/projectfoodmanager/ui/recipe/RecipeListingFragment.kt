@@ -114,7 +114,9 @@ class RecipeListingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.adapter = adapter
-
+        authModel.getSession {
+            binding.tvName.text = it!!.first_name.capitalize() + " "+ it!!.last_name.capitalize()
+        }
 
 
         viewModel.getRecipesPaginated(0)

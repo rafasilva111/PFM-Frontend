@@ -9,9 +9,9 @@
     android:background="#F6F6F6">
 
     <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="14dp"
         android:layout_marginEnd="20dp"
         android:src="@drawable/img_profile"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,11 +22,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="14dp"
         android:text="Bem vindo"
         android:fontFamily="@font/fedoka"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:background="@drawable/layout_bg_low"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:padding="5dp"
@@ -91,7 +91,8 @@
                     android:text="Sugestões"
                     android:textColor="@color/white"
                     android:textSize="10sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:layout_marginStart="5dp"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -128,7 +129,8 @@
                     android:text="Sugestões personalizadas"
                     android:textColor="@color/white"
                     android:textSize="10sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginEnd="5dp"/>
 
             </LinearLayout>
 
@@ -140,7 +142,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -208,7 +210,7 @@
                 android:fontFamily="@font/fedoka"
                 android:text="Carne"
                 android:textAllCaps="true"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/IB_Meat"
                 app:layout_constraintStart_toStartOf="@+id/IB_Meat"
@@ -235,7 +237,7 @@
                 android:fontFamily="@font/fedoka"
                 android:text="Peixe"
                 android:textAllCaps="true"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/IB_Fish"
                 app:layout_constraintStart_toStartOf="@+id/IB_Fish"
@@ -262,7 +264,7 @@
                 android:fontFamily="@font/fedoka"
                 android:text="Sopa"
                 android:textAllCaps="true"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/IB_Soup"
                 app:layout_constraintStart_toStartOf="@+id/IB_Soup"
@@ -289,7 +291,7 @@
                 android:fontFamily="@font/fedoka"
                 android:text="Salada"
                 android:textAllCaps="true"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/IB_Vegi"
                 app:layout_constraintStart_toStartOf="@+id/IB_Vegi"
@@ -317,7 +319,7 @@
                 android:fontFamily="@font/fedoka"
                 android:text="Fruta"
                 android:textAllCaps="true"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/IB_Fruit"
                 app:layout_constraintStart_toStartOf="@+id/IB_Fruit"
@@ -346,7 +348,7 @@
                 android:fontFamily="@font/fedoka"
                 android:text="Bebida"
                 android:textAllCaps="true"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="@+id/IB_Drink"
                 app:layout_constraintStart_toStartOf="@+id/IB_Drink"

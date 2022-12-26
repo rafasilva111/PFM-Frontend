@@ -85,7 +85,7 @@ class LoginFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        authViewModel.getSession { user ->
+        authViewModel.getUserSession { user ->
             if (user != null){
                 findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
             }

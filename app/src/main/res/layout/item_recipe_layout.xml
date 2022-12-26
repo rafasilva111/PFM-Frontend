@@ -68,7 +68,7 @@
             android:id="@+id/constraintLayout2"
             android:layout_width="300dp"
             android:layout_height="250dp"
-            android:layout_marginTop="-70dp"
+            android:layout_marginTop="-90dp"
             android:background="@drawable/layout_item_recipes"
             android:elevation="5dp"
             android:outlineProvider="none"
@@ -120,6 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Data"
+                android:textSize="10sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/date_label"
@@ -130,32 +131,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="5dp"
                 android:alpha="0.7"
                 android:padding="2dp"
                 android:text="02/03/2022"
                 android:textAlignment="center"
-                android:textSize="12sp"
+                android:textSize="9sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nº Gostos"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/TV_rate"
-                app:layout_constraintStart_toStartOf="@+id/TV_rate" />
-
+            <ImageView
+                android:id="@+id/GostosIV"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/TV_rate"
+                app:layout_constraintEnd_toStartOf="@+id/TV_rate"
+                app:layout_constraintTop_toTopOf="@+id/TV_rate"
+                tools:src="@drawable/ic_like" />
             <TextView
                 android:id="@+id/TV_rate"
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
+                android:layout_marginEnd="20dp"
                 android:text="@string/_0_gostos"
+                android:textSize="10sp"
+                android:textAlignment="center"
+                android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="@+id/date_label"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/date_label" />
