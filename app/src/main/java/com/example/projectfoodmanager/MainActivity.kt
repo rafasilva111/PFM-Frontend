@@ -10,9 +10,12 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.projectfoodmanager.databinding.ActivityMainMenuBinding
 import com.example.projectfoodmanager.ui.auth.LoginActivity
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
@@ -48,24 +51,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
         bottomNav = findViewById(R.id.bottomNavigationView)
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
-        navController = navHostFragment.navController
-        setupWithNavController(bottomNav,navController)
 
-        bottomNav.setOnItemSelectedListener {
-            when (it.itemId){
-                R.id.recipes -> {
-                    val connected_to_internet:Boolean = isOnline(this)
-                    val fragment:Fragment = RecipeListingFragment()
-                    fragment.arguments = Bundle().apply {
-                        putBoolean("connectivity",connected_to_internet)
-                    }
-                    replaceFragment(RecipeListingFragment())
-                }
-                R.id.profile -> replaceFragment(ProfileFragment())
-            }
-            true
-        }
+
+        //nav
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        val navController = findNavController(R.id.nav_host)
+
+        bottomNavigationView.setupWithNavController(navController)
+
     }
 
 
