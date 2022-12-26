@@ -38,7 +38,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.logoutIB.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+            findNavController().navigate(R.id.action_recipeListingFragment_to_loginFragment)
         }
     }
 

@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_navigation"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/recipeListingFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.projectfoodmanager.ui.home.HomeFragment"
+        android:id="@+id/recipeListingFragment"
+        android:name="com.example.projectfoodmanager.ui.recipe.RecipeListingFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_loginFragment"
+            android:id="@+id/action_recipeListingFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
@@ -22,13 +22,17 @@
         android:id="@+id/action_receitaListingFragment_to_receitaDetailFragment"
         app:destination="@id/receitaDetailFragment" />
 
-
     <fragment
         android:id="@+id/receitaDetailFragment"
         android:name="com.example.projectfoodmanager.ui.recipe.RecipeDetailFragment"
         android:label="fragment_recipe_detail"
         tools:layout="@layout/fragment_recipe_detail" >
     </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.projectfoodmanager.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 
 
 </navigation>

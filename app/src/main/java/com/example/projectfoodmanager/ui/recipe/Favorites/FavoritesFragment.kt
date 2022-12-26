@@ -40,7 +40,7 @@ class FavoritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.logoutIB.setOnClickListener {
             authViewModel.logout {
-                findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+                findNavController().navigate(R.id.action_recipeListingFragment_to_loginFragment)
             }
         }
     }
