@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.ui.recipe
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,6 +78,11 @@ class RecipeDetailFragment : Fragment() {
             binding.LVPreparationInfo.adapter = itemsAdapterPreparation
 
            setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
+
+            binding.TVSource.text=recipe.company
+            binding.TVLink.text=recipe.source
+            Log.d(TAG, "=> remote_rating: "+ recipe.remote_rating)
+            Log.d(TAG, "=> app_rating: "+ recipe.app_rating)
 
             val imgRef = Firebase.storage.reference.child(recipe.img)
             imgRef.downloadUrl.addOnSuccessListener {Uri->
