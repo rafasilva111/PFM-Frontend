@@ -156,7 +156,7 @@ class AuthRepositoryImp(
     }
 
     override fun getSession(result: (User?) -> Unit) {
-        var user:User? = validateSession()
+        var user:User? = validateSessionAndSharedPreferences()
 
         var user_in_preferences:User? = getUserInSharedPreferences()
 
@@ -256,7 +256,7 @@ class AuthRepositoryImp(
 
 
     override fun getFavoritesRecipeClass(result: (UiState<ArrayList<Recipe>?>) -> Unit) {
-        val user: User? = validateSession()
+        val user: User? = validateSessionAndSharedPreferences()
         if (user != null) {
             val recipes = getRecipesClassInSharedPreferences()
             result.invoke(UiState.Success(recipes))
@@ -268,7 +268,7 @@ class AuthRepositoryImp(
 
 
     override fun getFavoritesRecipeString(result: (UiState<ArrayList<String>?>) -> Unit) {
-        val user: User? = validateSession()
+        val user: User? = validateSessionAndSharedPreferences()
         if (user != null) {
             if (user.favorite_recipes != null){
                 result.invoke(UiState.Success(user.favorite_recipes))
@@ -283,7 +283,7 @@ class AuthRepositoryImp(
 
 
     override fun getUserSession(result: (UiState<User?>) -> Unit) {
-        val user: User? = validateSession()
+        val user: User? = validateSessionAndSharedPreferences()
         if (user!=null){
             database.collection(FireStoreCollection.USER).document(user.id).get().addOnSuccessListener {
                 val user:User? = it.toObject(User::class.java)
@@ -392,7 +392,7 @@ class AuthRepositoryImp(
         return  gson.fromJson(serializedHashMap, HashMap::class.java) as HashMap<String, String>?
     }
 
-    private fun validateSession(): User? {
+    private fun validateSessionAndSharedPreferences(): User? {
         val userUUID = auth.currentUser?.uid ?: null
         val user =getUserInSharedPreferences()
         if (user != null) {
@@ -401,6 +401,11 @@ class AuthRepositoryImp(
             }
         }
         return null
+    }
+
+    private fun validateSession(): String? {
+        val userUUID = auth.currentUser?.uid ?: null
+        return userUUID
     }
 
     private fun getRecipesClassInSharedPreferences(): ArrayList<Recipe>? {
