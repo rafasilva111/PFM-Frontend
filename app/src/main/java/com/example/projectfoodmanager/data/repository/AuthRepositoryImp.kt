@@ -179,7 +179,7 @@ class AuthRepositoryImp(
         result: (UiState<Pair<User, String>>?) -> Unit
     ) {
         //save on profile reference
-        var user:User? = validateSession() //check if user is user auth (pensar na segurança)
+        var user:User? = validateSessionAndSharedPreferences() //check if user is user auth (pensar na segurança)
 
 
         if(user == null){
@@ -218,7 +218,7 @@ class AuthRepositoryImp(
 
     override fun addFavoriteRecipe(recipe: Recipe, result: (UiState<Pair<User, String>>?) -> Unit) {
         //save on profile reference
-        var user:User? = validateSession() //check if user is user auth (pensar na segurança)
+        var user:User? = validateSessionAndSharedPreferences() //check if user is user auth (pensar na segurança)
 
         if(user == null){
             removeUserInSharedPreferences()
@@ -340,7 +340,7 @@ class AuthRepositoryImp(
 
     override fun removeLikeRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit) {
         //save on profile reference
-        var user:User? = validateSession() //check if user is user auth (pensar na segurança)
+        var user:User? = validateSessionAndSharedPreferences() //check if user is user auth (pensar na segurança)
 
         if(user == null){
             removeUserInSharedPreferences()
@@ -365,7 +365,7 @@ class AuthRepositoryImp(
 
     override fun addLikeRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit) {
         //save on profile reference
-        var user:User? = validateSession() //check if user is user auth (pensar na segurança)
+        var user:User? = validateSessionAndSharedPreferences() //check if user is user auth (pensar na segurança)
 
         if(user == null){
             removeUserInSharedPreferences()
@@ -392,16 +392,6 @@ class AuthRepositoryImp(
         return  gson.fromJson(serializedHashMap, HashMap::class.java) as HashMap<String, String>?
     }
 
-    private fun validateSessionAndSharedPreferences(): User? {
-        val userUUID = auth.currentUser?.uid ?: null
-        val user =getUserInSharedPreferences()
-        if (user != null) {
-            if (user.id == userUUID){
-                return user
-            }
-        }
-        return null
-    }
 
     private fun validateSession(): String? {
         val userUUID = auth.currentUser?.uid ?: null
@@ -446,11 +436,20 @@ class AuthRepositoryImp(
         return appPreferences.edit().remove(SharedPrefConstants.USER_SESSION).apply()
     }
 
-    private fun validateSessionUUID(): String? {
+    private fun validateSessionAndSharedPreferences(): User? {
         val userUUID = auth.currentUser?.uid ?: null
-        if (userUUID != null) {
-            return userUUID
+        val user =getUserInSharedPreferences()
+        if (user != null) {
+            if (user.id == userUUID){
+                return user
+            }
         }
         return null
     }
+
+    private fun validateSessionUUID(): String? {
+        val userUUID = auth.currentUser?.uid ?: null
+        return userUUID
+    }
+
 }

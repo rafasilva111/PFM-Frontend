@@ -20,7 +20,7 @@
         android:icon="@drawable/ic_baseline_celebration_24"
         />
     <item
-        android:id="@+id/profileFragment"
+        android:id="@+id/pro"
         android:title="Profile"
         android:icon="@drawable/ic_baseline_person_24"/>
 
