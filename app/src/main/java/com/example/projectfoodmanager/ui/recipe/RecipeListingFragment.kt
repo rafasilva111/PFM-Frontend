@@ -69,6 +69,7 @@ class RecipeListingFragment : Fragment() {
         }else {
         binding = FragmentRecipeListingBinding.inflate(layoutInflater)
         manager = LinearLayoutManager(activity)
+        manager.orientation=LinearLayoutManager.HORIZONTAL
         manager.reverseLayout=false
         binding.recyclerView.layoutManager = manager
         snapHelper.attachToRecyclerView(binding.recyclerView)
