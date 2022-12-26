@@ -6,61 +6,90 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.projectfoodmanager.databinding.ActivityMainBinding
+import com.example.projectfoodmanager.ui.auth.AuthViewModel
+import com.example.projectfoodmanager.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
     private lateinit var bottomNav: BottomNavigationView
     lateinit var navController: NavController
+    val authViewModel: AuthViewModel by viewModels()
     val TAG: String = "MainActivity"
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
-
-        startUI()
-    }
-
-    private fun startUI() {
+        //todo check internet
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        authViewModel.getSession { user->
+            if (user == null) {
+                authViewModel.getMetadata {
+                    var metadata = it?.get(MetadataConstants.FIRST_TIME_LOGIN) ?: null
+
+                    if (metadata != null) {
+                        setContentView(R.layout.activity_login)
+                    } else {
+
+                        setContentView(R.layout.first_time_welcoming)
+                        findViewById<Button>(R.id.btn_continue).setOnClickListener {
+                            setContentView(R.layout.activity_login)
+                        }
+                        authViewModel.storeMetadata(
+                            MetadataConstants.FIRST_TIME_LOGIN,
+                            true.toString()
+                        ) {
+                        }
+                    }
+
+                }
+            }
+            else{
+                startUI()
+            }
+        }
+
+    }
+
+
+    private fun startUI() {
         bottomNav = findViewById(R.id.bottomNavigationView)
-
-
+        bottomNav.visibility = View.VISIBLE
         //nav
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        val navController = findNavController(R.id.nav_host)
+        navController = findNavController(R.id.nav_host)
 
-        bottomNavigationView.setupWithNavController(navController)
+        bottomNav.setupWithNavController(navController)
 
     }
 
     override fun onBackPressed() {
         val count = supportFragmentManager.backStackEntryCount
 
+        if (navController?.currentDestination?.id == R.id.loginFragment){
+            bottomNav.visibility = View.GONE
+            moveTaskToBack(true)
+        }
         if (count == 0) {
             super.onBackPressed()
             //additional code
         } else {
             supportFragmentManager.popBackStack()
         }
+
     }
-
-    private fun replaceFragment(fragment : Fragment){
-
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.nav_host,fragment)
-        fragmentTransaction.commit()
-    }
-
     private fun isOnline(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -81,5 +110,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return false
+    }
+    fun showHideTextView(visible: Int) {
+        binding.bottomNavigationView.visibility = visible
     }
 }

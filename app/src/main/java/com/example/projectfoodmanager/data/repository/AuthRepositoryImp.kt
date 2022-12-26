@@ -157,21 +157,7 @@ class AuthRepositoryImp(
 
     override fun getSession(result: (User?) -> Unit) {
         var user:User? = validateSessionAndSharedPreferences()
-
-        var user_in_preferences:User? = getUserInSharedPreferences()
-
-        if (user == null){
-            removeUserInSharedPreferences()
-            result.invoke(null)
-        }else{
-            if(user == user_in_preferences) {
-                result.invoke(user)
-            }else{
-                storeUserInSharedPreferences(user)
-                result.invoke(user)
-            }
-
-        }
+        result.invoke(user)
     }
 
     override fun removeFavoriteRecipe(
@@ -437,10 +423,10 @@ class AuthRepositoryImp(
     }
 
     private fun validateSessionAndSharedPreferences(): User? {
-        val userUUID = auth.currentUser?.uid ?: null
-        val user =getUserInSharedPreferences()
-        if (user != null) {
-            if (user.id == userUUID){
+        if (auth.currentUser != null) {
+            val userUUID = auth.currentUser?.uid
+            val user:User? = getUserInSharedPreferences()
+            if (user?.id == userUUID){
                 return user
             }
         }
