@@ -115,22 +115,24 @@
 
             </ScrollView>
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Data"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/date_label"
-                app:layout_constraintStart_toStartOf="@+id/date_label" />
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="20dp"
+                android:elevation="3dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_baseline_calendar_month_24"
+                app:layout_constraintBottom_toBottomOf="@+id/date_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/date_label" />
 
             <TextView
                 android:id="@+id/date_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="24dp"
                 android:alpha="0.7"
                 android:padding="2dp"
                 android:text="02/03/2022"
@@ -138,23 +140,25 @@
                 android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/imageView9" />
 
+            <ImageView
+                android:id="@+id/imageView8"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="5dp"
+                android:elevation="3dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_like"
+                app:layout_constraintBottom_toBottomOf="@+id/TV_rate"
+                app:layout_constraintEnd_toStartOf="@+id/TV_rate"
+                app:layout_constraintTop_toTopOf="@+id/TV_rate" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nº Gostos"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/TV_rate"
-                app:layout_constraintStart_toStartOf="@+id/TV_rate" />
 
             <TextView
                 android:id="@+id/TV_rate"
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
                 android:text="@string/_0_gostos"
                 app:layout_constraintBottom_toBottomOf="@+id/date_label"
                 app:layout_constraintEnd_toEndOf="parent"

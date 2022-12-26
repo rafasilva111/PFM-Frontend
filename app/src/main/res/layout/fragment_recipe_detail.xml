@@ -43,31 +43,29 @@
 
 
         <ImageButton
-            android:id="@+id/favoritesIB"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/layout_bg_low"
-            android:elevation="2dp"
-            android:padding="30dp"
-            android:src="@drawable/ic_favorito_black"
-            app:layout_constraintEnd_toEndOf="@+id/calendarIB"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/calendarIB"
-            app:layout_constraintTop_toBottomOf="@+id/calendarIB" />
+            android:id="@+id/calendarIB"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/layout_circle_bg"
+            android:elevation="9dp"
+            android:src="@drawable/ic_calendar"
+            app:layout_constraintBottom_toBottomOf="@+id/favoritesIB"
+            app:layout_constraintEnd_toStartOf="@+id/favoritesIB"
+            app:layout_constraintTop_toTopOf="@+id/favoritesIB" />
+
 
         <ImageButton
-            android:id="@+id/calendarIB"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            android:background="@drawable/layout_bg_low"
-            android:elevation="2dp"
-            android:padding="30dp"
-            android:src="@drawable/ic_calendar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:id="@+id/favoritesIB"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/layout_circle_bg"
+            android:elevation="9dp"
+            android:src="@drawable/ic_favorito_black"
+            app:layout_constraintBottom_toBottomOf="@+id/likeIB"
+            app:layout_constraintEnd_toStartOf="@+id/likeIB"
+            app:layout_constraintTop_toTopOf="@+id/likeIB" />
 
         <ImageButton
             android:id="@+id/likeIB"
@@ -86,8 +84,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="190dp"
-            android:paddingBottom="20dp"
             android:background="@drawable/layout_body_bg"
+            android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/IV_Recipe">
@@ -134,13 +132,33 @@
                 app:layout_constraintStart_toEndOf="@+id/TV_RatingMed"
                 app:layout_constraintTop_toTopOf="@+id/TV_RatingMed" />
 
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_baseline_calendar_month_24"
+                app:layout_constraintBottom_toBottomOf="@+id/TV_date"
+                app:layout_constraintEnd_toStartOf="@+id/TV_date"
+                app:layout_constraintTop_toTopOf="@+id/TV_date" />
+
+            <TextView
+                android:id="@+id/TV_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="02/03/2022"
+                android:textAlignment="center"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/TV_Title"
+                app:layout_constraintTop_toTopOf="@+id/radtingRecipe" />
+
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/TV_RatingMed"
-                tools:layout_editor_absoluteX="10dp">
+                app:layout_constraintTop_toBottomOf="@+id/TV_RatingMed">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -328,7 +346,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/TV_description_Info" />
 
 
-          <!--  <ListView
+            <!--  <ListView
                 android:id="@+id/LV_Ingridients_Info"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -366,13 +384,14 @@
 
             <ListView
                 android:id="@+id/LV_Preparation_Info"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="5dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintTop_toBottomOf="@+id/tvPreparation"/>
-
+                app:layout_constraintEnd_toEndOf="@+id/LV_Ingridients_Info"
+                app:layout_constraintStart_toStartOf="@+id/LV_Ingridients_Info"
+                app:layout_constraintTop_toBottomOf="@+id/tvPreparation" />
 
             <TextView
                 android:id="@+id/LB_source"
@@ -410,6 +429,22 @@
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/TV_source"
                 app:layout_constraintTop_toBottomOf="@+id/TV_source" />
+
+
+            <TextView
+                android:id="@+id/TV_ref"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/layout_bg"
+                android:text="Ref"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:gravity="start|center"
+                android:padding="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/TV_link"
+                app:layout_constraintTop_toBottomOf="@+id/TV_link" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
