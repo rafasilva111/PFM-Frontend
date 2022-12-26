@@ -10,18 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
-import androidx.navigation.ui.NavigationUI.setupWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.projectfoodmanager.databinding.ActivityMainBinding
-import com.example.projectfoodmanager.ui.auth.LoginActivity
-import com.example.projectfoodmanager.ui.auth.AuthViewModel
-import com.example.projectfoodmanager.ui.profile.ProfileFragment
-import com.example.projectfoodmanager.ui.recipe.RecipeListingFragment
-import com.example.projectfoodmanager.util.UiState
-import com.example.projectfoodmanager.util.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
