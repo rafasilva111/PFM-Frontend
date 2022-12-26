@@ -15,7 +15,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.projectfoodmanager.databinding.ActivityMainMenuBinding
+import com.example.projectfoodmanager.databinding.ActivityMainBinding
 import com.example.projectfoodmanager.ui.auth.LoginActivity
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import com.example.projectfoodmanager.ui.profile.ProfileFragment
@@ -36,11 +36,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setNavController()
+        startUI()
     }
 
     private fun startUI() {
-        binding = ActivityMainMenuBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         bottomNav = findViewById(R.id.bottomNavigationView)
 
