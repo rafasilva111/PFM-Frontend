@@ -73,6 +73,8 @@ class RecipeListingFragment : Fragment() {
         manager.reverseLayout=false
         binding.recyclerView.layoutManager = manager
         snapHelper.attachToRecyclerView(binding.recyclerView)
+
+
         setRecyclerViewScrollListener()
         return binding.root
         }
@@ -92,11 +94,13 @@ class RecipeListingFragment : Fragment() {
                         val pastVisibleItem:Int = manager.findLastCompletelyVisibleItemPosition()
                         val pag_index = floor(((pastVisibleItem+1)/FireStorePaginations.RECIPE_LIMIT).toDouble())
                         if ((pastVisibleItem+1)%FireStorePaginations.RECIPE_LIMIT.toInt()==0){
-                            viewModel.getRecipesPaginated((pag_index*FireStorePaginations.RECIPE_LIMIT).toLong())
+                            viewModel.getRecipesPaginated()
                         }
                         Log.d(TAG, pag_index.toString())
                         Log.d(TAG, visibleItemCount.toString())
                         Log.d(TAG, pastVisibleItem.toString())
+
+
                         binding.recyclerView.addOnScrollListener(scrollListener)
                     }
                 }
@@ -118,7 +122,7 @@ class RecipeListingFragment : Fragment() {
 
 
 
-        viewModel.getRecipesPaginated(0)
+        viewModel.getRecipesPaginated()
         var firstTimeLoading = true
         viewModel.recipe.observe(viewLifecycleOwner){state ->
 

@@ -11,7 +11,7 @@ object FireStoreDocumentField {
 }
 
 object FireStorePaginations{
-    val RECIPE_LIMIT: Long = 25
+    val RECIPE_LIMIT: Long = 5
 }
 
 object SharedPrefConstants {

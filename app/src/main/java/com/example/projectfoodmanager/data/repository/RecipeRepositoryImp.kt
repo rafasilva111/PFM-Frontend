@@ -6,14 +6,19 @@ import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.util.FireStoreCollection
 import com.example.projectfoodmanager.util.FireStorePaginations
 import com.example.projectfoodmanager.util.UiState
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 
 
 class RecipeRepositoryImp(
     val database: FirebaseFirestore
 ): RecipeRepository {
     val TAG: String = "RecipeRepositoryImp"
+    var lastRecipeSnapshot: DocumentSnapshot? = null
+    var lastRecipe: Recipe? = null
 
     override fun getRecipes(result: (UiState<List<Recipe>>) -> Unit) {
         database.collection(FireStoreCollection.RECIPE_PROD)
@@ -57,68 +62,60 @@ class RecipeRepositoryImp(
             }
     }
 
-    override fun getRecipesPaginated(page: Long, result: (UiState<List<Recipe>>) -> Unit) {
-        if (page.compareTo(0) == 0) {
-            database.collection(FireStoreCollection.RECIPE_PROD).limit(FireStorePaginations.RECIPE_LIMIT).orderBy("id")
-                .get()
-                .addOnSuccessListener { documentSnapshots ->
+    override fun getRecipesPaginated( result: (UiState<List<Recipe>>) -> Unit) {
+        var first: Query?
 
-                    val notes = arrayListOf<Recipe>()
-                    for (document in documentSnapshots.documents) {
-                        val recipe = document.toObject(Recipe::class.java)
+        if (lastRecipeSnapshot == null){
+             first = database.collection(FireStoreCollection.RECIPE_PROD)
+                 .orderBy("id")
+                .limit(FireStorePaginations.RECIPE_LIMIT)
 
-                        if (recipe != null) {
-
-                            notes.add(recipe)
-                        } else {
-                            Log.d(TAG, "Problem on recipe -> " + document.toString())
-                        }
-                    }
-                    result.invoke(
-                        UiState.Success(notes)
-                    )
-                }
-                .addOnFailureListener {
-                    result.invoke(
-                        UiState.Failure(
-                            it.localizedMessage
-                        )
-                    )
-                }
         }
         else{
-            database.collection(FireStoreCollection.RECIPE_PROD).orderBy("id").startAt(page+1)
+            first = database.collection(FireStoreCollection.RECIPE_PROD)
+                .orderBy("id")
                 .limit(FireStorePaginations.RECIPE_LIMIT)
-                .get()
-                .addOnSuccessListener { documentSnapshots ->
+                .startAfter(lastRecipe?.id)
 
-                    val notes = arrayListOf<Recipe>()
-                    for (document in documentSnapshots.documents) {
-                        val recipe = document.toObject(Recipe::class.java)
-
-                        if (recipe != null) {
-
-                            notes.add(recipe)
-                        } else {
-                            Log.d(TAG, "Problem on recipe -> " + document.toString())
-                        }
-                    }
-                    result.invoke(
-                        UiState.Success(notes)
-                    )
-                }
-                .addOnFailureListener {
-                    Log.d(TAG, "problem" +it.toString())
-                    result.invoke(
-                        UiState.Failure(
-                            it.localizedMessage
-
-                        )
-                    )
-                }
         }
-    }
 
+        first.get()
+            .addOnSuccessListener { documentSnapshots ->
+                val notes = arrayListOf<Recipe>()
+                lastRecipeSnapshot = documentSnapshots.documents[documentSnapshots.size() - 1]
+
+
+                for (document in documentSnapshots.documents) {
+
+                    val recipe = document.toObject(Recipe::class.java)
+
+                    if (recipe != null) {
+                        notes.add(recipe)
+                    } else {
+                        Log.d(TAG, "Problem on recipe -> " + document.toString())
+                    }
+
+
+
+                }
+                lastRecipe = documentSnapshots.documents[documentSnapshots.size() - 1].toObject(Recipe::class.java)
+                result.invoke(
+
+                    UiState.Success(
+                        notes
+                    )
+                )
+
+            }
+            .addOnFailureListener {
+                result.invoke(
+                    UiState.Failure(
+                        it.localizedMessage
+                    )
+                )
+            }
+
+    }
     override fun addLikeOnRecipe(
         recipe: Recipe,
         result: (UiState<Pair<Recipe, String>>?) -> Unit

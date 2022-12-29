@@ -41,6 +41,8 @@ class ProfileFragment : Fragment() {
             authViewModel.logout {
 
                 findNavController().navigate(R.id.action_recipeListingFragment_to_loginFragment)
+                val teste = view.findViewById<View>(R.id.bottomNavigationView)
+                Log.d(TAG, "onViewCreated: ")
 
             }
 
