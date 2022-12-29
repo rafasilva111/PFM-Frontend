@@ -62,10 +62,11 @@ class RecipeRepositoryImp(
             }
     }
 
-    override fun getRecipesPaginated( result: (UiState<List<Recipe>>) -> Unit) {
+    override fun getRecipesPaginated(firstTime: Boolean, result: (UiState<List<Recipe>>) -> Unit) {
         var first: Query?
+        val notes = arrayListOf<Recipe>()
 
-        if (lastRecipeSnapshot == null){
+        if (firstTime){
              first = database.collection(FireStoreCollection.RECIPE_PROD)
                  .orderBy("id")
                 .limit(FireStorePaginations.RECIPE_LIMIT)
@@ -81,7 +82,7 @@ class RecipeRepositoryImp(
 
         first.get()
             .addOnSuccessListener { documentSnapshots ->
-                val notes = arrayListOf<Recipe>()
+
                 lastRecipeSnapshot = documentSnapshots.documents[documentSnapshots.size() - 1]
 
 

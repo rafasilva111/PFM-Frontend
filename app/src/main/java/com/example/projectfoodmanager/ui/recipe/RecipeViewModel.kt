@@ -33,9 +33,9 @@ class RecipeViewModel @Inject constructor (
 
     }
 
-    fun getRecipesPaginated(){
+    fun getRecipesPaginated(firstTime:Boolean){
         _recipes.value = UiState.Loading
-        repository.getRecipesPaginated() {
+        repository.getRecipesPaginated(firstTime) {
             _recipes.value = it
         }
 

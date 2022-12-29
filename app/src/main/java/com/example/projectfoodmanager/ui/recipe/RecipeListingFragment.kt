@@ -95,7 +95,7 @@ class RecipeListingFragment : Fragment() {
                         val pastVisibleItem:Int = manager.findLastCompletelyVisibleItemPosition()
                         val pag_index = floor(((pastVisibleItem+1)/FireStorePaginations.RECIPE_LIMIT).toDouble())
                         if ((pastVisibleItem+1)%FireStorePaginations.RECIPE_LIMIT.toInt()==0){
-                            viewModel.getRecipesPaginated()
+                            viewModel.getRecipesPaginated(false)
                         }
                         Log.d(TAG, pag_index.toString())
                         Log.d(TAG, visibleItemCount.toString())
@@ -133,7 +133,7 @@ class RecipeListingFragment : Fragment() {
         })
 
 
-        viewModel.getRecipesPaginated()
+        viewModel.getRecipesPaginated(true)
         var firstTimeLoading = true
         viewModel.recipe.observe(viewLifecycleOwner){state ->
 
