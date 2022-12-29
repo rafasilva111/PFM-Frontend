@@ -30,7 +30,8 @@
         app:itemIconTint="#FFFFFF"
         app:itemTextColor="#FFFFFF"
         android:layout_margin="10dp"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"
+        android:visibility="gone"/>
 
 
 

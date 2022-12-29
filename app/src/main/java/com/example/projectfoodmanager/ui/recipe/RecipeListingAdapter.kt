@@ -67,7 +67,7 @@ class RecipeListingAdapter(
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition,item) }
 
             // favorite function
-
+            binding.like.setImageResource(R.drawable.ic_favorite)
             authModel.getSession { user ->
                 if (user != null) {
                     if ( user.favorite_recipes.indexOf(item.id)!=-1){
@@ -103,6 +103,8 @@ class RecipeListingAdapter(
             }
             binding.dateLabel.text = item.date
 
+
+            binding.like.setImageResource(R.drawable.ic_like)
             authModel.getSession { user ->
                 if (user != null) {
                     if ( user.liked_recipes.indexOf(item.id)!=-1){
@@ -112,6 +114,7 @@ class RecipeListingAdapter(
             }
 
             binding.like.setOnClickListener {
+
                 authModel.getSession { user ->
                     if (user != null){
                         if ( user.liked_recipes.indexOf(item.id)!=-1){
