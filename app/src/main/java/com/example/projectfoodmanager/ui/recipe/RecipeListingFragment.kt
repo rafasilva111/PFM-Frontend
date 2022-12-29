@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -120,6 +121,16 @@ class RecipeListingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.adapter = adapter
 
+        binding.SVsearch.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                searchList(newText)
+                return true
+            }
+        })
 
 
         viewModel.getRecipesPaginated()
@@ -147,6 +158,21 @@ class RecipeListingFragment : Fragment() {
             }
         }
     }
+
+    private fun searchList(text: String?) {
+        val searchList =  ArrayList<Recipe>()
+        if (text != null) {
+        for (a in list){
+
+                if (a.title.lowercase().contains(text.lowercase())){
+                    searchList.add(a)
+                }
+
+            }
+        }
+        adapter.updateList(searchList.toMutableList())
+    }
+
     companion object {
         @JvmStatic
         fun newInstance(param1: String) =

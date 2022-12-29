@@ -49,6 +49,7 @@ class RecipeListingAdapter(
         return list.size
     }
 
+
     inner class MyViewHolder(private val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
 
