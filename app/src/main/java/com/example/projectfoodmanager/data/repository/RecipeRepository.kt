@@ -10,4 +10,5 @@ interface RecipeRepository {
     fun addRecipe(recipeInfo: Recipe, result: (UiState<String>)-> Unit)
     fun removeLikeOnRecipe(recipe: Recipe, result: (UiState<Pair<Recipe,String>>?)-> Unit)
     fun addLikeOnRecipe(recipe: Recipe, result: (UiState<Pair<Recipe,String>>?) -> Unit)
+    fun getRecipesByTitle(title: String,firstTime: Boolean,result: (UiState<List<Recipe>>) -> Unit)
 }

@@ -20,9 +20,20 @@ class RecipeViewModel @Inject constructor (
     val recipe: LiveData<UiState<List<Recipe>>>
             get() = _recipes
 
+    private val _recipes_search = MutableLiveData<UiState<List<Recipe>>>()
+    val recipe_search: LiveData<UiState<List<Recipe>>>
+        get() = _recipes_search
+
     private val _updateRecipe = MutableLiveData<UiState<Pair<Recipe,String>>>()
     val updateRecipe: LiveData<UiState<Pair<Recipe,String>>>
         get() = _updateRecipe
+
+
+    private val _addRecipe = MutableLiveData<UiState<String>>()
+    val addRecipe: LiveData<UiState<String>>
+        get() = _addRecipe
+
+
 
     fun getRecipes(){
         _recipes.value = UiState.Loading
@@ -41,10 +52,12 @@ class RecipeViewModel @Inject constructor (
 
     }
 
-    private val _addRecipe = MutableLiveData<UiState<String>>()
-    val addRecipe: LiveData<UiState<String>>
-        get() = _addRecipe
-
+    fun getRecipesByTitle(title: String,firstTime:Boolean) {
+        _recipes_search.value = UiState.Loading
+        repository.getRecipesByTitle(title,firstTime) {
+            _recipes_search.value = it
+        }
+    }
 
     fun addRecipe(recipe: Recipe){
         _addRecipe.value = UiState.Loading
@@ -60,6 +73,8 @@ class RecipeViewModel @Inject constructor (
         _updateRecipe.value = UiState.Loading
         repository.addLikeOnRecipe(recipe) { _updateRecipe.value = it}
     }
+
+
 
 
 }
