@@ -10,8 +10,8 @@ data class User(
     val first_name: String = "",
     val last_name: String = "",
     val email: String = "",
-    var favorite_recipes: ArrayList<String> = arrayListOf(),
-    var liked_recipes: ArrayList<String> = arrayListOf(),
+    var favorite_recipes: ArrayList<Recipe> = arrayListOf(),
+    var liked_recipes: ArrayList<Recipe> = arrayListOf(),
     //bio data
     val altura: String = "",
     val peso: String = "",
@@ -20,18 +20,18 @@ data class User(
 
 ) : Parcelable {
     fun addFavoriteRecipe(recipe: Recipe){
-        this.favorite_recipes.add(recipe.id.toString())
+        this.favorite_recipes.add(recipe)
     }
 
     fun removeFavoriteRecipe(recipe: Recipe) {
-        this.favorite_recipes.remove(recipe.id.toString())
+        this.favorite_recipes.remove(recipe)
     }
 
     fun addLikeRecipe(recipe: Recipe) {
-        this.liked_recipes.add(recipe.id.toString())
+        this.liked_recipes.add(recipe)
     }
 
     fun removeLikeRecipe(recipe: Recipe) {
-        this.liked_recipes.remove(recipe.id.toString())
+        this.liked_recipes.remove(recipe)
     }
 }

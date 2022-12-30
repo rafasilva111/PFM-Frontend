@@ -22,7 +22,7 @@ interface AuthRepository {
     fun removeFavoriteRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit)
     fun addFavoriteRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit)
     fun getFavoritesRecipeClass(result: (UiState<ArrayList<Recipe>?>) -> Unit)
-    fun getFavoritesRecipeString(result: (UiState<ArrayList<String>?>) -> Unit)
+
 
     // user likes
     fun removeLikeRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit)

@@ -98,7 +98,7 @@ class RecipeDetailFragment : Fragment() {
 
             authModel.getSession { user ->
                 if (user != null) {
-                    if ( user.liked_recipes.indexOf(recipe.id)!=-1){
+                    if ( user.liked_recipes.indexOf(recipe)!=-1){
                         binding.likeIB.setImageResource(R.drawable.ic_like_red)
                     }
                 }
@@ -107,7 +107,7 @@ class RecipeDetailFragment : Fragment() {
             binding.likeIB.setOnClickListener {
                 authModel.getSession { user ->
                     if (user != null){
-                        if ( user.liked_recipes.indexOf(recipe.id)!=-1){
+                        if ( user.liked_recipes.indexOf(recipe)!=-1){
                             authModel.removeLikeOnRecipe(recipe)
                             viewModel.removeLikeOnRecipe(recipe)
                             binding.likeIB.setImageResource(R.drawable.ic_like_black)
@@ -127,7 +127,7 @@ class RecipeDetailFragment : Fragment() {
 
             authModel.getSession { user ->
                 if (user != null) {
-                    if ( user.favorite_recipes.indexOf(recipe.id)!=-1){
+                    if ( user.favorite_recipes.indexOf(recipe)!=-1){
                         binding.favoritesIB.setImageResource(R.drawable.ic_favorito_white)
                     }
                 }
@@ -136,7 +136,7 @@ class RecipeDetailFragment : Fragment() {
             binding.favoritesIB.setOnClickListener {
                 authModel.getSession { user ->
                     if (user != null){
-                        if ( user.favorite_recipes.indexOf(recipe.id)!=-1){
+                        if ( user.favorite_recipes.indexOf(recipe)!=-1){
                             authModel.removeFavoriteRecipe(recipe)
                             binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
                             toast("Receita removida dos favoritos.")

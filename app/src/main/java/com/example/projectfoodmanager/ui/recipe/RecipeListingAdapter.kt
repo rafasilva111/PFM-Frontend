@@ -71,7 +71,7 @@ class RecipeListingAdapter(
             binding.like.setImageResource(R.drawable.ic_favorite)
             authModel.getSession { user ->
                 if (user != null) {
-                    if ( user.favorite_recipes.indexOf(item.id)!=-1){
+                    if ( user.favorite_recipes.indexOf(item)!=-1){
                         binding.favorites.setImageResource(R.drawable.ic_favorito_white)
                     }
                 }
@@ -80,7 +80,7 @@ class RecipeListingAdapter(
             binding.like.setOnClickListener {
                 authModel.getSession { user ->
                     if (user != null){
-                        if ( user.favorite_recipes.indexOf(item.id)!=-1){
+                        if ( user.favorite_recipes.indexOf(item)!=-1){
                             authModel.removeFavoriteRecipe(item)
                             binding.favorites.setImageResource(R.drawable.ic_favorite)
                             Toast.makeText(it.context,"Receita removida dos favoritos.", Toast.LENGTH_SHORT).show()
@@ -108,7 +108,7 @@ class RecipeListingAdapter(
             binding.like.setImageResource(R.drawable.ic_like)
             authModel.getSession { user ->
                 if (user != null) {
-                    if ( user.liked_recipes.indexOf(item.id)!=-1){
+                    if ( user.liked_recipes.indexOf(item)!=-1){
                         binding.like.setImageResource(R.drawable.ic_like_red)
                     }
                 }
@@ -118,7 +118,7 @@ class RecipeListingAdapter(
 
                 authModel.getSession { user ->
                     if (user != null){
-                        if ( user.liked_recipes.indexOf(item.id)!=-1){
+                        if ( user.liked_recipes.indexOf(item)!=-1){
                             authModel.removeLikeOnRecipe(item)
                             recipeModel.removeLikeOnRecipe(item)
                             binding.like.setImageResource(R.drawable.ic_like)

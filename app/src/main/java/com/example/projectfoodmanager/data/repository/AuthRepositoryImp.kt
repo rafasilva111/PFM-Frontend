@@ -253,19 +253,7 @@ class AuthRepositoryImp(
     }
 
 
-    override fun getFavoritesRecipeString(result: (UiState<ArrayList<String>?>) -> Unit) {
-        val user: User? = validateSessionAndSharedPreferences()
-        if (user != null) {
-            if (user.favorite_recipes != null){
-                result.invoke(UiState.Success(user.favorite_recipes))
-                return
-            }
-            result.invoke(UiState.Failure("Utilizador não tem receitas nos favoritos."))
-            return
-        }
-        removeUserInSharedPreferences()
-        result.invoke(UiState.Failure("Sessão expirou."))
-    }
+
 
 
     override fun getUserSession(result: (UiState<User?>) -> Unit) {
