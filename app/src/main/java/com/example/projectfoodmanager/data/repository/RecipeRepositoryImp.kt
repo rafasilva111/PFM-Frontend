@@ -2,15 +2,12 @@ package com.example.projectfoodmanager.data.repository
 
 import android.util.Log
 import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.util.FireStoreCollection
 import com.example.projectfoodmanager.util.FireStorePaginations
 import com.example.projectfoodmanager.util.UiState
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
 
 
 class RecipeRepositoryImp(
@@ -111,19 +108,9 @@ class RecipeRepositoryImp(
         var first: Query?
         val notes = arrayListOf<Recipe>()
 
-        if (firstTime){
-            first = database.collection(FireStoreCollection.RECIPE_PROD)
-                .orderBy("title")
-                .startAt(title).endAt(title + '~')
 
+        first = database.collection(FireStoreCollection.RECIPE_PROD)
 
-
-        }
-        else{
-            first = database.collection(FireStoreCollection.RECIPE_PROD)
-                .limit(FireStorePaginations.RECIPE_LIMIT)
-                .startAfter(lastRecipe?.id)
-        }
         first.get()
             .addOnSuccessListener { documentSnapshots ->
                 documentSnapshots.query
@@ -132,11 +119,15 @@ class RecipeRepositoryImp(
 
                     for (document in documentSnapshots.documents) {
                         val recipe = document.toObject(Recipe::class.java)
-
-                        if (recipe != null) {
+                        val found = recipe!!.title.lowercase().contains(title.lowercase())
+                        Log.d("TAG", "${recipe.title} / $found")
+                        if (found) {
                             notes.add(recipe)
                         } else {
                             Log.d(TAG, "Problem on recipe -> " + document.toString())
+                        }
+                        if (notes.size ==FireStorePaginations.RECIPE_LIMIT.toInt()){
+                            break
                         }
                     }
                     lastRecipe =

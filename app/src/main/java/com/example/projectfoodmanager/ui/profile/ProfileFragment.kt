@@ -37,16 +37,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.logoutIB.setOnClickListener {
-            authViewModel.logout {
 
-                findNavController().navigate(R.id.action_recipeListingFragment_to_loginFragment)
-                val teste = view.findViewById<View>(R.id.bottomNavigationView)
-                Log.d(TAG, "onViewCreated: ")
-
-            }
-
-        }
     }
 
     companion object {

@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         authViewModel.getSession { user->
             if (user == null) {
                 authViewModel.getMetadata {
-                    var metadata = it?.get(MetadataConstants.FIRST_TIME_LOGIN) ?: null
+                    var metadata = it?.get(MetadataConstants.FIRST_TIME_LOGIN)
 
                     if (metadata != null) {
                         setContentView(R.layout.activity_login)
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
     private fun isOnline(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (connectivityManager != null) {
+        if ( connectivityManager != null) {
             val capabilities =
                 connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             if (capabilities != null) {

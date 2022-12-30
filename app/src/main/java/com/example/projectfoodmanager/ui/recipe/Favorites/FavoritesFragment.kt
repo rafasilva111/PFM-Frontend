@@ -38,10 +38,6 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.logoutIB.setOnClickListener {
-            authViewModel.logout {
-                findNavController().navigate(R.id.action_recipeListingFragment_to_loginFragment)
-            }
-        }
+
     }
 }
