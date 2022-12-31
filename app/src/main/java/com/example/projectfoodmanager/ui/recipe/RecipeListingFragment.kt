@@ -186,6 +186,45 @@ class RecipeListingFragment : Fragment() {
                 }
             }
         }
+
+        //nav search toppom
+
+        binding.SSUGESTOES.setOnClickListener {
+            toast("Em desenvolvimento...")
+        }
+        binding.SMELHORES.setOnClickListener {
+            toast("Em desenvolvimento...")
+        }
+        binding.SRECENTES.setOnClickListener {
+            toast("Em desenvolvimento...")
+        }
+        binding.SPERSONALIZADAS.setOnClickListener {
+            toast("Em desenvolvimento...")
+        }
+
+
+
+
+        //nav search bottom
+
+        binding.IBMeat.setOnClickListener {
+            viewModel.getRecipesByTitleAndTags("Carne",true)
+        }
+        binding.IBFish.setOnClickListener {
+            viewModel.getRecipesByTitleAndTags("Peixe",true)
+        }
+        binding.IBSoup.setOnClickListener {
+            viewModel.getRecipesByTitleAndTags("Sopa",true)
+        }
+        binding.IBVegi.setOnClickListener {
+            viewModel.getRecipesByTitleAndTags("Vegetariano",true)
+        }
+        binding.IBFruit.setOnClickListener {
+            viewModel.getRecipesByTitleAndTags("Fruta",true)
+        }
+        binding.IBDrink.setOnClickListener {
+            viewModel.getRecipesByTitleAndTags("Bebidas",true)
+        }
     }
 
     companion object {

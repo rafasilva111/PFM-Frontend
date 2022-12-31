@@ -58,6 +58,12 @@ class RecipeViewModel @Inject constructor (
             _recipes_search.value = it
         }
     }
+    fun getRecipesByTitleAndTags(title: String,firstTime:Boolean) {
+        _recipes_search.value = UiState.Loading
+        repository.getRecipesByTitleAndTags(title,firstTime) {
+            _recipes_search.value = it
+        }
+    }
 
     fun addRecipe(recipe: Recipe){
         _addRecipe.value = UiState.Loading

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
@@ -24,7 +25,7 @@ import kotlin.math.floor
 
 
 class FavoritesFragment : Fragment() {
-    lateinit var binding: FragmentProfileBinding
+    lateinit var binding: FragmentFavoritesBinding
     val authViewModel: AuthViewModel by viewModels()
     val TAG: String = "ProfileFragment"
     override fun onCreateView(
@@ -32,7 +33,7 @@ class FavoritesFragment : Fragment() {
         savedInstanceState: Bundle?,
 
         ): View? {
-        binding = FragmentProfileBinding.inflate(layoutInflater)
+        binding = FragmentFavoritesBinding.inflate(layoutInflater)
         return binding.root
     }
 

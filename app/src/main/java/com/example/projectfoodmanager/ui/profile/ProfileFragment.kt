@@ -27,7 +27,7 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
 
-    ): View? {
+        ): View? {
         binding = FragmentProfileBinding.inflate(layoutInflater)
         // Inflate the layout for this fragment
         Log.d(TAG, "olaaa: ")
@@ -37,7 +37,16 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.logoutIB.setOnClickListener {
+            authViewModel.logout {
 
+                findNavController().navigate(R.id.action_recipeListingFragment_to_loginFragment)
+                val teste = view.findViewById<View>(R.id.bottomNavigationView)
+                Log.d(TAG, "onViewCreated: ")
+
+            }
+
+        }
     }
 
     companion object {

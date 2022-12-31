@@ -101,7 +101,7 @@ class AuthRepositoryImp(
                 if (task.isSuccessful) {
                     storeSession(){
                         if (it == null){
-                            result.invoke(UiState.Failure("Failed to store local session"))
+                            result.invoke(UiState.Failure("Fail to login successfully"))
                         }else{
                             result.invoke(UiState.Success("Login successfully!"))
                         }
