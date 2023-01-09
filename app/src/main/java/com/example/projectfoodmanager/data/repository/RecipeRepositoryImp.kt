@@ -76,7 +76,14 @@ class RecipeRepositoryImp(
         }
         first.get()
             .addOnSuccessListener { documentSnapshots ->
-                lastRecipeSnapshot = documentSnapshots.documents[documentSnapshots.size() - 1]
+                if (documentSnapshots.size()!=0){
+                    lastRecipeSnapshot = documentSnapshots.documents[documentSnapshots.size() - 1]
+                }
+                else{
+                    Log.d(TAG, "Pesquisa sem resultados")
+                    result.invoke(UiState.Failure("Pesquisa sem resultados..."))
+                }
+
 
                 for (document in documentSnapshots.documents) {
                     val recipe = document.toObject(Recipe::class.java)

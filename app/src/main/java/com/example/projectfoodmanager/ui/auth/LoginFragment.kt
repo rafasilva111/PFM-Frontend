@@ -2,14 +2,19 @@ package com.example.projectfoodmanager.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.databinding.FirstTimeWelcomingBinding
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +35,14 @@ class LoginFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        authViewModel.getUserSession {
+                user ->
+            if (user != null){
+                startActivity(Intent(this.context, MainActivity::class.java))
+            }
+        }
         super.onViewCreated(view, savedInstanceState)
+
         observer()
         binding.loginBtn.setOnClickListener {
             if (validation()) {
@@ -74,6 +86,22 @@ class LoginFragment : Fragment() {
                 is UiState.Loading -> {
                 }
                 is UiState.Failure -> {
+                    authViewModel.getMetadata {
+                        var metadata = it?.get(MetadataConstants.FIRST_TIME_LOGIN)
+                        if (metadata == null) {
+//                            binding = Fragment.inflate(layoutInflater)
+//                            setContentView(R.layout.first_time_welcoming)
+//                            findViewById<Button>(R.id.btn_continue).setOnClickListener {
+//                                setContentView(R.layout.activity_login)
+//                            }
+                            authViewModel.storeMetadata(
+                                MetadataConstants.FIRST_TIME_LOGIN,
+                                true.toString()
+                            ) {
+                            }
+                        }
+
+                    }
                 }
                 is UiState.Success -> {
                     toast("Bem-vindo de volta!")
@@ -83,14 +111,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        authViewModel.getSession { user ->
-            if (user != null){
-                findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
-            }
-        }
-    }
+
 
     fun validation(): Boolean {
         var isValid = true

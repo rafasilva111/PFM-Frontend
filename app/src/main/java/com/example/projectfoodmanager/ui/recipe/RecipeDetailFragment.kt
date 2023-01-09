@@ -96,7 +96,7 @@ class RecipeDetailFragment : Fragment() {
 
             //like function
 
-            authModel.getSession { user ->
+            authModel.getUserSession { user ->
                 if (user != null) {
                     if ( user.liked_recipes.indexOf(recipe)!=-1){
                         binding.likeIB.setImageResource(R.drawable.ic_like_red)
@@ -105,7 +105,7 @@ class RecipeDetailFragment : Fragment() {
             }
 
             binding.likeIB.setOnClickListener {
-                authModel.getSession { user ->
+                authModel.getUserSession { user ->
                     if (user != null){
                         if ( user.liked_recipes.indexOf(recipe)!=-1){
                             authModel.removeLikeOnRecipe(recipe)
@@ -125,7 +125,7 @@ class RecipeDetailFragment : Fragment() {
 
             //favorite function
 
-            authModel.getSession { user ->
+            authModel.getUserSession { user ->
                 if (user != null) {
                     if ( user.favorite_recipes.indexOf(recipe)!=-1){
                         binding.favoritesIB.setImageResource(R.drawable.ic_favorito_white)
@@ -134,7 +134,7 @@ class RecipeDetailFragment : Fragment() {
             }
 
             binding.favoritesIB.setOnClickListener {
-                authModel.getSession { user ->
+                authModel.getUserSession { user ->
                     if (user != null){
                         if ( user.favorite_recipes.indexOf(recipe)!=-1){
                             authModel.removeFavoriteRecipe(recipe)

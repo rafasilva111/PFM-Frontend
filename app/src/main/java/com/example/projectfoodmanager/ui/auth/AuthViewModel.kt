@@ -31,13 +31,17 @@ class AuthViewModel @Inject constructor(
     val updateLikeList: LiveData<UiState<Pair<User,String>>>
         get() = _updateLikeList
 
-    private val _getFavoriteRecipeList = MutableLiveData<UiState<ArrayList<Recipe>?>>()
-    val getFavoriteRecipeList: LiveData<UiState<ArrayList<Recipe>?>>
+    private val _getFavoriteRecipeList = MutableLiveData<UiState<ArrayList<Recipe>>>()
+    val getFavoriteRecipeList: LiveData<UiState<ArrayList<Recipe>>>
         get() = _getFavoriteRecipeList
 
     private val _getUserSession = MutableLiveData<UiState<User?>>()
     val getUserSession: LiveData<UiState<User?>>
         get() = _getUserSession
+
+    private val _updateUserSession = MutableLiveData<UiState<User?>>()
+    val updateUserSession: LiveData<UiState<User?>>
+        get() = _updateUserSession
 
     private val _getMetadata = MutableLiveData<UiState<HashMap<String,String>?>>()
     val getMetadata: LiveData<UiState<HashMap<String,String>?>>
@@ -68,13 +72,19 @@ class AuthViewModel @Inject constructor(
             _login.value = it
         }
     }
-
-    fun getSession(result: (User?) -> Unit){
-        repository.getSession(result)
+    fun getUserSession(result: (User?) -> Unit){
+        _getUserSession.value  = UiState.Loading
+        repository.getUserSession(result)
+    }
+    fun logout(result: () -> Unit){
+        repository.logout(result)
     }
 
-
-    fun getFavoriteRecipe(){
+    fun updateUserSession(user: User,result: (UiState<String?>) -> Unit){
+        _getUserSession.value  = UiState.Loading
+        repository.updateUserInfo(user,result)
+    }
+    fun getFavoriteRecipeList(){
         _getFavoriteRecipeList.value = UiState.Loading
         repository.getFavoritesRecipeClass { _getFavoriteRecipeList.value = it}
     }
@@ -88,14 +98,6 @@ class AuthViewModel @Inject constructor(
     fun removeFavoriteRecipe(recipe: Recipe) {
         _updateFavoriteList.value = UiState.Loading
         repository.removeFavoriteRecipe(recipe) { _updateFavoriteList.value = it}
-    }
-
-    fun getUserSession(result: (User?) -> Unit){
-        _getUserSession.value  = UiState.Loading
-        repository.getUserSession() { _getUserSession.value = it}
-    }
-    fun logout(result: () -> Unit){
-        repository.logout(result)
     }
 
     fun storeMetadata(key:String , value:String,result: (HashMap<String,String>?) -> Unit) {
@@ -117,4 +119,5 @@ class AuthViewModel @Inject constructor(
         _updateLikeList.value = UiState.Loading
         repository.addLikeRecipe(recipe) { _updateLikeList.value = it}
     }
+
 }

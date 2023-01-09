@@ -74,11 +74,14 @@ class AuthRepositoryImp(
     }
 
 
-    override fun updateUserInfo(user: User, result: (UiState<String>) -> Unit) {
-        val document = database.collection(FireStoreCollection.USER).document(user.id)
+    override fun updateUserInfo(user: User, result: (UiState<String?>) -> Unit) {
+        val uuid_validated: String? = validateSessionUUID()
+        if (uuid_validated  != null){
+        val document = database.collection(FireStoreCollection.USER).document(uuid_validated)
         document
             .set(user)
             .addOnSuccessListener {
+                storeUserInSharedPreferences(user)
                 result.invoke(
                     UiState.Success("User has been update successfully")
                 )
@@ -90,6 +93,7 @@ class AuthRepositoryImp(
                     )
                 )
             }
+        }
     }
 
     override fun loginUser(
@@ -155,129 +159,119 @@ class AuthRepositoryImp(
         }
     }
 
-    override fun getSession(result: (User?) -> Unit) {
-        var user:User? = validateSessionAndSharedPreferences()
-        result.invoke(user)
-    }
-
     override fun removeFavoriteRecipe(
         recipe: Recipe,
         result: (UiState<Pair<User, String>>?) -> Unit
     ) {
-        //save on profile reference
-        var user:User? = validateSessionAndSharedPreferences() //check if user is user auth (pensar na segurança)
+
+        validateSessionAndSharedPreferences { user ->
+            if(user != null){
+                user.removeFavoriteRecipe(recipe.id)
+                storeUserInSharedPreferences(user)
+
+                database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
+                    Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+                }
 
 
-        if(user == null){
-            removeUserInSharedPreferences()
-            result.invoke(UiState.Failure("Sessão expirou."))
-            return
+
+                //save recipe reference for future loading
+                val recipe_str = getRecipesStringInSharedPreferences()
+                if (recipe_str.isNullOrEmpty()){
+                    Log.d(TAG, "addFavoriteRecipe: nothing on shared preferences")
+                }
+                var recipes_list: MutableList<String> = ArrayList()
+                if (recipe_str != null) {
+                    recipes_list.add(gson.toJson(recipe))
+                }
+                var stored_recipes = storeRecipesInSharedPreferences(recipes_list)
+
+                Log.d(TAG, "Recipe has been added successfully "+stored_recipes)
+
+                result.invoke(
+                    UiState.Success(Pair(user,"Recipe has been added successfully"))
+                )
+            }
+            else{
+                removeUserInSharedPreferences()
+                result.invoke(UiState.Failure("Sessão expirou."))
+            }
         }
-
-        user.removeFavoriteRecipe(recipe)
-        storeUserInSharedPreferences(user)
-
-        database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
-            Log.d(TAG, "addFavoriteRecipe: "+it.toString())
-        }
-
-
-
-        //save recipe reference for future loading
-        val recipe_str = getRecipesStringInSharedPreferences()
-        if (recipe_str.isNullOrEmpty()){
-            Log.d(TAG, "addFavoriteRecipe: nothing on shared preferences")
-        }
-        var recipes_list: MutableList<String> = ArrayList()
-        if (recipe_str != null) {
-            recipes_list.add(gson.toJson(recipe))
-        }
-        var stored_recipes = storeRecipesInSharedPreferences(recipes_list)
-
-        Log.d(TAG, "Recipe has been added successfully "+stored_recipes)
-
-        result.invoke(
-            UiState.Success(Pair(user,"Recipe has been added successfully"))
-        )
-
     }
 
     override fun addFavoriteRecipe(recipe: Recipe, result: (UiState<Pair<User, String>>?) -> Unit) {
         //save on profile reference
-        var user:User? = validateSessionAndSharedPreferences() //check if user is user auth (pensar na segurança)
+        validateSessionAndSharedPreferences{ user->
+            if(user != null){
+                user.addFavoriteRecipe(recipe)
+                storeUserInSharedPreferences(user)
 
-        if(user == null){
+                database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
+                    Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+                }
+
+                //save recipe reference for future loading
+                val recipe_str = getRecipesStringInSharedPreferences()
+                if (recipe_str.isNullOrEmpty()){
+                    Log.d(TAG, "addFavoriteRecipe: nothing on shared preferences")
+                }
+                var recipes_list: MutableList<String> = ArrayList()
+                if (recipe_str != null) {
+                    recipes_list.add(gson.toJson(recipe))
+                }
+                var stored_recipes = storeRecipesInSharedPreferences(recipes_list)
+
+                Log.d(TAG, "Recipe has been added successfully "+stored_recipes)
+
+                result.invoke(
+                    UiState.Success(Pair(user,"Recipe has been added successfully"))
+                )
+            }
+            else{
+                removeUserInSharedPreferences()
+                result.invoke(UiState.Failure("Sessão expirou."))
+            }
+        }
+    }
+
+
+    override fun getFavoritesRecipeClass(result: (UiState<ArrayList<Recipe>>) -> Unit) {
+        validateSessionAndSharedPreferences { user->
+            if (user != null) {
+                val recipes = getRecipesClassInSharedPreferences()
+                result.invoke(UiState.Success(recipes))
+            }
             removeUserInSharedPreferences()
             result.invoke(UiState.Failure("Sessão expirou."))
-            return
         }
 
-        user.addFavoriteRecipe(recipe)
-        storeUserInSharedPreferences(user)
-
-        database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
-            Log.d(TAG, "addFavoriteRecipe: "+it.toString())
-        }
-
-
-
-        //save recipe reference for future loading
-        val recipe_str = getRecipesStringInSharedPreferences()
-        if (recipe_str.isNullOrEmpty()){
-            Log.d(TAG, "addFavoriteRecipe: nothing on shared preferences")
-        }
-        var recipes_list: MutableList<String> = ArrayList()
-        if (recipe_str != null) {
-            recipes_list.add(gson.toJson(recipe))
-        }
-        var stored_recipes = storeRecipesInSharedPreferences(recipes_list)
-
-        Log.d(TAG, "Recipe has been added successfully "+stored_recipes)
-
-        result.invoke(
-            UiState.Success(Pair(user,"Recipe has been added successfully"))
-        )
-
-    }
-
-
-    override fun getFavoritesRecipeClass(result: (UiState<ArrayList<Recipe>?>) -> Unit) {
-        val user: User? = validateSessionAndSharedPreferences()
-        if (user != null) {
-            val recipes = getRecipesClassInSharedPreferences()
-            result.invoke(UiState.Success(recipes))
-            return
-        }
-        removeUserInSharedPreferences()
-        result.invoke(UiState.Failure("Sessão expirou."))
     }
 
 
 
 
 
-    override fun getUserSession(result: (UiState<User?>) -> Unit) {
-        val user: User? = validateSessionAndSharedPreferences()
-        if (user!=null){
-            database.collection(FireStoreCollection.USER).document(user.id).get().addOnSuccessListener {
+    override fun getUserSession(result: (User?) -> Unit) {
+        validateSessionUUID()?.let {
+            database.collection(FireStoreCollection.USER).document(it).get().addOnSuccessListener {
                 val user:User? = it.toObject(User::class.java)
-                if (user != null){
-                    storeUserInSharedPreferences(user)
-                    result.invoke(UiState.Success(user))
-                }
-                else{
-                    result.invoke(UiState.Failure("Objeto impossivel de parcelar (parcelize)."))
-                }
+                val userInPreferences: User? = getUserInSharedPreferences()
+                    if (user != null) {
+                        if (user != userInPreferences){
+                        storeUserInSharedPreferences(user)
+                        result.invoke(user)
+                        } else {
+                            result.invoke(user)
+                        }
+                    } else{
+                        result.invoke(null)
+                    }
+
             }.addOnFailureListener {
-                result.invoke(UiState.Failure(it.toString()))
+                result.invoke(null)
                 Log.d(TAG, "addFavoriteRecipe: "+it.toString())
             }
         }
-        else{
-            removeUserInSharedPreferences()
-            result.invoke(UiState.Failure("Sessão expirou."))
-        }
-
     }
 
     override fun updateMetadata(key: String, value: String, result: (HashMap<String,String>?) -> Unit) {
@@ -314,51 +308,53 @@ class AuthRepositoryImp(
 
     override fun removeLikeRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit) {
         //save on profile reference
-        var user:User? = validateSessionAndSharedPreferences() //check if user is user auth (pensar na segurança)
-
-        if(user == null){
-            removeUserInSharedPreferences()
-            result.invoke(UiState.Failure("Sessão expirou."))
-            return
-        }
-
-        user.removeLikeRecipe(recipe)
-        storeUserInSharedPreferences(user)
+        validateSessionAndSharedPreferences { user ->
+            if (user!=null){
+                user.removeLikeRecipe(recipe.id)
+                storeUserInSharedPreferences(user)
 
 
-        database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
-            Log.d(TAG, "addFavoriteRecipe: "+it.toString())
-        }
+                database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
+                    Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+                }
 
-        Log.d(TAG, "Recipe has been liked successfully.")
+                Log.d(TAG, "Recipe has been liked successfully.")
 
-        result.invoke(
-            UiState.Success(Pair(user,"Receita adicionada com sucesso!"))
-        )
+                result.invoke(
+                    UiState.Success(Pair(user,"Receita adicionada com sucesso!"))
+                )
+            }
+            else{
+
+                removeUserInSharedPreferences()
+                result.invoke(UiState.Failure("Sessão expirou."))
+
+            }
+        } //check if user is user auth (pensar na segurança)
     }
 
     override fun addLikeRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit) {
         //save on profile reference
-        var user:User? = validateSessionAndSharedPreferences() //check if user is user auth (pensar na segurança)
+        validateSessionAndSharedPreferences { user ->
+            if (user!=null){
+                user.addLikeRecipe(recipe)
+                storeUserInSharedPreferences(user)
 
-        if(user == null){
-            removeUserInSharedPreferences()
-            result.invoke(UiState.Failure("Sessão expirou."))
-            return
-        }
+                database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
+                    Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+                }
 
-        user.addLikeRecipe(recipe)
-        storeUserInSharedPreferences(user)
+                Log.d(TAG, "Recipe has been liked successfully.")
 
-        database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
-            Log.d(TAG, "addFavoriteRecipe: "+it.toString())
-        }
+                result.invoke(
+                    UiState.Success(Pair(user,"Receita adicionada com sucesso!"))
+                )
+            }
+            else{
 
-        Log.d(TAG, "Recipe has been liked successfully.")
-
-        result.invoke(
-            UiState.Success(Pair(user,"Receita adicionada com sucesso!"))
-        )
+                removeUserInSharedPreferences()
+                result.invoke(UiState.Failure("Sessão expirou."))            }
+        } //check if user is user auth (pensar na segurança)
     }
 
     private fun getMetadataFunction(): HashMap<String,String>? {
@@ -367,12 +363,7 @@ class AuthRepositoryImp(
     }
 
 
-    private fun validateSession(): String? {
-        val userUUID = auth.currentUser?.uid ?: null
-        return userUUID
-    }
-
-    private fun getRecipesClassInSharedPreferences(): ArrayList<Recipe>? {
+    private fun getRecipesClassInSharedPreferences(): ArrayList<Recipe> {
 
         val recipes_string = getRecipesStringInSharedPreferences()
         if (recipes_string != null){
@@ -382,7 +373,7 @@ class AuthRepositoryImp(
             }
             return array
         }
-        return null
+        return arrayListOf()
     }
 
 
@@ -410,19 +401,29 @@ class AuthRepositoryImp(
         return appPreferences.edit().remove(SharedPrefConstants.USER_SESSION).apply()
     }
 
-    private fun validateSessionAndSharedPreferences(): User? {
-        if (auth.currentUser != null) {
-            val userUUID = auth.currentUser?.uid
-            val user:User? = getUserInSharedPreferences()
-            if (user?.id == userUUID){
-                return user
+    private fun validateSessionAndSharedPreferences(result: (User?) -> Unit){
+        val userUUID = validateSessionUUID()
+        if(userUUID != null){
+            val userInSharedPreferences = getUserInSharedPreferences()
+            getUserSession(){
+                if (it == null){
+                    result.invoke(null)
+                }
+                if (userInSharedPreferences != it) {
+                    storeSession(){
+                        result.invoke(it)
+                    }
+                }
+                else{
+                    result.invoke(it)
+                }
             }
+
         }
-        return null
     }
 
     private fun validateSessionUUID(): String? {
-        val userUUID = auth.currentUser?.uid ?: null
+        val userUUID = auth.currentUser?.uid
         return userUUID
     }
 

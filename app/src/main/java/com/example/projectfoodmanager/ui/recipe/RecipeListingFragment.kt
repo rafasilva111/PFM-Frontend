@@ -208,22 +208,22 @@ class RecipeListingFragment : Fragment() {
         //nav search bottom
 
         binding.IBMeat.setOnClickListener {
-            viewModel.getRecipesByTitleAndTags("Carne",true)
+            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE,true)
         }
         binding.IBFish.setOnClickListener {
-            viewModel.getRecipesByTitleAndTags("Peixe",true)
+            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE,true)
         }
         binding.IBSoup.setOnClickListener {
-            viewModel.getRecipesByTitleAndTags("Sopa",true)
+            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA,true)
         }
         binding.IBVegi.setOnClickListener {
-            viewModel.getRecipesByTitleAndTags("Vegetariano",true)
+            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANO,true)
         }
         binding.IBFruit.setOnClickListener {
-            viewModel.getRecipesByTitleAndTags("Fruta",true)
+            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA,true)
         }
         binding.IBDrink.setOnClickListener {
-            viewModel.getRecipesByTitleAndTags("Bebidas",true)
+            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS,true)
         }
     }
 
