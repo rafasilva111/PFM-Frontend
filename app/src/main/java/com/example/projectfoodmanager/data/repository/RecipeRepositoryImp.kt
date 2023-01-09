@@ -2,15 +2,12 @@ package com.example.projectfoodmanager.data.repository
 
 import android.util.Log
 import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.util.FireStoreCollection
 import com.example.projectfoodmanager.util.FireStorePaginations
 import com.example.projectfoodmanager.util.UiState
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
 
 
 class RecipeRepositoryImp(
@@ -62,31 +59,33 @@ class RecipeRepositoryImp(
             }
     }
 
-    override fun getRecipesPaginated( result: (UiState<List<Recipe>>) -> Unit) {
+    override fun getRecipesPaginated(firstTime: Boolean, result: (UiState<List<Recipe>>) -> Unit) {
         var first: Query?
+        val notes = arrayListOf<Recipe>()
 
-        if (lastRecipeSnapshot == null){
+        if (firstTime){
              first = database.collection(FireStoreCollection.RECIPE_PROD)
                  .orderBy("id")
                 .limit(FireStorePaginations.RECIPE_LIMIT)
-
         }
         else{
             first = database.collection(FireStoreCollection.RECIPE_PROD)
                 .orderBy("id")
                 .limit(FireStorePaginations.RECIPE_LIMIT)
                 .startAfter(lastRecipe?.id)
-
         }
-
         first.get()
             .addOnSuccessListener { documentSnapshots ->
-                val notes = arrayListOf<Recipe>()
-                lastRecipeSnapshot = documentSnapshots.documents[documentSnapshots.size() - 1]
+                if (documentSnapshots.size()!=0){
+                    lastRecipeSnapshot = documentSnapshots.documents[documentSnapshots.size() - 1]
+                }
+                else{
+                    Log.d(TAG, "Pesquisa sem resultados")
+                    result.invoke(UiState.Failure("Pesquisa sem resultados..."))
+                }
 
 
                 for (document in documentSnapshots.documents) {
-
                     val recipe = document.toObject(Recipe::class.java)
 
                     if (recipe != null) {
@@ -94,18 +93,13 @@ class RecipeRepositoryImp(
                     } else {
                         Log.d(TAG, "Problem on recipe -> " + document.toString())
                     }
-
-
-
                 }
                 lastRecipe = documentSnapshots.documents[documentSnapshots.size() - 1].toObject(Recipe::class.java)
                 result.invoke(
-
                     UiState.Success(
                         notes
                     )
                 )
-
             }
             .addOnFailureListener {
                 result.invoke(
@@ -116,6 +110,109 @@ class RecipeRepositoryImp(
             }
 
     }
+
+    override fun getRecipesByTitle(title: String,firstTime: Boolean, result: (UiState<List<Recipe>>) -> Unit) {
+        var first: Query?
+        val notes = arrayListOf<Recipe>()
+
+
+        first = database.collection(FireStoreCollection.RECIPE_PROD)
+
+        first.get()
+            .addOnSuccessListener { documentSnapshots ->
+                documentSnapshots.query
+                if( documentSnapshots.size() !=0) {
+                    lastRecipeSnapshot = documentSnapshots.documents[documentSnapshots.size() - 1]
+
+                    for (document in documentSnapshots.documents) {
+                        val recipe = document.toObject(Recipe::class.java)
+                        var found = recipe!!.title.lowercase().contains(title.lowercase()) or recipe!!.tags.lowercase().contains(title.lowercase())
+                        Log.d("TAG", "${recipe.title} / $found")
+                        if (found) {
+                            notes.add(recipe)
+                        } else {
+                            Log.d(TAG, "Problem on recipe -> " + document.toString())
+                        }
+                        if (notes.size ==FireStorePaginations.RECIPE_LIMIT.toInt()){
+                            break
+                        }
+                    }
+                    lastRecipe =
+                        documentSnapshots.documents[documentSnapshots.size() - 1].toObject(Recipe::class.java)
+                    result.invoke(
+                        UiState.Success(
+                            notes
+                        )
+                    )
+                }
+                else
+
+                    UiState.Success(
+                        notes
+                    )
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "getRecipesByTitle: "+it)
+                result.invoke(
+                    UiState.Failure(
+                        it.localizedMessage
+                    )
+                )
+            }
+    }
+
+    override fun getRecipesByTitleAndTags(title: String,firstTime: Boolean, result: (UiState<List<Recipe>>) -> Unit) {
+        var first: Query?
+        val notes = arrayListOf<Recipe>()
+
+
+        first = database.collection(FireStoreCollection.RECIPE_PROD)
+
+        first.get()
+            .addOnSuccessListener { documentSnapshots ->
+                documentSnapshots.query
+                if( documentSnapshots.size() !=0) {
+                    lastRecipeSnapshot = documentSnapshots.documents[documentSnapshots.size() - 1]
+
+                    for (document in documentSnapshots.documents) {
+                        val recipe = document.toObject(Recipe::class.java)
+                        var found = recipe!!.title.lowercase().contains(title.lowercase()) or recipe!!.tags.lowercase().contains(title.lowercase()) or recipe!!.title.lowercase().contains(title.lowercase()) or recipe!!.tags.lowercase().contains(title.lowercase())
+                        Log.d("TAG", "${recipe.title} / $found")
+                        if (found) {
+                            notes.add(recipe)
+                        } else {
+                            Log.d(TAG, "Problem on recipe -> " + document.toString())
+                        }
+                        if (notes.size ==FireStorePaginations.RECIPE_LIMIT.toInt()){
+                            break
+                        }
+                    }
+                    lastRecipe =
+                        documentSnapshots.documents[documentSnapshots.size() - 1].toObject(Recipe::class.java)
+                    result.invoke(
+                        UiState.Success(
+                            notes
+                        )
+                    )
+                }
+                else
+
+                    UiState.Success(
+                        notes
+                    )
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "getRecipesByTitle: "+it)
+                result.invoke(
+                    UiState.Failure(
+                        it.localizedMessage
+                    )
+                )
+            }
+    }
+
+
+
     override fun addLikeOnRecipe(
         recipe: Recipe,
         result: (UiState<Pair<Recipe, String>>?) -> Unit

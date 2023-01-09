@@ -40,6 +40,13 @@
         app:popUpToInclusive="true" />
     </fragment>
 
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.projectfoodmanager.ui.recipe.Favorites.FavoritesFragment"
+        android:label="fragment_recipe_detail"
+        tools:layout="@layout/fragment_favorites" >
+    </fragment>
+
 
 
 

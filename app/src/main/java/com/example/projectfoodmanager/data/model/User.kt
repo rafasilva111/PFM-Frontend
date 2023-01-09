@@ -10,8 +10,8 @@ data class User(
     val first_name: String = "",
     val last_name: String = "",
     val email: String = "",
-    var favorite_recipes: ArrayList<String> = arrayListOf(),
-    var liked_recipes: ArrayList<String> = arrayListOf(),
+    var favorite_recipes: ArrayList<Recipe> = arrayListOf(),
+    var liked_recipes: ArrayList<Recipe> = arrayListOf(),
     //bio data
     val altura: String = "",
     val peso: String = "",
@@ -20,18 +20,44 @@ data class User(
 
 ) : Parcelable {
     fun addFavoriteRecipe(recipe: Recipe){
-        this.favorite_recipes.add(recipe.id.toString())
+        this.favorite_recipes.add(recipe)
     }
 
-    fun removeFavoriteRecipe(recipe: Recipe) {
-        this.favorite_recipes.remove(recipe.id.toString())
+    fun removeFavoriteRecipe(recipeId: String) {
+        for (a in this.liked_recipes){
+            if (a.title == recipeId){
+                this.favorite_recipes.remove(a)
+            }
+        }
+    }
+
+    fun getFavoriteRecipe (recipeId: String): Recipe?{
+        for (a in this.favorite_recipes){
+            if (a.title == recipeId){
+                return a
+            }
+        }
+        return null
     }
 
     fun addLikeRecipe(recipe: Recipe) {
-        this.liked_recipes.add(recipe.id.toString())
+        this.liked_recipes.add(recipe)
     }
 
-    fun removeLikeRecipe(recipe: Recipe) {
-        this.liked_recipes.remove(recipe.id.toString())
+    fun removeLikeRecipe(recipeId: String) {
+        for (a in this.liked_recipes){
+            if (a.title == recipeId){
+                this.liked_recipes.remove(a)
+            }
+        }
+    }
+
+    fun getLikedRecipe (recipeId: String): Recipe?{
+        for (a in this.liked_recipes){
+            if (a.title == recipeId){
+                return a
+            }
+        }
+        return null
     }
 }

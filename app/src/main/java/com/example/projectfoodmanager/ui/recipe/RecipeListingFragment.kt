@@ -4,10 +4,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.text.BoringLayout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -37,7 +39,7 @@ class RecipeListingFragment : Fragment() {
     lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
     private var list: MutableList<Recipe> = arrayListOf()
-    private lateinit var navController: NavController
+    private var searchMode: Boolean = false
 
     val TAG: String = "RecipeListingFragment"
 
@@ -85,31 +87,34 @@ class RecipeListingFragment : Fragment() {
     private fun setRecyclerViewScrollListener() {
         scrollListener = object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (!searchMode) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        if (isFirstTimeCall) {
+                            isFirstTimeCall = false;
+                            binding.recyclerView.removeOnScrollListener(scrollListener)
+                            val visibleItemCount: Int = manager.childCount
+                            val pastVisibleItem: Int =
+                                manager.findLastCompletelyVisibleItemPosition()
+                            val pag_index =
+                                floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
+                            if ((pastVisibleItem + 1) % FireStorePaginations.RECIPE_LIMIT.toInt() == 0) {
+                                viewModel.getRecipesPaginated(false)
+                            }
+                            Log.d(TAG, pag_index.toString())
+                            Log.d(TAG, visibleItemCount.toString())
+                            Log.d(TAG, pastVisibleItem.toString())
 
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if (isFirstTimeCall) {
-                        isFirstTimeCall = false;
-                        binding.recyclerView.removeOnScrollListener(scrollListener)
-                        val visibleItemCount: Int = manager.childCount
-                        val pastVisibleItem:Int = manager.findLastCompletelyVisibleItemPosition()
-                        val pag_index = floor(((pastVisibleItem+1)/FireStorePaginations.RECIPE_LIMIT).toDouble())
-                        if ((pastVisibleItem+1)%FireStorePaginations.RECIPE_LIMIT.toInt()==0){
-                            viewModel.getRecipesPaginated()
+
+                            binding.recyclerView.addOnScrollListener(scrollListener)
                         }
-                        Log.d(TAG, pag_index.toString())
-                        Log.d(TAG, visibleItemCount.toString())
-                        Log.d(TAG, pastVisibleItem.toString())
-
-
-                        binding.recyclerView.addOnScrollListener(scrollListener)
                     }
-                }
 
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    isFirstTimeCall = true
-                }
+                    if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                        isFirstTimeCall = true
+                    }
 
-                super.onScrollStateChanged(recyclerView, newState)
+                    super.onScrollStateChanged(recyclerView, newState)
+                }
             }
         }
         binding.recyclerView.addOnScrollListener(scrollListener)
@@ -120,9 +125,22 @@ class RecipeListingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.adapter = adapter
 
+        binding.SVsearch.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(text: String?): Boolean {
+                if (text != null){
+                    viewModel.getRecipesByTitle(text,true)
+                }
+
+                return true
+            }
+        })
 
 
-        viewModel.getRecipesPaginated()
+        viewModel.getRecipesPaginated(true)
         var firstTimeLoading = true
         viewModel.recipe.observe(viewLifecycleOwner){state ->
 
@@ -146,7 +164,69 @@ class RecipeListingFragment : Fragment() {
                 }
             }
         }
+        viewModel.recipe_search.observe(viewLifecycleOwner){state ->
+            val lista:MutableList<Recipe> = arrayListOf()
+            when(state){
+
+                is UiState.Loading ->{
+                    adapter.updateList(arrayListOf())
+                    binding.progressBar.show()
+
+                }
+                is UiState.Success -> {
+                    binding.progressBar.hide()
+                    for (item in state.data.toMutableList())
+                        if (lista.indexOf(item)==-1)
+                            lista.add(item)
+                    adapter.updateList(lista)
+                }
+                is UiState.Failure -> {
+                    binding.progressBar.hide()
+                    toast(state.error)
+                }
+            }
+        }
+
+        //nav search toppom
+
+        binding.SSUGESTOES.setOnClickListener {
+            toast("Em desenvolvimento...")
+        }
+        binding.SMELHORES.setOnClickListener {
+            toast("Em desenvolvimento...")
+        }
+        binding.SRECENTES.setOnClickListener {
+            toast("Em desenvolvimento...")
+        }
+        binding.SPERSONALIZADAS.setOnClickListener {
+            toast("Em desenvolvimento...")
+        }
+
+
+
+
+        //nav search bottom
+
+        binding.IBMeat.setOnClickListener {
+            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE,true)
+        }
+        binding.IBFish.setOnClickListener {
+            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE,true)
+        }
+        binding.IBSoup.setOnClickListener {
+            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA,true)
+        }
+        binding.IBVegi.setOnClickListener {
+            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANO,true)
+        }
+        binding.IBFruit.setOnClickListener {
+            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA,true)
+        }
+        binding.IBDrink.setOnClickListener {
+            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS,true)
+        }
     }
+
     companion object {
         @JvmStatic
         fun newInstance(param1: String) =

@@ -34,3 +34,13 @@ enum class HomeTabs(val index: Int, val key: String) {
     GOALS(3, "Objetivos"),
     PROFILE(4, "Perfil"),
 }
+
+
+object RecipeListingFragmentFilters {
+    val CARNE ="carne"
+    val PEIXE ="peixe"
+    val SOPA ="sopa"
+    val VEGETARIANO ="vegetariano"
+    val FRUTA ="fruta"
+    val BEBIDAS ="bebidas"
+}

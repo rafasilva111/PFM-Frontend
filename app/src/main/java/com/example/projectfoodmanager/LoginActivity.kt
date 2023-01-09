@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.projectfoodmanager.databinding.ActivityLoginBinding
 import com.example.projectfoodmanager.databinding.ActivityMainBinding
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import com.example.projectfoodmanager.util.*
@@ -21,11 +22,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-
-    private lateinit var bottomNav: BottomNavigationView
-    lateinit var navController: NavController
+class LoginActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityLoginBinding
     val authViewModel: AuthViewModel by viewModels()
     val TAG: String = "MainActivity"
 
@@ -33,39 +31,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        //todo check internet
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        startUI()
     }
 
-    private fun startUI() {
-        bottomNav = findViewById(R.id.bottomNavigationView)
-        bottomNav.visibility = View.VISIBLE
-        //nav
-        navController = findNavController(R.id.nav_host)
-
-        bottomNav.setupWithNavController(navController)
-
-    }
-
-
-    override fun onBackPressed() {
-        val count = supportFragmentManager.backStackEntryCount
-
-        if (navController.currentDestination?.id == R.id.loginFragment){
-            bottomNav.visibility = View.GONE
-            moveTaskToBack(true)
-        }
-        if (count == 0) {
-            super.onBackPressed()
-            //additional code
-        } else {
-            supportFragmentManager.popBackStack()
-        }
-
-    }
     private fun isOnline(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

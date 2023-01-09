@@ -96,18 +96,18 @@ class RecipeDetailFragment : Fragment() {
 
             //like function
 
-            authModel.getSession { user ->
+            authModel.getUserSession { user ->
                 if (user != null) {
-                    if ( user.liked_recipes.indexOf(recipe.id)!=-1){
+                    if ( user.liked_recipes.indexOf(recipe)!=-1){
                         binding.likeIB.setImageResource(R.drawable.ic_like_red)
                     }
                 }
             }
 
             binding.likeIB.setOnClickListener {
-                authModel.getSession { user ->
+                authModel.getUserSession { user ->
                     if (user != null){
-                        if ( user.liked_recipes.indexOf(recipe.id)!=-1){
+                        if ( user.liked_recipes.indexOf(recipe)!=-1){
                             authModel.removeLikeOnRecipe(recipe)
                             viewModel.removeLikeOnRecipe(recipe)
                             binding.likeIB.setImageResource(R.drawable.ic_like_black)
@@ -125,18 +125,18 @@ class RecipeDetailFragment : Fragment() {
 
             //favorite function
 
-            authModel.getSession { user ->
+            authModel.getUserSession { user ->
                 if (user != null) {
-                    if ( user.favorite_recipes.indexOf(recipe.id)!=-1){
+                    if ( user.favorite_recipes.indexOf(recipe)!=-1){
                         binding.favoritesIB.setImageResource(R.drawable.ic_favorito_white)
                     }
                 }
             }
 
             binding.favoritesIB.setOnClickListener {
-                authModel.getSession { user ->
+                authModel.getUserSession { user ->
                     if (user != null){
-                        if ( user.favorite_recipes.indexOf(recipe.id)!=-1){
+                        if ( user.favorite_recipes.indexOf(recipe)!=-1){
                             authModel.removeFavoriteRecipe(recipe)
                             binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
                             toast("Receita removida dos favoritos.")
