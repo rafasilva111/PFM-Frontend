@@ -24,8 +24,11 @@ data class User(
     }
 
     fun removeFavoriteRecipe(recipeId: String) {
-        for (a in this.liked_recipes){
-            if (a.title == recipeId){
+        // it need to create a copy otherwise it will mess up the for
+        val favorited_recipes_helper: ArrayList<Recipe> = this.liked_recipes.clone() as ArrayList<Recipe>
+
+        for (a in favorited_recipes_helper){
+            if (a.id == recipeId){
                 this.favorite_recipes.remove(a)
             }
         }
@@ -33,7 +36,7 @@ data class User(
 
     fun getFavoriteRecipe (recipeId: String): Recipe?{
         for (a in this.favorite_recipes){
-            if (a.title == recipeId){
+            if (a.id == recipeId){
                 return a
             }
         }
@@ -45,16 +48,17 @@ data class User(
     }
 
     fun removeLikeRecipe(recipeId: String) {
-        for (a in this.liked_recipes){
-            if (a.title == recipeId){
-                this.liked_recipes.remove(a)
+        val liked_recipes_helper: ArrayList<Recipe> = this.liked_recipes.clone() as ArrayList<Recipe>
+        for (a in liked_recipes_helper){
+            if (a.id == recipeId){
+                liked_recipes.remove(a)
             }
         }
     }
 
     fun getLikedRecipe (recipeId: String): Recipe?{
         for (a in this.liked_recipes){
-            if (a.title == recipeId){
+            if (a.id == recipeId){
                 return a
             }
         }

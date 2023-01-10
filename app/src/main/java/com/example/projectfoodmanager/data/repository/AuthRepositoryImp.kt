@@ -238,11 +238,14 @@ class AuthRepositoryImp(
     override fun getFavoritesRecipeClass(result: (UiState<ArrayList<Recipe>>) -> Unit) {
         validateSessionAndSharedPreferences { user->
             if (user != null) {
-                val recipes = getRecipesClassInSharedPreferences()
-                result.invoke(UiState.Success(recipes))
+                result.invoke(UiState.Success(user.favorite_recipes))
             }
-            removeUserInSharedPreferences()
-            result.invoke(UiState.Failure("Sessão expirou."))
+            else
+            {
+                removeUserInSharedPreferences()
+                result.invoke(UiState.Failure("Sessão expirou."))
+            }
+
         }
 
     }
@@ -256,16 +259,17 @@ class AuthRepositoryImp(
             database.collection(FireStoreCollection.USER).document(it).get().addOnSuccessListener {
                 val user:User? = it.toObject(User::class.java)
                 val userInPreferences: User? = getUserInSharedPreferences()
-                    if (user != null) {
-                        if (user != userInPreferences){
+                if (user != null) {
+                    if (user != userInPreferences){
                         storeUserInSharedPreferences(user)
+                        val userTest = getUserInSharedPreferences()
                         result.invoke(user)
-                        } else {
-                            result.invoke(user)
-                        }
-                    } else{
-                        result.invoke(null)
+                    } else {
+                        result.invoke(user)
                     }
+                } else{
+                    result.invoke(null)
+                }
 
             }.addOnFailureListener {
                 result.invoke(null)
@@ -314,14 +318,15 @@ class AuthRepositoryImp(
                 storeUserInSharedPreferences(user)
 
 
+
                 database.collection(FireStoreCollection.USER).document(user.id).set(user).addOnFailureListener {
                     Log.d(TAG, "addFavoriteRecipe: "+it.toString())
                 }
 
-                Log.d(TAG, "Recipe has been liked successfully.")
+                Log.d(TAG, "Recipe has been unliked successfully.")
 
                 result.invoke(
-                    UiState.Success(Pair(user,"Receita adicionada com sucesso!"))
+                    UiState.Success(Pair(user,"Receita removida com sucesso!"))
                 )
             }
             else{

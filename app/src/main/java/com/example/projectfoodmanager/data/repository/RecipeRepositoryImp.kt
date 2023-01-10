@@ -78,28 +78,29 @@ class RecipeRepositoryImp(
             .addOnSuccessListener { documentSnapshots ->
                 if (documentSnapshots.size()!=0){
                     lastRecipeSnapshot = documentSnapshots.documents[documentSnapshots.size() - 1]
+
+                    for (document in documentSnapshots.documents) {
+                        val recipe = document.toObject(Recipe::class.java)
+
+                        if (recipe != null) {
+                            notes.add(recipe)
+                        } else {
+                            Log.d(TAG, "Problem on recipe -> " + document.toString())
+                        }
+                    }
+
+                    lastRecipe = documentSnapshots.documents[documentSnapshots.size() - 1].toObject(Recipe::class.java)
+
+
+                    result.invoke(
+                        UiState.Success(
+                            notes
+                        )
+                    )
                 }
                 else{
-                    Log.d(TAG, "Pesquisa sem resultados")
-                    result.invoke(UiState.Failure("Pesquisa sem resultados..."))
+                    result.invoke(UiState.Failure("Não existem mais receitas..."))
                 }
-
-
-                for (document in documentSnapshots.documents) {
-                    val recipe = document.toObject(Recipe::class.java)
-
-                    if (recipe != null) {
-                        notes.add(recipe)
-                    } else {
-                        Log.d(TAG, "Problem on recipe -> " + document.toString())
-                    }
-                }
-                lastRecipe = documentSnapshots.documents[documentSnapshots.size() - 1].toObject(Recipe::class.java)
-                result.invoke(
-                    UiState.Success(
-                        notes
-                    )
-                )
             }
             .addOnFailureListener {
                 result.invoke(

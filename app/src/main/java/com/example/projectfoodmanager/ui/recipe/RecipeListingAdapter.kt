@@ -19,7 +19,7 @@ import com.google.firebase.storage.ktx.storage
 class RecipeListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit,
     private val authModel: AuthViewModel,
-    private val recipeModel: RecipeViewModel
+    private val viewModel: RecipeViewModel
 ) : RecyclerView.Adapter<RecipeListingAdapter.MyViewHolder>() {
 
 
@@ -72,8 +72,18 @@ class RecipeListingAdapter(
             binding.TVDescription.text = item.desc.toString()
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
 
+            // like function
+
+            if (item.likes == 1) {
+                binding.TVRate.text = "1 Gosto"
+            } else {
+                binding.TVRate.text = item.likes.toString() + " Gosto"
+            }
+            binding.dateLabel.text = item.date
+
+
             // favorite function
-            binding.like.setImageResource(R.drawable.ic_favorite)
+            binding.favorites.setImageResource(R.drawable.ic_favorite)
             binding.like.setImageResource(R.drawable.ic_like)
             authModel.getUserSession { user ->
                 if (user != null) {
@@ -94,7 +104,8 @@ class RecipeListingAdapter(
                         }
                     }
 
-                    val recipe_liked = user.getLikedRecipe(item.title)
+                    val recipe_liked = user.getLikedRecipe(item.id)
+                    Log.d(TAG, "set like icon: "+recipe_liked +"  "+ item.title)
                     if (recipe_liked != null){
                         binding.like.setImageResource(R.drawable.ic_like_red)
                         if (recipe_liked != item){
@@ -110,73 +121,56 @@ class RecipeListingAdapter(
                             }
                         }
                     }
-
                 }
+            }
 
-                binding.like.setOnClickListener {
-                    authModel.getUserSession { user ->
-                        if (user != null) {
-                            if (user.getFavoriteRecipe(item.id) != null) {
-                                authModel.removeFavoriteRecipe(item)
-                                binding.favorites.setImageResource(R.drawable.ic_favorite)
-                                Toast.makeText(
-                                    it.context,
-                                    "Receita removida dos favoritos.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                authModel.addFavoriteRecipe(item)
-                                binding.favorites.setImageResource(R.drawable.ic_favorito_white)
-                                Toast.makeText(
-                                    it.context,
-                                    "Receita adicionada aos favoritos.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+            binding.favorites.setOnClickListener {
+                authModel.getUserSession { user ->
+                    if (user != null) {
+                        if (user.getFavoriteRecipe(item.id) != null) {
+                            authModel.removeFavoriteRecipe(item)
+                            binding.favorites.setImageResource(R.drawable.ic_favorite)
+                            Toast.makeText(
+                                it.context,
+                                "Receita removida dos favoritos.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            authModel.addFavoriteRecipe(item)
+                            binding.favorites.setImageResource(R.drawable.ic_favorito_white)
                         }
                     }
                 }
-
-                // like function
-
-                if (item.likes == 1) {
-                    binding.TVRate.text = "1 Gosto"
-                } else {
-                    binding.TVRate.text = item.likes.toString() + " Gosto"
-                }
-                binding.dateLabel.text = item.date
-
-
-
-
-                binding.like.setOnClickListener {
-
-                    authModel.getUserSession { user ->
-                        if (user != null) {
-                            if (user.getLikedRecipe(item.id) != null) {
-                                authModel.removeLikeOnRecipe(item)
-                                recipeModel.removeLikeOnRecipe(item)
-                                binding.like.setImageResource(R.drawable.ic_like)
-                                Toast.makeText(
-                                    it.context,
-                                    "Removido gosto da receita.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                notifyDataSetChanged()
+            }
+            binding.like.setOnClickListener {
+                authModel.getUserSession { user ->
+                    if (user != null) {
+                        if (user.getLikedRecipe(item.id) != null) {
+                            authModel.removeLikeOnRecipe(item)
+                            viewModel.removeLikeOnRecipe(item)
+                            binding.like.setImageResource(R.drawable.ic_like)
+                            if (item.likes == 1) {
+                                binding.TVRate.text = "1 Gosto"
                             } else {
-                                authModel.addLikeOnRecipe(item)
-                                recipeModel.addLikeOnRecipe(item)
-                                binding.like.setImageResource(R.drawable.ic_like_red)
-                                Toast.makeText(
-                                    it.context,
-                                    "Adicionado gosto á receita.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                notifyDataSetChanged()
+                                binding.TVRate.text = item.likes.toString() + " Gosto"
                             }
+
+
+                        } else {
+                            authModel.addLikeOnRecipe(item)
+                            viewModel.addLikeOnRecipe(item)
+                            binding.like.setImageResource(R.drawable.ic_like_red)
+                            if (item.likes == 1) {
+                                binding.TVRate.text = "1 Gosto"
+                            } else {
+                                binding.TVRate.text = item.likes.toString() + " Gosto"
+                            }
+
                         }
+
                     }
                 }
+
             }
         }
     }

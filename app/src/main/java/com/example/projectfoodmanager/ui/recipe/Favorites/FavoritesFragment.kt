@@ -127,7 +127,6 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (isOnline(view.context)){
-            toast("Está online")
             binding.recyclerView.adapter = adapter
 
             binding.SVsearch.setOnQueryTextListener(object: SearchView.OnQueryTextListener{

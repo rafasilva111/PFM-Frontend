@@ -124,6 +124,10 @@ class RecipeListingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.adapter = adapter
+         authModel.getUserSession{
+             if (it != null)
+                binding.tvName.text = it.first_name + " " + it.last_name
+        }
 
         binding.SVsearch.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(p0: String?): Boolean {
@@ -227,14 +231,5 @@ class RecipeListingFragment : Fragment() {
         }
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String) =
-            RecipeListingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                }
-            }
-    }
 
 }
