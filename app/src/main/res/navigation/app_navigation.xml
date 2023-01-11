@@ -42,13 +42,13 @@
 
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.projectfoodmanager.ui.recipe.Favorites.FavoritesFragment"
+        android:name="com.example.projectfoodmanager.ui.favorites.FavoritesFragment"
         android:label="fragment_recipe_detail"
         tools:layout="@layout/fragment_favorites" >
     </fragment>
     <fragment
         android:id="@+id/calenderFragment"
-        android:name="com.example.projectfoodmanager.ui.auth.calender.CalenderFragment"
+        android:name="com.example.projectfoodmanager.ui.calender.CalenderFragment"
         android:label="CalenderFragment"
         tools:layout="@layout/fragment_calender"/>
     <fragment

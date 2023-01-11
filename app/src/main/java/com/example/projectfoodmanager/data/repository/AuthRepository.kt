@@ -17,6 +17,7 @@ interface AuthRepository {
     // session
     fun getUserSession(result: (User?) -> Unit)
     fun storeSession(result: (User?) -> Unit)
+    fun getUserInSharedPreferences(result: (User?) -> Unit)
 
     // user favorites
     fun removeFavoriteRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit)
@@ -38,5 +39,6 @@ interface AuthRepository {
     fun updateMetadata(key:String,value:String,result: (HashMap<String,String>?) -> Unit)
     fun removeMetadata(key:String,value:String,result: (HashMap<String,String>?) -> Unit)
     fun removeMetadata(result: () -> Unit)
+
 
 }

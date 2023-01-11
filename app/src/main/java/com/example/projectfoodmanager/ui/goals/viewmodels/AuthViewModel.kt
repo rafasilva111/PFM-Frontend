@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.ui.auth
+package com.example.projectfoodmanager.ui.goals.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -118,11 +118,6 @@ class AuthViewModel @Inject constructor(
     fun addLikeOnRecipe(recipe: Recipe) {
         _updateLikeList.value = UiState.Loading
         repository.addLikeRecipe(recipe) { _updateLikeList.value = it}
-    }
-
-    fun getUserInSharedPreferences(result: (User?) -> Unit) {
-        _getUserSession.value  = UiState.Loading
-        repository.getUserInSharedPreferences(result)
     }
 
 }

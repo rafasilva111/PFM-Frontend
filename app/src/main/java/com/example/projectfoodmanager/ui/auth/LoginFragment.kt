@@ -30,17 +30,13 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = FragmentLoginBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        authViewModel.getUserSession {
-                user ->
-            if (user != null){
-                startActivity(Intent(this.context, MainActivity::class.java))
-            }
-        }
+
         super.onViewCreated(view, savedInstanceState)
 
         observer()

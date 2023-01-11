@@ -1,7 +1,6 @@
-package com.example.projectfoodmanager.ui.recipe.Favorites
+package com.example.projectfoodmanager.ui.favorites
 
 import android.content.Context
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -12,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -21,8 +19,6 @@ import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
-import com.example.projectfoodmanager.databinding.FragmentProfileBinding
-import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
 
 import com.example.projectfoodmanager.ui.recipe.RecipeListingAdapter

@@ -1,6 +1,9 @@
 package com.example.projectfoodmanager.data.repository
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.data.model.User
@@ -159,6 +162,10 @@ class AuthRepositoryImp(
         }
     }
 
+    override fun getUserInSharedPreferences(result: (User?) -> Unit) {
+        return result.invoke(getUserInSharedPreferences())
+    }
+
     override fun removeFavoriteRecipe(
         recipe: Recipe,
         result: (UiState<Pair<User, String>>?) -> Unit
@@ -255,27 +262,33 @@ class AuthRepositoryImp(
 
 
     override fun getUserSession(result: (User?) -> Unit) {
-        validateSessionUUID()?.let {
-            database.collection(FireStoreCollection.USER).document(it).get().addOnSuccessListener {
-                val user:User? = it.toObject(User::class.java)
-                val userInPreferences: User? = getUserInSharedPreferences()
-                if (user != null) {
-                    if (user != userInPreferences){
-                        storeUserInSharedPreferences(user)
-                        val userTest = getUserInSharedPreferences()
-                        result.invoke(user)
-                    } else {
-                        result.invoke(user)
-                    }
-                } else{
-                    result.invoke(null)
-                }
-
-            }.addOnFailureListener {
+        validateSessionUUID().let {
+            if (it == null){
                 result.invoke(null)
-                Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+            }
+            else{
+                database.collection(FireStoreCollection.USER).document(it).get().addOnSuccessListener {
+                    val user:User? = it.toObject(User::class.java)
+                    val userInPreferences: User? = getUserInSharedPreferences()
+                    if (user != null) {
+                        if (user != userInPreferences){
+                            storeUserInSharedPreferences(user)
+                            val userTest = getUserInSharedPreferences()
+                            result.invoke(user)
+                        } else {
+                            result.invoke(user)
+                        }
+                    } else{
+                        result.invoke(null)
+                    }
+
+                }.addOnFailureListener {
+                    result.invoke(null)
+                    Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+                }
             }
         }
+
     }
 
     override fun updateMetadata(key: String, value: String, result: (HashMap<String,String>?) -> Unit) {

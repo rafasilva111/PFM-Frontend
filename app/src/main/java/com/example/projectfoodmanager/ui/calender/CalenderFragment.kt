@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.ui.auth.calender
+package com.example.projectfoodmanager.ui.calender
 
 import android.content.Intent
 import android.os.Bundle

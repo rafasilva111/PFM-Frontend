@@ -1,6 +1,7 @@
 package com.example.projectfoodmanager.ui.recipe
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.example.projectfoodmanager.LoginActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
@@ -65,6 +67,18 @@ class RecipeListingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        //checks for user connectivity
+        authModel.getUserSession {user ->
+            if (user == null){
+                Log.d(TAG, "User is offline")
+                authModel.getUserInSharedPreferences{
+                    Log.d(TAG, "User has save in shared preferences")
+                }
+                startActivity(Intent(context, LoginActivity::class.java))
+            }
+
+        }
         //todo check for internet connection
         if (this::binding.isInitialized){
             return binding.root
