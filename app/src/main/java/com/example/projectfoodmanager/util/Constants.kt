@@ -3,11 +3,7 @@ package com.example.projectfoodmanager.util
 object FireStoreCollection{
     val USER = "user"
     val RECIPE ="recipe"
-    val RECIPE_PROD="recipes_prod"
-}
-object FireStoreDocumentField {
-    val RECIPE ="recipe"
-    val RECIPE_PROD ="recipes_test"
+    val RECIPE_PROD="recipes_test"
 }
 
 object FireStorePaginations{
@@ -27,14 +23,6 @@ object MetadataConstants{
 
 }
 
-enum class HomeTabs(val index: Int, val key: String) {
-    RECEITAS(0, "Receitas"),
-    FAVORITES(1, "Favoritos"),
-    CALENDER(2, "Calendario"),
-    GOALS(3, "Objetivos"),
-    PROFILE(4, "Perfil"),
-}
-
 
 object RecipeListingFragmentFilters {
     val CARNE ="carne"
@@ -42,5 +30,5 @@ object RecipeListingFragmentFilters {
     val SOPA ="sopa"
     val VEGETARIANO ="vegetariano"
     val FRUTA ="fruta"
-    val BEBIDAS ="bebidas"
+    val BEBIDAS ="bebida"
 }

@@ -46,8 +46,16 @@
         android:label="fragment_recipe_detail"
         tools:layout="@layout/fragment_favorites" >
     </fragment>
-
-
+    <fragment
+        android:id="@+id/calenderFragment"
+        android:name="com.example.projectfoodmanager.ui.auth.calender.CalenderFragment"
+        android:label="CalenderFragment"
+        tools:layout="@layout/fragment_calender"/>
+    <fragment
+        android:id="@+id/goalsFragment"
+        android:name="com.example.projectfoodmanager.ui.goals.GoalsFragment"
+        android:label="GoalsFragment"
+        tools:layout="@layout/fragment_goals"/>
 
 
 </navigation>
