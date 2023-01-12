@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.ui.goals.viewmodels
+package com.example.projectfoodmanager.ui.favorites.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -34,6 +34,10 @@ class AuthViewModel @Inject constructor(
     private val _getFavoriteRecipeList = MutableLiveData<UiState<ArrayList<Recipe>>>()
     val getFavoriteRecipeList: LiveData<UiState<ArrayList<Recipe>>>
         get() = _getFavoriteRecipeList
+
+    private val _getLikedRecipeList = MutableLiveData<UiState<ArrayList<Recipe>>>()
+    val getLikedRecipeList: LiveData<UiState<ArrayList<Recipe>>>
+        get() = _getLikedRecipeList
 
     private val _getUserSession = MutableLiveData<UiState<User?>>()
     val getUserSession: LiveData<UiState<User?>>
@@ -89,6 +93,11 @@ class AuthViewModel @Inject constructor(
         repository.getFavoritesRecipe { _getFavoriteRecipeList.value = it}
     }
 
+    fun getLikedRecipeList() {
+        _getLikedRecipeList.value = UiState.Loading
+        repository.getLikedRecipes{ _getLikedRecipeList.value = it}
+    }
+
     fun addFavoriteRecipe(recipe: Recipe) {
         _updateFavoriteList.value = UiState.Loading
         repository.addFavoriteRecipe(recipe) { _updateFavoriteList.value = it}
@@ -119,5 +128,7 @@ class AuthViewModel @Inject constructor(
         _updateLikeList.value = UiState.Loading
         repository.addLikeRecipe(recipe) { _updateLikeList.value = it}
     }
+
+
 
 }

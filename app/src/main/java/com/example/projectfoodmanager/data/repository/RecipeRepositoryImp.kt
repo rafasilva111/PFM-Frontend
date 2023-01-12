@@ -215,11 +215,12 @@ class RecipeRepositoryImp(
 
 
     override fun addLikeOnRecipe(
+        userId: String,
         recipe: Recipe,
         result: (UiState<Pair<Recipe, String>>?) -> Unit
     ) {
 
-        recipe.addLike()
+        recipe.addLike(userId)
         database.collection(FireStoreCollection.RECIPE_PROD).document(recipe.id).set(recipe).addOnFailureListener {
             Log.d(TAG, "addFavoriteRecipe: "+it.toString())
         }
@@ -232,10 +233,11 @@ class RecipeRepositoryImp(
     }
 
     override fun removeLikeOnRecipe(
+        userId: String,
         recipe: Recipe,
         result: (UiState<Pair<Recipe, String>>?) -> Unit
     ) {
-        recipe.removeLike()
+        recipe.removeLike(userId)
         database.collection(FireStoreCollection.RECIPE_PROD).document(recipe.id).set(recipe).addOnFailureListener {
             Log.d(TAG, "addFavoriteRecipe: "+it.toString())
         }

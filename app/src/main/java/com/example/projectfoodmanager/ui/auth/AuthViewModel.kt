@@ -86,7 +86,7 @@ class AuthViewModel @Inject constructor(
     }
     fun getFavoriteRecipeList(){
         _getFavoriteRecipeList.value = UiState.Loading
-        repository.getFavoritesRecipeClass { _getFavoriteRecipeList.value = it}
+        repository.getFavoritesRecipe { _getFavoriteRecipeList.value = it}
     }
 
     fun addFavoriteRecipe(recipe: Recipe) {

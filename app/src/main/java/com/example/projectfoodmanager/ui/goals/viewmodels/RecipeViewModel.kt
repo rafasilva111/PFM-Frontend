@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.ui.recipe
+package com.example.projectfoodmanager.ui.goals.viewmodels
 
 
 import androidx.lifecycle.LiveData
