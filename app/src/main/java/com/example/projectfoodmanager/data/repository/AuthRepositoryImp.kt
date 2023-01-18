@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.data.repository
 
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.wear.internal.widget.drawer.MultiPagePresenter.Ui
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.util.FireStoreCollection

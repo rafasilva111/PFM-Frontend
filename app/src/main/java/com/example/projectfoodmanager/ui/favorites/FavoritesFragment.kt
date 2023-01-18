@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
-import com.example.projectfoodmanager.ui.favorites.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.ui.favorites.viewmodels.RecipeViewModel
+import com.example.projectfoodmanager.ui.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.ui.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.floor
@@ -150,12 +150,10 @@ class FavoritesFragment : Fragment() {
 
             binding.SSAVED.setOnClickListener {
                 authModel.getFavoriteRecipeList()
-                toast("Favoritos")
 
             }
             binding.SLIKED.setOnClickListener {
                 authModel.getLikedRecipeList()
-                toast("Gostos")
             }
             binding.SRECENTES.setOnClickListener {
                 toast("Em desenvolvimento...")
@@ -186,6 +184,7 @@ class FavoritesFragment : Fragment() {
             }
         }
         else{
+            // TODO offline mode
             toast("Está offline")
         }
 

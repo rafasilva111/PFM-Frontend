@@ -39,7 +39,7 @@ class GoalsFragment : Fragment() {
 
         if (isOnline(requireContext())){
             //está online
-            binding.text.text = "online"
+
 
 
         }

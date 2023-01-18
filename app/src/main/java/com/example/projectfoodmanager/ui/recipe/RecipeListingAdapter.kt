@@ -152,7 +152,7 @@ class RecipeListingAdapter(
                             if (item.likes.size == 1) {
                                 binding.TVRate.text = "1 Gosto"
                             } else {
-                                binding.TVRate.text = item.likes.toString() + " Gosto"
+                                binding.TVRate.text = item.likes.size.toString() + " Gosto"
                             }
 
 
@@ -163,9 +163,8 @@ class RecipeListingAdapter(
                             if (item.likes.size == 1) {
                                 binding.TVRate.text = "1 Gosto"
                             } else {
-                                binding.TVRate.text = item.likes.toString() + " Gosto"
+                                binding.TVRate.text = item.likes.size.toString() + " Gosto"
                             }
-
                         }
 
                     }

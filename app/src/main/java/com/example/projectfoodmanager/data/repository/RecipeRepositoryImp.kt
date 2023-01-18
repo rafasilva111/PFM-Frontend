@@ -63,6 +63,19 @@ class RecipeRepositoryImp(
         var first: Query?
         val notes = arrayListOf<Recipe>()
 
+        database.collection(FireStoreCollection.RECIPE_PROD).orderBy("title").startAt("Gelatina").endAt("Gelatina"+"~").get().addOnSuccessListener { documentSnapshots ->
+
+            for (document in documentSnapshots.documents) {
+                val recipe = document.toObject(Recipe::class.java)
+                Log.d(TAG, "getRecipesByTitleAndTags: "+document.id)
+            }
+
+        }
+            .addOnFailureListener {
+                Log.d(TAG, "getRecipesPaginated: "+it)
+            }
+
+
         if (firstTime){
              first = database.collection(FireStoreCollection.RECIPE_PROD)
                  .orderBy("id")
@@ -117,49 +130,8 @@ class RecipeRepositoryImp(
         val notes = arrayListOf<Recipe>()
 
 
-        first = database.collection(FireStoreCollection.RECIPE_PROD)
+        first = database.collection(FireStoreCollection.RECIPE_PROD).startAt(title).endAt(title+"\uf8ff")
 
-        first.get()
-            .addOnSuccessListener { documentSnapshots ->
-                documentSnapshots.query
-                if( documentSnapshots.size() !=0) {
-                    lastRecipeSnapshot = documentSnapshots.documents[documentSnapshots.size() - 1]
-
-                    for (document in documentSnapshots.documents) {
-                        val recipe = document.toObject(Recipe::class.java)
-                        var found = recipe!!.title.lowercase().contains(title.lowercase()) or recipe!!.tags.lowercase().contains(title.lowercase())
-                        Log.d("TAG", "${recipe.title} / $found")
-                        if (found) {
-                            notes.add(recipe)
-                        } else {
-                            Log.d(TAG, "Problem on recipe -> " + document.toString())
-                        }
-                        if (notes.size ==FireStorePaginations.RECIPE_LIMIT.toInt()){
-                            break
-                        }
-                    }
-                    lastRecipe =
-                        documentSnapshots.documents[documentSnapshots.size() - 1].toObject(Recipe::class.java)
-                    result.invoke(
-                        UiState.Success(
-                            notes
-                        )
-                    )
-                }
-                else
-
-                    UiState.Success(
-                        notes
-                    )
-            }
-            .addOnFailureListener {
-                Log.d(TAG, "getRecipesByTitle: "+it)
-                result.invoke(
-                    UiState.Failure(
-                        it.localizedMessage
-                    )
-                )
-            }
     }
 
     override fun getRecipesByTitleAndTags(title: String,firstTime: Boolean, result: (UiState<List<Recipe>>) -> Unit) {
@@ -168,6 +140,7 @@ class RecipeRepositoryImp(
 
 
         first = database.collection(FireStoreCollection.RECIPE_PROD)
+
 
         first.get()
             .addOnSuccessListener { documentSnapshots ->

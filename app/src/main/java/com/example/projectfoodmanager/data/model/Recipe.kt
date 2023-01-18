@@ -34,9 +34,8 @@ data class Recipe(
             this.likes.add(userId)
     }
     fun removeLike(userId:String) {
-        if (this.likes.contains(userId)){
-            Log.d(TAG, "addLike: This recipe has already been by this user: $userId")
-        }
+        if (!this.likes.contains(userId))
+            Log.d(TAG, "addLike: This recipe has already been removed by this user: $userId")
         else
             this.likes.remove(userId)
     }
