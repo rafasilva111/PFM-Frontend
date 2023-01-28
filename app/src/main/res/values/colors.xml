@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bordeux">#B8860B</color>
-    <color name="purple_500">#5F021F</color>
-    <color name="purple_700">#5F021F</color>
+    <color name="color_1">#F5E1CE</color>
+    <color name="color_2">#E8C39E</color>
+    <color name="bordeux">#5F021F</color>
+    <color name="color_3">#F7F7F7</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="tab_selected">#FF000000</color>
     <color name="tab_unselected">#4D000000</color>
+    <color name="purple_700">#FF000000</color>
+    <color name="purple_500">#FF000000</color>
 </resources>

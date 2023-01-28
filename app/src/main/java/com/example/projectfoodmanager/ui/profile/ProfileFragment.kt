@@ -42,6 +42,10 @@ class ProfileFragment : Fragment() {
                 startActivity(Intent(this.context, LoginActivity::class.java))
             }
         }
+
+        binding.favoritesCV.setOnClickListener {
+            findNavController().navigate(R.id.action_favoritos)
+        }
     }
 
 }
