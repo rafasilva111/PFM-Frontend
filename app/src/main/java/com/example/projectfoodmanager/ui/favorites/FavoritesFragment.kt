@@ -38,6 +38,7 @@ class FavoritesFragment : Fragment() {
     private var listFavorited: MutableList<Recipe> = arrayListOf()
     private var listLiked: MutableList<Recipe> = arrayListOf()
     private var searchMode: Boolean = false
+    private var aba: String? = null
 
     val TAG: String = "FavoritesFragmentFragment"
 
@@ -63,6 +64,7 @@ class FavoritesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         //todo check for internet connection
+        this.aba = getArguments()?.get("aba") as String?
         if (this::binding.isInitialized){
             return binding.root
         }else {
@@ -137,23 +139,24 @@ class FavoritesFragment : Fragment() {
                 }
             })
 
-
-            authModel.getFavoriteRecipeList()
-
-
+            if (this.aba != null){
+                authModel.getLikedRecipesList()
+            }
+            else{
+                authModel.getSavedRecipesList()
+            }
 
             //
-
             observer()
 
             //nav search toppom
 
             binding.SSAVED.setOnClickListener {
-                authModel.getFavoriteRecipeList()
+                authModel.getSavedRecipesList()
 
             }
             binding.SLIKED.setOnClickListener {
-                authModel.getLikedRecipeList()
+                authModel.getLikedRecipesList()
             }
             binding.SRECENTES.setOnClickListener {
                 toast("Em desenvolvimento...")

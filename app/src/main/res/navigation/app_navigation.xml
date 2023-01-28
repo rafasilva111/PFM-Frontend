@@ -33,11 +33,16 @@
         android:name="com.example.projectfoodmanager.ui.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile">
-    <action
-        android:id="@+id/action_recipeListingFragment_to_loginFragment"
-        app:destination="@id/loginFragment"
-        app:popUpTo="@id/loginFragment"
-        app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_recipeListingFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_profile_to_favorites"
+            app:destination="@id/favoritesFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

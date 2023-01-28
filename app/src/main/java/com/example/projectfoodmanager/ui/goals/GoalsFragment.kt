@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.example.projectfoodmanager.LoginActivity
 import com.example.projectfoodmanager.databinding.FragmentCalenderBinding
@@ -40,13 +41,27 @@ class GoalsFragment : Fragment() {
         if (isOnline(requireContext())){
             //está online
 
+            //check for user bio data
+            authViewModel.getUserSession{
+                if(it != null){
+                    if (it.altura != "" && it.peso != "" && it.genero != "" && it.idade != ""){
+
+                    }
+                    else{
+                        // call bio data form
+                    }
+                }
+            }
+
+
 
 
         }
         else{
             //está offline
-
-            binding.text.text = "offline"
+            val popUpShow = PopUpFragment()
+            popUpShow.show((activity as AppCompatActivity).supportFragmentManager,"showUpFrgament")
+            binding.offlineText.visibility = View.VISIBLE
         }
         super.onViewCreated(view, savedInstanceState)
     }

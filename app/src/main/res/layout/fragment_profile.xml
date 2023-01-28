@@ -62,11 +62,10 @@
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="match_parent"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                tools:src="@tools:sample/avatars" />
+                tools:src="@drawable/img_profile" />
 
         </androidx.cardview.widget.CardView>
 

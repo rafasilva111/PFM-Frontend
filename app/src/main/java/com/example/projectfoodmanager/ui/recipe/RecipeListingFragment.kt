@@ -5,21 +5,15 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
-import android.text.BoringLayout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
@@ -31,6 +25,7 @@ import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.floor
+
 private const val ARG_PARAM1 = "param1"
 @AndroidEntryPoint
 class RecipeListingFragment : Fragment() {
@@ -149,6 +144,8 @@ class RecipeListingFragment : Fragment() {
             }
 
             binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+
                 override fun onQueryTextSubmit(p0: String?): Boolean {
                     return false
                 }
