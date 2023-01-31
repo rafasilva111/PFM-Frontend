@@ -39,10 +39,25 @@
 
         </androidx.cardview.widget.CardView>
 
+
+        <ImageView
+            android:id="@+id/IV_verified"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="25dp"
+            android:background="@drawable/layout_bg_rounded_2_corners_v2"
+            android:backgroundTint="#EFEFEF"
+            android:elevation="3dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_verified"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/CV_image_recipe"
+            app:tint="#4CAF50" />
+
         <ImageView
             android:id="@+id/like"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/layout_bg_low"
@@ -54,27 +69,31 @@
 
         <ImageView
             android:id="@+id/favorites"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/layout_bg_low"
+            android:backgroundTint="@color/color_3"
             android:elevation="3dp"
             android:padding="5dp"
             android:src="@drawable/ic_favorite"
             app:layout_constraintEnd_toEndOf="@+id/like"
             app:layout_constraintTop_toBottomOf="@+id/like" />
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="300dp"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:layout_marginTop="-70dp"
             android:background="@drawable/layout_item_recipes"
+            android:backgroundTint="@color/color_1"
             android:elevation="5dp"
             android:outlineProvider="none"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/CV_image_recipe">
 
@@ -83,8 +102,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/fedoka"
                 android:text="Recipe Title"
                 android:textColor="@color/black"
@@ -93,62 +112,121 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ScrollView
-                android:layout_width="match_parent"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CV_img_autor"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintStart_toStartOf="@+id/recipe_title"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_title">
 
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/recipe_title"
-                app:layout_constraintVertical_bias="0.206">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/img_pingo_doce" />
 
-                <TextView
-                    android:id="@+id/TV_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:text="Descrição"
-                    android:textAlignment="gravity" />
+            </androidx.cardview.widget.CardView>
 
+            <TextView
+                android:id="@+id/TV_Autor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="Autor"
+                android:textAlignment="gravity"
+                android:textSize="10sp"
+                android:alpha="0.7"
+                app:layout_constraintBottom_toBottomOf="@+id/CV_img_autor"
+                app:layout_constraintStart_toEndOf="@+id/CV_img_autor"
+                app:layout_constraintTop_toTopOf="@+id/CV_img_autor" />
 
-            </ScrollView>
 
             <ImageView
                 android:id="@+id/imageView9"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="20dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:elevation="3dp"
-                android:padding="5dp"
+                android:alpha="0.6"
                 android:src="@drawable/ic_baseline_calendar_month_24"
                 app:layout_constraintBottom_toBottomOf="@+id/date_label"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/date_label"
                 app:layout_constraintTop_toTopOf="@+id/date_label" />
 
             <TextView
                 android:id="@+id/date_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="24dp"
+                android:layout_marginTop="10dp"
                 android:alpha="0.7"
                 android:padding="2dp"
                 android:text="02/03/2022"
                 android:textAlignment="center"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView9" />
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="@+id/recipe_title"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_title" />
+
+
+            <ScrollView
+                android:id="@+id/scrollView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/IV_comments"
+                app:layout_constraintEnd_toEndOf="@+id/recipe_title"
+                app:layout_constraintStart_toStartOf="@+id/recipe_title"
+                app:layout_constraintTop_toBottomOf="@+id/CV_img_autor"
+                app:layout_constraintVertical_bias="0">
+
+                <TextView
+                    android:id="@+id/TV_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:justificationMode="inter_word"
+                    android:maxLines="4"
+                    android:text="Descrição"
+                    android:textAlignment="gravity"
+                    android:textSize="12sp" />
+
+
+            </ScrollView>
+
+
+            <ImageView
+                android:id="@+id/IV_comments"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:elevation="3dp"
+                android:alpha="0.6"
+                android:src="@drawable/ic_comments"
+                app:layout_constraintBottom_toBottomOf="@+id/TV_rate"
+                app:layout_constraintStart_toStartOf="@+id/scrollView2"
+                app:layout_constraintTop_toTopOf="@+id/TV_rate" />
+
+
+            <TextView
+                android:id="@+id/TV_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="2dp"
+                android:alpha="0.7"
+                android:text="0 comentarios"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="@+id/IV_comments"
+                app:layout_constraintStart_toEndOf="@+id/IV_comments"
+                app:layout_constraintTop_toTopOf="@+id/IV_comments" />
+
 
             <ImageView
                 android:id="@+id/imageView8"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:layout_marginEnd="5dp"
                 android:elevation="3dp"
-                android:padding="5dp"
+                android:alpha="0.6"
                 android:src="@drawable/ic_like"
                 app:layout_constraintBottom_toBottomOf="@+id/TV_rate"
                 app:layout_constraintEnd_toStartOf="@+id/TV_rate"
@@ -157,12 +235,13 @@
 
             <TextView
                 android:id="@+id/TV_rate"
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:alpha="0.7"
                 android:text="@string/_0_gostos"
-                app:layout_constraintBottom_toBottomOf="@+id/date_label"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/date_label" />
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/scrollView2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

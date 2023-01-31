@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.recipe.RecipeListingFragment"
-    android:background="#F6F6F6">
+    android:background="@color/background_1">
 
     <ImageView
         android:layout_width="70dp"

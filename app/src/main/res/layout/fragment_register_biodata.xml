@@ -115,52 +115,102 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Spinner
+    <TextView
         android:id="@+id/spinner2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:text="Atividade:"
+        android:fontFamily="@font/fedoka"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout1"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout1" />
 
     <RadioGroup
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner2">
 
         <RadioButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
             android:text="Sedentário" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pouco ou nenhum exercício"
+            android:textSize="10sp"
+            android:layout_marginStart="35dp"/>
 
         <RadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="Leve"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Leve" />
+            android:text="Execício de 1 a 3 vezes"
+            android:textSize="10sp"
+            android:layout_marginStart="35dp"/>
 
         <RadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="Moderado"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Moderado" />
+            android:text="Execício 4-5 vezes/semana"
+            android:textSize="10sp"
+            android:layout_marginStart="35dp"/>
 
         <RadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="Ativo"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ativo" />
+            android:text="Execício diario ou exercícios intensos 3-4 vezes/semana"
+            android:textSize="10sp"
+            android:layout_marginStart="35dp"/>
 
         <RadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="Muito Ativo"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Muito Ativo" />
+            android:text="Exercícios intensos 6-7 vezes/semana"
+            android:textSize="10sp"
+            android:layout_marginStart="35dp"/>
 
         <RadioButton
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="Extra Ativo"
+            android:layout_marginTop="15dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Extra Ativo" />
+            android:text="Execício intesso diário, ou te um trabalho muito fisico"
+            android:textSize="10sp"
+            android:layout_marginStart="35dp"/>
 
     </RadioGroup>
 
