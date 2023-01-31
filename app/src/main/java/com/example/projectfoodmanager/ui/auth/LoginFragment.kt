@@ -43,8 +43,8 @@ class LoginFragment : Fragment() {
         binding.loginBtn.setOnClickListener {
             if (validation()) {
                 authViewModel.login(
-                    email = binding.emailEt.text.toString(),
-                    password = binding.passEt.text.toString()
+                    email = binding.emailEt.text.toString().trim(),
+                    password = binding.passEt.text.toString().trim()
                 )
             }
         }
