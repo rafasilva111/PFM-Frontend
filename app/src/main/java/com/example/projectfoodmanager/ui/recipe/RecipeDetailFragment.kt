@@ -80,13 +80,13 @@ class RecipeDetailFragment : Fragment() {
 
            setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
 
-            binding.TVSource.text=recipe.company
-            binding.TVLink.text=recipe.source
+            //binding.TVSource.text=recipe.company
+            //binding.TVLink.text=recipe.source
             Log.d(TAG, "=> remote_rating: "+ recipe.remote_rating)
             Log.d(TAG, "=> app_rating: "+ recipe.app_rating)
 
 
-            binding.TVRef.text = "Ref: " + recipe.id
+            //binding.TVRef.text = "Ref: " + recipe.id
 
             val imgRef = Firebase.storage.reference.child(recipe.img)
             imgRef.downloadUrl.addOnSuccessListener {Uri->

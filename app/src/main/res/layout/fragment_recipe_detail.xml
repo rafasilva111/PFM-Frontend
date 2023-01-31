@@ -138,7 +138,8 @@
                 android:src="@drawable/ic_baseline_calendar_month_24"
                 app:layout_constraintBottom_toBottomOf="@+id/TV_date"
                 app:layout_constraintEnd_toStartOf="@+id/TV_date"
-                app:layout_constraintTop_toTopOf="@+id/TV_date" />
+                app:layout_constraintTop_toTopOf="@+id/TV_date"
+                app:tint="#5E5E5E" />
 
             <TextView
                 android:id="@+id/TV_date"
@@ -183,11 +184,12 @@
                                 android:id="@+id/IV_1"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
-                                android:layout_marginTop="20dp"
+                                android:layout_marginTop="15dp"
                                 android:src="@drawable/ic_clock"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="#598820" />
 
                             <TextView
                                 android:id="@+id/TV_Time"
@@ -232,11 +234,12 @@
                                 android:id="@+id/IV_3"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
-                                android:layout_marginTop="20dp"
-                                android:src="@drawable/ic_dificulties"
+                                android:layout_marginTop="15dp"
+                                android:src="@drawable/ic_fire"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="#DAA507" />
 
                             <TextView
                                 android:id="@+id/TV_Difficulty"
@@ -280,7 +283,7 @@
                                 android:id="@+id/IV_Portion"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
-                                android:layout_marginTop="20dp"
+                                android:layout_marginTop="15dp"
                                 android:src="@drawable/ic_peoples"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -307,17 +310,16 @@
             </LinearLayout>
 
 
-            <TextView
-                android:id="@+id/TV_description"
-                android:layout_width="wrap_content"
+            <ListView
+                android:id="@+id/lV_tags"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Descrição:"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
             <TextView
@@ -325,19 +327,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:justificationMode="inter_word"
                 android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/TV_description" />
+                app:layout_constraintTop_toBottomOf="@+id/lV_tags" />
 
             <TextView
                 android:id="@+id/tvIngridients"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/fedoka"
                 android:text="Ingredientes:"
                 android:textColor="#000000"
@@ -364,7 +366,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:divider="@android:color/transparent"
-                android:dividerHeight="5dp"
+                android:dividerHeight="2dp"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintBottom_toTopOf="@+id/tvPreparation"
                 app:layout_constraintEnd_toEndOf="@+id/TV_description_Info"
                 app:layout_constraintStart_toStartOf="@+id/TV_description_Info"
                 app:layout_constraintTop_toBottomOf="@+id/tvIngridients" />
@@ -373,7 +377,7 @@
                 android:id="@+id/tvPreparation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/fedoka"
                 android:text="Preparação:"
                 android:textColor="#000000"
@@ -393,59 +397,106 @@
                 app:layout_constraintStart_toStartOf="@+id/LV_Ingridients_Info"
                 app:layout_constraintTop_toBottomOf="@+id/tvPreparation" />
 
-            <TextView
-                android:id="@+id/LB_source"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Origem"
-                android:textAllCaps="true"
-                android:textColor="#454545"
-                android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="@+id/tvPreparation"
-                app:layout_constraintTop_toBottomOf="@+id/LV_Preparation_Info" />
+
+ <!--           <androidx.cardview.widget.CardView
+                android:id="@+id/cardView7"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="#E3E2E2"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/LV_Preparation_Info">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/LV_Preparation_Info">
+
+                    <TextView
+                        android:id="@+id/LB_source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Origem"
+                        android:textAllCaps="false"
+                        android:textColor="#8E8E8E"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
-            <TextView
-                android:id="@+id/TV_source"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="origem"
-                android:textColor="#AAA9A9"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@+id/LB_source"
-                app:layout_constraintTop_toBottomOf="@+id/LB_source" />
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20dp"
+                        app:cardCornerRadius="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/LB_source">
 
-            <TextView
-                android:id="@+id/TV_link"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="20dp"
-                android:text="link"
-                android:textColor="#FFAAA9A9"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@+id/TV_source"
-                app:layout_constraintTop_toBottomOf="@+id/TV_source" />
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/img_pingo_doce" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/TV_source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:text="origem"
+                        android:textColor="#515151"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/cardView6"
+                        app:layout_constraintStart_toEndOf="@+id/cardView6"
+                        app:layout_constraintTop_toTopOf="@+id/cardView6" />
+
+                    <TextView
+                        android:id="@+id/TV_link"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="link"
+                        android:textColor="#FFAAA9A9"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/TV_source"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/TV_source" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
 
 
             <TextView
                 android:id="@+id/TV_ref"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
                 android:background="@drawable/layout_bg"
-                android:text="Ref"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
                 android:gravity="start|center"
                 android:padding="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/TV_link"
-                app:layout_constraintTop_toBottomOf="@+id/TV_link" />
-
+                android:text="Ref"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/cardView7"
+                app:layout_constraintStart_toStartOf="@+id/cardView7"
+                app:layout_constraintTop_toBottomOf="@+id/cardView7" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
