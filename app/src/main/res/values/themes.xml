@@ -2,14 +2,17 @@
     <!-- Base application theme. -->
     <style name="Theme.ProjectFoodManager" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#000000</item>
-        <item name="colorPrimaryDark">@color/purple_700</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">#E3E3E4</item>
-        <item name="android:navigationBarColor">@color/purple_500</item>
+        <item name="colorPrimary">#95000000</item>
+
+        <item name="colorPrimaryVariant">@color/bordeux</item>
+        <item name="colorOnPrimary">#F6F6F6</item>
+
+        <item name="colorPrimaryDark">@color/bordeux</item>
+        <item name="android:navigationBarColor">@color/bordeux</item>
+
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#000000</item>
-        <item name="colorSecondaryVariant">@color/purple_700</item>
+        <item name="colorSecondaryVariant">@color/bordeux</item>
         <item name="colorOnSecondary">@color/black</item>
 
         <!-- Status bar color. -->
@@ -18,7 +21,7 @@
     </style>
 
     <style name="Theme.ProjectFoodManager.NoActionBarAndStatusBar">
-        <item name="colorPrimaryDark">@color/purple_500</item>
+        <item name="colorPrimaryDark">@color/bordeux</item>
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>

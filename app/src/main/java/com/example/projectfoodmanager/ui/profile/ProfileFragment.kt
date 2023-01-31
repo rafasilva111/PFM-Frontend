@@ -18,7 +18,7 @@ import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
-private const val ARG_PARAM1 = "param1"
+
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -41,6 +41,16 @@ class ProfileFragment : Fragment() {
             authViewModel.logout {
                 startActivity(Intent(this.context, LoginActivity::class.java))
             }
+        }
+
+        binding.favoritesCV.setOnClickListener {
+            findNavController().navigate(R.id.action_profile_to_favorites)
+        }
+
+        binding.likeCV.setOnClickListener {
+            findNavController().navigate(R.id.action_profile_to_favorites,Bundle().apply {
+                putString("aba","gostos")
+            })
         }
     }
 

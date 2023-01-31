@@ -1,6 +1,8 @@
 package com.example.projectfoodmanager.data.model
 
 import android.os.Parcelable
+import android.util.Log
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 
@@ -19,16 +21,26 @@ data class Recipe(
     val app_rating: String="",
     val date: String="",
     val tags: String="",
-    var likes: Int=0,
+    var likes: ArrayList<String> = arrayListOf(),
     val ingredients: HashMap<String,String> = HashMap(),
     val nutrition_table: HashMap<String,String> = HashMap<String,String>(),
     val preparation: HashMap<String,String> = HashMap<String,String>(),
+
 ) : Parcelable {
-    fun addLike() {
-        this.likes += 1
+
+
+    fun addLike(userId:String) {
+        if (this.likes.contains(userId)){
+            Log.d("RecipeModel", "addLike: This recipe is already liked by this user: $userId")
+        }
+        else
+            this.likes.add(userId)
     }
-    fun removeLike() {
-        this.likes -= 1
+    fun removeLike(userId:String) {
+        if (!this.likes.contains(userId))
+            Log.d("RecipeModel", "addLike: This recipe has already been removed by this user: $userId")
+        else
+            this.likes.remove(userId)
     }
 }
 

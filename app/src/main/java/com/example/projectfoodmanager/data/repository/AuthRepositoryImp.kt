@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.data.repository
 
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.wear.internal.widget.drawer.MultiPagePresenter.Ui
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.util.FireStoreCollection
@@ -17,7 +18,7 @@ import com.google.gson.Gson
 
 class AuthRepositoryImp(
     val auth: FirebaseAuth,
-    val database: FirebaseFirestore,
+    private val database: FirebaseFirestore,
     val appPreferences: SharedPreferences,
     val gson: Gson
 ) : AuthRepository {
@@ -159,6 +160,10 @@ class AuthRepositoryImp(
         }
     }
 
+    override fun getUserInSharedPreferences(result: (User?) -> Unit) {
+        return result.invoke(getUserInSharedPreferences())
+    }
+
     override fun removeFavoriteRecipe(
         recipe: Recipe,
         result: (UiState<Pair<User, String>>?) -> Unit
@@ -180,7 +185,7 @@ class AuthRepositoryImp(
                 if (recipe_str.isNullOrEmpty()){
                     Log.d(TAG, "addFavoriteRecipe: nothing on shared preferences")
                 }
-                var recipes_list: MutableList<String> = ArrayList()
+                val recipes_list: MutableList<String> = ArrayList()
                 if (recipe_str != null) {
                     recipes_list.add(gson.toJson(recipe))
                 }
@@ -235,7 +240,7 @@ class AuthRepositoryImp(
     }
 
 
-    override fun getFavoritesRecipeClass(result: (UiState<ArrayList<Recipe>>) -> Unit) {
+    override fun getFavoritesRecipe(result: (UiState<ArrayList<Recipe>>) -> Unit) {
         validateSessionAndSharedPreferences { user->
             if (user != null) {
                 result.invoke(UiState.Success(user.favorite_recipes))
@@ -251,64 +256,63 @@ class AuthRepositoryImp(
     }
 
 
+    private fun validateSessionAndSharedPreferences(result: (User?) -> Unit){
+        val userUUID = validateSessionUUID()
+        if(userUUID != null){
+            val userInSharedPreferences = getUserInSharedPreferences()
+            getUserSession(){
+                if (it == null){
+                    result.invoke(null)
+                }
+                if (userInSharedPreferences != it) {
+                    storeSession(){
+                        result.invoke(it)
+                    }
+                }
+                else{
+                    result.invoke(it)
+                }
+            }
 
+        }
+    }
+
+    private fun validateSessionUUID(): String? {
+        val userUUID = auth.currentUser?.uid
+        return userUUID
+    }
 
 
     override fun getUserSession(result: (User?) -> Unit) {
-        validateSessionUUID()?.let {
-            database.collection(FireStoreCollection.USER).document(it).get().addOnSuccessListener {
-                val user:User? = it.toObject(User::class.java)
-                val userInPreferences: User? = getUserInSharedPreferences()
-                if (user != null) {
-                    if (user != userInPreferences){
-                        storeUserInSharedPreferences(user)
-                        val userTest = getUserInSharedPreferences()
-                        result.invoke(user)
-                    } else {
-                        result.invoke(user)
-                    }
-                } else{
-                    result.invoke(null)
-                }
-
-            }.addOnFailureListener {
+        validateSessionUUID().let {
+            if (it == null){
                 result.invoke(null)
-                Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+            }
+            else{
+                database.collection(FireStoreCollection.USER).document(it).get().addOnSuccessListener {
+                    val user:User? = it.toObject(User::class.java)
+                    val userInPreferences: User? = getUserInSharedPreferences()
+                    if (user != null) {
+                        if (user != userInPreferences){
+                            storeUserInSharedPreferences(user)
+                            val userTest = getUserInSharedPreferences()
+                            result.invoke(user)
+                        } else {
+                            result.invoke(user)
+                        }
+                    } else{
+                        result.invoke(null)
+                    }
+
+                }.addOnFailureListener {
+                    result.invoke(null)
+                    Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+                }
             }
         }
-    }
-
-    override fun updateMetadata(key: String, value: String, result: (HashMap<String,String>?) -> Unit) {
-        if (key != MetadataConstants.FIRST_TIME_LOGIN) {
-            result.invoke(null)
-        }
-
-        var map_old = getMetadataFunction()
-        if (map_old!=null){
-            map_old.put(key, value)
-            appPreferences.edit().putString(SharedPrefConstants.METADATA,gson.toJson(map_old)).apply()
-            result.invoke(map_old)
-        }
-        else{
-            var map:HashMap<String,String> = HashMap()
-            map.put(key, value)
-            appPreferences.edit().putString(SharedPrefConstants.METADATA,gson.toJson(map)).apply()
-            result.invoke(map)
-        }
 
     }
 
-    override fun getMetadata(result: (HashMap<String,String>?) -> Unit){
-        result.invoke(getMetadataFunction())
-    }
-
-    override fun removeMetadata(key: String, value: String, result: (HashMap<String,String>?) -> Unit) {
-        TODO("Not yet implemented")
-    }
-
-    override fun removeMetadata(result: () -> Unit) {
-        return appPreferences.edit().remove(SharedPrefConstants.METADATA).apply()
-    }
 
     override fun removeLikeRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit) {
         //save on profile reference
@@ -362,6 +366,47 @@ class AuthRepositoryImp(
         } //check if user is user auth (pensar na segurança)
     }
 
+    override fun getLikedRecipes(result: (UiState<ArrayList<Recipe>>) -> Unit) {
+        validateSessionAndSharedPreferences { user->
+            if (user != null) {
+                result.invoke(UiState.Success(user.liked_recipes))
+            }
+            else
+            {
+                removeUserInSharedPreferences()
+                result.invoke(UiState.Failure("Sessão expirou."))
+            }
+        }
+    }
+
+    override fun updateMetadata(key: String, value: String, result: (HashMap<String,String>?) -> Unit) {
+        if (key != MetadataConstants.FIRST_TIME_LOGIN) {
+            result.invoke(null)
+        }
+
+        var map_old = getMetadataFunction()
+        if (map_old!=null){
+            map_old.put(key, value)
+            appPreferences.edit().putString(SharedPrefConstants.METADATA,gson.toJson(map_old)).apply()
+            result.invoke(map_old)
+        }
+        else{
+            var map:HashMap<String,String> = HashMap()
+            map.put(key, value)
+            appPreferences.edit().putString(SharedPrefConstants.METADATA,gson.toJson(map)).apply()
+            result.invoke(map)
+        }
+
+    }
+
+    override fun getMetadata(result: (HashMap<String,String>?) -> Unit){
+        result.invoke(getMetadataFunction())
+    }
+
+    override fun removeMetadata(result: () -> Unit) {
+        return appPreferences.edit().remove(SharedPrefConstants.METADATA).apply()
+    }
+
     private fun getMetadataFunction(): HashMap<String,String>? {
         val serializedHashMap = appPreferences.getString(SharedPrefConstants.METADATA, null)
         return  gson.fromJson(serializedHashMap, HashMap::class.java) as HashMap<String, String>?
@@ -406,30 +451,6 @@ class AuthRepositoryImp(
         return appPreferences.edit().remove(SharedPrefConstants.USER_SESSION).apply()
     }
 
-    private fun validateSessionAndSharedPreferences(result: (User?) -> Unit){
-        val userUUID = validateSessionUUID()
-        if(userUUID != null){
-            val userInSharedPreferences = getUserInSharedPreferences()
-            getUserSession(){
-                if (it == null){
-                    result.invoke(null)
-                }
-                if (userInSharedPreferences != it) {
-                    storeSession(){
-                        result.invoke(it)
-                    }
-                }
-                else{
-                    result.invoke(it)
-                }
-            }
 
-        }
-    }
-
-    private fun validateSessionUUID(): String? {
-        val userUUID = auth.currentUser?.uid
-        return userUUID
-    }
 
 }

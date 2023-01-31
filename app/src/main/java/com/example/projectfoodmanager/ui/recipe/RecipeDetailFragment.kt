@@ -109,13 +109,13 @@ class RecipeDetailFragment : Fragment() {
                     if (user != null){
                         if ( user.liked_recipes.indexOf(recipe)!=-1){
                             authModel.removeLikeOnRecipe(recipe)
-                            viewModel.removeLikeOnRecipe(recipe)
+                            viewModel.removeLikeOnRecipe(user.id,recipe)
                             binding.likeIB.setImageResource(R.drawable.ic_like_black)
                             toast("Removido o seu gosto da receita...")
                         }
                         else{
                             authModel.addLikeOnRecipe(recipe)
-                            viewModel.addLikeOnRecipe(recipe)
+                            viewModel.addLikeOnRecipe(user.id,recipe)
                             binding.likeIB.setImageResource(R.drawable.ic_like_red)
                             toast("Adicionado o seu gosto à receita.")
                         }

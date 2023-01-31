@@ -1,27 +1,23 @@
 package com.example.projectfoodmanager.ui.recipe
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
-import android.text.BoringLayout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.example.projectfoodmanager.LoginActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
@@ -29,6 +25,7 @@ import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.floor
+
 private const val ARG_PARAM1 = "param1"
 @AndroidEntryPoint
 class RecipeListingFragment : Fragment() {
@@ -65,20 +62,35 @@ class RecipeListingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        //checks for user connectivity
+        authModel.getUserSession {user ->
+            if (user == null){
+                Log.d(TAG, "User is offline")
+                authModel.getUserInSharedPreferences{
+                    Log.d(TAG, "User has save in shared preferences")
+                }
+                startActivity(Intent(context, LoginActivity::class.java))
+            }
+            else{
+
+            }
+
+        }
         //todo check for internet connection
         if (this::binding.isInitialized){
             return binding.root
         }else {
-        binding = FragmentRecipeListingBinding.inflate(layoutInflater)
-        manager = LinearLayoutManager(activity)
-        manager.orientation=LinearLayoutManager.HORIZONTAL
-        manager.reverseLayout=false
-        binding.recyclerView.layoutManager = manager
-        snapHelper.attachToRecyclerView(binding.recyclerView)
+            binding = FragmentRecipeListingBinding.inflate(layoutInflater)
+            manager = LinearLayoutManager(activity)
+            manager.orientation=LinearLayoutManager.HORIZONTAL
+            manager.reverseLayout=false
+            binding.recyclerView.layoutManager = manager
+            snapHelper.attachToRecyclerView(binding.recyclerView)
 
 
-        setRecyclerViewScrollListener()
-        return binding.root
+            setRecyclerViewScrollListener()
+            return binding.root
         }
         }
 
@@ -123,112 +135,141 @@ class RecipeListingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.recyclerView.adapter = adapter
-         authModel.getUserSession{
-             if (it != null)
-                binding.tvName.text = it.first_name + " " + it.last_name
-        }
 
-        binding.SVsearch.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(p0: String?): Boolean {
-                return false
+        if (isOnline(view.context)) {
+            binding.recyclerView.adapter = adapter
+            authModel.getUserSession {
+                if (it != null)
+                    binding.tvName.text = it.first_name + " " + it.last_name
             }
 
-            override fun onQueryTextChange(text: String?): Boolean {
-                if (text != null){
-                    viewModel.getRecipesByTitle(text,true)
+            binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    return false
                 }
 
-                return true
-            }
-        })
+                override fun onQueryTextChange(text: String?): Boolean {
+                    if (text != null && text != "") {
+                        viewModel.getRecipesByTitle(text, true)
+                    }
+
+                    return true
+                }
+            })
 
 
-        viewModel.getRecipesPaginated(true)
-        var firstTimeLoading = true
-        viewModel.recipe.observe(viewLifecycleOwner){state ->
+            viewModel.getRecipesPaginated(true)
+            var firstTimeLoading = true
+            viewModel.recipe.observe(viewLifecycleOwner) { state ->
 
-            when(state){
-                is UiState.Loading ->{
-                    if (firstTimeLoading)
-                        binding.progressBar.show()
+                when (state) {
+                    is UiState.Loading -> {
+                        if (firstTimeLoading)
+                            binding.progressBar.show()
                         firstTimeLoading = false
 
+                    }
+                    is UiState.Success -> {
+                        binding.progressBar.hide()
+                        for (item in state.data.toMutableList())
+                            if (list.indexOf(item) == -1)
+                                list.add(item)
+                        adapter.updateList(list)
+                    }
+                    is UiState.Failure -> {
+                        binding.progressBar.hide()
+                        toast(state.error)
+                    }
                 }
-                is UiState.Success -> {
-                    binding.progressBar.hide()
-                    for (item in state.data.toMutableList())
-                        if (list.indexOf(item)==-1)
-                            list.add(item)
-                    adapter.updateList(list)
+            }
+            viewModel.recipe_search.observe(viewLifecycleOwner) { state ->
+                val lista: MutableList<Recipe> = arrayListOf()
+                when (state) {
+
+                    is UiState.Loading -> {
+                        adapter.updateList(arrayListOf())
+                        binding.progressBar.show()
+
+                    }
+                    is UiState.Success -> {
+                        binding.progressBar.hide()
+                        for (item in state.data.toMutableList())
+                            if (lista.indexOf(item) == -1)
+                                lista.add(item)
+                        adapter.updateList(lista)
+                    }
+                    is UiState.Failure -> {
+                        binding.progressBar.hide()
+                        toast(state.error)
+                    }
                 }
-                is UiState.Failure -> {
-                    binding.progressBar.hide()
-                    toast(state.error)
+            }
+
+            //nav search toppom
+
+            binding.SSUGESTOES.setOnClickListener {
+                toast("Em desenvolvimento...")
+            }
+            binding.SMELHORES.setOnClickListener {
+                toast("Em desenvolvimento...")
+            }
+            binding.SRECENTES.setOnClickListener {
+                toast("Em desenvolvimento...")
+            }
+            binding.SPERSONALIZADAS.setOnClickListener {
+                toast("Em desenvolvimento...")
+            }
+
+
+            //nav search bottom
+
+            binding.IBMeat.setOnClickListener {
+                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE, true)
+            }
+            binding.IBFish.setOnClickListener {
+                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE, true)
+            }
+            binding.IBSoup.setOnClickListener {
+                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA, true)
+            }
+            binding.IBVegi.setOnClickListener {
+                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANO, true)
+            }
+            binding.IBFruit.setOnClickListener {
+                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA, true)
+            }
+            binding.IBDrink.setOnClickListener {
+                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS, true)
+            }
+        }
+        else{
+            binding.offlineText.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
+        }
+    }
+
+    private fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if ( connectivityManager != null) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
                 }
             }
         }
-        viewModel.recipe_search.observe(viewLifecycleOwner){state ->
-            val lista:MutableList<Recipe> = arrayListOf()
-            when(state){
-
-                is UiState.Loading ->{
-                    adapter.updateList(arrayListOf())
-                    binding.progressBar.show()
-
-                }
-                is UiState.Success -> {
-                    binding.progressBar.hide()
-                    for (item in state.data.toMutableList())
-                        if (lista.indexOf(item)==-1)
-                            lista.add(item)
-                    adapter.updateList(lista)
-                }
-                is UiState.Failure -> {
-                    binding.progressBar.hide()
-                    toast(state.error)
-                }
-            }
-        }
-
-        //nav search toppom
-
-        binding.SSUGESTOES.setOnClickListener {
-            toast("Em desenvolvimento...")
-        }
-        binding.SMELHORES.setOnClickListener {
-            toast("Em desenvolvimento...")
-        }
-        binding.SRECENTES.setOnClickListener {
-            toast("Em desenvolvimento...")
-        }
-        binding.SPERSONALIZADAS.setOnClickListener {
-            toast("Em desenvolvimento...")
-        }
-
-
-
-
-        //nav search bottom
-
-        binding.IBMeat.setOnClickListener {
-            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE,true)
-        }
-        binding.IBFish.setOnClickListener {
-            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE,true)
-        }
-        binding.IBSoup.setOnClickListener {
-            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA,true)
-        }
-        binding.IBVegi.setOnClickListener {
-            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANO,true)
-        }
-        binding.IBFruit.setOnClickListener {
-            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA,true)
-        }
-        binding.IBDrink.setOnClickListener {
-            viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS,true)
-        }
+        return false
     }
 
 

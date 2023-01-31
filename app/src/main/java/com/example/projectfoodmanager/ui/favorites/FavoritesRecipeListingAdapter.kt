@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.ui.recipe
+package com.example.projectfoodmanager.ui.favorites
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,17 +10,18 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
-import com.example.projectfoodmanager.ui.auth.AuthViewModel
+import com.example.projectfoodmanager.ui.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.ui.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.UiState
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 
-class RecipeListingAdapter(
+class FavoritesRecipeListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit,
     private val authModel: AuthViewModel,
     private val viewModel: RecipeViewModel
-) : RecyclerView.Adapter<RecipeListingAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<FavoritesRecipeListingAdapter.MyViewHolder>() {
 
 
     private val TAG: String? = "RecipeListingAdapter"
@@ -85,6 +86,7 @@ class RecipeListingAdapter(
             // favorite function
             binding.favorites.setImageResource(R.drawable.ic_favorite)
             binding.like.setImageResource(R.drawable.ic_like)
+            //set initial sates
             authModel.getUserSession { user ->
                 if (user != null) {
                     val recipe_fav = user.getFavoriteRecipe(item.id)
@@ -132,9 +134,11 @@ class RecipeListingAdapter(
                             binding.favorites.setImageResource(R.drawable.ic_favorite)
                             Toast.makeText(
                                 it.context,
-                                "Receita removida dos favoritos.",
+                                "Receita removida dos guardados.",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            list.remove(item)
+
                         } else {
                             authModel.addFavoriteRecipe(item)
                             binding.favorites.setImageResource(R.drawable.ic_favorito_white)
@@ -154,6 +158,12 @@ class RecipeListingAdapter(
                             } else {
                                 binding.TVRate.text = item.likes.size.toString() + " Gosto"
                             }
+                            Toast.makeText(
+                                it.context,
+                                "Receita removida dos favoritos.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            list.remove(item)
 
 
                         } else {

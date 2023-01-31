@@ -17,16 +17,19 @@ interface AuthRepository {
     // session
     fun getUserSession(result: (User?) -> Unit)
     fun storeSession(result: (User?) -> Unit)
+    fun getUserInSharedPreferences(result: (User?) -> Unit)
 
     // user favorites
     fun removeFavoriteRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit)
     fun addFavoriteRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit)
-    fun getFavoritesRecipeClass(result: (UiState<ArrayList<Recipe>>) -> Unit)
+    fun getFavoritesRecipe(result: (UiState<ArrayList<Recipe>>) -> Unit)
 
 
     // user likes
     fun removeLikeRecipe(recipe: Recipe, result: (UiState<Pair<User,String>>?) -> Unit)
     fun addLikeRecipe(recipe: Recipe, result:(UiState<Pair<User,String>>?) -> Unit)
+    fun getLikedRecipes(result: (UiState<ArrayList<Recipe>>) -> Unit)
+
 
     //simple functions
     //auth
@@ -36,7 +39,8 @@ interface AuthRepository {
     //metadata
     fun getMetadata(result: (HashMap<String,String>?) -> Unit)
     fun updateMetadata(key:String,value:String,result: (HashMap<String,String>?) -> Unit)
-    fun removeMetadata(key:String,value:String,result: (HashMap<String,String>?) -> Unit)
     fun removeMetadata(result: () -> Unit)
+
+
 
 }

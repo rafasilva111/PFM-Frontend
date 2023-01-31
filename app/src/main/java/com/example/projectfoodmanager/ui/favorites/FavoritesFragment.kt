@@ -1,7 +1,6 @@
-package com.example.projectfoodmanager.ui.recipe.Favorites
+package com.example.projectfoodmanager.ui.favorites
 
 import android.content.Context
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -12,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -21,12 +19,8 @@ import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
-import com.example.projectfoodmanager.databinding.FragmentProfileBinding
-import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
-import com.example.projectfoodmanager.ui.auth.AuthViewModel
-
-import com.example.projectfoodmanager.ui.recipe.RecipeListingAdapter
-import com.example.projectfoodmanager.ui.recipe.RecipeViewModel
+import com.example.projectfoodmanager.ui.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.ui.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.floor
@@ -41,21 +35,22 @@ class FavoritesFragment : Fragment() {
     private var snapHelper : SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
-    private var list: MutableList<Recipe> = arrayListOf()
+    private var listFavorited: MutableList<Recipe> = arrayListOf()
+    private var listLiked: MutableList<Recipe> = arrayListOf()
     private var searchMode: Boolean = false
+    private var aba: String? = null
 
-    val TAG: String = "RecipeListingFragment"
+    val TAG: String = "FavoritesFragmentFragment"
 
 
     lateinit var binding: FragmentFavoritesBinding
     val viewModel: RecipeViewModel by viewModels()
     private val authModel: AuthViewModel by viewModels()
     private val adapter by lazy {
-        RecipeListingAdapter(
+        FavoritesRecipeListingAdapter(
             onItemClicked = {pos,item ->
 
                 findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
-
                     putParcelable("note",item)
                 })
             },
@@ -69,6 +64,7 @@ class FavoritesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         //todo check for internet connection
+        this.aba = getArguments()?.get("aba") as String?
         if (this::binding.isInitialized){
             return binding.root
         }else {
@@ -80,7 +76,7 @@ class FavoritesFragment : Fragment() {
             snapHelper.attachToRecyclerView(binding.recyclerView)
 
 
-            setRecyclerViewScrollListener()
+            //setRecyclerViewScrollListener()
             return binding.root
         }
     }
@@ -135,7 +131,7 @@ class FavoritesFragment : Fragment() {
                 }
 
                 override fun onQueryTextChange(text: String?): Boolean {
-                    if (text != null){
+                    if (text != null && text != ""){
                         viewModel.getRecipesByTitle(text,true)
                     }
 
@@ -143,61 +139,24 @@ class FavoritesFragment : Fragment() {
                 }
             })
 
-
-            authModel.getFavoriteRecipeList()
-            var firstTimeLoading = true
-            authModel.getFavoriteRecipeList.observe(viewLifecycleOwner){state ->
-
-                when(state){
-                    is UiState.Loading ->{
-                        if (firstTimeLoading)
-                            binding.progressBar.show()
-                        firstTimeLoading = false
-
-                    }
-                    is UiState.Success -> {
-                        binding.progressBar.hide()
-                        for (item in state.data.toMutableList())
-                            if (list.indexOf(item)==-1)
-                                list.add(item)
-                        adapter.updateList(list)
-                    }
-                    is UiState.Failure -> {
-                        binding.progressBar.hide()
-                        toast(state.error)
-                    }
-                }
+            if (this.aba != null){
+                authModel.getLikedRecipesList()
             }
-            viewModel.recipe_search.observe(viewLifecycleOwner){state ->
-                val lista:MutableList<Recipe> = arrayListOf()
-                when(state){
-
-                    is UiState.Loading ->{
-                        adapter.updateList(arrayListOf())
-                        binding.progressBar.show()
-
-                    }
-                    is UiState.Success -> {
-                        binding.progressBar.hide()
-                        for (item in state.data.toMutableList())
-                            if (lista.indexOf(item)==-1)
-                                lista.add(item)
-                        adapter.updateList(lista)
-                    }
-                    is UiState.Failure -> {
-                        binding.progressBar.hide()
-                        toast(state.error)
-                    }
-                }
+            else{
+                authModel.getSavedRecipesList()
             }
+
+            //
+            observer()
 
             //nav search toppom
 
             binding.SSAVED.setOnClickListener {
-                toast("Em desenvolvimento...")
+                authModel.getSavedRecipesList()
+
             }
             binding.SLIKED.setOnClickListener {
-                toast("Em desenvolvimento...")
+                authModel.getLikedRecipesList()
             }
             binding.SRECENTES.setOnClickListener {
                 toast("Em desenvolvimento...")
@@ -228,9 +187,86 @@ class FavoritesFragment : Fragment() {
             }
         }
         else{
+            // TODO offline mode
             toast("Está offline")
         }
 
+    }
+
+    private fun observer(){
+        var firstTimeLoading = true
+
+        authModel.getFavoriteRecipeList.observe(viewLifecycleOwner){state ->
+
+            when(state){
+                is UiState.Loading ->{
+                    if (firstTimeLoading)
+                        binding.progressBar.show()
+                    firstTimeLoading = false
+
+                }
+                is UiState.Success -> {
+                    binding.progressBar.hide()
+                    Log.d(TAG, "onViewCreated: "+state.data)
+                    for (item in state.data.toMutableList())
+                        if (listFavorited.indexOf(item)==-1)
+                            listFavorited.add(item)
+                    adapter.updateList(listFavorited)
+                }
+                is UiState.Failure -> {
+                    binding.progressBar.hide()
+                    toast(state.error)
+                }
+            }
+        }
+
+        authModel.getLikedRecipeList.observe(viewLifecycleOwner){state ->
+
+            when(state){
+                is UiState.Loading ->{
+                    if (firstTimeLoading)
+                        binding.progressBar.show()
+                    firstTimeLoading = false
+
+                }
+                is UiState.Success -> {
+                    binding.progressBar.hide()
+                    Log.d(TAG, "onViewCreated: "+state.data)
+                    for (item in state.data.toMutableList())
+                        if (listLiked.indexOf(item)==-1)
+                            listLiked.add(item)
+                    adapter.updateList(listLiked)
+                }
+                is UiState.Failure -> {
+                    binding.progressBar.hide()
+                    toast(state.error)
+                }
+            }
+        }
+
+
+        viewModel.recipe_search.observe(viewLifecycleOwner){state ->
+            val lista:MutableList<Recipe> = arrayListOf()
+            when(state){
+
+                is UiState.Loading ->{
+                    adapter.updateList(arrayListOf())
+                    binding.progressBar.show()
+
+                }
+                is UiState.Success -> {
+                    binding.progressBar.hide()
+                    for (item in state.data.toMutableList())
+                        if (lista.indexOf(item)==-1)
+                            lista.add(item)
+                    adapter.updateList(lista)
+                }
+                is UiState.Failure -> {
+                    binding.progressBar.hide()
+                    toast(state.error)
+                }
+            }
+        }
     }
 
     private fun isOnline(context: Context): Boolean {

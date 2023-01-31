@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.ui.auth
+package com.example.projectfoodmanager.ui.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -34,6 +34,10 @@ class AuthViewModel @Inject constructor(
     private val _getFavoriteRecipeList = MutableLiveData<UiState<ArrayList<Recipe>>>()
     val getFavoriteRecipeList: LiveData<UiState<ArrayList<Recipe>>>
         get() = _getFavoriteRecipeList
+
+    private val _getLikedRecipeList = MutableLiveData<UiState<ArrayList<Recipe>>>()
+    val getLikedRecipeList: LiveData<UiState<ArrayList<Recipe>>>
+        get() = _getLikedRecipeList
 
     private val _getUserSession = MutableLiveData<UiState<User?>>()
     val getUserSession: LiveData<UiState<User?>>
@@ -84,9 +88,14 @@ class AuthViewModel @Inject constructor(
         _getUserSession.value  = UiState.Loading
         repository.updateUserInfo(user,result)
     }
-    fun getFavoriteRecipeList(){
+    fun getSavedRecipesList(){
         _getFavoriteRecipeList.value = UiState.Loading
         repository.getFavoritesRecipe { _getFavoriteRecipeList.value = it}
+    }
+
+    fun getLikedRecipesList() {
+        _getLikedRecipeList.value = UiState.Loading
+        repository.getLikedRecipes{ _getLikedRecipeList.value = it}
     }
 
     fun addFavoriteRecipe(recipe: Recipe) {
@@ -120,9 +129,6 @@ class AuthViewModel @Inject constructor(
         repository.addLikeRecipe(recipe) { _updateLikeList.value = it}
     }
 
-    fun getUserInSharedPreferences(result: (User?) -> Unit) {
-        _getUserSession.value  = UiState.Loading
-        repository.getUserInSharedPreferences(result)
-    }
+
 
 }

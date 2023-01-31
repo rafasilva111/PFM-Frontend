@@ -21,6 +21,9 @@
     <action
         android:id="@+id/action_receitaListingFragment_to_receitaDetailFragment"
         app:destination="@id/receitaDetailFragment" />
+    <action
+        android:id="@+id/action_favoritos"
+        app:destination="@id/favoritesFragment" />
 
     <fragment
         android:id="@+id/receitaDetailFragment"
@@ -33,21 +36,34 @@
         android:name="com.example.projectfoodmanager.ui.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile">
-    <action
-        android:id="@+id/action_recipeListingFragment_to_loginFragment"
-        app:destination="@id/loginFragment"
-        app:popUpTo="@id/loginFragment"
-        app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_recipeListingFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_profile_to_favorites"
+            app:destination="@id/favoritesFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.projectfoodmanager.ui.recipe.Favorites.FavoritesFragment"
+        android:name="com.example.projectfoodmanager.ui.favorites.FavoritesFragment"
         android:label="fragment_recipe_detail"
         tools:layout="@layout/fragment_favorites" >
     </fragment>
-
-
+    <fragment
+        android:id="@+id/calenderFragment"
+        android:name="com.example.projectfoodmanager.ui.calender.CalenderFragment"
+        android:label="CalenderFragment"
+        tools:layout="@layout/fragment_calender"/>
+    <fragment
+        android:id="@+id/goalsFragment"
+        android:name="com.example.projectfoodmanager.ui.goals.GoalsFragment"
+        android:label="GoalsFragment"
+        tools:layout="@layout/fragment_goals"/>
 
 
 </navigation>

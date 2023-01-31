@@ -19,4 +19,7 @@
     <string name="goals">Objetivos</string>
     <string name="calender">Calendário</string>
     <string name="favorites">Favoritos</string>
+    <string name="offline_text">Utilizador está offline...</string>
+    <string name="offline_desc">O utilizador necessita de estar online para aceder a esta aba.</string>
+    <string name="continuar">Ok, percebi.</string>
 </resources>
