@@ -7,102 +7,15 @@
     tools:context=".ui.profile.ProfileFragment"
     android:background="@color/color_3">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:fontFamily="@font/fedoka"
-        android:text="Perfil"
-        android:textColor="#FFFFFF"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.058"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/logoutIB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
-        android:backgroundTint="#00000000"
-        android:minWidth="48dp"
-        android:minHeight="48dp"
-        android:padding="5dp"
-        android:src="@drawable/ic_logout"
-        android:text="Logout"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.914" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_header"
-        android:layout_width="350dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/layout_item_recipes"
-        android:elevation="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            app:cardCornerRadius="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="120dp"
-                android:layout_height="match_parent"
-                android:adjustViewBounds="true"
-                tools:src="@drawable/img_profile" />
-
-        </androidx.cardview.widget.CardView>
-
-
-        <TextView
-            android:id="@+id/nameTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
-            android:text="Nome Apelido"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/cardView"
-            app:layout_constraintHorizontal_bias="0.298"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/rateeTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginBottom="16dp"
-            android:text="RATE"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_body"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -114,6 +27,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/layout_bg_rounded_2_corners_v1"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -164,7 +78,7 @@
                         android:id="@+id/imageView2"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/img_profile"/>
+                        android:src="@drawable/img_profile" />
                 </androidx.cardview.widget.CardView>
 
 
@@ -201,103 +115,103 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="horizontal">
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <LinearLayout
                         android:layout_width="100dp"
                         android:layout_height="50dp"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Publicações"
                             android:fontFamily="@font/fedoka"
+                            android:text="Publicações"
+                            android:textAlignment="center"
                             android:textColor="#4A4A4A"
-                            android:textSize="15sp"
-                            android:textAlignment="center"/>
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/tv_publications"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="200"
-                            android:textStyle="bold"
+                            android:textAlignment="center"
                             android:textColor="@color/bordeux"
                             android:textSize="15sp"
-                            android:textAlignment="center"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="100dp"
                         android:layout_height="50dp"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Seguidores"
                             android:fontFamily="@font/fedoka"
+                            android:text="Seguidores"
+                            android:textAlignment="center"
                             android:textColor="#3C3C3C"
-                            android:textSize="15sp"
-                            android:textAlignment="center"/>
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/tv_follow_me"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="1000"
-                            android:textStyle="bold"
+                            android:textAlignment="center"
                             android:textColor="@color/bordeux"
                             android:textSize="15sp"
-                            android:textAlignment="center"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="100dp"
                         android:layout_height="50dp"
-                        android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="A seguir"
                             android:fontFamily="@font/fedoka"
+                            android:text="A seguir"
+                            android:textAlignment="center"
                             android:textColor="#3C3C3C"
-                            android:textSize="15sp"
-                            android:textAlignment="center"/>
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/textView4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:textStyle="bold"
+                            android:textAlignment="center"
                             android:textColor="@color/bordeux"
                             android:textSize="15sp"
-                            android:textAlignment="center"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout5"
-                app:layout_constraintVertical_bias="0.0"
-                android:layout_marginBottom="30dp">
+                app:layout_constraintVertical_bias="0.0">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/perfilCV"
@@ -323,7 +237,7 @@
                             android:src="@drawable/ic_user"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"/>
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/perfilTV"
@@ -491,9 +405,9 @@
                     android:id="@+id/settingsCV"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:backgroundTint="#00000000"
                     android:outlineProvider="none"
-                    android:layout_marginTop="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/likeCV">
@@ -531,8 +445,11 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
                 </androidx.cardview.widget.CardView>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
