@@ -191,22 +191,24 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout5"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:hint="Género"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
         app:layout_constraintStart_toEndOf="@+id/textInputLayout4"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
-        app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
+        app:startIconDrawable="@drawable/gender">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <AutoCompleteTextView
             android:id="@+id/sex_et"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textCapSentences" />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:inputType="none"
+            android:hint="@string/gender"
+        />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -246,6 +248,7 @@
         app:startIconDrawable="@drawable/ic_lock">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/pass_et_conf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword" />

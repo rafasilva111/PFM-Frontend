@@ -87,7 +87,7 @@
         app:startIconDrawable="@drawable/ic_person">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/first_name_et"
+            android:id="@+id/height_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal" />
@@ -129,6 +129,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout1" />
 
     <RadioGroup
+        android:id="@+id/activity_level_rg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -248,4 +249,18 @@
             android:visibility="invisible" />
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Etapa não necessária, podes futuramente acrestar estes dados"
+        app:layout_constraintBottom_toTopOf="@+id/button_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_level_rg"
+        app:layout_constraintVertical_bias="1.0"
+        android:textSize="10sp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

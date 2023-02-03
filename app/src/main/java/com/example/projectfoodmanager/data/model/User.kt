@@ -9,16 +9,19 @@ data class User(
     var idade: String = "",
     val first_name: String = "",
     val last_name: String = "",
+    val birth_date: String = "",
     val email: String = "",
+    val password: String = "",
+    val img_source: String = "",
     var favorite_recipes: ArrayList<Recipe> = arrayListOf(),
     var liked_recipes: ArrayList<Recipe> = arrayListOf(),
     //bio data
-    val altura: String = "",
-    val peso: String = "",
-    val nivel_de_atividade: String = "",
-    val genero: String = "",
+    val height: String = "",
+    val weight: String = "",
+    val activity_level: String = "",
+    val sex: String = "",
 
-) : Parcelable {
+    ) : Parcelable {
     fun addFavoriteRecipe(recipe: Recipe){
         this.favorite_recipes.add(recipe)
     }

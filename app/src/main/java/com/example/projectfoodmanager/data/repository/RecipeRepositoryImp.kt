@@ -8,6 +8,7 @@ import com.example.projectfoodmanager.util.UiState
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import dagger.Provides
 
 
 class RecipeRepositoryImp(
