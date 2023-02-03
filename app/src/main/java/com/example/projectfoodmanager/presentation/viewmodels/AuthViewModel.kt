@@ -12,7 +12,10 @@ import com.example.projectfoodmanager.data.old.AuthRepository_old
 import com.example.projectfoodmanager.data.util.Resource
 import com.example.projectfoodmanager.data.util.SharedPreference
 import com.example.projectfoodmanager.domain.usecase.AuthUseCase
+import com.example.projectfoodmanager.util.FireStoreCollection
 import com.example.projectfoodmanager.util.UiState
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,9 +25,11 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     val repository: AuthRepository_old,
     private val authUseCase: AuthUseCase,
+    val auth: FirebaseAuth,
+    private val database: FirebaseFirestore,
     private val sharedPreference: SharedPreference
 ): ViewModel() {
-
+    private val TAG:String ="AuthViewModel"
     val successful: MutableLiveData<Boolean?> = MutableLiveData()
     val error: MutableLiveData<String?> = MutableLiveData()
 
@@ -107,7 +112,7 @@ class AuthViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun getUserSession(){
+    fun getUserSession_v2(){
         authUseCase.getUser().onEach { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -130,6 +135,35 @@ class AuthViewModel @Inject constructor(
 
     //old
 
+    override fun getUserSession(result: (User?) -> Unit) {
+        validateSessionUUID().let {
+            if (it == null){
+                result.invoke(null)
+            }
+            else{
+                database.collection(FireStoreCollection.USER).document(it).get().addOnSuccessListener {
+                    val user:User? = it.toObject(User::class.java)
+                    val userInPreferences: User? = getUserInSharedPreferences()
+                    if (user != null) {
+                        if (user != userInPreferences){
+                            storeUserInSharedPreferences(user)
+                            val userTest = getUserInSharedPreferences()
+                            result.invoke(user)
+                        } else {
+                            result.invoke(user)
+                        }
+                    } else{
+                        result.invoke(null)
+                    }
+
+                }.addOnFailureListener {
+                    result.invoke(null)
+                    Log.d(TAG, "addFavoriteRecipe: "+it.toString())
+                }
+            }
+        }
+
+    }
     fun logout(result: () -> Unit){
         repository.logout(result)
     }
@@ -187,6 +221,9 @@ class AuthViewModel @Inject constructor(
         successful.postValue(null)
         error.postValue(null)
     }
-
+    private fun validateSessionUUID(): String? {
+        val userUUID = auth.currentUser?.uid
+        return userUUID
+    }
 
 }
