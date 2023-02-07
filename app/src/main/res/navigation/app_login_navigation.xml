@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.projectfoodmanager.ui.auth.LoginFragment"
+        android:name="com.example.projectfoodmanager.presentation.auth.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -21,13 +21,23 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.projectfoodmanager.ui.auth.registerFragments.BasicDataFragment"
+        android:name="com.example.projectfoodmanager.ui.auth.registerFragments.RegisterFragment"
         android:label="RegisterFragment" >
+        <action
+            android:id="@+id/action_registerFragment_to_biodataFragment_navigation"
+            app:destination="@id/bioDataFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bioDataFragment"
+        android:name="com.example.projectfoodmanager.ui.auth.registerFragments.BioDataFragment"
+        android:label="BioDataFragment">
         <action
             android:id="@+id/action_registerFragment_to_home_navigation"
             app:destination="@id/app_navigation" />
     </fragment>
 
     <include app:graph="@navigation/app_navigation" />
+
 
 </navigation>
