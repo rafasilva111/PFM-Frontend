@@ -1,0 +1,19 @@
+
+
+#base observer
+fun observer() {
+        authModel.user.observe(viewLifecycleOwner){ response ->
+            when(response){
+                is Resource.Loading -> {
+                    Log.i(TAG,"Loading...")
+                }
+                is Resource.Success -> {
+                    Log.i(TAG,"${response.data}")
+                }
+                is Resource.Error -> {
+                    Log.i(TAG,"${response.message}")
+                }
+            }
+        }
+    }
+}

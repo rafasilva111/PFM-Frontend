@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import com.example.projectfoodmanager.data.old.AuthRepositoryImp_old
 import com.example.projectfoodmanager.data.old.AuthRepository_old
 import com.example.projectfoodmanager.data.repository.*
-import com.example.projectfoodmanager.data.repository.datasourImp.UserRemoteDataSourceImpl
+import com.example.projectfoodmanager.data.repository.datasourImp.RemoteDataSourceImpl
 import com.example.projectfoodmanager.data.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -44,11 +44,11 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun providesFlyBuyRepository(
-        userRemoteDataSource: UserRemoteDataSourceImpl,
+        RemoteDataSource: RemoteDataSourceImpl,
         auth: FirebaseAuth,
     ): AuthRepository {
         return AuthRepositoryImp(
-            userRemoteDataSource = userRemoteDataSource,
+            remoteDataSource = RemoteDataSource,
             auth
         )
     }

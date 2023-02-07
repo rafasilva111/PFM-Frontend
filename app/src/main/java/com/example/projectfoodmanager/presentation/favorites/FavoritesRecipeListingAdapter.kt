@@ -86,7 +86,7 @@ class FavoritesRecipeListingAdapter(
             binding.favorites.setImageResource(R.drawable.ic_favorite)
             binding.like.setImageResource(R.drawable.ic_like)
             //set initial sates
-            authModel.getUserSession { user ->
+            authModel.getUserSession_old { user ->
                 if (user != null) {
                     val recipe_fav = user.getFavoriteRecipe(item.id)
                     if (recipe_fav != null){
@@ -126,7 +126,7 @@ class FavoritesRecipeListingAdapter(
             }
 
             binding.favorites.setOnClickListener {
-                authModel.getUserSession { user ->
+                authModel.getUserSession_old { user ->
                     if (user != null) {
                         if (user.getFavoriteRecipe(item.id) != null) {
                             authModel.removeFavoriteRecipe(item)
@@ -146,7 +146,7 @@ class FavoritesRecipeListingAdapter(
                 }
             }
             binding.like.setOnClickListener {
-                authModel.getUserSession { user ->
+                authModel.getUserSession_old { user ->
                     if (user != null) {
                         if (user.getLikedRecipe(item.id) != null) {
                             authModel.removeLikeOnRecipe(item)

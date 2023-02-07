@@ -1,5 +1,6 @@
 package com.codelytical.flybuy.presentation.di
 
+import android.app.Application
 import com.example.projectfoodmanager.data.old.AuthRepository_old
 import com.example.projectfoodmanager.data.util.SharedPreference
 import com.example.projectfoodmanager.domain.usecase.AuthUseCase
@@ -21,11 +22,10 @@ class ViewModelModule {
 	fun providesLoginViewModel(
 		authUseCase: AuthUseCase,
 		repository: AuthRepository_old,
-		auth: FirebaseAuth,
-		database: FirebaseFirestore,
+		application: Application,
 		sharedPreference: SharedPreference,
 	) : AuthViewModel{
-		return AuthViewModel(repository,authUseCase,auth,database,sharedPreference)
+		return AuthViewModel(repository = repository,authUseCase= authUseCase, application = application,sharedPreference =sharedPreference)
 	}
 
 

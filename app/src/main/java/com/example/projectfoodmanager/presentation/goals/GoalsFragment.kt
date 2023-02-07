@@ -38,9 +38,9 @@ class GoalsFragment : Fragment() {
             //está online
 
             //check for user bio data
-            authViewModel.getUserSession{
+            authViewModel.getUserSession_old{
                 if(it != null){
-                    if (it.height != "" && it.weight != "" && it.sex != "" && it.idade != ""){
+                    if (it.height != "" && it.weight != "" && it.sex != "" && it.age != 0){
 
                     }
                     else{

@@ -1,27 +1,30 @@
 package com.example.projectfoodmanager.data.model
 
 import android.os.Parcelable
+import com.google.type.DateTime
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class User(
     var id: String = "",
-    var idade: String = "",
+    var age: Int = 0,
     val first_name: String = "",
     val last_name: String = "",
     val birth_date: String = "",
     val email: String = "",
     val password: String = "",
-    val img_source: String = "",
+    val img_source: String? = "",
     var favorite_recipes: ArrayList<Recipe> = arrayListOf(),
     var liked_recipes: ArrayList<Recipe> = arrayListOf(),
     //bio data
-    val height: String = "",
-    val weight: String = "",
-    val activity_level: String = "",
+    val height: String? = "",
+    val weight: String? = "",
+    val activity_level: String? = "",
     val sex: String = "",
 
     ) : Parcelable {
+
+
     fun addFavoriteRecipe(recipe: Recipe){
         this.favorite_recipes.add(recipe)
     }

@@ -17,9 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
-import com.example.projectfoodmanager.LoginActivity
+import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.data.util.Resource
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
@@ -60,10 +61,11 @@ class RecipeListingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        //checks for user connectivity
-        authModel.getUserSession()
+        observer()
         //todo check for internet connection
+
+        authModel.getUserSession()
+
         if (this::binding.isInitialized){
             return binding.root
         }else {
@@ -124,10 +126,6 @@ class RecipeListingFragment : Fragment() {
 
         if (isOnline(view.context)) {
             binding.recyclerView.adapter = adapter
-            authModel.getUserSession {
-                if (it != null)
-                    binding.tvName.text = it.first_name + " " + it.last_name
-            }
 
             binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
@@ -258,5 +256,22 @@ class RecipeListingFragment : Fragment() {
         return false
     }
 
-
+    fun observer() {
+        authModel.user.observe(viewLifecycleOwner){ response ->
+            when(response){
+                is Resource.Loading -> {
+                    Log.i(TAG,"Loading...")
+                }
+                is Resource.Success -> {
+                    response.data
+                    val user = response.data
+                    binding.tvName.text = user!!.first_name + " " + user!!.last_name
+                    Log.i(TAG,"${response.data}")
+                }
+                is Resource.Error -> {
+                    Log.i(TAG,"${response.message}")
+                }
+            }
+        }
+    }
 }

@@ -14,6 +14,8 @@ data class UserResponse(
     val last_name: String="",
     @SerializedName("birth_date")
     val birth_date: String="",
+    @SerializedName("age")
+    val age: Int=0,
     @SerializedName("email")
     val email: String="",
     @SerializedName("profile_type")
@@ -28,12 +30,12 @@ data class UserResponse(
     val created_date: String="",
     @SerializedName("updated_date")
     val updated_date: String="",
-    @SerializedName("nivel_de_atividade")
-    val nivel_de_atividade: String="",
+    @SerializedName("activity_level")
+    val activity_level: String="",
     @SerializedName("altura")
-    val altura: String="",
+    val height: String="",
     @SerializedName("sexo")
-    val sexo: String="",
+    val sex: String="",
     @SerializedName("peso")
-    val peso: String="",
+    val weight: String="",
 ) : Serializable
