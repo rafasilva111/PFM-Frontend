@@ -9,26 +9,31 @@ object Constants {
     const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"
 }
 
+object ERROR_CODES {
+    const val SESSION_INVALID = 404
+    const val UNAUTORIZED = 403
+    const val BAD_INPUTS = "401"
+}
+
 object FireStoreCollection{
-    val USER = "user"
-    val RECIPE ="recipe"
-    val RECIPE_PROD="recipes_test"
+    const val USER = "user"
+    const val RECIPE ="recipe"
+    const val RECIPE_PROD="recipes_test"
 }
 
 object FireStorePaginations{
-    val RECIPE_LIMIT: Long = 5
+    const val RECIPE_LIMIT: Long = 5
 }
 
 object SharedPrefConstants {
-    val LOCAL_SHARED_PREF = "local_shared_pref"
-    val USER_SESSION = "user_session"
-    val FAVORITE_RECIPES_SESSION = "favorite_recipes_session"
-
+    const val LOCAL_SHARED_PREF = "local_shared_pref"
+    const val USER_SESSION = "user_session"
+    const val FAVORITE_RECIPES_SESSION = "favorite_recipes_session"
     var METADATA = "metadata"
 }
 
 object MetadataConstants{
-    val FIRST_TIME_LOGIN = "first_time_login"
+    const val FIRST_TIME_LOGIN = "first_time_login"
 
 }
 

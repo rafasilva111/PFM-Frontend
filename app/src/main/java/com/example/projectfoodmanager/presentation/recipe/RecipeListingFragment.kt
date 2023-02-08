@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.example.projectfoodmanager.LoginActivity
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
@@ -269,6 +270,11 @@ class RecipeListingFragment : Fragment() {
                     Log.i(TAG,"${response.data}")
                 }
                 is Resource.Error -> {
+                    if (response.code == ERROR_CODES.SESSION_INVALID){
+                        startActivity(Intent(this.context, LoginActivity::class.java))
+                        //todo delete user prefs
+                        toast(getString(R.string.invalid_session))
+                    }
                     Log.i(TAG,"${response.message}")
                 }
             }

@@ -2,14 +2,17 @@ package com.example.projectfoodmanager.presentation.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.projectfoodmanager.LoginActivity
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.util.Resource
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
@@ -18,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
-    val TAG: String = "RegisterFragment"
+    val TAG: String = "LoginFragment"
     lateinit var binding: FragmentLoginBinding
     val authViewModel: AuthViewModel by viewModels()
 
@@ -38,8 +41,7 @@ class LoginFragment : Fragment() {
         observer()
         binding.loginBtn.setOnClickListener {
             if (validation()) {
-                authViewModel.getUserSession(
-                )
+                authViewModel.login(binding.emailEt.text.toString().trim(),binding.passEt.text.toString().trim())
             }
         }
 
@@ -59,14 +61,37 @@ class LoginFragment : Fragment() {
                 authViewModel.navigateToPage()
                 startActivity(Intent(this.context, MainActivity::class.java))
             }else if(successful == false){
-                if (authViewModel.error.value!!.contains("The email address is already"))
-                    toast(getString(R.string.invalid_email_2))
+                if (authViewModel.error.value!!.contains("There is no user record corresponding to this identifier."))
+                    toast(getString(R.string.invalid_email_3))
+                else if (authViewModel.error.value!!.contains("User's password is incorrect"))
+                    toast(getString(R.string.invalid_password_1))
+                else if (authViewModel.error.value!!.contains("You can immediately restore it by resetting your password or you can try again later."))
+                    toast(getString(R.string.to_many_attemps_to_login_failed))
                 else
-                    toast("Failuire")
+                    toast("Failure")
                 authViewModel.navigateToPage()
             }
         }
-
+        authViewModel.user.observe(viewLifecycleOwner){ response ->
+            when(response){
+                is Resource.Loading -> {
+                    Log.i(TAG,"Loading...")
+                }
+                is Resource.Success -> {
+                    response.data
+                    val user = response.data
+                    Log.i(TAG,"${response.data}")
+                }
+                is Resource.Error -> {
+                    if (response.code == ERROR_CODES.SESSION_INVALID){
+                        startActivity(Intent(this.context, LoginActivity::class.java))
+                        //todo delete user prefs
+                        toast(getString(R.string.invalid_session))
+                    }
+                    Log.i(TAG,"${response.message}")
+                }
+            }
+        }
         authViewModel.login.observe(viewLifecycleOwner) { state ->
             when(state){
                 is UiState.Loading -> {
@@ -82,6 +107,7 @@ class LoginFragment : Fragment() {
                     binding.loginBtn.setText("Login")
                     binding.loginProgress.hide()
                     toast(state.data)
+                    authViewModel.navigateToPage()
                     startActivity(Intent(this.context, MainActivity::class.java))
                 }
             }

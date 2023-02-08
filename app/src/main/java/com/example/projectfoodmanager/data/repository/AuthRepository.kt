@@ -14,6 +14,7 @@ interface AuthRepository {
     suspend fun registerUser(user : UserRequest) : Resource<UserResponse>
     suspend fun loginUser(email: String, password: String) : Resource<UserResponse>
     suspend fun getUser() : Resource<User>
+    suspend fun logout(): Resource<UserResponse>
 
     //Recipe
 }

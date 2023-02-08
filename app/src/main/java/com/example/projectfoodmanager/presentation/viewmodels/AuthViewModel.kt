@@ -31,6 +31,7 @@ class AuthViewModel @Inject constructor(
 ): ViewModel() {
     private val TAG:String ="AuthViewModel"
     val successful: MutableLiveData<Boolean?> = MutableLiveData()
+    val logout: MutableLiveData<Boolean?> = MutableLiveData()
     val error: MutableLiveData<String?> = MutableLiveData()
     val user : MutableLiveData<Resource<User>> = MutableLiveData()
 
@@ -114,6 +115,26 @@ class AuthViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    fun logout(){
+        authUseCase.logout().onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    Log.i("LoginViewModel", "I dey here, Loading")
+                }
+                is Resource.Error -> {
+                    error.postValue("${result.message}")
+                    successful.postValue(false)
+                    Log.i("LoginViewModel", "I dey here, Error ${result.message}")
+
+                }
+                is Resource.Success -> {
+                    successful.postValue(true)
+                    Log.i("LoginViewModel", "I dey here, Success ${result.data}")
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
     fun getUserSession() = viewModelScope.launch(Dispatchers.IO){
         user.postValue(Resource.Loading())
         try {
@@ -136,9 +157,7 @@ class AuthViewModel @Inject constructor(
         repository.getUserSession(result)
     }
 
-    fun logout(result: () -> Unit){
-        repository.logout(result)
-    }
+
 
     fun updateUserSession(user: User,result: (UiState<String?>) -> Unit){
         _getUserSession.value  = UiState.Loading

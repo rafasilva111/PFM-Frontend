@@ -20,6 +20,9 @@ interface ApiInterface {
     @GET("/user")
     suspend fun getUser(@Query("userId") userId: String): Response<UserResponse>
 
+    @GET("/user")
+    suspend fun getUserByUUID(@Query("userUUID") userUUID: String): Response<UserResponse>
+
     @PUT("/user")
     suspend fun updateUser(@Query("userId") userId: String,@Body user : UserRequest): Response<UserResponse>
 

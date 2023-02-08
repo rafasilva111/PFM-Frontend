@@ -34,9 +34,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.logoutIB.setOnClickListener {
-            authViewModel.logout {
-                startActivity(Intent(this.context, LoginActivity::class.java))
-            }
+            authViewModel.logout()
         }
 
         binding.favoritesCV.setOnClickListener {
