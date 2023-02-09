@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.projectfoodmanager.databinding.ActivityMainBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
@@ -36,24 +37,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun startUI() {
         bottomNav = findViewById(R.id.bottomNavigationView)
-        bottomNav.visibility = View.VISIBLE
-        //nav
-        navController = findNavController(R.id.nav_host)
-
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
+        navController = navHostFragment.navController
         bottomNav.setupWithNavController(navController)
 
     }
 
 
     override fun onBackPressed() {
-        val count = supportFragmentManager.backStackEntryCount
-        if (count == 0) {
-
-            toast("Are u sure?")
+        super.onBackPressed()
+        if (navController.currentDestination?.id == R.id.loginFragment){
+            moveTaskToBack(true)
+        }else{
             super.onBackPressed()
-            //additional code
-        } else {
-            supportFragmentManager.popBackStack()
         }
 
     }

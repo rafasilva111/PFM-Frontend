@@ -9,13 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.projectfoodmanager.LoginActivity
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.util.Resource
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,8 +35,9 @@ class LoginFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
+        //todo get user in shared preferences
+
 
         observer()
         binding.loginBtn.setOnClickListener {
@@ -59,7 +60,7 @@ class LoginFragment : Fragment() {
             if (successful == true){
                 toast("Sucess")
                 authViewModel.navigateToPage()
-                startActivity(Intent(this.context, MainActivity::class.java))
+                findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
             }else if(successful == false){
                 if (authViewModel.error.value!!.contains("There is no user record corresponding to this identifier."))
                     toast(getString(R.string.invalid_email_3))
@@ -70,26 +71,6 @@ class LoginFragment : Fragment() {
                 else
                     toast("Failure")
                 authViewModel.navigateToPage()
-            }
-        }
-        authViewModel.user.observe(viewLifecycleOwner){ response ->
-            when(response){
-                is Resource.Loading -> {
-                    Log.i(TAG,"Loading...")
-                }
-                is Resource.Success -> {
-                    response.data
-                    val user = response.data
-                    Log.i(TAG,"${response.data}")
-                }
-                is Resource.Error -> {
-                    if (response.code == ERROR_CODES.SESSION_INVALID){
-                        startActivity(Intent(this.context, LoginActivity::class.java))
-                        //todo delete user prefs
-                        toast(getString(R.string.invalid_session))
-                    }
-                    Log.i(TAG,"${response.message}")
-                }
             }
         }
     }
@@ -120,4 +101,19 @@ class LoginFragment : Fragment() {
         return isValid
     }
 
+    override fun onResume() {
+        super.onResume()
+        //todo get user token from shared preferences
+
+        changeVisib_Menu(false)
+    }
+
+    private fun changeVisib_Menu(state : Boolean){
+        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        if(state){
+            menu!!.visibility=View.VISIBLE
+        }else{
+            menu!!.visibility=View.GONE
+        }
+    }
 }

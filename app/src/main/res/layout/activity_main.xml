@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:navGraph="@navigation/app_navigation" />
+        app:navGraph="@navigation/app_login_navigation" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -30,7 +30,7 @@
         app:itemTextColor="#FFFFFF"
         android:layout_margin="10dp"
         app:menu="@menu/bottom_nav_menu"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
