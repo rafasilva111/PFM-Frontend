@@ -68,8 +68,8 @@ class AuthUseCase @Inject constructor(
 	}
 
 
-	suspend fun getUser() : Resource<User> {
-		return authRepository.getUser()
+	suspend fun getUserSession() : Resource<User> {
+		return authRepository.getUserSession()
 	}
 
 

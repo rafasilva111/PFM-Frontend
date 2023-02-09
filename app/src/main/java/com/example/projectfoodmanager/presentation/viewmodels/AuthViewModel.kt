@@ -139,7 +139,7 @@ class AuthViewModel @Inject constructor(
         user.postValue(Resource.Loading())
         try {
             if (isNetworkAvailable(application)){
-                val apiResult = authUseCase.getUser()
+                val apiResult = authUseCase.getUserSession()
                 user.postValue(apiResult)
             }else{
                 user.postValue(Resource.Error(message = "Internet not available"))

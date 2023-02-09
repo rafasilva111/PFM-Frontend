@@ -116,14 +116,13 @@ class AuthRepositoryImp @Inject constructor(
         return Resource.Error(message = "Something went wrong.")
     }
 
-    override suspend fun getUser(): Resource<User> {
+    override suspend fun getUserSession(): Resource<User> {
         this.currentUser =firebaseAuth.currentUser
-
         if (this.currentUser == null){
             return Resource.Error(message = "Session invalid", code = ERROR_CODES.SESSION_INVALID)
         }
         return responseToUser(remoteDataSource.getUserByUUID(userUUID = this.currentUser!!.uid))
     }
-
+    //todo make a validation to the shared preferences user 
 
 }

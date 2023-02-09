@@ -54,29 +54,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-    fun observer(){
-
-        authViewModel.successful.observe(viewLifecycleOwner) { successful ->
-            if (successful == true){
-                toast("Sucess")
-                authViewModel.navigateToPage()
-                findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
-            }else if(successful == false){
-                if (authViewModel.error.value!!.contains("There is no user record corresponding to this identifier."))
-                    toast(getString(R.string.invalid_email_3))
-                else if (authViewModel.error.value!!.contains("User's password is incorrect"))
-                    toast(getString(R.string.invalid_password_1))
-                else if (authViewModel.error.value!!.contains("You can immediately restore it by resetting your password or you can try again later."))
-                    toast(getString(R.string.to_many_attemps_to_login_failed))
-                else
-                    toast("Failure")
-                authViewModel.navigateToPage()
-            }
-        }
-    }
-
-
-
     fun validation(): Boolean {
         var isValid = true
 
@@ -104,7 +81,7 @@ class LoginFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         //todo get user token from shared preferences
-
+        authViewModel.getUserSession()
         changeVisib_Menu(false)
     }
 
@@ -114,6 +91,44 @@ class LoginFragment : Fragment() {
             menu!!.visibility=View.VISIBLE
         }else{
             menu!!.visibility=View.GONE
+        }
+    }
+
+    fun observer(){
+
+        authViewModel.successful.observe(viewLifecycleOwner) { successful ->
+            if (successful == true){
+                toast("Sucess")
+                authViewModel.navigateToPage()
+                findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
+            }else if(successful == false){
+                if (authViewModel.error.value!!.contains("There is no user record corresponding to this identifier."))
+                    toast(getString(R.string.invalid_email_3))
+                else if (authViewModel.error.value!!.contains("User's password is incorrect"))
+                    toast(getString(R.string.invalid_password_1))
+                else if (authViewModel.error.value!!.contains("You can immediately restore it by resetting your password or you can try again later."))
+                    toast(getString(R.string.to_many_attemps_to_login_failed))
+                else
+                    toast("Failure")
+                authViewModel.navigateToPage()
+            }
+        }
+
+        authViewModel.user.observe(viewLifecycleOwner) { response ->
+            when(response){
+                is Resource.Loading -> {
+                    Log.i(TAG,"Loading...")
+                    binding.progressBar.show()
+
+                }
+                is Resource.Success -> {
+                    findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
+                }
+                is Resource.Error -> {
+                    Log.i(TAG,"No user previously logged out.")
+                    Log.i(TAG,"${response.message}")
+                }
+            }
         }
     }
 }
