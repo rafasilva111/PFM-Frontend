@@ -50,7 +50,7 @@ class AuthUseCase @Inject constructor(
 		}
 	}
 
-	fun logout() : Flow<Resource<UserResponse>> = flow {
+	fun logout() : Flow<Resource<Boolean>> = flow {
 		emit(Resource.Loading())
 		//create a demo user and upload
 		try {

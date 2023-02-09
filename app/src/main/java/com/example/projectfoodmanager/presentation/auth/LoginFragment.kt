@@ -92,26 +92,6 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-        authViewModel.login.observe(viewLifecycleOwner) { state ->
-            when(state){
-                is UiState.Loading -> {
-                    binding.loginBtn.setText("")
-                    binding.loginProgress.show()
-                }
-                is UiState.Failure -> {
-                    binding.loginBtn.setText("Login")
-                    binding.loginProgress.hide()
-                    toast(state.error)
-                }
-                is UiState.Success -> {
-                    binding.loginBtn.setText("Login")
-                    binding.loginProgress.hide()
-                    toast(state.data)
-                    authViewModel.navigateToPage()
-                    startActivity(Intent(this.context, MainActivity::class.java))
-                }
-            }
-        }
     }
 
 

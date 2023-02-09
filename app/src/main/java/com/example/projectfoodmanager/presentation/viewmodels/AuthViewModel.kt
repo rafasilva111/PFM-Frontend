@@ -123,12 +123,12 @@ class AuthViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     error.postValue("${result.message}")
-                    successful.postValue(false)
+                    logout.postValue(false)
                     Log.i("LoginViewModel", "I dey here, Error ${result.message}")
 
                 }
                 is Resource.Success -> {
-                    successful.postValue(true)
+                    logout.postValue(true)
                     Log.i("LoginViewModel", "I dey here, Success ${result.data}")
                 }
             }

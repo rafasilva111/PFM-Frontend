@@ -100,11 +100,12 @@ class AuthRepositoryImp @Inject constructor(
         return Resource.Error(message = "Something went wrong.")
     }
 
-    override suspend fun logout(): Resource<UserResponse> {
+    override suspend fun logout(): Resource<Boolean> {
         try {
             val result = firebaseAuth.signOut()
-            //delete shared preferences
+            //todo delete shared preferences
             Log.i(TAG, "logout: $result")
+            return Resource.Success(true)
         }catch (e: FirebaseAuthInvalidCredentialsException){
             Log.i(TAG, "logout: $e")
         }

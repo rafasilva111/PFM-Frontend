@@ -10,6 +10,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.projectfoodmanager.databinding.ActivityMainBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.util.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,12 +47,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val count = supportFragmentManager.backStackEntryCount
-
-        if (navController.currentDestination?.id == R.id.loginFragment){
-            bottomNav.visibility = View.GONE
-            moveTaskToBack(true)
-        }
         if (count == 0) {
+
+            toast("Are u sure?")
             super.onBackPressed()
             //additional code
         } else {
