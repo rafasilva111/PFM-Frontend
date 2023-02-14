@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.presentation.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +11,17 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.util.Resource
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
-    val TAG: String = "RegisterFragment"
+    val TAG: String = "LoginFragment"
     lateinit var binding: FragmentLoginBinding
     val authViewModel: AuthViewModel by viewModels()
 
@@ -32,14 +35,14 @@ class LoginFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
+        //todo get user in shared preferences
+        binding.progressBar.hide()
 
         observer()
         binding.loginBtn.setOnClickListener {
             if (validation()) {
-                authViewModel.getUserSession(
-                )
+                authViewModel.login(binding.emailEt.text.toString().trim(),binding.passEt.text.toString().trim())
             }
         }
 
@@ -50,45 +53,6 @@ class LoginFragment : Fragment() {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
     }
-
-    fun observer(){
-
-        authViewModel.successful.observe(viewLifecycleOwner) { successful ->
-            if (successful == true){
-                toast("Sucess")
-                authViewModel.navigateToPage()
-                startActivity(Intent(this.context, MainActivity::class.java))
-            }else if(successful == false){
-                if (authViewModel.error.value!!.contains("The email address is already"))
-                    toast(getString(R.string.invalid_email_2))
-                else
-                    toast("Failuire")
-                authViewModel.navigateToPage()
-            }
-        }
-
-        authViewModel.login.observe(viewLifecycleOwner) { state ->
-            when(state){
-                is UiState.Loading -> {
-                    binding.loginBtn.setText("")
-                    binding.loginProgress.show()
-                }
-                is UiState.Failure -> {
-                    binding.loginBtn.setText("Login")
-                    binding.loginProgress.hide()
-                    toast(state.error)
-                }
-                is UiState.Success -> {
-                    binding.loginBtn.setText("Login")
-                    binding.loginProgress.hide()
-                    toast(state.data)
-                    startActivity(Intent(this.context, MainActivity::class.java))
-                }
-            }
-        }
-    }
-
-
 
     fun validation(): Boolean {
         var isValid = true
@@ -114,4 +78,62 @@ class LoginFragment : Fragment() {
         return isValid
     }
 
+    override fun onResume() {
+        super.onResume()
+        //todo get user token from shared preferences
+        authViewModel.getUserSession()
+        changeVisib_Menu(false)
+    }
+
+    private fun changeVisib_Menu(state : Boolean){
+        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        if(state){
+            menu!!.visibility=View.VISIBLE
+        }else{
+            menu!!.visibility=View.GONE
+        }
+    }
+
+    fun observer(){
+
+        authViewModel.successful.observe(viewLifecycleOwner) { successful ->
+            if (successful == true){
+                toast("Sucess")
+                authViewModel.navigateToPage()
+                findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
+            }else if(successful == false){
+                if (authViewModel.error.value!!.contains("There is no user record corresponding to this identifier."))
+                    toast(getString(R.string.invalid_email_3))
+                else if (authViewModel.error.value!!.contains("User's password is incorrect"))
+                    toast(getString(R.string.invalid_password_1))
+                else if (authViewModel.error.value!!.contains("You can immediately restore it by resetting your password or you can try again later."))
+                    toast(getString(R.string.to_many_attemps_to_login_failed))
+                else
+                    toast("Failure")
+                authViewModel.navigateToPage()
+            }
+        }
+
+        authViewModel.user.observe(viewLifecycleOwner) { response ->
+            when(response){
+                is Resource.Loading -> {
+                    Log.i(TAG,"Loading...")
+                    binding.progressBar.show()
+
+                }
+                is Resource.Success -> {
+                    binding.progressBar.hide()
+                    toast(getString(R.string.welcome))
+                    findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
+
+                }
+                is Resource.Error -> {
+                    binding.progressBar.hide()
+                    Log.i(TAG,"No user previously logged out.")
+                    Log.i(TAG,"${response.message}")
+                }
+                else -> {}
+            }
+        }
+    }
 }

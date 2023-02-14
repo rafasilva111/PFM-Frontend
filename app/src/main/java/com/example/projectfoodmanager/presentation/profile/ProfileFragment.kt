@@ -8,10 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.projectfoodmanager.LoginActivity
+import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.util.toast
 
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,17 +27,16 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?,
 
         ): View? {
+        observer()
         binding = FragmentProfileBinding.inflate(layoutInflater)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.logoutIB.setOnClickListener {
-            authViewModel.logout {
-                startActivity(Intent(this.context, LoginActivity::class.java))
-            }
+            authViewModel.logout()
         }
 
         binding.favoritesCV.setOnClickListener {
@@ -47,6 +47,21 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_profile_to_favorites,Bundle().apply {
                 putString("aba","gostos")
             })
+        }
+    }
+
+    fun observer(){
+        authViewModel.logout.observe(viewLifecycleOwner) { logout ->
+            if (logout == true){
+                toast(getString(R.string.logout_completed))
+                authViewModel.navigateToPage()
+                authViewModel.navigateToPageUser()
+                startActivity(Intent(this.context, MainActivity::class.java))
+
+            }else if(logout == false){
+                toast(authViewModel.error.value)
+                authViewModel.navigateToPage()
+            }
         }
     }
 

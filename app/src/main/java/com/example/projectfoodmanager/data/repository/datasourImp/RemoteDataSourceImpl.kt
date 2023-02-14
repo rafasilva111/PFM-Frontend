@@ -22,7 +22,10 @@ class RemoteDataSourceImpl @Inject constructor(
 	override suspend fun registerUser(user: UserRequest): Response<UserResponse> {
 		return apiInterface.createUser(user = user)
 	}
-	override suspend fun getUser(userId: String): Response<UserResponse> {
+	override suspend fun getUserByUUID(userUUID: String): Response<UserResponse> {
+		return apiInterface.getUserByUUID(userUUID = userUUID)
+	}
+	override suspend fun getUserById(userId: String): Response<UserResponse> {
 		return apiInterface.getUser(userId = userId)
 	}
 	override suspend fun updateUser(userId: String,user: UserRequest): Response<UserResponse> {

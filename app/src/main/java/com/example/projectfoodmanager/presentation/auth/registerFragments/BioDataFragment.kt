@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
@@ -41,6 +42,9 @@ class BioDataFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.backIB.setOnClickListener {
+            findNavController().navigateUp()
+        }
         objUser = arguments?.getParcelable("user")
         if (objUser==null)
             Log.d(TAG, "Something went wrong whit user object")

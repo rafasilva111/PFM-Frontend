@@ -38,6 +38,10 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.backIB.setOnClickListener {
+                findNavController().navigateUp()
+        }
         binding.registerBtn.setOnClickListener {
             if (validation()){
                 val user = getUserObj()

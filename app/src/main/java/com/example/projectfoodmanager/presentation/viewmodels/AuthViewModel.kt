@@ -31,8 +31,9 @@ class AuthViewModel @Inject constructor(
 ): ViewModel() {
     private val TAG:String ="AuthViewModel"
     val successful: MutableLiveData<Boolean?> = MutableLiveData()
+    val logout: MutableLiveData<Boolean?> = MutableLiveData()
     val error: MutableLiveData<String?> = MutableLiveData()
-    val user : MutableLiveData<Resource<User>> = MutableLiveData()
+    var user : MutableLiveData<Resource<User>> = MutableLiveData()
 
 
     private val _register = MutableLiveData<UiState<String>>()
@@ -114,11 +115,32 @@ class AuthViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    fun logout(){
+        authUseCase.logout().onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    Log.i("LoginViewModel", "I dey here, Loading")
+                }
+                is Resource.Error -> {
+                    error.postValue("${result.message}")
+                    logout.postValue(false)
+                    Log.i("LoginViewModel", "I dey here, Error ${result.message}")
+
+                }
+                is Resource.Success -> {
+                    logout.postValue(true)
+                    Log.i("LoginViewModel", "I dey here, Success ${result.data}")
+                }
+            }
+        }.launchIn(viewModelScope)
+
+    }
+
     fun getUserSession() = viewModelScope.launch(Dispatchers.IO){
         user.postValue(Resource.Loading())
         try {
             if (isNetworkAvailable(application)){
-                val apiResult = authUseCase.getUser()
+                val apiResult = authUseCase.getUserSession()
                 user.postValue(apiResult)
             }else{
                 user.postValue(Resource.Error(message = "Internet not available"))
@@ -136,9 +158,7 @@ class AuthViewModel @Inject constructor(
         repository.getUserSession(result)
     }
 
-    fun logout(result: () -> Unit){
-        repository.logout(result)
-    }
+
 
     fun updateUserSession(user: User,result: (UiState<String?>) -> Unit){
         _getUserSession.value  = UiState.Loading
@@ -189,9 +209,17 @@ class AuthViewModel @Inject constructor(
         repository.getUserInSharedPreferences(result)
     }
 
+    //view variable management
+
+
     fun navigateToPage(){
         successful.postValue(null)
         error.postValue(null)
+        logout.postValue(null)
+    }
+
+    fun navigateToPageUser(){
+        this.user = MutableLiveData()
     }
 
 }

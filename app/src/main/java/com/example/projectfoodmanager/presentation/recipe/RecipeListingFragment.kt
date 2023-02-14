@@ -17,13 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
-import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.data.util.Resource
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.floor
 
@@ -123,13 +123,11 @@ class RecipeListingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        changeVisib_Menu(true)
 
         if (isOnline(view.context)) {
             binding.recyclerView.adapter = adapter
-
             binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
-
                 override fun onQueryTextSubmit(p0: String?): Boolean {
                     return false
                 }
@@ -269,9 +267,23 @@ class RecipeListingFragment : Fragment() {
                     Log.i(TAG,"${response.data}")
                 }
                 is Resource.Error -> {
+                    if (response.code == ERROR_CODES.SESSION_INVALID){
+                        findNavController().navigate(R.id.action_recipeListingFragment_to_loginFragment)
+                        //todo delete user prefs
+                        toast(getString(R.string.invalid_session))
+                    }
                     Log.i(TAG,"${response.message}")
                 }
+                else -> {}
             }
+        }
+    }
+    private fun changeVisib_Menu(state : Boolean){
+        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        if(state){
+            menu!!.visibility=View.VISIBLE
+        }else{
+            menu!!.visibility=View.GONE
         }
     }
 }

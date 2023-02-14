@@ -16,10 +16,14 @@
     <string name="enter_activity_level">Enter activity level</string>
     <string name="invalid_email">Invalid email entered</string>
     <string name="invalid_email_2">This email is already registered</string>
+    <string name="invalid_email_3">This email does not have an account</string>
     <string name="invalid_birthdate">Invalid birthdate entered, please use the format dd/mm/yyyy</string>
     <string name="invalid_birthdate_2">Invalid birthdate entered, you\'re yet to be born?</string>
     <string name="invalid_password">Your password must be at least 8 characters</string>
+    <string name="invalid_password_1">User\'s password is incorrect</string>
     <string name="invalid_conf_password">Your password and confirm password must be teh same</string>
+    <string name="invalid_session">Session is invalid, logging out...</string>
+    <string name="to_many_attemps_to_login_failed">Access to this account has been temporarily put on a cool-down due to many failed login attempts. Try again later.</string>
     <string name="ingredients">Ingredients</string>
     <string name="receitas">Receitas</string>
     <string name="perfile">Perfil</string>
@@ -31,6 +35,8 @@
     <string name="offline_desc">O utilizador necessita de estar online para aceder a esta aba.</string>
     <string name="continuar">Ok, percebi.</string>
     <string name="gender">Género</string>
+    <string name="logout_completed">Logout completed successfully.</string>
+    <string name="welcome">Tás cá outra vez porca?</string>
 
     <string-array name="gender_array">
         <item>M</item>

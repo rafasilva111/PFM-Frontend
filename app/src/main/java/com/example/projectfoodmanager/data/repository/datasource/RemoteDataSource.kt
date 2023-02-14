@@ -2,7 +2,6 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.model.modelRequest.CommentRequest
-import com.example.projectfoodmanager.data.model.modelRequest.FollowerRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
@@ -10,13 +9,13 @@ import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.RecipeResponse
 import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
 import retrofit2.Response
-import retrofit2.http.*
 
 interface RemoteDataSource {
 
 	//user
 	suspend fun registerUser(user: UserRequest) : Response<UserResponse>
-	suspend fun getUser(userId: String): Response<UserResponse>
+	suspend fun getUserByUUID(userUUID: String): Response<UserResponse>
+	suspend fun getUserById(userId: String): Response<UserResponse>
 	suspend fun updateUser(userId: String,user: UserRequest): Response<UserResponse>
 	suspend fun deleteUser(userId: String): Response<String>
 

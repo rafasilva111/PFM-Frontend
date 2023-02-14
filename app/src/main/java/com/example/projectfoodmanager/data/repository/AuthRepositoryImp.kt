@@ -6,7 +6,9 @@ import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.data.util.Resource
+import com.example.projectfoodmanager.util.ERROR_CODES
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.tasks.await
 import retrofit2.Response
@@ -83,19 +85,46 @@ class AuthRepositoryImp @Inject constructor(
                 currentUser  = result.user
                 Log.i(TAG, "loginUser: User uuid is "+result.user!!.uid)
 
-                return responseToUserResult(remoteDataSource.getUser(userUUID = result.user!!.uid))
+                return responseToUserResult(remoteDataSource.getUserByUUID(userUUID = result.user!!.uid))
             }
-        } catch (e: Exception) {
+        }catch (e: FirebaseAuthInvalidCredentialsException){
+            if (e.localizedMessage.contains("password is invalid"))
+                return Resource.Error(message = "User's password is incorrect", code = ERROR_CODES.UNAUTORIZED)
+            else
+                return Resource.Error(message = "There is no user whit that password", code = ERROR_CODES.UNAUTORIZED)
+        }
+        catch (e: Exception) {
             e.printStackTrace()
             return Resource.Error(message = "$e")
         }
         return Resource.Error(message = "Something went wrong.")
     }
 
-    override suspend fun getUser(): Resource<User> {
-        return responseToUser(remoteDataSource.getUser(userUUID = this.firebaseAuth.uid.toString()))
+    override suspend fun logout(): Resource<Boolean> {
+        try {
+            val result = firebaseAuth.signOut()
 
+            this.currentUser = null
+            //todo delete shared preferences
+            Log.i(TAG, "logout: $result")
+            return Resource.Success(true)
+        }catch (e: FirebaseAuthInvalidCredentialsException){
+            Log.i(TAG, "logout: $e")
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+            return Resource.Error(message = "$e")
+        }
+        return Resource.Error(message = "Something went wrong.")
     }
 
+    override suspend fun getUserSession(): Resource<User> {
+        this.currentUser =firebaseAuth.currentUser
+        if (this.currentUser == null){
+            return Resource.Error(message = "Session invalid", code = ERROR_CODES.SESSION_INVALID)
+        }
+        return responseToUser(remoteDataSource.getUserByUUID(userUUID = this.currentUser!!.uid))
+    }
+    //todo make a validation to the shared preferences user
 
 }
