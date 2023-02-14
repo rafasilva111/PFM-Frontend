@@ -23,6 +23,7 @@ import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import com.example.projectfoodmanager.util.*
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.floor
 
@@ -52,6 +53,8 @@ class RecipeListingFragment : Fragment() {
 
                     putParcelable("note",item)
                 })
+
+                changeVisib_Menu(false)
             },
             this.authModel,
             this.viewModel
@@ -95,6 +98,10 @@ class RecipeListingFragment : Fragment() {
         }
 
 
+    override fun onResume() {
+        changeVisib_Menu(true)
+        super.onResume()
+    }
 
     private fun setRecyclerViewScrollListener() {
         scrollListener = object : RecyclerView.OnScrollListener(){
@@ -235,7 +242,7 @@ class RecipeListingFragment : Fragment() {
                 viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA, true)
             }
             binding.IBVegi.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANO, true)
+                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA, true)
             }
             binding.IBFruit.setOnClickListener {
                 viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA, true)
@@ -272,5 +279,15 @@ class RecipeListingFragment : Fragment() {
         return false
     }
 
+    private fun changeVisib_Menu(state : Boolean){
+        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        if(state){
+            menu!!.visibility=View.VISIBLE
+        }else{
+            menu!!.visibility=View.GONE
+        }
+
+    }
 
 }

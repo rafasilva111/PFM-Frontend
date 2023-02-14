@@ -95,7 +95,6 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 
     //animated icon
-
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
 
 }

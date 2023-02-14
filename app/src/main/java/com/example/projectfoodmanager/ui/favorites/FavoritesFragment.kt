@@ -177,7 +177,7 @@ class FavoritesFragment : Fragment() {
                 viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA,true)
             }
             binding.IBVegi.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANO,true)
+                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA,true)
             }
             binding.IBFruit.setOnClickListener {
                 viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA,true)
