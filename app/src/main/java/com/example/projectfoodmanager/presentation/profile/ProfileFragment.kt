@@ -1,5 +1,6 @@
 package com.example.projectfoodmanager.presentation.profile
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
@@ -25,13 +27,14 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?,
 
         ): View? {
+        observer()
         binding = FragmentProfileBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observer()
+
         binding.logoutIB.setOnClickListener {
             authViewModel.logout()
         }
@@ -48,13 +51,14 @@ class ProfileFragment : Fragment() {
     }
 
     fun observer(){
-        authViewModel.logout.observe(viewLifecycleOwner) { successful ->
-            if (successful == true){
+        authViewModel.logout.observe(viewLifecycleOwner) { logout ->
+            if (logout == true){
                 toast(getString(R.string.logout_completed))
                 authViewModel.navigateToPage()
-                findNavController().navigateUp()
+                authViewModel.navigateToPageUser()
+                startActivity(Intent(this.context, MainActivity::class.java))
 
-            }else if(successful == false){
+            }else if(logout == false){
                 toast(authViewModel.error.value)
                 authViewModel.navigateToPage()
             }

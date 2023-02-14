@@ -36,6 +36,7 @@
     <string name="continuar">Ok, percebi.</string>
     <string name="gender">Género</string>
     <string name="logout_completed">Logout completed successfully.</string>
+    <string name="welcome">Tás cá outra vez porca?</string>
 
     <string-array name="gender_array">
         <item>M</item>

@@ -274,6 +274,7 @@ class RecipeListingFragment : Fragment() {
                     }
                     Log.i(TAG,"${response.message}")
                 }
+                else -> {}
             }
         }
     }

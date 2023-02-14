@@ -103,6 +103,8 @@ class AuthRepositoryImp @Inject constructor(
     override suspend fun logout(): Resource<Boolean> {
         try {
             val result = firebaseAuth.signOut()
+
+            this.currentUser = null
             //todo delete shared preferences
             Log.i(TAG, "logout: $result")
             return Resource.Success(true)
@@ -123,6 +125,6 @@ class AuthRepositoryImp @Inject constructor(
         }
         return responseToUser(remoteDataSource.getUserByUUID(userUUID = this.currentUser!!.uid))
     }
-    //todo make a validation to the shared preferences user 
+    //todo make a validation to the shared preferences user
 
 }

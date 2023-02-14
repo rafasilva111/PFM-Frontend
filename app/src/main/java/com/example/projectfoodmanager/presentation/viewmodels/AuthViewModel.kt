@@ -33,7 +33,7 @@ class AuthViewModel @Inject constructor(
     val successful: MutableLiveData<Boolean?> = MutableLiveData()
     val logout: MutableLiveData<Boolean?> = MutableLiveData()
     val error: MutableLiveData<String?> = MutableLiveData()
-    val user : MutableLiveData<Resource<User>> = MutableLiveData()
+    var user : MutableLiveData<Resource<User>> = MutableLiveData()
 
 
     private val _register = MutableLiveData<UiState<String>>()
@@ -133,6 +133,7 @@ class AuthViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+
     }
 
     fun getUserSession() = viewModelScope.launch(Dispatchers.IO){
@@ -208,9 +209,17 @@ class AuthViewModel @Inject constructor(
         repository.getUserInSharedPreferences(result)
     }
 
+    //view variable management
+
+
     fun navigateToPage(){
         successful.postValue(null)
         error.postValue(null)
+        logout.postValue(null)
+    }
+
+    fun navigateToPageUser(){
+        this.user = MutableLiveData()
     }
 
 }

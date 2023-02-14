@@ -37,7 +37,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //todo get user in shared preferences
-
+        binding.progressBar.hide()
 
         observer()
         binding.loginBtn.setOnClickListener {
@@ -122,12 +122,17 @@ class LoginFragment : Fragment() {
 
                 }
                 is Resource.Success -> {
+                    binding.progressBar.hide()
+                    toast(getString(R.string.welcome))
                     findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
+
                 }
                 is Resource.Error -> {
+                    binding.progressBar.hide()
                     Log.i(TAG,"No user previously logged out.")
                     Log.i(TAG,"${response.message}")
                 }
+                else -> {}
             }
         }
     }
