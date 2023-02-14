@@ -42,7 +42,38 @@ object RecipeListingFragmentFilters {
     val CARNE ="carne"
     val PEIXE ="peixe"
     val SOPA ="sopa"
-    val VEGETARIANO ="vegetariano"
+    val VEGETARIANA ="vegetariana"
     val FRUTA ="fruta"
     val BEBIDAS ="bebida"
+    val SALADA ="salada"
+    val PIZZA ="pizza"
+    val SOBREMESA = "sobremesa"
+    val SANDES = "sandes"
+    val LANCHE = "lanche"
+    val PEQUENO_ALMOCO = "pequeno-almoco"
+    val JANTAR = "jantar"
+    val ALMOCO = "almoco"
+    val PETISCO = "petisco"
+
+}
+
+object NutritionTable{
+    val ENERGIA = "energia"
+    val ENERGIA_PERC = "energia_perc"
+    val GORDURA = "gordura"
+    val GORDURA_PERC = "gordura_perc"
+    val GORDURA_SAT = "gordura_saturada"
+    val GORDURA_SAT_PERC = "gordura_saturada_perc"
+    //Erro "s"
+    val HIDRATOS_CARBONO = "hidratos_carbonos"
+    //Falta adicionar este campo na BD
+    val HIDRATOS_CARBONO_PERC = "hidratos_carbono_perc"
+    //Erro "s"
+    val HIDRATOS_CARBONO_ACUCARES="hidratos_carbonos_acucares"
+    val HIDRATOS_CARBONO_ACUCARES_PERC="hidratos_carbonos_acucares_perc"
+    val FIBRA = "fibra"
+    val FIBRA_PERC = "fibra_perc"
+    val PROTEINA = "proteina"
+    //Falta adicionar este campo na BD
+    val PROTEINA_PERC = "proteina_perc"
 }

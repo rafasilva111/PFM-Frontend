@@ -22,9 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="Bem vindo"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/fedoka"
+        android:text="Bem vindo"
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,52 +87,52 @@
                 android:paddingRight="10dp">
 
                 <Button
+                    android:id="@+id/S_SUGESTOES"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:background="@drawable/layout_bg"
+                    android:background="@drawable/bg_btn_black"
                     android:text="Sugestões"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:textStyle="bold"
-                    android:id="@+id/S_SUGESTOES"/>
+                    android:layout_margin="5dp"/>
 
                 <Button
+                    android:id="@+id/S_MELHORES"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/layout_bg"
-                    android:backgroundTint="#E3E3E4"
+                    android:background="@drawable/bg_btn_black"
                     android:text="Melhor classificadas"
                     android:textColor="@color/white"
                     android:textSize="10sp"
-                    android:textAlignment="center"
-                    android:textStyle="bold"
-                    tools:ignore="TouchTargetSizeCheck"
-                    android:id="@+id/S_MELHORES"/>
+                    android:layout_margin="5dp"
+                    android:textStyle="bold"/>
 
                 <Button
                     android:id="@+id/S_RECENTES"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/layout_bg"
+                    android:background="@drawable/bg_btn_black"
                     android:backgroundTint="#E3E3E4"
                     android:text="Mais recentes"
                     android:textColor="@color/white"
                     android:textSize="10sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_margin="5dp"/>
 
                 <Button
+                    android:id="@+id/S_PERSONALIZADAS"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/layout_bg"
+                    android:background="@drawable/bg_btn_black"
                     android:backgroundTint="#E3E3E4"
                     android:text="Sugestões personalizadas"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:textStyle="bold"
-                    android:id="@+id/S_PERSONALIZADAS"/>
+                    android:layout_margin="5dp" />
 
             </LinearLayout>
 

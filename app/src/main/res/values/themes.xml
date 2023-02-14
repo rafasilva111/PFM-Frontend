@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ProjectFoodManager" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.ProjectFoodManager" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#95000000</item>
+        <item name="colorPrimary">@color/black</item>
 
         <item name="colorPrimaryVariant">@color/bordeux</item>
         <item name="colorOnPrimary">#F6F6F6</item>
@@ -14,6 +14,7 @@
         <item name="colorSecondary">#000000</item>
         <item name="colorSecondaryVariant">@color/bordeux</item>
         <item name="colorOnSecondary">@color/black</item>
+<!--        <item name="android:windowLightStatusBar">true</item>-->
 
         <!-- Status bar color. -->
 

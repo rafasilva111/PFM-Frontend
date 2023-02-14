@@ -6,10 +6,47 @@
     <color name="color_3">#F7F7F7</color>
     <color name="color_4">#60E7E7E7</color>
     <color name="bordeux">#5F021F</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
+
+    //-------------------------
+    <color name="catg_carne">#FD7A70</color>//Carne
+    <color name="catg_peixe">#8BCCFF</color>//Peixe
+    <color name="catg_sopa">#FDF39A</color>//Sopa
+    <color name="catg_vegeteriana">#73BE73</color>
+    <color name="catg_fruta">#C3A4FA</color>//Fruta
+    <color name="catg_bebida">#FFDAA2</color>//Bebida
+    <color name="catg_salada">#C1EC8F</color>//Salada
+    <color name="catg_pizza">#ff69b4</color>
+    <color name="catg_sobremesa">#00bfff</color>
+    <color name="catg_sandes">#ff7f50</color>
+    <color name="catg_lanche">#add8e6</color>
+    <color name="catg_peq_almoco">#90ee90</color>
+    <color name="catg_jantar">#ff6347</color>
+    <color name="catg_almoco">#E1AEDF</color>
+    <color name="catg_petiscos">#AE725F</color>
+
+<!--    <color name="">#1e90ff</color>
+    <color name="">#ffd700</color>
+    <color name="">#87ceeb</color>
+    <color name="">#da70d6</color>
+    <color name="">#7cfc00</color>
+    <color name="">#ffa07a</color>
+    <color name="">#ffa500</color>
+    <color name="">#00ffff</color>-->
+
+
+
+
+
+
+
+
+    <color name="grey">#DADADA</color>//Default
+    //-------------------------
+    <color name="teal_700">#FF018786</color>
+
     <color name="tab_selected">#FF000000</color>
     <color name="tab_unselected">#4D000000</color>
     <color name="purple_700">#FF000000</color>

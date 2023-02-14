@@ -98,15 +98,50 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView6"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/bordeux"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_add_recipe"
+                app:tint="@color/white" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Nova Receita"
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/fedoka"
+                android:gravity="center_vertical"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
+        app:layout_constraintTop_toBottomOf="@+id/cardView6">
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -126,17 +161,17 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical"
             android:textAlignment="center"
-            app:flow_verticalAlign="center"
             app:flow_horizontalAlign="center"
+            app:flow_verticalAlign="center"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:focusable="true"
-            android:focusableInTouchMode="true"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
