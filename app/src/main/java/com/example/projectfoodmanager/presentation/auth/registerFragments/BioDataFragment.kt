@@ -112,6 +112,15 @@ class BioDataFragment : Fragment() {
             isValid = false
             if (requiredFields)
                 toast(getString(R.string.enter_weight))
+            val weight: Int? = binding.weightEt.text.toString().toIntOrNull()
+            if (weight == null){
+                toast(getString(R.string.weightEt_problem_1))
+            }
+
+            if (weight!! < 30){
+                //todo pop up showing dat later on features will be disabled for dangerous values
+                toast(getString(R.string.weightEt_problem_2))
+            }
         }
 
         if (binding.activityLevelRg.checkedRadioButtonId != null) {

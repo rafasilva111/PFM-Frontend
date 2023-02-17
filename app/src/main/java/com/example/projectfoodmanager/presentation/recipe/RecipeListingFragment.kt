@@ -260,7 +260,7 @@ class RecipeListingFragment : Fragment() {
         return false
     }
 
-<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeListingFragment.kt
+
     fun observer() {
         authModel.user.observe(viewLifecycleOwner){ response ->
             when(response){
@@ -285,23 +285,15 @@ class RecipeListingFragment : Fragment() {
             }
         }
     }
-    private fun changeVisib_Menu(state : Boolean){
-        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-=======
+
     private fun changeVisib_Menu(state : Boolean){
         val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
->>>>>>> Layouts:app/src/main/java/com/example/projectfoodmanager/ui/recipe/RecipeListingFragment.kt
         if(state){
             menu!!.visibility=View.VISIBLE
         }else{
             menu!!.visibility=View.GONE
         }
-<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeListingFragment.kt
-    }
-=======
-
     }
 
->>>>>>> Layouts:app/src/main/java/com/example/projectfoodmanager/ui/recipe/RecipeListingFragment.kt
 }

@@ -37,6 +37,9 @@
     <string name="gender">Género</string>
     <string name="logout_completed">Logout completed successfully.</string>
     <string name="welcome">Tás cá outra vez porca?</string>
+    <string name="invalid_password_2">The passwords are differents</string>
+    <string name="weightEt_problem_1">Please insert a valid weight</string>
+    <string name="weightEt_problem_2">Be careful, those are low numbers.</string>
 
     <string-array name="gender_array">
         <item>M</item>

@@ -26,13 +26,9 @@ import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
-<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
-=======
-import com.example.projectfoodmanager.ui.auth.AuthViewModel
 import com.example.projectfoodmanager.util.NutritionTable
 import com.example.projectfoodmanager.util.RecipeListingFragmentFilters
->>>>>>> Layouts:app/src/main/java/com/example/projectfoodmanager/ui/recipe/RecipeDetailFragment.kt
 import com.example.projectfoodmanager.util.UiState
 import com.example.projectfoodmanager.util.toast
 import com.google.android.material.chip.Chip

@@ -137,8 +137,8 @@ class RegisterFragment : Fragment() {
                 return false
             }
             else{
-                if(binding.passEt.text == binding.passEtConf.text){
-                    toast(getString(R.string.invalid_password))
+                if(binding.passEt.text.toString().compareTo(binding.passEtConf.text.toString()) != 0 ){
+                    toast(getString(R.string.invalid_password_2))
                     return false
                 }
             }

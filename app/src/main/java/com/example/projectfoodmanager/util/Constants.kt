@@ -4,7 +4,8 @@ package com.example.projectfoodmanager.util
 
 
 object Constants {
-    const val BASE_URL = "http://192.168.1.110:5000/"
+    // TODO: PRIMEIRO PASSO MUDAR ESTA MERDA SEU ANIMAL
+    const val BASE_URL = "http://192.168.1.72:5000/"
     const val USER_IS_LOGGED_IN = "USER_IS_LOGGED_IN"
     const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"
 }
