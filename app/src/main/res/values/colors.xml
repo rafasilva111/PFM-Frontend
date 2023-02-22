@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="background_1">#EDEDED</color>
     <color name="color_1">#F5E1CE</color>
     <color name="color_2">#E8C39E</color>
     <color name="color_3">#F7F7F7</color>
     <color name="color_4">#60E7E7E7</color>
-    <color name="bordeux">#5F021F</color>
+    <color name="bordeux">#62162F</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF2700</color>
     <color name="transparent">#00FFFFFF</color>
 
     //-------------------------
@@ -26,6 +27,8 @@
     <color name="catg_jantar">#ff6347</color>
     <color name="catg_almoco">#E1AEDF</color>
     <color name="catg_petiscos">#AE725F</color>
+
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true" >#ff69b4</color>
 
 <!--    <color name="">#1e90ff</color>
     <color name="">#ffd700</color>

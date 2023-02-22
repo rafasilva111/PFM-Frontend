@@ -46,7 +46,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
@@ -96,6 +96,8 @@ dependencies {
 
     //animated icon
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+
+    //animated activity
 
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

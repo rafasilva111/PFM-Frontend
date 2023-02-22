@@ -1,22 +1,24 @@
 package com.example.projectfoodmanager.presentation.auth
 
-import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.util.Resource
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -46,6 +48,7 @@ class LoginFragment : Fragment() {
             }
         }
 
+
         binding.forgotPassLabel.setOnClickListener {
 
         }
@@ -59,21 +62,31 @@ class LoginFragment : Fragment() {
 
         if (binding.emailEt.text.isNullOrEmpty()){
             isValid = false
-            toast(getString(R.string.enter_email))
-        }else{
-            if (!binding.emailEt.text.toString().isValidEmail()){
+            binding.emailTL.isErrorEnabled=true
+            binding.emailTL.error=getString(R.string.enter_email)
+            //toast(getString(R.string.enter_email))
+        }else if (!binding.emailEt.text.toString().isValidEmail()){
                 isValid = false
-                toast(getString(R.string.invalid_email))
-            }
+                binding.emailTL.isErrorEnabled=true
+                binding.emailTL.error=getString(R.string.invalid_email)
+                //toast(getString(R.string.invalid_email))
+
+        }else{
+            binding.emailTL.isErrorEnabled=false
         }
+
         if (binding.passEt.text.isNullOrEmpty()){
             isValid = false
-            toast(getString(R.string.enter_password))
+            binding.passwordTL.isErrorEnabled=true
+            binding.passwordTL.error=getString(R.string.enter_password)
+            //toast(getString(R.string.enter_password))
+        }else if (binding.passEt.text.toString().length < 8){
+            isValid = false
+            binding.passwordTL.isErrorEnabled=true
+            binding.passwordTL.error=getString(R.string.invalid_password)
+            //toast(getString(R.string.invalid_password))
         }else{
-            if (binding.passEt.text.toString().length < 8){
-                isValid = false
-                toast(getString(R.string.invalid_password))
-            }
+            binding.passwordTL.isErrorEnabled=false
         }
         return isValid
     }
@@ -119,12 +132,17 @@ class LoginFragment : Fragment() {
                 is Resource.Loading -> {
                     Log.i(TAG,"Loading...")
                     binding.progressBar.show()
+                    binding.loginBtn.visibility=View.GONE
 
                 }
                 is Resource.Success -> {
-                    binding.progressBar.hide()
-                    toast(getString(R.string.welcome))
-                    findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
+                    Handler().postDelayed({
+                        binding.progressBar.hide()
+                        toast(getString(R.string.welcome))
+                        findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
+                    }, 3000)
+
+
 
                 }
                 is Resource.Error -> {

@@ -56,7 +56,7 @@ class ProfileFragment : Fragment() {
                 toast(getString(R.string.logout_completed))
                 authViewModel.navigateToPage()
                 authViewModel.navigateToPageUser()
-                startActivity(Intent(this.context, MainActivity::class.java))
+                findNavController().navigate(R.id.action_homeFragment)
 
             }else if(logout == false){
                 toast(authViewModel.error.value)

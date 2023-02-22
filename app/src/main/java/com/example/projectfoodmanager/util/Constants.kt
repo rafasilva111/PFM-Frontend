@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.util
 
 
 
+val SPLASH_TIME:Long = 3000
 
 object Constants {
     // TODO: PRIMEIRO PASSO MUDAR ESTA MERDA SEU ANIMAL

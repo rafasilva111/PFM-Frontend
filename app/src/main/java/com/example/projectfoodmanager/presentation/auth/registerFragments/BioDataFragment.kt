@@ -44,14 +44,17 @@ class BioDataFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.backIB.setOnClickListener {
             findNavController().navigateUp()
+            // TODO: alertar que antes de voltar atras
         }
         objUser = arguments?.getParcelable("user")
         if (objUser==null)
             Log.d(TAG, "Something went wrong whit user object")
         observer()
         binding.registerBtn.setOnClickListener {
-            val userRequest = getUserRequest()
-            viewModel.registerUser(userRequest)
+            if (validation()) {
+                val userRequest = getUserRequest()
+                viewModel.registerUser(userRequest)
+            }
         }
     }
     fun observer() {
@@ -59,7 +62,7 @@ class BioDataFragment : Fragment() {
             if (successful == true){
                 toast("Sucess")
                 viewModel.navigateToPage()
-                startActivity(Intent(this.context, MainActivity::class.java))
+                findNavController().navigate(R.id.action_registerFragment_to_home_navigation)
             }else if(successful == false){
                 if (viewModel.error.value!!.contains("The email address is already"))
                     toast(getString(R.string.invalid_email_2))
@@ -72,21 +75,21 @@ class BioDataFragment : Fragment() {
 
 
     fun getUserRequest():UserRequest {
-        if (validation()){
-            return UserRequest(
-                first_name = objUser!!.first_name,
-                last_name = objUser!!.last_name,
-                email = objUser!!.email,
-                birth_date = objUser!!.birth_date,
-                password = objUser!!.password,
-                sex = objUser!!.sex,
-                height = binding.heightEt.text.toString(),
-                weight = binding.weightEt.text.toString(),
-                activity_level = resources.getResourceEntryName(binding.activityLevelRg.checkedRadioButtonId),
 
-                )
-        }
-        else{
+        return UserRequest(
+            first_name = objUser!!.first_name,
+            last_name = objUser!!.last_name,
+            email = objUser!!.email,
+            birth_date = objUser!!.birth_date,
+            password = objUser!!.password,
+            sex = objUser!!.sex,
+            height = binding.heightEt.text.toString(),
+            weight = binding.weightEt.text.toString(),
+            activity_level = binding.activityLevelRg.checkedRadioButtonId.toString(),
+
+            )
+
+       /* else{
             return UserRequest(
                 first_name = objUser!!.first_name,
                 last_name = objUser!!.last_name,
@@ -95,38 +98,58 @@ class BioDataFragment : Fragment() {
                 password = objUser!!.password,
                 sex = objUser!!.sex
                 )
-        }
+        }*/
 
     }
 
     fun validation(): Boolean {
         var isValid = true
-
-        if (binding.heightEt.text.isNullOrEmpty()){
+        val heightTxt = binding.heightEt.text.toString()
+        if (heightTxt.isNullOrEmpty()) {
             isValid = false
-            if (requiredFields)
-                toast(getString(R.string.enter_height))
+            toast(getString(R.string.heightEt_problem))
+        } else {
+            val heightInt = heightTxt.toIntOrNull()
+            if (heightInt != null) {
+                if (heightInt !in 120..300){
+                    isValid = false
+                    toast(getString(R.string.heightEt_problem))
+                }
+            } else {
+                val heighFloat = heightTxt.toFloatOrNull()
+                if (heighFloat != null)
+                    if (heighFloat !in 1.20..3.0) {
+                        isValid = false
+                        toast(getString(R.string.heightEt_problem))
+                    } else {
+                        binding.heightEt.setText((heighFloat * 100).toString())
+                    }
+            }
+
+
         }
 
-        if (binding.weightEt.text.isNullOrEmpty()){
+        if (binding.weightEt.text.toString().isNullOrEmpty()) {
             isValid = false
-            if (requiredFields)
-                toast(getString(R.string.enter_weight))
-            val weight: Int? = binding.weightEt.text.toString().toIntOrNull()
+            toast(getString(R.string.enter_weight))
+        }
+        else{
+            val weight = binding.weightEt.text.toString().toFloatOrNull()
             if (weight == null){
-                toast(getString(R.string.weightEt_problem_1))
+                isValid = false
+                toast(getString(R.string.enter_weight))
             }
-
-            if (weight!! < 30){
-                //todo pop up showing dat later on features will be disabled for dangerous values
-                toast(getString(R.string.weightEt_problem_2))
+            else{
+                if (weight !in 30.0..200.0) {
+                    isValid = false
+                    toast(getString(R.string.weightEt_problem_2))
+                }
             }
         }
 
-        if (binding.activityLevelRg.checkedRadioButtonId != null) {
+        if (binding.activityLevelRg.checkedRadioButtonId == null) {
             isValid = false
-            if (requiredFields)
-                toast(getString(R.string.enter_activity_level))
+            toast(getString(R.string.enter_activity_level))
         }
         return isValid
     }

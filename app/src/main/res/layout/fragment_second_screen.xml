@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".onboarding.screens.SecondScreen"
+    android:background="@color/color_1">
+
+    <ImageView
+        android:id="@+id/IV_goals"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/img_goals"
+        app:layout_constraintBottom_toBottomOf="@+id/IV_plus"
+        app:layout_constraintEnd_toStartOf="@+id/IV_plus"
+        app:layout_constraintTop_toTopOf="@+id/IV_plus" />
+
+    <ImageView
+        android:id="@+id/IV_plus"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="200dp"
+        android:src="@drawable/ic_plus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/bordeux" />
+
+    <ImageView
+        android:id="@+id/IV_plan"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/img_plan"
+        app:layout_constraintBottom_toBottomOf="@+id/IV_plus"
+        app:layout_constraintStart_toEndOf="@+id/IV_plus"
+        app:layout_constraintTop_toTopOf="@+id/IV_plus" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/fedoka"
+        android:text="Objetivos"
+        android:textColor="@color/black"
+        android:textSize="@dimen/title_3"
+        app:layout_constraintEnd_toEndOf="@+id/IV_plan"
+        app:layout_constraintStart_toStartOf="@+id/IV_goals"
+        app:layout_constraintTop_toBottomOf="@+id/IV_goals" />
+
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:alpha="0.5"
+        android:fontFamily="@font/titillium_web_regular"
+        android:text="Possibilidade de consultar, criar e até mesmo partilhar as suas receitas com outros utilizadores"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/textView7"
+        app:layout_constraintStart_toStartOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/next_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
+        android:fontFamily="@font/fedoka"
+        android:text="Next"
+        android:textSize="20sp"
+        android:textColor="@color/bordeux"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
