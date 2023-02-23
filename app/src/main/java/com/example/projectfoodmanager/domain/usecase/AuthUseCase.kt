@@ -50,22 +50,6 @@ class AuthUseCase @Inject constructor(
 		}
 	}
 
-	fun logout() : Flow<Resource<Boolean>> = flow {
-		emit(Resource.Loading())
-		//create a demo user and upload
-		try {
-			val response = authRepository.logout()
-			Log.i("AuthUseCase", "I dey here, ${response.data}")
-			emit(response)
-		}catch (e : HttpException){
-			Log.i("AuthUseCase", e.localizedMessage!!)
-			emit (Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
-		}
-		catch (e : IOException){
-			Log.i("AuthUseCase", e.localizedMessage!!)
-			emit (Resource.Error("Couldn't reach server. Check your internet connection."))
-		}
-	}
 
 
 	suspend fun getUserSession() : Resource<User> {

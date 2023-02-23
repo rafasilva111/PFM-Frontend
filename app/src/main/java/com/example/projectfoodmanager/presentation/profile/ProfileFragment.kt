@@ -28,7 +28,6 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?,
 
         ): View? {
-        observer()
         binding = FragmentProfileBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -37,7 +36,12 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.logoutIB.setOnClickListener {
-            authViewModel.logout()
+            authViewModel.logout{
+                findNavController().navigate(R.id.action_homeFragment)
+                changeVisib_Menu(false)
+                authViewModel.refresh()
+            }
+
         }
 
         binding.favoritesCV.setOnClickListener {
@@ -56,21 +60,7 @@ class ProfileFragment : Fragment() {
 
     }
 
-    fun observer(){
-        authViewModel.logout.observe(viewLifecycleOwner) { logout ->
-            if (logout == true){
-                toast(getString(R.string.logout_completed))
-                authViewModel.navigateToPage()
-                authViewModel.navigateToPageUser()
-                changeVisib_Menu(false)
-                findNavController().navigate(R.id.action_homeFragment)
 
-            }else if(logout == false){
-                toast(authViewModel.error.value)
-                authViewModel.navigateToPage()
-            }
-        }
-    }
     private fun changeVisib_Menu(state : Boolean){
         val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         if(state){

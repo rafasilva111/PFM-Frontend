@@ -100,31 +100,20 @@ class AuthRepositoryImp @Inject constructor(
         return Resource.Error(message = "Something went wrong.")
     }
 
-    override suspend fun logout(): Resource<Boolean> {
-        try {
-            val result = firebaseAuth.signOut()
-
-            this.currentUser = null
-            //todo delete shared preferences
-            Log.i(TAG, "logout: $result")
-            return Resource.Success(true)
-        }catch (e: FirebaseAuthInvalidCredentialsException){
-            Log.i(TAG, "logout: $e")
-        }
-        catch (e: Exception) {
-            e.printStackTrace()
-            return Resource.Error(message = "$e")
-        }
-        return Resource.Error(message = "Something went wrong.")
-    }
 
     override suspend fun getUserSession(): Resource<User> {
         this.currentUser =firebaseAuth.currentUser
-        if (this.currentUser == null){
+        if (firebaseAuth.currentUser == null){
             return Resource.Error(message = "Session invalid", code = ERROR_CODES.SESSION_INVALID)
         }
         return responseToUser(remoteDataSource.getUserByUUID(userUUID = this.currentUser!!.uid))
     }
     //todo make a validation to the shared preferences user
 
+    override fun logout(result: () -> Unit) {
+        firebaseAuth.signOut()
+        //appPreferences.edit().putString(SharedPrefConstants.USER_SESSION,null).apply()
+        this.currentUser=null
+        result.invoke()
+    }
 }
