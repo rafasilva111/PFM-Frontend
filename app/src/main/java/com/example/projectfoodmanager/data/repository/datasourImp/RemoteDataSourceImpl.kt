@@ -23,7 +23,9 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.createUser(user = user)
 	}
 	override suspend fun getUserByUUID(userUUID: String): Response<UserResponse> {
-		return apiInterface.getUserByUUID(userUUID = userUUID)
+		 apiInterface.getUserByUUID(userUUID = userUUID).let {
+			 return it
+		}
 	}
 	override suspend fun getUserById(userId: String): Response<UserResponse> {
 		return apiInterface.getUser(userId = userId)

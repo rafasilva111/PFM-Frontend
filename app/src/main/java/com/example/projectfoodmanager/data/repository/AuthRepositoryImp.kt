@@ -7,6 +7,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.data.util.Resource
 import com.example.projectfoodmanager.util.ERROR_CODES
+import com.example.projectfoodmanager.util.UiState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseUser
@@ -77,7 +78,7 @@ class AuthRepositoryImp @Inject constructor(
         return Resource.Error(message = "Something went wrong.")
     }
 
-    override suspend fun loginUser(email: String, password: String): Resource<UserResponse> {
+    /*override suspend fun loginUser(email: String, password: String): Resource<UserResponse> {
         try {
             val result = firebaseAuth.signInWithEmailAndPassword(email,password).await()
 
@@ -98,32 +99,44 @@ class AuthRepositoryImp @Inject constructor(
             return Resource.Error(message = "$e")
         }
         return Resource.Error(message = "Something went wrong.")
+    }*/
+
+    override fun loginUser(
+        email: String,
+        password: String,
+        result: (UiState<String>) -> Unit) {
+        firebaseAuth.signInWithEmailAndPassword(email,password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    result.invoke(UiState.Success("Login successfully!"))
+
+                    /* storeSession(){
+                         if (it == null){
+                             result.invoke(UiState.Failure("Fail to login successfully"))
+                         }else{
+                             result.invoke(UiState.Success("Login successfully!"))
+                         }
+                     }*/
+                }
+                else{
+                    Log.d(TAG, "loginUser: "+task.exception)
+                }
+            }.addOnFailureListener {
+                result.invoke(UiState.Failure("Authentication failed, Check email and password"))
+            }
     }
 
-    override suspend fun logout(): Resource<Boolean> {
-        try {
-            val result = firebaseAuth.signOut()
-
-            this.currentUser = null
-            //todo delete shared preferences
-            Log.i(TAG, "logout: $result")
-            return Resource.Success(true)
-        }catch (e: FirebaseAuthInvalidCredentialsException){
-            Log.i(TAG, "logout: $e")
-        }
-        catch (e: Exception) {
-            e.printStackTrace()
-            return Resource.Error(message = "$e")
-        }
-        return Resource.Error(message = "Something went wrong.")
+    override fun logout(result: () -> Unit) {
+        firebaseAuth.signOut()
+        //appPreferences.edit().putString(SharedPrefConstants.USER_SESSION,null).apply()
+        result.invoke()
     }
 
     override suspend fun getUserSession(): Resource<User> {
-        this.currentUser =firebaseAuth.currentUser
-        if (this.currentUser == null){
+        if (firebaseAuth.currentUser == null){
             return Resource.Error(message = "Session invalid", code = ERROR_CODES.SESSION_INVALID)
         }
-        return responseToUser(remoteDataSource.getUserByUUID(userUUID = this.currentUser!!.uid))
+        return responseToUser(remoteDataSource.getUserByUUID(userUUID = firebaseAuth.currentUser!!.uid))
     }
     //todo make a validation to the shared preferences user
 

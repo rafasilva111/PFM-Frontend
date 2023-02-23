@@ -37,7 +37,7 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        authViewModel.getUserSession()
+        authViewModel.getUserSessionSplash()
         observer()
     }
 
@@ -48,7 +48,7 @@ class SplashFragment : Fragment() {
 
 
     fun observer(){
-        authViewModel.user.observe(viewLifecycleOwner) { response ->
+        authViewModel.user_splash.observe(viewLifecycleOwner) { response ->
             when(response){
                 is Resource.Loading -> {
                    // Log.i(TAG,"Loading...")

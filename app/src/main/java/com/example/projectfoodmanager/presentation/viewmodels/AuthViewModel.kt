@@ -10,6 +10,7 @@ import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.old.AuthRepository_old
+import com.example.projectfoodmanager.data.repository.AuthRepository
 import com.example.projectfoodmanager.data.util.Network.isNetworkAvailable
 import com.example.projectfoodmanager.data.util.Resource
 import com.example.projectfoodmanager.data.util.SharedPreference
@@ -25,7 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val application : Application,
-    val repository: AuthRepository_old,
+    val repositoryOld: AuthRepository_old,
+    val repository: AuthRepository,
     private val authUseCase: AuthUseCase,
     private val sharedPreference: SharedPreference
 ): ViewModel() {
@@ -34,6 +36,7 @@ class AuthViewModel @Inject constructor(
     val logout: MutableLiveData<Boolean?> = MutableLiveData()
     val error: MutableLiveData<String?> = MutableLiveData()
     var user : MutableLiveData<Resource<User>> = MutableLiveData()
+    var user_splash : MutableLiveData<Resource<User>> = MutableLiveData()
 
 
     private val _register = MutableLiveData<UiState<String>>()
@@ -96,45 +99,20 @@ class AuthViewModel @Inject constructor(
         email: String,
         password: String
     ) {
-        authUseCase.loginUser(email,password).onEach { result ->
-            when (result) {
-                is Resource.Loading -> {
-                    Log.i("LoginViewModel", "I dey here, Loading")
-                }
-                is Resource.Error -> {
-                    error.postValue("${result.message}")
-                    successful.postValue(false)
-                    Log.i("LoginViewModel", "I dey here, Error ${result.message}")
-
-                }
-                is Resource.Success -> {
-                    successful.postValue(true)
-                    Log.i("LoginViewModel", "I dey here, Success ${result.data}")
-                }
-            }
-        }.launchIn(viewModelScope)
+        _login.value = UiState.Loading
+        repository.loginUser(
+            email,
+            password
+        ){
+            _login.value = it
+        }
     }
 
-    fun logout(){
-        authUseCase.logout().onEach { result ->
-            when (result) {
-                is Resource.Loading -> {
-                    Log.i("LoginViewModel", "I dey here, Loading")
-                }
-                is Resource.Error -> {
-                    error.postValue("${result.message}")
-                    logout.postValue(false)
-                    Log.i("LoginViewModel", "I dey here, Error ${result.message}")
-
-                }
-                is Resource.Success -> {
-                    logout.postValue(true)
-                    Log.i("LoginViewModel", "I dey here, Success ${result.data}")
-                }
-            }
-        }.launchIn(viewModelScope)
-
+    fun logout(result: () -> Unit){
+        repository.logout(result)
     }
+
+    
 
     fun getUserSession() = viewModelScope.launch(Dispatchers.IO){
         user.postValue(Resource.Loading())
@@ -150,63 +128,77 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun getUserSessionSplash() = viewModelScope.launch(Dispatchers.IO){
+        user_splash.postValue(Resource.Loading())
+        try {
+            if (isNetworkAvailable(application)){
+                val apiResult = authUseCase.getUserSession()
+                user_splash.postValue(apiResult)
+            }else{
+                user_splash.postValue(Resource.Error(message = "Internet not available"))
+            }
+        }catch (e : Exception){
+            user_splash.postValue(Resource.Error(message = e.localizedMessage ?: "Unknown Error"))
+        }
+    }
+
 
     //old
 
     fun getUserSession_old(result: (User?) -> Unit){
         _getUserSession.value  = UiState.Loading
-        repository.getUserSession(result)
+        repositoryOld.getUserSession(result)
     }
 
 
 
     fun updateUserSession(user: User,result: (UiState<String?>) -> Unit){
         _getUserSession.value  = UiState.Loading
-        repository.updateUserInfo(user,result)
+        repositoryOld.updateUserInfo(user,result)
     }
     fun getSavedRecipesList(){
         _getFavoriteRecipeList.value = UiState.Loading
-        repository.getFavoritesRecipe { _getFavoriteRecipeList.value = it}
+        repositoryOld.getFavoritesRecipe { _getFavoriteRecipeList.value = it}
     }
 
     fun getLikedRecipesList() {
         _getLikedRecipeList.value = UiState.Loading
-        repository.getLikedRecipes{ _getLikedRecipeList.value = it}
+        repositoryOld.getLikedRecipes{ _getLikedRecipeList.value = it}
     }
 
     fun addFavoriteRecipe(recipe: Recipe) {
         _updateFavoriteList.value = UiState.Loading
-        repository.addFavoriteRecipe(recipe) { _updateFavoriteList.value = it}
+        repositoryOld.addFavoriteRecipe(recipe) { _updateFavoriteList.value = it}
 
     }
 
     fun removeFavoriteRecipe(recipe: Recipe) {
         _updateFavoriteList.value = UiState.Loading
-        repository.removeFavoriteRecipe(recipe) { _updateFavoriteList.value = it}
+        repositoryOld.removeFavoriteRecipe(recipe) { _updateFavoriteList.value = it}
     }
 
     fun storeMetadata(key:String , value:String,result: (HashMap<String,String>?) -> Unit) {
         _getMetadata.value  = UiState.Loading
-        repository.updateMetadata(key,value,result)
+        repositoryOld.updateMetadata(key,value,result)
     }
 
     fun getMetadata(result: (HashMap<String,String>?) -> Unit) {
         _getMetadata.value  = UiState.Loading
-        repository.getMetadata(result)
+        repositoryOld.getMetadata(result)
     }
 
     fun removeLikeOnRecipe(recipe: Recipe) {
         _updateLikeList.value = UiState.Loading
-        repository.removeLikeRecipe(recipe) { _updateLikeList.value = it}
+        repositoryOld.removeLikeRecipe(recipe) { _updateLikeList.value = it}
     }
 
     fun addLikeOnRecipe(recipe: Recipe) {
         _updateLikeList.value = UiState.Loading
-        repository.addLikeRecipe(recipe) { _updateLikeList.value = it}
+        repositoryOld.addLikeRecipe(recipe) { _updateLikeList.value = it}
     }
     fun getUserInSharedPreferences(result: (User?) -> Unit) {
         _getUserSession.value  = UiState.Loading
-        repository.getUserInSharedPreferences(result)
+        repositoryOld.getUserInSharedPreferences(result)
     }
 
     //view variable management
@@ -218,8 +210,7 @@ class AuthViewModel @Inject constructor(
         logout.postValue(null)
     }
 
-    fun navigateToPageUser(){
-        this.user = MutableLiveData()
-    }
+
+
 
 }

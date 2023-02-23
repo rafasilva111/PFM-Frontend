@@ -63,11 +63,9 @@ class RecipeListingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        authModel.getUserSession()
         observer()
         //todo check for internet connection
-
-        authModel.getUserSession()
-
         if (this::binding.isInitialized){
             return binding.root
         }else {
@@ -83,49 +81,6 @@ class RecipeListingFragment : Fragment() {
             return binding.root
         }
         }
-
-
-    override fun onResume() {
-        changeVisib_Menu(true)
-        super.onResume()
-    }
-
-    private fun setRecyclerViewScrollListener() {
-        scrollListener = object : RecyclerView.OnScrollListener(){
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (!searchMode) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        if (isFirstTimeCall) {
-                            isFirstTimeCall = false;
-                            binding.recyclerView.removeOnScrollListener(scrollListener)
-                            val visibleItemCount: Int = manager.childCount
-                            val pastVisibleItem: Int =
-                                manager.findLastCompletelyVisibleItemPosition()
-                            val pag_index =
-                                floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
-                            if ((pastVisibleItem + 1) % FireStorePaginations.RECIPE_LIMIT.toInt() == 0) {
-                                viewModel.getRecipesPaginated(false)
-                            }
-                            Log.d(TAG, pag_index.toString())
-                            Log.d(TAG, visibleItemCount.toString())
-                            Log.d(TAG, pastVisibleItem.toString())
-
-
-                            binding.recyclerView.addOnScrollListener(scrollListener)
-                        }
-                    }
-
-                    if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                        isFirstTimeCall = true
-                    }
-
-                    super.onScrollStateChanged(recyclerView, newState)
-                }
-            }
-        }
-        binding.recyclerView.addOnScrollListener(scrollListener)
-
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -236,6 +191,48 @@ class RecipeListingFragment : Fragment() {
             binding.offlineText.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.GONE
         }
+    }
+
+    override fun onResume() {
+        changeVisib_Menu(true)
+        super.onResume()
+    }
+
+    private fun setRecyclerViewScrollListener() {
+        scrollListener = object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (!searchMode) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        if (isFirstTimeCall) {
+                            isFirstTimeCall = false;
+                            binding.recyclerView.removeOnScrollListener(scrollListener)
+                            val visibleItemCount: Int = manager.childCount
+                            val pastVisibleItem: Int =
+                                manager.findLastCompletelyVisibleItemPosition()
+                            val pag_index =
+                                floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
+                            if ((pastVisibleItem + 1) % FireStorePaginations.RECIPE_LIMIT.toInt() == 0) {
+                                viewModel.getRecipesPaginated(false)
+                            }
+                            Log.d(TAG, pag_index.toString())
+                            Log.d(TAG, visibleItemCount.toString())
+                            Log.d(TAG, pastVisibleItem.toString())
+
+
+                            binding.recyclerView.addOnScrollListener(scrollListener)
+                        }
+                    }
+
+                    if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                        isFirstTimeCall = true
+                    }
+
+                    super.onScrollStateChanged(recyclerView, newState)
+                }
+            }
+        }
+        binding.recyclerView.addOnScrollListener(scrollListener)
+
     }
 
     private fun isOnline(context: Context): Boolean {

@@ -91,66 +91,31 @@ class LoginFragment : Fragment() {
         return isValid
     }
 
-    override fun onResume() {
-        super.onResume()
-        //todo get user token from shared preferences
-        authViewModel.getUserSession()
-        changeVisib_Menu(false)
-    }
 
-    private fun changeVisib_Menu(state : Boolean){
-        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        if(state){
-            menu!!.visibility=View.VISIBLE
-        }else{
-            menu!!.visibility=View.GONE
-        }
-    }
+
 
     fun observer(){
 
-        authViewModel.successful.observe(viewLifecycleOwner) { successful ->
-            if (successful == true){
-                toast("Sucess")
-                authViewModel.navigateToPage()
-                findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
-            }else if(successful == false){
-                if (authViewModel.error.value!!.contains("There is no user record corresponding to this identifier."))
-                    toast(getString(R.string.invalid_email_3))
-                else if (authViewModel.error.value!!.contains("User's password is incorrect"))
-                    toast(getString(R.string.invalid_password_1))
-                else if (authViewModel.error.value!!.contains("You can immediately restore it by resetting your password or you can try again later."))
-                    toast(getString(R.string.to_many_attemps_to_login_failed))
-                else
-                    toast("Failure")
-                authViewModel.navigateToPage()
-            }
-        }
-
-        authViewModel.user.observe(viewLifecycleOwner) { response ->
-            when(response){
-                is Resource.Loading -> {
-                    Log.i(TAG,"Loading...")
+        authViewModel.login.observe(viewLifecycleOwner) { state ->
+            when(state){
+                is UiState.Loading -> {
+                    binding.loginBtn.setText("")
                     binding.progressBar.show()
-                    binding.loginBtn.visibility=View.GONE
-
                 }
-                is Resource.Success -> {
-                    Handler().postDelayed({
-                        binding.progressBar.hide()
-                        toast(getString(R.string.welcome))
-                        findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
-                    }, 3000)
-
-
-
-                }
-                is Resource.Error -> {
+                is UiState.Failure -> {
+                    binding.loginBtn.setText("Login")
                     binding.progressBar.hide()
-                    Log.i(TAG,"No user previously logged out.")
-                    Log.i(TAG,"${response.message}")
+                    toast(state.error)
                 }
-                else -> {}
+                is UiState.Success -> {
+                    if (!binding.emailEt.text.isNullOrEmpty()){
+                        binding.loginBtn.setText("Login")
+                        binding.progressBar.hide()
+                        toast(state.data)
+                        findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
+
+                    }
+                }
             }
         }
     }

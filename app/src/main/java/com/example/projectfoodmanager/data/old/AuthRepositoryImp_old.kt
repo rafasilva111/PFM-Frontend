@@ -103,13 +103,16 @@ class AuthRepositoryImp_old(
         auth.signInWithEmailAndPassword(email,password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    storeSession(){
+
+                    result.invoke(UiState.Success("Login successfully!"))
+
+                   /* storeSession(){
                         if (it == null){
                             result.invoke(UiState.Failure("Fail to login successfully"))
                         }else{
                             result.invoke(UiState.Success("Login successfully!"))
                         }
-                    }
+                    }*/
                 }
             }.addOnFailureListener {
                 result.invoke(UiState.Failure("Authentication failed, Check email and password"))

@@ -4,6 +4,7 @@ import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
 import com.example.projectfoodmanager.data.util.Resource
+import com.example.projectfoodmanager.util.UiState
 import com.google.firebase.auth.FirebaseUser
 
 interface AuthRepository {
@@ -11,9 +12,8 @@ interface AuthRepository {
 
     //User
     suspend fun registerUser(user : UserRequest) : Resource<UserResponse>
-    suspend fun loginUser(email: String, password: String) : Resource<UserResponse>
+    fun loginUser(email: String, password: String, result: (UiState<String>) -> Unit)
     suspend fun getUserSession() : Resource<User>
-    suspend fun logout(): Resource<Boolean>
+    fun logout(result: () -> Unit)
 
-    //Recipe
 }
