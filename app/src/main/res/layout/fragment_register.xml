@@ -237,7 +237,8 @@
                 app:layout_constraintEnd_toEndOf="@+id/sex_TL"
                 app:layout_constraintStart_toStartOf="@+id/sex_TL"
                 app:layout_constraintTop_toBottomOf="@+id/sex_TL"
-                app:startIconDrawable="@drawable/ic_lock">
+                app:startIconDrawable="@drawable/ic_lock"
+                app:errorIconDrawable="@null">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/pass_et"
@@ -258,7 +259,8 @@
                 app:layout_constraintEnd_toEndOf="@+id/email_TL"
                 app:layout_constraintStart_toStartOf="@+id/email_TL"
                 app:layout_constraintTop_toBottomOf="@+id/password_TL"
-                app:startIconDrawable="@drawable/ic_lock">
+                app:startIconDrawable="@drawable/ic_lock"
+                app:errorIconDrawable="@null">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/pass_et_conf"

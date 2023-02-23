@@ -57,6 +57,11 @@
             app:destination="@id/favoritesFragment"
             app:popUpTo="@id/profileFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_profileFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -75,6 +80,11 @@
         android:name="com.example.projectfoodmanager.presentation.goals.GoalsFragment"
         android:label="GoalsFragment"
         tools:layout="@layout/fragment_goals"/>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.projectfoodmanager.presentation.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 
 
 </navigation>

@@ -13,6 +13,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.toast
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,6 +49,11 @@ class ProfileFragment : Fragment() {
                 putString("aba","gostos")
             })
         }
+
+        binding.settingsCV.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_settingsFragment)
+        }
+
     }
 
     fun observer(){
@@ -56,6 +62,7 @@ class ProfileFragment : Fragment() {
                 toast(getString(R.string.logout_completed))
                 authViewModel.navigateToPage()
                 authViewModel.navigateToPageUser()
+                changeVisib_Menu(false)
                 findNavController().navigate(R.id.action_homeFragment)
 
             }else if(logout == false){
@@ -64,5 +71,12 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-
+    private fun changeVisib_Menu(state : Boolean){
+        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        if(state){
+            menu!!.visibility=View.VISIBLE
+        }else{
+            menu!!.visibility=View.GONE
+        }
+    }
 }

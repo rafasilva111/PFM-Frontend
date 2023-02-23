@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
+import androidx.core.view.children
+import androidx.core.view.size
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.MainActivity
@@ -30,6 +33,7 @@ class BioDataFragment : Fragment() {
     val viewModel: AuthViewModel by viewModels()
     var objUser: User? = null
     val requiredFields: Boolean = false
+    private var activityLevel:String=""
 
 
     override fun onCreateView(
@@ -50,6 +54,20 @@ class BioDataFragment : Fragment() {
         if (objUser==null)
             Log.d(TAG, "Something went wrong whit user object")
         observer()
+
+        binding.activityLevelRg.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId){
+                R.id.op1_RB-> activityLevel="sedentario"
+                R.id.op2_RB-> activityLevel="leve"
+                R.id.op3_RB-> activityLevel="moderado"
+                R.id.op4_RB-> activityLevel="ativo"
+                R.id.op5_RB-> activityLevel="muito_ativo"
+                R.id.op6_RB-> activityLevel="extra_ativo"
+            }
+
+        }
+
+
         binding.registerBtn.setOnClickListener {
             if (validation()) {
                 val userRequest = getUserRequest()
@@ -85,71 +103,94 @@ class BioDataFragment : Fragment() {
             sex = objUser!!.sex,
             height = binding.heightEt.text.toString(),
             weight = binding.weightEt.text.toString(),
-            activity_level = binding.activityLevelRg.checkedRadioButtonId.toString(),
+            activity_level = activityLevel,
 
             )
-
-       /* else{
-            return UserRequest(
-                first_name = objUser!!.first_name,
-                last_name = objUser!!.last_name,
-                email = objUser!!.email,
-                birth_date = objUser!!.birth_date,
-                password = objUser!!.password,
-                sex = objUser!!.sex
-                )
-        }*/
-
     }
 
     fun validation(): Boolean {
         var isValid = true
         val heightTxt = binding.heightEt.text.toString()
+
         if (heightTxt.isNullOrEmpty()) {
             isValid = false
-            toast(getString(R.string.heightEt_problem))
-        } else {
-            val heightInt = heightTxt.toIntOrNull()
-            if (heightInt != null) {
-                if (heightInt !in 120..300){
-                    isValid = false
-                    toast(getString(R.string.heightEt_problem))
-                }
-            } else {
-                val heighFloat = heightTxt.toFloatOrNull()
-                if (heighFloat != null)
-                    if (heighFloat !in 1.20..3.0) {
-                        isValid = false
-                        toast(getString(R.string.heightEt_problem))
-                    } else {
-                        binding.heightEt.setText((heighFloat * 100).toString())
-                    }
+            binding.heightTL.isErrorEnabled=true
+            binding.heightTL.error=getString(R.string.heightEt_problem)
+            //toast(getString(R.string.heightEt_problem))
+        } else if (heightTxt.toIntOrNull() != null) {
+            if (heightTxt.toIntOrNull()  !in 120..300){
+                isValid = false
+                binding.heightTL.isErrorEnabled=true
+                binding.heightTL.error=getString(R.string.heightEt_problem)
+                //toast(getString(R.string.heightEt_problem))
             }
-
-
+        } else if (heightTxt.toFloatOrNull() != null){
+            val heighFloat = heightTxt.toFloatOrNull()
+            if (heighFloat!! !in 1.20..3.0) {
+                isValid = false
+                binding.heightTL.isErrorEnabled=true
+                binding.heightTL.error=getString(R.string.heightEt_problem)
+                //toast(getString(R.string.heightEt_problem))
+            } else {
+                binding.heightEt.setText((heighFloat * 100).toString())
+            }
+        }else{
+            binding.heightTL.isErrorEnabled=false
         }
 
         if (binding.weightEt.text.toString().isNullOrEmpty()) {
             isValid = false
-            toast(getString(R.string.enter_weight))
-        }
-        else{
-            val weight = binding.weightEt.text.toString().toFloatOrNull()
-            if (weight == null){
-                isValid = false
-                toast(getString(R.string.enter_weight))
-            }
-            else{
-                if (weight !in 30.0..200.0) {
-                    isValid = false
-                    toast(getString(R.string.weightEt_problem_2))
-                }
-            }
+            binding.weightTL.isErrorEnabled=true
+            binding.weightTL.error=getString(R.string.enter_weight)
+            //toast(getString(R.string.enter_weight))
+        }else if (binding.weightEt.text.toString().toFloatOrNull() == null){
+            isValid = false
+            binding.weightTL.isErrorEnabled=true
+            binding.weightTL.error=getString(R.string.enter_weight)
+            //toast(getString(R.string.enter_weight))
+        }else if (binding.weightEt.text.toString().toFloatOrNull()!! !in 30.0..200.0) {
+            isValid = false
+            binding.weightTL.isErrorEnabled=true
+            binding.weightTL.error=getString(R.string.weightEt_problem_2)
+            //toast(getString(R.string.weightEt_problem_2))
+        }else{
+            binding.weightTL.isErrorEnabled=false
         }
 
-        if (binding.activityLevelRg.checkedRadioButtonId == null) {
+        if (binding.activityLevelRg.checkedRadioButtonId == -1) {
             isValid = false
-            toast(getString(R.string.enter_activity_level))
+            //binding.activityLevelRg.
+
+            binding.op1RB.buttonTintList=context?.resources?.getColorStateList(R.color.red,null)
+            binding.op1RB.setTextColor(resources.getColor(R.color.red,null))
+            binding.op2RB.buttonTintList=context?.resources?.getColorStateList(R.color.red,null)
+            binding.op2RB.setTextColor(resources.getColor(R.color.red,null))
+            binding.op3RB.buttonTintList=context?.resources?.getColorStateList(R.color.red,null)
+            binding.op3RB.setTextColor(resources.getColor(R.color.red,null))
+            binding.op4RB.buttonTintList=context?.resources?.getColorStateList(R.color.red,null)
+            binding.op4RB.setTextColor(resources.getColor(R.color.red,null))
+            binding.op5RB.buttonTintList=context?.resources?.getColorStateList(R.color.red,null)
+            binding.op5RB.setTextColor(resources.getColor(R.color.red,null))
+            binding.op6RB.buttonTintList=context?.resources?.getColorStateList(R.color.red,null)
+            binding.op6RB.setTextColor(resources.getColor(R.color.red,null))
+
+            binding.errorActivityLevelTV.visibility=View.VISIBLE
+            binding.errorActivityLevelTV.text=getString(R.string.enter_activity_level)
+            //toast(getString(R.string.enter_activity_level))
+        }else{
+            binding.op1RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.op1RB.setTextColor(resources.getColor(R.color.black,null))
+            binding.op2RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.op2RB.setTextColor(resources.getColor(R.color.black,null))
+            binding.op3RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.op3RB.setTextColor(resources.getColor(R.color.black,null))
+            binding.op4RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.op4RB.setTextColor(resources.getColor(R.color.black,null))
+            binding.op5RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.op5RB.setTextColor(resources.getColor(R.color.black,null))
+            binding.op6RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.op6RB.setTextColor(resources.getColor(R.color.black,null))
+            binding.errorActivityLevelTV.visibility=View.INVISIBLE
         }
         return isValid
     }

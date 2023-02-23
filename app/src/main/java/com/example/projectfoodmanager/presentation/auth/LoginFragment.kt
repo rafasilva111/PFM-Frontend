@@ -142,9 +142,8 @@ class LoginFragment : Fragment() {
                         findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
                     }, 3000)
 
-
-
                 }
+
                 is Resource.Error -> {
                     binding.progressBar.hide()
                     Log.i(TAG,"No user previously logged out.")
