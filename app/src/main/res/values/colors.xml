@@ -9,6 +9,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF2700</color>
+    <color name="grey_2">#7A7A7A</color>
+
+
     <color name="transparent">#00FFFFFF</color>
 
     //-------------------------

@@ -13,7 +13,7 @@ interface AuthRepository {
     suspend fun registerUser(user : UserRequest) : Resource<UserResponse>
     suspend fun loginUser(email: String, password: String) : Resource<UserResponse>
     suspend fun getUserSession() : Resource<User>
-    suspend fun logout(): Resource<Boolean>
+    fun logout(result: () -> Unit)
 
     //Recipe
 }

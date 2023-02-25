@@ -13,6 +13,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.toast
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +28,6 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?,
 
         ): View? {
-        observer()
         binding = FragmentProfileBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -36,7 +36,12 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.logoutIB.setOnClickListener {
-            authViewModel.logout()
+            authViewModel.logout{
+                findNavController().navigate(R.id.action_homeFragment)
+                changeVisib_Menu(false)
+                authViewModel.refresh()
+            }
+
         }
 
         binding.favoritesCV.setOnClickListener {
@@ -48,21 +53,20 @@ class ProfileFragment : Fragment() {
                 putString("aba","gostos")
             })
         }
+
+        binding.settingsCV.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_settingsFragment)
+        }
+
     }
 
-    fun observer(){
-        authViewModel.logout.observe(viewLifecycleOwner) { logout ->
-            if (logout == true){
-                toast(getString(R.string.logout_completed))
-                authViewModel.navigateToPage()
-                authViewModel.navigateToPageUser()
-                findNavController().navigate(R.id.action_homeFragment)
 
-            }else if(logout == false){
-                toast(authViewModel.error.value)
-                authViewModel.navigateToPage()
-            }
+    private fun changeVisib_Menu(state : Boolean){
+        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        if(state){
+            menu!!.visibility=View.VISIBLE
+        }else{
+            menu!!.visibility=View.GONE
         }
     }
-
 }

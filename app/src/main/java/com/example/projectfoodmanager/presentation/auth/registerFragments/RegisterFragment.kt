@@ -111,6 +111,7 @@ class RegisterFragment : Fragment() {
             binding.emailTL.error=getString(R.string.enter_email)
             //toast(getString(R.string.enter_email))
         }else if (!binding.emailEt.text.toString().isValidEmail()){
+            isValid = false
             binding.emailTL.isErrorEnabled=true
             binding.emailTL.error=getString(R.string.invalid_email)
             //toast(getString(R.string.invalid_email))

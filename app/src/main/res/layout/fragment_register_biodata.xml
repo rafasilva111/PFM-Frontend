@@ -71,20 +71,34 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout1"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="180dp"
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="Etapa não necessária, podes futuramente acrestar estes dados"
+        android:textColor="@color/black"
+        android:textSize="@dimen/medium_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/height_TL"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:background="@color/color_3"
         android:hint="Altura"
         android:outlineProvider="none"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7"
-        app:startIconDrawable="@drawable/ic_person">
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:startIconDrawable="@drawable/ic_height_size">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/height_et"
@@ -95,17 +109,17 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/last_name_TL"
+        android:id="@+id/weight_TL"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="180dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
         android:background="@color/color_3"
         android:hint="Peso"
         android:outlineProvider="none"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textInputLayout1"
-        app:layout_constraintTop_toTopOf="@+id/textInputLayout1"
-        app:startIconDrawable="@drawable/ic_person">
+        app:layout_constraintTop_toTopOf="@+id/height_TL"
+        app:startIconDrawable="@drawable/ic_weight_size">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/weight_et"
@@ -124,113 +138,133 @@
         android:fontFamily="@font/fedoka"
         android:textColor="@color/black"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/last_name_TL"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout1"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout1" />
+        app:layout_constraintEnd_toEndOf="@+id/weight_TL"
+        app:layout_constraintStart_toStartOf="@+id/height_TL"
+        app:layout_constraintTop_toBottomOf="@+id/height_TL" />
 
     <RadioGroup
         android:id="@+id/activity_level_rg"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/spinner2"
+        app:layout_constraintStart_toStartOf="@+id/spinner2"
         app:layout_constraintTop_toBottomOf="@+id/spinner2">
 
         <RadioButton
+            android:id="@+id/op1_RB"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:text="Sedentário" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
             android:text="Pouco ou nenhum exercício"
-            android:textSize="10sp"
-            android:layout_marginStart="35dp"/>
+            android:textSize="10sp" />
 
         <RadioButton
+            android:id="@+id/op2_RB"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:text="Leve"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:text="Leve" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
             android:text="Execício de 1 a 3 vezes"
-            android:textSize="10sp"
-            android:layout_marginStart="35dp"/>
+            android:textSize="10sp" />
 
         <RadioButton
+            android:id="@+id/op3_RB"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:text="Moderado"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:text="Moderado" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
             android:text="Execício 4-5 vezes/semana"
-            android:textSize="10sp"
-            android:layout_marginStart="35dp"/>
+            android:textSize="10sp" />
 
         <RadioButton
+            android:id="@+id/op4_RB"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:text="Ativo"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:text="Ativo" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
             android:text="Execício diario ou exercícios intensos 3-4 vezes/semana"
-            android:textSize="10sp"
-            android:layout_marginStart="35dp"/>
+            android:textSize="10sp" />
 
         <RadioButton
+            android:id="@+id/op5_RB"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:text="Muito Ativo"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:text="Muito Ativo" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
             android:text="Exercícios intensos 6-7 vezes/semana"
-            android:textSize="10sp"
-            android:layout_marginStart="35dp"/>
+            android:textSize="10sp" />
 
         <RadioButton
+            android:id="@+id/op6_RB"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:text="Extra Ativo"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:text="Extra Ativo" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
             android:text="Execício intesso diário, ou te um trabalho muito fisico"
-            android:textSize="10sp"
-            android:layout_marginStart="35dp"/>
+            android:textSize="10sp" />
 
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/error_activity_level_TV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingStart="10dp"
+        android:text="Error"
+        android:textColor="@color/red"
+        android:textSize="13sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@+id/activity_level_rg"
+        app:layout_constraintStart_toStartOf="@+id/activity_level_rg"
+        app:layout_constraintTop_toBottomOf="@+id/activity_level_rg" />
 
     <RelativeLayout
         android:id="@+id/button_layout"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_marginLeft="-220dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintEnd_toEndOf="@+id/activity_level_rg"
+        app:layout_constraintStart_toStartOf="@+id/activity_level_rg">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/register_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/layout_bg_rounded_1"
+            android:background="@drawable/bg_default"
             android:text="Terminar"
             android:textAllCaps="false"
             android:textAppearance="@style/SubTitleStyle"
@@ -250,17 +284,6 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="Etapa não necessária, podes futuramente acrestar estes dados"
-        app:layout_constraintBottom_toTopOf="@+id/button_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_level_rg"
-        app:layout_constraintVertical_bias="1.0"
-        android:textSize="10sp"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

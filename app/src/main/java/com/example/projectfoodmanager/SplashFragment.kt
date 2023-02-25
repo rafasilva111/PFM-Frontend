@@ -32,13 +32,22 @@ class SplashFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        Handler().postDelayed({
+            if(onBoardingFinished()){
+                findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+
+            }else{
+                findNavController().navigate(R.id.action_splashFragment_to_viewPagerFragment)
+            }
+        },SPLASH_TIME)
+
         return inflater.inflate(R.layout.fragment_splash, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        authViewModel.getUserSession()
-        observer()
+        //authViewModel.getUserSession()
+       // observer()
     }
 
     private fun onBoardingFinished():Boolean{
