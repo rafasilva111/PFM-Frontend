@@ -52,7 +52,7 @@ class SplashFragment : Fragment() {
     }
 
 
-    fun observer(){
+    /*fun observer(){
         authViewModel.user.observe(viewLifecycleOwner) { response ->
             when(response){
                 is Resource.Loading -> {
@@ -80,7 +80,7 @@ class SplashFragment : Fragment() {
                 else -> {}
             }
         }
-    }
+    }*/
 
 
 }

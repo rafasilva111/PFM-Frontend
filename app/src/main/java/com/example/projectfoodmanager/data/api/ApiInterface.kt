@@ -18,6 +18,15 @@ interface ApiInterface {
     @POST("/user")
     suspend fun createUser(@Body user : UserRequest): Response<UserResponse>
 
+    @POST("/user/login")
+    suspend fun loginUser(@Body user : UserRequest): Response<UserResponse>
+
+    @DELETE("/user/logout")
+    suspend fun logoutUser(): Response<String>
+
+    @GET("/user/auth")
+    suspend fun getUserSession(): Response<UserResponse>
+
     @GET("/user")
     suspend fun getUser(@Query("userId") userId: String): Response<UserResponse>
 

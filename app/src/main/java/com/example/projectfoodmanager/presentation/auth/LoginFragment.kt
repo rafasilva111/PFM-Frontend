@@ -111,13 +111,17 @@ class LoginFragment : Fragment() {
         }
     }
 
+    private fun showValidationErrors(error: String) {
+        toast(String.format(resources.getString(R.string.txt_error_message, error)))
+    }
+
     private fun bindObservers() {
         authViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer {
             binding.progressBar.isVisible = false
             when (it) {
                 is NetworkResult.Success -> {
                     tokenManager.saveToken(it.data!!.token)
-                    findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                    findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
                 }
                 is NetworkResult.Error -> {
                     showValidationErrors(it.message.toString())

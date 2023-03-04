@@ -43,7 +43,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesFlyBuyRepository(
+    fun providesRepository(
         RemoteDataSource: RemoteDataSourceImpl,
     ): AuthRepository {
         return AuthRepositoryImp(

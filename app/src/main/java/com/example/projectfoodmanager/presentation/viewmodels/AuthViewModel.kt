@@ -1,6 +1,7 @@
 package com.example.projectfoodmanager.presentation.viewmodels
 
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,11 +23,19 @@ class AuthViewModel @Inject constructor(
     val userResponseLiveData: LiveData<NetworkResult<UserResponse>>
         get() = repository.userResponseLiveData
 
+    val userLogoutResponseLiveData: LiveData<NetworkResult<String>>
+        get() = repository.userLogoutResponseLiveData
+
     fun registerUser(userRequest: UserRequest){
         viewModelScope.launch {
             repository.registerUser(userRequest)
         }
     }
+
+    init {
+        loginUser("","")
+    }
+
 
     fun loginUser(email: String, password: String){
         viewModelScope.launch {
@@ -34,19 +43,10 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun validateCredentials(emailAddress: String, userName: String, password: String,
-                            isLogin: Boolean) : Pair<Boolean, String> {
-
-        var result = Pair(true, "")
-        if(TextUtils.isEmpty(emailAddress) || (!isLogin && TextUtils.isEmpty(userName)) || TextUtils.isEmpty(password)){
-            result = Pair(false, "Please provide the credentials")
+    fun logoutUser(){
+        viewModelScope.launch {
+            repository.logoutUser()
         }
-        else if(!Helper.isValidEmail(emailAddress)){
-            result = Pair(false, "Email is invalid")
-        }
-        else if(!TextUtils.isEmpty(password) && password.length <= 5){
-            result = Pair(false, "Password length should be greater than 5")
-        }
-        return result
     }
+
 }

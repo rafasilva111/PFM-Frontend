@@ -53,7 +53,7 @@ class BioDataFragment : Fragment() {
         objUser = arguments?.getParcelable("user")
         if (objUser==null)
             Log.d(TAG, "Something went wrong whit user object")
-        observer()
+        //observer()
 
         binding.activityLevelRg.setOnCheckedChangeListener { group, checkedId ->
             when(checkedId){
@@ -75,21 +75,7 @@ class BioDataFragment : Fragment() {
             }
         }
     }
-    fun observer() {
-        viewModel.successful.observe(viewLifecycleOwner) { successful ->
-            if (successful == true){
-                toast("Sucess")
-                viewModel.navigateToPage()
-                findNavController().navigate(R.id.action_registerFragment_to_home_navigation)
-            }else if(successful == false){
-                if (viewModel.error.value!!.contains("The email address is already"))
-                    toast(getString(R.string.invalid_email_2))
-                else
-                    toast("Failuire")
-                viewModel.navigateToPage()
-            }
-        }
-    }
+
 
 
     fun getUserRequest():UserRequest {

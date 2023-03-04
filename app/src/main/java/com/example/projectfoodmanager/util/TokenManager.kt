@@ -21,7 +21,7 @@ class TokenManager @Inject constructor(@ApplicationContext context: Context) {
         return prefs.getString(USER_TOKEN, null)
     }
 
-    fun deleteToken(token: String) {
+    fun deleteToken() {
         val editor = prefs.edit()
         editor.remove(USER_TOKEN)
         editor.apply()

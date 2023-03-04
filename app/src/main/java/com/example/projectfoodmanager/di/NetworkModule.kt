@@ -1,19 +1,15 @@
-package com.codelytical.flybuy.presentation.di
+package com.example.projectfoodmanager.di
 
 import com.example.projectfoodmanager.data.api.ApiInterface
 import com.example.projectfoodmanager.data.api.AuthInterceptor
 import com.example.projectfoodmanager.util.Constants
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -35,8 +31,8 @@ class NetworkModule {
 
 	@Singleton
 	@Provides
-	fun providesAPI(retrofitBuilder: Retrofit.Builder): ApiInterface {
-		return retrofitBuilder.build().create(ApiInterface::class.java)
+	fun providesAPI(retrofitBuilder: Retrofit.Builder, okHttpClient: OkHttpClient): ApiInterface {
+		return retrofitBuilder.client(okHttpClient).build().create(ApiInterface::class.java)
 	}
 
 }

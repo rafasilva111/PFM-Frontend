@@ -84,7 +84,7 @@ class RecipeListingAdapter(
             // favorite function
             binding.favorites.setImageResource(R.drawable.ic_favorite)
             binding.like.setImageResource(R.drawable.ic_like)
-            authModel.getUserSession_old { user ->
+            /*authModel.getUserSession_old { user ->
                 if (user != null) {
                     val recipe_fav = user.getFavoriteRecipe(item.id)
                     if (recipe_fav != null){
@@ -169,7 +169,7 @@ class RecipeListingAdapter(
                     }
                 }
 
-            }
+            }*/
         }
     }
 }

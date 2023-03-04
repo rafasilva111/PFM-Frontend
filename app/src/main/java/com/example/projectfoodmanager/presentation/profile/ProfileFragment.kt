@@ -6,23 +6,33 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.util.NetworkResult
+import com.example.projectfoodmanager.util.TokenManager
 import com.example.projectfoodmanager.util.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
+
     lateinit var binding: FragmentProfileBinding
-    val authViewModel: AuthViewModel by viewModels()
+    private val authViewModel by activityViewModels<AuthViewModel>()
     val TAG: String = "ProfileFragment"
+
+    @Inject
+    lateinit var tokenManager: TokenManager
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -34,13 +44,10 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        bindObservers()
         binding.logoutIB.setOnClickListener {
-            authViewModel.logout{
-                findNavController().navigate(R.id.action_homeFragment)
-                changeVisib_Menu(false)
-                authViewModel.refresh()
-            }
+            authViewModel.logoutUser()
+
 
         }
 
@@ -60,6 +67,27 @@ class ProfileFragment : Fragment() {
 
     }
 
+    private fun showValidationErrors(error: String) {
+        toast(String.format(resources.getString(R.string.txt_error_message, error)))
+    }
+
+    private fun bindObservers() {
+        authViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner, Observer {
+            when (it) {
+                is NetworkResult.Success -> {
+                    tokenManager.deleteToken()
+                    findNavController().navigate(R.id.action_profile_to_login)
+                    changeVisib_Menu(false)
+                }
+                is NetworkResult.Error -> {
+                    showValidationErrors(it.message.toString())
+                }
+                is NetworkResult.Loading ->{
+                    //binding.progressBar.isVisible = true
+                }
+            }
+        })
+    }
 
     private fun changeVisib_Menu(state : Boolean){
         val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)

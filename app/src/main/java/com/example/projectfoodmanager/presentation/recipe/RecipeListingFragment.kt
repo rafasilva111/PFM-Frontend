@@ -62,10 +62,10 @@ class RecipeListingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        observer()
+        //observer()
         //todo check for internet connection
 
-        authModel.getUserSession()
+        //authModel.getUserSession()
 
         if (this::binding.isInitialized){
             return binding.root
@@ -260,7 +260,7 @@ class RecipeListingFragment : Fragment() {
     }
 
 
-    fun observer() {
+    /*fun observer() {
         authModel.user.observe(viewLifecycleOwner){ response ->
             when(response){
                 is Resource.Loading -> {
@@ -283,7 +283,7 @@ class RecipeListingFragment : Fragment() {
                 else -> {}
             }
         }
-    }
+    }*/
 
     private fun changeVisib_Menu(state : Boolean){
         val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)

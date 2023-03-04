@@ -1,4 +1,4 @@
-package com.codelytical.flybuy.presentation.di
+package com.example.projectfoodmanager.di
 
 import com.example.projectfoodmanager.data.api.ApiInterface
 import com.example.projectfoodmanager.data.repository.datasourImp.RemoteDataSourceImpl

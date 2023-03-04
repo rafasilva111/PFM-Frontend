@@ -38,7 +38,7 @@ class GoalsFragment : Fragment() {
             //está online
 
             //check for user bio data
-            authViewModel.getUserSession_old{
+           /* authViewModel.getUserSession_old{
                 if(it != null){
                     if (it.height != "" && it.weight != "" && it.sex != "" && it.age != 0){
 
@@ -47,7 +47,7 @@ class GoalsFragment : Fragment() {
                         // call bio data form
                     }
                 }
-            }
+            }*/
 
 
 
