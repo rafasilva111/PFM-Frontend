@@ -1,119 +1,48 @@
 package com.example.projectfoodmanager.data.repository
 
-import android.util.Log
-import com.example.projectfoodmanager.data.model.User
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
-import com.example.projectfoodmanager.data.util.Resource
-import com.example.projectfoodmanager.util.ERROR_CODES
+import com.example.projectfoodmanager.util.NetworkResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.tasks.await
+import org.json.JSONObject
 import retrofit2.Response
 import javax.inject.Inject
 
 
 class AuthRepositoryImp @Inject constructor(
-    private val remoteDataSource: RemoteDataSource,
-    private val firebaseAuth: FirebaseAuth
+    private val remoteDataSource: RemoteDataSource
 ) : AuthRepository {
     private val TAG:String = "AuthRepositoryImp"
-    override var currentUser: FirebaseUser? = null
 
-    private fun responseToUserResult(response : Response<UserResponse>) : Resource<UserResponse>{
-        if (response.isSuccessful){
-            response.body()?.let { result->
-                return Resource.Success(result)
-            }
-        }
-        return Resource.Error(message = "${response.errorBody()?.string()}")
+    private val _userResponseLiveData = MutableLiveData<NetworkResult<UserResponse>>()
+    override val userResponseLiveData: LiveData<NetworkResult<UserResponse>>
+        get() = _userResponseLiveData
+
+    override suspend fun registerUser(userRequest: UserRequest) {
+        _userResponseLiveData.postValue(NetworkResult.Loading())
+        val response = remoteDataSource.registerUser(userRequest)
+        handleResponse(response)
     }
 
-    private fun responseToUser(response : Response<UserResponse>) : Resource<User>{
-        if (response.isSuccessful){
-            response.body()?.let { result->
-                return Resource.Success(User(
-                    id = result.id,
-                    age = result.age,
-                    first_name = result.first_name,
-                    last_name = result.last_name,
-                    birth_date = result.birth_date,
-                    email = result.email,
-                    img_source = result.img_source,
-                    height = result.height,
-                    weight = result.weight,
-                    activity_level = result.activity_level,
-                    sex = result.sex,
-                ))
-            }
-        }
-        return Resource.Error(message = "${response.errorBody()?.string()}")
+    override suspend fun loginUser(email: String, password: String) {
+        _userResponseLiveData.postValue(NetworkResult.Loading())
+        val response =remoteDataSource.loginUser(email,password)
+        handleResponse(response)
     }
 
-    private fun responseToNothingResult(response : Response<String>) : Resource<String>{
-        if (response.isSuccessful){
-            response.body()?.let { result->
-                return Resource.Success("result")
-            }
+    private fun handleResponse(response: Response<UserResponse>) {
+        if (response.isSuccessful && response.body() != null) {
+            _userResponseLiveData.postValue(NetworkResult.Success(response.body()!!))
         }
-        return Resource.Error(message = "${response.errorBody()?.string()}")
-    }
-
-    override suspend fun registerUser(user: UserRequest): Resource<UserResponse> {
-         try {
-            val result = firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).await()
-            if (result.user != null){
-                var userWhitId = user
-                currentUser = result.user
-                userWhitId.uuid = currentUser!!.uid.toString()
-                return responseToUserResult(remoteDataSource.registerUser(user = userWhitId))
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return Resource.Error(message = "$e")
+        else if(response.errorBody()!=null){
+            val errorObj = JSONObject(response.errorBody()!!.charStream().readText())
+            _userResponseLiveData.postValue(NetworkResult.Error(errorObj.getString("message")))
         }
-        return Resource.Error(message = "Something went wrong.")
-    }
-
-    override suspend fun loginUser(email: String, password: String): Resource<UserResponse> {
-        try {
-            val result = firebaseAuth.signInWithEmailAndPassword(email,password).await()
-
-            if (result != null){
-                currentUser  = result.user
-                Log.i(TAG, "loginUser: User uuid is "+result.user!!.uid)
-
-                return responseToUserResult(remoteDataSource.getUserByUUID(userUUID = result.user!!.uid))
-            }
-        }catch (e: FirebaseAuthInvalidCredentialsException){
-            if (e.localizedMessage.contains("password is invalid"))
-                return Resource.Error(message = "User's password is incorrect", code = ERROR_CODES.UNAUTORIZED)
-            else
-                return Resource.Error(message = "There is no user whit that password", code = ERROR_CODES.UNAUTORIZED)
+        else{
+            _userResponseLiveData.postValue(NetworkResult.Error("Something Went Wrong"))
         }
-        catch (e: Exception) {
-            e.printStackTrace()
-            return Resource.Error(message = "$e")
-        }
-        return Resource.Error(message = "Something went wrong.")
-    }
-
-
-    override suspend fun getUserSession(): Resource<User> {
-        this.currentUser =firebaseAuth.currentUser
-        if (firebaseAuth.currentUser == null){
-            return Resource.Error(message = "Session invalid", code = ERROR_CODES.SESSION_INVALID)
-        }
-        return responseToUser(remoteDataSource.getUserByUUID(userUUID = this.currentUser!!.uid))
-    }
-    //todo make a validation to the shared preferences user
-
-    override fun logout(result: () -> Unit) {
-        firebaseAuth.signOut()
-        //appPreferences.edit().putString(SharedPrefConstants.USER_SESSION,null).apply()
-        this.currentUser=null
-        result.invoke()
     }
 }

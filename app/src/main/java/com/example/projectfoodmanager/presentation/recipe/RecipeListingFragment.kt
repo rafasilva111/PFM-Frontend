@@ -1,7 +1,6 @@
 package com.example.projectfoodmanager.presentation.recipe
 
 import android.content.Context
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -19,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.util.Resource
+import com.example.projectfoodmanager.util.Resource
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*

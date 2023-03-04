@@ -3,7 +3,7 @@ package com.codelytical.flybuy.presentation.di
 import android.app.Application
 import com.example.projectfoodmanager.data.old.AuthRepository_old
 import com.example.projectfoodmanager.data.repository.AuthRepository
-import com.example.projectfoodmanager.data.util.SharedPreference
+import com.example.projectfoodmanager.util.SharedPreference
 import com.example.projectfoodmanager.domain.usecase.AuthUseCase
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import dagger.Module
@@ -19,11 +19,11 @@ class ViewModelModule {
 	@Provides
 	@Singleton
 	fun providesLoginViewModel(
-		authUseCase: AuthUseCase,
-		repositoryOld: AuthRepository_old,
-		repository: AuthRepository,
-		application: Application,
-		sharedPreference: SharedPreference,
+        authUseCase: AuthUseCase,
+        repositoryOld: AuthRepository_old,
+        repository: AuthRepository,
+        application: Application,
+        sharedPreference: SharedPreference,
 	) : AuthViewModel{
 		return AuthViewModel(authrepositoryOld = repositoryOld, repository = repository,authUseCase= authUseCase, application = application,sharedPreference =sharedPreference)
 	}

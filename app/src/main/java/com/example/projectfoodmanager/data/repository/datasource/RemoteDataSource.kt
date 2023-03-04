@@ -14,6 +14,8 @@ interface RemoteDataSource {
 
 	//user
 	suspend fun registerUser(user: UserRequest) : Response<UserResponse>
+	suspend fun loginUser(email: String, password: String) : Response<UserResponse>
+	suspend fun getUserAuth(user: UserRequest) : Response<UserResponse>
 	suspend fun getUserByUUID(userUUID: String): Response<UserResponse>
 	suspend fun getUserById(userId: String): Response<UserResponse>
 	suspend fun updateUser(userId: String,user: UserRequest): Response<UserResponse>

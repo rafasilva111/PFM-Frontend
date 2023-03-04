@@ -45,11 +45,9 @@ object RepositoryModule {
     @Singleton
     fun providesFlyBuyRepository(
         RemoteDataSource: RemoteDataSourceImpl,
-        auth: FirebaseAuth,
     ): AuthRepository {
         return AuthRepositoryImp(
-            remoteDataSource = RemoteDataSource,
-            auth
+            remoteDataSource = RemoteDataSource
         )
     }
 }

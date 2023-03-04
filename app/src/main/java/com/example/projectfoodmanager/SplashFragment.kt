@@ -1,7 +1,6 @@
 package com.example.projectfoodmanager
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -11,12 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.projectfoodmanager.data.util.Resource
+import com.example.projectfoodmanager.util.Resource
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.SPLASH_TIME
-import com.example.projectfoodmanager.util.hide
-import com.example.projectfoodmanager.util.show
-import com.example.projectfoodmanager.util.toast
 import dagger.hilt.android.AndroidEntryPoint
 
 

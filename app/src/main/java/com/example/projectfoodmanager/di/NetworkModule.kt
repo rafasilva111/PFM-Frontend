@@ -1,6 +1,7 @@
 package com.codelytical.flybuy.presentation.di
 
 import com.example.projectfoodmanager.data.api.ApiInterface
+import com.example.projectfoodmanager.data.api.AuthInterceptor
 import com.example.projectfoodmanager.util.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,30 +20,23 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
 
-	@Provides
 	@Singleton
-	fun providesRetrofit(): Retrofit {
-		val interceptor = HttpLoggingInterceptor().apply {
-			this.level = HttpLoggingInterceptor.Level.BODY
-		}
-
-		val client = OkHttpClient.Builder().apply {
-			this.addInterceptor(interceptor)
-				.connectTimeout(30, TimeUnit.SECONDS)
-				.readTimeout(20, TimeUnit.SECONDS)
-				.writeTimeout(25, TimeUnit.SECONDS)
-		}.build()
-
-		return Retrofit.Builder()
+	@Provides
+	fun providesRetrofit(): Retrofit.Builder {
+		return Retrofit.Builder().baseUrl(Constants.BASE_URL)
 			.addConverterFactory(GsonConverterFactory.create())
-			.client(client)
-			.baseUrl(Constants.BASE_URL)
-			.build()
 	}
 
-	@Provides
 	@Singleton
-	fun providesFlyBuyApiService(retrofit: Retrofit): ApiInterface {
-		return retrofit.create(ApiInterface::class.java)
+	@Provides
+	fun provideOkHttpClient(interceptor: AuthInterceptor): OkHttpClient {
+		return OkHttpClient.Builder().addInterceptor(interceptor).build()
 	}
+
+	@Singleton
+	@Provides
+	fun providesAPI(retrofitBuilder: Retrofit.Builder): ApiInterface {
+		return retrofitBuilder.build().create(ApiInterface::class.java)
+	}
+
 }
