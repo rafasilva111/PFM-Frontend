@@ -7,6 +7,7 @@ import com.example.projectfoodmanager.data.old.AuthRepository_old
 import com.example.projectfoodmanager.data.repository.*
 import com.example.projectfoodmanager.data.repository.datasourImp.RemoteDataSourceImpl
 import com.example.projectfoodmanager.data.repository.AuthRepository
+import com.example.projectfoodmanager.util.SharedPreference
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
@@ -45,9 +46,11 @@ object RepositoryModule {
     @Singleton
     fun providesRepository(
         RemoteDataSource: RemoteDataSourceImpl,
+        sharedPreference: SharedPreference
     ): AuthRepository {
         return AuthRepositoryImp(
-            remoteDataSource = RemoteDataSource
+            remoteDataSource = RemoteDataSource,
+            sharedPreference = sharedPreference
         )
     }
 }

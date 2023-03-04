@@ -112,11 +112,12 @@ class LoginFragment : Fragment() {
     }
 
     private fun showValidationErrors(error: String) {
-        toast(String.format(resources.getString(R.string.txt_error_message, error)))
+        toast(error)
     }
 
     private fun bindObservers() {
         authViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
             binding.progressBar.isVisible = false
             when (it) {
                 is NetworkResult.Success -> {
@@ -126,10 +127,11 @@ class LoginFragment : Fragment() {
                 is NetworkResult.Error -> {
                     showValidationErrors(it.message.toString())
                 }
-                is NetworkResult.Loading ->{
+                is NetworkResult.Loading -> {
                     binding.progressBar.isVisible = true
                 }
             }
+        }
         })
     }
 }

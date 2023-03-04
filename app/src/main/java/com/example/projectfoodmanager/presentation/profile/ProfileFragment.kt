@@ -73,17 +73,19 @@ class ProfileFragment : Fragment() {
 
     private fun bindObservers() {
         authViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is NetworkResult.Success -> {
-                    tokenManager.deleteToken()
-                    findNavController().navigate(R.id.action_profile_to_login)
-                    changeVisib_Menu(false)
-                }
-                is NetworkResult.Error -> {
-                    showValidationErrors(it.message.toString())
-                }
-                is NetworkResult.Loading ->{
-                    //binding.progressBar.isVisible = true
+            it.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        tokenManager.deleteToken()
+                        findNavController().navigate(R.id.action_profile_to_login)
+                        changeVisib_Menu(false)
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        //binding.progressBar.isVisible = true
+                    }
                 }
             }
         })

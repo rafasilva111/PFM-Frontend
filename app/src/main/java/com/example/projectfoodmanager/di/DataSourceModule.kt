@@ -15,7 +15,7 @@ class DataSourceModule {
 
 	@Provides
 	@Singleton
-	fun provideFlyBuyRemoteDataSource(apiInterface: ApiInterface): RemoteDataSource {
+	fun provideRemoteDataSource(apiInterface: ApiInterface): RemoteDataSource {
 		return RemoteDataSourceImpl(apiInterface = apiInterface)
 	}
 }

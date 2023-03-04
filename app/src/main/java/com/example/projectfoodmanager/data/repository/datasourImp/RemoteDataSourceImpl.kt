@@ -31,7 +31,7 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.logoutUser()
 	}
 
-	override suspend fun getUserAuth(user: UserRequest): Response<UserResponse> {
+	override suspend fun getUserAuth(): Response<UserResponse> {
 		return apiInterface.getUserSession()
 	}
 

@@ -8,19 +8,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.util.Resource
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.SPLASH_TIME
+import com.example.projectfoodmanager.util.TokenManager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
 
+    @Inject
+    lateinit var tokenManager: TokenManager
 
-    val authViewModel: AuthViewModel by viewModels()
+    private val authViewModel by activityViewModels<AuthViewModel>()
     val TAG: String = "SplashFragment"
 
     override fun onCreateView(
@@ -30,20 +35,30 @@ class SplashFragment : Fragment() {
         // Inflate the layout for this fragment
         Handler().postDelayed({
             if(onBoardingFinished()){
-                findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                if (tokenManager.getToken()!=null){
+                    authViewModel.getUserSession()
+                }
+                else{
+                    findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                }
+
 
             }else{
                 findNavController().navigate(R.id.action_splashFragment_to_viewPagerFragment)
             }
         },SPLASH_TIME)
 
+        authViewModel.userResponseLiveData
+
+
+
         return inflater.inflate(R.layout.fragment_splash, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //authViewModel.getUserSession()
-       // observer()
+        //observer()
+
     }
 
     private fun onBoardingFinished():Boolean{

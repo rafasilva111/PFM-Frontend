@@ -8,8 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
 import com.example.projectfoodmanager.data.repository.AuthRepository
+import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.NetworkResult
+import com.example.projectfoodmanager.util.SharedPreference
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,11 +22,13 @@ class AuthViewModel @Inject constructor(
 ): ViewModel() {
     private val TAG:String ="AuthViewModel"
 
-    val userResponseLiveData: LiveData<NetworkResult<UserResponse>>
+    val userResponseLiveData: LiveData<Event<NetworkResult<UserResponse>>>
         get() = repository.userResponseLiveData
 
-    val userLogoutResponseLiveData: LiveData<NetworkResult<String>>
+
+    val userLogoutResponseLiveData: LiveData<Event<NetworkResult<String>>>
         get() = repository.userLogoutResponseLiveData
+
 
     fun registerUser(userRequest: UserRequest){
         viewModelScope.launch {
@@ -32,8 +36,10 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    init {
-        loginUser("","")
+    fun getUserSession(){
+        viewModelScope.launch {
+            repository.getUserSession()
+        }
     }
 
 
