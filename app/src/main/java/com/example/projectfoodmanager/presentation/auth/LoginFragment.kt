@@ -6,18 +6,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.util.Resource
+import androidx.lifecycle.Observer
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -25,7 +26,10 @@ class LoginFragment : Fragment() {
 
     val TAG: String = "LoginFragment"
     lateinit var binding: FragmentLoginBinding
-    val authViewModel: AuthViewModel by viewModels()
+    private val authViewModel by activityViewModels<AuthViewModel>()
+
+    @Inject
+    lateinit var tokenManager: TokenManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,10 +45,10 @@ class LoginFragment : Fragment() {
         //todo get user in shared preferences
         binding.progressBar.hide()
 
-        observer()
+        bindObservers()
         binding.loginBtn.setOnClickListener {
             if (validation()) {
-                authViewModel.login(binding.emailEt.text.toString().trim(),binding.passEt.text.toString().trim())
+                authViewModel.loginUser(binding.emailEt.text.toString().trim(),binding.passEt.text.toString().trim())
             }
         }
 
@@ -66,10 +70,10 @@ class LoginFragment : Fragment() {
             binding.emailTL.error=getString(R.string.enter_email)
             //toast(getString(R.string.enter_email))
         }else if (!binding.emailEt.text.toString().isValidEmail()){
-                isValid = false
-                binding.emailTL.isErrorEnabled=true
-                binding.emailTL.error=getString(R.string.invalid_email)
-                //toast(getString(R.string.invalid_email))
+            isValid = false
+            binding.emailTL.isErrorEnabled=true
+            binding.emailTL.error=getString(R.string.invalid_email)
+            //toast(getString(R.string.invalid_email))
 
         }else{
             binding.emailTL.isErrorEnabled=false
@@ -94,7 +98,7 @@ class LoginFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         //todo get user token from shared preferences
-        authViewModel.getUserSession()
+        //authViewModel.getUserSession()
         changeVisib_Menu(false)
     }
 
@@ -107,50 +111,27 @@ class LoginFragment : Fragment() {
         }
     }
 
-    fun observer(){
+    private fun showValidationErrors(error: String) {
+        toast(error)
+    }
 
-        authViewModel.successful.observe(viewLifecycleOwner) { successful ->
-            if (successful == true){
-                toast("Sucess")
-                authViewModel.navigateToPage()
-                findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
-            }else if(successful == false){
-                if (authViewModel.error.value!!.contains("There is no user record corresponding to this identifier."))
-                    toast(getString(R.string.invalid_email_3))
-                else if (authViewModel.error.value!!.contains("User's password is incorrect"))
-                    toast(getString(R.string.invalid_password_1))
-                else if (authViewModel.error.value!!.contains("You can immediately restore it by resetting your password or you can try again later."))
-                    toast(getString(R.string.to_many_attemps_to_login_failed))
-                else
-                    toast("Failure")
-                authViewModel.navigateToPage()
-            }
-        }
-
-        authViewModel.user.observe(viewLifecycleOwner) { response ->
-            when(response){
-                is Resource.Loading -> {
-                    Log.i(TAG,"Loading...")
-                    binding.progressBar.show()
-                    binding.loginBtn.visibility=View.GONE
-
-                }
-                is Resource.Success -> {
-                    Handler().postDelayed({
-                        binding.progressBar.hide()
-                        toast(getString(R.string.welcome))
+    private fun bindObservers() {
+        authViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                binding.progressBar.isVisible = false
+                when (it) {
+                    is NetworkResult.Success -> {
+                        tokenManager.saveToken(it.data!!.token)
                         findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
-                    }, 3000)
-
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.isVisible = true
+                    }
                 }
-
-                is Resource.Error -> {
-                    binding.progressBar.hide()
-                    Log.i(TAG,"No user previously logged out.")
-                    Log.i(TAG,"${response.message}")
-                }
-                else -> {}
             }
-        }
+        })
     }
 }

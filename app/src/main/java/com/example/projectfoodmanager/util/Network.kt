@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.util
+package com.example.projectfoodmanager.util
 
 import android.content.Context
 import android.net.ConnectivityManager

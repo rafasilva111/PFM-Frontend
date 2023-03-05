@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.util
+package com.example.projectfoodmanager.util
 
 sealed class Resource<T> (
     val data : T? = null,

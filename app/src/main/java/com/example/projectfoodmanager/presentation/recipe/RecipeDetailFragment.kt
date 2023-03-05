@@ -297,16 +297,16 @@ class RecipeDetailFragment : Fragment() {
             
             //like function
 
-            authModel.getUserSession_old { user ->
+            /*authModel.getUserSession_old { user ->
                 if (user != null) {
                     if ( user.liked_recipes.indexOf(recipe)!=-1){
                         binding.likeIB.setImageResource(R.drawable.ic_like_red)
                     }
                 }
-            }
+            }*/
 
 
-            binding.likeIB.setOnClickListener {
+            /*binding.likeIB.setOnClickListener {
                 authModel.getUserSession_old { user ->
                     if (user != null){
                         if ( user.liked_recipes.indexOf(recipe)!=-1){
@@ -350,7 +350,7 @@ class RecipeDetailFragment : Fragment() {
                         }
                     }
                 }
-            }
+            }*/
 
             binding.backIB.setOnClickListener {
                 findNavController().navigateUp()
@@ -360,7 +360,7 @@ class RecipeDetailFragment : Fragment() {
         }
     }
 
-    private fun observer() {
+  /*  private fun observer() {
         authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Loading -> {
@@ -375,7 +375,7 @@ class RecipeDetailFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 
 
 

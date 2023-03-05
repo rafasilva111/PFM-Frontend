@@ -1,119 +1,86 @@
 package com.example.projectfoodmanager.data.repository
 
 import android.util.Log
-import com.example.projectfoodmanager.data.model.User
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
-import com.example.projectfoodmanager.data.util.Resource
-import com.example.projectfoodmanager.util.ERROR_CODES
+import com.example.projectfoodmanager.util.Event
+import com.example.projectfoodmanager.util.NetworkResult
+import com.example.projectfoodmanager.util.SharedPreference
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.tasks.await
+import org.json.JSONObject
 import retrofit2.Response
 import javax.inject.Inject
 
 
 class AuthRepositoryImp @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val firebaseAuth: FirebaseAuth
+    private val sharedPreference: SharedPreference
 ) : AuthRepository {
     private val TAG:String = "AuthRepositoryImp"
-    override var currentUser: FirebaseUser? = null
 
-    private fun responseToUserResult(response : Response<UserResponse>) : Resource<UserResponse>{
-        if (response.isSuccessful){
-            response.body()?.let { result->
-                return Resource.Success(result)
-            }
-        }
-        return Resource.Error(message = "${response.errorBody()?.string()}")
+    private val _userResponseLiveData = MutableLiveData<Event<NetworkResult<UserResponse>>>()
+    override val userResponseLiveData: LiveData<Event<NetworkResult<UserResponse>>>
+        get() = _userResponseLiveData
+
+    private val _userLogoutResponseLiveData = MutableLiveData<Event<NetworkResult<String>>>()
+    override val userLogoutResponseLiveData: LiveData<Event<NetworkResult<String>>>
+        get() = _userLogoutResponseLiveData
+
+    override suspend fun registerUser(userRequest: UserRequest) {
+        _userResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        val response = remoteDataSource.registerUser(userRequest)
+        handleUserResponse(response)
     }
 
-    private fun responseToUser(response : Response<UserResponse>) : Resource<User>{
-        if (response.isSuccessful){
-            response.body()?.let { result->
-                return Resource.Success(User(
-                    id = result.id,
-                    age = result.age,
-                    first_name = result.first_name,
-                    last_name = result.last_name,
-                    birth_date = result.birth_date,
-                    email = result.email,
-                    img_source = result.img_source,
-                    height = result.height,
-                    weight = result.weight,
-                    activity_level = result.activity_level,
-                    sex = result.sex,
-                ))
-            }
-        }
-        return Resource.Error(message = "${response.errorBody()?.string()}")
-    }
-
-    private fun responseToNothingResult(response : Response<String>) : Resource<String>{
-        if (response.isSuccessful){
-            response.body()?.let { result->
-                return Resource.Success("result")
-            }
-        }
-        return Resource.Error(message = "${response.errorBody()?.string()}")
-    }
-
-    override suspend fun registerUser(user: UserRequest): Resource<UserResponse> {
-         try {
-            val result = firebaseAuth.createUserWithEmailAndPassword(user.email, user.password).await()
-            if (result.user != null){
-                var userWhitId = user
-                currentUser = result.user
-                userWhitId.uuid = currentUser!!.uid.toString()
-                return responseToUserResult(remoteDataSource.registerUser(user = userWhitId))
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return Resource.Error(message = "$e")
-        }
-        return Resource.Error(message = "Something went wrong.")
-    }
-
-    override suspend fun loginUser(email: String, password: String): Resource<UserResponse> {
-        try {
-            val result = firebaseAuth.signInWithEmailAndPassword(email,password).await()
-
-            if (result != null){
-                currentUser  = result.user
-                Log.i(TAG, "loginUser: User uuid is "+result.user!!.uid)
-
-                return responseToUserResult(remoteDataSource.getUserByUUID(userUUID = result.user!!.uid))
-            }
-        }catch (e: FirebaseAuthInvalidCredentialsException){
-            if (e.localizedMessage.contains("password is invalid"))
-                return Resource.Error(message = "User's password is incorrect", code = ERROR_CODES.UNAUTORIZED)
-            else
-                return Resource.Error(message = "There is no user whit that password", code = ERROR_CODES.UNAUTORIZED)
-        }
-        catch (e: Exception) {
-            e.printStackTrace()
-            return Resource.Error(message = "$e")
-        }
-        return Resource.Error(message = "Something went wrong.")
+    override suspend fun loginUser(email: String, password: String) {
+        _userResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making login request.")
+        val response =remoteDataSource.loginUser(email,password)
+        handleUserResponse(response)
     }
 
 
-    override suspend fun getUserSession(): Resource<User> {
-        this.currentUser =firebaseAuth.currentUser
-        if (firebaseAuth.currentUser == null){
-            return Resource.Error(message = "Session invalid", code = ERROR_CODES.SESSION_INVALID)
-        }
-        return responseToUser(remoteDataSource.getUserByUUID(userUUID = this.currentUser!!.uid))
+    override suspend fun getUserSession() {
+        _userResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making login request.")
+        val response =remoteDataSource.getUserAuth()
+        handleUserResponse(response)
     }
-    //todo make a validation to the shared preferences user
 
-    override fun logout(result: () -> Unit) {
-        firebaseAuth.signOut()
-        //appPreferences.edit().putString(SharedPrefConstants.USER_SESSION,null).apply()
-        this.currentUser=null
-        result.invoke()
+    override suspend fun logoutUser() {
+        _userLogoutResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making login request.")
+        val response =remoteDataSource.logoutUser()
+
+        if (response.isSuccessful && response.body() != null) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            _userLogoutResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+        }
+        else if(response.errorBody()!=null){
+            Log.i(TAG, "handleResponse: request made was not sucessfull."+response.errorBody()!!.charStream().readText())
+            val errorObj = response.errorBody()!!.charStream().readText()
+            _userLogoutResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _userLogoutResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+    private fun handleUserResponse(response: Response<UserResponse>) {
+        if (response.isSuccessful && response.body() != null) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            _userResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
+            _userResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _userResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
     }
 }

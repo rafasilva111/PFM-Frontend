@@ -1,7 +1,6 @@
 package com.example.projectfoodmanager.presentation.recipe
 
 import android.content.Context
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -19,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.util.Resource
+import com.example.projectfoodmanager.util.Resource
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
@@ -63,10 +62,10 @@ class RecipeListingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        observer()
+        //observer()
         //todo check for internet connection
 
-        authModel.getUserSession()
+        //authModel.getUserSession()
 
         if (this::binding.isInitialized){
             return binding.root
@@ -261,7 +260,7 @@ class RecipeListingFragment : Fragment() {
     }
 
 
-    fun observer() {
+    /*fun observer() {
         authModel.user.observe(viewLifecycleOwner){ response ->
             when(response){
                 is Resource.Loading -> {
@@ -284,7 +283,7 @@ class RecipeListingFragment : Fragment() {
                 else -> {}
             }
         }
-    }
+    }*/
 
     private fun changeVisib_Menu(state : Boolean){
         val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)

@@ -140,23 +140,23 @@ class FavoritesFragment : Fragment() {
             })
 
             if (this.aba != null){
-                authModel.getLikedRecipesList()
+                //authModel.getLikedRecipesList()
             }
             else{
-                authModel.getSavedRecipesList()
+                //authModel.getSavedRecipesList()
             }
 
             //
-            observer()
+            //observer()
 
             //nav search toppom
 
             binding.SSAVED.setOnClickListener {
-                authModel.getSavedRecipesList()
+                //authModel.getSavedRecipesList()
 
             }
             binding.SLIKED.setOnClickListener {
-                authModel.getLikedRecipesList()
+                //authModel.getLikedRecipesList()
             }
             binding.SRECENTES.setOnClickListener {
                 toast("Em desenvolvimento...")
@@ -193,7 +193,7 @@ class FavoritesFragment : Fragment() {
 
     }
 
-    private fun observer(){
+   /* private fun observer(){
         var firstTimeLoading = true
 
         authModel.getFavoriteRecipeList.observe(viewLifecycleOwner){state ->
@@ -268,7 +268,7 @@ class FavoritesFragment : Fragment() {
             }
         }
     }
-
+*/
     private fun isOnline(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

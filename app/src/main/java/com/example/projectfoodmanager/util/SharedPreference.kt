@@ -1,7 +1,6 @@
-package com.example.projectfoodmanager.data.util
+package com.example.projectfoodmanager.util
 
 import android.content.SharedPreferences
-import com.example.projectfoodmanager.util.Constants
 import javax.inject.Inject
 
 class SharedPreference @Inject constructor(
@@ -17,20 +16,20 @@ class SharedPreference @Inject constructor(
     }
 
     fun userIsLoggedIn() : Boolean {
-        val token = sharedPreferences.getString(Constants.USER_IS_LOGGED_IN, null)
+        val token = sharedPreferences.getString(Constants.USER_TOKEN, null)
         return token != null
     }
 
     fun getUserToken(): String {
-        return sharedPreferences.getString(Constants.USER_IS_LOGGED_IN, "").toString()
+        return sharedPreferences.getString(Constants.USER_TOKEN, "").toString()
     }
 
     fun saveUserAccessToken(token: String) {
-        sharedPreferences.edit().putString(Constants.USER_IS_LOGGED_IN, token).apply()
+        sharedPreferences.edit().putString(Constants.USER_TOKEN, token).apply()
     }
 
     fun deleteAccessToken(): Boolean {
-        sharedPreferences.edit().remove(Constants.USER_IS_LOGGED_IN).apply()
+        sharedPreferences.edit().remove(Constants.USER_TOKEN).apply()
         return userIsLoggedIn()
     }
 }

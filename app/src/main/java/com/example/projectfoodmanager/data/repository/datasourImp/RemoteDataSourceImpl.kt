@@ -22,6 +22,19 @@ class RemoteDataSourceImpl @Inject constructor(
 	override suspend fun registerUser(user: UserRequest): Response<UserResponse> {
 		return apiInterface.createUser(user = user)
 	}
+
+	override suspend fun loginUser(email: String, password: String): Response<UserResponse> {
+		return apiInterface.loginUser(UserRequest(email = email, password = password))
+	}
+
+	override suspend fun logoutUser(): Response<String> {
+		return apiInterface.logoutUser()
+	}
+
+	override suspend fun getUserAuth(): Response<UserResponse> {
+		return apiInterface.getUserSession()
+	}
+
 	override suspend fun getUserByUUID(userUUID: String): Response<UserResponse> {
 		return apiInterface.getUserByUUID(userUUID = userUUID)
 	}

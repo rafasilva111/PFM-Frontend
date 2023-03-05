@@ -1,19 +1,21 @@
 package com.example.projectfoodmanager.data.repository
 
-import com.example.projectfoodmanager.data.model.User
+import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
-import com.example.projectfoodmanager.data.util.Resource
-import com.google.firebase.auth.FirebaseUser
+import com.example.projectfoodmanager.util.Event
+import com.example.projectfoodmanager.util.NetworkResult
 
 interface AuthRepository {
-    val currentUser: FirebaseUser?
+
+    val userResponseLiveData: LiveData<Event<NetworkResult<UserResponse>>>
+    val userLogoutResponseLiveData: LiveData<Event<NetworkResult<String>>>
 
     //User
-    suspend fun registerUser(user : UserRequest) : Resource<UserResponse>
-    suspend fun loginUser(email: String, password: String) : Resource<UserResponse>
-    suspend fun getUserSession() : Resource<User>
-    fun logout(result: () -> Unit)
+    suspend fun registerUser(user : UserRequest)
+    suspend fun loginUser(email: String, password: String)
+    suspend fun getUserSession()
+    suspend fun logoutUser()
 
-    //Recipe
+
 }
