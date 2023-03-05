@@ -70,10 +70,10 @@ class LoginFragment : Fragment() {
             binding.emailTL.error=getString(R.string.enter_email)
             //toast(getString(R.string.enter_email))
         }else if (!binding.emailEt.text.toString().isValidEmail()){
-                isValid = false
-                binding.emailTL.isErrorEnabled=true
-                binding.emailTL.error=getString(R.string.invalid_email)
-                //toast(getString(R.string.invalid_email))
+            isValid = false
+            binding.emailTL.isErrorEnabled=true
+            binding.emailTL.error=getString(R.string.invalid_email)
+            //toast(getString(R.string.invalid_email))
 
         }else{
             binding.emailTL.isErrorEnabled=false
@@ -118,20 +118,20 @@ class LoginFragment : Fragment() {
     private fun bindObservers() {
         authViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
-            binding.progressBar.isVisible = false
-            when (it) {
-                is NetworkResult.Success -> {
-                    tokenManager.saveToken(it.data!!.token)
-                    findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
-                }
-                is NetworkResult.Error -> {
-                    showValidationErrors(it.message.toString())
-                }
-                is NetworkResult.Loading -> {
-                    binding.progressBar.isVisible = true
+                binding.progressBar.isVisible = false
+                when (it) {
+                    is NetworkResult.Success -> {
+                        tokenManager.saveToken(it.data!!.token)
+                        findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.isVisible = true
+                    }
                 }
             }
-        }
         })
     }
 }
