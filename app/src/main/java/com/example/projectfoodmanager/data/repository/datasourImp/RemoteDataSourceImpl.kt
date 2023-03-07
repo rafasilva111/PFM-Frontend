@@ -7,11 +7,12 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
-import com.example.projectfoodmanager.data.model.modelResponse.RecipeResponse
+
 import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import retrofit2.Response
-import retrofit2.http.Query
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
@@ -50,13 +51,16 @@ class RemoteDataSourceImpl @Inject constructor(
 
 
 	//Recipe
-	override suspend fun createRecipe(userId: String, recipe : RecipeRequest): Response<RecipeResponse> {
+	override suspend fun createRecipe(userId: String, recipe : RecipeRequest): Response<RecipeResult> {
 		return apiInterface.createRecipe(userId = userId,recipe = recipe)
 	}
-	override suspend fun getRecipe(recipeId: String): Response<RecipeResponse> {
+	override suspend fun getRecipe(recipeId: String): Response<RecipeResult> {
 		return apiInterface.getRecipe(recipeId = recipeId)
 	}
-	override suspend fun updateRecipe(userId: String,recipeId: String,recipe: RecipeRequest): Response<RecipeResponse> {
+	override suspend fun getRecipesPaginated(page: Int): Response<RecipeListResponse> {
+		return apiInterface.getRecipePaginated(page = page)
+	}
+	override suspend fun updateRecipe(userId: String,recipeId: String,recipe: RecipeRequest): Response<RecipeResult> {
 		return apiInterface.updateRecipe(recipeId=recipeId,userId = userId, recipe = recipe )
 	}
 	override suspend fun deleteRecipe(userId: String,recipeId: String): Response<String> {

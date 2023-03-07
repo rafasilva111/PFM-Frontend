@@ -1,13 +1,13 @@
 package com.example.projectfoodmanager.data.api
 
-import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.data.model.modelRequest.CommentRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
-import com.example.projectfoodmanager.data.model.modelResponse.RecipeResponse
 import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -41,13 +41,16 @@ interface ApiInterface {
 
     //recipe
     @POST("/recipe")
-    suspend fun createRecipe(@Query("userId") userId: String,@Body recipe : RecipeRequest): Response<RecipeResponse>
+    suspend fun createRecipe(@Query("userId") userId: String,@Body recipe : RecipeRequest): Response<RecipeResult>
 
     @GET("/recipe")
-    suspend fun getRecipe(@Query("recipeId") recipeId: String): Response<RecipeResponse>
+    suspend fun getRecipe(@Query("recipeId") recipeId: String): Response<RecipeResult>
+
+    @GET("/recipe")
+    suspend fun getRecipePaginated(@Query("page") page: Int): Response<RecipeListResponse>
 
     @PUT("/recipe")
-    suspend fun updateRecipe(@Query("recipeId") recipeId: String,@Query("userId") userId: String,@Body recipe : RecipeRequest): Response<RecipeResponse>
+    suspend fun updateRecipe(@Query("recipeId") recipeId: String,@Query("userId") userId: String,@Body recipe : RecipeRequest): Response<RecipeResult>
 
     @DELETE("/recipe")
     suspend fun deleteRecipe(@Query("recipeId") recipeId: String,@Query("userId") userId: String): Response<String>
@@ -78,6 +81,7 @@ interface ApiInterface {
 
     @GET("/followers")
     suspend fun getFollowes(@Query("userReceiverId") userReceiverId: String): Response<FollowerResponse>
+
 
 
 }

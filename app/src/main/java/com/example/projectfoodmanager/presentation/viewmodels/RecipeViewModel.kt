@@ -4,16 +4,24 @@ package com.example.projectfoodmanager.presentation.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.model.User
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
+import com.example.projectfoodmanager.data.old.RecipeRepository_old
 import com.example.projectfoodmanager.data.repository.RecipeRepository
+import com.example.projectfoodmanager.util.Event
+import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RecipeViewModel @Inject constructor (
+    val repositoryOld: RecipeRepository_old,
     val repository: RecipeRepository
+
+
 
 ): ViewModel() {
     private val _recipes = MutableLiveData<UiState<List<Recipe>>>()
@@ -33,20 +41,29 @@ class RecipeViewModel @Inject constructor (
     val addRecipe: LiveData<UiState<String>>
         get() = _addRecipe
 
+    val recipeResponseLiveData: LiveData<Event<NetworkResult<RecipeListResponse>>>
+        get() = repository.recipeResponseLiveData
+
 
 
     fun getRecipes(){
         _recipes.value = UiState.Loading
-        repository.getRecipes {
+        repositoryOld.getRecipes {
             _recipes.value = UiState.Loading
-            repository.getRecipes { _recipes.value = it }
+            repositoryOld.getRecipes { _recipes.value = it }
         }
 
     }
 
-    fun getRecipesPaginated(firstTime:Boolean){
+    fun getRecipesPaginated(page: Int){
+        viewModelScope.launch {
+            repository.getRecipesPaginated(page)
+        }
+    }
+
+    fun getRecipesPaginatedOld(firstTime:Boolean){
         _recipes.value = UiState.Loading
-        repository.getRecipesPaginated(firstTime) {
+        repositoryOld.getRecipesPaginated(firstTime) {
             _recipes.value = it
         }
 
@@ -54,30 +71,30 @@ class RecipeViewModel @Inject constructor (
 
     fun getRecipesByTitle(title: String,firstTime:Boolean) {
         _recipes_search.value = UiState.Loading
-        repository.getRecipesByTitle(title,firstTime) {
+        repositoryOld.getRecipesByTitle(title,firstTime) {
             _recipes_search.value = it
         }
     }
     fun getRecipesByTitleAndTags(title: String,firstTime:Boolean) {
         _recipes_search.value = UiState.Loading
-        repository.getRecipesByTitleAndTags(title,firstTime) {
+        repositoryOld.getRecipesByTitleAndTags(title,firstTime) {
             _recipes_search.value = it
         }
     }
 
     fun addRecipe(recipe: Recipe){
         _addRecipe.value = UiState.Loading
-        repository.addRecipe(recipe) { _addRecipe.value = it}
+        repositoryOld.addRecipe(recipe) { _addRecipe.value = it}
     }
 
     fun removeLikeOnRecipe(userId: String, recipe: Recipe) {
         _updateRecipe.value = UiState.Loading
-        repository.removeLikeOnRecipe(userId,recipe) { _updateRecipe.value = it}
+        repositoryOld.removeLikeOnRecipe(userId,recipe) { _updateRecipe.value = it}
     }
 
     fun addLikeOnRecipe(userId: String, recipe: Recipe) {
         _updateRecipe.value = UiState.Loading
-        repository.addLikeOnRecipe(userId,recipe) { _updateRecipe.value = it}
+        repositoryOld.addLikeOnRecipe(userId,recipe) { _updateRecipe.value = it}
     }
 
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.recipe.CreateRecepiFragment">
+    tools:context=".presentation.recipe.comments.CreateRecepiFragment">
 
  <!--   <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout6"

@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.ui.recipe;
+package com.example.projectfoodmanager.presentation.recipe.comments;
 
 import android.content.Context
 import android.view.LayoutInflater

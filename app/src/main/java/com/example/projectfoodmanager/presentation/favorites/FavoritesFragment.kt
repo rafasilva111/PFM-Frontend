@@ -97,7 +97,7 @@ class FavoritesFragment : Fragment() {
                             val pag_index =
                                 floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
                             if ((pastVisibleItem + 1) % FireStorePaginations.RECIPE_LIMIT.toInt() == 0) {
-                                viewModel.getRecipesPaginated(false)
+                                viewModel.getRecipesPaginatedOld(false)
                             }
                             Log.d(TAG, pag_index.toString())
                             Log.d(TAG, visibleItemCount.toString())

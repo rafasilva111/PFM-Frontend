@@ -43,6 +43,7 @@
     <string name="heightEt_problem">Invalid height</string>
     <string name="invalid_sex">Please selected valid gender.</string>
     <string name="txt_error_message">%1$S*</string>
+    <string name="no_recipes_found">No recipes found.</string>
 
     <string-array name="gender_array">
         <item>Masculino</item>

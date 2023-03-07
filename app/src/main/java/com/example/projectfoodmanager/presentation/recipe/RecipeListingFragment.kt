@@ -10,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -18,9 +20,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.util.Resource
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +31,12 @@ import kotlin.math.floor
 
 @AndroidEntryPoint
 class RecipeListingFragment : Fragment() {
+
+    // constantes (cuidado com esta merda)
+
+    private var page:Int = 1
+    private var nextPage: Int? = null
+    private var recipeList: MutableList<RecipeResult> = mutableListOf()
 
 
     private var isFirstTimeCall = true
@@ -38,11 +47,9 @@ class RecipeListingFragment : Fragment() {
     private var searchMode: Boolean = false
 
     val TAG: String = "RecipeListingFragment"
-
-
     lateinit var binding: FragmentRecipeListingBinding
-    val viewModel: RecipeViewModel by viewModels()
-    private val authModel: AuthViewModel by viewModels()
+    private val recipeViewModel by activityViewModels<RecipeViewModel>()
+    private val authViewModel: AuthViewModel by viewModels()
     private val adapter by lazy {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
@@ -53,8 +60,8 @@ class RecipeListingFragment : Fragment() {
 
                 changeVisib_Menu(false)
             },
-            this.authModel,
-            this.viewModel
+            this.authViewModel,
+            this.recipeViewModel
         )
     }
 
@@ -65,7 +72,7 @@ class RecipeListingFragment : Fragment() {
         //observer()
         //todo check for internet connection
 
-        //authModel.getUserSession()
+        bindObservers()
 
         if (this::binding.isInitialized){
             return binding.root
@@ -102,8 +109,10 @@ class RecipeListingFragment : Fragment() {
                                 manager.findLastCompletelyVisibleItemPosition()
                             val pag_index =
                                 floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
-                            if ((pastVisibleItem + 1) % FireStorePaginations.RECIPE_LIMIT.toInt() == 0) {
-                                viewModel.getRecipesPaginated(false)
+
+
+                            if ((pastVisibleItem+2) >= recipeList.size ) {
+                                recipeViewModel.getRecipesPaginated(page+1)
                             }
                             Log.d(TAG, pag_index.toString())
                             Log.d(TAG, visibleItemCount.toString())
@@ -139,7 +148,7 @@ class RecipeListingFragment : Fragment() {
 
                 override fun onQueryTextChange(text: String?): Boolean {
                     if (text != null && text != "") {
-                        viewModel.getRecipesByTitle(text, true)
+                        recipeViewModel.getRecipesByTitle(text, true)
                     }
 
                     return true
@@ -147,9 +156,9 @@ class RecipeListingFragment : Fragment() {
             })
 
 
-            viewModel.getRecipesPaginated(true)
+            recipeViewModel.getRecipesPaginated(1)
             var firstTimeLoading = true
-            viewModel.recipe.observe(viewLifecycleOwner) { state ->
+            recipeViewModel.recipe.observe(viewLifecycleOwner) { state ->
 
                 when (state) {
                     is UiState.Loading -> {
@@ -163,7 +172,7 @@ class RecipeListingFragment : Fragment() {
                         for (item in state.data.toMutableList())
                             if (list.indexOf(item) == -1)
                                 list.add(item)
-                        adapter.updateList(list)
+                        //adapter.updateList(list)
                     }
                     is UiState.Failure -> {
                         binding.progressBar.hide()
@@ -171,7 +180,7 @@ class RecipeListingFragment : Fragment() {
                     }
                 }
             }
-            viewModel.recipe_search.observe(viewLifecycleOwner) { state ->
+            /*viewModel.recipe_search.observe(viewLifecycleOwner) { state ->
                 val lista: MutableList<Recipe> = arrayListOf()
                 when (state) {
 
@@ -192,7 +201,7 @@ class RecipeListingFragment : Fragment() {
                         toast(state.error)
                     }
                 }
-            }
+            }*/
 
             //nav search toppom
 
@@ -212,7 +221,7 @@ class RecipeListingFragment : Fragment() {
 
             //nav search bottom
 
-            binding.IBMeat.setOnClickListener {
+            /*binding.IBMeat.setOnClickListener {
                 viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE, true)
             }
             binding.IBFish.setOnClickListener {
@@ -229,7 +238,7 @@ class RecipeListingFragment : Fragment() {
             }
             binding.IBDrink.setOnClickListener {
                 viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS, true)
-            }
+            }*/
         }
         else{
             binding.offlineText.visibility = View.VISIBLE
@@ -257,6 +266,40 @@ class RecipeListingFragment : Fragment() {
             }
         }
         return false
+    }
+
+    private fun showValidationErrors(error: String) {
+        toast(error)
+    }
+
+    private fun bindObservers() {
+        recipeViewModel.recipeResponseLiveData.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        if (it.data == null){
+                            toast(getString(R.string.no_recipes_found))
+                        }
+                        else{
+                            page = it.data._metadata.page
+                            for (recipe in it.data.recipe_result){
+                                recipeList.add(recipe)
+                            }
+                            adapter.updateList(recipeList)
+                            nextPage = page ++
+
+                        }
+
+
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        })
     }
 
 

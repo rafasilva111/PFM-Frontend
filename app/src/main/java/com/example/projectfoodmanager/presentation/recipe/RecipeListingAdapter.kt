@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.UiState
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -23,7 +25,7 @@ class RecipeListingAdapter(
 
 
     private val TAG: String? = "RecipeListingAdapter"
-    private var list: MutableList<Recipe> = arrayListOf()
+    private var list: MutableList<RecipeResult> = arrayListOf()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -37,7 +39,7 @@ class RecipeListingAdapter(
         holder.bind(item)
     }
 
-    fun updateList(list: MutableList<Recipe>){
+    fun updateList(list: MutableList<RecipeResult>){
         this.list = list
         notifyDataSetChanged()
     }
@@ -55,8 +57,8 @@ class RecipeListingAdapter(
     inner class MyViewHolder(private val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(item: Recipe) {
-            val imgRef = Firebase.storage.reference.child(item.img)
+        fun bind(item: RecipeResult) {
+            val imgRef = Firebase.storage.reference.child(item.img_source)
             imgRef.downloadUrl.addOnSuccessListener { Uri ->
                 val imageURL = Uri.toString()
                 Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
@@ -66,19 +68,19 @@ class RecipeListingAdapter(
                         .load(R.drawable.good_food_display___nci_visuals_online)
                         .into(binding.imageView)
                 }
-            binding.dateLabel.text = item.date
+            binding.dateLabel.text = item.created_date
             binding.recipeTitle.text = item.title
-            binding.TVDescription.text = item.desc.toString()
-            binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
+            binding.TVDescription.text = item.description.toString()
+            //binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
 
             // like function
 
-            if (item.likes.size == 1) {
+            if (item.likes == 1) {
                 binding.TVRate.text = "1 Gosto"
             } else {
-                binding.TVRate.text = item.likes.size.toString() + " Gosto"
+                binding.TVRate.text = item.likes.toString() + " Gosto"
             }
-            binding.dateLabel.text = item.date
+            binding.dateLabel.text = item.created_date
 
 
             // favorite function

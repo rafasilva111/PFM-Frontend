@@ -6,8 +6,9 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
-import com.example.projectfoodmanager.data.model.modelResponse.RecipeResponse
 import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
 import retrofit2.Response
 
 interface RemoteDataSource {
@@ -23,9 +24,10 @@ interface RemoteDataSource {
 	suspend fun deleteUser(userId: String): Response<String>
 
 	//recipe
-	suspend fun createRecipe(userId: String,recipe : RecipeRequest): Response<RecipeResponse>
-	suspend fun getRecipe(recipeId: String): Response<RecipeResponse>
-	suspend fun updateRecipe(userId: String,recipeId: String,recipe: RecipeRequest): Response<RecipeResponse>
+	suspend fun createRecipe(userId: String,recipe : RecipeRequest): Response<RecipeResult>
+	suspend fun getRecipe(recipeId: String): Response<RecipeResult>
+	suspend fun getRecipesPaginated(page: Int): Response<RecipeListResponse>
+	suspend fun updateRecipe(userId: String,recipeId: String,recipe: RecipeRequest): Response<RecipeResult>
 	suspend fun deleteRecipe(userId: String,recipeId: String): Response<String>
 
 	//comments

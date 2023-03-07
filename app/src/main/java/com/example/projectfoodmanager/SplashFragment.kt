@@ -88,36 +88,4 @@ class SplashFragment : Fragment() {
         })
     }
 
-
-    /*fun observer(){
-        authViewModel.user.observe(viewLifecycleOwner) { response ->
-            when(response){
-                is Resource.Loading -> {
-                   // Log.i(TAG,"Loading...")
-                }
-                is Resource.Success -> {
-                    Handler().postDelayed({
-                        findNavController().navigate(R.id.action_splashFragment_to_app_navigation)
-                    }, SPLASH_TIME)
-
-                }
-                is Resource.Error -> {
-                    Log.i(TAG,"No user previously logged out.")
-                    Log.i(TAG,"${response.message}")
-
-                    Handler().postDelayed({
-                        if(onBoardingFinished()){
-                            findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
-
-                        }else{
-                            findNavController().navigate(R.id.action_splashFragment_to_viewPagerFragment)
-                        }
-                    },SPLASH_TIME)
-                }
-                else -> {}
-            }
-        }
-    }*/
-
-
 }

@@ -4,6 +4,8 @@ package com.example.projectfoodmanager.di
 import android.content.SharedPreferences
 import com.example.projectfoodmanager.data.old.AuthRepositoryImp_old
 import com.example.projectfoodmanager.data.old.AuthRepository_old
+import com.example.projectfoodmanager.data.old.RecipeRepositoryImp_old
+import com.example.projectfoodmanager.data.old.RecipeRepository_old
 import com.example.projectfoodmanager.data.repository.*
 import com.example.projectfoodmanager.data.repository.datasourImp.RemoteDataSourceImpl
 import com.example.projectfoodmanager.data.repository.AuthRepository
@@ -22,12 +24,20 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun provideRecipeRepository(
+    fun recipeRepositoryOld(
         database: FirebaseFirestore
-    ): RecipeRepository{
-        return RecipeRepositoryImp(database)
+    ): RecipeRepository_old {
+        return RecipeRepositoryImp_old(database)
     }
 
+    @Provides
+    @Singleton
+    fun recipeRepository(
+        remoteDataSource: RemoteDataSourceImpl,
+        sharedPreference: SharedPreference
+    ): RecipeRepository {
+        return RecipeRepositoryImp(remoteDataSource,sharedPreference)
+    }
 
 
     @Provides
@@ -45,11 +55,11 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun providesRepository(
-        RemoteDataSource: RemoteDataSourceImpl,
+        remoteDataSource: RemoteDataSourceImpl,
         sharedPreference: SharedPreference
     ): AuthRepository {
         return AuthRepositoryImp(
-            remoteDataSource = RemoteDataSource,
+            remoteDataSource = remoteDataSource,
             sharedPreference = sharedPreference
         )
     }
