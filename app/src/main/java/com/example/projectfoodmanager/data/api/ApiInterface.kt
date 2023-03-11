@@ -5,9 +5,10 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
-import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -16,10 +17,10 @@ interface ApiInterface {
 
     //user
     @POST("/user")
-    suspend fun createUser(@Body user : UserRequest): Response<UserResponse>
+    suspend fun createUser(@Body user : UserRequest): Response<UserAuthResponse>
 
     @POST("/user/login")
-    suspend fun loginUser(@Body user : UserRequest): Response<UserResponse>
+    suspend fun loginUser(@Body user : UserRequest): Response<UserAuthResponse>
 
     @DELETE("/user/logout")
     suspend fun logoutUser(): Response<String>
@@ -28,13 +29,13 @@ interface ApiInterface {
     suspend fun getUserSession(): Response<UserResponse>
 
     @GET("/user")
-    suspend fun getUser(@Query("userId") userId: String): Response<UserResponse>
+    suspend fun getUser(@Query("userId") userId: String): Response<UserAuthResponse>
 
     @GET("/user")
-    suspend fun getUserByUUID(@Query("userUUID") userUUID: String): Response<UserResponse>
+    suspend fun getUserByUUID(@Query("userUUID") userUUID: String): Response<UserAuthResponse>
 
     @PUT("/user")
-    suspend fun updateUser(@Query("userId") userId: String,@Body user : UserRequest): Response<UserResponse>
+    suspend fun updateUser(@Query("userId") userId: String,@Body user : UserRequest): Response<UserAuthResponse>
 
     @DELETE("/user")
     suspend fun deleteUser(@Query("userId") userId: String): Response<String>
@@ -48,6 +49,9 @@ interface ApiInterface {
 
     @GET("/recipe")
     suspend fun getRecipePaginated(@Query("page") page: Int): Response<RecipeListResponse>
+
+    @GET("/recipe")
+    suspend fun getRecipesByTitleAndTags(@Query("string")string: String,@Query("page") page: Int): Response<RecipeListResponse>
 
     @PUT("/recipe")
     suspend fun updateRecipe(@Query("recipeId") recipeId: String,@Query("userId") userId: String,@Body recipe : RecipeRequest): Response<RecipeResult>

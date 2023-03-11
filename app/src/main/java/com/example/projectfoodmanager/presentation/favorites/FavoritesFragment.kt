@@ -166,9 +166,9 @@ class FavoritesFragment : Fragment() {
 
 
             //nav search bottom
-
+/*
             binding.IBMeat.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE,true)
+                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE, searchPage = pa)
             }
             binding.IBFish.setOnClickListener {
                 viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE,true)
@@ -184,7 +184,7 @@ class FavoritesFragment : Fragment() {
             }
             binding.IBDrink.setOnClickListener {
                 viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS,true)
-            }
+            }*/
         }
         else{
             // TODO offline mode

@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -35,8 +36,11 @@ class RecipeListingFragment : Fragment() {
     // constantes (cuidado com esta merda)
 
     private var page:Int = 1
-    private var nextPage: Int? = null
+    private var searchPage:Int = 1
+    private var stringToSearch: String? = null
+    private var newSearch: Boolean = false
     private var recipeList: MutableList<RecipeResult> = mutableListOf()
+    private var searchRecipeList: MutableList<RecipeResult> = mutableListOf()
 
 
     private var isFirstTimeCall = true
@@ -99,36 +103,41 @@ class RecipeListingFragment : Fragment() {
     private fun setRecyclerViewScrollListener() {
         scrollListener = object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (!searchMode) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        if (isFirstTimeCall) {
-                            isFirstTimeCall = false;
-                            binding.recyclerView.removeOnScrollListener(scrollListener)
-                            val visibleItemCount: Int = manager.childCount
-                            val pastVisibleItem: Int =
-                                manager.findLastCompletelyVisibleItemPosition()
-                            val pag_index =
-                                floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
 
+                    binding.recyclerView.removeOnScrollListener(scrollListener)
+                    //val visibleItemCount: Int = manager.childCount
+                    val pastVisibleItem: Int =
+                        manager.findLastCompletelyVisibleItemPosition()
+                    //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
 
-                            if ((pastVisibleItem+2) >= recipeList.size ) {
-                                recipeViewModel.getRecipesPaginated(page+1)
-                            }
-                            Log.d(TAG, pag_index.toString())
-                            Log.d(TAG, visibleItemCount.toString())
-                            Log.d(TAG, pastVisibleItem.toString())
-
-
-                            binding.recyclerView.addOnScrollListener(scrollListener)
+                    if (stringToSearch.isNullOrEmpty()){
+                        if ((pastVisibleItem+2) >= recipeList.size ) {
+                            page += 1
+                            recipeViewModel.getRecipesPaginated(page)
+                        }
+                    }
+                    else{
+                        if ((pastVisibleItem+2) >= searchRecipeList.size ) {
+                            page += 1
+                            recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!,page)
                         }
                     }
 
-                    if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                        isFirstTimeCall = true
-                    }
+                    //Log.d(TAG, pag_index.toString())
+                    //Log.d(TAG, visibleItemCount.toString())
+                    Log.d(TAG, pastVisibleItem.toString())
 
-                    super.onScrollStateChanged(recyclerView, newState)
+                    binding.recyclerView.addOnScrollListener(scrollListener)
+
                 }
+
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    isFirstTimeCall = true
+                }
+
+                super.onScrollStateChanged(recyclerView, newState)
+
             }
         }
         binding.recyclerView.addOnScrollListener(scrollListener)
@@ -148,60 +157,20 @@ class RecipeListingFragment : Fragment() {
 
                 override fun onQueryTextChange(text: String?): Boolean {
                     if (text != null && text != "") {
-                        recipeViewModel.getRecipesByTitle(text, true)
+                        // importante se não não funciona
+                        newSearch = true
+                        stringToSearch=text
+                        recipeViewModel.getRecipesByTitleAndTags(text, searchPage)
                     }
-
+                    else{
+                        stringToSearch=null
+                        adapter.updateList(recipeList)
+                    }
                     return true
                 }
             })
+            recipeViewModel.getRecipesPaginated(page)
 
-
-            recipeViewModel.getRecipesPaginated(1)
-            var firstTimeLoading = true
-            recipeViewModel.recipe.observe(viewLifecycleOwner) { state ->
-
-                when (state) {
-                    is UiState.Loading -> {
-                        if (firstTimeLoading)
-                            binding.progressBar.show()
-                        firstTimeLoading = false
-
-                    }
-                    is UiState.Success -> {
-                        binding.progressBar.hide()
-                        for (item in state.data.toMutableList())
-                            if (list.indexOf(item) == -1)
-                                list.add(item)
-                        //adapter.updateList(list)
-                    }
-                    is UiState.Failure -> {
-                        binding.progressBar.hide()
-                        toast(state.error)
-                    }
-                }
-            }
-            /*viewModel.recipe_search.observe(viewLifecycleOwner) { state ->
-                val lista: MutableList<Recipe> = arrayListOf()
-                when (state) {
-
-                    is UiState.Loading -> {
-                        adapter.updateList(arrayListOf())
-                        binding.progressBar.show()
-
-                    }
-                    is UiState.Success -> {
-                        binding.progressBar.hide()
-                        for (item in state.data.toMutableList())
-                            if (lista.indexOf(item) == -1)
-                                lista.add(item)
-                        adapter.updateList(lista)
-                    }
-                    is UiState.Failure -> {
-                        binding.progressBar.hide()
-                        toast(state.error)
-                    }
-                }
-            }*/
 
             //nav search toppom
 
@@ -221,30 +190,43 @@ class RecipeListingFragment : Fragment() {
 
             //nav search bottom
 
-            /*binding.IBMeat.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE, true)
+            binding.IBMeat.setOnClickListener {
+                newSearch = true
+                stringToSearch=RecipeListingFragmentFilters.CARNE
+                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE)
             }
             binding.IBFish.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE, true)
+                newSearch = true
+                stringToSearch=RecipeListingFragmentFilters.PEIXE
+                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE)
             }
             binding.IBSoup.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA, true)
+                newSearch = true
+                stringToSearch=RecipeListingFragmentFilters.SOPA
+                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA)
             }
             binding.IBVegi.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA, true)
+                newSearch = true
+                stringToSearch=RecipeListingFragmentFilters.VEGETARIANA
+                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA)
             }
             binding.IBFruit.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA, true)
+                newSearch = true
+                stringToSearch=RecipeListingFragmentFilters.FRUTA
+                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA)
             }
             binding.IBDrink.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS, true)
-            }*/
+                newSearch = true
+                stringToSearch=RecipeListingFragmentFilters.BEBIDAS
+                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS)
+            }
         }
         else{
             binding.offlineText.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.GONE
         }
     }
+
 
     private fun isOnline(context: Context): Boolean {
         val connectivityManager =
@@ -277,25 +259,61 @@ class RecipeListingFragment : Fragment() {
             it.getContentIfNotHandled()?.let{
                 when (it) {
                     is NetworkResult.Success -> { it
+                        binding.progressBar.hide()
+                        searchMode = false
+                        page = it.data!!._metadata.page
                         if (it.data == null){
                             toast(getString(R.string.no_recipes_found))
                         }
-                        else{
-                            page = it.data._metadata.page
-                            for (recipe in it.data.recipe_result){
+                        else {
+                            for (recipe in it.data.recipe_result) {
                                 recipeList.add(recipe)
                             }
                             adapter.updateList(recipeList)
-                            nextPage = page ++
 
                         }
-
-
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(it.message.toString())
                     }
                     is NetworkResult.Loading -> {
+                        binding.progressBar.show()
+
+                    }
+                }
+            }
+        })
+        recipeViewModel.recipeSearchByTitleAndTagsResponseLiveData.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        binding.progressBar.hide()
+                        searchMode = true
+                        if (it.data!!.recipe_result.isEmpty()){
+                            //removing last page on recipes not found
+                            page = it.data!!._metadata.page_count
+                            toast(getString(R.string.no_recipes_found))
+                        }
+                        else {
+
+                            // if new check
+                            if (searchRecipeList.size != 0 && newSearch){
+                                searchRecipeList = mutableListOf()
+                                page=1
+                            }
+                            newSearch = false
+                            for (recipe in it.data.recipe_result) {
+                                searchRecipeList.add(recipe)
+                            }
+                            Log.d(TAG, "bindObservers: searchRecipeList: "+searchRecipeList.toString())
+                            adapter.updateList(searchRecipeList)
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.show()
                     }
                 }
             }

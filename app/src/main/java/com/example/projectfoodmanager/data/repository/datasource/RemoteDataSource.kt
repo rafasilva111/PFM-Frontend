@@ -6,27 +6,29 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
-import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserResponse
 import retrofit2.Response
 
 interface RemoteDataSource {
 
 	//user
-	suspend fun registerUser(user: UserRequest) : Response<UserResponse>
-	suspend fun loginUser(email: String, password: String) : Response<UserResponse>
+	suspend fun registerUser(user: UserRequest) : Response<UserAuthResponse>
+	suspend fun loginUser(email: String, password: String) : Response<UserAuthResponse>
 	suspend fun logoutUser() : Response<String>
 	suspend fun getUserAuth() : Response<UserResponse>
-	suspend fun getUserByUUID(userUUID: String): Response<UserResponse>
-	suspend fun getUserById(userId: String): Response<UserResponse>
-	suspend fun updateUser(userId: String,user: UserRequest): Response<UserResponse>
+	suspend fun getUserByUUID(userUUID: String): Response<UserAuthResponse>
+	suspend fun getUserById(userId: String): Response<UserAuthResponse>
+	suspend fun updateUser(userId: String,user: UserRequest): Response<UserAuthResponse>
 	suspend fun deleteUser(userId: String): Response<String>
 
 	//recipe
 	suspend fun createRecipe(userId: String,recipe : RecipeRequest): Response<RecipeResult>
 	suspend fun getRecipe(recipeId: String): Response<RecipeResult>
 	suspend fun getRecipesPaginated(page: Int): Response<RecipeListResponse>
+	suspend fun getRecipesByTitleAndTags(string: String, page: Int): Response<RecipeListResponse>
 	suspend fun updateRecipe(userId: String,recipeId: String,recipe: RecipeRequest): Response<RecipeResult>
 	suspend fun deleteRecipe(userId: String,recipeId: String): Response<String>
 
@@ -41,4 +43,5 @@ interface RemoteDataSource {
 	suspend fun createFollower( userSenderId: String, userReceiverId: String): Response<FollowerResponse>
 	suspend fun getFollowers(userSenderId: String): Response<FollowerResponse>
 	suspend fun getFollowes( userReceiverId: String): Response<FollowerResponse>
+
 }

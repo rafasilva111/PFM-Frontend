@@ -8,9 +8,10 @@ import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 
-import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserResponse
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import retrofit2.Response
 import javax.inject.Inject
@@ -20,11 +21,11 @@ class RemoteDataSourceImpl @Inject constructor(
 ) : RemoteDataSource {
 
 	//User
-	override suspend fun registerUser(user: UserRequest): Response<UserResponse> {
+	override suspend fun registerUser(user: UserRequest): Response<UserAuthResponse> {
 		return apiInterface.createUser(user = user)
 	}
 
-	override suspend fun loginUser(email: String, password: String): Response<UserResponse> {
+	override suspend fun loginUser(email: String, password: String): Response<UserAuthResponse> {
 		return apiInterface.loginUser(UserRequest(email = email, password = password))
 	}
 
@@ -36,13 +37,13 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getUserSession()
 	}
 
-	override suspend fun getUserByUUID(userUUID: String): Response<UserResponse> {
+	override suspend fun getUserByUUID(userUUID: String): Response<UserAuthResponse> {
 		return apiInterface.getUserByUUID(userUUID = userUUID)
 	}
-	override suspend fun getUserById(userId: String): Response<UserResponse> {
+	override suspend fun getUserById(userId: String): Response<UserAuthResponse> {
 		return apiInterface.getUser(userId = userId)
 	}
-	override suspend fun updateUser(userId: String,user: UserRequest): Response<UserResponse> {
+	override suspend fun updateUser(userId: String,user: UserRequest): Response<UserAuthResponse> {
 		return apiInterface.updateUser(userId = userId, user = user )
 	}
 	override suspend fun deleteUser(userId: String): Response<String> {
@@ -60,7 +61,15 @@ class RemoteDataSourceImpl @Inject constructor(
 	override suspend fun getRecipesPaginated(page: Int): Response<RecipeListResponse> {
 		return apiInterface.getRecipePaginated(page = page)
 	}
-	override suspend fun updateRecipe(userId: String,recipeId: String,recipe: RecipeRequest): Response<RecipeResult> {
+
+	override suspend fun getRecipesByTitleAndTags(
+		string: String,
+		page: Int
+	): Response<RecipeListResponse> {
+		return apiInterface.getRecipesByTitleAndTags(string = string,page = page)
+	}
+
+	override suspend fun updateRecipe(userId: String, recipeId: String, recipe: RecipeRequest): Response<RecipeResult> {
 		return apiInterface.updateRecipe(recipeId=recipeId,userId = userId, recipe = recipe )
 	}
 	override suspend fun deleteRecipe(userId: String,recipeId: String): Response<String> {

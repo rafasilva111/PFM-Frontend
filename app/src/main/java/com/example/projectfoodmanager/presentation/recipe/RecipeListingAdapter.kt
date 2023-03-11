@@ -44,6 +44,12 @@ class RecipeListingAdapter(
         notifyDataSetChanged()
     }
 
+
+    fun cleanList(){
+        this.list= arrayListOf()
+        notifyDataSetChanged()
+    }
+
     fun removeItem(position: Int){
         list.removeAt(position)
         notifyItemChanged(position)
@@ -58,16 +64,19 @@ class RecipeListingAdapter(
 
 
         fun bind(item: RecipeResult) {
-            val imgRef = Firebase.storage.reference.child(item.img_source)
-            imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                val imageURL = Uri.toString()
-                Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
-            }
+            if (!item.img_source.isNullOrEmpty()){
+                val imgRef = Firebase.storage.reference.child(item.img_source)
+                imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                    val imageURL = Uri.toString()
+                    Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
+                }
                 .addOnFailureListener {
                     Glide.with(binding.imageView.context)
                         .load(R.drawable.good_food_display___nci_visuals_online)
                         .into(binding.imageView)
                 }
+            }
+
             binding.dateLabel.text = item.created_date
             binding.recipeTitle.text = item.title
             binding.TVDescription.text = item.description.toString()

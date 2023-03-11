@@ -13,6 +13,8 @@ import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +30,41 @@ class RecipeViewModel @Inject constructor (
     val recipe: LiveData<UiState<List<Recipe>>>
             get() = _recipes
 
+
+    val recipeResponseLiveData: LiveData<Event<NetworkResult<RecipeListResponse>>>
+        get() = repository.recipeResponseLiveData
+
+
+    fun getRecipesPaginated(page: Int){
+        viewModelScope.launch {
+            repository.getRecipesPaginated(page)
+        }
+    }
+
+    val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeListResponse>>>
+        get() = repository.recipeSearchByTitleAndTagsResponseLiveData
+
+    var getRecipesByTitleAndTagsJob: Job? = null
+
+    //falta implementar o debouncer
+    fun getRecipesByTitleAndTags(title: String,searchPage:Int) {
+        getRecipesByTitleAndTagsJob?.cancel()
+        getRecipesByTitleAndTagsJob = viewModelScope.launch {
+            repository.getRecipesByTitleAndTags(title,searchPage)
+            delay(500)//debounce
+        }
+    }
+
+    fun getRecipesByTitleAndTags(title: String) {
+        getRecipesByTitleAndTagsJob?.cancel()
+        getRecipesByTitleAndTagsJob = viewModelScope.launch {
+            repository.getRecipesByTitleAndTags(title,1)
+            delay(500)//debounce
+        }
+    }
+
+    //OLD
+
     private val _recipes_search = MutableLiveData<UiState<List<Recipe>>>()
     val recipe_search: LiveData<UiState<List<Recipe>>>
         get() = _recipes_search
@@ -41,11 +78,6 @@ class RecipeViewModel @Inject constructor (
     val addRecipe: LiveData<UiState<String>>
         get() = _addRecipe
 
-    val recipeResponseLiveData: LiveData<Event<NetworkResult<RecipeListResponse>>>
-        get() = repository.recipeResponseLiveData
-
-
-
     fun getRecipes(){
         _recipes.value = UiState.Loading
         repositoryOld.getRecipes {
@@ -53,12 +85,6 @@ class RecipeViewModel @Inject constructor (
             repositoryOld.getRecipes { _recipes.value = it }
         }
 
-    }
-
-    fun getRecipesPaginated(page: Int){
-        viewModelScope.launch {
-            repository.getRecipesPaginated(page)
-        }
     }
 
     fun getRecipesPaginatedOld(firstTime:Boolean){
@@ -69,18 +95,15 @@ class RecipeViewModel @Inject constructor (
 
     }
 
+
+
     fun getRecipesByTitle(title: String,firstTime:Boolean) {
         _recipes_search.value = UiState.Loading
         repositoryOld.getRecipesByTitle(title,firstTime) {
             _recipes_search.value = it
         }
     }
-    fun getRecipesByTitleAndTags(title: String,firstTime:Boolean) {
-        _recipes_search.value = UiState.Loading
-        repositoryOld.getRecipesByTitleAndTags(title,firstTime) {
-            _recipes_search.value = it
-        }
-    }
+
 
     fun addRecipe(recipe: Recipe){
         _addRecipe.value = UiState.Loading

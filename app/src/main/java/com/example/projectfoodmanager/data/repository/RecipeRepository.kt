@@ -7,6 +7,8 @@ import com.example.projectfoodmanager.util.NetworkResult
 
 interface RecipeRepository {
     val recipeResponseLiveData: LiveData<Event<NetworkResult<RecipeListResponse>>>
+    val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeListResponse>>>
 
     suspend fun getRecipesPaginated(page: Int)
+    suspend fun getRecipesByTitleAndTags(title: String, searchPage: Int)
 }
