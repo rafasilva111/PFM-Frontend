@@ -115,6 +115,7 @@ class LoginFragment : Fragment() {
     private fun bindObservers() {
         authViewModel.userAuthResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
+                binding.loginBtn.isVisible = true
                 binding.progressBar.isVisible = false
                 when (it) {
                     is NetworkResult.Success -> {
@@ -125,6 +126,7 @@ class LoginFragment : Fragment() {
                         showValidationErrors(it.message.toString())
                     }
                     is NetworkResult.Loading -> {
+                        binding.loginBtn.isVisible = false
                         binding.progressBar.isVisible = true
                     }
                 }

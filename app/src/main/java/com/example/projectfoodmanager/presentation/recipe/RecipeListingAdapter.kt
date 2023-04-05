@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResult
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel

@@ -38,16 +38,10 @@ class SplashFragment : Fragment() {
                 else{
                     findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                 }
-
-
             }else{
                 findNavController().navigate(R.id.action_splashFragment_to_viewPagerFragment)
             }
         },SPLASH_TIME)
-
-        authViewModel.userAuthResponseLiveData
-
-
 
         return inflater.inflate(R.layout.fragment_splash, container, false)
     }
@@ -76,7 +70,8 @@ class SplashFragment : Fragment() {
                         toast(getString(R.string.welcome))
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                        tokenManager.deleteToken()
                     }
                     is NetworkResult.Loading -> {
                     }

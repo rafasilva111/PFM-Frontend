@@ -6,7 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
+
 import com.example.projectfoodmanager.data.old.RecipeRepository_old
 import com.example.projectfoodmanager.data.repository.RecipeRepository
 import com.example.projectfoodmanager.util.Event

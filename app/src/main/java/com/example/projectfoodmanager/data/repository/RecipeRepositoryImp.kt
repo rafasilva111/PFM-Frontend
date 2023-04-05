@@ -3,7 +3,8 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
+
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult

@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
-import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,21 +20,21 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResult
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.floor
 
 @AndroidEntryPoint
 class RecipeListingFragment : Fragment() {
 
     // constantes (cuidado com esta merda)
 
-    private var page:Int = 1
+    private var current_page:Int = 0
+    private var next_page:Boolean = true
     private var searchPage:Int = 1
     private var stringToSearch: String? = null
     private var newSearch: Boolean = false
@@ -104,29 +103,41 @@ class RecipeListingFragment : Fragment() {
         scrollListener = object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // prevent missed calls to api // needs to be reseted on search so it could be a next page
+                    if (next_page){
+                        binding.recyclerView.removeOnScrollListener(scrollListener)
 
-                    binding.recyclerView.removeOnScrollListener(scrollListener)
-                    //val visibleItemCount: Int = manager.childCount
-                    val pastVisibleItem: Int =
-                        manager.findLastCompletelyVisibleItemPosition()
-                    //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
 
-                    if (stringToSearch.isNullOrEmpty()){
-                        if ((pastVisibleItem+2) >= recipeList.size ) {
-                            page += 1
-                            recipeViewModel.getRecipesPaginated(page)
+                        //val visibleItemCount: Int = manager.childCount
+                        val pastVisibleItem: Int =
+                            manager.findLastCompletelyVisibleItemPosition()
+                        //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
+
+
+
+                        if ((pastVisibleItem + 2) >= recipeList.size){
+                            if (current_page==0)
+                                current_page = 1
+                            else
+                                current_page++
+                            if (stringToSearch.isNullOrEmpty()) {
+                                recipeViewModel.getRecipesPaginated(current_page)
+                            } else {
+                                recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!, current_page)
+                            }
                         }
+
+
+                        //Log.d(TAG, pag_index.toString())
+                        //Log.d(TAG, visibleItemCount.toString())
+                        Log.d(TAG, pastVisibleItem.toString())
                     }
                     else{
-                        if ((pastVisibleItem+2) >= searchRecipeList.size ) {
-                            page += 1
-                            recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!,page)
-                        }
+                        toast("Sorry cant find more recipes.")
                     }
 
-                    //Log.d(TAG, pag_index.toString())
-                    //Log.d(TAG, visibleItemCount.toString())
-                    Log.d(TAG, pastVisibleItem.toString())
+
+
 
                     binding.recyclerView.addOnScrollListener(scrollListener)
 
@@ -169,7 +180,7 @@ class RecipeListingFragment : Fragment() {
                     return true
                 }
             })
-            recipeViewModel.getRecipesPaginated(page)
+            recipeViewModel.getRecipesPaginated(current_page)
 
 
             //nav search toppom
@@ -257,21 +268,30 @@ class RecipeListingFragment : Fragment() {
     private fun bindObservers() {
         recipeViewModel.recipeResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
+                searchMode = false
+
                 when (it) {
+
                     is NetworkResult.Success -> { it
                         binding.progressBar.hide()
-                        searchMode = false
-                        page = it.data!!._metadata.page
+
+                        current_page = it.data!!._metadata.current_page
+
+                        // check next page to failed missed calls to api
+                        next_page = it.data._metadata.Links[0].next!=null
+
                         if (it.data == null){
                             toast(getString(R.string.no_recipes_found))
                         }
                         else {
-                            for (recipe in it.data.recipe_result) {
+                            for (recipe in it.data.result) {
                                 recipeList.add(recipe)
                             }
                             adapter.updateList(recipeList)
 
                         }
+
+
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(it.message.toString())
@@ -289,9 +309,9 @@ class RecipeListingFragment : Fragment() {
                     is NetworkResult.Success -> { it
                         binding.progressBar.hide()
                         searchMode = true
-                        if (it.data!!.recipe_result.isEmpty()){
+                        if (it.data!!.result.isEmpty()){
                             //removing last page on recipes not found
-                            page = it.data!!._metadata.page_count
+                            current_page = it.data!!._metadata.total_pages
                             toast(getString(R.string.no_recipes_found))
                         }
                         else {
@@ -299,10 +319,10 @@ class RecipeListingFragment : Fragment() {
                             // if new check
                             if (searchRecipeList.size != 0 && newSearch){
                                 searchRecipeList = mutableListOf()
-                                page=1
+                                current_page=1
                             }
                             newSearch = false
-                            for (recipe in it.data.recipe_result) {
+                            for (recipe in it.data.result) {
                                 searchRecipeList.add(recipe)
                             }
                             Log.d(TAG, "bindObservers: searchRecipeList: "+searchRecipeList.toString())
