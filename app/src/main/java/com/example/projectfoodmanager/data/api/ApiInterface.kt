@@ -1,56 +1,60 @@
 package com.example.projectfoodmanager.data.api
 
-import com.example.projectfoodmanager.data.model.User
 import com.example.projectfoodmanager.data.model.modelRequest.CommentRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
-import com.example.projectfoodmanager.data.model.modelResponse.RecipeResponse
-import com.example.projectfoodmanager.data.model.modelResponse.UserResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import retrofit2.Response
 import retrofit2.http.*
-
+const val API_V1_BASE_URL = "api/v1"
 
 interface ApiInterface {
 
     //user
-    @POST("/user")
-    suspend fun createUser(@Body user : UserRequest): Response<UserResponse>
+    @POST("$API_V1_BASE_URL/auth")
+    suspend fun createUser(@Body user : UserRequest): Response<Unit>
 
-    @POST("/user/login")
-    suspend fun loginUser(@Body user : UserRequest): Response<UserResponse>
+    @POST("$API_V1_BASE_URL/auth/login")
+    suspend fun loginUser(@Body user : UserRequest): Response<UserAuthResponse>
 
-    @DELETE("/user/logout")
+    @DELETE("$API_V1_BASE_URL/auth/logout")
     suspend fun logoutUser(): Response<String>
 
-    @GET("/user/auth")
-    suspend fun getUserSession(): Response<UserResponse>
+    @GET("$API_V1_BASE_URL/auth")
+    suspend fun getUserSession(): Response<User>
 
     @GET("/user")
-    suspend fun getUser(@Query("userId") userId: String): Response<UserResponse>
-
-    @GET("/user")
-    suspend fun getUserByUUID(@Query("userUUID") userUUID: String): Response<UserResponse>
+    suspend fun getUser(@Query("userId") userId: Int): Response<UserAuthResponse>
 
     @PUT("/user")
-    suspend fun updateUser(@Query("userId") userId: String,@Body user : UserRequest): Response<UserResponse>
+    suspend fun updateUser(@Query("userId") userId: Int,@Body user : UserRequest): Response<UserAuthResponse>
 
     @DELETE("/user")
-    suspend fun deleteUser(@Query("userId") userId: String): Response<String>
+    suspend fun deleteUser(@Query("userId") userId: Int): Response<String>
 
     //recipe
-    @POST("/recipe")
-    suspend fun createRecipe(@Query("userId") userId: String,@Body recipe : RecipeRequest): Response<RecipeResponse>
+    @POST("$API_V1_BASE_URL/recipe")
+    suspend fun createRecipe(@Body recipe : RecipeRequest): Response<RecipeResponse>
 
-    @GET("/recipe")
-    suspend fun getRecipe(@Query("recipeId") recipeId: String): Response<RecipeResponse>
+    @GET("$API_V1_BASE_URL/recipe/list")
+    suspend fun getRecipe(@Query("recipeId") recipeId: Int): Response<RecipeResponse>
 
-    @PUT("/recipe")
-    suspend fun updateRecipe(@Query("recipeId") recipeId: String,@Query("userId") userId: String,@Body recipe : RecipeRequest): Response<RecipeResponse>
+    @GET("$API_V1_BASE_URL/recipe/list")
+    suspend fun getRecipePaginated(@Query("page") page: Int): Response<RecipeListResponse>
 
-    @DELETE("/recipe")
-    suspend fun deleteRecipe(@Query("recipeId") recipeId: String,@Query("userId") userId: String): Response<String>
+    @GET("$API_V1_BASE_URL/recipe/list")
+    suspend fun getRecipesByTitleAndTags(@Query("string")string: String,@Query("page") page: Int): Response<RecipeListResponse>
+
+    @PUT("$API_V1_BASE_URL/recipe")
+    suspend fun updateRecipe(@Query("recipeId") recipeId: Int,@Body recipe : RecipeRequest): Response<RecipeResponse>
+
+    @DELETE("$API_V1_BASE_URL/recipe")
+    suspend fun deleteRecipe(@Query("recipeId") recipeId: Int): Response<String>
 
 
     //comments
@@ -78,6 +82,7 @@ interface ApiInterface {
 
     @GET("/followers")
     suspend fun getFollowes(@Query("userReceiverId") userReceiverId: String): Response<FollowerResponse>
+
 
 
 }

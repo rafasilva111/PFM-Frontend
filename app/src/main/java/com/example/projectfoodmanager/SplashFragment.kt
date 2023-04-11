@@ -8,9 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
@@ -24,6 +22,9 @@ class SplashFragment : Fragment() {
 
     @Inject
     lateinit var tokenManager: TokenManager
+
+    @Inject
+    lateinit var sharedPreference: SharedPreference
 
     private val authViewModel by activityViewModels<AuthViewModel>()
     val TAG: String = "SplashFragment"
@@ -41,16 +42,10 @@ class SplashFragment : Fragment() {
                 else{
                     findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                 }
-
-
             }else{
                 findNavController().navigate(R.id.action_splashFragment_to_viewPagerFragment)
             }
         },SPLASH_TIME)
-
-        authViewModel.userResponseLiveData
-
-
 
         return inflater.inflate(R.layout.fragment_splash, container, false)
     }
@@ -71,15 +66,22 @@ class SplashFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        authViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer {
+        authViewModel.userOldLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
                 when (it) {
                     is NetworkResult.Success -> {
-                        findNavController().navigate(R.id.action_splashFragment_to_app_navigation)
-                        toast(getString(R.string.welcome))
+                        if (it.data != null) {
+                            sharedPreference.saveUserSession(it.data)
+                            findNavController().navigate(R.id.action_splashFragment_to_app_navigation)
+                            toast(getString(R.string.welcome))
+                        }
+                        else{
+                            Log.d(TAG, "userResponseLiveData Observer: Something went wrong")
+                        }
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                        tokenManager.deleteToken()
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -87,37 +89,5 @@ class SplashFragment : Fragment() {
             }
         })
     }
-
-
-    /*fun observer(){
-        authViewModel.user.observe(viewLifecycleOwner) { response ->
-            when(response){
-                is Resource.Loading -> {
-                   // Log.i(TAG,"Loading...")
-                }
-                is Resource.Success -> {
-                    Handler().postDelayed({
-                        findNavController().navigate(R.id.action_splashFragment_to_app_navigation)
-                    }, SPLASH_TIME)
-
-                }
-                is Resource.Error -> {
-                    Log.i(TAG,"No user previously logged out.")
-                    Log.i(TAG,"${response.message}")
-
-                    Handler().postDelayed({
-                        if(onBoardingFinished()){
-                            findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
-
-                        }else{
-                            findNavController().navigate(R.id.action_splashFragment_to_viewPagerFragment)
-                        }
-                    },SPLASH_TIME)
-                }
-                else -> {}
-            }
-        }
-    }*/
-
 
 }

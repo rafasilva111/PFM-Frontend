@@ -1,14 +1,12 @@
 package com.example.projectfoodmanager.di
 
 
-import android.content.SharedPreferences
-import com.example.projectfoodmanager.data.old.AuthRepositoryImp_old
-import com.example.projectfoodmanager.data.old.AuthRepository_old
+import com.example.projectfoodmanager.data.old.RecipeRepositoryImp_old
+import com.example.projectfoodmanager.data.old.RecipeRepository_old
 import com.example.projectfoodmanager.data.repository.*
-import com.example.projectfoodmanager.data.repository.datasourImp.RemoteDataSourceImpl
+import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourceImpl
 import com.example.projectfoodmanager.data.repository.AuthRepository
 import com.example.projectfoodmanager.util.SharedPreference
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import dagger.Module
@@ -22,34 +20,29 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun provideRecipeRepository(
+    fun recipeRepositoryOld(
         database: FirebaseFirestore
-    ): RecipeRepository{
-        return RecipeRepositoryImp(database)
+    ): RecipeRepository_old {
+        return RecipeRepositoryImp_old(database)
     }
-
-
 
     @Provides
     @Singleton
-    fun provideAuthRepository(
-        database: FirebaseFirestore,
-        auth: FirebaseAuth,
-        appPreferences: SharedPreferences,
+    fun recipeRepository(
+        remoteDataSource: RemoteDataSourceImpl,
         gson: Gson
-
-    ): AuthRepository_old {
-        return AuthRepositoryImp_old(auth,database,appPreferences, gson )
+    ): RecipeRepository {
+        return RecipeRepositoryImp(remoteDataSource,gson)
     }
 
     @Provides
     @Singleton
     fun providesRepository(
-        RemoteDataSource: RemoteDataSourceImpl,
+        remoteDataSource: RemoteDataSourceImpl,
         sharedPreference: SharedPreference
     ): AuthRepository {
         return AuthRepositoryImp(
-            remoteDataSource = RemoteDataSource,
+            remoteDataSource = remoteDataSource,
             sharedPreference = sharedPreference
         )
     }

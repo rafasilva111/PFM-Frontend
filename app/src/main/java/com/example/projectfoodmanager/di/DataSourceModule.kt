@@ -1,7 +1,7 @@
 package com.example.projectfoodmanager.di
 
 import com.example.projectfoodmanager.data.api.ApiInterface
-import com.example.projectfoodmanager.data.repository.datasourImp.RemoteDataSourceImpl
+import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourceImpl
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import dagger.Module
 import dagger.Provides

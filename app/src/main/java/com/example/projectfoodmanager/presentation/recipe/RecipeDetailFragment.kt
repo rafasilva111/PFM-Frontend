@@ -27,6 +27,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.NutritionTable
 import com.example.projectfoodmanager.util.RecipeListingFragmentFilters
 import com.example.projectfoodmanager.util.UiState

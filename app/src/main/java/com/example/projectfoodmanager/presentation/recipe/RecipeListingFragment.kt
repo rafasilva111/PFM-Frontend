@@ -10,39 +10,55 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.util.Resource
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.floor
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecipeListingFragment : Fragment() {
+
+    // constantes (cuidado com esta merda)
+
+    private var current_page:Int = 1
+    private var next_page:Boolean = true
+
+    private var recipeList: MutableList<RecipeResponse> = mutableListOf()
+
+    private var stringToSearch: String? = null
+    private var newSearch: Boolean = false
+    // this needs to happen otherwise we will have a spam of toast
+    private var no_more_recipes_message_presented = false
+
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+
+
 
 
     private var isFirstTimeCall = true
     private var snapHelper : SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
-    private var list: MutableList<Recipe> = arrayListOf()
     private var searchMode: Boolean = false
 
     val TAG: String = "RecipeListingFragment"
-
-
     lateinit var binding: FragmentRecipeListingBinding
-    val viewModel: RecipeViewModel by viewModels()
-    private val authModel: AuthViewModel by viewModels()
+    private val recipeViewModel by activityViewModels<RecipeViewModel>()
+    private val authViewModel: AuthViewModel by viewModels()
     private val adapter by lazy {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
@@ -53,8 +69,8 @@ class RecipeListingFragment : Fragment() {
 
                 changeVisib_Menu(false)
             },
-            this.authModel,
-            this.viewModel
+            this.recipeViewModel,
+            sharedPreference
         )
     }
 
@@ -65,7 +81,7 @@ class RecipeListingFragment : Fragment() {
         //observer()
         //todo check for internet connection
 
-        //authModel.getUserSession()
+        bindObservers()
 
         if (this::binding.isInitialized){
             return binding.root
@@ -92,34 +108,43 @@ class RecipeListingFragment : Fragment() {
     private fun setRecyclerViewScrollListener() {
         scrollListener = object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (!searchMode) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        if (isFirstTimeCall) {
-                            isFirstTimeCall = false;
-                            binding.recyclerView.removeOnScrollListener(scrollListener)
-                            val visibleItemCount: Int = manager.childCount
-                            val pastVisibleItem: Int =
-                                manager.findLastCompletelyVisibleItemPosition()
-                            val pag_index =
-                                floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
-                            if ((pastVisibleItem + 1) % FireStorePaginations.RECIPE_LIMIT.toInt() == 0) {
-                                viewModel.getRecipesPaginated(false)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // prevent missed calls to api // needs to be reseted on search so it could be a next page
+
+                    if (next_page){
+
+                        Log.d(TAG, "onScrollStateChanged: $next_page")
+                        binding.recyclerView.removeOnScrollListener(scrollListener)
+
+
+                        //val visibleItemCount: Int = manager.childCount
+                        val pastVisibleItem: Int =
+                            manager.findLastCompletelyVisibleItemPosition()
+                        //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
+
+                        if ((pastVisibleItem + 1) >= recipeList.size){
+                            if (stringToSearch.isNullOrEmpty()) {
+                                recipeViewModel.getRecipesPaginated(current_page)
+                            } else {
+                                recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!, current_page)
                             }
-                            Log.d(TAG, pag_index.toString())
-                            Log.d(TAG, visibleItemCount.toString())
-                            Log.d(TAG, pastVisibleItem.toString())
-
-
-                            binding.recyclerView.addOnScrollListener(scrollListener)
                         }
+                        //Log.d(TAG, pag_index.toString())
+                        //Log.d(TAG, visibleItemCount.toString())
+                        Log.d(TAG, pastVisibleItem.toString())
                     }
-
-                    if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                        isFirstTimeCall = true
+                    else if (no_more_recipes_message_presented == false){
+                        no_more_recipes_message_presented = true
+                        toast("Sorry cant find more recipes.")
                     }
-
-                    super.onScrollStateChanged(recyclerView, newState)
+                    binding.recyclerView.addOnScrollListener(scrollListener)
                 }
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    isFirstTimeCall = true
+                }
+
+                super.onScrollStateChanged(recyclerView, newState)
+
             }
         }
         binding.recyclerView.addOnScrollListener(scrollListener)
@@ -130,6 +155,13 @@ class RecipeListingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         changeVisib_Menu(true)
 
+        // user data
+        val user = sharedPreference.getUserSession()
+        if (user!= null){
+            binding.tvName.text = user.first_name+" "+ user.last_name
+        }
+
+
         if (isOnline(view.context)) {
             binding.recyclerView.adapter = adapter
             binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -139,60 +171,21 @@ class RecipeListingFragment : Fragment() {
 
                 override fun onQueryTextChange(text: String?): Boolean {
                     if (text != null && text != "") {
-                        viewModel.getRecipesByTitle(text, true)
+                        // importante se não não funciona
+                        current_page = 1
+                        newSearch = true
+                        stringToSearch=text
+                        recipeViewModel.getRecipesByTitleAndTags(text, current_page)
                     }
-
+                    else{
+                        stringToSearch=null
+                        recipeViewModel.getRecipesPaginated(current_page)
+                    }
                     return true
                 }
             })
+            recipeViewModel.getRecipesPaginated(current_page)
 
-
-            viewModel.getRecipesPaginated(true)
-            var firstTimeLoading = true
-            viewModel.recipe.observe(viewLifecycleOwner) { state ->
-
-                when (state) {
-                    is UiState.Loading -> {
-                        if (firstTimeLoading)
-                            binding.progressBar.show()
-                        firstTimeLoading = false
-
-                    }
-                    is UiState.Success -> {
-                        binding.progressBar.hide()
-                        for (item in state.data.toMutableList())
-                            if (list.indexOf(item) == -1)
-                                list.add(item)
-                        adapter.updateList(list)
-                    }
-                    is UiState.Failure -> {
-                        binding.progressBar.hide()
-                        toast(state.error)
-                    }
-                }
-            }
-            viewModel.recipe_search.observe(viewLifecycleOwner) { state ->
-                val lista: MutableList<Recipe> = arrayListOf()
-                when (state) {
-
-                    is UiState.Loading -> {
-                        adapter.updateList(arrayListOf())
-                        binding.progressBar.show()
-
-                    }
-                    is UiState.Success -> {
-                        binding.progressBar.hide()
-                        for (item in state.data.toMutableList())
-                            if (lista.indexOf(item) == -1)
-                                lista.add(item)
-                        adapter.updateList(lista)
-                    }
-                    is UiState.Failure -> {
-                        binding.progressBar.hide()
-                        toast(state.error)
-                    }
-                }
-            }
 
             //nav search toppom
 
@@ -213,22 +206,34 @@ class RecipeListingFragment : Fragment() {
             //nav search bottom
 
             binding.IBMeat.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE, true)
+                newSearch = true
+                stringToSearch=RecipeListingFragmentFilters.CARNE
+                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE)
             }
             binding.IBFish.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE, true)
+                newSearch = true
+                stringToSearch=RecipeListingFragmentFilters.PEIXE
+                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE)
             }
             binding.IBSoup.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA, true)
+                newSearch = true
+                stringToSearch=RecipeListingFragmentFilters.SOPA
+                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA)
             }
             binding.IBVegi.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA, true)
+                newSearch = true
+                stringToSearch=RecipeListingFragmentFilters.VEGETARIANA
+                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA)
             }
             binding.IBFruit.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA, true)
+                newSearch = true
+                stringToSearch=RecipeListingFragmentFilters.FRUTA
+                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA)
             }
             binding.IBDrink.setOnClickListener {
-                viewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS, true)
+                newSearch = true
+                stringToSearch=RecipeListingFragmentFilters.BEBIDAS
+                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS)
             }
         }
         else{
@@ -236,6 +241,7 @@ class RecipeListingFragment : Fragment() {
             binding.recyclerView.visibility = View.GONE
         }
     }
+
 
     private fun isOnline(context: Context): Boolean {
         val connectivityManager =
@@ -257,6 +263,82 @@ class RecipeListingFragment : Fragment() {
             }
         }
         return false
+    }
+
+    private fun showValidationErrors(error: String) {
+        toast(error)
+    }
+
+    private fun bindObservers() {
+        recipeViewModel.recipeResponseLiveData.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                searchMode = false
+
+                when (it) {
+
+                    is NetworkResult.Success -> { it
+                        binding.progressBar.hide()
+
+                        current_page = it.data!!._metadata.current_page
+
+                        // check next page to failed missed calls to api
+                        next_page = it.data._metadata.next!=null
+
+
+                        for (recipe in it.data.result) {
+                            recipeList.add(recipe)
+                        }
+                        adapter.updateList(recipeList)
+
+                        // se houver next page soma se não faz nada
+                        if (next_page)
+                            current_page++
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.show()
+
+                    }
+                }
+            }
+        })
+        recipeViewModel.recipeSearchByTitleAndTagsResponseLiveData.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        binding.progressBar.hide()
+                        if (it.data != null){
+                            // numa nova procura resetar a lista de receitas
+                            if (newSearch)
+                                recipeList = mutableListOf()
+
+                            for (recipe in it.data.result) {
+                                recipeList.add(recipe)
+                            }
+                            adapter.updateList(recipeList)
+                            newSearch = false
+
+                            // check next page to failed missed calls to api
+                            next_page = it.data._metadata.next!=null
+                            // safe call for debaunce
+                            current_page = it.data!!._metadata.current_page
+                            // se houver next page soma se não não faz nada
+                            if (next_page)
+                                current_page++
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        binding.progressBar.hide()
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.show()
+                    }
+                }
+            }
+        })
     }
 
 

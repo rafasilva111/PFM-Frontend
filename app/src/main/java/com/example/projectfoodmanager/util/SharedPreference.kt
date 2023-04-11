@@ -1,10 +1,13 @@
 package com.example.projectfoodmanager.util
 
 import android.content.SharedPreferences
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.google.gson.Gson
 import javax.inject.Inject
 
 class SharedPreference @Inject constructor(
-    private val sharedPreferences : SharedPreferences
+    private val sharedPreferences : SharedPreferences,
+    private val gson: Gson
 ) {
 
     fun isFirstAppLaunch(): Boolean {
@@ -15,21 +18,17 @@ class SharedPreference @Inject constructor(
         sharedPreferences.edit().putBoolean(Constants.IS_FIRST_APP_LAUNCH, value).apply()
     }
 
-    fun userIsLoggedIn() : Boolean {
-        val token = sharedPreferences.getString(Constants.USER_TOKEN, null)
-        return token != null
+    fun getUserSession(): User {
+
+         return gson.fromJson(sharedPreferences.getString(Constants.USER_SESSION,""), User::class.java)
+
     }
 
-    fun getUserToken(): String {
-        return sharedPreferences.getString(Constants.USER_TOKEN, "").toString()
+    fun saveUserSession(user: User) {
+        sharedPreferences.edit().putString(Constants.USER_SESSION,gson.toJson(user)).apply()
     }
 
-    fun saveUserAccessToken(token: String) {
-        sharedPreferences.edit().putString(Constants.USER_TOKEN, token).apply()
-    }
-
-    fun deleteAccessToken(): Boolean {
-        sharedPreferences.edit().remove(Constants.USER_TOKEN).apply()
-        return userIsLoggedIn()
+    fun deleteUserSession() {
+        sharedPreferences.edit().remove(Constants.USER_SESSION).apply()
     }
 }

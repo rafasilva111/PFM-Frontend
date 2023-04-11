@@ -1,29 +1,29 @@
 package com.example.projectfoodmanager.presentation.recipe
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.util.UiState
+import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
+import com.example.projectfoodmanager.util.SharedPreference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 
 class RecipeListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit,
-    private val authModel: AuthViewModel,
-    private val viewModel: RecipeViewModel
+    private val viewModel: RecipeViewModel,
+    private val sharedPreference: SharedPreference
 ) : RecyclerView.Adapter<RecipeListingAdapter.MyViewHolder>() {
 
 
+
     private val TAG: String? = "RecipeListingAdapter"
-    private var list: MutableList<Recipe> = arrayListOf()
+    private var list: MutableList<RecipeResponse> = arrayListOf()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -37,8 +37,14 @@ class RecipeListingAdapter(
         holder.bind(item)
     }
 
-    fun updateList(list: MutableList<Recipe>){
+    fun updateList(list: MutableList<RecipeResponse>){
         this.list = list
+        notifyDataSetChanged()
+    }
+
+
+    fun cleanList(){
+        this.list= arrayListOf()
         notifyDataSetChanged()
     }
 
@@ -55,35 +61,51 @@ class RecipeListingAdapter(
     inner class MyViewHolder(private val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(item: Recipe) {
-            val imgRef = Firebase.storage.reference.child(item.img)
-            imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                val imageURL = Uri.toString()
-                Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
-            }
+        fun bind(item: RecipeResponse) {
+            if (!item.img_source.isNullOrEmpty()){
+                val imgRef = Firebase.storage.reference.child(item.img_source)
+                imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                    val imageURL = Uri.toString()
+                    Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
+                }
                 .addOnFailureListener {
                     Glide.with(binding.imageView.context)
                         .load(R.drawable.good_food_display___nci_visuals_online)
                         .into(binding.imageView)
                 }
-            binding.dateLabel.text = item.date
+            }
+
+            binding.dateLabel.text = item.created_date
             binding.recipeTitle.text = item.title
-            binding.TVDescription.text = item.desc.toString()
-            binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
+            binding.TVDescription.text = item.description.toString()
+            //binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
 
             // like function
 
-            if (item.likes.size == 1) {
+            if (item.likes == 1) {
                 binding.TVRate.text = "1 Gosto"
             } else {
-                binding.TVRate.text = item.likes.size.toString() + " Gosto"
+                binding.TVRate.text = item.likes.toString() + " Gosto"
             }
-            binding.dateLabel.text = item.date
+            binding.dateLabel.text = item.created_date
 
 
             // favorite function
             binding.favorites.setImageResource(R.drawable.ic_favorite)
             binding.like.setImageResource(R.drawable.ic_like)
+
+            val user = sharedPreference.getUserSession()
+
+            // check for user likes
+
+            if (user != null){
+
+            }
+
+
+
+
+
             /*authModel.getUserSession_old { user ->
                 if (user != null) {
                     val recipe_fav = user.getFavoriteRecipe(item.id)

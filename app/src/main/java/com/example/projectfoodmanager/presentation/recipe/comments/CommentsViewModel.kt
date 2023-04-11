@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.ui.recipe
+package com.example.projectfoodmanager.presentation.recipe.comments
 
 import androidx.lifecycle.ViewModel
 

@@ -1,251 +1,86 @@
 package com.example.projectfoodmanager.data.repository
 
 import android.util.Log
-import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.util.FireStoreCollection
-import com.example.projectfoodmanager.util.FireStorePaginations
-import com.example.projectfoodmanager.util.UiState
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import dagger.Provides
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
+
+import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
+import com.example.projectfoodmanager.util.Event
+import com.example.projectfoodmanager.util.NetworkResult
+import com.example.projectfoodmanager.util.SharedPreference
+import com.google.gson.Gson
+import javax.inject.Inject
+
+class RecipeRepositoryImp @Inject constructor(
+    private val remoteDataSource: RemoteDataSource,
+    private val gson: Gson
+) : RecipeRepository {
+
+    private val TAG:String = "RecipeRepositoryImp"
+
+    private val _recipeResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeListResponse>>>()
+    override val recipeResponseLiveData: LiveData<Event<NetworkResult<RecipeListResponse>>>
+        get() = _recipeResponseLiveData
 
 
-class RecipeRepositoryImp(
-    val database: FirebaseFirestore
-): RecipeRepository {
-    val TAG: String = "RecipeRepositoryImp"
-    var lastRecipeSnapshot: DocumentSnapshot? = null
-    var lastRecipe: Recipe? = null
+    override suspend fun getRecipesPaginated(page: Int) {
+        _recipeResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making login request.")
+        val response =remoteDataSource.getRecipesPaginated(page)
 
-    override fun getRecipes(result: (UiState<List<Recipe>>) -> Unit) {
-        database.collection(FireStoreCollection.RECIPE_PROD)
-            .get()
-            .addOnSuccessListener {
-                val notes = arrayListOf<Recipe>()
-                for (document in it) {
-                    val recipe = document.toObject(Recipe::class.java)
+        //handle response RecipeListResponse
 
-                    if (recipe != null) {
-                        notes.add(recipe)
-                    } else {
-                        Log.d(TAG, "Problem on recipe -> " + document.toString())
-                    }
-                }
-                result.invoke(
-                    UiState.Success(notes)
-                )
+        if (response.isSuccessful && response.body() != null) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            Log.i(TAG, "handleResponse: response body -> ${response.body()}")
+            _recipeResponseLiveData.postValue(Event(NetworkResult.Success(
+             response.body()!!
+            )))
+        }
+        else if(response.errorBody()!=null){
+
+            try {
+                val errorObj = response.errorBody()!!.charStream().readText()
+                Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
+                _recipeResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+            } catch (e: Exception) {
+                Log.i(TAG, "e")
             }
-            .addOnFailureListener {
-                result.invoke(
-                    UiState.Failure(
-                        it.localizedMessage
-                    )
-                )
-            }
-    }
 
-    override fun addRecipe(recipe: Recipe, result: (UiState<String>) -> Unit) {
-        database.collection(FireStoreCollection.RECIPE_PROD)
-            .add(recipe)
-            .addOnSuccessListener {
-                result.invoke(
-                    UiState.Success(it.id)
-                )
-            }
-            .addOnFailureListener{
-                result.invoke(
-                    UiState.Failure(it.localizedMessage)
-                )
-            }
-    }
-
-    override fun getRecipesPaginated(firstTime: Boolean, result: (UiState<List<Recipe>>) -> Unit) {
-        var first: Query?
-        val notes = arrayListOf<Recipe>()
-
-        if (firstTime){
-             first = database.collection(FireStoreCollection.RECIPE_PROD)
-                 .orderBy("id")
-                .limit(FireStorePaginations.RECIPE_LIMIT)
         }
         else{
-            first = database.collection(FireStoreCollection.RECIPE_PROD)
-                .orderBy("id")
-                .limit(FireStorePaginations.RECIPE_LIMIT)
-                .startAfter(lastRecipe?.id)
+            _recipeResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
-        first.get()
-            .addOnSuccessListener { documentSnapshots ->
-                if (documentSnapshots.size()!=0){
-                    for (document in documentSnapshots.documents) {
-                        val recipe = document.toObject(Recipe::class.java)
-
-                        if (recipe != null) {
-                            notes.add(recipe)
-                        } else {
-                            Log.d(TAG, "Problem on recipe -> " + document.toString())
-                        }
-                    }
-                    lastRecipe = documentSnapshots.documents[documentSnapshots.size() - 1].toObject(Recipe::class.java)
-
-                    result.invoke(
-                        UiState.Success(
-                            notes
-                        )
-                    )
-                }
-                else{
-                    result.invoke(UiState.Failure("Não existem mais receitas..."))
-                }
-            }
-            .addOnFailureListener {
-                result.invoke(
-                    UiState.Failure(
-                        it.localizedMessage
-                    )
-                )
-            }
-
     }
 
-    override fun getRecipesByTitle(title: String,firstTime: Boolean, result: (UiState<List<Recipe>>) -> Unit) {
+    private val _recipeSearchByTitleAndTagsResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeListResponse>>>()
+    override val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeListResponse>>>
+        get() = _recipeSearchByTitleAndTagsResponseLiveData
 
-        var first: Query?
-        val notes = arrayListOf<Recipe>()
 
-        if (firstTime){
+    override suspend fun getRecipesByTitleAndTags(string: String, searchPage: Int) {
+        _recipeSearchByTitleAndTagsResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making login request.")
+        val response =remoteDataSource.getRecipesByTitleAndTags(string,searchPage)
 
-            first = database.collection(FireStoreCollection.RECIPE_PROD)
-                .orderBy("title")
-                .startAt(title).endAt(title+"~")
-                .limit(FireStorePaginations.RECIPE_LIMIT)
+        //handle response RecipeListResponse
+
+        if (response.isSuccessful && response.body() != null) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            Log.i(TAG, "handleResponse: response body -> ${response.body()}")
+            _recipeSearchByTitleAndTagsResponseLiveData.postValue(Event(NetworkResult.Success(
+                response.body()!!
+            )))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
+            _recipeSearchByTitleAndTagsResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
         }
         else{
-            first = database.collection(FireStoreCollection.RECIPE_PROD)
-                .orderBy("title")
-                .startAt(lastRecipe?.title).endAt(title+"~")
-                .limit(FireStorePaginations.RECIPE_LIMIT)
+            _recipeSearchByTitleAndTagsResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
-        first.get()
-            .addOnSuccessListener { documentSnapshots ->
-                if (documentSnapshots.size()!=0){
-
-                    for (document in documentSnapshots.documents) {
-                        val recipe = document.toObject(Recipe::class.java)
-
-                        if (recipe != null) {
-                            notes.add(recipe)
-                        } else {
-                            Log.d(TAG, "Problem on recipe -> " + document.toString())
-                        }
-                    }
-
-                    lastRecipe = documentSnapshots.documents[documentSnapshots.size() - 1].toObject(Recipe::class.java)
-                    result.invoke(
-                        UiState.Success(
-                            notes
-                        )
-                    )
-                }
-                else{
-                    result.invoke(UiState.Failure("Não existem mais receitas..."))
-                }
-            }
-            .addOnFailureListener {
-                result.invoke(
-                    UiState.Failure(
-                        it.localizedMessage
-                    )
-                )
-            }
     }
 
-    override fun getRecipesByTitleAndTags(title: String,firstTime: Boolean, result: (UiState<List<Recipe>>) -> Unit) {
-        var first: Query?
-        val notes = arrayListOf<Recipe>()
-
-
-        first = database.collection(FireStoreCollection.RECIPE_PROD)
-
-
-        first.get()
-            .addOnSuccessListener { documentSnapshots ->
-                documentSnapshots.query
-                if( documentSnapshots.size() !=0) {
-                    lastRecipeSnapshot = documentSnapshots.documents[documentSnapshots.size() - 1]
-
-                    for (document in documentSnapshots.documents) {
-                        val recipe = document.toObject(Recipe::class.java)
-                        var found = recipe!!.title.lowercase().contains(title.lowercase()) or recipe!!.tags.lowercase().contains(title.lowercase()) or recipe!!.title.lowercase().contains(title.lowercase()) or recipe!!.tags.lowercase().contains(title.lowercase())
-                        Log.d("TAG", "${recipe.title} / $found")
-                        if (found) {
-                            notes.add(recipe)
-                        } else {
-                            Log.d(TAG, "Problem on recipe -> " + document.toString())
-                        }
-                        if (notes.size ==FireStorePaginations.RECIPE_LIMIT.toInt()){
-                            break
-                        }
-                    }
-                    lastRecipe =
-                        documentSnapshots.documents[documentSnapshots.size() - 1].toObject(Recipe::class.java)
-                    result.invoke(
-                        UiState.Success(
-                            notes
-                        )
-                    )
-                }
-                else
-
-                    UiState.Success(
-                        notes
-                    )
-            }
-            .addOnFailureListener {
-                Log.d(TAG, "getRecipesByTitle: "+it)
-                result.invoke(
-                    UiState.Failure(
-                        it.localizedMessage
-                    )
-                )
-            }
-    }
-
-
-
-    override fun addLikeOnRecipe(
-        userId: String,
-        recipe: Recipe,
-        result: (UiState<Pair<Recipe, String>>?) -> Unit
-    ) {
-
-        recipe.addLike(userId)
-        database.collection(FireStoreCollection.RECIPE_PROD).document(recipe.id).set(recipe).addOnFailureListener {
-            Log.d(TAG, "addFavoriteRecipe: "+it.toString())
-        }
-
-        Log.d(TAG, "Recipe has been liked successfully.")
-
-        result.invoke(
-            UiState.Success(Pair(recipe,"Receita gostada com sucesso!"))
-        )
-    }
-
-    override fun removeLikeOnRecipe(
-        userId: String,
-        recipe: Recipe,
-        result: (UiState<Pair<Recipe, String>>?) -> Unit
-    ) {
-        recipe.removeLike(userId)
-        database.collection(FireStoreCollection.RECIPE_PROD).document(recipe.id).set(recipe).addOnFailureListener {
-            Log.d(TAG, "addFavoriteRecipe: "+it.toString())
-        }
-
-        Log.d(TAG, "Recipe has been unliked successfully.")
-
-        result.invoke(
-            UiState.Success(Pair(recipe,"Receita gosto retirado com sucesso!"))
-        )
-    }
 }
