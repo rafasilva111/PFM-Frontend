@@ -15,7 +15,7 @@ import com.google.firebase.storage.ktx.storage
 
 
 class RecipeListingAdapter(
-    val onItemClicked: (Int, Recipe) -> Unit,
+    val onItemClicked: (Int, RecipeResponse) -> Unit,
     private val viewModel: RecipeViewModel,
     private val sharedPreference: SharedPreference
 ) : RecyclerView.Adapter<RecipeListingAdapter.MyViewHolder>() {
@@ -78,7 +78,7 @@ class RecipeListingAdapter(
             binding.dateLabel.text = item.created_date
             binding.recipeTitle.text = item.title
             binding.TVDescription.text = item.description.toString()
-            //binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
+            binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
 
             // like function
 
