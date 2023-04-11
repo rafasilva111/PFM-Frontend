@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.recipe;
+package com.example.projectfoodmanager.presentation.recipe.details;
 
 import android.content.Context
 import android.view.LayoutInflater

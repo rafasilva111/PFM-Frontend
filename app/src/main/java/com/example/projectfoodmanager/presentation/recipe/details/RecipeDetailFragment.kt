@@ -1,19 +1,13 @@
-package com.example.projectfoodmanager.presentation.recipe
+package com.example.projectfoodmanager.presentation.recipe.details
 
 
 import android.animation.LayoutTransition
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams
-import android.view.ViewGroup.VISIBLE
-import android.view.WindowManager
-import android.widget.LinearLayout
 import android.widget.ListAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
@@ -30,8 +24,6 @@ import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.NutritionTable
 import com.example.projectfoodmanager.util.RecipeListingFragmentFilters
-import com.example.projectfoodmanager.util.UiState
-import com.example.projectfoodmanager.util.toast
 import com.google.android.material.chip.Chip
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -75,11 +67,15 @@ class RecipeDetailFragment : Fragment() {
         objRecipe = arguments?.getParcelable("note")
 
         objRecipe?.let { recipe ->
+
+            var fragmentAdapter = FragmentAdapter(supportFragmentManager)
+
             binding.TVTitle.text = recipe.title
             binding.TVDate.text = recipe.date
             binding.TVTime.text = recipe.time
             binding.TVDifficulty.text = recipe.difficulty
             binding.TVPortion.text = recipe.portion
+
 
             // TODO: Falta implementar o rating externo
           //  binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
