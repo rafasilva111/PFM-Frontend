@@ -169,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/fedoka"
-                android:text="First & Last name"
+                android:text="First and Last name"
                 android:textAlignment="gravity"
                 android:textColor="@color/white"
                 android:textSize="15sp"

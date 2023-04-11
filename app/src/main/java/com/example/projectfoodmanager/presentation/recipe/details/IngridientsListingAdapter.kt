@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Ingredient
 
 
 class IngridientsListingAdapter(
     val context: Context,
-    private val items: List<String>
+    private val items: List<Ingredient>
 ):
     BaseAdapter() {
     private val inflater: LayoutInflater
@@ -46,7 +47,7 @@ class IngridientsListingAdapter(
             vh = view.tag as ViewHolder
         }
 
-        vh.tvTitle.text = items[position].toString()
+        vh.tvTitle.text = items[position].name
 
 
         return view

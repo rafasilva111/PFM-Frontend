@@ -18,7 +18,7 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
@@ -33,7 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
     val TAG: String = "ReceitaDetailFragment"
     lateinit var binding: FragmentRecipeDetailBinding
-    var objRecipe: Recipe? = null
+    var objRecipe: RecipeResponse? = null
     val viewModel: RecipeViewModel by viewModels()
     val authModel: AuthViewModel by viewModels()
     lateinit var manager: LinearLayoutManager
@@ -68,10 +68,10 @@ class RecipeDetailFragment : Fragment() {
 
         objRecipe?.let { recipe ->
 
-            var fragmentAdapter = FragmentAdapter(supportFragmentManager)
+            //var fragmentAdapter = FragmentAdapter(supportFragmentManager)
 
             binding.TVTitle.text = recipe.title
-            binding.TVDate.text = recipe.date
+            binding.TVDate.text = recipe.created_date
             binding.TVTime.text = recipe.time
             binding.TVDifficulty.text = recipe.difficulty
             binding.TVPortion.text = recipe.portion
@@ -80,9 +80,9 @@ class RecipeDetailFragment : Fragment() {
             // TODO: Falta implementar o rating externo
           //  binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
           //  binding.tvRateInt.text = "not implemented"
-            binding.TVDescriptionInfo.text = recipe.desc
+            binding.TVDescriptionInfo.text = recipe.description
 
-            val list : List<String> = recipe.tags.split("\\")
+            val list : List<String> = recipe.tags
 
 
             // TODO: Obter a lista ordenada da base de dados
@@ -166,7 +166,7 @@ class RecipeDetailFragment : Fragment() {
             //List_Ingredients
             binding.LVIngridientsInfo.isClickable = false
             val itemsAdapterIngrtedients: IngridientsListingAdapter? =
-                this.context?.let { IngridientsListingAdapter(it,parse_hash_maps(recipe.ingredients)) }
+                this.context?.let { IngridientsListingAdapter(it,recipe.ingredients) }
             binding.LVIngridientsInfo.adapter = itemsAdapterIngrtedients
             setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
 
@@ -222,31 +222,31 @@ class RecipeDetailFragment : Fragment() {
 
             //Nutrition
 
-            if(recipe.nutrition_table!=null){
+            if(recipe.nutrition_informations!=null){
 
-                //-->Resume nutrition
-                binding.TVRDoseEnergia.text=recipe.nutrition_table.get(NutritionTable.ENERGIA)
-                binding.TVRPercEnergia.text=recipe.nutrition_table.get(NutritionTable.ENERGIA_PERC)
-                binding.TVRDoseGordura.text=recipe.nutrition_table.get(NutritionTable.GORDURA)
-                binding.TVRPercGordura.text=recipe.nutrition_table.get(NutritionTable.GORDURA_PERC)
-                binding.TVRDoseGordSat.text=recipe.nutrition_table.get(NutritionTable.GORDURA_SAT)
-                binding.TVRPercGordSat.text=recipe.nutrition_table.get(NutritionTable.GORDURA_SAT_PERC)
+                /*//-->Resume nutrition
+                binding.TVRDoseEnergia.text=recipe.nutrition_informations.get(NutritionTable.ENERGIA)
+                binding.TVRPercEnergia.text=recipe.nutrition_informations.get(NutritionTable.ENERGIA_PERC)
+                binding.TVRDoseGordura.text=recipe.nutrition_informations.get(NutritionTable.GORDURA)
+                binding.TVRPercGordura.text=recipe.nutrition_informations.get(NutritionTable.GORDURA_PERC)
+                binding.TVRDoseGordSat.text=recipe.nutrition_informations.get(NutritionTable.GORDURA_SAT)
+                binding.TVRPercGordSat.text=recipe.nutrition_informations.get(NutritionTable.GORDURA_SAT_PERC)
 
                 //-->Table_Nutrition
-                binding.TVDoseEnergia.text=recipe.nutrition_table.get(NutritionTable.ENERGIA)
-                binding.TVPercEnergia.text=recipe.nutrition_table.get(NutritionTable.ENERGIA_PERC)
-                binding.TVDoseGordura.text=recipe.nutrition_table.get(NutritionTable.GORDURA)
-                binding.TVPercGordura.text=recipe.nutrition_table.get(NutritionTable.GORDURA_PERC)
-                binding.TVDoseGordSat.text=recipe.nutrition_table.get(NutritionTable.GORDURA_SAT)
-                binding.TVPercGordSat.text=recipe.nutrition_table.get(NutritionTable.GORDURA_SAT_PERC)
-                binding.TVDoseHCarbono.text=recipe.nutrition_table.get(NutritionTable.HIDRATOS_CARBONO)
-                binding.TVPercHCarbono.text=recipe.nutrition_table.get(NutritionTable.HIDRATOS_CARBONO_PERC)
+                binding.TVDoseEnergia.text=recipe.nutrition_informations.get(NutritionTable.ENERGIA)
+                binding.TVPercEnergia.text=recipe.nutrition_informations.get(NutritionTable.ENERGIA_PERC)
+                binding.TVDoseGordura.text=recipe.nutrition_informations.get(NutritionTable.GORDURA)
+                binding.TVPercGordura.text=recipe.nutrition_informations.get(NutritionTable.GORDURA_PERC)
+                binding.TVDoseGordSat.text=recipe.nutrition_informations.get(NutritionTable.GORDURA_SAT)
+                binding.TVPercGordSat.text=recipe.nutrition_informations.get(NutritionTable.GORDURA_SAT_PERC)
+                binding.TVDoseHCarbono.text=recipe.nutrition_informations.get(NutritionTable.HIDRATOS_CARBONO)
+                binding.TVPercHCarbono.text=recipe.nutrition_informations.get(NutritionTable.HIDRATOS_CARBONO_PERC)
                 binding.TVDoseHCAcucar.text=recipe.nutrition_table.get(NutritionTable.HIDRATOS_CARBONO_ACUCARES)
                 binding.TVPercHCAcucar.text=recipe.nutrition_table.get(NutritionTable.HIDRATOS_CARBONO_ACUCARES_PERC)
                 binding.TVDoseFibra.text=recipe.nutrition_table.get(NutritionTable.FIBRA)
                 binding.TVPercFibra.text=recipe.nutrition_table.get(NutritionTable.FIBRA_PERC)
                 binding.TVDoseProteina.text=recipe.nutrition_table.get(NutritionTable.PROTEINA)
-                binding.TVPercProteina.text=recipe.nutrition_table.get(NutritionTable.PROTEINA_PERC)
+                binding.TVPercProteina.text=recipe.nutrition_table.get(NutritionTable.PROTEINA_PERC)*/
 
                 binding.LLContNutrition.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
@@ -274,12 +274,12 @@ class RecipeDetailFragment : Fragment() {
             // TODO: Inserir imagem do autor da receita
             binding.TVAutor.text=recipe.company
             binding.IVSource.setOnClickListener {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source))
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
                 startActivity(browserIntent)
             }
             binding.TVRef.text = "Ref: " + recipe.id
 
-            val imgRef = Firebase.storage.reference.child(recipe.img)
+            val imgRef = Firebase.storage.reference.child(recipe.img_source)
             imgRef.downloadUrl.addOnSuccessListener {Uri->
                 val imageURL = Uri.toString()
                 Glide.with(binding.IVRecipe.context).load(imageURL).into(binding.IVRecipe)
