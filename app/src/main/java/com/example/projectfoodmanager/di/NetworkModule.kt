@@ -19,34 +19,32 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
-
-	private val TAG = "NetworkModule"
-	@Singleton
 	@Provides
-	fun providesRetrofit(): Retrofit.Builder {
-		val retrofitBuilder = Retrofit.Builder().baseUrl(Constants.BASE_URL)
-			.addConverterFactory(GsonConverterFactory.create())
-
-		// Add logs to the retrofitBuilder
-		val loggingInterceptor = HttpLoggingInterceptor { message ->
-			Log.d(TAG, message)
+	@Singleton
+	fun providesRetrofit(authInterceptor: AuthInterceptor): Retrofit {
+		val interceptor = HttpLoggingInterceptor().apply {
+			this.level = HttpLoggingInterceptor.Level.BODY
 		}
-		loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-		val httpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
-		retrofitBuilder.client(httpClient)
-		return retrofitBuilder
+
+		val client = OkHttpClient.Builder().apply {
+			this.addInterceptor(authInterceptor)
+				.addInterceptor(interceptor)
+				.connectTimeout(30, TimeUnit.SECONDS)
+				.readTimeout(20, TimeUnit.SECONDS)
+				.writeTimeout(25, TimeUnit.SECONDS)
+		}.build()
+
+		return Retrofit.Builder()
+			.addConverterFactory(GsonConverterFactory.create())
+			.client(client)
+			.baseUrl(Constants.BASE_URL)
+			.build()
 	}
 
-	@Singleton
 	@Provides
-	fun provideOkHttpClient(interceptor: AuthInterceptor): OkHttpClient {
-		return OkHttpClient.Builder().addInterceptor(interceptor).build()
-	}
-
 	@Singleton
-	@Provides
-	fun providesAPI(retrofitBuilder: Retrofit.Builder, okHttpClient: OkHttpClient): ApiInterface {
-		return retrofitBuilder.client(okHttpClient).build().create(ApiInterface::class.java)
+	fun providesAPI(retrofit: Retrofit): ApiInterface {
+		return retrofit.create(ApiInterface::class.java)
 	}
 
 }

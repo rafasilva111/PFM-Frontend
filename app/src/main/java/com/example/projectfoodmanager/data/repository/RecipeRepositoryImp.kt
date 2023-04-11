@@ -9,11 +9,12 @@ import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourc
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
+import com.google.gson.Gson
 import javax.inject.Inject
 
 class RecipeRepositoryImp @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val sharedPreference: SharedPreference
+    private val gson: Gson
 ) : RecipeRepository {
 
     private val TAG:String = "RecipeRepositoryImp"
@@ -38,9 +39,15 @@ class RecipeRepositoryImp @Inject constructor(
             )))
         }
         else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
-            _recipeResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+
+            try {
+                val errorObj = response.errorBody()!!.charStream().readText()
+                Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
+                _recipeResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+            } catch (e: Exception) {
+                Log.i(TAG, "e")
+            }
+
         }
         else{
             _recipeResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))

@@ -1,6 +1,10 @@
 package com.example.projectfoodmanager.data.model.modelResponse.recipe
 
-data class RecipeResult(
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class RecipeResponse(
     val backgrounds: Backgrounds,
     val company: String,
     val created_date: String,
@@ -20,4 +24,4 @@ data class RecipeResult(
     val title: String,
     val updated_date: String,
     val views: Int
-)
+) : Parcelable

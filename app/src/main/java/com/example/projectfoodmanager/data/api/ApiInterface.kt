@@ -7,7 +7,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import retrofit2.Response
 import retrofit2.http.*
 const val API_V1_BASE_URL = "api/v1"
@@ -15,8 +16,8 @@ const val API_V1_BASE_URL = "api/v1"
 interface ApiInterface {
 
     //user
-    @POST("$API_V1_BASE_URL/user")
-    suspend fun createUser(@Body user : UserRequest): Response<UserAuthResponse>
+    @POST("$API_V1_BASE_URL/auth")
+    suspend fun createUser(@Body user : UserRequest): Response<Unit>
 
     @POST("$API_V1_BASE_URL/auth/login")
     suspend fun loginUser(@Body user : UserRequest): Response<UserAuthResponse>
@@ -25,7 +26,7 @@ interface ApiInterface {
     suspend fun logoutUser(): Response<String>
 
     @GET("$API_V1_BASE_URL/auth")
-    suspend fun getUserSession(): Response<UserResponse>
+    suspend fun getUserSession(): Response<User>
 
     @GET("/user")
     suspend fun getUser(@Query("userId") userId: Int): Response<UserAuthResponse>
@@ -38,10 +39,10 @@ interface ApiInterface {
 
     //recipe
     @POST("$API_V1_BASE_URL/recipe")
-    suspend fun createRecipe(@Body recipe : RecipeRequest): Response<com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResult>
+    suspend fun createRecipe(@Body recipe : RecipeRequest): Response<RecipeResponse>
 
     @GET("$API_V1_BASE_URL/recipe/list")
-    suspend fun getRecipe(@Query("recipeId") recipeId: Int): Response<com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResult>
+    suspend fun getRecipe(@Query("recipeId") recipeId: Int): Response<RecipeResponse>
 
     @GET("$API_V1_BASE_URL/recipe/list")
     suspend fun getRecipePaginated(@Query("page") page: Int): Response<RecipeListResponse>
@@ -50,7 +51,7 @@ interface ApiInterface {
     suspend fun getRecipesByTitleAndTags(@Query("string")string: String,@Query("page") page: Int): Response<RecipeListResponse>
 
     @PUT("$API_V1_BASE_URL/recipe")
-    suspend fun updateRecipe(@Query("recipeId") recipeId: Int,@Body recipe : RecipeRequest): Response<com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResult>
+    suspend fun updateRecipe(@Query("recipeId") recipeId: Int,@Body recipe : RecipeRequest): Response<RecipeResponse>
 
     @DELETE("$API_V1_BASE_URL/recipe")
     suspend fun deleteRecipe(@Query("recipeId") recipeId: Int): Response<String>

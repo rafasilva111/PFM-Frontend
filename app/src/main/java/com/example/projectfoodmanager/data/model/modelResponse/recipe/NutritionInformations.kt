@@ -1,5 +1,9 @@
 package com.example.projectfoodmanager.data.model.modelResponse.recipe
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class NutritionInformations(
     val energia: String,
     val energia_perc: String,
@@ -14,4 +18,4 @@ data class NutritionInformations(
     val hidratos_carbonos_acucares_perc: String,
     val id: Int,
     val proteina: String
-)
+) : Parcelable

@@ -15,6 +15,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.NetworkResult
+import com.example.projectfoodmanager.util.SharedPreference
 import com.example.projectfoodmanager.util.TokenManager
 import com.example.projectfoodmanager.util.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -32,6 +33,8 @@ class ProfileFragment : Fragment() {
 
     @Inject
     lateinit var tokenManager: TokenManager
+    @Inject
+    lateinit var sharedPreference: SharedPreference
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,8 +50,6 @@ class ProfileFragment : Fragment() {
         bindObservers()
         binding.logoutIB.setOnClickListener {
             authViewModel.logoutUser()
-
-
         }
 
         binding.favoritesCV.setOnClickListener {
@@ -77,6 +78,7 @@ class ProfileFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
                         tokenManager.deleteToken()
+                        sharedPreference.deleteUserSession()
                         findNavController().navigate(R.id.action_profile_to_login)
                         changeVisib_Menu(false)
                     }

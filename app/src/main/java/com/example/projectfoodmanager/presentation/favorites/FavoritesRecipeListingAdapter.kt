@@ -1,30 +1,25 @@
 package com.example.projectfoodmanager.presentation.favorites
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
-import com.example.projectfoodmanager.util.UiState
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 
 class FavoritesRecipeListingAdapter(
-    val onItemClicked: (Int, Recipe) -> Unit,
-    private val authModel: AuthViewModel,
-    private val viewModel: RecipeViewModel
+    val onItemClicked: (Int, RecipeResponse) -> Unit
 ) : RecyclerView.Adapter<FavoritesRecipeListingAdapter.MyViewHolder>() {
 
 
+    private var user: User? = null
     private val TAG: String? = "RecipeListingAdapter"
-    private var list: MutableList<Recipe> = arrayListOf()
+    private var list: MutableList<RecipeResponse> = arrayListOf()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -38,8 +33,9 @@ class FavoritesRecipeListingAdapter(
         holder.bind(item)
     }
 
-    fun updateList(list: MutableList<Recipe>){
+    fun updateList(list: MutableList<RecipeResponse>, user: User){
         this.list = list
+        this.user = user
         notifyDataSetChanged()
     }
 
@@ -53,11 +49,12 @@ class FavoritesRecipeListingAdapter(
     }
 
 
+
     inner class MyViewHolder(private val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(item: Recipe) {
-            val imgRef = Firebase.storage.reference.child(item.img)
+        fun bind(item: RecipeResponse) {
+            val imgRef = Firebase.storage.reference.child(item.img_source)
             imgRef.downloadUrl.addOnSuccessListener { Uri ->
                 val imageURL = Uri.toString()
                 Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
@@ -67,20 +64,27 @@ class FavoritesRecipeListingAdapter(
                         .load(R.drawable.good_food_display___nci_visuals_online)
                         .into(binding.imageView)
                 }
-            binding.dateLabel.text = item.date
+            binding.dateLabel.text = item.created_date
             binding.recipeTitle.text = item.title
             binding.TVAutor.text = item.company
-            binding.TVDescription.text = item.desc.toString()
+            binding.TVDescription.text = item.description.toString()
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
+
+
+            if (item.likes == 1) {
+                binding.TVRate.text = "1 Gosto"
+            } else {
+                binding.TVRate.text = "${item.likes} Gostos"
+            }
 
             // like function
 
-            if (item.likes.size == 1) {
-                binding.TVRate.text = "1 Gosto"
-            } else {
-                binding.TVRate.text = item.likes.size.toString() + " Gosto"
+            // todo não percebo porque que não realmente mete a imagem
+            if (user!=null){
+                if(user!!.checkIfLiked(item))
+                    binding.like.setImageResource(R.drawable.ic_like_red)
             }
-            binding.dateLabel.text = item.date
+
 
 
             // favorite function
