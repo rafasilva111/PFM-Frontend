@@ -3,6 +3,7 @@ package com.example.projectfoodmanager
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,9 @@ class SplashFragment : Fragment() {
     @Inject
     lateinit var tokenManager: TokenManager
 
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+
     private val authViewModel by activityViewModels<AuthViewModel>()
     val TAG: String = "SplashFragment"
 
@@ -38,16 +42,10 @@ class SplashFragment : Fragment() {
                 else{
                     findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                 }
-
-
             }else{
                 findNavController().navigate(R.id.action_splashFragment_to_viewPagerFragment)
             }
         },SPLASH_TIME)
-
-        authViewModel.userAuthResponseLiveData
-
-
 
         return inflater.inflate(R.layout.fragment_splash, container, false)
     }
@@ -68,15 +66,22 @@ class SplashFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        authViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer {
+        authViewModel.userOldLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
                 when (it) {
                     is NetworkResult.Success -> {
-                        findNavController().navigate(R.id.action_splashFragment_to_app_navigation)
-                        toast(getString(R.string.welcome))
+                        if (it.data != null) {
+                            sharedPreference.saveUserSession(it.data)
+                            findNavController().navigate(R.id.action_splashFragment_to_app_navigation)
+                            toast(getString(R.string.welcome))
+                        }
+                        else{
+                            Log.d(TAG, "userResponseLiveData Observer: Something went wrong")
+                        }
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                        tokenManager.deleteToken()
                     }
                     is NetworkResult.Loading -> {
                     }

@@ -1,12 +1,12 @@
 package com.example.projectfoodmanager.data.model.modelRequest
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
-
+@Parcelize
 data class UserRequest(
-    @SerializedName("uuid")
-    var uuid: String="",
     @SerializedName("first_name")
     val first_name: String="",
     @SerializedName("last_name")
@@ -20,13 +20,11 @@ data class UserRequest(
     @SerializedName("img_source")
     val img_source: String="",
     @SerializedName("activity_level")
-    val activity_level: String="",
+    val activity_level: Float= 0.00F,
     @SerializedName("height")
     val height: String="",
     @SerializedName("sex")
     val sex: String="",
     @SerializedName("weight")
     val weight: String="",
-    @SerializedName("profile_type")
-    val profile_type: String="",
-) : Serializable
+) : Serializable, Parcelable

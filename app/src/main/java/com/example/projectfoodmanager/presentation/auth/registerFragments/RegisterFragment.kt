@@ -2,10 +2,7 @@
 package com.example.projectfoodmanager.ui.auth.registerFragments
 
 import android.app.DatePickerDialog
-import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +10,9 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.User
+import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
 import com.example.projectfoodmanager.util.*
-import com.google.android.gms.common.SupportErrorDialogFragment.newInstance
-import com.google.android.material.datepicker.MaterialCalendar.newInstance
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DateTimeException
 import java.time.LocalDate
@@ -63,6 +58,7 @@ class RegisterFragment : Fragment() {
         binding.registerBtn.setOnClickListener {
             if (validation()){
                 val user = getUserObj()
+                // todo se utilizador responder "nao responder" não ir para dados biomedicos não vale a pena avançar logo para login
                 findNavController().navigate(R.id.action_registerFragment_to_biodataFragment_navigation,Bundle().apply {
                     putParcelable("user",user)
                 })
@@ -70,14 +66,24 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    fun getUserObj(): User {
-        return User(
+    fun getUserObj(): UserRequest {
+
+        var sex = binding.sexEt.text.toString()
+        if (sex == "Masculino")
+            sex = "M"
+        else if(sex == "Feminino")
+            sex = "F"
+        else if  (sex == "Nao responder")
+                sex = "Nao responder"
+
+
+        return UserRequest(
             first_name = binding.firstNameEt.text.toString(),
             last_name = binding.lastNameEt.text.toString(),
             email = binding.emailEt.text.toString(),
             birth_date = binding.dateEt.text.toString(),
             password = binding.passEt.text.toString(),
-            sex = binding.sexEt.text.toString()
+            sex = sex
         )
     }
 
@@ -189,8 +195,19 @@ class RegisterFragment : Fragment() {
                 // date to our text view.
 
                 //val editable = Editable.Factory.getInstance().newEditable(dayOfMonth.toString() + "/" + (monthOfYear + 1).toString() + "/" + year.toString())
+                var dayOfMonth_: String
+                if (dayOfMonth<10)
+                    dayOfMonth_ = "0$dayOfMonth"
+                else
+                    dayOfMonth_ = "$dayOfMonth"
+                var monthOfYear_: String
+                if ((monthOfYear + 1)<10)
+                    monthOfYear_ = "0${monthOfYear + 1}"
+                else
+                    monthOfYear_ = "${monthOfYear + 1}"
 
-                binding.dateEt.setText(dayOfMonth.toString() + "/" + (monthOfYear + 1).toString() + "/" + year.toString())
+
+                binding.dateEt.setText("$dayOfMonth_/$monthOfYear_/${year}")
             },
             // on below line we are passing year, month
             // and day for the selected date in our date picker.

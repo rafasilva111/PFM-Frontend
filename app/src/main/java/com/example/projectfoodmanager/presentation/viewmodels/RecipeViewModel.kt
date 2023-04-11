@@ -1,12 +1,14 @@
 package com.example.projectfoodmanager.presentation.viewmodels
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
+
 import com.example.projectfoodmanager.data.old.RecipeRepository_old
 import com.example.projectfoodmanager.data.repository.RecipeRepository
 import com.example.projectfoodmanager.util.Event
@@ -14,6 +16,7 @@ import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,6 +29,9 @@ class RecipeViewModel @Inject constructor (
 
 
 ): ViewModel() {
+
+    val TAG: String = "RecipeViewModel"
+
     private val _recipes = MutableLiveData<UiState<List<Recipe>>>()
     val recipe: LiveData<UiState<List<Recipe>>>
             get() = _recipes
@@ -48,19 +54,13 @@ class RecipeViewModel @Inject constructor (
 
     //falta implementar o debouncer
     fun getRecipesByTitleAndTags(title: String,searchPage:Int) {
-        getRecipesByTitleAndTagsJob?.cancel()
         getRecipesByTitleAndTagsJob = viewModelScope.launch {
             repository.getRecipesByTitleAndTags(title,searchPage)
-            delay(500)//debounce
         }
     }
 
     fun getRecipesByTitleAndTags(title: String) {
-        getRecipesByTitleAndTagsJob?.cancel()
-        getRecipesByTitleAndTagsJob = viewModelScope.launch {
-            repository.getRecipesByTitleAndTags(title,1)
-            delay(500)//debounce
-        }
+        getRecipesByTitleAndTags(title,1)
     }
 
     //OLD
@@ -95,14 +95,6 @@ class RecipeViewModel @Inject constructor (
 
     }
 
-
-
-    fun getRecipesByTitle(title: String,firstTime:Boolean) {
-        _recipes_search.value = UiState.Loading
-        repositoryOld.getRecipesByTitle(title,firstTime) {
-            _recipes_search.value = it
-        }
-    }
 
 
     fun addRecipe(recipe: Recipe){

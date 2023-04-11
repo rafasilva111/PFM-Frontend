@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.repository.datasourImp
+package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.api.ApiInterface
@@ -7,12 +7,11 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserResponse
-import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -21,7 +20,7 @@ class RemoteDataSourceImpl @Inject constructor(
 ) : RemoteDataSource {
 
 	//User
-	override suspend fun registerUser(user: UserRequest): Response<UserAuthResponse> {
+	override suspend fun registerUser(user: UserRequest): Response<Unit> {
 		return apiInterface.createUser(user = user)
 	}
 
@@ -33,29 +32,26 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.logoutUser()
 	}
 
-	override suspend fun getUserAuth(): Response<UserResponse> {
+	override suspend fun getUserAuth(): Response<User> {
 		return apiInterface.getUserSession()
 	}
 
-	override suspend fun getUserByUUID(userUUID: String): Response<UserAuthResponse> {
-		return apiInterface.getUserByUUID(userUUID = userUUID)
-	}
-	override suspend fun getUserById(userId: String): Response<UserAuthResponse> {
+	override suspend fun getUserById(userId: Int): Response<UserAuthResponse> {
 		return apiInterface.getUser(userId = userId)
 	}
-	override suspend fun updateUser(userId: String,user: UserRequest): Response<UserAuthResponse> {
+	override suspend fun updateUser(userId: Int,user: UserRequest): Response<UserAuthResponse> {
 		return apiInterface.updateUser(userId = userId, user = user )
 	}
-	override suspend fun deleteUser(userId: String): Response<String> {
+	override suspend fun deleteUser(userId: Int): Response<String> {
 		return apiInterface.deleteUser(userId = userId)
 	}
 
 
 	//Recipe
-	override suspend fun createRecipe(userId: String, recipe : RecipeRequest): Response<RecipeResult> {
-		return apiInterface.createRecipe(userId = userId,recipe = recipe)
+	override suspend fun createRecipe(recipe : RecipeRequest): Response<RecipeResponse> {
+		return apiInterface.createRecipe(recipe = recipe)
 	}
-	override suspend fun getRecipe(recipeId: String): Response<RecipeResult> {
+	override suspend fun getRecipe(recipeId: Int): Response<RecipeResponse> {
 		return apiInterface.getRecipe(recipeId = recipeId)
 	}
 	override suspend fun getRecipesPaginated(page: Int): Response<RecipeListResponse> {
@@ -69,11 +65,11 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getRecipesByTitleAndTags(string = string,page = page)
 	}
 
-	override suspend fun updateRecipe(userId: String, recipeId: String, recipe: RecipeRequest): Response<RecipeResult> {
-		return apiInterface.updateRecipe(recipeId=recipeId,userId = userId, recipe = recipe )
+	override suspend fun updateRecipe(recipeId: Int, recipe: RecipeRequest): Response<RecipeResponse> {
+		return apiInterface.updateRecipe(recipeId=recipeId, recipe = recipe )
 	}
-	override suspend fun deleteRecipe(userId: String,recipeId: String): Response<String> {
-		return apiInterface.deleteRecipe(userId=userId,recipeId = recipeId)
+	override suspend fun deleteRecipe(recipeId: Int): Response<String> {
+		return apiInterface.deleteRecipe(recipeId = recipeId)
 	}
 
 

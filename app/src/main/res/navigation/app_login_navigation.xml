@@ -37,7 +37,7 @@
         android:label="BioDataFragment">
         <action
             android:id="@+id/action_registerFragment_to_home_navigation"
-            app:destination="@id/app_navigation" />
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <include app:graph="@navigation/app_navigation" />

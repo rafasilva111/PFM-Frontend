@@ -6,31 +6,30 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import retrofit2.Response
 
 interface RemoteDataSource {
 
 	//user
-	suspend fun registerUser(user: UserRequest) : Response<UserAuthResponse>
+	suspend fun registerUser(user: UserRequest) : Response<Unit>
 	suspend fun loginUser(email: String, password: String) : Response<UserAuthResponse>
 	suspend fun logoutUser() : Response<String>
-	suspend fun getUserAuth() : Response<UserResponse>
-	suspend fun getUserByUUID(userUUID: String): Response<UserAuthResponse>
-	suspend fun getUserById(userId: String): Response<UserAuthResponse>
-	suspend fun updateUser(userId: String,user: UserRequest): Response<UserAuthResponse>
-	suspend fun deleteUser(userId: String): Response<String>
+	suspend fun getUserAuth() : Response<User>
+	suspend fun getUserById(userId: Int): Response<UserAuthResponse>
+	suspend fun updateUser(userId: Int,user: UserRequest): Response<UserAuthResponse>
+	suspend fun deleteUser(userId: Int): Response<String>
 
 	//recipe
-	suspend fun createRecipe(userId: String,recipe : RecipeRequest): Response<RecipeResult>
-	suspend fun getRecipe(recipeId: String): Response<RecipeResult>
+	suspend fun createRecipe(recipe : RecipeRequest): Response<RecipeResponse>
+	suspend fun getRecipe(recipeId: Int): Response<RecipeResponse>
 	suspend fun getRecipesPaginated(page: Int): Response<RecipeListResponse>
 	suspend fun getRecipesByTitleAndTags(string: String, page: Int): Response<RecipeListResponse>
-	suspend fun updateRecipe(userId: String,recipeId: String,recipe: RecipeRequest): Response<RecipeResult>
-	suspend fun deleteRecipe(userId: String,recipeId: String): Response<String>
+	suspend fun updateRecipe(recipeId: Int,recipe: RecipeRequest): Response<RecipeResponse>
+	suspend fun deleteRecipe(recipeId: Int): Response<String>
 
 	//comments
 	suspend fun createComments(comments: CommentRequest): Response<CommentResponse>

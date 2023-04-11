@@ -6,58 +6,55 @@ import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeListResponse
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import retrofit2.Response
 import retrofit2.http.*
-
+const val API_V1_BASE_URL = "api/v1"
 
 interface ApiInterface {
 
     //user
-    @POST("/user")
-    suspend fun createUser(@Body user : UserRequest): Response<UserAuthResponse>
+    @POST("$API_V1_BASE_URL/auth")
+    suspend fun createUser(@Body user : UserRequest): Response<Unit>
 
-    @POST("/user/login")
+    @POST("$API_V1_BASE_URL/auth/login")
     suspend fun loginUser(@Body user : UserRequest): Response<UserAuthResponse>
 
-    @DELETE("/user/logout")
+    @DELETE("$API_V1_BASE_URL/auth/logout")
     suspend fun logoutUser(): Response<String>
 
-    @GET("/user/auth")
-    suspend fun getUserSession(): Response<UserResponse>
+    @GET("$API_V1_BASE_URL/auth")
+    suspend fun getUserSession(): Response<User>
 
     @GET("/user")
-    suspend fun getUser(@Query("userId") userId: String): Response<UserAuthResponse>
-
-    @GET("/user")
-    suspend fun getUserByUUID(@Query("userUUID") userUUID: String): Response<UserAuthResponse>
+    suspend fun getUser(@Query("userId") userId: Int): Response<UserAuthResponse>
 
     @PUT("/user")
-    suspend fun updateUser(@Query("userId") userId: String,@Body user : UserRequest): Response<UserAuthResponse>
+    suspend fun updateUser(@Query("userId") userId: Int,@Body user : UserRequest): Response<UserAuthResponse>
 
     @DELETE("/user")
-    suspend fun deleteUser(@Query("userId") userId: String): Response<String>
+    suspend fun deleteUser(@Query("userId") userId: Int): Response<String>
 
     //recipe
-    @POST("/recipe")
-    suspend fun createRecipe(@Query("userId") userId: String,@Body recipe : RecipeRequest): Response<RecipeResult>
+    @POST("$API_V1_BASE_URL/recipe")
+    suspend fun createRecipe(@Body recipe : RecipeRequest): Response<RecipeResponse>
 
-    @GET("/recipe")
-    suspend fun getRecipe(@Query("recipeId") recipeId: String): Response<RecipeResult>
+    @GET("$API_V1_BASE_URL/recipe/list")
+    suspend fun getRecipe(@Query("recipeId") recipeId: Int): Response<RecipeResponse>
 
-    @GET("/recipe")
+    @GET("$API_V1_BASE_URL/recipe/list")
     suspend fun getRecipePaginated(@Query("page") page: Int): Response<RecipeListResponse>
 
-    @GET("/recipe")
+    @GET("$API_V1_BASE_URL/recipe/list")
     suspend fun getRecipesByTitleAndTags(@Query("string")string: String,@Query("page") page: Int): Response<RecipeListResponse>
 
-    @PUT("/recipe")
-    suspend fun updateRecipe(@Query("recipeId") recipeId: String,@Query("userId") userId: String,@Body recipe : RecipeRequest): Response<RecipeResult>
+    @PUT("$API_V1_BASE_URL/recipe")
+    suspend fun updateRecipe(@Query("recipeId") recipeId: Int,@Body recipe : RecipeRequest): Response<RecipeResponse>
 
-    @DELETE("/recipe")
-    suspend fun deleteRecipe(@Query("recipeId") recipeId: String,@Query("userId") userId: String): Response<String>
+    @DELETE("$API_V1_BASE_URL/recipe")
+    suspend fun deleteRecipe(@Query("recipeId") recipeId: Int): Response<String>
 
 
     //comments

@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
-import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,34 +19,40 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.list.RecipeResult
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.floor
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecipeListingFragment : Fragment() {
 
     // constantes (cuidado com esta merda)
 
-    private var page:Int = 1
-    private var searchPage:Int = 1
+    private var current_page:Int = 1
+    private var next_page:Boolean = true
+
+    private var recipeList: MutableList<RecipeResponse> = mutableListOf()
+
     private var stringToSearch: String? = null
     private var newSearch: Boolean = false
-    private var recipeList: MutableList<RecipeResult> = mutableListOf()
-    private var searchRecipeList: MutableList<RecipeResult> = mutableListOf()
+    // this needs to happen otherwise we will have a spam of toast
+    private var no_more_recipes_message_presented = false
+
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+
+
 
 
     private var isFirstTimeCall = true
     private var snapHelper : SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
-    private var list: MutableList<Recipe> = arrayListOf()
     private var searchMode: Boolean = false
 
     val TAG: String = "RecipeListingFragment"
@@ -64,8 +69,8 @@ class RecipeListingFragment : Fragment() {
 
                 changeVisib_Menu(false)
             },
-            this.authViewModel,
-            this.recipeViewModel
+            this.recipeViewModel,
+            sharedPreference
         )
     }
 
@@ -104,34 +109,36 @@ class RecipeListingFragment : Fragment() {
         scrollListener = object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // prevent missed calls to api // needs to be reseted on search so it could be a next page
 
-                    binding.recyclerView.removeOnScrollListener(scrollListener)
-                    //val visibleItemCount: Int = manager.childCount
-                    val pastVisibleItem: Int =
-                        manager.findLastCompletelyVisibleItemPosition()
-                    //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
+                    if (next_page){
 
-                    if (stringToSearch.isNullOrEmpty()){
-                        if ((pastVisibleItem+2) >= recipeList.size ) {
-                            page += 1
-                            recipeViewModel.getRecipesPaginated(page)
+                        Log.d(TAG, "onScrollStateChanged: $next_page")
+                        binding.recyclerView.removeOnScrollListener(scrollListener)
+
+
+                        //val visibleItemCount: Int = manager.childCount
+                        val pastVisibleItem: Int =
+                            manager.findLastCompletelyVisibleItemPosition()
+                        //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
+
+                        if ((pastVisibleItem + 1) >= recipeList.size){
+                            if (stringToSearch.isNullOrEmpty()) {
+                                recipeViewModel.getRecipesPaginated(current_page)
+                            } else {
+                                recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!, current_page)
+                            }
                         }
+                        //Log.d(TAG, pag_index.toString())
+                        //Log.d(TAG, visibleItemCount.toString())
+                        Log.d(TAG, pastVisibleItem.toString())
                     }
-                    else{
-                        if ((pastVisibleItem+2) >= searchRecipeList.size ) {
-                            page += 1
-                            recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!,page)
-                        }
+                    else if (no_more_recipes_message_presented == false){
+                        no_more_recipes_message_presented = true
+                        toast("Sorry cant find more recipes.")
                     }
-
-                    //Log.d(TAG, pag_index.toString())
-                    //Log.d(TAG, visibleItemCount.toString())
-                    Log.d(TAG, pastVisibleItem.toString())
-
                     binding.recyclerView.addOnScrollListener(scrollListener)
-
                 }
-
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     isFirstTimeCall = true
                 }
@@ -148,6 +155,13 @@ class RecipeListingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         changeVisib_Menu(true)
 
+        // user data
+        val user = sharedPreference.getUserSession()
+        if (user!= null){
+            binding.tvName.text = user.first_name+" "+ user.last_name
+        }
+
+
         if (isOnline(view.context)) {
             binding.recyclerView.adapter = adapter
             binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -158,18 +172,19 @@ class RecipeListingFragment : Fragment() {
                 override fun onQueryTextChange(text: String?): Boolean {
                     if (text != null && text != "") {
                         // importante se não não funciona
+                        current_page = 1
                         newSearch = true
                         stringToSearch=text
-                        recipeViewModel.getRecipesByTitleAndTags(text, searchPage)
+                        recipeViewModel.getRecipesByTitleAndTags(text, current_page)
                     }
                     else{
                         stringToSearch=null
-                        adapter.updateList(recipeList)
+                        recipeViewModel.getRecipesPaginated(current_page)
                     }
                     return true
                 }
             })
-            recipeViewModel.getRecipesPaginated(page)
+            recipeViewModel.getRecipesPaginated(current_page)
 
 
             //nav search toppom
@@ -257,21 +272,27 @@ class RecipeListingFragment : Fragment() {
     private fun bindObservers() {
         recipeViewModel.recipeResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
+                searchMode = false
+
                 when (it) {
+
                     is NetworkResult.Success -> { it
                         binding.progressBar.hide()
-                        searchMode = false
-                        page = it.data!!._metadata.page
-                        if (it.data == null){
-                            toast(getString(R.string.no_recipes_found))
-                        }
-                        else {
-                            for (recipe in it.data.recipe_result) {
-                                recipeList.add(recipe)
-                            }
-                            adapter.updateList(recipeList)
 
+                        current_page = it.data!!._metadata.current_page
+
+                        // check next page to failed missed calls to api
+                        next_page = it.data._metadata.next!=null
+
+
+                        for (recipe in it.data.result) {
+                            recipeList.add(recipe)
                         }
+                        adapter.updateList(recipeList)
+
+                        // se houver next page soma se não faz nada
+                        if (next_page)
+                            current_page++
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(it.message.toString())
@@ -288,28 +309,28 @@ class RecipeListingFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> { it
                         binding.progressBar.hide()
-                        searchMode = true
-                        if (it.data!!.recipe_result.isEmpty()){
-                            //removing last page on recipes not found
-                            page = it.data!!._metadata.page_count
-                            toast(getString(R.string.no_recipes_found))
-                        }
-                        else {
+                        if (it.data != null){
+                            // numa nova procura resetar a lista de receitas
+                            if (newSearch)
+                                recipeList = mutableListOf()
 
-                            // if new check
-                            if (searchRecipeList.size != 0 && newSearch){
-                                searchRecipeList = mutableListOf()
-                                page=1
+                            for (recipe in it.data.result) {
+                                recipeList.add(recipe)
                             }
+                            adapter.updateList(recipeList)
                             newSearch = false
-                            for (recipe in it.data.recipe_result) {
-                                searchRecipeList.add(recipe)
-                            }
-                            Log.d(TAG, "bindObservers: searchRecipeList: "+searchRecipeList.toString())
-                            adapter.updateList(searchRecipeList)
+
+                            // check next page to failed missed calls to api
+                            next_page = it.data._metadata.next!=null
+                            // safe call for debaunce
+                            current_page = it.data!!._metadata.current_page
+                            // se houver next page soma se não não faz nada
+                            if (next_page)
+                                current_page++
                         }
                     }
                     is NetworkResult.Error -> {
+                        binding.progressBar.hide()
                         showValidationErrors(it.message.toString())
                     }
                     is NetworkResult.Loading -> {
