@@ -5,6 +5,7 @@ import android.animation.LayoutTransition
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
+import com.example.projectfoodmanager.HomeFragment
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
@@ -28,6 +30,7 @@ import com.google.android.material.chip.Chip
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.parcelize.Parcelize
 
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
@@ -62,14 +65,32 @@ class RecipeDetailFragment : Fragment() {
         updateUI()
     }
 
+
     private fun updateUI() {
 
         objRecipe = arguments?.getParcelable("note")
 
         objRecipe?.let { recipe ->
 
-            //var fragmentAdapter = FragmentAdapter(supportFragmentManager)
+            val bundle = Bundle()
+            bundle.putString("recipeName", "Chicken Alfredo")
 
+            val recipeTabFragment = RecipeTabFragment()
+            val nutritionTabFragment = NutritionTabFragment()
+
+
+            recipeTabFragment.arguments?.putParcelable("recipe",recipe)
+            nutritionTabFragment.arguments?.putParcelable("recipe",recipe)
+
+            var fragmentAdapter = FragmentAdapter(requireActivity().supportFragmentManager)
+            fragmentAdapter.addFragment(RecipeTabFragment(),"Recipe")
+            fragmentAdapter.addFragment(NutritionTabFragment(),"Nutrition")
+
+            binding.recipeInfoViewPager.adapter = fragmentAdapter
+            binding.recipeDetailTab.setupWithViewPager(binding.recipeInfoViewPager)
+
+
+/*  1234567812345670
             binding.TVTitle.text = recipe.title
             binding.TVDate.text = recipe.created_date
             binding.TVTime.text = recipe.time
@@ -152,13 +173,13 @@ class RecipeDetailFragment : Fragment() {
                     }
 
                 }
-           /*     chip.text = item.toString()
+           *//*     chip.text = item.toString()
                 chip.isCloseIconVisible = true
                 chip.setBackgroundColor(resources.getColor(R.color.red))
                 chip.setChipIconResource(R.drawable.ic_like_red)
                 chip.setOnCloseIconClickListener{
                     binding.CHTags.addView(chip)
-                }*/
+                }*//*
 
             }
 
@@ -267,17 +288,17 @@ class RecipeDetailFragment : Fragment() {
                     }
                 }
 
-            }
+            }*/
 
 
 
             // TODO: Inserir imagem do autor da receita
-            binding.TVAutor.text=recipe.company
+  /*          binding.TVAutor.text=recipe.company
             binding.IVSource.setOnClickListener {
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
                 startActivity(browserIntent)
             }
-            binding.TVRef.text = "Ref: " + recipe.id
+            binding.TVRef.text = "Ref: " + recipe.id*/
 
             val imgRef = Firebase.storage.reference.child(recipe.img_source)
             imgRef.downloadUrl.addOnSuccessListener {Uri->
@@ -288,9 +309,9 @@ class RecipeDetailFragment : Fragment() {
 
             // TODO: Falta registar o numero de comentarios
             // TODO: Falta registar o numero de gostos
-            binding.CVComments.setOnClickListener {
+        /*    binding.CVComments.setOnClickListener {
                 findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment)
-            }
+            }*/
             
             //like function
 

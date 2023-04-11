@@ -118,7 +118,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/CV_img_autor"
+                    android:id="@+id/img_autor_CV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -141,9 +141,9 @@
                     android:text="Autor"
                     android:textAlignment="gravity"
                     android:textSize="10sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/CV_img_autor"
-                    app:layout_constraintStart_toEndOf="@+id/CV_img_autor"
-                    app:layout_constraintTop_toTopOf="@+id/CV_img_autor" />
+                    app:layout_constraintBottom_toBottomOf="@+id/img_autor_CV"
+                    app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
+                    app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
 
                 <ImageView
                     android:id="@+id/imageView9"
@@ -179,7 +179,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/IV_comments"
                     app:layout_constraintEnd_toEndOf="@+id/recipe_title"
                     app:layout_constraintStart_toStartOf="@+id/recipe_title"
-                    app:layout_constraintTop_toBottomOf="@+id/CV_img_autor"
+                    app:layout_constraintTop_toBottomOf="@+id/img_autor_CV"
                     app:layout_constraintVertical_bias="0">
 
                     <TextView

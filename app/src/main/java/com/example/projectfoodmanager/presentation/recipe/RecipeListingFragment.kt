@@ -46,9 +46,6 @@ class RecipeListingFragment : Fragment() {
     @Inject
     lateinit var sharedPreference: SharedPreference
 
-
-
-
     private var isFirstTimeCall = true
     private var snapHelper : SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
@@ -63,7 +60,7 @@ class RecipeListingFragment : Fragment() {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
 
-                findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
+                findNavController().navigate(R.id.action_recipeListingFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("note",item)
                 })
 

@@ -75,7 +75,7 @@
         android:backgroundTint="#99DADADA">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/CV_img_autor"
+            android:id="@+id/img_autor_CV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -106,8 +106,8 @@
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button"
-            app:layout_constraintStart_toEndOf="@+id/CV_img_autor"
-            app:layout_constraintTop_toTopOf="@+id/CV_img_autor" />
+            app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
+            app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
 
         <Button
             android:id="@+id/button"
@@ -120,7 +120,7 @@
             android:textAllCaps="false"
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/CV_img_autor" />
+            app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
