@@ -1,6 +1,7 @@
 package com.example.projectfoodmanager.util
 
 import android.content.SharedPreferences
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.google.gson.Gson
 import javax.inject.Inject
@@ -19,9 +20,7 @@ class SharedPreference @Inject constructor(
     }
 
     fun getUserSession(): User {
-
          return gson.fromJson(sharedPreferences.getString(Constants.USER_SESSION,""), User::class.java)
-
     }
 
     fun saveUserSession(user: User) {
@@ -30,5 +29,17 @@ class SharedPreference @Inject constructor(
 
     fun deleteUserSession() {
         sharedPreferences.edit().remove(Constants.USER_SESSION).apply()
+    }
+
+    fun addLikeToUserSession(recipe : RecipeResponse){
+        val user:User = gson.fromJson(sharedPreferences.getString(Constants.USER_SESSION,""), User::class.java)
+        user.addLike(recipe)
+        saveUserSession(user)
+    }
+
+    fun removeLikeFromUserSession(recipe : RecipeResponse){
+        val user:User = gson.fromJson(sharedPreferences.getString(Constants.USER_SESSION,""), User::class.java)
+        user.removeLike(recipe)
+        saveUserSession(user)
     }
 }

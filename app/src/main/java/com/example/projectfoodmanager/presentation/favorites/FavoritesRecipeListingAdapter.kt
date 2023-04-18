@@ -8,12 +8,16 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
+import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 
 class FavoritesRecipeListingAdapter(
-    val onItemClicked: (Int, RecipeResponse) -> Unit
+    val onItemClicked: (Int, RecipeResponse) -> Unit,
+    val authViewModel: AuthViewModel,
+    val recipeViewModel: RecipeViewModel
 ) : RecyclerView.Adapter<FavoritesRecipeListingAdapter.MyViewHolder>() {
 
 
@@ -79,17 +83,70 @@ class FavoritesRecipeListingAdapter(
 
             // like function
 
-            // todo não percebo porque que não realmente mete a imagem
+
             if (user!=null){
-                if(user!!.checkIfLiked(item))
-                    binding.like.setImageResource(R.drawable.ic_like_red)
+                if(user!!.checkIfLiked(item)){
+                    binding.like.setImageResource(R.drawable.ic_like_active)
+                    binding.like.setOnClickListener {
+                        recipeViewModel.removeLikeOnRecipe(item.id)
+                    }
+                }
+                else{
+                    binding.like.setOnClickListener {
+                        recipeViewModel.addLikeOnRecipe(item.id)
+                    }
+                }
             }
+            /*
+            binding.like.setOnClickListener {
+                authModel.getUserSession_old { user ->
+                    if (user != null) {
+                        if (user.getLikedRecipe(item.id) != null) {
+                            authModel.removeLikeOnRecipe(item)
+                            viewModel.removeLikeOnRecipe(user.id,item)
+                            binding.like.setImageResource(R.drawable.ic_like)
+                            if (item.likes.size == 1) {
+                                binding.TVRate.text = "1 Gosto"
+                            } else {
+                                binding.TVRate.text = item.likes.size.toString() + " Gosto"
+                            }
+                            Toast.makeText(
+                                it.context,
+                                "Receita removida dos favoritos.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            list.remove(item)
+
+
+                        } else {
+                            authModel.addLikeOnRecipe(item)
+                            viewModel.addLikeOnRecipe(user.id,item)
+                            binding.like.setImageResource(R.drawable.ic_like_red)
+                            if (item.likes.size == 1) {
+                                binding.TVRate.text = "1 Gosto"
+                            } else {
+                                binding.TVRate.text = item.likes.size.toString() + " Gosto"
+                            }
+                        }
+
+                    }
+                }
+
+            }*/
 
 
 
             // favorite function
-            binding.favorites.setImageResource(R.drawable.ic_favorite)
-            binding.like.setImageResource(R.drawable.ic_like)
+
+
+            if (user!=null){
+                if(user!!.checkIfLiked(item))
+                    binding.favorites.setImageResource(R.drawable.ic_favorito_active)
+                else
+                    binding.favorites.setImageResource(R.drawable.ic_favorite)
+            }
+
+
             //set initial sates
             /*authModel.getUserSession_old { user ->
                 if (user != null) {

@@ -30,6 +30,8 @@ interface RemoteDataSource {
 	suspend fun getRecipesByTitleAndTags(string: String, page: Int): Response<RecipeListResponse>
 	suspend fun updateRecipe(recipeId: Int,recipe: RecipeRequest): Response<RecipeResponse>
 	suspend fun deleteRecipe(recipeId: Int): Response<String>
+	suspend fun addLike(recipeId: Int): Response<Unit>
+	suspend fun removeLike(recipeId: Int): Response<Unit>
 
 	//comments
 	suspend fun createComments(comments: CommentRequest): Response<CommentResponse>

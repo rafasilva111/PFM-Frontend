@@ -13,7 +13,7 @@ data class RecipeResponse(
     val id: Int,
     val img_source: String,
     val ingredients: List<Ingredient>,
-    val likes: Int,
+    var likes: Int,
     val nutrition_informations: NutritionInformations,
     val portion: String,
     val preparation: List<Preparation>,

@@ -63,6 +63,25 @@ class RecipeViewModel @Inject constructor (
         getRecipesByTitleAndTags(title,1)
     }
 
+    val functionLikeOnRecipe: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.functionLikeOnRecipe
+
+
+    fun addLikeOnRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            repository.addLikeOnRecipe(recipeId)
+        }
+    }
+
+    val functionRemoveLikeOnRecipe: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.functionRemoveLikeOnRecipe
+
+    fun removeLikeOnRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            repository.removeLikeOnRecipe(recipeId)
+        }
+    }
+
     //OLD
 
     private val _recipes_search = MutableLiveData<UiState<List<Recipe>>>()
@@ -101,18 +120,6 @@ class RecipeViewModel @Inject constructor (
         _addRecipe.value = UiState.Loading
         repositoryOld.addRecipe(recipe) { _addRecipe.value = it}
     }
-
-    fun removeLikeOnRecipe(userId: String, recipe: Recipe) {
-        _updateRecipe.value = UiState.Loading
-        repositoryOld.removeLikeOnRecipe(userId,recipe) { _updateRecipe.value = it}
-    }
-
-    fun addLikeOnRecipe(userId: String, recipe: Recipe) {
-        _updateRecipe.value = UiState.Loading
-        repositoryOld.addLikeOnRecipe(userId,recipe) { _updateRecipe.value = it}
-    }
-
-
 
 
 }

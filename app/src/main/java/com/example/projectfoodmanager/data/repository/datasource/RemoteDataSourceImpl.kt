@@ -72,6 +72,13 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.deleteRecipe(recipeId = recipeId)
 	}
 
+	override suspend fun addLike(recipeId: Int): Response<Unit> {
+		return apiInterface.addLike(recipeId = recipeId)
+	}
+
+	override suspend fun removeLike(recipeId: Int): Response<Unit> {
+		return apiInterface.removeLike(recipeId = recipeId)
+	}
 
 	//Comments
 	override suspend fun createComments(comment : CommentRequest): Response<CommentResponse> {

@@ -69,6 +69,15 @@ class RecipeListingFragment : Fragment() {
 
                 changeVisib_Menu(false)
             },
+            onLikeClicked = {item,like ->
+                if(like){
+                    recipeViewModel.addLikeOnRecipe(item.id)
+                }
+                else{
+                    recipeViewModel.removeLikeOnRecipe(item.id)
+                }
+
+            },
             this.recipeViewModel,
             sharedPreference
         )
@@ -327,6 +336,62 @@ class RecipeListingFragment : Fragment() {
                             // se houver next page soma se não não faz nada
                             if (next_page)
                                 current_page++
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        binding.progressBar.hide()
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.show()
+                    }
+                }
+            }
+        })
+
+        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        binding.progressBar.hide()
+                        toast(getString(R.string.recipe_liked))
+
+                        // updates local list
+                        for (item in recipeList.toMutableList()){
+                            if (item.id == it.data){
+                                item.likes ++
+                                sharedPreference.addLikeToUserSession(item)
+                                adapter.updateItem(recipeList.indexOf(item),item)
+                                break
+                            }
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        binding.progressBar.hide()
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.show()
+                    }
+                }
+            }
+        })
+
+        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        binding.progressBar.hide()
+                        toast(getString(R.string.recipe_removed_liked))
+
+                        // updates local list
+                        for (item in recipeList.toMutableList()){
+                            if (item.id == it.data){
+                                item.likes --
+                                sharedPreference.removeLikeFromUserSession(item)
+                                adapter.updateItem(recipeList.indexOf(item),item)
+                                break
+                            }
                         }
                     }
                     is NetworkResult.Error -> {
