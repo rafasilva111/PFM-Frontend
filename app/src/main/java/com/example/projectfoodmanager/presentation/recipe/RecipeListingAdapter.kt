@@ -108,7 +108,7 @@ class RecipeListingAdapter(
             // check for user likes
 
             if (user!=null){
-                if(user!!.checkIfLiked(item)){
+                if(user!!.checkIfLiked(item) != -1){
                     binding.like.setImageResource(R.drawable.ic_like_active)
                 }
                 else
@@ -116,7 +116,7 @@ class RecipeListingAdapter(
             }
 
             binding.like.setOnClickListener {
-                if(!user!!.checkIfLiked(item)) {
+                if(user!!.checkIfLiked(item) == -1) {
                     onLikeClicked.invoke(item, true)
                 }
                 else

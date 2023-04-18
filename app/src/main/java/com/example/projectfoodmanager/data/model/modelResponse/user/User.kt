@@ -28,21 +28,18 @@ data class User(
 ) : Parcelable {
 
 
-    fun checkIfLiked(recipe: RecipeResponse): Boolean {
-        for (recipe_liked in liked_recipes)
-            if (recipe.id==recipe_liked.id)
-                return true
-
-        return false
+    fun checkIfLiked(recipe: RecipeResponse): Int {
+        return  liked_recipes.indexOfFirst { it.id == recipe.id }
     }
 
-    fun addLike(item: RecipeResponse){
-        if (!checkIfLiked(item))
-            liked_recipes.add(item)
+    fun addLike(recipe: RecipeResponse){
+        if (checkIfLiked(recipe) == -1)
+            liked_recipes.add(recipe)
     }
-    fun removeLike(item: RecipeResponse){
-        if (checkIfLiked(item))
-            liked_recipes.remove(item)
+    fun removeLike(recipe: RecipeResponse){
+        val index = checkIfLiked(recipe)
+        if (index != -1)
+            liked_recipes.removeAt(index)
     }
 
 

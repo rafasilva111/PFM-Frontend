@@ -85,7 +85,7 @@ class FavoritesRecipeListingAdapter(
 
 
             if (user!=null){
-                if(user!!.checkIfLiked(item)){
+                if(user!!.checkIfLiked(item) != -1){
                     binding.like.setImageResource(R.drawable.ic_like_active)
                     binding.like.setOnClickListener {
                         recipeViewModel.removeLikeOnRecipe(item.id)
@@ -140,7 +140,7 @@ class FavoritesRecipeListingAdapter(
 
 
             if (user!=null){
-                if(user!!.checkIfLiked(item))
+                if(user!!.checkIfLiked(item) != -1)
                     binding.favorites.setImageResource(R.drawable.ic_favorito_active)
                 else
                     binding.favorites.setImageResource(R.drawable.ic_favorite)
