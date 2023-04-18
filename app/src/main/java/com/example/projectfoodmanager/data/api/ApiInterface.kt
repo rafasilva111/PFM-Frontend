@@ -62,6 +62,12 @@ interface ApiInterface {
     @DELETE("$API_V1_BASE_URL/recipe/like")
     suspend fun removeLike(@Query("id") recipeId: Int): Response<Unit>
 
+    @POST("$API_V1_BASE_URL/recipe/save")
+    suspend fun addSave(@Query("id") recipeId: Int): Response<Unit>
+
+    @DELETE("$API_V1_BASE_URL/recipe/save")
+    suspend fun removeSave(@Query("id") recipeId: Int): Response<Unit>
+
 
 
     //comments

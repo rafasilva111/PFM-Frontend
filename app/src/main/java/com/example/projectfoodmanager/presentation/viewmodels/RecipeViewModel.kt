@@ -67,6 +67,8 @@ class RecipeViewModel @Inject constructor (
         get() = repository.functionLikeOnRecipe
 
 
+    // LIKE FUNCTION
+
     fun addLikeOnRecipe(recipeId: Int) {
         viewModelScope.launch {
             repository.addLikeOnRecipe(recipeId)
@@ -82,29 +84,27 @@ class RecipeViewModel @Inject constructor (
         }
     }
 
-    //OLD
+    // SAVE FUNCTION
 
-    private val _recipes_search = MutableLiveData<UiState<List<Recipe>>>()
-    val recipe_search: LiveData<UiState<List<Recipe>>>
-        get() = _recipes_search
+    val functionAddSaveOnRecipe: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.functionAddSaveOnRecipe
 
-    private val _updateRecipe = MutableLiveData<UiState<Pair<Recipe,String>>>()
-    val updateRecipe: LiveData<UiState<Pair<Recipe,String>>>
-        get() = _updateRecipe
-
-
-    private val _addRecipe = MutableLiveData<UiState<String>>()
-    val addRecipe: LiveData<UiState<String>>
-        get() = _addRecipe
-
-    fun getRecipes(){
-        _recipes.value = UiState.Loading
-        repositoryOld.getRecipes {
-            _recipes.value = UiState.Loading
-            repositoryOld.getRecipes { _recipes.value = it }
+    fun addSaveOnRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            repository.addSaveOnRecipe(recipeId)
         }
-
     }
+
+    val functionRemoveSaveOnRecipe: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.functionRemoveSaveOnRecipe
+
+    fun removeSaveOnRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            repository.removeSaveOnRecipe(recipeId)
+        }
+    }
+
+    //OLD
 
     fun getRecipesPaginatedOld(firstTime:Boolean){
         _recipes.value = UiState.Loading
@@ -113,13 +113,5 @@ class RecipeViewModel @Inject constructor (
         }
 
     }
-
-
-
-    fun addRecipe(recipe: Recipe){
-        _addRecipe.value = UiState.Loading
-        repositoryOld.addRecipe(recipe) { _addRecipe.value = it}
-    }
-
 
 }

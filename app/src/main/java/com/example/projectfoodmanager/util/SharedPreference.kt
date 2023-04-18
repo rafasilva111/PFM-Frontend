@@ -42,4 +42,16 @@ class SharedPreference @Inject constructor(
         user.removeLike(recipe)
         saveUserSession(user)
     }
+
+    fun addSaveToUserSession(recipe: RecipeResponse) {
+        val user:User = gson.fromJson(sharedPreferences.getString(Constants.USER_SESSION,""), User::class.java)
+        user.addSave(recipe)
+        saveUserSession(user)
+    }
+
+    fun removeSaveFromUserSession(recipe: RecipeResponse) {
+        val user:User = gson.fromJson(sharedPreferences.getString(Constants.USER_SESSION,""), User::class.java)
+        user.removeSave(recipe)
+        saveUserSession(user)
+    }
 }

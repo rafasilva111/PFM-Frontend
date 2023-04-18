@@ -42,6 +42,21 @@ data class User(
             liked_recipes.removeAt(index)
     }
 
+    fun checkIfSaved(recipe: RecipeResponse): Int {
+        return  saved_recipes.indexOfFirst { it.id == recipe.id }
+    }
+
+    fun addSave(recipe: RecipeResponse){
+        if (checkIfSaved(recipe) == -1)
+            saved_recipes.add(recipe)
+    }
+    fun removeSave(recipe: RecipeResponse){
+        val index = checkIfSaved(recipe)
+        if (index != -1)
+            saved_recipes.removeAt(index)
+    }
+
+
 
     /*fun addLike(userId:String) {
         if (this.likes.contains(userId)){

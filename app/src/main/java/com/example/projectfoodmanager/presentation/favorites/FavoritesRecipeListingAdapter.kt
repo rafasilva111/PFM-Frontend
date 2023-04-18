@@ -87,64 +87,43 @@ class FavoritesRecipeListingAdapter(
             if (user!=null){
                 if(user!!.checkIfLiked(item) != -1){
                     binding.like.setImageResource(R.drawable.ic_like_active)
-                    binding.like.setOnClickListener {
-                        recipeViewModel.removeLikeOnRecipe(item.id)
-                    }
                 }
-                else{
-                    binding.like.setOnClickListener {
-                        recipeViewModel.addLikeOnRecipe(item.id)
-                    }
-                }
+                else
+                    binding.like.setImageResource(R.drawable.ic_like)
             }
-            /*
-            binding.like.setOnClickListener {
-                authModel.getUserSession_old { user ->
-                    if (user != null) {
-                        if (user.getLikedRecipe(item.id) != null) {
-                            authModel.removeLikeOnRecipe(item)
-                            viewModel.removeLikeOnRecipe(user.id,item)
-                            binding.like.setImageResource(R.drawable.ic_like)
-                            if (item.likes.size == 1) {
-                                binding.TVRate.text = "1 Gosto"
-                            } else {
-                                binding.TVRate.text = item.likes.size.toString() + " Gosto"
-                            }
-                            Toast.makeText(
-                                it.context,
-                                "Receita removida dos favoritos.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            list.remove(item)
 
-
-                        } else {
-                            authModel.addLikeOnRecipe(item)
-                            viewModel.addLikeOnRecipe(user.id,item)
-                            binding.like.setImageResource(R.drawable.ic_like_red)
-                            if (item.likes.size == 1) {
-                                binding.TVRate.text = "1 Gosto"
-                            } else {
-                                binding.TVRate.text = item.likes.size.toString() + " Gosto"
-                            }
-                        }
-
-                    }
+            /*binding.like.setOnClickListener {
+                if(user!!.checkIfLiked(item) == -1) {
+                    onLikeClicked.invoke(item, true)
                 }
-
+                else
+                {
+                    onLikeClicked.invoke(item, false)
+                }
             }*/
 
-
-
             // favorite function
+            binding.saved.setImageResource(R.drawable.ic_favorite)
 
+            // check for user likes
 
             if (user!=null){
-                if(user!!.checkIfLiked(item) != -1)
-                    binding.favorites.setImageResource(R.drawable.ic_favorito_active)
+                if(user!!.checkIfSaved(item) != -1){
+                    binding.saved.setImageResource(R.drawable.ic_favorito_active)
+                }
                 else
-                    binding.favorites.setImageResource(R.drawable.ic_favorite)
+                    binding.saved.setImageResource(R.drawable.ic_favorite)
             }
+
+            /*binding.saved.setOnClickListener {
+                if(user!!.checkIfSaved(item) == -1) {
+                    onSaveClicked.invoke(item, true)
+                }
+                else
+                {
+                    onSaveClicked.invoke(item, false)
+                }
+            }*/
 
 
             //set initial sates
