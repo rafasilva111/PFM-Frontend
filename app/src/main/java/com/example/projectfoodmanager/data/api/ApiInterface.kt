@@ -29,20 +29,20 @@ interface ApiInterface {
     suspend fun getUserSession(): Response<User>
 
     @GET("/user")
-    suspend fun getUser(@Query("userId") userId: Int): Response<UserAuthResponse>
+    suspend fun getUser(@Query("id") userId: Int): Response<UserAuthResponse>
 
     @PUT("/user")
-    suspend fun updateUser(@Query("userId") userId: Int,@Body user : UserRequest): Response<UserAuthResponse>
+    suspend fun updateUser(@Query("id") userId: Int,@Body user : UserRequest): Response<UserAuthResponse>
 
     @DELETE("/user")
-    suspend fun deleteUser(@Query("userId") userId: Int): Response<String>
+    suspend fun deleteUser(@Query("id") userId: Int): Response<String>
 
     //recipe
     @POST("$API_V1_BASE_URL/recipe")
     suspend fun createRecipe(@Body recipe : RecipeRequest): Response<RecipeResponse>
 
     @GET("$API_V1_BASE_URL/recipe/list")
-    suspend fun getRecipe(@Query("recipeId") recipeId: Int): Response<RecipeResponse>
+    suspend fun getRecipe(@Query("id") recipeId: Int): Response<RecipeResponse>
 
     @GET("$API_V1_BASE_URL/recipe/list")
     suspend fun getRecipePaginated(@Query("page") page: Int): Response<RecipeListResponse>
@@ -51,10 +51,23 @@ interface ApiInterface {
     suspend fun getRecipesByTitleAndTags(@Query("string")string: String,@Query("page") page: Int): Response<RecipeListResponse>
 
     @PUT("$API_V1_BASE_URL/recipe")
-    suspend fun updateRecipe(@Query("recipeId") recipeId: Int,@Body recipe : RecipeRequest): Response<RecipeResponse>
+    suspend fun updateRecipe(@Query("id") recipeId: Int,@Body recipe : RecipeRequest): Response<RecipeResponse>
 
     @DELETE("$API_V1_BASE_URL/recipe")
-    suspend fun deleteRecipe(@Query("recipeId") recipeId: Int): Response<String>
+    suspend fun deleteRecipe(@Query("id") recipeId: Int): Response<String>
+
+    @POST("$API_V1_BASE_URL/recipe/like")
+    suspend fun addLike(@Query("id") recipeId: Int): Response<Unit>
+
+    @DELETE("$API_V1_BASE_URL/recipe/like")
+    suspend fun removeLike(@Query("id") recipeId: Int): Response<Unit>
+
+    @POST("$API_V1_BASE_URL/recipe/save")
+    suspend fun addSave(@Query("id") recipeId: Int): Response<Unit>
+
+    @DELETE("$API_V1_BASE_URL/recipe/save")
+    suspend fun removeSave(@Query("id") recipeId: Int): Response<Unit>
+
 
 
     //comments

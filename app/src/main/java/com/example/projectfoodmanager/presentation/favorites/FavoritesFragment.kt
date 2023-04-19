@@ -37,6 +37,11 @@ class FavoritesFragment : Fragment() {
     @Inject
     lateinit var tokenManager: TokenManager
 
+    private val authViewModel: AuthViewModel by viewModels()
+    private val recipeViewModel: RecipeViewModel by viewModels()
+
+    lateinit var binding: FragmentFavoritesBinding
+
     private var isFirstTimeCall = true
     private var snapHelper: SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
@@ -48,10 +53,6 @@ class FavoritesFragment : Fragment() {
 
     val TAG: String = "FavoritesFragmentFragment"
 
-
-    lateinit var binding: FragmentFavoritesBinding
-    val recipeViewModel: RecipeViewModel by viewModels()
-    private val authViewModel: AuthViewModel by viewModels()
     private val adapter by lazy {
         FavoritesRecipeListingAdapter(
             onItemClicked = { pos, item ->
@@ -59,7 +60,9 @@ class FavoritesFragment : Fragment() {
 //                findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
 //                    putParcelable("note",item)
 //                })
-            }
+            },
+            authViewModel,
+            recipeViewModel
         )
     }
 

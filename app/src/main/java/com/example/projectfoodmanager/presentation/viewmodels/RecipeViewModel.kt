@@ -63,29 +63,48 @@ class RecipeViewModel @Inject constructor (
         getRecipesByTitleAndTags(title,1)
     }
 
-    //OLD
-
-    private val _recipes_search = MutableLiveData<UiState<List<Recipe>>>()
-    val recipe_search: LiveData<UiState<List<Recipe>>>
-        get() = _recipes_search
-
-    private val _updateRecipe = MutableLiveData<UiState<Pair<Recipe,String>>>()
-    val updateRecipe: LiveData<UiState<Pair<Recipe,String>>>
-        get() = _updateRecipe
+    val functionLikeOnRecipe: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.functionLikeOnRecipe
 
 
-    private val _addRecipe = MutableLiveData<UiState<String>>()
-    val addRecipe: LiveData<UiState<String>>
-        get() = _addRecipe
+    // LIKE FUNCTION
 
-    fun getRecipes(){
-        _recipes.value = UiState.Loading
-        repositoryOld.getRecipes {
-            _recipes.value = UiState.Loading
-            repositoryOld.getRecipes { _recipes.value = it }
+    fun addLikeOnRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            repository.addLikeOnRecipe(recipeId)
         }
-
     }
+
+    val functionRemoveLikeOnRecipe: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.functionRemoveLikeOnRecipe
+
+    fun removeLikeOnRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            repository.removeLikeOnRecipe(recipeId)
+        }
+    }
+
+    // SAVE FUNCTION
+
+    val functionAddSaveOnRecipe: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.functionAddSaveOnRecipe
+
+    fun addSaveOnRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            repository.addSaveOnRecipe(recipeId)
+        }
+    }
+
+    val functionRemoveSaveOnRecipe: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.functionRemoveSaveOnRecipe
+
+    fun removeSaveOnRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            repository.removeSaveOnRecipe(recipeId)
+        }
+    }
+
+    //OLD
 
     fun getRecipesPaginatedOld(firstTime:Boolean){
         _recipes.value = UiState.Loading
@@ -94,25 +113,5 @@ class RecipeViewModel @Inject constructor (
         }
 
     }
-
-
-
-    fun addRecipe(recipe: Recipe){
-        _addRecipe.value = UiState.Loading
-        repositoryOld.addRecipe(recipe) { _addRecipe.value = it}
-    }
-
-    fun removeLikeOnRecipe(userId: String, recipe: Recipe) {
-        _updateRecipe.value = UiState.Loading
-        repositoryOld.removeLikeOnRecipe(userId,recipe) { _updateRecipe.value = it}
-    }
-
-    fun addLikeOnRecipe(userId: String, recipe: Recipe) {
-        _updateRecipe.value = UiState.Loading
-        repositoryOld.addLikeOnRecipe(userId,recipe) { _updateRecipe.value = it}
-    }
-
-
-
 
 }

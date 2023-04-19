@@ -20,17 +20,42 @@ data class User(
     val sex: String,
     val weight: Double,
     val age: Int,
-    val liked_recipes: List<RecipeResponse>,
-    val saved_recipes: List<RecipeResponse>,
-    val created_recipes: List<RecipeResponse>,
+    val liked_recipes: MutableList<RecipeResponse>,
+    val saved_recipes: MutableList<RecipeResponse>,
+    val created_recipes: MutableList<RecipeResponse>,
     val created_date: String,
     val updated_date: String
 ) : Parcelable {
 
 
-    fun checkIfLiked(item: RecipeResponse): Boolean {
-        return item in liked_recipes
+    fun checkIfLiked(recipe: RecipeResponse): Int {
+        return  liked_recipes.indexOfFirst { it.id == recipe.id }
     }
+
+    fun addLike(recipe: RecipeResponse){
+        if (checkIfLiked(recipe) == -1)
+            liked_recipes.add(recipe)
+    }
+    fun removeLike(recipe: RecipeResponse){
+        val index = checkIfLiked(recipe)
+        if (index != -1)
+            liked_recipes.removeAt(index)
+    }
+
+    fun checkIfSaved(recipe: RecipeResponse): Int {
+        return  saved_recipes.indexOfFirst { it.id == recipe.id }
+    }
+
+    fun addSave(recipe: RecipeResponse){
+        if (checkIfSaved(recipe) == -1)
+            saved_recipes.add(recipe)
+    }
+    fun removeSave(recipe: RecipeResponse){
+        val index = checkIfSaved(recipe)
+        if (index != -1)
+            saved_recipes.removeAt(index)
+    }
+
 
 
     /*fun addLike(userId:String) {

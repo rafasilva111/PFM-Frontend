@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
@@ -15,8 +14,10 @@ import com.google.firebase.storage.ktx.storage
 
 
 class RecipeListingAdapter(
-    val onItemClicked: (Int, Recipe) -> Unit,
-    private val viewModel: RecipeViewModel,
+    val onItemClicked: (Int, RecipeResponse) -> Unit,
+    val onLikeClicked: (RecipeResponse,Boolean) -> Unit,
+    val onSaveClicked: (RecipeResponse,Boolean) -> Unit,
+    private val recipeViewModel: RecipeViewModel,
     private val sharedPreference: SharedPreference
 ) : RecyclerView.Adapter<RecipeListingAdapter.MyViewHolder>() {
 
@@ -42,6 +43,12 @@ class RecipeListingAdapter(
         notifyDataSetChanged()
     }
 
+    fun updateItem(position: Int,item: RecipeResponse){
+        list.removeAt(position)
+        list.add(position,item)
+        notifyItemChanged(position)
+    }
+
 
     fun cleanList(){
         this.list= arrayListOf()
@@ -59,8 +66,6 @@ class RecipeListingAdapter(
 
 
     inner class MyViewHolder(private val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-
-
         fun bind(item: RecipeResponse) {
             if (!item.img_source.isNullOrEmpty()){
                 val imgRef = Firebase.storage.reference.child(item.img_source)
@@ -80,7 +85,11 @@ class RecipeListingAdapter(
             binding.TVDescription.text = item.description.toString()
             //binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
 
+            // get user from shared prefrences
+            val user = sharedPreference.getUserSession()
+
             // like function
+            binding.like.setImageResource(R.drawable.ic_like)
 
             if (item.likes == 1) {
                 binding.TVRate.text = "1 Gosto"
@@ -89,109 +98,49 @@ class RecipeListingAdapter(
             }
             binding.dateLabel.text = item.created_date
 
+            // check for user likes
+
+            if (user!=null){
+                if(user!!.checkIfLiked(item) != -1){
+                    binding.like.setImageResource(R.drawable.ic_like_active)
+                }
+                else
+                    binding.like.setImageResource(R.drawable.ic_like)
+            }
+
+            binding.like.setOnClickListener {
+                if(user!!.checkIfLiked(item) == -1) {
+                    onLikeClicked.invoke(item, true)
+                }
+                else
+                {
+                    onLikeClicked.invoke(item, false)
+                }
+            }
 
             // favorite function
-            binding.favorites.setImageResource(R.drawable.ic_favorite)
-            binding.like.setImageResource(R.drawable.ic_like)
-
-            val user = sharedPreference.getUserSession()
+            binding.saved.setImageResource(R.drawable.ic_favorite)
 
             // check for user likes
 
-            if (user != null){
-
+            if (user!=null){
+                if(user!!.checkIfSaved(item) != -1){
+                    binding.saved.setImageResource(R.drawable.ic_favorito_active)
+                }
+                else
+                    binding.saved.setImageResource(R.drawable.ic_favorite)
             }
 
-
-
-
-
-            /*authModel.getUserSession_old { user ->
-                if (user != null) {
-                    val recipe_fav = user.getFavoriteRecipe(item.id)
-                    if (recipe_fav != null){
-                        binding.favorites.setImageResource(R.drawable.ic_favorito_white)
-                        if (recipe_fav != item){
-                            user.removeFavoriteRecipe(recipe_fav.id)
-                            user.addFavoriteRecipe(item)
-                            authModel.updateUserSession(user) { state ->
-                                when (state) {
-                                    is UiState.Success -> {
-                                        Log.d(TAG, "bind: Updated recipe " + state.data.toString())
-                                    }
-                                    else -> {}
-                                }
-                            }
-                        }
-                    }
-
-                    val recipe_liked = user.getLikedRecipe(item.id)
-                    Log.d(TAG, "set like icon: "+recipe_liked +"  "+ item.title)
-                    if (recipe_liked != null){
-                        binding.like.setImageResource(R.drawable.ic_like_red)
-                        if (recipe_liked != item){
-                            user.removeLikeRecipe(recipe_liked.id)
-                            user.addLikeRecipe(item)
-                            authModel.updateUserSession(user) { state ->
-                                when (state) {
-                                    is UiState.Success -> {
-                                        Log.d(TAG, "bind: Updated recipe " + state.data.toString())
-                                    }
-                                    else -> {}
-                                }
-                            }
-                        }
-                    }
+            binding.saved.setOnClickListener {
+                if(user!!.checkIfSaved(item) == -1) {
+                    onSaveClicked.invoke(item, true)
+                }
+                else
+                {
+                    onSaveClicked.invoke(item, false)
                 }
             }
 
-            binding.favorites.setOnClickListener {
-                authModel.getUserSession_old { user ->
-                    if (user != null) {
-                        if (user.getFavoriteRecipe(item.id) != null) {
-                            authModel.removeFavoriteRecipe(item)
-                            binding.favorites.setImageResource(R.drawable.ic_favorite)
-                            Toast.makeText(
-                                it.context,
-                                "Receita removida dos favoritos.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            authModel.addFavoriteRecipe(item)
-                            binding.favorites.setImageResource(R.drawable.ic_favorito_white)
-                        }
-                    }
-                }
-            }
-            binding.like.setOnClickListener {
-                authModel.getUserSession_old { user ->
-                    if (user != null) {
-                        if (user.getLikedRecipe(item.id) != null) {
-                            authModel.removeLikeOnRecipe(item)
-                            viewModel.removeLikeOnRecipe(user.id,item)
-                            binding.like.setImageResource(R.drawable.ic_like)
-                            if (item.likes.size == 1) {
-                                binding.TVRate.text = "1 Gosto"
-                            } else {
-                                binding.TVRate.text = item.likes.size.toString() + " Gosto"
-                            }
-
-
-                        } else {
-                            authModel.addLikeOnRecipe(item)
-                            viewModel.addLikeOnRecipe(user.id,item)
-                            binding.like.setImageResource(R.drawable.ic_like_red)
-                            if (item.likes.size == 1) {
-                                binding.TVRate.text = "1 Gosto"
-                            } else {
-                                binding.TVRate.text = item.likes.size.toString() + " Gosto"
-                            }
-                        }
-
-                    }
-                }
-
-            }*/
         }
     }
 }

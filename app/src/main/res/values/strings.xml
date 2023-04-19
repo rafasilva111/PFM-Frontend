@@ -48,6 +48,8 @@
     <string name="user_had_no_shared_preferences">User session invalid.</string>
     <string name="get_saved_recipes">Saved recipes</string>
     <string name="get_liked_recipes">Liked recipes</string>
+    <string name="recipe_liked">Recipe liked.</string>
+    <string name="recipe_removed_liked">Removed like.</string>
 
     <string-array name="gender_array">
         <item>Masculino</item>

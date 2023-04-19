@@ -8,12 +8,16 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
+import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 
 class FavoritesRecipeListingAdapter(
-    val onItemClicked: (Int, RecipeResponse) -> Unit
+    val onItemClicked: (Int, RecipeResponse) -> Unit,
+    val authViewModel: AuthViewModel,
+    val recipeViewModel: RecipeViewModel
 ) : RecyclerView.Adapter<FavoritesRecipeListingAdapter.MyViewHolder>() {
 
 
@@ -79,17 +83,49 @@ class FavoritesRecipeListingAdapter(
 
             // like function
 
-            // todo não percebo porque que não realmente mete a imagem
+
             if (user!=null){
-                if(user!!.checkIfLiked(item))
-                    binding.like.setImageResource(R.drawable.ic_like_red)
+                if(user!!.checkIfLiked(item) != -1){
+                    binding.like.setImageResource(R.drawable.ic_like_active)
+                }
+                else
+                    binding.like.setImageResource(R.drawable.ic_like)
             }
 
-
+            /*binding.like.setOnClickListener {
+                if(user!!.checkIfLiked(item) == -1) {
+                    onLikeClicked.invoke(item, true)
+                }
+                else
+                {
+                    onLikeClicked.invoke(item, false)
+                }
+            }*/
 
             // favorite function
-            binding.favorites.setImageResource(R.drawable.ic_favorite)
-            binding.like.setImageResource(R.drawable.ic_like)
+            binding.saved.setImageResource(R.drawable.ic_favorite)
+
+            // check for user likes
+
+            if (user!=null){
+                if(user!!.checkIfSaved(item) != -1){
+                    binding.saved.setImageResource(R.drawable.ic_favorito_active)
+                }
+                else
+                    binding.saved.setImageResource(R.drawable.ic_favorite)
+            }
+
+            /*binding.saved.setOnClickListener {
+                if(user!!.checkIfSaved(item) == -1) {
+                    onSaveClicked.invoke(item, true)
+                }
+                else
+                {
+                    onSaveClicked.invoke(item, false)
+                }
+            }*/
+
+
             //set initial sates
             /*authModel.getUserSession_old { user ->
                 if (user != null) {
