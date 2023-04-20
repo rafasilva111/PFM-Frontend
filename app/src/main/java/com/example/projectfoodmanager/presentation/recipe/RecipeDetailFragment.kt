@@ -82,8 +82,8 @@ class RecipeDetailFragment : Fragment() {
             binding.TVPortion.text = recipe.portion
 
             // TODO: Falta implementar o rating externo
-          //  binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
-          //  binding.tvRateInt.text = "not implemented"
+            //  binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
+            //  binding.tvRateInt.text = "not implemented"
             binding.TVDescriptionInfo.text = recipe.desc
 
             val list : List<String> = recipe.tags.split("\\")
@@ -156,13 +156,13 @@ class RecipeDetailFragment : Fragment() {
                     }
 
                 }
-           /*     chip.text = item.toString()
-                chip.isCloseIconVisible = true
-                chip.setBackgroundColor(resources.getColor(R.color.red))
-                chip.setChipIconResource(R.drawable.ic_like_red)
-                chip.setOnCloseIconClickListener{
-                    binding.CHTags.addView(chip)
-                }*/
+                /*     chip.text = item.toString()
+                     chip.isCloseIconVisible = true
+                     chip.setBackgroundColor(resources.getColor(R.color.red))
+                     chip.setChipIconResource(R.drawable.ic_like_red)
+                     chip.setOnCloseIconClickListener{
+                         binding.CHTags.addView(chip)
+                     }*/
 
             }
 
@@ -203,7 +203,7 @@ class RecipeDetailFragment : Fragment() {
                 this.context?.let { PreparationListingAdapter(it,recipe.preparation) }
             binding.LVPreparationInfo.adapter = itemsAdapterPreparation
 
-           setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
+            setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
 
             binding.LLContPreparation.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
@@ -295,7 +295,7 @@ class RecipeDetailFragment : Fragment() {
             binding.CVComments.setOnClickListener {
                 findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment)
             }
-            
+
             //like function
 
             /*authModel.getUserSession_old { user ->
@@ -361,22 +361,22 @@ class RecipeDetailFragment : Fragment() {
         }
     }
 
-  /*  private fun observer() {
-        authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is UiState.Loading -> {
-                    //todo
-                }
-                is UiState.Failure -> {
+    /*  private fun observer() {
+          authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
+              when (state) {
+                  is UiState.Loading -> {
+                      //todo
+                  }
+                  is UiState.Failure -> {
 
-                    toast(state.error)
-                }
-                is UiState.Success -> {
-                    toast(state.data.second)
-                }
-            }
-        }
-    }*/
+                      toast(state.error)
+                  }
+                  is UiState.Success -> {
+                      toast(state.data.second)
+                  }
+              }
+          }
+      }*/
 
 
 
