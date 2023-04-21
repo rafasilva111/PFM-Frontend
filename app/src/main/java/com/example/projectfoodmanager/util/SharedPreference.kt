@@ -54,4 +54,12 @@ class SharedPreference @Inject constructor(
         user.removeSave(recipe)
         saveUserSession(user)
     }
+
+    fun updateUserSession(user: User) {
+        val userToBeUpdated:User = gson.fromJson(sharedPreferences.getString(Constants.USER_SESSION,""), User::class.java)
+        user.saved_recipes = userToBeUpdated.saved_recipes
+        user.liked_recipes = userToBeUpdated.saved_recipes
+        user.created_recipes = userToBeUpdated.saved_recipes
+        saveUserSession(user)
+    }
 }

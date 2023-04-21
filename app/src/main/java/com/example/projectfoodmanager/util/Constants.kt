@@ -20,6 +20,14 @@ object ERROR_CODES {
     const val BAD_INPUTS = "401"
 }
 
+object actionResultCodes{
+    const val GALLERY_REQUEST_CODE = 1
+}
+
+object FireStorage{
+    const val user_profile_images = "images/users/profile/"
+}
+
 object FireStoreCollection{
     const val USER = "user"
     const val RECIPE ="recipe"

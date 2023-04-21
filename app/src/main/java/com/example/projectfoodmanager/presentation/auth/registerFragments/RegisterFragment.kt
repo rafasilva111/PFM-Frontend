@@ -1,18 +1,31 @@
 
 package com.example.projectfoodmanager.ui.auth.registerFragments
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
+import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.FireStorage.user_profile_images
+import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_CODE
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.UploadTask
+import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.DateTimeException
 import java.time.LocalDate
@@ -23,8 +36,13 @@ import java.util.*
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
 
+    val authViewModel: AuthViewModel by viewModels()
+
+
+    private var file_uri: Uri? = null
     val TAG: String = "RegisterFragment"
     lateinit var binding: FragmentRegisterBinding
+    var imageUrl: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +65,40 @@ class RegisterFragment : Fragment() {
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
+        bindObservers()
+
         Locale.setDefault(Locale("pt"));
+
+        binding.skipBiodata.setOnClickListener {
+            // todo melhorar a estétitica
+            if (validation()) {
+
+                if (file_uri != null){
+                    val fileName = UUID.randomUUID().toString() +".jpg"
+                    imageUrl = "$user_profile_images$fileName"
+
+                    val refStorage = Firebase.storage.reference.child(imageUrl)
+
+                    refStorage.putFile(file_uri!!)
+                        .addOnSuccessListener(
+                            OnSuccessListener<UploadTask.TaskSnapshot> { taskSnapshot ->
+                                Log.d(TAG, "uploadImageToFirebase: success")
+                                authViewModel.registerUser(getUserRequest())
+                            })
+
+                        ?.addOnFailureListener(OnFailureListener { e ->
+                            Log.d(TAG, "uploadImageToFirebase: "+e)
+                        })
+                }
+                else
+                    authViewModel.registerUser(getUserRequest())
+
+            }
+        }
+
+        binding.imageView.setOnClickListener {
+            selectImageFromGallery()
+        }
         binding.dateEt.setOnClickListener {
             initDatePicker(year,month,day)
         }
@@ -57,16 +108,14 @@ class RegisterFragment : Fragment() {
         }
         binding.registerBtn.setOnClickListener {
             if (validation()){
-                val user = getUserObj()
-                // todo se utilizador responder "nao responder" não ir para dados biomedicos não vale a pena avançar logo para login
                 findNavController().navigate(R.id.action_registerFragment_to_biodataFragment_navigation,Bundle().apply {
-                    putParcelable("user",user)
+                    putParcelable("user",getUserRequest())
                 })
             }
         }
     }
 
-    fun getUserObj(): UserRequest {
+    fun getUserRequest(): UserRequest {
 
         var sex = binding.sexEt.text.toString()
         if (sex == "Masculino")
@@ -83,7 +132,9 @@ class RegisterFragment : Fragment() {
             email = binding.emailEt.text.toString(),
             birth_date = binding.dateEt.text.toString(),
             password = binding.passEt.text.toString(),
-            sex = sex
+            sex = sex,
+            img_source = imageUrl
+
         )
     }
 
@@ -190,7 +241,7 @@ class RegisterFragment : Fragment() {
         val datePickerDialog = DatePickerDialog(
             // on below line we are passing context.
             requireContext(),
-            { view, year, monthOfYear, dayOfMonth ->
+            { _, year, monthOfYear, dayOfMonth ->
                 // on below line we are setting
                 // date to our text view.
 
@@ -218,6 +269,66 @@ class RegisterFragment : Fragment() {
         // at last we are calling show
         // to display our date picker dialog.
         datePickerDialog.show()
+    }
+
+    private fun selectImageFromGallery() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(
+            Intent.createChooser(
+                intent,
+                "Please select..."
+            ),
+            GALLERY_REQUEST_CODE
+        )
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+
+        super.onActivityResult(
+            requestCode,
+            resultCode,
+            data
+        )
+
+        if (requestCode == GALLERY_REQUEST_CODE
+            && resultCode == Activity.RESULT_OK
+            && data != null
+            && data.data != null
+        ) {
+            // Get the Uri of data
+
+            file_uri = data.data
+            if (file_uri != null) {
+                binding.imageView.setImageURI(file_uri)
+            }
+        }
+    }
+
+
+
+    private fun bindObservers() {
+        authViewModel.userRegisterLiveData.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+                        toast(getString(R.string.user_registered_successfully))
+                    }
+                    is NetworkResult.Error -> {
+                        toast(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        // todo falta aqui um loading bar
+                    }
+                }
+            }
+        }
     }
 
 }

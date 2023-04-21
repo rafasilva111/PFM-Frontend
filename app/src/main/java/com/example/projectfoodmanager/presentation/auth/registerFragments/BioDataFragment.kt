@@ -60,7 +60,7 @@ class BioDataFragment : Fragment() {
             Log.d(TAG, "Something went wrong whit user object")
 
 
-        binding.activityLevelRg.setOnCheckedChangeListener { group, checkedId ->
+        binding.activityLevelRg.setOnCheckedChangeListener { _, checkedId ->
             when(checkedId){
                 R.id.op1_RB-> activityLevel= 1.2F
                 R.id.op2_RB-> activityLevel= 1.375F
@@ -81,26 +81,24 @@ class BioDataFragment : Fragment() {
         }
     }
 
-    private fun showValidationErrors(error: String) {
-        toast(error)
-    }
 
     private fun bindObservers() {
-        authViewModel.userRegisterLiveData.observe(viewLifecycleOwner, Observer {
+        authViewModel.userRegisterLiveData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
                         findNavController().navigate(R.id.action_registerFragment_to_home_navigation)
+                        toast(getString(R.string.user_registered_successfully))
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        toast(it.message.toString())
                     }
                     is NetworkResult.Loading -> {
                         // todo falta aqui um loading bar
                     }
                 }
             }
-        })
+        }
     }
 
 
@@ -114,8 +112,9 @@ class BioDataFragment : Fragment() {
             birth_date = objUser!!.birth_date,
             password = objUser!!.password,
             sex = objUser!!.sex,
-            height = binding.heightEt.text.toString(),
-            weight = binding.weightEt.text.toString(),
+            img_source = objUser!!.img_source,
+            height = binding.heightEt.text.toString().toFloat(),
+            weight = binding.heightEt.text.toString().toFloat(),
             activity_level = activityLevel,
 
             )
@@ -138,14 +137,20 @@ class BioDataFragment : Fragment() {
                 //toast(getString(R.string.heightEt_problem))
             }
         } else if (heightTxt.toFloatOrNull() != null){
-            val heighFloat = heightTxt.toFloatOrNull()
-            if (heighFloat!! !in 1.20..3.0) {
+            val heightFloat = heightTxt.toFloatOrNull()
+            if (heightFloat!! !in 1.20..3.0) {
                 isValid = false
                 binding.heightTL.isErrorEnabled=true
                 binding.heightTL.error=getString(R.string.heightEt_problem)
                 //toast(getString(R.string.heightEt_problem))
             } else {
-                binding.heightEt.setText((heighFloat * 100).toString())
+                binding.heightEt.setText((heightFloat * 100).toString())
+                if ((heightFloat * 100) !in 120.0..300.0){
+                    isValid = false
+                    binding.heightTL.isErrorEnabled=true
+                    binding.heightTL.error=getString(R.string.heightEt_problem)
+                    //toast(getString(R.string.heightEt_problem))
+                }
             }
         }else{
             binding.heightTL.isErrorEnabled=false

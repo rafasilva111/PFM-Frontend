@@ -22,9 +22,9 @@ data class UserRequest(
     @SerializedName("activity_level")
     val activity_level: Float= 0.00F,
     @SerializedName("height")
-    val height: String="",
+    val height: Float=-1F,
     @SerializedName("sex")
     val sex: String="",
     @SerializedName("weight")
-    val weight: String="",
+    val weight: Float=-1F,
 ) : Serializable, Parcelable

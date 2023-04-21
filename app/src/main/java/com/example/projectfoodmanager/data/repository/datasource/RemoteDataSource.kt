@@ -20,7 +20,7 @@ interface RemoteDataSource {
 	suspend fun logoutUser() : Response<String>
 	suspend fun getUserAuth() : Response<User>
 	suspend fun getUserById(userId: Int): Response<UserAuthResponse>
-	suspend fun updateUser(userId: Int,user: UserRequest): Response<UserAuthResponse>
+	suspend fun updateUser(user: UserRequest): Response<User>
 	suspend fun deleteUser(userId: Int): Response<String>
 
 	//recipe

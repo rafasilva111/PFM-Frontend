@@ -28,11 +28,14 @@ interface ApiInterface {
     @GET("$API_V1_BASE_URL/auth")
     suspend fun getUserSession(): Response<User>
 
+    @POST("$API_V1_BASE_URL/user")
+    suspend fun patchUser(@Body user : UserRequest): Response<Unit>
+
     @GET("/user")
     suspend fun getUser(@Query("id") userId: Int): Response<UserAuthResponse>
 
-    @PUT("/user")
-    suspend fun updateUser(@Query("id") userId: Int,@Body user : UserRequest): Response<UserAuthResponse>
+    @PATCH("$API_V1_BASE_URL/user")
+    suspend fun updateUser(@Body user : UserRequest): Response<User>
 
     @DELETE("/user")
     suspend fun deleteUser(@Query("id") userId: Int): Response<String>

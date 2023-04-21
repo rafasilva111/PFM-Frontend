@@ -137,7 +137,7 @@ class LoginFragment : Fragment() {
             }
         })
 
-        authViewModel.userOldLiveData.observe(viewLifecycleOwner, Observer {
+        authViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
                 when (it) {
                     is NetworkResult.Success -> {

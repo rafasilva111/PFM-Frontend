@@ -20,9 +20,9 @@ data class User(
     val sex: String,
     val weight: Double,
     val age: Int,
-    val liked_recipes: MutableList<RecipeResponse>,
-    val saved_recipes: MutableList<RecipeResponse>,
-    val created_recipes: MutableList<RecipeResponse>,
+    var liked_recipes: MutableList<RecipeResponse>,
+    var saved_recipes: MutableList<RecipeResponse>,
+    var created_recipes: MutableList<RecipeResponse>,
     val created_date: String,
     val updated_date: String
 ) : Parcelable {

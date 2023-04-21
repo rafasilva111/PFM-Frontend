@@ -39,8 +39,8 @@ class RemoteDataSourceImpl @Inject constructor(
 	override suspend fun getUserById(userId: Int): Response<UserAuthResponse> {
 		return apiInterface.getUser(userId = userId)
 	}
-	override suspend fun updateUser(userId: Int,user: UserRequest): Response<UserAuthResponse> {
-		return apiInterface.updateUser(userId = userId, user = user )
+	override suspend fun updateUser(user: UserRequest): Response<User> {
+		return apiInterface.updateUser(user = user )
 	}
 	override suspend fun deleteUser(userId: Int): Response<String> {
 		return apiInterface.deleteUser(userId = userId)

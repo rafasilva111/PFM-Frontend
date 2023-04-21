@@ -10,15 +10,17 @@ import com.example.projectfoodmanager.util.NetworkResult
 interface AuthRepository {
 
     val userRegisterLiveData: LiveData<Event<NetworkResult<String>>>
-    val userAuthResponseLiveData: LiveData<Event<NetworkResult<UserAuthResponse>>>
-    val userLogoutResponseLiveData: LiveData<Event<NetworkResult<String>>>
-    val userOldLiveData: LiveData<Event<NetworkResult<User>>>
+    val userAuthLiveData: LiveData<Event<NetworkResult<UserAuthResponse>>>
+    val userLogoutLiveData: LiveData<Event<NetworkResult<String>>>
+    val userLiveData: LiveData<Event<NetworkResult<User>>>
+    val userUpdateLiveData: LiveData<Event<NetworkResult<User>>>
 
     //User
     suspend fun registerUser(user : UserRequest)
     suspend fun loginUser(email: String, password: String)
     suspend fun getUserSession()
     suspend fun logoutUser()
+    suspend fun updateUser(userRequest: UserRequest)
 
 
 }

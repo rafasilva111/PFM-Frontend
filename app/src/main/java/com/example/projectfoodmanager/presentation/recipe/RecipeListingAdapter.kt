@@ -78,6 +78,8 @@ class RecipeListingAdapter(
                         .load(R.drawable.good_food_display___nci_visuals_online)
                         .into(binding.imageView)
                 }
+                //Firebase.storage.reference.putFile()
+
             }
 
             binding.dateLabel.text = item.created_date
