@@ -2,6 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_login_navigation"
     app:startDestination="@id/splashFragment">
 
 
@@ -19,7 +20,10 @@
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_loginFragment_to_home_navigation"
-            app:destination="@id/app_navigation" />
+            app:destination="@id/app_navigation"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/app_login_navigation"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
@@ -61,7 +65,10 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_splashFragment_to_app_navigation"
-            app:destination="@id/app_navigation" />
+            app:destination="@id/app_navigation"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/app_login_navigation"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/viewPagerFragment"
