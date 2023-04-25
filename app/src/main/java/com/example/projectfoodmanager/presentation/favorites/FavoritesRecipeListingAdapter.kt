@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
@@ -15,7 +15,7 @@ import com.google.firebase.storage.ktx.storage
 
 
 class FavoritesRecipeListingAdapter(
-    val onItemClicked: (Int, RecipeResponse) -> Unit,
+    val onItemClicked: (Int, Recipe) -> Unit,
     val authViewModel: AuthViewModel,
     val recipeViewModel: RecipeViewModel
 ) : RecyclerView.Adapter<FavoritesRecipeListingAdapter.MyViewHolder>() {
@@ -23,7 +23,7 @@ class FavoritesRecipeListingAdapter(
 
     private var user: User? = null
     private val TAG: String? = "RecipeListingAdapter"
-    private var list: MutableList<RecipeResponse> = arrayListOf()
+    private var list: MutableList<Recipe> = arrayListOf()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -37,7 +37,7 @@ class FavoritesRecipeListingAdapter(
         holder.bind(item)
     }
 
-    fun updateList(list: MutableList<RecipeResponse>, user: User){
+    fun updateList(list: MutableList<Recipe>, user: User){
         this.list = list
         this.user = user
         notifyDataSetChanged()
@@ -57,7 +57,7 @@ class FavoritesRecipeListingAdapter(
     inner class MyViewHolder(private val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(item: RecipeResponse) {
+        fun bind(item: Recipe) {
             val imgRef = Firebase.storage.reference.child(item.img_source)
             imgRef.downloadUrl.addOnSuccessListener { Uri ->
                 val imageURL = Uri.toString()

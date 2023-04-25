@@ -18,7 +18,7 @@ data class UserRequest(
     @SerializedName("password")
     val password: String="",
     @SerializedName("img_source")
-    val img_source: String="",
+    var img_source: String="",
     @SerializedName("activity_level")
     val activity_level: Float= 0.00F,
     @SerializedName("height")

@@ -42,7 +42,6 @@ class RegisterFragment : Fragment() {
     private var file_uri: Uri? = null
     val TAG: String = "RegisterFragment"
     lateinit var binding: FragmentRegisterBinding
-    var imageUrl: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,13 +71,10 @@ class RegisterFragment : Fragment() {
         binding.skipBiodata.setOnClickListener {
             // todo melhorar a estétitica
             if (validation()) {
-
                 if (file_uri != null){
                     val fileName = UUID.randomUUID().toString() +".jpg"
-                    imageUrl = "$user_profile_images$fileName"
 
-                    val refStorage = Firebase.storage.reference.child(imageUrl)
-
+                    val refStorage = Firebase.storage.reference.child("$user_profile_images$fileName")
                     refStorage.putFile(file_uri!!)
                         .addOnSuccessListener(
                             OnSuccessListener<UploadTask.TaskSnapshot> { taskSnapshot ->
@@ -110,6 +106,10 @@ class RegisterFragment : Fragment() {
             if (validation()){
                 findNavController().navigate(R.id.action_registerFragment_to_biodataFragment_navigation,Bundle().apply {
                     putParcelable("user",getUserRequest())
+                    if (file_uri != null){
+                        putString("uri",file_uri.toString())
+                    }
+
                 })
             }
         }
@@ -132,9 +132,7 @@ class RegisterFragment : Fragment() {
             email = binding.emailEt.text.toString(),
             birth_date = binding.dateEt.text.toString(),
             password = binding.passEt.text.toString(),
-            sex = sex,
-            img_source = imageUrl
-
+            sex = sex
         )
     }
 

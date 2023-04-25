@@ -1,8 +1,5 @@
 package com.example.projectfoodmanager.presentation.recipe
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,13 +15,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -36,7 +38,7 @@ class RecipeListingFragment : Fragment() {
     private var current_page:Int = 1
     private var next_page:Boolean = true
 
-    private var recipeList: MutableList<RecipeResponse> = mutableListOf()
+    private var recipeList: MutableList<Recipe> = mutableListOf()
 
     private var stringToSearch: String? = null
     private var newSearch: Boolean = false
@@ -104,6 +106,24 @@ class RecipeListingFragment : Fragment() {
         if (this::binding.isInitialized){
             return binding.root
         }else {
+
+            // load profile image
+
+            val userSession: User? = sharedPreference.getUserSession()
+            if (userSession != null && !userSession.img_source.isNullOrEmpty()){
+                val imgRef = Firebase.storage.reference.child(userSession.img_source)
+                imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                    val imageURL = Uri.toString()
+                    Glide.with(binding.ivProfilePic.context).load(imageURL).into(binding.ivProfilePic)
+                }
+                    .addOnFailureListener {
+                        Glide.with(binding.ivProfilePic.context)
+                            .load(R.drawable.good_food_display___nci_visuals_online)
+                            .into(binding.ivProfilePic)
+                    }
+            }
+
+
             binding = FragmentRecipeListingBinding.inflate(layoutInflater)
             manager = LinearLayoutManager(activity)
             manager.orientation=LinearLayoutManager.HORIZONTAL
@@ -260,28 +280,6 @@ class RecipeListingFragment : Fragment() {
         }
     }
 
-
-    private fun isOnline(context: Context): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if ( connectivityManager != null) {
-            val capabilities =
-                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            if (capabilities != null) {
-                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
-                    return true
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
-                    return true
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
-                    return true
-                }
-            }
-        }
-        return false
-    }
 
     private fun showValidationErrors(error: String) {
         toast(error)

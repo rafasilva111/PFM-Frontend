@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
@@ -101,9 +101,9 @@ class FavoritesFragment : Fragment() {
                                 manager.findLastCompletelyVisibleItemPosition()
                             val pag_index =
                                 floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
-                            if ((pastVisibleItem + 1) % FireStorePaginations.RECIPE_LIMIT.toInt() == 0) {
-                                recipeViewModel.getRecipesPaginatedOld(false)
-                            }
+//                            if ((pastVisibleItem + 1) % FireStorePaginations.RECIPE_LIMIT.toInt() == 0) {
+//                                recipeViewModel.getRecipesPaginatedOld(false)
+//                            }
                             Log.d(TAG, pag_index.toString())
                             Log.d(TAG, visibleItemCount.toString())
                             Log.d(TAG, pastVisibleItem.toString())

@@ -6,8 +6,9 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
+import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import retrofit2.Response
@@ -24,11 +25,11 @@ interface RemoteDataSource {
 	suspend fun deleteUser(userId: Int): Response<String>
 
 	//recipe
-	suspend fun createRecipe(recipe : RecipeRequest): Response<RecipeResponse>
-	suspend fun getRecipe(recipeId: Int): Response<RecipeResponse>
-	suspend fun getRecipesPaginated(page: Int): Response<RecipeListResponse>
-	suspend fun getRecipesByTitleAndTags(string: String, page: Int): Response<RecipeListResponse>
-	suspend fun updateRecipe(recipeId: Int,recipe: RecipeRequest): Response<RecipeResponse>
+	suspend fun createRecipe(recipe : RecipeRequest): Response<Recipe>
+	suspend fun getRecipe(recipeId: Int): Response<Recipe>
+	suspend fun getRecipesPaginated(page: Int): Response<RecipeList>
+	suspend fun getRecipesByTitleAndTags(string: String, page: Int): Response<RecipeList>
+	suspend fun updateRecipe(recipeId: Int,recipe: RecipeRequest): Response<Recipe>
 	suspend fun deleteRecipe(recipeId: Int): Response<String>
 	suspend fun addLike(recipeId: Int): Response<Unit>
 	suspend fun removeLike(recipeId: Int): Response<Unit>
@@ -44,7 +45,7 @@ interface RemoteDataSource {
 
 	//followers
 	suspend fun createFollower( userSenderId: String, userReceiverId: String): Response<FollowerResponse>
-	suspend fun getFollowers(userSenderId: String): Response<FollowerResponse>
-	suspend fun getFollowes( userReceiverId: String): Response<FollowerResponse>
+	suspend fun getFollowers(): Response<FollowList>
+	suspend fun getFolloweds(): Response<FollowList>
 
 }

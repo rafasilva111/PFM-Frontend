@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
@@ -137,4 +138,50 @@ class AuthRepositoryImp @Inject constructor(
 
     }
 
+
+    private val _userFollowersResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
+    override val userFollowersResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = _userFollowersResponseLiveData
+
+    private val _userFolloweesResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
+    override val userFolloweesResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = _userFolloweesResponseLiveData
+
+
+    override suspend fun getUserFollowers() {
+        _userFollowersResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        val response = remoteDataSource.getFollowers()
+        if (response.isSuccessful && response.code() == 200) {
+            Log.i(TAG, "updateUser: request made was sucessfull.")
+            _userFollowersResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "updateUser: request made was not sucessfull: $errorObj")
+
+            _userFollowersResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _userFollowersResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+    override suspend fun getUserFollowees() {
+        _userFolloweesResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        val response = remoteDataSource.getFolloweds()
+        if (response.isSuccessful && response.code() == 200) {
+            Log.i(TAG, "updateUser: request made was sucessfull.")
+            _userFollowersResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "updateUser: request made was not sucessfull: $errorObj")
+
+            _userFolloweesResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _userFolloweesResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
 }

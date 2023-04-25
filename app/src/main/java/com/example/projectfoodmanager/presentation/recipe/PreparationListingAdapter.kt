@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Preparation
 
 
 class PreparationListingAdapter(
     val context: Context,
-    private val items: HashMap<String,String>
+    private val items: List<Preparation>
     ):
     BaseAdapter() {
     private val inflater: LayoutInflater
@@ -22,7 +23,7 @@ class PreparationListingAdapter(
     }
 
     override fun getItem(p0: Int): Any {
-        return items.get(p0.toString()).toString()
+        return items[p0].toString()
     }
 
     override fun getItemId(position: Int): Long {
@@ -46,8 +47,8 @@ class PreparationListingAdapter(
             vh = view.tag as ViewHolderPreparation
         }
 
-        vh.tvNumber.text = (position + 1).toString()
-        vh.tvTitle.text = items.get((position+1).toString()).toString()
+        vh.tvNumber.text = items[position].step.toString()
+        vh.tvTitle.text = items[position].description
 
         return view
     }

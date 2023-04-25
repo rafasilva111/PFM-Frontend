@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class RecipeResponse(
+data class Recipe(
     val backgrounds: Backgrounds,
     val company: String,
     val created_date: String,

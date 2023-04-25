@@ -1,7 +1,7 @@
 package com.example.projectfoodmanager.data.model.modelResponse.user
 
 import android.os.Parcelable
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -20,37 +20,43 @@ data class User(
     val sex: String,
     val weight: Double,
     val age: Int,
-    var liked_recipes: MutableList<RecipeResponse>,
-    var saved_recipes: MutableList<RecipeResponse>,
-    var created_recipes: MutableList<RecipeResponse>,
+    var liked_recipes: MutableList<Recipe>,
+    var saved_recipes: MutableList<Recipe>,
+    var created_recipes: MutableList<Recipe>,
     val created_date: String,
     val updated_date: String
 ) : Parcelable {
 
 
-    fun checkIfLiked(recipe: RecipeResponse): Int {
-        return  liked_recipes.indexOfFirst { it.id == recipe.id }
+    fun checkIfLiked(recipe: Recipe): Int {
+        return if (liked_recipes != null)
+            liked_recipes.indexOfFirst { it.id == recipe.id }
+        else
+            -1
     }
 
-    fun addLike(recipe: RecipeResponse){
-        if (checkIfLiked(recipe) == -1)
+    fun addLike(recipe: Recipe){
+        if (checkIfLiked(recipe) != -1)
             liked_recipes.add(recipe)
     }
-    fun removeLike(recipe: RecipeResponse){
+    fun removeLike(recipe: Recipe){
         val index = checkIfLiked(recipe)
         if (index != -1)
             liked_recipes.removeAt(index)
     }
 
-    fun checkIfSaved(recipe: RecipeResponse): Int {
-        return  saved_recipes.indexOfFirst { it.id == recipe.id }
+    fun checkIfSaved(recipe: Recipe): Int {
+        return if (liked_recipes != null)
+            saved_recipes.indexOfFirst { it.id == recipe.id }
+        else
+            -1
     }
 
-    fun addSave(recipe: RecipeResponse){
+    fun addSave(recipe: Recipe){
         if (checkIfSaved(recipe) == -1)
             saved_recipes.add(recipe)
     }
-    fun removeSave(recipe: RecipeResponse){
+    fun removeSave(recipe: Recipe){
         val index = checkIfSaved(recipe)
         if (index != -1)
             saved_recipes.removeAt(index)

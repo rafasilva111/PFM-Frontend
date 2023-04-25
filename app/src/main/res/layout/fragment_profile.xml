@@ -75,7 +75,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView">
 
                     <ImageView
-                        android:id="@+id/image_view"
+                        android:id="@+id/ivProfilePicOnProfile"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:src="@drawable/img_profile" />
@@ -140,7 +140,7 @@
                             android:id="@+id/tv_publications"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="200"
+                            android:text="0"
                             android:textAlignment="center"
                             android:textColor="@color/bordeux"
                             android:textSize="15sp"
@@ -166,7 +166,7 @@
                             android:id="@+id/tv_follow_me"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="1000"
+                            android:text="0"
                             android:textAlignment="center"
                             android:textColor="@color/bordeux"
                             android:textSize="15sp"

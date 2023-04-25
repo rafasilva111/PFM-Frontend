@@ -1,8 +1,6 @@
 package com.example.projectfoodmanager.di
 
 
-import com.example.projectfoodmanager.data.old.RecipeRepositoryImp_old
-import com.example.projectfoodmanager.data.old.RecipeRepository_old
 import com.example.projectfoodmanager.data.repository.*
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourceImpl
 import com.example.projectfoodmanager.data.repository.AuthRepository
@@ -18,13 +16,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object RepositoryModule {
-    @Provides
-    @Singleton
-    fun recipeRepositoryOld(
-        database: FirebaseFirestore
-    ): RecipeRepository_old {
-        return RecipeRepositoryImp_old(database)
-    }
 
     @Provides
     @Singleton

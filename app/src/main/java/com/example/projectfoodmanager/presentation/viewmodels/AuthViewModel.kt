@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.repository.AuthRepository
@@ -49,6 +50,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+
     val userUpdateResponseLiveData: LiveData<Event<NetworkResult<User>>>
         get() = repository.userUpdateLiveData
 
@@ -65,6 +67,24 @@ class AuthViewModel @Inject constructor(
     fun logoutUser(){
         viewModelScope.launch {
             repository.logoutUser()
+        }
+    }
+
+    val userFollowersResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = repository.userFollowersResponseLiveData
+
+    fun getUserFollowers(){
+        viewModelScope.launch {
+            repository.getUserFollowers()
+        }
+    }
+
+    val userFolloweesResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = repository.userFolloweesResponseLiveData
+
+    fun getUserFollowees(){
+        viewModelScope.launch {
+            repository.getUserFollowees()
         }
     }
 

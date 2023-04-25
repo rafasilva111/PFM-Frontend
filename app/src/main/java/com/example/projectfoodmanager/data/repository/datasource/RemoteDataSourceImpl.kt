@@ -7,8 +7,9 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
+import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
@@ -48,24 +49,24 @@ class RemoteDataSourceImpl @Inject constructor(
 
 
 	//Recipe
-	override suspend fun createRecipe(recipe : RecipeRequest): Response<RecipeResponse> {
+	override suspend fun createRecipe(recipe : RecipeRequest): Response<Recipe> {
 		return apiInterface.createRecipe(recipe = recipe)
 	}
-	override suspend fun getRecipe(recipeId: Int): Response<RecipeResponse> {
+	override suspend fun getRecipe(recipeId: Int): Response<Recipe> {
 		return apiInterface.getRecipe(recipeId = recipeId)
 	}
-	override suspend fun getRecipesPaginated(page: Int): Response<RecipeListResponse> {
+	override suspend fun getRecipesPaginated(page: Int): Response<RecipeList> {
 		return apiInterface.getRecipePaginated(page = page)
 	}
 
 	override suspend fun getRecipesByTitleAndTags(
 		string: String,
 		page: Int
-	): Response<RecipeListResponse> {
+	): Response<RecipeList> {
 		return apiInterface.getRecipesByTitleAndTags(string = string,page = page)
 	}
 
-	override suspend fun updateRecipe(recipeId: Int, recipe: RecipeRequest): Response<RecipeResponse> {
+	override suspend fun updateRecipe(recipeId: Int, recipe: RecipeRequest): Response<Recipe> {
 		return apiInterface.updateRecipe(recipeId=recipeId, recipe = recipe )
 	}
 	override suspend fun deleteRecipe(recipeId: Int): Response<String> {
@@ -109,10 +110,10 @@ class RemoteDataSourceImpl @Inject constructor(
 	override suspend fun createFollower( userSenderId: String, userReceiverId: String): Response<FollowerResponse> {
 		return apiInterface.createFollower(userSenderId = userSenderId,userReceiverId = userReceiverId)
 	}
-	override suspend fun getFollowers(userSenderId: String): Response<FollowerResponse> {
-		return apiInterface.getFollowers(userSenderId = userSenderId)
+	override suspend fun getFollowers(): Response<FollowList> {
+		return apiInterface.getFollowers()
 	}
-	override suspend fun getFollowes( userReceiverId: String): Response<FollowerResponse> {
-		return apiInterface.getFollowes(userReceiverId = userReceiverId)
+	override suspend fun getFolloweds(): Response<FollowList> {
+		return apiInterface.getFolloweds()
 	}
 }
