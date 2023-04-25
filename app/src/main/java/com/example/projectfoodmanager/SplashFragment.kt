@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 
+@Suppress("DEPRECATION")
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
 
@@ -66,7 +67,7 @@ class SplashFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        authViewModel.userOldLiveData.observe(viewLifecycleOwner, Observer {
+        authViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
                 when (it) {
                     is NetworkResult.Success -> {

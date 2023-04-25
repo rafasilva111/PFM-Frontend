@@ -1,29 +1,24 @@
 package com.example.projectfoodmanager.presentation.viewmodels
 
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.projectfoodmanager.data.model.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 
-import com.example.projectfoodmanager.data.old.RecipeRepository_old
 import com.example.projectfoodmanager.data.repository.RecipeRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RecipeViewModel @Inject constructor (
-    val repositoryOld: RecipeRepository_old,
     val repository: RecipeRepository
 
 
@@ -37,7 +32,7 @@ class RecipeViewModel @Inject constructor (
             get() = _recipes
 
 
-    val recipeResponseLiveData: LiveData<Event<NetworkResult<RecipeListResponse>>>
+    val recipeResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
         get() = repository.recipeResponseLiveData
 
 
@@ -47,7 +42,7 @@ class RecipeViewModel @Inject constructor (
         }
     }
 
-    val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeListResponse>>>
+    val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
         get() = repository.recipeSearchByTitleAndTagsResponseLiveData
 
     var getRecipesByTitleAndTagsJob: Job? = null
@@ -104,14 +99,5 @@ class RecipeViewModel @Inject constructor (
         }
     }
 
-    //OLD
-
-    fun getRecipesPaginatedOld(firstTime:Boolean){
-        _recipes.value = UiState.Loading
-        repositoryOld.getRecipesPaginated(firstTime) {
-            _recipes.value = it
-        }
-
-    }
 
 }

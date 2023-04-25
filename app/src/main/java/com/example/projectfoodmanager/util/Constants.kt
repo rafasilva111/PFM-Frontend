@@ -6,8 +6,8 @@ val SPLASH_TIME:Long = 3000
 
 object Constants {
     // TODO: PRIMEIRO PASSO MUDAR ESTA MERDA SEU ANIMAL
-    const val BASE_URL = "http://192.168.1.110:5000/"
-    //const val BASE_URL = "http://52.47.44.215/"
+    //const val BASE_URL = "http://192.168.1.110:5000/"
+    const val BASE_URL = "http://52.47.44.215/"
     const val USER_TOKEN = "user_token"
     const val USER_SESSION = "user_session"
     const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"
@@ -18,6 +18,14 @@ object ERROR_CODES {
     const val SESSION_INVALID = 404
     const val UNAUTORIZED = 403
     const val BAD_INPUTS = "401"
+}
+
+object actionResultCodes{
+    const val GALLERY_REQUEST_CODE = 1
+}
+
+object FireStorage{
+    const val user_profile_images = "images/users/profile/"
 }
 
 object FireStoreCollection{

@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_registerFragment_to_biodataFragment_navigation"
             app:destination="@id/bioDataFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment

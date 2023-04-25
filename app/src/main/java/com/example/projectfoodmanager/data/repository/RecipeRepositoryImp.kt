@@ -3,13 +3,12 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeListResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 import com.google.gson.Gson
-import retrofit2.Response
 import javax.inject.Inject
 
 class RecipeRepositoryImp @Inject constructor(
@@ -19,8 +18,8 @@ class RecipeRepositoryImp @Inject constructor(
 
     private val TAG:String = "RecipeRepositoryImp"
 
-    private val _recipeResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeListResponse>>>()
-    override val recipeResponseLiveData: LiveData<Event<NetworkResult<RecipeListResponse>>>
+    private val _recipeResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeList>>>()
+    override val recipeResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
         get() = _recipeResponseLiveData
 
 
@@ -54,8 +53,8 @@ class RecipeRepositoryImp @Inject constructor(
         }
     }
 
-    private val _recipeSearchByTitleAndTagsResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeListResponse>>>()
-    override val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeListResponse>>>
+    private val _recipeSearchByTitleAndTagsResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeList>>>()
+    override val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
         get() = _recipeSearchByTitleAndTagsResponseLiveData
 
 

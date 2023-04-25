@@ -137,7 +137,7 @@
                 app:layout_constraintTop_toTopOf="@+id/first_name_TL">
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/image_view"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
                     android:src="@drawable/img_profile" />
@@ -282,6 +282,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/password_conf_TL">
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/skip_biodata"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_default"
+                    android:text="Finalizar"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/SubTitleStyle"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/grey" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/register_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -290,7 +301,8 @@
                     android:textAllCaps="false"
                     android:textAppearance="@style/SubTitleStyle"
                     android:textColor="@color/white"
-                    app:backgroundTint="@color/bordeux" />
+                    app:backgroundTint="@color/bordeux"
+                    android:layout_marginTop="60dp"/>
 
                 <ProgressBar
                     android:id="@+id/register_progress"

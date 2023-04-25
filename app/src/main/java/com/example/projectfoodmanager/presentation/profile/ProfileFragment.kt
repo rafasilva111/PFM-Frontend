@@ -10,15 +10,19 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.SharedPreference
-import com.example.projectfoodmanager.util.TokenManager
-import com.example.projectfoodmanager.util.toast
+import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -64,6 +68,37 @@ class ProfileFragment : Fragment() {
 
         binding.settingsCV.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_settingsFragment)
+        }
+
+
+
+        val userSession: User? = sharedPreference.getUserSession()
+
+        // load profile image offline
+
+        if (isOnline(view.context)) {
+
+            // load profile image online
+
+            if (userSession?.img_source != null && userSession.img_source != "") {
+                val imgRef = Firebase.storage.reference.child(userSession.img_source)
+                imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                    val imageURL = Uri.toString()
+                    Glide.with(binding.ivProfilePicOnProfile.context).load(imageURL)
+                        .into(binding.ivProfilePicOnProfile)
+                }
+                    .addOnFailureListener {
+                        Glide.with(binding.ivProfilePicOnProfile.context)
+                            .load(R.drawable.good_food_display___nci_visuals_online)
+                            .into(binding.ivProfilePicOnProfile)
+                    }
+            }
+
+            // get followers
+
+            authViewModel.getUserFollowees()
+            authViewModel.getUserFollowers()
+
         }
 
     }

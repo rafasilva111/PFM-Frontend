@@ -24,7 +24,7 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
@@ -76,17 +76,17 @@ class RecipeDetailFragment : Fragment() {
 
         objRecipe?.let { recipe ->
             binding.TVTitle.text = recipe.title
-            binding.TVDate.text = recipe.date
+            binding.TVDate.text = recipe.created_date
             binding.TVTime.text = recipe.time
             binding.TVDifficulty.text = recipe.difficulty
             binding.TVPortion.text = recipe.portion
 
             // TODO: Falta implementar o rating externo
-          //  binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
-          //  binding.tvRateInt.text = "not implemented"
-            binding.TVDescriptionInfo.text = recipe.desc
+            //  binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
+            //  binding.tvRateInt.text = "not implemented"
+            binding.TVDescriptionInfo.text = recipe.description
 
-            val list : List<String> = recipe.tags.split("\\")
+            val list : List<String> = recipe.tags
 
 
             // TODO: Obter a lista ordenada da base de dados
@@ -156,13 +156,13 @@ class RecipeDetailFragment : Fragment() {
                     }
 
                 }
-           /*     chip.text = item.toString()
-                chip.isCloseIconVisible = true
-                chip.setBackgroundColor(resources.getColor(R.color.red))
-                chip.setChipIconResource(R.drawable.ic_like_red)
-                chip.setOnCloseIconClickListener{
-                    binding.CHTags.addView(chip)
-                }*/
+                /*     chip.text = item.toString()
+                     chip.isCloseIconVisible = true
+                     chip.setBackgroundColor(resources.getColor(R.color.red))
+                     chip.setChipIconResource(R.drawable.ic_like_red)
+                     chip.setOnCloseIconClickListener{
+                         binding.CHTags.addView(chip)
+                     }*/
 
             }
 
@@ -170,7 +170,7 @@ class RecipeDetailFragment : Fragment() {
             //List_Ingredients
             binding.LVIngridientsInfo.isClickable = false
             val itemsAdapterIngrtedients: IngridientsListingAdapter? =
-                this.context?.let { IngridientsListingAdapter(it,parse_hash_maps(recipe.ingredients)) }
+                this.context?.let { IngridientsListingAdapter(it,recipe.ingredients) }
             binding.LVIngridientsInfo.adapter = itemsAdapterIngrtedients
             setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
 
@@ -203,7 +203,7 @@ class RecipeDetailFragment : Fragment() {
                 this.context?.let { PreparationListingAdapter(it,recipe.preparation) }
             binding.LVPreparationInfo.adapter = itemsAdapterPreparation
 
-           setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
+            setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
 
             binding.LLContPreparation.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
@@ -226,31 +226,29 @@ class RecipeDetailFragment : Fragment() {
 
             //Nutrition
 
-            if(recipe.nutrition_table!=null){
+            if(recipe.nutrition_informations!=null){
 
                 //-->Resume nutrition
-                binding.TVRDoseEnergia.text=recipe.nutrition_table.get(NutritionTable.ENERGIA)
-                binding.TVRPercEnergia.text=recipe.nutrition_table.get(NutritionTable.ENERGIA_PERC)
-                binding.TVRDoseGordura.text=recipe.nutrition_table.get(NutritionTable.GORDURA)
-                binding.TVRPercGordura.text=recipe.nutrition_table.get(NutritionTable.GORDURA_PERC)
-                binding.TVRDoseGordSat.text=recipe.nutrition_table.get(NutritionTable.GORDURA_SAT)
-                binding.TVRPercGordSat.text=recipe.nutrition_table.get(NutritionTable.GORDURA_SAT_PERC)
+                binding.TVRDoseEnergia.text=recipe.nutrition_informations.energia
+                binding.TVRPercEnergia.text=recipe.nutrition_informations.energia_perc
+                binding.TVRDoseGordura.text=recipe.nutrition_informations.gordura
+                binding.TVRPercGordura.text=recipe.nutrition_informations.gordura_perc
+                binding.TVRDoseGordSat.text=recipe.nutrition_informations.gordura_saturada
+                binding.TVRPercGordSat.text=recipe.nutrition_informations.gordura_saturada_perc
 
                 //-->Table_Nutrition
-                binding.TVDoseEnergia.text=recipe.nutrition_table.get(NutritionTable.ENERGIA)
-                binding.TVPercEnergia.text=recipe.nutrition_table.get(NutritionTable.ENERGIA_PERC)
-                binding.TVDoseGordura.text=recipe.nutrition_table.get(NutritionTable.GORDURA)
-                binding.TVPercGordura.text=recipe.nutrition_table.get(NutritionTable.GORDURA_PERC)
-                binding.TVDoseGordSat.text=recipe.nutrition_table.get(NutritionTable.GORDURA_SAT)
-                binding.TVPercGordSat.text=recipe.nutrition_table.get(NutritionTable.GORDURA_SAT_PERC)
-                binding.TVDoseHCarbono.text=recipe.nutrition_table.get(NutritionTable.HIDRATOS_CARBONO)
-                binding.TVPercHCarbono.text=recipe.nutrition_table.get(NutritionTable.HIDRATOS_CARBONO_PERC)
-                binding.TVDoseHCAcucar.text=recipe.nutrition_table.get(NutritionTable.HIDRATOS_CARBONO_ACUCARES)
-                binding.TVPercHCAcucar.text=recipe.nutrition_table.get(NutritionTable.HIDRATOS_CARBONO_ACUCARES_PERC)
-                binding.TVDoseFibra.text=recipe.nutrition_table.get(NutritionTable.FIBRA)
-                binding.TVPercFibra.text=recipe.nutrition_table.get(NutritionTable.FIBRA_PERC)
-                binding.TVDoseProteina.text=recipe.nutrition_table.get(NutritionTable.PROTEINA)
-                binding.TVPercProteina.text=recipe.nutrition_table.get(NutritionTable.PROTEINA_PERC)
+                binding.TVDoseEnergia.text=recipe.nutrition_informations.energia
+                binding.TVPercEnergia.text=recipe.nutrition_informations.energia_perc
+                binding.TVDoseGordura.text=recipe.nutrition_informations.gordura
+                binding.TVPercGordura.text=recipe.nutrition_informations.gordura_perc
+                binding.TVDoseGordSat.text=recipe.nutrition_informations.gordura_saturada
+                binding.TVPercGordSat.text=recipe.nutrition_informations.gordura_saturada_perc
+                binding.TVDoseHCarbono.text=recipe.nutrition_informations.hidratos_carbonos
+                binding.TVDoseHCAcucar.text=recipe.nutrition_informations.hidratos_carbonos_acucares
+                binding.TVPercHCAcucar.text=recipe.nutrition_informations.hidratos_carbonos_acucares_perc
+                binding.TVDoseFibra.text=recipe.nutrition_informations.fibra
+                binding.TVPercFibra.text=recipe.nutrition_informations.fibra_perc
+                binding.TVDoseProteina.text=recipe.nutrition_informations.proteina
 
                 binding.LLContNutrition.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
@@ -278,12 +276,12 @@ class RecipeDetailFragment : Fragment() {
             // TODO: Inserir imagem do autor da receita
             binding.TVAutor.text=recipe.company
             binding.IVSource.setOnClickListener {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source))
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.img_source))
                 startActivity(browserIntent)
             }
             binding.TVRef.text = "Ref: " + recipe.id
 
-            val imgRef = Firebase.storage.reference.child(recipe.img)
+            val imgRef = Firebase.storage.reference.child(recipe.img_source)
             imgRef.downloadUrl.addOnSuccessListener {Uri->
                 val imageURL = Uri.toString()
                 Glide.with(binding.IVRecipe.context).load(imageURL).into(binding.IVRecipe)
@@ -295,7 +293,7 @@ class RecipeDetailFragment : Fragment() {
             binding.CVComments.setOnClickListener {
                 findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment)
             }
-            
+
             //like function
 
             /*authModel.getUserSession_old { user ->
@@ -361,22 +359,22 @@ class RecipeDetailFragment : Fragment() {
         }
     }
 
-  /*  private fun observer() {
-        authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is UiState.Loading -> {
-                    //todo
-                }
-                is UiState.Failure -> {
+    /*  private fun observer() {
+          authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
+              when (state) {
+                  is UiState.Loading -> {
+                      //todo
+                  }
+                  is UiState.Failure -> {
 
-                    toast(state.error)
-                }
-                is UiState.Success -> {
-                    toast(state.data.second)
-                }
-            }
-        }
-    }*/
+                      toast(state.error)
+                  }
+                  is UiState.Success -> {
+                      toast(state.data.second)
+                  }
+              }
+          }
+      }*/
 
 
 

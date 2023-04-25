@@ -122,7 +122,7 @@
         app:layout_constraintTop_toTopOf="@+id/first_name_TL">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/image_view"
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:src="@drawable/img_profile" />

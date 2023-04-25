@@ -9,6 +9,7 @@
     android:background="@color/background_1">
 
     <ImageView
+        android:id="@+id/ivProfilePic"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginTop="20dp"

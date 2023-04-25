@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.repository.AuthRepository
@@ -32,7 +33,7 @@ class AuthViewModel @Inject constructor(
     }
 
     val userAuthResponseLiveData: LiveData<Event<NetworkResult<UserAuthResponse>>>
-        get() = repository.userAuthResponseLiveData
+        get() = repository.userAuthLiveData
 
     fun loginUser(email: String, password: String){
         viewModelScope.launch {
@@ -40,8 +41,8 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    val userOldLiveData: LiveData<Event<NetworkResult<User>>>
-        get() = repository.userOldLiveData
+    val userResponseLiveData: LiveData<Event<NetworkResult<User>>>
+        get() = repository.userLiveData
 
     fun getUserSession(){
         viewModelScope.launch {
@@ -50,12 +51,40 @@ class AuthViewModel @Inject constructor(
     }
 
 
+    val userUpdateResponseLiveData: LiveData<Event<NetworkResult<User>>>
+        get() = repository.userUpdateLiveData
+
+    fun updateUser(userRequest: UserRequest){
+        viewModelScope.launch {
+            repository.updateUser(userRequest)
+        }
+    }
+
+
     val userLogoutResponseLiveData: LiveData<Event<NetworkResult<String>>>
-        get() = repository.userLogoutResponseLiveData
+        get() = repository.userLogoutLiveData
 
     fun logoutUser(){
         viewModelScope.launch {
             repository.logoutUser()
+        }
+    }
+
+    val userFollowersResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = repository.userFollowersResponseLiveData
+
+    fun getUserFollowers(){
+        viewModelScope.launch {
+            repository.getUserFollowers()
+        }
+    }
+
+    val userFolloweesResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = repository.userFolloweesResponseLiveData
+
+    fun getUserFollowees(){
+        viewModelScope.launch {
+            repository.getUserFollowees()
         }
     }
 
