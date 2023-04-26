@@ -47,9 +47,8 @@ class PreparationListingAdapter(
             vh = view.tag as ViewHolderPreparation
         }
 
-        vh.tvNumber.text = "${position + 1}"
-        //vh.tvTitle.text = items[(position+1)].toString()
-
+        vh.tvNumber.text = items[position].step.toString()
+        vh.tvTitle.text = items[position].description
         return view
     }
 

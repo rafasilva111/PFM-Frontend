@@ -61,7 +61,7 @@ class RecipeListingFragment : Fragment() {
             onItemClicked = {pos,item ->
 
                 findNavController().navigate(R.id.action_recipeListingFragment_to_receitaDetailFragment,Bundle().apply {
-                    putParcelable("note",item)
+                    putParcelable("Recipe",item)
                 })
 
                 changeVisib_Menu(false)

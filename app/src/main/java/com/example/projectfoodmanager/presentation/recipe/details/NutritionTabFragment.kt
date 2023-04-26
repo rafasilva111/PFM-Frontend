@@ -1,60 +1,93 @@
 package com.example.projectfoodmanager.presentation.recipe.details
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
+import com.example.projectfoodmanager.databinding.FragmentNutritionTabBinding
+import com.example.projectfoodmanager.databinding.FragmentRecipeTabBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class NutritionTabFragment(recipe: RecipeResponse) : Fragment() {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [NutritionTabFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class NutritionTabFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    lateinit var binding: FragmentNutritionTabBinding
+    var objRecipe: RecipeResponse? = recipe
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_nutrition_tab, container, false)
+        if (this::binding.isInitialized){
+            return binding.root
+        }else {
+
+            // Inflate the layout for this fragment
+            binding = FragmentNutritionTabBinding.inflate(layoutInflater)
+
+            return binding.root
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment NutritionTabFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            NutritionTabFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        super.onViewCreated(view, savedInstanceState)
+
+        updateUI()
+        Log.d("TAG", "onViewCreated: ")
+    }
+
+    private fun updateUI() {
+
+        //Nutrition
+
+        /*if(recipe.nutrition_informations!=null){
+
+            /*//-->Resume nutrition
+            binding.TVRDoseEnergia.text=recipe.nutrition_informations.get(NutritionTable.ENERGIA)
+            binding.TVRPercEnergia.text=recipe.nutrition_informations.get(NutritionTable.ENERGIA_PERC)
+            binding.TVRDoseGordura.text=recipe.nutrition_informations.get(NutritionTable.GORDURA)
+            binding.TVRPercGordura.text=recipe.nutrition_informations.get(NutritionTable.GORDURA_PERC)
+            binding.TVRDoseGordSat.text=recipe.nutrition_informations.get(NutritionTable.GORDURA_SAT)
+            binding.TVRPercGordSat.text=recipe.nutrition_informations.get(NutritionTable.GORDURA_SAT_PERC)
+
+            //-->Table_Nutrition
+            binding.TVDoseEnergia.text=recipe.nutrition_informations.get(NutritionTable.ENERGIA)
+            binding.TVPercEnergia.text=recipe.nutrition_informations.get(NutritionTable.ENERGIA_PERC)
+            binding.TVDoseGordura.text=recipe.nutrition_informations.get(NutritionTable.GORDURA)
+            binding.TVPercGordura.text=recipe.nutrition_informations.get(NutritionTable.GORDURA_PERC)
+            binding.TVDoseGordSat.text=recipe.nutrition_informations.get(NutritionTable.GORDURA_SAT)
+            binding.TVPercGordSat.text=recipe.nutrition_informations.get(NutritionTable.GORDURA_SAT_PERC)
+            binding.TVDoseHCarbono.text=recipe.nutrition_informations.get(NutritionTable.HIDRATOS_CARBONO)
+            binding.TVPercHCarbono.text=recipe.nutrition_informations.get(NutritionTable.HIDRATOS_CARBONO_PERC)
+            binding.TVDoseHCAcucar.text=recipe.nutrition_table.get(NutritionTable.HIDRATOS_CARBONO_ACUCARES)
+            binding.TVPercHCAcucar.text=recipe.nutrition_table.get(NutritionTable.HIDRATOS_CARBONO_ACUCARES_PERC)
+            binding.TVDoseFibra.text=recipe.nutrition_table.get(NutritionTable.FIBRA)
+            binding.TVPercFibra.text=recipe.nutrition_table.get(NutritionTable.FIBRA_PERC)
+            binding.TVDoseProteina.text=recipe.nutrition_table.get(NutritionTable.PROTEINA)
+            binding.TVPercProteina.text=recipe.nutrition_table.get(NutritionTable.PROTEINA_PERC)*/
+
+            binding.LLContNutrition.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+
+            binding.CVTitleNutrition.setOnClickListener{
+                val state = if(binding.LLContNutrition.visibility== View.GONE) View.VISIBLE else View.GONE
+
+
+                TransitionManager.beginDelayedTransition(binding.LLContNutrition, AutoTransition())
+                binding.LLContNutrition.visibility= state
+
+
+
+                if(state==View.VISIBLE){
+                    binding.IVArrowNutri.animate().rotationBy(90F).setDuration(5).start()
+                    //   binding.SRLDetails.fullScroll(View.AUTOFILL_TYPE_LIST)
+                }else{
+                    binding.IVArrowNutri.animate().rotationBy(-90F).setDuration(5).start()
                 }
             }
+
+        }*/
     }
 }
