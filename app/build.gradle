@@ -12,15 +12,14 @@ plugins {
 
 android {
     namespace 'com.example.projectfoodmanager'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.projectfoodmanager"
         minSdk 26
-        targetSdk 32
-        versionCode 5
-        versionName "1.2"
-
+        targetSdk 33
+        versionCode 6
+        versionName "2.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures{

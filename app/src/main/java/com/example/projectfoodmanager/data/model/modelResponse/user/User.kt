@@ -35,9 +35,14 @@ data class User(
             -1
     }
 
-    fun addLike(recipe: Recipe){
-        if (checkIfLiked(recipe) != -1)
+    fun  addLike(recipe: Recipe){
+        if (liked_recipes == null){
+            this.liked_recipes = mutableListOf()
             liked_recipes.add(recipe)
+        }
+        else if (this.checkIfLiked(recipe) == -1){
+            liked_recipes.add(recipe)
+        }
     }
     fun removeLike(recipe: Recipe){
         val index = checkIfLiked(recipe)
@@ -46,15 +51,20 @@ data class User(
     }
 
     fun checkIfSaved(recipe: Recipe): Int {
-        return if (liked_recipes != null)
+        return if (saved_recipes != null)
             saved_recipes.indexOfFirst { it.id == recipe.id }
         else
             -1
     }
 
     fun addSave(recipe: Recipe){
-        if (checkIfSaved(recipe) == -1)
+        if (saved_recipes == null){
+            this.saved_recipes = mutableListOf()
             saved_recipes.add(recipe)
+        }
+        else if (checkIfSaved(recipe) == -1){
+            saved_recipes.add(recipe)
+        }
     }
     fun removeSave(recipe: Recipe){
         val index = checkIfSaved(recipe)

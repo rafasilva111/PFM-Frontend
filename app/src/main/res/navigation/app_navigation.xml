@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/recipeListingFragment"
         android:name="com.example.projectfoodmanager.presentation.recipe.RecipeListingFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home">
+        android:label="fragment_recipe_listing"
+        tools:layout="@layout/fragment_recipe_listing">
         <action
             android:id="@+id/action_recipeListingFragment_to_loginFragment"
             app:destination="@id/loginFragment"
