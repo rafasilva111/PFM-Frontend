@@ -15,6 +15,9 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_recipeListingFragment_to_receitaDetailFragment"
+            app:destination="@id/receitaDetailFragment"/>
 
     </fragment>
 
@@ -27,7 +30,7 @@
 
     <fragment
         android:id="@+id/receitaDetailFragment"
-        android:name="com.example.projectfoodmanager.presentation.recipe.RecipeDetailFragment"
+        android:name="com.example.projectfoodmanager.presentation.recipe.details.RecipeDetailFragment"
         android:label="fragment_recipe_detail"
         tools:layout="@layout/fragment_recipe_detail" >
         <action

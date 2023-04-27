@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -21,8 +23,8 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -50,6 +52,7 @@ class FavoritesFragment : Fragment() {
     private var listLiked: MutableList<Recipe> = arrayListOf()
     private var searchMode: Boolean = false
     private var user: User? = null
+    private var buttonPressed: Button? = null
 
     val TAG: String = "FavoritesFragmentFragment"
 
@@ -94,7 +97,7 @@ class FavoritesFragment : Fragment() {
                 if (!searchMode) {
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                         if (isFirstTimeCall) {
-                            isFirstTimeCall = false;
+                            isFirstTimeCall = false
                             binding.recyclerView.removeOnScrollListener(scrollListener)
                             val visibleItemCount: Int = manager.childCount
                             val pastVisibleItem: Int =
@@ -131,14 +134,20 @@ class FavoritesFragment : Fragment() {
             binding.recyclerView.adapter = adapter
             bindObservers()
 
+
+
             //valida shared preferences
             try {
                 user = sharedPreference.getUserSession()
                 if (user!!.liked_recipes.isNullOrEmpty()) {
                     Log.d(TAG, "onViewCreated: user.saved_recipes is empty")
-                    // TODO adicionar textview no meio a dizer sem receitas
+                    //Mensagem sem receitas
+                    binding.tvNoRecipes.visibility = View.VISIBLE
 
                 } else {
+                    //Mensagem com receitas
+                    binding.tvNoRecipes.visibility = View.GONE
+
                     // Primeira lista a aparecer
                     adapter.updateList(user!!.liked_recipes.toMutableList(),user!!)
                 }
@@ -163,21 +172,64 @@ class FavoritesFragment : Fragment() {
                 }
             })
 
+            binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
 
+            //todo: RAFA
             // top nav bar
+            binding.btnLiked.setOnClickListener {
+                binding.cvCreateRecipe.visibility = View.GONE
+                toast(getString(R.string.get_liked_recipes))
+                binding.tvNoRecipes.isVisible = user!!.liked_recipes.isEmpty()
 
-            binding.SSAVED.setOnClickListener {
+
+                if (buttonPressed != binding.btnLiked) {
+                    binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
+                    buttonPressed = binding.btnLiked
+                    buttonPressed?.background= resources.getDrawable(R.drawable.bg_default)
+
+                }
+
+                adapter.updateList(user!!.liked_recipes.toMutableList(), user!!)
+
+            }
+
+            binding.btnSaved.setOnClickListener {
+                binding.cvCreateRecipe.visibility = View.GONE
                 toast(getString(R.string.get_saved_recipes))
+                binding.tvNoRecipes.isVisible = user!!.saved_recipes.isEmpty()
+
+                if (buttonPressed != binding.btnSaved) {
+                    buttonPressed?.setBackgroundColor(resources.getColor(R.color.bordeux))
+                    buttonPressed = binding.btnSaved
+                    buttonPressed?.setBackgroundColor(resources.getColor(R.color.black))
+                }
+
                 adapter.updateList(user!!.saved_recipes.toMutableList(), user!!)
 
             }
-            binding.SLIKED.setOnClickListener {
-                toast(getString(R.string.get_liked_recipes))
-                adapter.updateList(user!!.liked_recipes.toMutableList(), user!!)
-            }
-            // todo make another one for created recipes
-            binding.SRECENTES.setOnClickListener {
+
+            binding.btnCreated.setOnClickListener {
+                binding.cvCreateRecipe.visibility = View.VISIBLE
+                //Todo: RAFAEL
                 toast("Em desenvolvimento...")
+                adapter.updateList(mutableListOf(), user!!)
+
+            }
+
+            binding.btnComment.setOnClickListener {
+                binding.cvCreateRecipe.visibility = View.GONE
+                //Todo: RAFAEL
+                toast("Em desenvolvimento...")
+                adapter.updateList(mutableListOf(), user!!)
+
+            }
+
+            binding.btnRecentes.setOnClickListener {
+                binding.cvCreateRecipe.visibility = View.GONE
+                //Todo: RAFAEL
+                toast("Em desenvolvimento...")
+                adapter.updateList(mutableListOf(), user!!)
+
             }
 
             // bottom nav bar

@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.example.projectfoodmanager.databinding.FragmentGoalsBinding
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
 
 import dagger.hilt.android.AndroidEntryPoint
 

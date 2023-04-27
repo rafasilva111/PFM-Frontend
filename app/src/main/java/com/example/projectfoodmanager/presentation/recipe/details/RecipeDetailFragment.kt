@@ -1,19 +1,13 @@
-package com.example.projectfoodmanager.presentation.recipe
+package com.example.projectfoodmanager.presentation.recipe.details
 
 
 import android.animation.LayoutTransition
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams
-import android.view.ViewGroup.VISIBLE
-import android.view.WindowManager
-import android.widget.LinearLayout
 import android.widget.ListAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
@@ -24,14 +18,16 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
+<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+=======
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
+>>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/RecipeDetailFragment.kt
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.NutritionTable
 import com.example.projectfoodmanager.util.RecipeListingFragmentFilters
-import com.example.projectfoodmanager.util.UiState
-import com.example.projectfoodmanager.util.toast
 import com.google.android.material.chip.Chip
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -41,7 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
     val TAG: String = "ReceitaDetailFragment"
     lateinit var binding: FragmentRecipeDetailBinding
-    var objRecipe: Recipe? = null
+    var objRecipe: RecipeResponse? = null
     val viewModel: RecipeViewModel by viewModels()
     val authModel: AuthViewModel by viewModels()
     lateinit var manager: LinearLayoutManager
@@ -70,9 +66,10 @@ class RecipeDetailFragment : Fragment() {
         updateUI()
     }
 
+
     private fun updateUI() {
 
-        objRecipe = arguments?.getParcelable("note")
+        objRecipe = arguments?.getParcelable("Recipe")
 
         objRecipe?.let { recipe ->
             binding.TVTitle.text = recipe.title
@@ -86,11 +83,15 @@ class RecipeDetailFragment : Fragment() {
             //  binding.tvRateInt.text = "not implemented"
             binding.TVDescriptionInfo.text = recipe.description
 
+<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
             val list : List<String> = recipe.tags
+=======
+            //val list : List<String> = recipe.tags.split("\\")
+>>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/RecipeDetailFragment.kt
 
 
             // TODO: Obter a lista ordenada da base de dados
-            val list_orderByLenght : List<String> = list.sortedBy { it.length }
+            val list_orderByLenght : List<String> = recipe.tags.sortedBy { it.length }
             val mutList : MutableList<String> = list_orderByLenght.toMutableList()
             mutList.removeAt(0)
 
@@ -244,11 +245,19 @@ class RecipeDetailFragment : Fragment() {
                 binding.TVDoseGordSat.text=recipe.nutrition_informations.gordura_saturada
                 binding.TVPercGordSat.text=recipe.nutrition_informations.gordura_saturada_perc
                 binding.TVDoseHCarbono.text=recipe.nutrition_informations.hidratos_carbonos
+<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
+=======
+                //binding.TVPercHCarbono.text=recipe.nutrition_informations.get(NutritionTable.HIDRATOS_CARBONO_PERC)
+>>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/RecipeDetailFragment.kt
                 binding.TVDoseHCAcucar.text=recipe.nutrition_informations.hidratos_carbonos_acucares
                 binding.TVPercHCAcucar.text=recipe.nutrition_informations.hidratos_carbonos_acucares_perc
                 binding.TVDoseFibra.text=recipe.nutrition_informations.fibra
                 binding.TVPercFibra.text=recipe.nutrition_informations.fibra_perc
                 binding.TVDoseProteina.text=recipe.nutrition_informations.proteina
+<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
+=======
+                //binding.TVPercProteina.text=recipe.nutrition_informations.get(NutritionTable.PROTEINA_PERC)
+>>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/RecipeDetailFragment.kt
 
                 binding.LLContNutrition.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
@@ -276,7 +285,11 @@ class RecipeDetailFragment : Fragment() {
             // TODO: Inserir imagem do autor da receita
             binding.TVAutor.text=recipe.company
             binding.IVSource.setOnClickListener {
+<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.img_source))
+=======
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
+>>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/RecipeDetailFragment.kt
                 startActivity(browserIntent)
             }
             binding.TVRef.text = "Ref: " + recipe.id
@@ -291,7 +304,7 @@ class RecipeDetailFragment : Fragment() {
             // TODO: Falta registar o numero de comentarios
             // TODO: Falta registar o numero de gostos
             binding.CVComments.setOnClickListener {
-                findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment)
+                //findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment)
             }
 
             //like function
@@ -358,6 +371,7 @@ class RecipeDetailFragment : Fragment() {
 
         }
     }
+<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
 
     /*  private fun observer() {
           authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
@@ -375,6 +389,24 @@ class RecipeDetailFragment : Fragment() {
               }
           }
       }*/
+=======
+  /*  private fun observer() {
+        authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is UiState.Loading -> {
+                    //todo
+                }
+                is UiState.Failure -> {
+
+                    toast(state.error)
+                }
+                is UiState.Success -> {
+                    toast(state.data.second)
+                }
+            }
+        }
+    }*/
+>>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/RecipeDetailFragment.kt
 
 
 

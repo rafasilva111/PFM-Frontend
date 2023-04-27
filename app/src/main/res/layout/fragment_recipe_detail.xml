@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.recipe.RecipeDetailFragment"
     android:background="@color/color_3">
 
     <ScrollView
@@ -45,7 +44,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
             <ImageView
                 android:id="@+id/IV_Recipe"
                 android:layout_width="match_parent"
@@ -58,7 +56,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <ImageButton
                 android:id="@+id/calendarIB"
                 android:layout_width="50dp"
@@ -70,7 +67,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/favoritesIB"
                 app:layout_constraintEnd_toStartOf="@+id/favoritesIB"
                 app:layout_constraintTop_toTopOf="@+id/favoritesIB" />
-
 
             <ImageButton
                 android:id="@+id/favoritesIB"
@@ -96,7 +92,6 @@
                 app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:ignore="SpeakableTextPresentCheck" />
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -152,7 +147,7 @@
 
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/CV_img_autor"
+                    android:id="@+id/img_autor_CV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -176,9 +171,9 @@
                     android:text="Autor"
                     android:textAlignment="gravity"
                     android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/CV_img_autor"
-                    app:layout_constraintStart_toEndOf="@+id/CV_img_autor"
-                    app:layout_constraintTop_toTopOf="@+id/CV_img_autor" />
+                    app:layout_constraintBottom_toBottomOf="@+id/img_autor_CV"
+                    app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
+                    app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
 
                 <ImageView
                     android:id="@+id/IV_source"
@@ -204,7 +199,7 @@
                     android:textSize="15sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/CV_img_autor" />
+                    app:layout_constraintTop_toBottomOf="@+id/img_autor_CV" />
 
                 <RatingBar
                     android:id="@+id/radtingRecipe"
@@ -227,7 +222,7 @@
                     android:textAlignment="center"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="@+id/TV_Title"
-                    app:layout_constraintTop_toTopOf="@+id/CV_img_autor" />
+                    app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
 
 
                 <ImageView
@@ -290,8 +285,7 @@
                                     android:src="@drawable/ic_clock"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:tint="#598820" />
+                                    app:layout_constraintTop_toTopOf="parent" />
 
                                 <TextView
                                     android:id="@+id/TV_Time"
@@ -337,11 +331,10 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="40dp"
                                     android:layout_marginTop="15dp"
-                                    android:src="@drawable/ic_dificulty"
+                                    android:src="@drawable/low_difficulty"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"
-                                    app:tint="#DAA507" />
+                                    app:layout_constraintTop_toTopOf="parent" />
 
                                 <TextView
                                     android:id="@+id/TV_Difficulty"
@@ -386,7 +379,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="40dp"
                                     android:layout_marginTop="15dp"
-                                    android:src="@drawable/ic_peoples"
+                                    android:src="@drawable/ic_portion"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -1255,6 +1248,7 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

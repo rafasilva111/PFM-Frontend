@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.recipe;
+package com.example.projectfoodmanager.presentation.recipe.details;
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -48,7 +48,10 @@ class IngridientsListingAdapter(
         }
 
         vh.tvTitle.text = items[position].name
+<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/IngridientsListingAdapter.kt
         // todo falta aqui um campo items[position].quantity
+=======
+>>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/IngridientsListingAdapter.kt
 
 
         return view

@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.recipe;
+package com.example.projectfoodmanager.presentation.recipe.details;
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -23,7 +23,11 @@ class PreparationListingAdapter(
     }
 
     override fun getItem(p0: Int): Any {
+<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/PreparationListingAdapter.kt
         return items[p0].toString()
+=======
+        return items.get(p0).toString()
+>>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/PreparationListingAdapter.kt
     }
 
     override fun getItemId(position: Int): Long {
@@ -49,7 +53,10 @@ class PreparationListingAdapter(
 
         vh.tvNumber.text = items[position].step.toString()
         vh.tvTitle.text = items[position].description
+<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/PreparationListingAdapter.kt
 
+=======
+>>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/PreparationListingAdapter.kt
         return view
     }
 

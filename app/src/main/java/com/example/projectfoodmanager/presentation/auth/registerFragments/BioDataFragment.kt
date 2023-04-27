@@ -13,6 +13,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.databinding.FragmentRegisterBiodataBinding
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.util.NetworkResult
+import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.TokenManager
+import com.example.projectfoodmanager.util.toast
 import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
 import com.google.android.gms.tasks.OnFailureListener

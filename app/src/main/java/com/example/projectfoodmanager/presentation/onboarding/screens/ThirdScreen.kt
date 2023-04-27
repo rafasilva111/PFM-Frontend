@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.onboarding.screens
+package com.example.projectfoodmanager.presentation.onboarding.screens
 
 import android.annotation.SuppressLint
 import android.content.Context

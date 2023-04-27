@@ -20,8 +20,8 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -48,9 +48,6 @@ class RecipeListingFragment : Fragment() {
     @Inject
     lateinit var sharedPreference: SharedPreference
 
-
-
-
     private var isFirstTimeCall = true
     private var snapHelper : SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
@@ -65,8 +62,8 @@ class RecipeListingFragment : Fragment() {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
 
-                findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
-                    putParcelable("note",item)
+                findNavController().navigate(R.id.action_recipeListingFragment_to_receitaDetailFragment,Bundle().apply {
+                    putParcelable("Recipe",item)
                 })
 
                 changeVisib_Menu(false)
@@ -227,16 +224,16 @@ class RecipeListingFragment : Fragment() {
 
             //nav search toppom
 
-            binding.SSUGESTOES.setOnClickListener {
+            binding.btnSugestoes.setOnClickListener {
                 toast("Em desenvolvimento...")
             }
-            binding.SMELHORES.setOnClickListener {
+            binding.btnMelhores.setOnClickListener {
                 toast("Em desenvolvimento...")
             }
-            binding.SRECENTES.setOnClickListener {
+            binding.btnRecentes.setOnClickListener {
                 toast("Em desenvolvimento...")
             }
-            binding.SPERSONALIZADAS.setOnClickListener {
+            binding.btnPersonalizadas.setOnClickListener {
                 toast("Em desenvolvimento...")
             }
 
