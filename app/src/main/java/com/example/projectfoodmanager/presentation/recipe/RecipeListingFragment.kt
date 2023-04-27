@@ -21,8 +21,8 @@ import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -186,16 +186,16 @@ class RecipeListingFragment : Fragment() {
 
             //nav search toppom
 
-            binding.SSUGESTOES.setOnClickListener {
+            binding.btnSugestoes.setOnClickListener {
                 toast("Em desenvolvimento...")
             }
-            binding.SMELHORES.setOnClickListener {
+            binding.btnMelhores.setOnClickListener {
                 toast("Em desenvolvimento...")
             }
-            binding.SRECENTES.setOnClickListener {
+            binding.btnRecentes.setOnClickListener {
                 toast("Em desenvolvimento...")
             }
-            binding.SPERSONALIZADAS.setOnClickListener {
+            binding.btnPersonalizadas.setOnClickListener {
                 toast("Em desenvolvimento...")
             }
 

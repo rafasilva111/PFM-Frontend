@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

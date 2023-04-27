@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.onboarding
+package com.example.projectfoodmanager.presentation.onboarding
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

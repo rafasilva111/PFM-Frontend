@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.onboarding
+package com.example.projectfoodmanager.presentation.onboarding
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.onboarding.screens.FirstScreen
-import com.example.projectfoodmanager.onboarding.screens.SecondScreen
-import com.example.projectfoodmanager.onboarding.screens.ThirdScreen
+import com.example.projectfoodmanager.presentation.onboarding.screens.FirstScreen
+import com.example.projectfoodmanager.presentation.onboarding.screens.SecondScreen
+import com.example.projectfoodmanager.presentation.onboarding.screens.ThirdScreen
 
 
 class ViewPagerFragment : Fragment() {

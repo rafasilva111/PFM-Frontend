@@ -20,8 +20,8 @@ import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.NutritionTable
 import com.example.projectfoodmanager.util.RecipeListingFragmentFilters
 import com.google.android.material.chip.Chip
@@ -286,7 +286,7 @@ class RecipeDetailFragment : Fragment() {
             // TODO: Falta registar o numero de comentarios
             // TODO: Falta registar o numero de gostos
             binding.CVComments.setOnClickListener {
-                findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment)
+                //findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment)
             }
 
             //like function

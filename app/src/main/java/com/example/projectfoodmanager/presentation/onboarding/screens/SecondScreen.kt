@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.onboarding.screens
+package com.example.projectfoodmanager.presentation.onboarding.screens
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

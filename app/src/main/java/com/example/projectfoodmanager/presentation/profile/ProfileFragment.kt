@@ -1,25 +1,26 @@
 package com.example.projectfoodmanager.presentation.profile
 
-import android.content.Intent
+import android.app.AlertDialog
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
 import com.example.projectfoodmanager.util.TokenManager
 import com.example.projectfoodmanager.util.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -49,7 +50,32 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bindObservers()
         binding.logoutIB.setOnClickListener {
-            authViewModel.logoutUser()
+
+            //USER CONFIRMATION DIALOG
+            // set the custom layout
+            val dialogBinding : View = layoutInflater.inflate(R.layout.dialog_confirmation_from_user, null);
+
+            val myDialog = Dialog(requireContext())
+            myDialog.setContentView(dialogBinding)
+
+            // create alert dialog
+            myDialog.setCancelable(true)
+            myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            val yesBtn = dialogBinding.findViewById<Button>(R.id.btn_conf_Yes)
+            val cancelBtn = dialogBinding.findViewById<Button>(R.id.btn_conf_cancel)
+
+            yesBtn.setOnClickListener {
+                authViewModel.logoutUser()
+                myDialog.dismiss()
+            }
+
+            cancelBtn.setOnClickListener {
+                myDialog.dismiss()
+            }
+
+            myDialog.show()
+
         }
 
         binding.favoritesCV.setOnClickListener {
@@ -79,6 +105,7 @@ class ProfileFragment : Fragment() {
                     is NetworkResult.Success -> {
                         tokenManager.deleteToken()
                         sharedPreference.deleteUserSession()
+                        toast("Logout feito com sucesso!")
                         findNavController().navigate(R.id.action_profile_to_login)
                         changeVisib_Menu(false)
                     }
@@ -101,4 +128,5 @@ class ProfileFragment : Fragment() {
             menu!!.visibility=View.GONE
         }
     }
+
 }

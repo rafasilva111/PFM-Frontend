@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.projectfoodmanager.databinding.FragmentCalenderBinding
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
 
 import dagger.hilt.android.AndroidEntryPoint
 

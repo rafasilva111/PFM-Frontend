@@ -24,7 +24,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/fedoka"
-        android:text="Bem vindo"
+        android:text="@string/recipe_listing_welcome"
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/fedoka"
-        android:text="Nome Proprio"
+        android:text="@string/recipe_listing_name"
         android:textStyle="bold"
         android:textColor="#000000"
         android:textSize="20sp"
@@ -87,48 +87,48 @@
                 android:paddingRight="10dp">
 
                 <Button
-                    android:id="@+id/S_SUGESTOES"
+                    android:id="@+id/btn_sugestoes"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:background="@drawable/bg_default"
-                    android:text="Sugestões"
+                    android:text="@string/recipe_listing_filter_sugestions"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:textStyle="bold"
                     android:layout_margin="5dp"/>
 
                 <Button
-                    android:id="@+id/S_MELHORES"
+                    android:id="@+id/btn_melhores"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:background="@drawable/bg_default"
-                    android:text="Melhor classificadas"
+                    android:text="@string/recipe_listing_filter_best"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:layout_margin="5dp"
                     android:textStyle="bold"/>
 
                 <Button
-                    android:id="@+id/S_RECENTES"
+                    android:id="@+id/btn_recentes"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginStart="10dp"
                     android:background="@drawable/bg_default"
                     android:backgroundTint="#E3E3E4"
-                    android:text="Mais recentes"
+                    android:text="@string/recipe_listing_filter_recent"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:textStyle="bold"
                     android:layout_margin="5dp"/>
 
                 <Button
-                    android:id="@+id/S_PERSONALIZADAS"
+                    android:id="@+id/btn_personalizadas"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginStart="10dp"
                     android:background="@drawable/bg_default"
                     android:backgroundTint="#E3E3E4"
-                    android:text="Sugestões personalizadas"
+                    android:text="@string/recipe_listing_filter_personalized_sugestions"
                     android:textColor="@color/white"
                     android:textSize="10sp"
                     android:textStyle="bold"

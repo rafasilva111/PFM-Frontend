@@ -1,6 +1,7 @@
 package com.example.projectfoodmanager.presentation.auth
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import androidx.lifecycle.Observer
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -119,8 +120,7 @@ class LoginFragment : Fragment() {
     private fun bindObservers() {
         authViewModel.userAuthResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
-                binding.loginBtn.isVisible = true
-                binding.progressBar.isVisible = false
+
                 when (it) {
                     is NetworkResult.Success -> {
                         tokenManager.saveToken(it.data!!.token)
@@ -139,20 +139,26 @@ class LoginFragment : Fragment() {
 
         authViewModel.userOldLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
+
                 when (it) {
                     is NetworkResult.Success -> {
-                            if (it.data != null) {
-                                    sharedPreference.saveUserSession(it.data)
-                                    findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
-                            }
-                            else{
-                                Log.d(TAG, "userResponseLiveData Observer: Something went wrong")
-                            }
+                        Handler().postDelayed({
+                            binding.loginBtn.isVisible = true
+                            binding.progressBar.isVisible = false
+                                if (it.data != null) {
+                                        sharedPreference.saveUserSession(it.data)
+                                        findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
+                                }
+                                else{
+                                    Log.d(TAG, "userResponseLiveData Observer: Something went wrong")
+                                }
+                        }, LOGIN_TIME)
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(it.message.toString())
                     }
                     is NetworkResult.Loading -> {
+
                     }
                 }
             }

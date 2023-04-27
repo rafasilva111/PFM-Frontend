@@ -8,7 +8,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
-import com.example.projectfoodmanager.presentation.viewmodels.RecipeViewModel
+import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.SharedPreference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
