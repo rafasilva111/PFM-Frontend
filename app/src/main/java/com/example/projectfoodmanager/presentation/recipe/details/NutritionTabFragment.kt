@@ -7,14 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentNutritionTabBinding
 import com.example.projectfoodmanager.databinding.FragmentRecipeTabBinding
 
-class NutritionTabFragment(recipe: RecipeResponse) : Fragment() {
+class NutritionTabFragment(recipe: Recipe) : Fragment() {
 
     lateinit var binding: FragmentNutritionTabBinding
-    var objRecipe: RecipeResponse? = recipe
+    var objRecipe: Recipe? = recipe
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

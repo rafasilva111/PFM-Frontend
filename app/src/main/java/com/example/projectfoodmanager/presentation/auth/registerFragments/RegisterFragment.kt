@@ -17,10 +17,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
-import com.example.projectfoodmanager.presentation.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FireStorage.user_profile_images
 import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_CODE
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.ktx.Firebase

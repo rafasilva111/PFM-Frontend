@@ -18,11 +18,7 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
-<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-=======
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeResponse
->>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/RecipeDetailFragment.kt
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
@@ -37,7 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
     val TAG: String = "ReceitaDetailFragment"
     lateinit var binding: FragmentRecipeDetailBinding
-    var objRecipe: RecipeResponse? = null
+    var objRecipe: Recipe? = null
     val viewModel: RecipeViewModel by viewModels()
     val authModel: AuthViewModel by viewModels()
     lateinit var manager: LinearLayoutManager
@@ -83,11 +79,8 @@ class RecipeDetailFragment : Fragment() {
             //  binding.tvRateInt.text = "not implemented"
             binding.TVDescriptionInfo.text = recipe.description
 
-<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
             val list : List<String> = recipe.tags
-=======
             //val list : List<String> = recipe.tags.split("\\")
->>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/RecipeDetailFragment.kt
 
 
             // TODO: Obter a lista ordenada da base de dados
@@ -245,19 +238,15 @@ class RecipeDetailFragment : Fragment() {
                 binding.TVDoseGordSat.text=recipe.nutrition_informations.gordura_saturada
                 binding.TVPercGordSat.text=recipe.nutrition_informations.gordura_saturada_perc
                 binding.TVDoseHCarbono.text=recipe.nutrition_informations.hidratos_carbonos
-<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
-=======
+
                 //binding.TVPercHCarbono.text=recipe.nutrition_informations.get(NutritionTable.HIDRATOS_CARBONO_PERC)
->>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/RecipeDetailFragment.kt
                 binding.TVDoseHCAcucar.text=recipe.nutrition_informations.hidratos_carbonos_acucares
                 binding.TVPercHCAcucar.text=recipe.nutrition_informations.hidratos_carbonos_acucares_perc
                 binding.TVDoseFibra.text=recipe.nutrition_informations.fibra
                 binding.TVPercFibra.text=recipe.nutrition_informations.fibra_perc
                 binding.TVDoseProteina.text=recipe.nutrition_informations.proteina
-<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
-=======
+
                 //binding.TVPercProteina.text=recipe.nutrition_informations.get(NutritionTable.PROTEINA_PERC)
->>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/RecipeDetailFragment.kt
 
                 binding.LLContNutrition.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
@@ -285,11 +274,7 @@ class RecipeDetailFragment : Fragment() {
             // TODO: Inserir imagem do autor da receita
             binding.TVAutor.text=recipe.company
             binding.IVSource.setOnClickListener {
-<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.img_source))
-=======
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
->>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/RecipeDetailFragment.kt
                 startActivity(browserIntent)
             }
             binding.TVRef.text = "Ref: " + recipe.id
@@ -371,7 +356,6 @@ class RecipeDetailFragment : Fragment() {
 
         }
     }
-<<<<<<< HEAD:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/RecipeDetailFragment.kt
 
     /*  private fun observer() {
           authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
@@ -389,7 +373,6 @@ class RecipeDetailFragment : Fragment() {
               }
           }
       }*/
-=======
   /*  private fun observer() {
         authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -406,7 +389,6 @@ class RecipeDetailFragment : Fragment() {
             }
         }
     }*/
->>>>>>> old_layout_adpated_for_new_release:app/src/main/java/com/example/projectfoodmanager/presentation/recipe/details/RecipeDetailFragment.kt
 
 
 
