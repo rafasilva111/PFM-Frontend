@@ -63,6 +63,9 @@
     <string name="recipe_listing_filter_personalized_sugestions">Sugestões personalizadas</string>
     <string name="recipe_listing_welcome">Bem vindo</string>
     <string name="recipe_listing_name">Nome Proprio</string>
+    <string name="goodbites">GoodBites</string>
+    <string name="register_string">Registar</string>
+    <string name="login_string">Entrar</string>
 
     <string-array name="gender_array">
         <item>Masculino</item>

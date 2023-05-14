@@ -9,18 +9,19 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.databinding.FragmentHomeBinding
+import com.example.projectfoodmanager.databinding.FragmentHomeNewBinding
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.util.hide
 
 class HomeFragment : Fragment() {
 
-    lateinit var binding: FragmentHomeBinding
+    lateinit var binding: FragmentHomeNewBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentHomeBinding.inflate(layoutInflater)
+        binding = FragmentHomeNewBinding.inflate(layoutInflater)
 
         return binding.root
     }

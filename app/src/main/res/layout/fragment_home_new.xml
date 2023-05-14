@@ -1,0 +1,93 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent" android:layout_height="match_parent"
+	tools:context=".HomeFragment">
+
+
+	<View
+		android:id="@+id/ellipse_65"
+		android:layout_width="212.32dp"
+		android:layout_height="213.69dp"
+		android:layout_marginTop="48dp"
+		android:background="@drawable/ellipse_65_shape"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.497"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<ImageView
+		android:id="@+id/home_img"
+		android:layout_width="121dp"
+		android:layout_height="120dp"
+		android:contentDescription="image_458"
+		android:src="@drawable/home_img"
+		app:layout_constraintBottom_toBottomOf="@+id/ellipse_65"
+		app:layout_constraintEnd_toEndOf="@+id/ellipse_65"
+		app:layout_constraintStart_toStartOf="@+id/ellipse_65"
+		app:layout_constraintTop_toTopOf="@+id/ellipse_65" />
+
+
+	<ImageView
+		android:id="@+id/BTNRegistar"
+		android:layout_width="357dp"
+		android:layout_height="50dp"
+		android:layout_marginTop="32dp"
+		android:contentDescription="rectangle_574"
+		android:src="@drawable/home_button_bordeaux"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/BTNLogin" />
+
+	<TextView
+		android:id="@+id/login"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:fontFamily="@font/fedoka"
+		android:text="@string/login_string"
+		android:textColor="@color/_bg__android_large___2_ek2_color"
+		android:textSize="25sp"
+
+		app:layout_constraintEnd_toEndOf="@+id/BTNRegistar"
+		app:layout_constraintStart_toStartOf="@+id/BTNRegistar"
+		app:layout_constraintTop_toTopOf="@+id/BTNRegistar" />
+
+	<View
+		android:id="@+id/BTNLogin"
+		android:layout_width="357dp"
+		android:layout_height="50dp"
+		android:layout_marginTop="123dp"
+		android:background="@drawable/rectangle_575_shape"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/goodbites" />
+
+	<TextView
+		android:id="@+id/register"
+		android:fontFamily="@font/fedoka"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/register_string"
+		android:textColor="@color/bordeux"
+		android:textSize="25sp"
+		app:layout_constraintBottom_toBottomOf="@+id/BTNLogin"
+		app:layout_constraintEnd_toEndOf="@+id/BTNLogin"
+		app:layout_constraintStart_toStartOf="@+id/BTNLogin"
+		app:layout_constraintTop_toTopOf="@+id/BTNLogin" />
+
+	<TextView
+		android:id="@+id/goodbites"
+		android:fontFamily="@font/fedoka"
+		android:layout_width="wrap_content"
+		android:layout_height="93dp"
+		android:layout_marginTop="36dp"
+		android:text="@string/goodbites"
+		android:textColor="@color/bordeux"
+		android:textSize="50sp"
+		android:textStyle="bold"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/ellipse_65" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
