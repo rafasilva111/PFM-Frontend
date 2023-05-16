@@ -1,10 +1,8 @@
 package com.example.projectfoodmanager
 
 
+
 import android.os.Bundle
-import android.view.View
-import android.view.WindowManager
-import android.widget.Button
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -48,14 +46,8 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        if (navController.currentDestination?.id == R.id.loginFragment){
-            moveTaskToBack(true)
-        }else{
-            super.onBackPressed()
-        }
-
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
 

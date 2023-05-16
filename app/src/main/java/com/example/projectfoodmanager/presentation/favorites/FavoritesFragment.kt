@@ -5,13 +5,14 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.SearchView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -23,9 +24,9 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
+import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
-import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.floor
@@ -58,7 +59,7 @@ class FavoritesFragment : Fragment() {
 
     private val adapter by lazy {
         FavoritesRecipeListingAdapter(
-            onItemClicked = { pos, item ->
+            onItemClicked = { _, item ->
 
 //                findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
 //                    putParcelable("note",item)
@@ -73,6 +74,8 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         //todo check for internet connection
         if (this::binding.isInitialized) {
             return binding.root
@@ -86,6 +89,7 @@ class FavoritesFragment : Fragment() {
 
 
             //setRecyclerViewScrollListener()
+
             return binding.root
         }
     }
@@ -130,8 +134,98 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
+
+        //todo: RAFA
+        // top nav bar
+        binding.btnLiked.setOnClickListener {
+            binding.cvCreateRecipe.visibility = View.GONE
+            toast(getString(R.string.get_liked_recipes))
+            binding.tvNoRecipes.isVisible = user!!.liked_recipes.isEmpty()
+
+
+            if (buttonPressed != binding.btnLiked) {
+                binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
+                buttonPressed = binding.btnLiked
+                buttonPressed?.background= resources.getDrawable(R.drawable.bg_default)
+
+            }
+
+            adapter.updateList(user!!.liked_recipes.toMutableList(), user!!)
+
+        }
+
+        binding.btnSaved.setOnClickListener {
+            binding.cvCreateRecipe.visibility = View.GONE
+            toast(getString(R.string.get_saved_recipes))
+            binding.tvNoRecipes.isVisible = user!!.saved_recipes.isEmpty()
+
+            if (buttonPressed != binding.btnSaved) {
+                buttonPressed?.setBackgroundColor(resources.getColor(R.color.bordeux))
+                buttonPressed = binding.btnSaved
+                buttonPressed?.setBackgroundColor(resources.getColor(R.color.black))
+            }
+
+            adapter.updateList(user!!.saved_recipes.toMutableList(), user!!)
+
+        }
+
+        binding.btnCreated.setOnClickListener {
+            binding.cvCreateRecipe.visibility = View.VISIBLE
+            //Todo: RAFAEL
+            toast("Em desenvolvimento...")
+            adapter.updateList(mutableListOf(), user!!)
+
+        }
+
+        binding.btnComment.setOnClickListener {
+            binding.cvCreateRecipe.visibility = View.GONE
+            //Todo: RAFAEL
+            toast("Em desenvolvimento...")
+            adapter.updateList(mutableListOf(), user!!)
+
+        }
+
+        binding.btnRecentes.setOnClickListener {
+            binding.cvCreateRecipe.visibility = View.GONE
+            //Todo: RAFAEL
+            toast("Em desenvolvimento...")
+            adapter.updateList(mutableListOf(), user!!)
+
+        }
+
+        // bottom nav bar
+
+        binding.IBMeat.setOnClickListener {
+            recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE)
+        }
+        binding.IBFish.setOnClickListener {
+            recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE)
+        }
+        binding.IBSoup.setOnClickListener {
+            recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA)
+        }
+        binding.IBVegi.setOnClickListener {
+            recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA)
+        }
+        binding.IBFruit.setOnClickListener {
+            recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA)
+        }
+        binding.IBDrink.setOnClickListener {
+            recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS)
+        }
+
+        binding.recyclerView.adapter = adapter
+
+        // coisas que só faz online
+
         if (isOnline(view.context)) {
-            binding.recyclerView.adapter = adapter
+
+            // todo check if recipes removed from sharedPreferences ( in case user in offline mode removes like)
+            // caso sim atualizar a bd
+
             bindObservers()
 
 
@@ -172,86 +266,13 @@ class FavoritesFragment : Fragment() {
                 }
             })
 
-            binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
+            // todo atualiza a lista de likes mediante http://{{dev}}/api/v1/recipe/likes
+            // nota: tirar
 
-            //todo: RAFA
-            // top nav bar
-            binding.btnLiked.setOnClickListener {
-                binding.cvCreateRecipe.visibility = View.GONE
-                toast(getString(R.string.get_liked_recipes))
-                binding.tvNoRecipes.isVisible = user!!.liked_recipes.isEmpty()
+            // todo atualiza a lista de comments mediante http://{{dev}}/api/v1/recipe/comments
+            //authViewModel.getUserBackgrounds()
 
 
-                if (buttonPressed != binding.btnLiked) {
-                    binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
-                    buttonPressed = binding.btnLiked
-                    buttonPressed?.background= resources.getDrawable(R.drawable.bg_default)
-
-                }
-
-                adapter.updateList(user!!.liked_recipes.toMutableList(), user!!)
-
-            }
-
-            binding.btnSaved.setOnClickListener {
-                binding.cvCreateRecipe.visibility = View.GONE
-                toast(getString(R.string.get_saved_recipes))
-                binding.tvNoRecipes.isVisible = user!!.saved_recipes.isEmpty()
-
-                if (buttonPressed != binding.btnSaved) {
-                    buttonPressed?.setBackgroundColor(resources.getColor(R.color.bordeux))
-                    buttonPressed = binding.btnSaved
-                    buttonPressed?.setBackgroundColor(resources.getColor(R.color.black))
-                }
-
-                adapter.updateList(user!!.saved_recipes.toMutableList(), user!!)
-
-            }
-
-            binding.btnCreated.setOnClickListener {
-                binding.cvCreateRecipe.visibility = View.VISIBLE
-                //Todo: RAFAEL
-                toast("Em desenvolvimento...")
-                adapter.updateList(mutableListOf(), user!!)
-
-            }
-
-            binding.btnComment.setOnClickListener {
-                binding.cvCreateRecipe.visibility = View.GONE
-                //Todo: RAFAEL
-                toast("Em desenvolvimento...")
-                adapter.updateList(mutableListOf(), user!!)
-
-            }
-
-            binding.btnRecentes.setOnClickListener {
-                binding.cvCreateRecipe.visibility = View.GONE
-                //Todo: RAFAEL
-                toast("Em desenvolvimento...")
-                adapter.updateList(mutableListOf(), user!!)
-
-            }
-
-            // bottom nav bar
-
-            binding.IBMeat.setOnClickListener {
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE)
-            }
-            binding.IBFish.setOnClickListener {
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE)
-            }
-            binding.IBSoup.setOnClickListener {
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA)
-            }
-            binding.IBVegi.setOnClickListener {
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA)
-            }
-            binding.IBFruit.setOnClickListener {
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA)
-            }
-            binding.IBDrink.setOnClickListener {
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS)
-            }
         } else {
             // TODO offline mode
             toast("Está offline")
@@ -377,6 +398,8 @@ class FavoritesFragment : Fragment() {
         }
         return false
     }
+
+
 
 
 }

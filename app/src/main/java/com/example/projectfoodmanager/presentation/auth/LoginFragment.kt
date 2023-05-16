@@ -117,6 +117,20 @@ class LoginFragment : Fragment() {
         toast(error)
     }
 
+
+
+    private fun setButtonVisibility(visibility: Boolean) {
+        if (visibility){
+            binding.loginBtn.isVisible = true
+            binding.progressBar.isVisible = false
+        }
+        else{
+            binding.loginBtn.isVisible = false
+            binding.progressBar.isVisible = true
+        }
+
+    }
+
     private fun bindObservers() {
         authViewModel.userAuthResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
@@ -128,10 +142,10 @@ class LoginFragment : Fragment() {
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(it.message.toString())
+                        setButtonVisibility(visibility = true)
                     }
                     is NetworkResult.Loading -> {
-                        binding.loginBtn.isVisible = false
-                        binding.progressBar.isVisible = true
+                        setButtonVisibility(visibility = false)
                     }
                 }
             }
@@ -143,19 +157,21 @@ class LoginFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
                         Handler().postDelayed({
-                            binding.loginBtn.isVisible = true
-                            binding.progressBar.isVisible = false
-                                if (it.data != null) {
-                                        sharedPreference.saveUserSession(it.data)
-                                        findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
-                                }
-                                else{
-                                    Log.d(TAG, "userResponseLiveData Observer: Something went wrong")
-                                }
+                            setButtonVisibility(visibility = true)
+
+                            if (it.data != null) {
+                                    sharedPreference.saveUserSession(it.data)
+                                    findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
+                            }
+                            else{
+                                Log.d(TAG, "userResponseLiveData Observer: Something went wrong")
+                            }
                         }, LOGIN_TIME)
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(it.message.toString())
+                        setButtonVisibility(visibility = true)
+
                     }
                     is NetworkResult.Loading -> {
 

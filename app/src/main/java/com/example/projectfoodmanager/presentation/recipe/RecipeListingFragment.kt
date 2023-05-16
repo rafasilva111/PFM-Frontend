@@ -159,9 +159,9 @@ class RecipeListingFragment : Fragment() {
 
                         if ((pastVisibleItem + 1) >= recipeList.size){
                             if (stringToSearch.isNullOrEmpty()) {
-                                recipeViewModel.getRecipesPaginated(current_page)
+                                recipeViewModel.getRecipesPaginated(current_page++)
                             } else {
-                                recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!, current_page)
+                                recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!, current_page++)
                             }
                         }
                         //Log.d(TAG, pag_index.toString())
@@ -214,7 +214,7 @@ class RecipeListingFragment : Fragment() {
                     }
                     else{
                         stringToSearch=null
-                        recipeViewModel.getRecipesPaginated(current_page)
+                        recipeViewModel.getRecipesPaginated(current_page++)
                     }
                     return true
                 }
@@ -303,9 +303,7 @@ class RecipeListingFragment : Fragment() {
                         }
                         adapter.updateList(recipeList)
 
-                        // se houver next page soma se não faz nada
-                        if (next_page)
-                            current_page++
+
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(it.message.toString())
@@ -338,8 +336,7 @@ class RecipeListingFragment : Fragment() {
                             // safe call for debaunce
                             current_page = it.data!!._metadata.current_page
                             // se houver next page soma se não não faz nada
-                            if (next_page)
-                                current_page++
+
                         }
                     }
                     is NetworkResult.Error -> {
