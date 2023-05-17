@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
@@ -184,4 +185,5 @@ class AuthRepositoryImp @Inject constructor(
             _userFolloweesResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
     }
+
 }

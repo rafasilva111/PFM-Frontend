@@ -64,6 +64,15 @@ class RecipeViewModel @Inject constructor (
 
     // LIKE FUNCTION
 
+    val userLikedRecipes: LiveData<Event<NetworkResult<RecipeList>>>
+        get() = repository.userLikedRecipes
+
+    fun getUserLikedRecipes() {
+        viewModelScope.launch {
+            repository.getUserLikedRecipes()
+        }
+    }
+
     fun addLikeOnRecipe(recipeId: Int) {
         viewModelScope.launch {
             repository.addLikeOnRecipe(recipeId)

@@ -159,9 +159,9 @@ class RecipeListingFragment : Fragment() {
 
                         if ((pastVisibleItem + 1) >= recipeList.size){
                             if (stringToSearch.isNullOrEmpty()) {
-                                recipeViewModel.getRecipesPaginated(current_page++)
+                                recipeViewModel.getRecipesPaginated(++current_page)
                             } else {
-                                recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!, current_page++)
+                                recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!, ++current_page)
                             }
                         }
                         //Log.d(TAG, pag_index.toString())

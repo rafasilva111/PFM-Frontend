@@ -16,6 +16,8 @@ import com.google.firebase.storage.ktx.storage
 
 class FavoritesRecipeListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit,
+    val onLikeClicked: (Recipe, Boolean) -> Unit,
+    val onSaveClicked: (Recipe, Boolean) -> Unit,
     val authViewModel: AuthViewModel,
     val recipeViewModel: RecipeViewModel
 ) : RecyclerView.Adapter<FavoritesRecipeListingAdapter.MyViewHolder>() {
@@ -37,10 +39,21 @@ class FavoritesRecipeListingAdapter(
         holder.bind(item)
     }
 
+    fun getAdapterList():MutableList<Recipe>{
+        return this.list
+    }
+
     fun updateList(list: MutableList<Recipe>, user: User){
         this.list = list
         this.user = user
         notifyDataSetChanged()
+    }
+
+    fun updateItem(position: Int,item: Recipe,user: User){
+        list.removeAt(position)
+        list.add(position,item)
+        this.user = user
+        notifyItemChanged(position)
     }
 
     fun removeItem(position: Int){
@@ -92,7 +105,7 @@ class FavoritesRecipeListingAdapter(
                     binding.like.setImageResource(R.drawable.ic_like)
             }
 
-            /*binding.like.setOnClickListener {
+            binding.like.setOnClickListener {
                 if(user!!.checkIfLiked(item) == -1) {
                     onLikeClicked.invoke(item, true)
                 }
@@ -100,7 +113,7 @@ class FavoritesRecipeListingAdapter(
                 {
                     onLikeClicked.invoke(item, false)
                 }
-            }*/
+            }
 
             // favorite function
             binding.saved.setImageResource(R.drawable.ic_favorite)

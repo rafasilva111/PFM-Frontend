@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/receitaCommentsFragment"
-        android:name="com.example.projectfoodmanager.ui.CommentsFragment"
+        android:name="com.example.projectfoodmanager.presentation.recipe.comments.CommentsFragment"
         android:label="fragment_recipe_comments"
         tools:layout="@layout/fragment_comments" />
 
@@ -71,7 +71,9 @@
         android:name="com.example.projectfoodmanager.presentation.favorites.FavoritesFragment"
         android:label="fragment_recipe_detail"
         tools:layout="@layout/fragment_favorites" >
-
+        <action
+            android:id="@+id/action_favoritesFragment_to_receitaDetailFragment"
+            app:destination="@id/receitaDetailFragment"/>
     </fragment>
     <fragment
         android:id="@+id/calenderFragment"
