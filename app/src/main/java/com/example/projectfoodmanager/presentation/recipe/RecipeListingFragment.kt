@@ -212,9 +212,14 @@ class RecipeListingFragment : Fragment() {
                         stringToSearch=text
                         recipeViewModel.getRecipesByTitleAndTags(text, current_page)
                     }
+                    else if ( text == ""){
+                        stringToSearch=null
+                        current_page = 1
+                        recipeViewModel.getRecipesPaginated(current_page)
+                    }
                     else{
                         stringToSearch=null
-                        recipeViewModel.getRecipesPaginated(current_page++)
+                        recipeViewModel.getRecipesPaginated(current_page)
                     }
                     return true
                 }
