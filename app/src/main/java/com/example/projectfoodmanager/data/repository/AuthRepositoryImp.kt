@@ -5,14 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
-import retrofit2.Response
 import javax.inject.Inject
 
 
@@ -27,9 +25,9 @@ class AuthRepositoryImp @Inject constructor(
         get() = _userRegisterLiveData
 
 
-    override suspend fun registerUser(userRequest: UserRequest) {
+    override suspend fun registerUser(user: UserRequest) {
         _userRegisterLiveData.postValue(Event(NetworkResult.Loading()))
-        val response = remoteDataSource.registerUser(userRequest)
+        val response = remoteDataSource.registerUser(user)
         if (response.isSuccessful && response.code() == 201) {
             Log.i(TAG, "loginUser: request made was sucessfull.")
             _userRegisterLiveData.postValue(Event(NetworkResult.Success(response.code().toString())))
