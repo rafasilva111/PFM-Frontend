@@ -44,7 +44,6 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //todo get user in shared preferences
         binding.progressBar.hide()
 
         bindObservers()
@@ -99,8 +98,6 @@ class LoginFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        //todo get user token from shared preferences
-        //authViewModel.getUserSession()
         changeVisib_Menu(false)
     }
 

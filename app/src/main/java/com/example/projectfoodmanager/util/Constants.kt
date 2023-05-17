@@ -6,7 +6,7 @@ val SPLASH_TIME:Long = 3000
 val LOGIN_TIME:Long = 2000
 
 object Constants {
-    // TODO: PRIMEIRO PASSO MUDAR ESTA MERDA SEU ANIMAL
+    // TODO: Primeira coisa a fazer quando testar
     const val BASE_URL = "http://192.168.1.110:5000/"
     //const val BASE_URL = "http://52.47.44.215/"
     const val USER_TOKEN = "user_token"

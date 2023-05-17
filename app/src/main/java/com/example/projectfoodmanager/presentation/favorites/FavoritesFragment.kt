@@ -245,10 +245,6 @@ class FavoritesFragment : Fragment() {
             // todo check if recipes removed from sharedPreferences ( in case user in offline mode removes like)
             // caso sim atualizar a bd
 
-
-
-            // todo atualiza a lista de likes mediante http://{{dev}}/api/v1/recipe/likes
-            // nota: tirar
             recipeViewModel.getUserLikedRecipes()
 
 
