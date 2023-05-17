@@ -29,6 +29,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.math.ceil
 
 @AndroidEntryPoint
 class RecipeListingFragment : Fragment() {
@@ -53,6 +54,7 @@ class RecipeListingFragment : Fragment() {
     lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
     private var searchMode: Boolean = false
+    private var refreshCurrent: Boolean = false
 
     val TAG: String = "RecipeListingFragment"
     lateinit var binding: FragmentRecipeListingBinding
@@ -61,7 +63,9 @@ class RecipeListingFragment : Fragment() {
     private val adapter by lazy {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
-
+                // use pos to reset current page to pos page, so it will refresh the pos page
+                current_page =  ceil((pos+1).toFloat()/5).toInt()
+                refreshCurrent = true
                 findNavController().navigate(R.id.action_recipeListingFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("Recipe",item)
                 })
@@ -211,20 +215,22 @@ class RecipeListingFragment : Fragment() {
                         newSearch = true
                         stringToSearch=text
                         recipeViewModel.getRecipesByTitleAndTags(text, current_page)
-                    }
-                    else if ( text == ""){
+                    } // se já fez pesquisa e text vazio
+                    else if (stringToSearch != null && text == ""){
                         stringToSearch=null
                         current_page = 1
                         recipeViewModel.getRecipesPaginated(current_page)
                     }
                     else{
                         stringToSearch=null
-                        recipeViewModel.getRecipesPaginated(current_page)
                     }
                     return true
                 }
             })
+
+
             recipeViewModel.getRecipesPaginated(current_page)
+
 
 
             //nav search toppom
@@ -295,18 +301,41 @@ class RecipeListingFragment : Fragment() {
                 when (it) {
 
                     is NetworkResult.Success -> { it
-                        binding.progressBar.hide()
+                        // isto é usado para atualizar os likes caso o user vá a detail view
 
-                        current_page = it.data!!._metadata.current_page
+                        if (refreshCurrent){
+                            binding.progressBar.hide()
 
-                        // check next page to failed missed calls to api
-                        next_page = it.data._metadata.next!=null
+                            current_page = it.data!!._metadata.current_page
 
+                            // check next page to failed missed calls to api
+                            next_page = it.data._metadata.next!=null
 
-                        for (recipe in it.data.result) {
-                            recipeList.add(recipe)
+                            for (i in 1..5) {
+                                recipeList.removeLast()
+                            }
+
+                            for (recipe in it.data.result) {
+                                recipeList.add(recipe)
+                            }
+                            adapter.updateList(recipeList)
+                            refreshCurrent = false
                         }
-                        adapter.updateList(recipeList)
+                        else{
+                            binding.progressBar.hide()
+
+                            current_page = it.data!!._metadata.current_page
+
+                            // check next page to failed missed calls to api
+                            next_page = it.data._metadata.next!=null
+
+
+                            for (recipe in it.data.result) {
+                                recipeList.add(recipe)
+                            }
+                            adapter.updateList(recipeList)
+                        }
+
 
 
                     }
