@@ -128,7 +128,7 @@ class FavoritesRecipeListingAdapter(
                     binding.saved.setImageResource(R.drawable.ic_favorite)
             }
 
-            /*binding.saved.setOnClickListener {
+            binding.saved.setOnClickListener {
                 if(user!!.checkIfSaved(item) == -1) {
                     onSaveClicked.invoke(item, true)
                 }
@@ -136,104 +136,7 @@ class FavoritesRecipeListingAdapter(
                 {
                     onSaveClicked.invoke(item, false)
                 }
-            }*/
-
-
-            //set initial sates
-            /*authModel.getUserSession_old { user ->
-                if (user != null) {
-                    val recipe_fav = user.getFavoriteRecipe(item.id)
-                    if (recipe_fav != null){
-                        binding.favorites.setImageResource(R.drawable.ic_favorito_white)
-                        if (recipe_fav != item){
-                            user.removeFavoriteRecipe(recipe_fav.id)
-                            user.addFavoriteRecipe(item)
-                            authModel.updateUserSession(user) { state ->
-                                when (state) {
-                                    is UiState.Success -> {
-                                        Log.d(TAG, "bind: Updated recipe " + state.data.toString())
-                                    }
-                                    else -> {}
-                                }
-                            }
-                        }
-                    }
-
-                    val recipe_liked = user.getLikedRecipe(item.id)
-                    Log.d(TAG, "set like icon: "+recipe_liked +"  "+ item.title)
-                    if (recipe_liked != null){
-                        binding.like.setImageResource(R.drawable.ic_like_red)
-                        if (recipe_liked != item){
-                            user.removeLikeRecipe(recipe_liked.id)
-                            user.addLikeRecipe(item)
-                            authModel.updateUserSession(user) { state ->
-                                when (state) {
-                                    is UiState.Success -> {
-                                        Log.d(TAG, "bind: Updated recipe " + state.data.toString())
-                                    }
-                                    else -> {}
-                                }
-                            }
-                        }
-                    }
-                }
             }
-
-            binding.favorites.setOnClickListener {
-                authModel.getUserSession_old { user ->
-                    if (user != null) {
-                        if (user.getFavoriteRecipe(item.id) != null) {
-                            authModel.removeFavoriteRecipe(item)
-                            binding.favorites.setImageResource(R.drawable.ic_favorite)
-                            Toast.makeText(
-                                it.context,
-                                "Receita removida dos guardados.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            list.remove(item)
-
-                        } else {
-                            authModel.addFavoriteRecipe(item)
-                            binding.favorites.setImageResource(R.drawable.ic_favorito_white)
-                        }
-                    }
-                }
-            }
-            binding.like.setOnClickListener {
-                authModel.getUserSession_old { user ->
-                    if (user != null) {
-                        if (user.getLikedRecipe(item.id) != null) {
-                            authModel.removeLikeOnRecipe(item)
-                            viewModel.removeLikeOnRecipe(user.id,item)
-                            binding.like.setImageResource(R.drawable.ic_like)
-                            if (item.likes.size == 1) {
-                                binding.TVRate.text = "1 Gosto"
-                            } else {
-                                binding.TVRate.text = item.likes.size.toString() + " Gosto"
-                            }
-                            Toast.makeText(
-                                it.context,
-                                "Receita removida dos favoritos.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            list.remove(item)
-
-
-                        } else {
-                            authModel.addLikeOnRecipe(item)
-                            viewModel.addLikeOnRecipe(user.id,item)
-                            binding.like.setImageResource(R.drawable.ic_like_red)
-                            if (item.likes.size == 1) {
-                                binding.TVRate.text = "1 Gosto"
-                            } else {
-                                binding.TVRate.text = item.likes.size.toString() + " Gosto"
-                            }
-                        }
-
-                    }
-                }
-
-            }*/
         }
     }
 }

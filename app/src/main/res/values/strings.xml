@@ -66,6 +66,8 @@
     <string name="goodbites">GoodBites</string>
     <string name="register_string">Registar</string>
     <string name="login_string">Entrar</string>
+    <string name="recipe_removed_from_saves">Save revomed.</string>
+    <string name="recipe_saved">Recipe saved.</string>
 
     <string-array name="gender_array">
         <item>Masculino</item>

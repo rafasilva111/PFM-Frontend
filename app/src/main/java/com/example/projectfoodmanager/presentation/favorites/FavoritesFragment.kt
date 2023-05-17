@@ -74,6 +74,7 @@ class FavoritesFragment : Fragment() {
 
             },
             onSaveClicked = {item,saved ->
+                val teste = sharedPreference.getUserSession()
                 if(saved){
                     recipeViewModel.addSaveOnRecipe(item.id)
                 }
@@ -160,7 +161,7 @@ class FavoritesFragment : Fragment() {
         binding.btnLiked.setOnClickListener {
             binding.cvCreateRecipe.visibility = View.GONE
             toast(getString(R.string.get_liked_recipes))
-            binding.tvNoRecipes.isVisible = user!!.liked_recipes.isEmpty()
+            binding.tvNoRecipes.isVisible = sharedPreference.getUserSession()!!.liked_recipes.isEmpty()
 
 
             if (buttonPressed != binding.btnLiked) {
@@ -177,7 +178,8 @@ class FavoritesFragment : Fragment() {
         binding.btnSaved.setOnClickListener {
             binding.cvCreateRecipe.visibility = View.GONE
             toast(getString(R.string.get_saved_recipes))
-            binding.tvNoRecipes.isVisible = user!!.saved_recipes.isEmpty()
+            val userSession: User? = sharedPreference.getUserSession()
+            binding.tvNoRecipes.isVisible = userSession!!.saved_recipes.isEmpty()
 
             if (buttonPressed != binding.btnSaved) {
                 buttonPressed?.setBackgroundColor(resources.getColor(R.color.bordeux))
@@ -185,7 +187,7 @@ class FavoritesFragment : Fragment() {
                 buttonPressed?.setBackgroundColor(resources.getColor(R.color.black))
             }
 
-            adapter.updateList(user!!.saved_recipes.toMutableList(), user!!)
+            adapter.updateList(userSession!!.saved_recipes.toMutableList(), user!!)
 
         }
 
@@ -443,14 +445,13 @@ class FavoritesFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> { it
                         binding.progressBar.hide()
-                        toast(getString(R.string.recipe_liked))
+                        toast(getString(R.string.recipe_saved))
 
                         val listOnAdapter = adapter.getAdapterList()
 
                         // updates local list
                         for (item in listOnAdapter){
                             if (item.id == it.data){
-                                item.likes ++
                                 adapter.updateItem(listOnAdapter.indexOf(item),item,sharedPreference.addSaveToUserSession(item))
                                 break
                             }
@@ -472,14 +473,13 @@ class FavoritesFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> { it
                         binding.progressBar.hide()
-                        toast(getString(R.string.recipe_removed_liked))
+                        toast(getString(R.string.recipe_removed_from_saves))
 
                         val listOnAdapter = adapter.getAdapterList()
 
                         // updates local list
                         for (item in listOnAdapter){
                             if (item.id == it.data){
-                                item.likes --
                                 adapter.updateItem(listOnAdapter.indexOf(item),item,sharedPreference.removeSaveFromUserSession(item))
                                 break
                             }

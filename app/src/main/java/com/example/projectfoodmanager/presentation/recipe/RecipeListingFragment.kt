@@ -55,7 +55,6 @@ class RecipeListingFragment : Fragment() {
     private lateinit var scrollListener: RecyclerView.OnScrollListener
     private var searchMode: Boolean = false
     private var refreshPage: Int = 0
-    private var refreshCurrent: Boolean = false
 
     val TAG: String = "RecipeListingFragment"
     lateinit var binding: FragmentRecipeListingBinding
@@ -452,12 +451,11 @@ class RecipeListingFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> { it
                         binding.progressBar.hide()
-                        toast(getString(R.string.recipe_liked))
+                        toast(getString(R.string.recipe_saved))
 
                         // updates local list
                         for (item in recipeList.toMutableList()){
                             if (item.id == it.data){
-                                item.likes ++
                                 sharedPreference.addSaveToUserSession(item)
                                 adapter.updateItem(recipeList.indexOf(item),item)
                                 break
@@ -480,12 +478,11 @@ class RecipeListingFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> { it
                         binding.progressBar.hide()
-                        toast(getString(R.string.recipe_removed_liked))
+                        toast(getString(R.string.recipe_removed_from_saves))
 
                         // updates local list
                         for (item in recipeList.toMutableList()){
                             if (item.id == it.data){
-                                item.likes --
                                 sharedPreference.removeSaveFromUserSession(item)
                                 adapter.updateItem(recipeList.indexOf(item),item)
                                 break
