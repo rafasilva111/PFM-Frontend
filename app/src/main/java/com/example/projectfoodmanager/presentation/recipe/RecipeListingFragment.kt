@@ -196,7 +196,7 @@ class RecipeListingFragment : Fragment() {
         // user data
         val user = sharedPreference.getUserSession()
         if (user!= null){
-            binding.tvName.text = user.first_name+" "+ user.last_name
+            binding.tvName.text = "${user.first_name} ${user.last_name}"
         }
 
 
@@ -214,9 +214,10 @@ class RecipeListingFragment : Fragment() {
                         newSearch = true
                         stringToSearch=text
                         recipeViewModel.getRecipesByTitleAndTags(text, current_page)
-                    } // se já fez pesquisa e text vazio
+                    } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
                     else if (stringToSearch != null && text == ""){
                         stringToSearch=null
+                        recipeList = mutableListOf()
                         current_page = 1
                         recipeViewModel.getRecipesPaginated(current_page)
                     }
@@ -226,11 +227,16 @@ class RecipeListingFragment : Fragment() {
                     return true
                 }
             })
-
-            if (refreshPage == 0)
-                recipeViewModel.getRecipesPaginated(current_page)
+            if (stringToSearch.isNullOrEmpty())
+                if (refreshPage == 0)
+                    recipeViewModel.getRecipesPaginated(current_page)
+                else
+                    recipeViewModel.getRecipesPaginated(refreshPage)
             else
-                recipeViewModel.getRecipesPaginated(refreshPage)
+                if (refreshPage == 0)
+                    recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!,current_page)
+                else
+                    recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!,refreshPage)
 
 
 
@@ -298,17 +304,15 @@ class RecipeListingFragment : Fragment() {
         recipeViewModel.recipeResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
                 searchMode = false
-
                 when (it) {
-
                     is NetworkResult.Success -> { it
                         // isto é usado para atualizar os likes caso o user vá a detail view
 
                         if (refreshPage != 0){
                             binding.progressBar.hide()
+                            val lastIndex = if (recipeList.size >= 5) (refreshPage * 5) -1 else recipeList.size -1
+                            var firstIndex = if (recipeList.size >= 5)  lastIndex - 4 else  0
 
-                            val lastIndex = (refreshPage * 5) -1
-                            var firstIndex = lastIndex -4
                             recipeList.subList(firstIndex, lastIndex + 1).clear()
 
 
@@ -349,17 +353,43 @@ class RecipeListingFragment : Fragment() {
                 }
             }
         })
+
+        // Search Function
+
         recipeViewModel.recipeSearchByTitleAndTagsResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
                 when (it) {
                     is NetworkResult.Success -> { it
-                        binding.progressBar.hide()
-                        if (it.data != null){
+
+                        // isto é usado para atualizar os likes caso o user vá a detail view
+
+                        if (refreshPage != 0){
+                            binding.progressBar.hide()
+                            val lastIndex = if (recipeList.size >= 5) (refreshPage * 5) -1 else recipeList.size -1
+                            var firstIndex = if (recipeList.size >= 5)  lastIndex - 4 else  0
+
+                            recipeList.subList(firstIndex, lastIndex + 1).clear()
+
+                            if (newSearch)
+                                recipeList = mutableListOf()
+
+                            for (recipe in it.data!!.result) {
+                                recipeList.add(firstIndex,recipe)
+                                firstIndex++
+                            }
+                            adapter.updateList(recipeList)
+
+                            //reset control variables
+                            refreshPage = 0
+                        }
+                        else{
+                            binding.progressBar.hide()
+
                             // numa nova procura resetar a lista de receitas
                             if (newSearch)
                                 recipeList = mutableListOf()
 
-                            for (recipe in it.data.result) {
+                            for (recipe in it.data!!.result) {
                                 recipeList.add(recipe)
                             }
                             adapter.updateList(recipeList)
@@ -368,10 +398,12 @@ class RecipeListingFragment : Fragment() {
                             // check next page to failed missed calls to api
                             next_page = it.data._metadata.next!=null
                             // safe call for debaunce
-                            current_page = it.data!!._metadata.current_page
+                            current_page = it.data._metadata.current_page
                             // se houver next page soma se não não faz nada
-
                         }
+
+                        binding.progressBar.hide()
+
                     }
                     is NetworkResult.Error -> {
                         binding.progressBar.hide()
