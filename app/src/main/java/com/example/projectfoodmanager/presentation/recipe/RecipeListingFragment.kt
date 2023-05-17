@@ -54,6 +54,7 @@ class RecipeListingFragment : Fragment() {
     lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
     private var searchMode: Boolean = false
+    private var refreshPage: Int = 0
     private var refreshCurrent: Boolean = false
 
     val TAG: String = "RecipeListingFragment"
@@ -64,8 +65,7 @@ class RecipeListingFragment : Fragment() {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
                 // use pos to reset current page to pos page, so it will refresh the pos page
-                current_page =  ceil((pos+1).toFloat()/5).toInt()
-                refreshCurrent = true
+                refreshPage =  ceil((pos+1).toFloat()/5).toInt()
                 findNavController().navigate(R.id.action_recipeListingFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("Recipe",item)
                 })
@@ -228,8 +228,10 @@ class RecipeListingFragment : Fragment() {
                 }
             })
 
-
-            recipeViewModel.getRecipesPaginated(current_page)
+            if (refreshPage == 0)
+                recipeViewModel.getRecipesPaginated(current_page)
+            else
+                recipeViewModel.getRecipesPaginated(refreshPage)
 
 
 
@@ -303,23 +305,22 @@ class RecipeListingFragment : Fragment() {
                     is NetworkResult.Success -> { it
                         // isto é usado para atualizar os likes caso o user vá a detail view
 
-                        if (refreshCurrent){
+                        if (refreshPage != 0){
                             binding.progressBar.hide()
 
-                            current_page = it.data!!._metadata.current_page
+                            val lastIndex = (refreshPage * 5) -1
+                            var firstIndex = lastIndex -4
+                            recipeList.subList(firstIndex, lastIndex + 1).clear()
 
-                            // check next page to failed missed calls to api
-                            next_page = it.data._metadata.next!=null
 
-                            for (i in 1..5) {
-                                recipeList.removeLast()
-                            }
-
-                            for (recipe in it.data.result) {
-                                recipeList.add(recipe)
+                            for (recipe in it.data!!.result) {
+                                recipeList.add(firstIndex,recipe)
+                                firstIndex++
                             }
                             adapter.updateList(recipeList)
-                            refreshCurrent = false
+
+                            //reset control variables
+                            refreshPage = 0
                         }
                         else{
                             binding.progressBar.hide()
