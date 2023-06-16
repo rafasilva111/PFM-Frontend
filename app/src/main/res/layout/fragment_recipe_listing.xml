@@ -6,385 +6,398 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.recipe.RecipeListingFragment"
-    android:background="@color/background_1">
+    android:background="@color/main_color">
 
-    <ImageView
-        android:id="@+id/ivProfilePic"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:src="@drawable/img_profile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvWelcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/fedoka"
-        android:text="@string/recipe_listing_welcome"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/fedoka"
-        android:text="@string/recipe_listing_name"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/tvWelcome"
-        app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
-
-    <SearchView
-        android:id="@+id/SVsearch"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="@drawable/layout_bg_low"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:padding="5dp"
-        android:iconifiedByDefault="false"
-        android:queryBackground="@android:color/transparent"
-        android:queryHint="Search Recipe"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvName" />
+        android:layout_height="match_parent"
+        tools:context=".presentation.recipe.RecipeListingFragment"
+        android:background="@drawable/layout_main">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SVsearch">
+        <ImageView
+            android:id="@+id/ivProfilePic"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/img_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <HorizontalScrollView
-            android:id="@+id/HSV_filter_1"
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/fedoka"
+            android:text="@string/recipe_listing_welcome"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/fedoka"
+            android:text="@string/recipe_listing_name"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/tvWelcome"
+            app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
+
+        <SearchView
+            android:id="@+id/SVsearch"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@drawable/layout_bg_low"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="5dp"
+            android:iconifiedByDefault="false"
+            android:queryBackground="@android:color/transparent"
+            android:queryHint="Search Recipe"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/SVsearch">
+
+            <HorizontalScrollView
+                android:id="@+id/HSV_filter_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:scrollbars="none"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvName">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <Button
+                        android:id="@+id/btn_sugestoes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:background="@drawable/bg_default"
+                        android:text="@string/recipe_listing_filter_sugestions"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:layout_margin="5dp"/>
+
+                    <Button
+                        android:id="@+id/btn_melhores"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:background="@drawable/bg_default"
+                        android:text="@string/recipe_listing_filter_best"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:layout_margin="5dp"
+                        android:textStyle="bold"/>
+
+                    <Button
+                        android:id="@+id/btn_recentes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/bg_default"
+                        android:backgroundTint="#E3E3E4"
+                        android:text="@string/recipe_listing_filter_recent"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:layout_margin="5dp"/>
+
+                    <Button
+                        android:id="@+id/btn_personalizadas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/bg_default"
+                        android:backgroundTint="#E3E3E4"
+                        android:text="@string/recipe_listing_filter_personalized_sugestions"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:layout_margin="5dp" />
+
+                </LinearLayout>
+
+
+            </HorizontalScrollView>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:elevation="7dp"
+                android:indeterminateTint="#FF6410"
+                android:outlineProvider="none"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:textAlignment="center"
+                app:flow_verticalAlign="center"
+                app:flow_horizontalAlign="center"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
+
+            <TextView
+                android:id="@+id/offlineText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Estás offline..."
+                app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
             android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvName">
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:padding="10dp">
 
-                <Button
-                    android:id="@+id/btn_sugestoes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:background="@drawable/bg_default"
-                    android:text="@string/recipe_listing_filter_sugestions"
-                    android:textColor="@color/white"
+
+                <TextView
+                    android:id="@+id/TV_Filt_meat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:text="Carne"
+                    android:textAllCaps="true"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
                     android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:layout_margin="5dp"/>
+                    app:layout_constraintEnd_toEndOf="@+id/IB_Meat"
+                    app:layout_constraintStart_toStartOf="@+id/IB_Meat"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <Button
-                    android:id="@+id/btn_melhores"
+
+                <ImageButton
+                    android:id="@+id/IB_Meat"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:background="@drawable/bg_default"
-                    android:text="@string/recipe_listing_filter_best"
-                    android:textColor="@color/white"
-                    android:textSize="10sp"
-                    android:layout_margin="5dp"
-                    android:textStyle="bold"/>
+                    android:layout_height="50dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/card_cat"
+                    android:padding="12dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_meat"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/TV_Filt_meat"
+                    tools:ignore="SpeakableTextPresentCheck" />
 
-                <Button
-                    android:id="@+id/btn_recentes"
+                <TextView
+                    android:id="@+id/TV_Filt_Fish"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:text="Peixe"
+                    android:textAllCaps="true"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="@+id/IB_Fish"
+                    app:layout_constraintStart_toStartOf="@+id/IB_Fish"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <ImageButton
+                    android:id="@+id/IB_Fish"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/bg_default"
-                    android:backgroundTint="#E3E3E4"
-                    android:text="@string/recipe_listing_filter_recent"
-                    android:textColor="@color/white"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:layout_margin="5dp"/>
+                    android:layout_height="50dp"
+                    android:layout_marginStart="15dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/card_cat"
+                    android:padding="7dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_fish"
+                    app:layout_constraintStart_toEndOf="@+id/IB_Meat"
+                    app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Fish" />
 
-                <Button
-                    android:id="@+id/btn_personalizadas"
+                <TextView
+                    android:id="@+id/TV_Filt_Soup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:text="Sopa"
+                    android:textAllCaps="true"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="@+id/IB_Soup"
+                    app:layout_constraintStart_toStartOf="@+id/IB_Soup"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <ImageButton
+                    android:id="@+id/IB_Soup"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/bg_default"
-                    android:backgroundTint="#E3E3E4"
-                    android:text="@string/recipe_listing_filter_personalized_sugestions"
-                    android:textColor="@color/white"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:layout_margin="5dp" />
+                    android:layout_height="50dp"
+                    android:layout_marginStart="15dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/card_cat"
+                    android:padding="12dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_soup"
+                    app:layout_constraintStart_toEndOf="@+id/IB_Fish"
+                    app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Soup" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/TV_Filt_Vegi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:text="Salada"
+                    android:textAllCaps="true"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="@+id/IB_Vegi"
+                    app:layout_constraintStart_toStartOf="@+id/IB_Vegi"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <ImageButton
+                    android:id="@+id/IB_Vegi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="15dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/card_cat"
+                    android:padding="12dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_veget"
+                    app:layout_constraintStart_toEndOf="@+id/IB_Soup"
+                    app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Vegi"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+                <TextView
+                    android:id="@+id/TV_Filt_Fruit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:text="Fruta"
+                    android:textAllCaps="true"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="@+id/IB_Fruit"
+                    app:layout_constraintStart_toStartOf="@+id/IB_Fruit"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <ImageButton
+                    android:id="@+id/IB_Fruit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="15dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/card_cat"
+                    android:padding="12dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_fruit"
+                    app:layout_constraintStart_toEndOf="@+id/IB_Vegi"
+                    app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Fruit"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+
+                <TextView
+                    android:id="@+id/TV_Filt_Drink"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:text="Bebida"
+                    android:textAllCaps="true"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="@+id/IB_Drink"
+                    app:layout_constraintStart_toStartOf="@+id/IB_Drink"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <ImageButton
+                    android:id="@+id/IB_Drink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="15dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/card_cat"
+                    android:padding="12dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_drink"
+                    app:layout_constraintStart_toEndOf="@+id/IB_Fruit"
+                    app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Drink" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </HorizontalScrollView>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout3"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:elevation="7dp"
-            android:indeterminateTint="#FF6410"
-            android:outlineProvider="none"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:textAlignment="center"
-            app:flow_verticalAlign="center"
-            app:flow_horizontalAlign="center"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:focusable="true"
-            android:focusableInTouchMode="true"/>
-
-        <TextView
-            android:id="@+id/offlineText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Estás offline..."
-            app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        android:scrollbars="none"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-
-            <TextView
-                android:id="@+id/TV_Filt_meat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/fedoka"
-                android:text="Carne"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/IB_Meat"
-                app:layout_constraintStart_toStartOf="@+id/IB_Meat"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageButton
-                android:id="@+id/IB_Meat"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/card_cat"
-                android:padding="9dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_meat"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/TV_Filt_meat"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <TextView
-                android:id="@+id/TV_Filt_Fish"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/fedoka"
-                android:text="Peixe"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/IB_Fish"
-                app:layout_constraintStart_toStartOf="@+id/IB_Fish"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageButton
-                android:id="@+id/IB_Fish"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="15dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/card_cat"
-                android:padding="9dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_fish"
-                app:layout_constraintStart_toEndOf="@+id/IB_Meat"
-                app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Fish" />
-
-            <TextView
-                android:id="@+id/TV_Filt_Soup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/fedoka"
-                android:text="Sopa"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/IB_Soup"
-                app:layout_constraintStart_toStartOf="@+id/IB_Soup"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageButton
-                android:id="@+id/IB_Soup"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="15dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/card_cat"
-                android:padding="9dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_soup"
-                app:layout_constraintStart_toEndOf="@+id/IB_Fish"
-                app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Soup" />
-
-            <TextView
-                android:id="@+id/TV_Filt_Vegi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/fedoka"
-                android:text="Salada"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/IB_Vegi"
-                app:layout_constraintStart_toStartOf="@+id/IB_Vegi"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageButton
-                android:id="@+id/IB_Vegi"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="15dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/card_cat"
-                android:padding="7dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_veget"
-                app:layout_constraintStart_toEndOf="@+id/IB_Soup"
-                app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Vegi"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <TextView
-                android:id="@+id/TV_Filt_Fruit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/fedoka"
-                android:text="Fruta"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/IB_Fruit"
-                app:layout_constraintStart_toStartOf="@+id/IB_Fruit"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageButton
-                android:id="@+id/IB_Fruit"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="15dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/card_cat"
-                android:padding="7dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_fruit"
-                app:layout_constraintStart_toEndOf="@+id/IB_Vegi"
-                app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Fruit"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-
-            <TextView
-                android:id="@+id/TV_Filt_Drink"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/fedoka"
-                android:text="Bebida"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/IB_Drink"
-                app:layout_constraintStart_toStartOf="@+id/IB_Drink"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageButton
-                android:id="@+id/IB_Drink"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="15dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/card_cat"
-                android:padding="10dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_drink"
-                app:layout_constraintStart_toEndOf="@+id/IB_Fruit"
-                app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Drink" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </HorizontalScrollView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

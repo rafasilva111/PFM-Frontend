@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.recipe.details.RecipeTabFragment">
+    tools:context=".presentation.recipe.details.RecipeTabFragment"
+    android:paddingBottom="80dp">
 
 
             <LinearLayout
@@ -12,7 +13,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -49,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -70,6 +71,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
+                        android:id="@+id/numberCategoriasTV"
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:layout_weight="1"
@@ -104,8 +106,7 @@
                 android:id="@+id/ingridients_LL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-
+                android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:orientation="vertical"
@@ -127,6 +128,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
+                        android:id="@+id/numberIngridientsTV"
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:layout_weight="1"
@@ -153,7 +155,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:divider="@android:color/transparent"
-                android:dividerHeight="2dp"
+                android:dividerHeight="1dp"
                 app:layout_constraintEnd_toEndOf="@+id/ingridients_LL"
                 app:layout_constraintStart_toStartOf="@+id/ingridients_LL"
                 app:layout_constraintTop_toBottomOf="@+id/ingridients_LL" />
@@ -163,7 +165,7 @@
                 android:id="@+id/preparation_LL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:orientation="vertical"
@@ -185,6 +187,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
+                        android:id="@+id/numberPreparationTV"
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:layout_weight="1"
@@ -210,9 +213,10 @@
             <ListView
                 android:id="@+id/LV_Preparation_Info"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="2dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="@+id/preparation_LL"
                 app:layout_constraintStart_toStartOf="@+id/preparation_LL"
                 app:layout_constraintTop_toBottomOf="@+id/preparation_LL" />

@@ -361,7 +361,6 @@ class RecipeListingFragment : Fragment() {
             it.getContentIfNotHandled()?.let{
                 when (it) {
                     is NetworkResult.Success -> { it
-                        binding.progressBar.hide()
                         toast(getString(R.string.recipe_liked))
 
                         // updates local list
@@ -375,11 +374,9 @@ class RecipeListingFragment : Fragment() {
                         }
                     }
                     is NetworkResult.Error -> {
-                        binding.progressBar.hide()
                         showValidationErrors(it.message.toString())
                     }
                     is NetworkResult.Loading -> {
-                        binding.progressBar.show()
                     }
                 }
             }
@@ -389,7 +386,6 @@ class RecipeListingFragment : Fragment() {
             it.getContentIfNotHandled()?.let{
                 when (it) {
                     is NetworkResult.Success -> { it
-                        binding.progressBar.hide()
                         toast(getString(R.string.recipe_removed_liked))
 
                         // updates local list
@@ -403,11 +399,9 @@ class RecipeListingFragment : Fragment() {
                         }
                     }
                     is NetworkResult.Error -> {
-                        binding.progressBar.hide()
                         showValidationErrors(it.message.toString())
                     }
                     is NetworkResult.Loading -> {
-                        binding.progressBar.show()
                     }
                 }
             }
@@ -419,13 +413,11 @@ class RecipeListingFragment : Fragment() {
             it.getContentIfNotHandled()?.let{
                 when (it) {
                     is NetworkResult.Success -> { it
-                        binding.progressBar.hide()
-                        toast(getString(R.string.recipe_liked))
+                        toast(getString(R.string.recipe_saved))
 
                         // updates local list
                         for (item in recipeList.toMutableList()){
                             if (item.id == it.data){
-                                item.likes ++
                                 sharedPreference.addSaveToUserSession(item)
                                 adapter.updateItem(recipeList.indexOf(item),item)
                                 break
@@ -433,11 +425,9 @@ class RecipeListingFragment : Fragment() {
                         }
                     }
                     is NetworkResult.Error -> {
-                        binding.progressBar.hide()
                         showValidationErrors(it.message.toString())
                     }
                     is NetworkResult.Loading -> {
-                        binding.progressBar.show()
                     }
                 }
             }
@@ -447,13 +437,11 @@ class RecipeListingFragment : Fragment() {
             it.getContentIfNotHandled()?.let{
                 when (it) {
                     is NetworkResult.Success -> { it
-                        binding.progressBar.hide()
-                        toast(getString(R.string.recipe_removed_liked))
+                        toast(getString(R.string.recipe_removed_saved))
 
                         // updates local list
                         for (item in recipeList.toMutableList()){
                             if (item.id == it.data){
-                                item.likes --
                                 sharedPreference.removeSaveFromUserSession(item)
                                 adapter.updateItem(recipeList.indexOf(item),item)
                                 break
@@ -461,11 +449,9 @@ class RecipeListingFragment : Fragment() {
                         }
                     }
                     is NetworkResult.Error -> {
-                        binding.progressBar.hide()
                         showValidationErrors(it.message.toString())
                     }
                     is NetworkResult.Loading -> {
-                        binding.progressBar.show()
                     }
                 }
             }

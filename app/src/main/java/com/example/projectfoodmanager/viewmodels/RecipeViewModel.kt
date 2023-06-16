@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 
@@ -96,6 +97,18 @@ class RecipeViewModel @Inject constructor (
     fun removeSaveOnRecipe(recipeId: Int) {
         viewModelScope.launch {
             repository.removeSaveOnRecipe(recipeId)
+        }
+    }
+
+    // COMMENT FUNCTION
+
+
+    val functionGetCommentsOnRecipe: LiveData<Event<NetworkResult<CommentList>>>
+        get() = repository.functionGetCommentsOnRecipe
+
+    fun getCommentsOnRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            repository.getCommentsOnRecipe(recipeId)
         }
     }
 

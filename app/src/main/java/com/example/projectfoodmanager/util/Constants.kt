@@ -7,8 +7,8 @@ val LOGIN_TIME:Long = 2000
 
 object Constants {
     // TODO: PRIMEIRO PASSO MUDAR ESTA MERDA SEU ANIMAL
-    //const val BASE_URL = "http://192.168.1.110:5000/"
-    const val BASE_URL = "http://52.47.44.215/"
+    const val BASE_URL = "http://192.168.1.102:5000/"
+    //const val BASE_URL = "http://35.180.118.91/"
     const val USER_TOKEN = "user_token"
     const val USER_SESSION = "user_session"
     const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"

@@ -10,9 +10,9 @@
     <style name="roundedImageView"></style>
 
     <style name="Theme.App" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/bordeux</item>
-        <item name="colorOnSurface">@color/bordeux</item>
-        <item name="colorError">@color/bordeux</item>
+        <item name="colorPrimary">@color/main_color</item>
+        <item name="colorOnSurface">@color/main_color</item>
+        <item name="colorError">@color/main_color</item>
         <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
         <item name="textAppearanceCaption">@style/TextAppearance.App.Caption</item>
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>

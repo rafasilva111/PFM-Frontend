@@ -199,7 +199,7 @@ class FavoritesFragment : Fragment() {
                 binding.tvNoRecipes.isVisible = user!!.saved_recipes.isEmpty()
 
                 if (buttonPressed != binding.btnSaved) {
-                    buttonPressed?.setBackgroundColor(resources.getColor(R.color.bordeux))
+                    buttonPressed?.setBackgroundColor(resources.getColor(R.color.main_color))
                     buttonPressed = binding.btnSaved
                     buttonPressed?.setBackgroundColor(resources.getColor(R.color.black))
                 }

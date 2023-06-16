@@ -3,28 +3,33 @@ package com.example.projectfoodmanager.presentation.recipe.details
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 
-class FragmentAdapter(fm: FragmentManager): FragmentStatePagerAdapter(fm,
-    BEHAVIOR_SET_USER_VISIBLE_HINT) {
+class FragmentAdapter(
+    fragmentManager: FragmentManager,
+    lifecycle: Lifecycle,
+    recipe: Recipe
+    ): FragmentStateAdapter(fragmentManager,lifecycle) {
 
-    var fragmentList : ArrayList<Fragment> = ArrayList()
-    var fragmentTitle : ArrayList<String> = ArrayList()
+    private var recipe: Recipe = recipe
 
 
-    override fun getCount(): Int {
-        return fragmentList.size
+    override fun getItemCount(): Int {
+        return 3
     }
 
-    override fun getItem(position: Int): Fragment {
-        return fragmentList[position]
+    override fun createFragment(position: Int): Fragment {
+
+        return if(position==0)
+
+            RecipeTabFragment(recipe)
+
+        else
+            NutritionTabFragment(recipe)
+
     }
 
-    override fun getPageTitle(position: Int): CharSequence?{
-        return fragmentTitle[position]
-    }
 
-    fun addFragment(fragment: Fragment, title: String){
-        fragmentList.add(fragment)
-        fragmentTitle.add(title)
-    }
 }

@@ -3,6 +3,7 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
@@ -191,5 +192,29 @@ class RecipeRepositoryImp @Inject constructor(
         }
     }
 
+    private val _functionGetCommentsOnRecipe = MutableLiveData<Event<NetworkResult<CommentList>>>()
+    override val functionGetCommentsOnRecipe: LiveData<Event<NetworkResult<CommentList>>>
+        get() = _functionGetCommentsOnRecipe
+
+    override suspend fun getCommentsOnRecipe(recipeId: Int) {
+        _functionGetCommentsOnRecipe.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
+        val response =remoteDataSource.getCommentsByRecipe(recipeId)
+        if (response.isSuccessful && response.body() != null) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            Log.i(TAG, "handleResponse: response body -> ${response.body()}")
+            _functionGetCommentsOnRecipe.postValue(Event(NetworkResult.Success(
+                response.body()!!
+            )))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
+            _functionGetCommentsOnRecipe.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _functionGetCommentsOnRecipe.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
 
 }

@@ -6,6 +6,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
@@ -39,7 +40,7 @@ interface RemoteDataSource {
 	//comments
 	suspend fun createComments(comments: CommentRequest): Response<CommentResponse>
 	suspend fun getCommentsByUser(userId: String): Response<CommentResponse>
-	suspend fun getCommentsByRecipe(recipeId: String): Response<CommentResponse>
+	suspend fun getCommentsByRecipe(recipeId: Int): Response<CommentList>
 	suspend fun updateComments(userId: String, comments : CommentRequest): Response<CommentResponse>
 	suspend fun deleteComments(recipeId: String, userId: String): Response<String>
 

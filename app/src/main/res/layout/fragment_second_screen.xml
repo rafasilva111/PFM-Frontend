@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.onboarding.screens.SecondScreen"
-    android:background="@color/color_1">
+    android:background="@color/color_3">
 
     <ImageView
         android:id="@+id/IV_goals"
@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/bordeux" />
+        app:tint="@color/main_color" />
 
     <ImageView
         android:id="@+id/IV_plan"
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:alpha="0.5"
-        android:fontFamily="@font/titillium_web_regular"
+        android:fontFamily="sans-serif"
         android:text="Possibilidade de consultar, criar e até mesmo partilhar as suas receitas com outros utilizadores"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -74,7 +74,7 @@
         android:fontFamily="@font/fedoka"
         android:text="Next"
         android:textSize="20sp"
-        android:textColor="@color/bordeux"
+        android:textColor="@color/main_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

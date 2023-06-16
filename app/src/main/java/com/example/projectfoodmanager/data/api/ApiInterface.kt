@@ -5,6 +5,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
@@ -78,8 +79,8 @@ interface ApiInterface {
     @POST("/comments")
     suspend fun createComments(@Body comment : CommentRequest): Response<CommentResponse>
 
-    @GET("/comments")
-    suspend fun getCommentsByRecipe(@Query("recipeId") recipeId: String): Response<CommentResponse>
+    @GET("$API_V1_BASE_URL/comment/list")
+    suspend fun getCommentsByRecipe(@Query("recipe_id") recipeId: Int): Response<CommentList>
 
     @GET("/comments")
     suspend fun getCommentsByUser(@Query("userId") userId: String): Response<CommentResponse>

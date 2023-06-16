@@ -127,6 +127,8 @@ class LoginFragment : Fragment() {
                         authViewModel.getUserSession()
                     }
                     is NetworkResult.Error -> {
+                        binding.loginBtn.isVisible = true
+                        binding.progressBar.isVisible = false
                         showValidationErrors(it.message.toString())
                     }
                     is NetworkResult.Loading -> {
@@ -155,6 +157,8 @@ class LoginFragment : Fragment() {
                         }, LOGIN_TIME)
                     }
                     is NetworkResult.Error -> {
+                        binding.loginBtn.isVisible = true
+                        binding.progressBar.isVisible = false
                         showValidationErrors(it.message.toString())
                     }
                     is NetworkResult.Loading -> {

@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Recipe(
-    val backgrounds: Backgrounds,
+    val backgrounds: List<Backgrounds>,
     val company: String,
     val created_date: String,
     val description: String,

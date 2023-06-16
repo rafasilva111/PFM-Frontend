@@ -7,6 +7,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
@@ -93,7 +94,7 @@ class RemoteDataSourceImpl @Inject constructor(
 	override suspend fun createComments(comment : CommentRequest): Response<CommentResponse> {
 		return apiInterface.createComments(comment = comment)
 	}
-	override suspend fun getCommentsByRecipe(recipeId: String): Response<CommentResponse> {
+	override suspend fun getCommentsByRecipe(recipeId: Int): Response<CommentList> {
 		return apiInterface.getCommentsByRecipe(recipeId = recipeId)
 	}
 	override suspend fun getCommentsByUser(userId: String): Response<CommentResponse> {

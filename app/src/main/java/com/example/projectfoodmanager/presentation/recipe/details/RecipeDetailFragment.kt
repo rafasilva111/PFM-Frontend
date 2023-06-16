@@ -1,42 +1,53 @@
 package com.example.projectfoodmanager.presentation.recipe.details
 
 
-import android.animation.LayoutTransition
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.ListAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.AutoTransition
-import androidx.transition.TransitionManager
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.databinding.FragmentRecipeDetailNewBinding
+import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
-import com.example.projectfoodmanager.util.NutritionTable
-import com.example.projectfoodmanager.util.RecipeListingFragmentFilters
-import com.google.android.material.chip.Chip
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
     val TAG: String = "ReceitaDetailFragment"
-    lateinit var binding: FragmentRecipeDetailBinding
+    lateinit var binding: FragmentRecipeDetailNewBinding
     var objRecipe: Recipe? = null
-    val viewModel: RecipeViewModel by viewModels()
-    val authModel: AuthViewModel by viewModels()
+    val recipeViewModel: RecipeViewModel by viewModels()
+    val authViewModel: AuthViewModel by viewModels()
     lateinit var manager: LinearLayoutManager
+
+    private lateinit var adapter: FragmentAdapter
+
+    @Inject
+    lateinit var sharedPreference: SharedPreference
 
 
 
@@ -44,26 +55,175 @@ class RecipeDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        observer()
+
         if (this::binding.isInitialized){
             return binding.root
         }else {
             // Inflate the layout for this fragment
-            binding = FragmentRecipeDetailBinding.inflate(layoutInflater)
+            binding = FragmentRecipeDetailNewBinding.inflate(layoutInflater)
 
             return binding.root
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        objRecipe = arguments?.getParcelable("Recipe")
 
         super.onViewCreated(view, savedInstanceState)
 
-        updateUI()
+        if(objRecipe!=null){
+            if (isOnline(view.context)){
+                recipeViewModel.getCommentsOnRecipe(objRecipe!!.id)
+            }
+
+            setUI(objRecipe!!)
+        }
+
+
     }
 
 
-    private fun updateUI() {
+    private fun setUI(recipe: Recipe) {
+
+
+
+            // TODO: Inserir imagem do autor da receita
+            binding.AutorTV.text = recipe.company
+            binding.IVSource.setOnClickListener {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
+                startActivity(browserIntent)
+            }
+            binding.TVRef.text = recipe.id.toString()
+
+            val imgRef = Firebase.storage.reference.child(recipe.img_source)
+            imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                val imageURL = Uri.toString()
+                Glide.with(binding.IVRecipe.context).load(imageURL).into(binding.IVRecipe)
+            }
+
+            //info
+            binding.TVTitle.text = recipe.title
+            binding.TVDate.text = recipe.created_date
+            binding.radtingRecipe.rating = recipe.source_rating.toFloat()
+            binding.ratingMedTV.text = recipe.source_rating.toString()
+
+            binding.numberLikeTV.text = recipe.likes.toString()
+
+            // check for user likes
+            val user: User? = sharedPreference.getUserSession()
+
+            if (user!=null){
+                if(user!!.checkIfLiked(recipe) != -1){
+                    binding.likeIB.setImageResource(R.drawable.ic_like_active)
+                }
+                else
+                    binding.likeIB.setImageResource(R.drawable.ic_like_black)
+            }
+
+            binding.likeIB.setOnClickListener {
+                if(sharedPreference.getUserSession()!!.checkIfLiked(recipe) == -1) {
+                    recipeViewModel.addLikeOnRecipe(recipe.id)
+                }
+                else
+                {
+                    recipeViewModel.removeLikeOnRecipe(recipe.id)
+                }
+            }
+
+
+
+            // check for user saves
+
+            if (user!=null){
+                if(user!!.checkIfSaved(recipe) != -1){
+                    binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
+                }
+                else
+                    binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
+            }
+
+            binding.favoritesIB.setOnClickListener {
+                if(sharedPreference.getUserSession()!!.checkIfSaved(recipe) == -1) {
+                    recipeViewModel.addSaveOnRecipe(recipe.id)
+                }
+                else
+                {
+                    recipeViewModel.removeSaveOnRecipe(recipe.id)
+                }
+            }
+
+
+            binding.TVTime.text = recipe.time
+            binding.TVDifficulty.text = recipe.difficulty
+            binding.TVPortion.text = recipe.portion
+
+            //tabs
+            //val recipeTabFragment = RecipeTabFragment(recipe)
+            //val nutritionTabFragment = NutritionTabFragment(recipe)
+
+
+            val fragmentAdapter = FragmentAdapter(requireActivity().supportFragmentManager,lifecycle,recipe)
+
+            binding.recipeDetailTab.addTab(binding.recipeDetailTab.newTab().setText("Recipe"))
+            binding.recipeDetailTab.addTab(binding.recipeDetailTab.newTab().setText("Nutrition"))
+
+
+            //fragmentAdapter.addFragment(recipeTabFragment, "Recipe")
+            //fragmentAdapter.addFragment(nutritionTabFragment, "Nutrition")
+
+            binding.recipeInfoViewPager.adapter = fragmentAdapter
+            //binding.recipeDetailTab.setupWithViewPager(binding.recipeInfoViewPager)
+
+            TabLayoutMediator(binding.recipeDetailTab,binding.recipeInfoViewPager){ tab,position->
+                when(position){
+                    0->{
+                        tab.text="Recipe"
+                    }
+                    1->{
+                        tab.text="Nutrition"
+                    }
+                }
+            }
+
+            binding.backIB.setOnClickListener {
+                findNavController().navigateUp()
+            }
+
+
+
+
+        }
+
+    private fun updateUI(recipe: Recipe) {
+
+        // check for user likes
+        val user: User? = sharedPreference.getUserSession()
+
+        binding.numberLikeTV.text = recipe.likes.toString()
+
+        if (user!=null){
+            if(user!!.checkIfLiked(recipe) != -1){
+                binding.likeIB.setImageResource(R.drawable.ic_like_active)
+            }
+            else
+                binding.likeIB.setImageResource(R.drawable.ic_like_black)
+        }
+
+        // check for user saves
+
+        if (user!=null){
+            if(user!!.checkIfSaved(recipe) != -1){
+                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
+            }
+            else
+                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
+        }
+
+    }
+
+   /* private fun updateUI() {
 
         objRecipe = arguments?.getParcelable("Recipe")
 
@@ -150,13 +310,13 @@ class RecipeDetailFragment : Fragment() {
                     }
 
                 }
-                /*     chip.text = item.toString()
+                *//*     chip.text = item.toString()
                      chip.isCloseIconVisible = true
                      chip.setBackgroundColor(resources.getColor(R.color.red))
                      chip.setChipIconResource(R.drawable.ic_like_red)
                      chip.setOnCloseIconClickListener{
                          binding.CHTags.addView(chip)
-                     }*/
+                     }*//*
 
             }
 
@@ -294,16 +454,16 @@ class RecipeDetailFragment : Fragment() {
 
             //like function
 
-            /*authModel.getUserSession_old { user ->
+            *//*authModel.getUserSession_old { user ->
                 if (user != null) {
                     if ( user.liked_recipes.indexOf(recipe)!=-1){
                         binding.likeIB.setImageResource(R.drawable.ic_like_red)
                     }
                 }
-            }*/
+            }*//*
 
 
-            /*binding.likeIB.setOnClickListener {
+            *//*binding.likeIB.setOnClickListener {
                 authModel.getUserSession_old { user ->
                     if (user != null){
                         if ( user.liked_recipes.indexOf(recipe)!=-1){
@@ -347,7 +507,7 @@ class RecipeDetailFragment : Fragment() {
                         }
                     }
                 }
-            }*/
+            }*//*
 
             binding.backIB.setOnClickListener {
                 findNavController().navigateUp()
@@ -355,8 +515,7 @@ class RecipeDetailFragment : Fragment() {
 
 
         }
-    }
-
+    }*/
     /*  private fun observer() {
           authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
               when (state) {
@@ -390,6 +549,141 @@ class RecipeDetailFragment : Fragment() {
         }
     }*/
 
+    private fun observer() {
+
+        recipeViewModel.functionGetCommentsOnRecipe.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+
+                        binding.commentsFB.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                            @SuppressLint("UnsafeOptInUsageError")
+                            override fun onGlobalLayout() {
+                                val badgeDrawable = BadgeDrawable.create(requireContext())
+                                val teste = it.data?._metadata?.total_items
+                                badgeDrawable.number = it.data?._metadata?.total_items ?: 0
+                                badgeDrawable.horizontalOffset = 30
+                                badgeDrawable.verticalOffset = 20
+
+                                BadgeUtils.attachBadgeDrawable(badgeDrawable, binding.commentsFB, null)
+
+                                // Remove the listener once it's no longer needed
+                                binding.commentsFB.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                            }
+                        })
+
+                    }
+                    is NetworkResult.Error -> {
+                        Log.d(TAG, "observer: " + it.message.toString())
+
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        })
+
+
+        // Like function
+
+
+        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        toast(getString(R.string.recipe_liked))
+
+                        // updates local list
+                        if (objRecipe!!.id == it.data){
+                            objRecipe!!.likes ++
+                            sharedPreference.addLikeToUserSession(objRecipe!!)
+                            updateUI(objRecipe!!)
+                        }
+
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        })
+
+        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        toast(getString(R.string.recipe_removed_liked))
+
+                        // updates local list
+                        if (objRecipe!!.id == it.data){
+                            objRecipe!!.likes --
+                            sharedPreference.removeLikeFromUserSession(objRecipe!!)
+                            updateUI(objRecipe!!)
+                        }
+
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        })
+
+        // save function
+
+        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        toast(getString(R.string.recipe_saved))
+
+                        // updates local list
+                        if (objRecipe!!.id == it.data){
+                            sharedPreference.addSaveToUserSession(objRecipe!!)
+                            updateUI(objRecipe!!)
+                        }
+
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        })
+
+        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        toast(getString(R.string.recipe_removed_saved))
+
+                        // updates local list
+                        if (objRecipe!!.id == it.data){
+                            sharedPreference.removeSaveFromUserSession(objRecipe!!)
+                            updateUI(objRecipe!!)
+                        }
+
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        })
+
+    }
+
+    private fun showValidationErrors(toString: String) {
+        Log.d(TAG, "showValidationErrors: " + toString)
+    }
 
 
     private fun parse_hash_maps(ingredients: HashMap<String, String>): ArrayList<String> {

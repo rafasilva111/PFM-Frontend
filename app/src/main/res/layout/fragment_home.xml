@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment"
-    android:background="@color/color_2">
+    android:background="@color/background_1">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -29,7 +29,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/fedoka"
             android:text="GoodBites"
-            android:textColor="@color/bordeux"
+            android:textColor="@color/main_color"
             android:textSize="@dimen/title_1" />
     </LinearLayout>
 
@@ -40,7 +40,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="160dp"
         android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/bordeux"
+        android:backgroundTint="@color/main_color"
         android:fontFamily="@font/fedoka"
         android:text="Login"
         android:textColor="@color/color_1"
@@ -58,7 +58,7 @@
         android:backgroundTint="@color/color_1"
         android:fontFamily="@font/fedoka"
         android:text="Registar"
-        android:textColor="@color/bordeux"
+        android:textColor="@color/main_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/BTN_Login" />
