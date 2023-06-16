@@ -14,6 +14,7 @@ data class Recipe(
     val img_source: String,
     val ingredients: List<Ingredient>,
     var likes: Int,
+    var comments: Int,
     val nutrition_informations: NutritionInformations,
     val portion: String,
     val preparation: List<Preparation>,

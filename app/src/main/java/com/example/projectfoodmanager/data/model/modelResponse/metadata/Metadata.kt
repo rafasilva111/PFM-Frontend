@@ -5,6 +5,6 @@ data class Metadata(
     val items_per_page: Int,
     val total_items: Int,
     val total_pages: Int,
-    val next: String,
-    val previous: String
+    val next: String?,
+    val previous: String?
 )

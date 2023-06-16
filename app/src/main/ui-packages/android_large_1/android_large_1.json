@@ -1,0 +1,337 @@
+{
+  "name": "android_large_1",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "KDOFFUsvfNeY3ZfNwAZLeU",
+    "node": "3:3",
+    "version": "3487507299",
+    "component-id": "dedfce1bd560b4fdb4ba4be13089a4b73cb52501"
+  },
+  "default": "Android Large - 1",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "vector",
+        "id": "Ellipse 65"
+      },
+      {
+        "type": "image",
+        "id": "image 458"
+      },
+      {
+        "type": "vector",
+        "id": "Rectangle 574"
+      },
+      {
+        "type": "text",
+        "id": "login"
+      },
+      {
+        "type": "vector",
+        "id": "Rectangle 575"
+      },
+      {
+        "type": "text",
+        "id": "Register"
+      },
+      {
+        "type": "text",
+        "id": "GoodBites"
+      }
+    ],
+    "modes": {
+      "Android Large - 1": {
+        "rules": [
+          {
+            "id": "top_level",
+            "is-structured": "false",
+            "children": [
+              "Ellipse 65",
+              "image 458",
+              "Rectangle 574",
+              "login",
+              "Rectangle 575",
+              "Register",
+              "GoodBites"
+            ],
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "1.0"
+            }
+          },
+          {
+            "id": "Ellipse 65",
+            "margin": {
+              "left": "90.33969152995681",
+              "right": "90.33969079426197"
+            },
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "118.15562570418112"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "213.688720703125"
+              }
+            },
+            "vector-content": "ellipse_65.svg"
+          },
+          {
+            "id": "image 458",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "136.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "163.99996948242188"
+              }
+            },
+            "relative-transform": [
+              [
+                "-1.0",
+                "-2.4492937051703357e-16",
+                "0.0"
+              ],
+              [
+                "-2.4492937051703357e-16",
+                "1.0",
+                "0.0"
+              ]
+            ],
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "121.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "120.0"
+              }
+            },
+            "image-content": "image_458.png",
+            "scale": "cover"
+          },
+          {
+            "id": "Rectangle 574",
+            "margin": {
+              "left": "18.0",
+              "right": "18.0"
+            },
+            "border-radius": "5.0",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "655.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "50.0"
+              }
+            },
+            "vector-content": "rectangle_574.svg"
+          },
+          {
+            "id": "login",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "155.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "666.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "85.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "28.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "1.0"
+            },
+            "text-content": "login",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align": "left",
+            "text-size": "25.0",
+            "line-height": "1.21",
+            "typeface": "Fredoka One",
+            "case": "upper"
+          },
+          {
+            "id": "Rectangle 575",
+            "margin": {
+              "left": "18.0",
+              "right": "18.0"
+            },
+            "border-radius": "5.0",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "4.0",
+              "offset-x": "0.0",
+              "offset-y": "4.0",
+              "spread": "0.0",
+              "blend-mode": "normal"
+            },
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "568.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "50.0"
+              }
+            },
+            "vector-content": "rectangle_575.svg"
+          },
+          {
+            "id": "Register",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "135.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "581.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "125.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "24.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "340.2631578947369",
+              "saturation": "0.7755102040816327",
+              "value": "0.3843137254901961"
+            },
+            "text-content": "Register",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align": "left",
+            "text-size": "25.0",
+            "line-height": "1.21",
+            "typeface": "Fredoka One",
+            "case": "upper"
+          },
+          {
+            "id": "GoodBites",
+            "margin": {
+              "left": "79.0",
+              "right": "79.0"
+            },
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "366.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "57.0"
+              }
+            },
+            "font-weight": "600.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "340.2631578947369",
+              "saturation": "0.7755102040816327",
+              "value": "0.3843137254901961"
+            },
+            "text-content": "GoodBites",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align": "left",
+            "text-size": "50.0",
+            "line-height": "1.21",
+            "typeface": "Fredoka"
+          }
+        ]
+      }
+    }
+  },
+  "previews": [
+    {
+      "design": "Android Large - 1",
+      "size": {
+        "width": 393.0,
+        "height": 830.0
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

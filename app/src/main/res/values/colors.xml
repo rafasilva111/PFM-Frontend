@@ -48,11 +48,14 @@
 
 
 
-
-
+    <!--fragment_home_new-->
+    <color name="_bg__android_large___2_ek2_color">#FFFFFF</color>
+    <color name="ellipse_65_color">#FABB18</color>
+    <color name="rectangle_575_color">#EBEBEB</color>
+    <!--fragment_home_new-->
 
     <color name="grey">#DADADA</color>//Default
-    //-------------------------
+
     <color name="teal_700">#FF018786</color>
 
     <color name="tab_selected">#FF000000</color>

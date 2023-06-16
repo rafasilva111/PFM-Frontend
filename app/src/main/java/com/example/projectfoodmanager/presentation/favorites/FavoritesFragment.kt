@@ -5,13 +5,14 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.SearchView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -23,9 +24,9 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
+import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
-import com.example.projectfoodmanager.util.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.floor
@@ -48,21 +49,39 @@ class FavoritesFragment : Fragment() {
     private var snapHelper: SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
-    private var listFavorited: MutableList<Recipe> = arrayListOf()
-    private var listLiked: MutableList<Recipe> = arrayListOf()
+
     private var searchMode: Boolean = false
     private var user: User? = null
     private var buttonPressed: Button? = null
+
 
     val TAG: String = "FavoritesFragmentFragment"
 
     private val adapter by lazy {
         FavoritesRecipeListingAdapter(
-            onItemClicked = { pos, item ->
+            onItemClicked = { _, item ->
+                    findNavController().navigate(R.id.action_favoritesFragment_to_receitaDetailFragment,Bundle().apply {
+                    putParcelable("Recipe",item)
+                })
+            },
+            onLikeClicked = {item,like ->
+                if(like){
+                    recipeViewModel.addLikeOnRecipe(item.id)
+                }
+                else{
+                    recipeViewModel.removeLikeOnRecipe(item.id)
+                }
 
-//                findNavController().navigate(R.id.action_receitaListingFragment_to_receitaDetailFragment,Bundle().apply {
-//                    putParcelable("note",item)
-//                })
+            },
+            onSaveClicked = {item,saved ->
+                val teste = sharedPreference.getUserSession()
+                if(saved){
+                    recipeViewModel.addSaveOnRecipe(item.id)
+                }
+                else{
+                    recipeViewModel.removeSaveOnRecipe(item.id)
+                }
+
             },
             authViewModel,
             recipeViewModel
@@ -73,6 +92,8 @@ class FavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         //todo check for internet connection
         if (this::binding.isInitialized) {
             return binding.root
@@ -86,6 +107,7 @@ class FavoritesFragment : Fragment() {
 
 
             //setRecyclerViewScrollListener()
+
             return binding.root
         }
     }
@@ -130,11 +152,129 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindObservers()
+
+        binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
+
+        //todo: RAFA
+        // top nav bar
+        binding.btnLiked.setOnClickListener {
+            binding.cvCreateRecipe.visibility = View.GONE
+            toast(getString(R.string.get_liked_recipes))
+            binding.tvNoRecipes.isVisible = sharedPreference.getUserSession()!!.liked_recipes.isEmpty()
+
+
+            if (buttonPressed != binding.btnLiked) {
+                binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
+                buttonPressed = binding.btnLiked
+                buttonPressed?.background= resources.getDrawable(R.drawable.bg_default)
+
+            }
+
+            adapter.updateList(user!!.liked_recipes.toMutableList(), user!!)
+
+        }
+
+        binding.btnSaved.setOnClickListener {
+            binding.cvCreateRecipe.visibility = View.GONE
+            toast(getString(R.string.get_saved_recipes))
+            val userSession: User? = sharedPreference.getUserSession()
+            binding.tvNoRecipes.isVisible = userSession!!.saved_recipes.isEmpty()
+
+            if (buttonPressed != binding.btnSaved) {
+                buttonPressed?.setBackgroundColor(resources.getColor(R.color.bordeux))
+                buttonPressed = binding.btnSaved
+                buttonPressed?.setBackgroundColor(resources.getColor(R.color.black))
+            }
+
+            adapter.updateList(userSession!!.saved_recipes.toMutableList(), user!!)
+
+        }
+
+        binding.btnCreated.setOnClickListener {
+            binding.cvCreateRecipe.visibility = View.VISIBLE
+            //Todo: RAFAEL
+            toast("Em desenvolvimento...")
+            adapter.updateList(mutableListOf(), user!!)
+
+        }
+
+        binding.btnComment.setOnClickListener {
+            binding.cvCreateRecipe.visibility = View.GONE
+            //Todo: RAFAEL
+            toast("Em desenvolvimento...")
+            adapter.updateList(mutableListOf(), user!!)
+
+        }
+
+        binding.btnRecentes.setOnClickListener {
+            binding.cvCreateRecipe.visibility = View.GONE
+            //Todo: RAFAEL
+            toast("Em desenvolvimento...")
+            adapter.updateList(mutableListOf(), user!!)
+
+        }
+
+        // bottom nav bar
+
+        binding.IBMeat.setOnClickListener {
+            recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE)
+        }
+        binding.IBFish.setOnClickListener {
+            recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE)
+        }
+        binding.IBSoup.setOnClickListener {
+            recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA)
+        }
+        binding.IBVegi.setOnClickListener {
+            recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA)
+        }
+        binding.IBFruit.setOnClickListener {
+            recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA)
+        }
+        binding.IBDrink.setOnClickListener {
+            recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS)
+        }
+
+        binding.recyclerView.adapter = adapter
+
+        // coisas que só faz online
+
         if (isOnline(view.context)) {
-            binding.recyclerView.adapter = adapter
-            bindObservers()
+
+            // todo check if recipes removed from sharedPreferences ( in case user in offline mode removes like)
+            // caso sim atualizar a bd
+
+            recipeViewModel.getUserLikedRecipes()
 
 
+            //validação da shared preferences feita no observer
+
+
+            binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(text: String?): Boolean {
+                    if (text != null && text != "") {
+                        recipeViewModel.getRecipesByTitleAndTags(text)
+                    }
+
+                    return true
+                }
+            })
+
+
+
+            // todo atualiza a lista de comments mediante http://{{dev}}/api/v1/recipe/comments
+            //authViewModel.getUserBackgrounds()
+
+
+        } else {
+            // TODO offline mode
+
+            toast("Está offline")
 
             //valida shared preferences
             try {
@@ -158,108 +298,62 @@ class FavoritesFragment : Fragment() {
                 authViewModel.logoutUser()
             }
 
-            binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(p0: String?): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextChange(text: String?): Boolean {
-                    if (text != null && text != "") {
-                        recipeViewModel.getRecipesByTitleAndTags(text)
-                    }
-
-                    return true
-                }
-            })
-
-            binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
-
-            //todo: RAFA
-            // top nav bar
-            binding.btnLiked.setOnClickListener {
-                binding.cvCreateRecipe.visibility = View.GONE
-                toast(getString(R.string.get_liked_recipes))
-                binding.tvNoRecipes.isVisible = user!!.liked_recipes.isEmpty()
-
-
-                if (buttonPressed != binding.btnLiked) {
-                    binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
-                    buttonPressed = binding.btnLiked
-                    buttonPressed?.background= resources.getDrawable(R.drawable.bg_default)
-
-                }
-
-                adapter.updateList(user!!.liked_recipes.toMutableList(), user!!)
-
-            }
-
-            binding.btnSaved.setOnClickListener {
-                binding.cvCreateRecipe.visibility = View.GONE
-                toast(getString(R.string.get_saved_recipes))
-                binding.tvNoRecipes.isVisible = user!!.saved_recipes.isEmpty()
-
-                if (buttonPressed != binding.btnSaved) {
-                    buttonPressed?.setBackgroundColor(resources.getColor(R.color.main_color))
-                    buttonPressed = binding.btnSaved
-                    buttonPressed?.setBackgroundColor(resources.getColor(R.color.black))
-                }
-
-                adapter.updateList(user!!.saved_recipes.toMutableList(), user!!)
-
-            }
-
-            binding.btnCreated.setOnClickListener {
-                binding.cvCreateRecipe.visibility = View.VISIBLE
-                //Todo: RAFAEL
-                toast("Em desenvolvimento...")
-                adapter.updateList(mutableListOf(), user!!)
-
-            }
-
-            binding.btnComment.setOnClickListener {
-                binding.cvCreateRecipe.visibility = View.GONE
-                //Todo: RAFAEL
-                toast("Em desenvolvimento...")
-                adapter.updateList(mutableListOf(), user!!)
-
-            }
-
-            binding.btnRecentes.setOnClickListener {
-                binding.cvCreateRecipe.visibility = View.GONE
-                //Todo: RAFAEL
-                toast("Em desenvolvimento...")
-                adapter.updateList(mutableListOf(), user!!)
-
-            }
-
-            // bottom nav bar
-
-            binding.IBMeat.setOnClickListener {
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE)
-            }
-            binding.IBFish.setOnClickListener {
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE)
-            }
-            binding.IBSoup.setOnClickListener {
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA)
-            }
-            binding.IBVegi.setOnClickListener {
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA)
-            }
-            binding.IBFruit.setOnClickListener {
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA)
-            }
-            binding.IBDrink.setOnClickListener {
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS)
-            }
-        } else {
-            // TODO offline mode
-            toast("Está offline")
         }
+    }
+
+    private fun showValidationErrors(error: String) {
+        toast(error)
+        Log.d(TAG, "bindObservers: $error.")
+
     }
 
 
     private fun bindObservers() {
+
+        recipeViewModel.userLikedRecipes.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        // atualiza lista de likes mediante remote
+
+                        try {
+                            user = sharedPreference.getUserSession()
+
+                            if(user!!.liked_recipes != it.data!!.result ){
+                                user!!.liked_recipes = it.data.result
+                            }
+
+                            sharedPreference.saveUserSession(user!!)
+
+                            if (user!!.liked_recipes.isNullOrEmpty()) {
+                                Log.d(TAG, "onViewCreated: user.saved_recipes is empty")
+                                //Mensagem sem receitas
+                                binding.tvNoRecipes.visibility = View.VISIBLE
+
+                            } else {
+                                //Mensagem com receitas
+                                binding.tvNoRecipes.visibility = View.GONE
+
+                                // Primeira lista a aparecer
+                                adapter.updateList(user!!.liked_recipes.toMutableList(),user!!)
+                            }
+                        } catch (e: Exception) {
+                            Log.d(TAG, "onViewCreated: User had no shared prefences...")
+                            // se não tiver shared preferences o user não tem sessão válida
+                            //tera um comportamento diferente offilne
+                            authViewModel.logoutUser()
+                        }
+
+                    }
+                    is NetworkResult.Error -> {
+                        Log.d(TAG, "bindObservers: ${it.message}.")
+                    }
+                    is NetworkResult.Loading -> {
+                        //binding.progressBar.isVisible = true
+                    }
+                }
+            }
+        })
         authViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let {
                 when (it) {
@@ -278,7 +372,128 @@ class FavoritesFragment : Fragment() {
                 }
             }
         })
+
+        // Like function
+
+
+        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        binding.progressBar.hide()
+                        toast(getString(R.string.recipe_liked))
+
+                        val listOnAdapter = adapter.getAdapterList()
+                        // updates local list
+                        for (item in listOnAdapter){
+                            if (item.id == it.data){
+                                item.likes ++
+                                adapter.updateItem(listOnAdapter.indexOf(item),item,sharedPreference.addLikeToUserSession(item))
+                                break
+                            }
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        binding.progressBar.hide()
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.show()
+                    }
+                }
+            }
+        })
+
+        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        binding.progressBar.hide()
+                        toast(getString(R.string.recipe_removed_liked))
+
+                        val listOnAdapter = adapter.getAdapterList()
+
+
+                        // updates local list
+                        for (item in listOnAdapter.toMutableList()){
+                            if (item.id == it.data){
+                                item.likes --
+                                adapter.updateItem(listOnAdapter.indexOf(item),item,sharedPreference.removeLikeFromUserSession(item))
+                                break
+                            }
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        binding.progressBar.hide()
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.show()
+                    }
+                }
+            }
+        })
+
+        // save function
+
+        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        binding.progressBar.hide()
+                        toast(getString(R.string.recipe_saved))
+
+                        val listOnAdapter = adapter.getAdapterList()
+
+                        // updates local list
+                        for (item in listOnAdapter){
+                            if (item.id == it.data){
+                                adapter.updateItem(listOnAdapter.indexOf(item),item,sharedPreference.addSaveToUserSession(item))
+                                break
+                            }
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        binding.progressBar.hide()
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.show()
+                    }
+                }
+            }
+        })
+
+        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let{
+                when (it) {
+                    is NetworkResult.Success -> { it
+                        binding.progressBar.hide()
+                        toast(getString(R.string.recipe_removed_from_saves))
+
+                        val listOnAdapter = adapter.getAdapterList()
+
+                        // updates local list
+                        for (item in listOnAdapter){
+                            if (item.id == it.data){
+                                adapter.updateItem(listOnAdapter.indexOf(item),item,sharedPreference.removeSaveFromUserSession(item))
+                                break
+                            }
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        binding.progressBar.hide()
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.show()
+                    }
+                }
+            }
+        })
+
     }
+
 
     /* private fun observer(){
          var firstTimeLoading = true
@@ -377,6 +592,5 @@ class FavoritesFragment : Fragment() {
         }
         return false
     }
-
-
 }
+

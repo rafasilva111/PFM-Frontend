@@ -11,7 +11,6 @@ import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourc
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
-import retrofit2.Response
 import javax.inject.Inject
 
 
@@ -26,9 +25,9 @@ class AuthRepositoryImp @Inject constructor(
         get() = _userRegisterLiveData
 
 
-    override suspend fun registerUser(userRequest: UserRequest) {
+    override suspend fun registerUser(user: UserRequest) {
         _userRegisterLiveData.postValue(Event(NetworkResult.Loading()))
-        val response = remoteDataSource.registerUser(userRequest)
+        val response = remoteDataSource.registerUser(user)
         if (response.isSuccessful && response.code() == 201) {
             Log.i(TAG, "loginUser: request made was sucessfull.")
             _userRegisterLiveData.postValue(Event(NetworkResult.Success(response.code().toString())))
@@ -184,4 +183,5 @@ class AuthRepositoryImp @Inject constructor(
             _userFolloweesResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
     }
+
 }

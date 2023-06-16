@@ -25,6 +25,7 @@ interface RemoteDataSource {
 	suspend fun updateUser(user: UserRequest): Response<User>
 	suspend fun deleteUser(userId: Int): Response<String>
 
+
 	//recipe
 	suspend fun createRecipe(recipe : RecipeRequest): Response<Recipe>
 	suspend fun getRecipe(recipeId: Int): Response<Recipe>
@@ -32,6 +33,7 @@ interface RemoteDataSource {
 	suspend fun getRecipesByTitleAndTags(string: String, page: Int): Response<RecipeList>
 	suspend fun updateRecipe(recipeId: Int,recipe: RecipeRequest): Response<Recipe>
 	suspend fun deleteRecipe(recipeId: Int): Response<String>
+	suspend fun getUserLikedRecipes(): Response<RecipeList>
 	suspend fun addLike(recipeId: Int): Response<Unit>
 	suspend fun removeLike(recipeId: Int): Response<Unit>
 	suspend fun addSave(recipeId: Int): Response<Unit>
@@ -48,5 +50,6 @@ interface RemoteDataSource {
 	suspend fun createFollower( userSenderId: String, userReceiverId: String): Response<FollowerResponse>
 	suspend fun getFollowers(): Response<FollowList>
 	suspend fun getFolloweds(): Response<FollowList>
+
 
 }

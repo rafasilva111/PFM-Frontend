@@ -3,12 +3,14 @@ package com.example.projectfoodmanager.data.repository
 import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 
 interface AuthRepository {
+
 
     val userRegisterLiveData: LiveData<Event<NetworkResult<String>>>
     val userAuthLiveData: LiveData<Event<NetworkResult<UserAuthResponse>>>
@@ -26,6 +28,7 @@ interface AuthRepository {
     suspend fun updateUser(userRequest: UserRequest)
     suspend fun getUserFollowers()
     suspend fun getUserFollowees()
+
 
 
 }

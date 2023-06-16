@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">GoodBites</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="error_description">Description missing</string>
     <string name="error_title">Title missing</string>
@@ -21,8 +20,8 @@
     <string name="invalid_birthdate_2">Invalid birthdate entered, you\'re yet to be born?</string>
     <string name="invalid_password">Your password must be at least 8 characters</string>
     <string name="invalid_password_1">User\'s password is incorrect</string>
-    <string name="invalid_conf_password">Your password and confirm password must be teh same</string>
-    <string name="invalid_session">Session is invalid, logging out...</string>
+    <string name="invalid_conf_password">Your password and confirm password must be the same</string>
+    <string name="invalid_session">Session is invalid, logging out…</string>
     <string name="to_many_attemps_to_login_failed">Access to this account has been temporarily put on a cool-down due to many failed login attempts. Try again later.</string>
     <string name="ingredients">Ingredients</string>
     <string name="receitas">Receitas</string>
@@ -31,7 +30,7 @@
     <string name="goals">Objetivos</string>
     <string name="calender">Calendário</string>
     <string name="favorites">Favoritos</string>
-    <string name="offline_text">Utilizador está offline...</string>
+    <string name="offline_text">Utilizador está offline…</string>
     <string name="offline_desc">O utilizador necessita de estar online para aceder a esta aba.</string>
     <string name="continuar">Ok, percebi.</string>
     <string name="gender">Género</string>
@@ -63,6 +62,12 @@
     <string name="recipe_listing_filter_personalized_sugestions">Sugestões personalizadas</string>
     <string name="recipe_listing_welcome">Bem vindo</string>
     <string name="recipe_listing_name">Nome Proprio</string>
+    <string name="goodbites">GoodBites</string>
+    <string name="register_string">Registar</string>
+    <string name="login_string">Entrar</string>
+    <string name="recipe_removed_from_saves">Save revomed.</string>
+    <string name="recipe_saved">Recipe saved.</string>
+    <string name="full_name">%1$s %2$s</string>
     <string name="recipe_removed_saved">Save remove</string>
     <string name="recipe_saved">Recipe saved</string>
 
