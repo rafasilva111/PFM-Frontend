@@ -155,14 +155,8 @@ class LoginFragment : Fragment() {
                     is NetworkResult.Success -> {
                         Handler().postDelayed({
                             setButtonVisibility(visibility = true)
+                                findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
 
-                            if (it.data != null) {
-                                    sharedPreference.saveUserSession(it.data)
-                                    findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
-                            }
-                            else{
-                                Log.d(TAG, "userResponseLiveData Observer: Something went wrong")
-                            }
                         }, LOGIN_TIME)
                     }
                     is NetworkResult.Error -> {

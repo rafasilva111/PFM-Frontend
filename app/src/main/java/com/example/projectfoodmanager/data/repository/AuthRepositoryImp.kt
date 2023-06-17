@@ -75,8 +75,10 @@ class AuthRepositoryImp @Inject constructor(
         Log.i(TAG, "getUserSession: making login request.")
         val response =remoteDataSource.getUserAuth()
 
+
         if (response.isSuccessful && response.body() != null) {
             Log.i(TAG, "getUserSession: request made was sucessfull.")
+            sharedPreference.saveUserSession(response.body()!!)
             _userOldLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
         }
         else if(response.errorBody()!=null){
@@ -119,7 +121,7 @@ class AuthRepositoryImp @Inject constructor(
     override suspend fun updateUser(userRequest: UserRequest) {
         _userUpdateResponseLiveData.postValue(Event(NetworkResult.Loading()))
         val response = remoteDataSource.updateUser(userRequest)
-        if (response.isSuccessful && response.code() == 200) {
+        if (response.isSuccessful && response.code() == 204) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             sharedPreference.updateUserSession(response.body()!!)
             _userUpdateResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
