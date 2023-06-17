@@ -282,6 +282,7 @@
                     app:layout_constraintTop_toTopOf="@+id/likeIB" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+            
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout13"
                 android:layout_width="match_parent"

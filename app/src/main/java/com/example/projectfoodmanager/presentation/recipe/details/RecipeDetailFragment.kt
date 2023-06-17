@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
@@ -27,6 +28,7 @@ import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -176,17 +178,38 @@ class RecipeDetailFragment : Fragment() {
 
             binding.recipeInfoViewPager.adapter = fragmentAdapter
             //binding.recipeDetailTab.setupWithViewPager(binding.recipeInfoViewPager)
-
-            TabLayoutMediator(binding.recipeDetailTab,binding.recipeInfoViewPager){ tab,position->
-                when(position){
-                    0->{
-                        tab.text="Recipe"
-                    }
-                    1->{
-                        tab.text="Nutrition"
-                    }
+//
+//            TabLayoutMediator(binding.recipeDetailTab,binding.recipeInfoViewPager){ tab,position->
+//                when(position){
+//                    0->{
+//                        tab.text="Recipe"
+//                    }
+//                    1->{
+//                        tab.text="Nutrition"
+//                    }
+//                }
+//            }
+            binding.recipeDetailTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    if( tab != null)
+                        binding.recipeInfoViewPager.currentItem = tab.position
                 }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                }
+
+            })
+
+        binding.recipeInfoViewPager.registerOnPageChangeCallback(object:ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                binding.recipeDetailTab.selectTab(binding.recipeDetailTab.getTabAt(position))
             }
+        })
+
 
             binding.backIB.setOnClickListener {
                 findNavController().navigateUp()
