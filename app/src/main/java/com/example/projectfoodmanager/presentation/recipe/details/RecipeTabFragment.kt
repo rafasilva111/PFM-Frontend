@@ -229,18 +229,15 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
     }
 
     fun setListViewHeightBasedOnChildrenPREP(myListView: ListView?) {
-        val adapter: ListAdapter = myListView!!.getAdapter()
+        val adapter: ListAdapter = myListView!!.adapter
         var totalHeight = 0
-        val teste = adapter.count
-        val teste2 = adapter.getCount()
-        for (i in 0 until adapter.getCount()) {
+        for (i in 0 until adapter.count) {
             val item: View = adapter.getView(i, null, myListView)
             item.measure(0, 0)
-
-            totalHeight = item.measuredHeight
+            totalHeight  += ((item.measuredHeight/resources.displayMetrics.density) * 0.5).toInt()
         }
-        val params: ViewGroup.LayoutParams = myListView.getLayoutParams()
-        params.height = totalHeight + myListView.getDividerHeight() * (adapter.getCount())
+        val params: ViewGroup.LayoutParams = myListView.layoutParams
+        params.height = totalHeight + 200 + myListView.getDividerHeight() * (adapter.getCount())
         myListView.setLayoutParams(params)
         myListView.requestLayout()
     }
