@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import androidx.lifecycle.Observer
+import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
@@ -44,7 +45,9 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //todo get user in shared preferences
+        //activity?.theme?.applyStyle(R.style.Teste22,true)
+
+
         binding.progressBar.hide()
 
         bindObservers()
@@ -97,12 +100,7 @@ class LoginFragment : Fragment() {
         return isValid
     }
 
-    override fun onResume() {
-        super.onResume()
-        //todo get user token from shared preferences
-        //authViewModel.getUserSession()
-        changeVisib_Menu(false)
-    }
+
 
     private fun changeVisib_Menu(state : Boolean){
         val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
@@ -117,6 +115,20 @@ class LoginFragment : Fragment() {
         toast(error)
     }
 
+
+
+    private fun setButtonVisibility(visibility: Boolean) {
+        if (visibility){
+            binding.loginBtn.isVisible = true
+            binding.progressBar.isVisible = false
+        }
+        else{
+            binding.loginBtn.isVisible = false
+            binding.progressBar.isVisible = true
+        }
+
+    }
+
     private fun bindObservers() {
         authViewModel.userAuthResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
@@ -127,11 +139,13 @@ class LoginFragment : Fragment() {
                         authViewModel.getUserSession()
                     }
                     is NetworkResult.Error -> {
+                        binding.loginBtn.isVisible = true
+                        binding.progressBar.isVisible = false
                         showValidationErrors(it.message.toString())
+                        setButtonVisibility(visibility = true)
                     }
                     is NetworkResult.Loading -> {
-                        binding.loginBtn.isVisible = false
-                        binding.progressBar.isVisible = true
+                        setButtonVisibility(visibility = false)
                     }
                 }
             }
@@ -143,19 +157,17 @@ class LoginFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
                         Handler().postDelayed({
-                            binding.loginBtn.isVisible = true
-                            binding.progressBar.isVisible = false
-                                if (it.data != null) {
-                                        sharedPreference.saveUserSession(it.data)
-                                        findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
-                                }
-                                else{
-                                    Log.d(TAG, "userResponseLiveData Observer: Something went wrong")
-                                }
+                            setButtonVisibility(visibility = true)
+                                findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
+
                         }, LOGIN_TIME)
                     }
                     is NetworkResult.Error -> {
+                        binding.loginBtn.isVisible = true
+                        binding.progressBar.isVisible = false
                         showValidationErrors(it.message.toString())
+                        setButtonVisibility(visibility = true)
+
                     }
                     is NetworkResult.Loading -> {
 
@@ -163,5 +175,20 @@ class LoginFragment : Fragment() {
                 }
             }
         })
+    }
+
+
+    override fun onResume() {
+        requireActivity().window.decorView.systemUiVisibility = 0
+        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
+        changeVisib_Menu(false)
+
+        super.onResume()
+    }
+
+    override fun onPause() {
+        requireActivity().window.decorView.systemUiVisibility = 8192
+        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
+        super.onPause()
     }
 }

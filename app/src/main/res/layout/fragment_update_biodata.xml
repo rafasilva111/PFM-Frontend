@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/fedoka"
-            android:text="Registo"
+            android:text="@string/biodata_update"
             android:textColor="@color/color_3"
             android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -62,7 +62,7 @@
             android:fontFamily="@font/fedoka"
             android:gravity="center"
             android:text="Bio Dados"
-            android:textColor="@color/main_color"
+            android:textColor="@color/bordeux"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -265,11 +265,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_default"
-            android:text="Terminar"
+            android:text="@string/Update"
             android:textAllCaps="false"
             android:textAppearance="@style/SubTitleStyle"
             android:textColor="@color/white"
-            app:backgroundTint="@color/main_color" />
+            app:backgroundTint="@color/bordeux" />
 
         <ProgressBar
             android:id="@+id/register_progress"

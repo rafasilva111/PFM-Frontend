@@ -35,7 +35,7 @@ class IngridientsListingAdapter(
         val view: View
         val vh: ViewHolder
         if (convertView == null) {
-            val layoutInflater = LayoutInflater.from(context)
+            val layoutInflater = LayoutInflater.from(parent?.context)
 
             view = layoutInflater.inflate(R.layout.item_recipe_ingredients_layout, parent, false)
             vh = ViewHolder(view)
@@ -47,8 +47,8 @@ class IngridientsListingAdapter(
             vh = view.tag as ViewHolder
         }
 
-        vh.tvTitle.text = items[position].name
-        // todo falta aqui um campo items[position].quantity
+        vh.tvName.text = items[position].name.capitalize()
+        vh.tvQuant.text = items[position].quantity
 
 
         return view
@@ -59,5 +59,6 @@ class IngridientsListingAdapter(
 
 
 private class ViewHolder(view: View?) {
-    val tvTitle: TextView = view?.findViewById<TextView>(R.id.TV_IngredINFO) as TextView
+    val tvName: TextView = view?.findViewById<TextView>(R.id.nameIngridTV) as TextView
+    val tvQuant: TextView = view?.findViewById<TextView>(R.id.quantIngridTV) as TextView
 }

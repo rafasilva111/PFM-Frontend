@@ -128,10 +128,21 @@ class ProfileFragment : Fragment() {
             // get followers
 
             authViewModel.getUserFollowees()
-            authViewModel.getUserFollowers()
 
         }
 
+    }
+
+    override fun onResume() {
+        requireActivity().window.decorView.systemUiVisibility = 0
+        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        requireActivity().window.decorView.systemUiVisibility = 8192
+        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
+        super.onPause()
     }
 
     private fun showValidationErrors(error: String) {
@@ -168,5 +179,7 @@ class ProfileFragment : Fragment() {
             menu!!.visibility=View.GONE
         }
     }
+
+
 
 }

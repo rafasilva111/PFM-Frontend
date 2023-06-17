@@ -6,8 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListAdapter
+import android.widget.ListView
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeTabBinding
+import com.example.projectfoodmanager.util.RecipeListingFragmentFilters
+import com.google.android.material.chip.Chip
 
 
 class RecipeTabFragment(recipe: Recipe) : Fragment() {
@@ -41,88 +46,77 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
 
         objRecipe?.let { recipe ->
 
-            val teste = recipe.description
             binding.descriptionTV.text = recipe.description
 
-            val itemsAdapterIngrtedients: IngridientsListingAdapter? =
-            this.context?.let { IngridientsListingAdapter(it,recipe.ingredients) }
-            binding.LVIngridientsInfo.adapter = itemsAdapterIngrtedients
-            //setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
+
+            val list: List<String> = recipe.tags
 
 
-        }
-
-
-        //val list : List<String> = recipe.tags
-
-
-        // TODO: Obter a lista ordenada da base de dados
-//        val list_orderByLenght : List<String> = list.sortedBy { it.length }
-//        val mutList : MutableList<String> = list_orderByLenght.toMutableList()
-//        mutList.removeAt(0)
-
-
-        //al with = resources.getDimension(R.dimen.text_margin).toInt()
-
-        //layoutParams.setMargins(margin, margin, margin, margin)
+            // TODO: Obter a lista ordenada da base de dados
+            val mutList: MutableList<String> = list.sortedBy { it.length }.toMutableList()
+            mutList.removeAt(0)
 
 
 
-//        for (item: String in mutList) {
-//
-//            val chip = Chip(context)
-//
-//            chip.apply {
-//                text = item
-//                textSize= 12F
-//                chipEndPadding=0F
-//
-//                textStartPadding=0F
-//                textAlignment=View.TEXT_ALIGNMENT_CENTER
-//
-//                when (item.lowercase()) {
-//                    RecipeListingFragmentFilters.CARNE -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_carne, null)
-//                    RecipeListingFragmentFilters.PEIXE -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_peixe, null)
-//                    RecipeListingFragmentFilters.SOPA -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_sopa, null)
-//                    RecipeListingFragmentFilters.VEGETARIANA -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_vegeteriana, null)
-//                    RecipeListingFragmentFilters.FRUTA -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_fruta, null)
-//                    RecipeListingFragmentFilters.BEBIDAS -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_bebida, null)
-//                    RecipeListingFragmentFilters.SALADA -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_salada, null)
-//                    RecipeListingFragmentFilters.PIZZA -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_pizza, null)
-//                    RecipeListingFragmentFilters.SOBREMESA -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_sobremesa, null)
-//                    RecipeListingFragmentFilters.SANDES -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_sandes, null)
-//                    RecipeListingFragmentFilters.LANCHE -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_lanche, null)
-//                    RecipeListingFragmentFilters.PEQUENO_ALMOCO -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_peq_almoco, null)
-//                    RecipeListingFragmentFilters.JANTAR -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_jantar, null)
-//                    RecipeListingFragmentFilters.ALMOCO -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_almoco, null)
-//                    RecipeListingFragmentFilters.PETISCO -> chipBackgroundColor =
-//                        context.resources.getColorStateList(R.color.catg_petiscos, null)
-//                }
-//
-//                isClickable = false
-//                isCheckable = false
-//                binding.apply {
-//                    CHTags.addView(chip as View)
-//                    chip.setOnCloseIconClickListener {
-//                        CHTags.removeView(chip as View)
-//                    }
-//                }
-//
-//            }
+            binding.numberCategoriasTV.text = mutList.size.toString() + " Categorias"
+            for (item: String in mutList) {
+
+                val chip = Chip(context)
+
+                chip.apply {
+                    text = item
+                    textSize = 12F
+                    chipEndPadding = 0F
+
+                    textStartPadding = 0F
+                    textAlignment = View.TEXT_ALIGNMENT_CENTER
+
+                    when (item.lowercase()) {
+                        RecipeListingFragmentFilters.CARNE -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_carne, null)
+                        RecipeListingFragmentFilters.PEIXE -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_peixe, null)
+                        RecipeListingFragmentFilters.SOPA -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_sopa, null)
+                        RecipeListingFragmentFilters.VEGETARIANA -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_vegeteriana, null)
+                        RecipeListingFragmentFilters.FRUTA -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_fruta, null)
+                        RecipeListingFragmentFilters.BEBIDAS -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_bebida, null)
+                        RecipeListingFragmentFilters.SALADA -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_salada, null)
+                        RecipeListingFragmentFilters.PIZZA -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_pizza, null)
+                        RecipeListingFragmentFilters.SOBREMESA -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_sobremesa, null)
+                        RecipeListingFragmentFilters.SANDES -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_sandes, null)
+                        RecipeListingFragmentFilters.LANCHE -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_lanche, null)
+                        RecipeListingFragmentFilters.PEQUENO_ALMOCO -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_peq_almoco, null)
+                        RecipeListingFragmentFilters.JANTAR -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_jantar, null)
+                        RecipeListingFragmentFilters.ALMOCO -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_almoco, null)
+                        RecipeListingFragmentFilters.PETISCO -> chipBackgroundColor =
+                            context.resources.getColorStateList(R.color.catg_petiscos, null)
+                        else ->
+                            chipBackgroundColor =
+                                context.resources.getColorStateList(R.color.grey, null)
+                    }
+
+                    isClickable = false
+                    isCheckable = false
+                    binding.apply {
+                        CHTags.addView(chip as View)
+                        chip.setOnCloseIconClickListener {
+                            CHTags.removeView(chip as View)
+                        }
+                    }
+
+                }
 //            *//*     chip.text = item.toString()
 //            chip.isCloseIconVisible = true
 //            chip.setBackgroundColor(resources.getColor(R.color.red))
@@ -190,5 +184,64 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
 //                binding.IVArrowPrep.animate().rotationBy(-90F).setDuration(5).start()
 //            }
 //        }
+            }
+
+            binding.numberIngridientsTV.text = recipe.ingredients.size.toString() + " Ingredientes"
+            val itemsAdapterIngrtedients: IngridientsListingAdapter? =
+                this.context?.let { IngridientsListingAdapter(it, recipe.ingredients) }
+            binding.LVIngridientsInfo.adapter = itemsAdapterIngrtedients
+            setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
+
+            binding.numberPreparationTV.text = recipe.preparation.size.toString() + " Passos"
+
+            val itemsAdapterPreparation: PreparationListingAdapter? =
+                this.context?.let { PreparationListingAdapter(it, recipe.preparation) }
+            binding.LVPreparationInfo.adapter = itemsAdapterPreparation
+            setListViewHeightBasedOnChildrenPREP(binding.LVPreparationInfo)
+
+        }
+
+    }
+
+        //al with = resources.getDimension(R.dimen.text_margin).toInt()
+
+        //layoutParams.setMargins(margin, margin, margin, margin)
+
+
+
+
+
+    fun setListViewHeightBasedOnChildren(myListView: ListView?) {
+        val adapter: ListAdapter = myListView!!.getAdapter()
+        var totalHeight = 0
+        val teste = adapter.count
+        val teste2 = adapter.getCount()
+        for (i in 0 until adapter.getCount()) {
+            val item: View = adapter.getView(i, null, myListView)
+            item.measure(0, 0)
+
+            totalHeight += item.measuredHeight
+        }
+        val params: ViewGroup.LayoutParams = myListView.getLayoutParams()
+        params.height = totalHeight + myListView.getDividerHeight() * (adapter.getCount())
+        myListView.setLayoutParams(params)
+        myListView.requestLayout()
+    }
+
+    fun setListViewHeightBasedOnChildrenPREP(myListView: ListView?) {
+        val adapter: ListAdapter = myListView!!.getAdapter()
+        var totalHeight = 0
+        val teste = adapter.count
+        val teste2 = adapter.getCount()
+        for (i in 0 until adapter.getCount()) {
+            val item: View = adapter.getView(i, null, myListView)
+            item.measure(0, 0)
+
+            totalHeight = item.measuredHeight
+        }
+        val params: ViewGroup.LayoutParams = myListView.getLayoutParams()
+        params.height = totalHeight + myListView.getDividerHeight() * (adapter.getCount())
+        myListView.setLayoutParams(params)
+        myListView.requestLayout()
     }
 }

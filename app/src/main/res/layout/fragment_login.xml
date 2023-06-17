@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.auth.LoginFragment"
-    android:background="@color/bordeux">
+    android:background="@color/main_color">
 
     <ImageButton
         android:id="@+id/IBback"
@@ -81,7 +81,7 @@
             android:layout_marginTop="25dp"
             android:fontFamily="@font/fedoka"
             android:text="Login"
-            android:textColor="@color/bordeux"
+            android:textColor="@color/main_color"
             android:textSize="@dimen/title_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -159,7 +159,7 @@
             android:textAppearance="@style/SubTitleStyle"
             android:textColor="@color/white"
             android:visibility="visible"
-            app:backgroundTint="@color/bordeux"
+            app:backgroundTint="@color/main_color"
             app:layout_constraintEnd_toEndOf="@+id/password_TL"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/password_TL"
@@ -173,7 +173,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:elevation="10dp"
-            android:indeterminateTint="@color/bordeux"
+            android:indeterminateTint="@color/main_color"
             android:visibility="invisible"
             android:layout_marginTop="55dp"
             app:layout_constraintStart_toStartOf="@+id/password_TL"
@@ -189,7 +189,7 @@
             android:fontFamily="@font/fedoka"
             android:text="New user? Register Now?"
             android:textAlignment="center"
-            android:textColor="@color/bordeux"
+            android:textColor="@color/main_color"
             android:textSize="14dp"
             app:layout_constraintEnd_toEndOf="@+id/login_btn"
             app:layout_constraintHorizontal_bias="0.0"

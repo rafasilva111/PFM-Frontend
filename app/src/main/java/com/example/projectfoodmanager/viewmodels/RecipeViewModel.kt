@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 
@@ -64,6 +65,15 @@ class RecipeViewModel @Inject constructor (
 
     // LIKE FUNCTION
 
+    val userLikedRecipes: LiveData<Event<NetworkResult<RecipeList>>>
+        get() = repository.userLikedRecipes
+
+    fun getUserLikedRecipes() {
+        viewModelScope.launch {
+            repository.getUserLikedRecipes()
+        }
+    }
+
     fun addLikeOnRecipe(recipeId: Int) {
         viewModelScope.launch {
             repository.addLikeOnRecipe(recipeId)
@@ -96,6 +106,18 @@ class RecipeViewModel @Inject constructor (
     fun removeSaveOnRecipe(recipeId: Int) {
         viewModelScope.launch {
             repository.removeSaveOnRecipe(recipeId)
+        }
+    }
+
+    // COMMENT FUNCTION
+
+
+    val functionGetCommentsOnRecipe: LiveData<Event<NetworkResult<CommentList>>>
+        get() = repository.functionGetCommentsOnRecipe
+
+    fun getCommentsOnRecipe(recipeId: Int) {
+        viewModelScope.launch {
+            repository.getCommentsOnRecipe(recipeId)
         }
     }
 

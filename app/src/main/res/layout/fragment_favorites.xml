@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.favorites.FavoritesFragment"
-    android:background="#F6F6F6">
+    tools:context=".presentation.favorites.FavoritesFragment">
 
 
     <SearchView
@@ -135,7 +134,7 @@
         android:layout_marginEnd="50dp"
         android:visibility="gone"
         app:cardCornerRadius="20dp"
-        app:cardBackgroundColor="@color/bordeux"
+        app:cardBackgroundColor="@color/main_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
