@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentGoalsBinding
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 
@@ -57,7 +58,7 @@ class GoalsFragment : Fragment() {
             //está offline
             val popUpShow = PopUpFragment()
             popUpShow.show((activity as AppCompatActivity).supportFragmentManager,"showUpFrgament")
-            binding.offlineText.visibility = View.VISIBLE
+            //binding.offlineText.visibility = View.VISIBLE
         }
         super.onViewCreated(view, savedInstanceState)
     }
@@ -85,4 +86,7 @@ class GoalsFragment : Fragment() {
         }
         return false
     }
+
+
+
 }

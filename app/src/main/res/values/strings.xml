@@ -69,7 +69,6 @@
     <string name="recipe_saved">Recipe saved.</string>
     <string name="full_name">%1$s %2$s</string>
     <string name="recipe_removed_saved">Save remove</string>
-    <string name="recipe_saved">Recipe saved</string>
 
     <string-array name="gender_array">
         <item>Masculino</item>

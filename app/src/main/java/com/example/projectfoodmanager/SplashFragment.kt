@@ -91,4 +91,16 @@ class SplashFragment : Fragment() {
         })
     }
 
+    override fun onResume() {
+        requireActivity().window.decorView.systemUiVisibility = 0
+        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        val mainActivity = activity as? MainActivity
+        requireActivity().window.decorView.systemUiVisibility = 8192
+        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
+        super.onPause()
+    }
 }

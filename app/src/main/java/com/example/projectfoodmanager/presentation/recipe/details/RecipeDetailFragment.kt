@@ -6,12 +6,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.*
+import android.widget.ImageView
 import android.widget.ListAdapter
 import android.widget.ListView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -70,6 +69,8 @@ class RecipeDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         objRecipe = arguments?.getParcelable("Recipe")
+        //requireActivity().window.statusBarColor =  requireContext().getColor(R.color.transparent)
+
 
         super.onViewCreated(view, savedInstanceState)
 
@@ -714,4 +715,15 @@ class RecipeDetailFragment : Fragment() {
         myListView.requestLayout()
     }
 
+    override fun onResume() {
+        requireActivity().window.decorView.systemUiVisibility = 0
+        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        requireActivity().window.decorView.systemUiVisibility = 8192
+        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
+        super.onPause()
+    }
 }

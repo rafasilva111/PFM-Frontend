@@ -98,6 +98,8 @@ class RecipeListingFragment : Fragment() {
         //observer()
         //todo check for internet connection
 
+        var flags: Int = requireActivity().window.decorView.systemUiVisibility
+
         bindObservers()
 
         if (this::binding.isInitialized){
@@ -135,10 +137,7 @@ class RecipeListingFragment : Fragment() {
         }
 
 
-    override fun onResume() {
-        changeVisibilityMenu(true)
-        super.onResume()
-    }
+
 
     private fun setRecyclerViewScrollListener() {
         scrollListener = object : RecyclerView.OnScrollListener(){

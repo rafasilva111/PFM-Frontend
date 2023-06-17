@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import androidx.lifecycle.Observer
+import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
@@ -44,6 +45,9 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //activity?.theme?.applyStyle(R.style.Teste22,true)
+
+
         binding.progressBar.hide()
 
         bindObservers()
@@ -96,10 +100,7 @@ class LoginFragment : Fragment() {
         return isValid
     }
 
-    override fun onResume() {
-        super.onResume()
-        changeVisib_Menu(false)
-    }
+
 
     private fun changeVisib_Menu(state : Boolean){
         val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
@@ -180,5 +181,20 @@ class LoginFragment : Fragment() {
                 }
             }
         })
+    }
+
+
+    override fun onResume() {
+        requireActivity().window.decorView.systemUiVisibility = 0
+        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
+        changeVisib_Menu(false)
+
+        super.onResume()
+    }
+
+    override fun onPause() {
+        requireActivity().window.decorView.systemUiVisibility = 8192
+        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
+        super.onPause()
     }
 }

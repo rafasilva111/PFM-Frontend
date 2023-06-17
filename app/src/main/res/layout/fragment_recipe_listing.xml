@@ -5,14 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.recipe.RecipeListingFragment"
-    android:background="@color/main_color">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".presentation.recipe.RecipeListingFragment"
-        android:background="@drawable/layout_main">
+    tools:context=".presentation.recipe.RecipeListingFragment">
 
         <ImageView
             android:id="@+id/ivProfilePic"
@@ -399,5 +392,4 @@
         </HorizontalScrollView>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

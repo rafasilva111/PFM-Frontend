@@ -33,4 +33,5 @@ interface RecipeRepository {
     suspend fun removeSaveOnRecipe(recipeId: Int)
     suspend fun addSaveOnRecipe(recipeId: Int)
     suspend fun getUserLikedRecipes()
+    suspend fun getCommentsOnRecipe(recipeId: Int)
 }
