@@ -84,12 +84,21 @@
         android:id="@+id/goalsFragment"
         android:name="com.example.projectfoodmanager.presentation.goals.GoalsFragment"
         android:label="GoalsFragment"
-        tools:layout="@layout/fragment_goals"/>
+        tools:layout="@layout/fragment_goals">
+        <action
+            android:id="@+id/action_goalsFragment_to_updateBiodata"
+            app:destination="@id/updateBiodata"
+            />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.projectfoodmanager.presentation.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/updateBiodata"
+        android:name="com.example.projectfoodmanager.presentation.goals.UpdateBiodata"
+        android:label="UpdateBiodata" />
 
 
 </navigation>

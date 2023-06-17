@@ -1,11 +1,13 @@
-
-package com.example.projectfoodmanager.ui.auth.registerFragments
+package com.example.projectfoodmanager.presentation.goals
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,57 +15,45 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.databinding.FragmentRegisterBiodataBinding
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.databinding.FragmentGoalsBinding
+import com.example.projectfoodmanager.databinding.FragmentUpdateBiodataBinding
+import com.example.projectfoodmanager.util.LOGIN_TIME
 import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.SharedPreference
-import com.example.projectfoodmanager.util.TokenManager
 import com.example.projectfoodmanager.util.toast
-import com.example.projectfoodmanager.util.*
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class BioDataFragment : Fragment() {
-
-
-    @Inject
-    lateinit var tokenManager: TokenManager
-
-    @Inject
-    lateinit var sharedPreference: SharedPreference
-
-    val TAG: String = "BioDataFragment"
-    lateinit var binding: FragmentRegisterBiodataBinding
+class UpdateBiodata : Fragment() {
+    lateinit var binding: FragmentUpdateBiodataBinding
     val authViewModel: AuthViewModel by viewModels()
-    var objUser: UserRequest? = null
-    private var fileUri: String? = null
-    private var activityLevel : Float = 0.0f
-
-
+    val TAG: String = "ProfileFragment"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentRegisterBiodataBinding.inflate(layoutInflater)
+        savedInstanceState: Bundle?,
+
+        ): View? {
+        changeVisibilityMenu(state = false)
+        binding = FragmentUpdateBiodataBinding.inflate(layoutInflater)
+
+        bindObservers()
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        bindObservers()
-        binding.backIB.setOnClickListener {
-            // TODO: alertar que antes de voltar atras
 
+        binding.backIB.setOnClickListener {
             val dialogBinding : View = layoutInflater.inflate(R.layout.dialog_confirmation_generic, null);
 
             val myDialog = Dialog(requireContext())
@@ -73,7 +63,7 @@ class BioDataFragment : Fragment() {
             myDialog.setCancelable(true)
             myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-            dialogBinding.findViewById<TextView>(R.id.tvDescription).text = "Are you sure you to back?"
+            dialogBinding.findViewById<TextView>(R.id.tvDescription).text = "Are you sure?"
             dialogBinding.findViewById<TextView>(R.id.tvTitle).text = "Atenção"
 
             dialogBinding.findViewById<Button>(R.id.btn_conf_Yes).setOnClickListener {
@@ -87,83 +77,69 @@ class BioDataFragment : Fragment() {
             }
 
             myDialog.show()
-
-        }
-        objUser = arguments?.getParcelable("user")
-        fileUri = arguments?.getString("uri")
-        if (objUser==null)
-            Log.d(TAG, "Something went wrong whit user object")
-
-
-        binding.activityLevelRg.setOnCheckedChangeListener { _, checkedId ->
-            when(checkedId){
-                R.id.op1_RB-> activityLevel= 1.2F
-                R.id.op2_RB-> activityLevel= 1.375F
-                R.id.op3_RB-> activityLevel= 1.465F
-                R.id.op4_RB-> activityLevel= 1.55F
-                R.id.op5_RB-> activityLevel= 1.725F
-                R.id.op6_RB-> activityLevel= 1.9F
-            }
-
         }
 
-
-        binding.registerBtn.setOnClickListener {
-            if (validation()) {
-                if (fileUri != null){
-                    val path = "${FireStorage.user_profile_images}${UUID.randomUUID().toString() +".jpg"}"
-                    Firebase.storage.reference.child(path).putFile(Uri.parse(fileUri!!))
-                        .addOnSuccessListener {
-                            Log.d(TAG, "uploadImageToFirebase: success")
-                            val user = getUserRequest()
-                            user.img_source = path
-                            authViewModel.registerUser(user)
-                        }
-                        .addOnFailureListener(OnFailureListener { e ->
-                            Log.d(TAG, "uploadImageToFirebase: "+e)
-                        })
-                }
-                else
-                    authViewModel.registerUser(getUserRequest())
-            }
-        }
-    }
-
-
-    private fun bindObservers() {
-        authViewModel.userRegisterLiveData.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        findNavController().navigate(R.id.action_registerFragment_to_home_navigation)
-                        toast(getString(R.string.user_registered_successfully))
-                    }
-                    is NetworkResult.Error -> {
-                        toast(it.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                        // todo falta aqui um loading bar
-                    }
+        if (isOnline(requireContext())){
+            binding.registerBtn.setOnClickListener {
+                if(validation()){
+                    authViewModel.updateUser(getUserRequest())
                 }
             }
         }
+        else{
+            //está offline
+            val popUpShow = PopUpFragment()
+            popUpShow.show((activity as AppCompatActivity).supportFragmentManager,"showUpFrgament")
+        }
+        super.onViewCreated(view, savedInstanceState)
     }
 
 
 
-    fun getUserRequest():UserRequest {
+    private fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities != null) {
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                return true
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                return true
+            }
+        }
+        return false
+    }
 
+    private fun changeVisibilityMenu(state : Boolean){
+        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        if(state){
+            menu!!.visibility=View.VISIBLE
+        }else{
+            menu!!.visibility=View.GONE
+        }
+    }
+
+    fun getUserRequest(): UserRequest {
+        var activityLevel = 0.0F
+        when(binding.activityLevelRg.checkedRadioButtonId){
+            R.id.op1_RB-> activityLevel= 1.2F
+            R.id.op2_RB-> activityLevel= 1.375F
+            R.id.op3_RB-> activityLevel= 1.465F
+            R.id.op4_RB-> activityLevel= 1.55F
+            R.id.op5_RB-> activityLevel= 1.725F
+            R.id.op6_RB-> activityLevel= 1.9F
+        }
         return UserRequest(
-            first_name = objUser!!.first_name,
-            last_name = objUser!!.last_name,
-            email = objUser!!.email,
-            birth_date = objUser!!.birth_date,
-            password = objUser!!.password,
-            sex = objUser!!.sex,
             height = binding.heightEt.text.toString().toFloat(),
-            weight = binding.heightEt.text.toString().toFloat(),
-            activity_level = activityLevel
-
+            weight = binding.weightEt.text.toString().toFloat(),
+            activity_level = activityLevel,
             )
     }
 
@@ -258,6 +234,30 @@ class BioDataFragment : Fragment() {
             binding.errorActivityLevelTV.visibility=View.INVISIBLE
         }
         return isValid
+    }
+
+    private fun bindObservers() {
+
+        authViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner, Observer { userSessionResponse ->
+            userSessionResponse.getContentIfNotHandled()?.let{
+
+                when (it) {
+                    is NetworkResult.Success -> {
+                        toast("Dados atualizados com sucesso")
+                        findNavController().navigateUp()
+
+                    }
+                    is NetworkResult.Error -> {
+                        toast("Dados não atualizados, alguma coisa se passou.")
+                    }
+                    is NetworkResult.Loading -> {
+                        // show loading bar
+                        //todo falta aqui uma loading bar
+
+                    }
+                }
+            }
+        })
     }
 
 }

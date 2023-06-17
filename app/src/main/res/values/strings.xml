@@ -68,6 +68,12 @@
     <string name="recipe_removed_from_saves">Save revomed.</string>
     <string name="recipe_saved">Recipe saved.</string>
     <string name="full_name">%1$s %2$s</string>
+    <string name="goals_biodata_confirmation">You don\'t have you\'re biodata insered, and it is required to proceed, do you want to insert?</string>
+    <string name="biodata_update">Atualização</string>
+    <string name="warning">Atenção</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="Update">Atualizar</string>
     <string name="recipe_removed_saved">Save remove</string>
 
     <string-array name="gender_array">

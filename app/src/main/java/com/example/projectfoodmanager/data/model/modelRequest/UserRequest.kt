@@ -8,23 +8,23 @@ import java.io.Serializable
 @Parcelize
 data class UserRequest(
     @SerializedName("first_name")
-    val first_name: String="",
+    val first_name: String? = null,
     @SerializedName("last_name")
-    val last_name: String="",
+    val last_name: String? = null,
     @SerializedName("birth_date")
-    val birth_date: String="",
+    val birth_date: String? = null,
     @SerializedName("email")
-    val email: String="",
+    val email: String?= null,
     @SerializedName("password")
-    val password: String="",
+    val password: String?= null,
     @SerializedName("img_source")
-    var img_source: String="",
+    var img_source: String? = null,
     @SerializedName("activity_level")
-    val activity_level: Float= 0.00F,
+    val activity_level: Float? = 0.00F,
     @SerializedName("height")
-    val height: Float=-1F,
+    val height: Float?=-1F,
     @SerializedName("sex")
-    val sex: String="",
+    val sex: String?= null,
     @SerializedName("weight")
-    val weight: Float=-1F,
+    val weight: Float? =-1F,
 ) : Serializable, Parcelable
