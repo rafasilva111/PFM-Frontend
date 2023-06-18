@@ -2,33 +2,42 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.recipe.details.NutritionTabFragment">
 
 
     <LinearLayout
+        android:id="@+id/linearLayout6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <!-- ENERGIA -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:layout_margin="20dp">
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/layout_badge_nutrition"
+                android:backgroundTint="#FFFBA9"
                 android:fontFamily="@font/fedoka"
+                android:padding="7dp"
                 android:text="Energia"
+                android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textSize="12sp"/>
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -48,39 +57,250 @@
 
                 <ProgressBar
                     android:id="@+id/energia_PB"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="5dp"
+                    android:indeterminateOnly="false"
+                    android:progressDrawable="@drawable/custom_progress_1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="5dp"/>
+                    app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/energiaDose_TV"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="0 g"
-                android:textAlignment="center"/>
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/dose" />
+
+                <TextView
+                    android:id="@+id/energiaDose_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="0 g"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
 
         </LinearLayout>
 
-        <!-- GORDURA -->
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+
+        <!-- PROTEINA -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:layout_margin="20dp">
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
+                android:background="@drawable/layout_badge_nutrition"
+                android:backgroundTint="#D6FDFF"
                 android:fontFamily="@font/fedoka"
-                android:text="Gordura"
+                android:padding="7dp"
+                android:text="Proteina"
+                android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textSize="12sp"/>
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/proteina_percTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:text="0%"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/proteina_PB"
+                    app:layout_constraintEnd_toEndOf="@+id/proteina_PB"
+                    app:layout_constraintStart_toStartOf="@+id/proteina_PB"
+                    app:layout_constraintTop_toTopOf="@+id/proteina_PB" />
+
+                <ProgressBar
+                    android:id="@+id/proteina_PB"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="5dp"
+                    android:indeterminateOnly="false"
+                    android:progressDrawable="@drawable/custom_progress_1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/dose" />
+
+                <TextView
+                    android:id="@+id/proteinaDose_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="0 g"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <!-- FIBRA -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_badge_nutrition"
+                android:backgroundTint="#FFF3D6"
+                android:fontFamily="@font/fedoka"
+                android:padding="7dp"
+                android:text="Fibra"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/fibra_percTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:text="0%"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/fibra_PB"
+                    app:layout_constraintEnd_toEndOf="@+id/fibra_PB"
+                    app:layout_constraintStart_toStartOf="@+id/fibra_PB"
+                    app:layout_constraintTop_toTopOf="@+id/fibra_PB" />
+
+                <ProgressBar
+                    android:id="@+id/fibra_PB"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="5dp"
+                    android:indeterminateOnly="false"
+                    android:progressDrawable="@drawable/custom_progress_3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/dose" />
+
+                <TextView
+                    android:id="@+id/fibraDose_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="0 g"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- GORDURA -->
+
+    <LinearLayout
+        android:id="@+id/linearLayout8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_badge_nutrition"
+                android:backgroundTint="#D9F6CE"
+                android:fontFamily="@font/fedoka"
+                android:padding="7dp"
+                android:text="Gordura"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -100,21 +320,41 @@
 
                 <ProgressBar
                     android:id="@+id/gordura_PB"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="5dp"
+                    android:indeterminateOnly="false"
+                    android:progressDrawable="@drawable/custom_progress_4"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="5dp"/>
+                    app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/gorduraDose_TV"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="0 g"
-                android:textAlignment="center"/>
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/dose" />
+
+                <TextView
+                    android:id="@+id/gorduraDose_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="0 g"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -122,56 +362,260 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="30dp"
+            android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="10dp"
-            android:layout_margin="20dp">
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/layout_badge_nutrition"
+                android:backgroundTint="#D9F6CE"
                 android:fontFamily="@font/fedoka"
-                android:text="Hidratos de Carbono"
+                android:padding="7dp"
+                android:text="dos quais saturados"
+                android:textAlignment="center"
+                android:textColor="#252525"
+                android:textSize="11sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/gorduraSaturados_percTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:text="0%"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/gorduraSaturados_PB"
+                    app:layout_constraintEnd_toEndOf="@+id/gorduraSaturados_PB"
+                    app:layout_constraintStart_toStartOf="@+id/gorduraSaturados_PB"
+                    app:layout_constraintTop_toTopOf="@+id/gorduraSaturados_PB" />
+
+                <ProgressBar
+                    android:id="@+id/gorduraSaturados_PB"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="5dp"
+                    android:indeterminateOnly="false"
+                    android:progressDrawable="@drawable/custom_progress_4"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/dose" />
+
+                <TextView
+                    android:id="@+id/gorduraSaturadosDose_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="0 g"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- HIDRATOS -->
+    <LinearLayout
+        android:id="@+id/linearLayout9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout8">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_badge_nutrition"
+                android:backgroundTint="#FFD7D7"
+                android:fontFamily="@font/fedoka"
+                android:padding="7dp"
+                android:text="Hidratos de carbono"
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textSize="12sp"/>
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/hidratos_percTV"
+                    android:id="@+id/hidratosCarbono_percTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
                     android:text="0%"
                     android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/hidratos_PB"
-                    app:layout_constraintEnd_toEndOf="@+id/hidratos_PB"
-                    app:layout_constraintStart_toStartOf="@+id/hidratos_PB"
-                    app:layout_constraintTop_toTopOf="@+id/hidratos_PB" />
+                    app:layout_constraintBottom_toBottomOf="@+id/hidratosCarbono_PB"
+                    app:layout_constraintEnd_toEndOf="@+id/hidratosCarbono_PB"
+                    app:layout_constraintStart_toStartOf="@+id/hidratosCarbono_PB"
+                    app:layout_constraintTop_toTopOf="@+id/hidratosCarbono_PB" />
 
                 <ProgressBar
-                    android:id="@+id/hidratos_PB"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/hidratosCarbono_PB"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="5dp"
+                    android:indeterminateOnly="false"
+                    android:progressDrawable="@drawable/custom_progress_5"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="5dp"/>
+                    app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/hidratosDose_TV"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="0 g"
-                android:textAlignment="center"/>
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/dose" />
+
+                <TextView
+                    android:id="@+id/hidratosCarbonoDose_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="0 g"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
 
         </LinearLayout>
 
+        <!-- HIDRATOS DE CARBONO -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:layout_marginEnd="30dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_badge_nutrition"
+                android:backgroundTint="#FFD7D7"
+                android:fontFamily="@font/fedoka"
+                android:padding="7dp"
+                android:text="dos quais açúcares"
+                android:textAlignment="center"
+                android:textColor="#252525"
+                android:textSize="11sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/hidratosAcucares_percTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:text="0%"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/hidratosAcucares_PB"
+                    app:layout_constraintEnd_toEndOf="@+id/hidratosAcucares_PB"
+                    app:layout_constraintStart_toStartOf="@+id/hidratosAcucares_PB"
+                    app:layout_constraintTop_toTopOf="@+id/hidratosAcucares_PB" />
+
+                <ProgressBar
+                    android:id="@+id/hidratosAcucares_PB"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="5dp"
+                    android:indeterminateOnly="false"
+                    android:progressDrawable="@drawable/custom_progress_5"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/dose" />
+
+                <TextView
+                    android:id="@+id/hidratosAcucaresDose_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="0 g"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
+        android:text="Leia atentamente o rótulo dos produtos que usar como ingredientes, estes valores são apenas estimativas e devem ser tomadas como tal."
+        android:textAlignment="center"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
+        app:layout_constraintVertical_bias="0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -284,7 +284,7 @@ class RecipeListingFragment : Fragment() {
             }
         }
         else{
-            binding.offlineText.visibility = View.VISIBLE
+            binding.offlineTV.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.GONE
         }
     }
@@ -324,6 +324,15 @@ class RecipeListingFragment : Fragment() {
                             binding.progressBar.hide()
 
                             currentPage = it.data!!._metadata.current_page
+
+                            if(it.data.result.isEmpty()){
+                                binding.offlineTV.text = "Não existem receitas..."
+                                binding.offlineTV.visibility=View.VISIBLE
+                            }else{
+                                binding.offlineTV.visibility=View.GONE
+
+                            }
+
 
                             // check next page to failed missed calls to api
                             nextPage = it.data._metadata.next != null

@@ -182,7 +182,7 @@
                 android:focusableInTouchMode="true"/>
 
             <TextView
-                android:id="@+id/offlineText"
+                android:id="@+id/offlineTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Estás offline..."

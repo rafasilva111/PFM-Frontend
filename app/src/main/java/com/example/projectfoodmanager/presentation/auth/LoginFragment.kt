@@ -189,6 +189,7 @@ class LoginFragment : Fragment() {
     override fun onPause() {
         requireActivity().window.decorView.systemUiVisibility = 8192
         requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
+
         super.onPause()
     }
 }

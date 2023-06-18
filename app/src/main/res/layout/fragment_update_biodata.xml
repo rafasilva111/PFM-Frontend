@@ -62,7 +62,7 @@
             android:fontFamily="@font/fedoka"
             android:gravity="center"
             android:text="Bio Dados"
-            android:textColor="@color/bordeux"
+            android:textColor="@color/main_color"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -269,7 +269,7 @@
             android:textAllCaps="false"
             android:textAppearance="@style/SubTitleStyle"
             android:textColor="@color/white"
-            app:backgroundTint="@color/bordeux" />
+            app:backgroundTint="@color/main_color" />
 
         <ProgressBar
             android:id="@+id/register_progress"
