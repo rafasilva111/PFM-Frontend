@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="background_1">#EDEDED</color>
+<!--    <color name="background_1">#EDEDED</color>-->
+    <color name="background_1">#FFFFFF</color>
     <color name="color_1">#F5E1CE</color>
     <color name="color_2">#E8C39E</color>
     <color name="color_3">#F4F4F4</color>
