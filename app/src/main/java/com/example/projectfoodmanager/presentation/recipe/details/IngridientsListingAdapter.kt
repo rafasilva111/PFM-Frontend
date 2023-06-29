@@ -47,8 +47,8 @@ class IngridientsListingAdapter(
             vh = view.tag as ViewHolder
         }
 
-        vh.tvName.text = items[position].name.capitalize()
-        vh.tvQuant.text = items[position].quantity
+        vh.tvName.text = items[position].ingredient.name.capitalize()
+        vh.tvQuant.text = items[position].quantity_original
 
 
         return view

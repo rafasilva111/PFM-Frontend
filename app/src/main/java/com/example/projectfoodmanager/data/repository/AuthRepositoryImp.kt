@@ -11,6 +11,7 @@ import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourc
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 
@@ -51,43 +52,52 @@ class AuthRepositoryImp @Inject constructor(
     override suspend fun loginUser(email: String, password: String) {
         _userAuthResponseLiveData.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making login request.")
-        val response =remoteDataSource.loginUser(email,password)
-        if (response.isSuccessful && response.body() != null) {
-            Log.i(TAG, "loginUser: request made was sucessfull.")
-            _userAuthResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
-        }
-        else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "loginUser: request made was sucessfull. \n"+errorObj)
-            _userAuthResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
-        }
-        else{
-            _userAuthResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        try {
+            val response =remoteDataSource.loginUser(email,password)
+            if (response.isSuccessful && response.body() != null) {
+                Log.i(TAG, "loginUser: request made was sucessfull.")
+                _userAuthResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+            }
+            else if(response.errorBody()!=null){
+                val errorObj = response.errorBody()!!.charStream().readText()
+                Log.i(TAG, "loginUser: request made was sucessfull. \n"+errorObj)
+                _userAuthResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+            }
+            else{
+                _userAuthResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            }
+        } catch (e:SocketTimeoutException){
+            _userAuthResponseLiveData.postValue(Event(NetworkResult.Error("No connection to host server...")))
+            return
         }
     }
 
-    private val _userOldLiveData = MutableLiveData<Event<NetworkResult<User>>>()
+    private val _userLiveData = MutableLiveData<Event<NetworkResult<User>>>()
     override val userLiveData: LiveData<Event<NetworkResult<User>>>
-        get() = _userOldLiveData
+        get() = _userLiveData
 
     override suspend fun getUserSession() {
-        _userOldLiveData.postValue(Event(NetworkResult.Loading()))
+        _userLiveData.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "getUserSession: making login request.")
-        val response =remoteDataSource.getUserAuth()
 
-
-        if (response.isSuccessful && response.body() != null) {
-            Log.i(TAG, "getUserSession: request made was sucessfull.")
-            sharedPreference.saveUserSession(response.body()!!)
-            _userOldLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
-        }
-        else if(response.errorBody()!=null){
-            Log.i(TAG, "getUserSession: request made was not sucessfull."+response.errorBody()!!.charStream().readText())
-            val errorObj = response.errorBody()!!.charStream().readText()
-            _userOldLiveData.postValue(Event(NetworkResult.Error(errorObj)))
-        }
-        else{
-            _userOldLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        try {
+            val response =remoteDataSource.getUserAuth()
+            if (response.isSuccessful && response.body() != null) {
+                Log.i(TAG, "getUserSession: request made was sucessfull.")
+                sharedPreference.saveUserSession(response.body()!!)
+                _userLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+            }
+            else if(response.errorBody()!=null){
+                Log.i(TAG, "getUserSession: request made was not sucessfull."+response.errorBody()!!.charStream().readText())
+                val errorObj = response.errorBody()!!.charStream().readText()
+                _userLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+            }
+            else{
+                _userLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            }
+        }catch (e:SocketTimeoutException){
+            _userLiveData.postValue(Event(NetworkResult.Error("No connection to host server...")))
+            return
         }
     }
 
@@ -121,7 +131,7 @@ class AuthRepositoryImp @Inject constructor(
     override suspend fun updateUser(userRequest: UserRequest) {
         _userUpdateResponseLiveData.postValue(Event(NetworkResult.Loading()))
         val response = remoteDataSource.updateUser(userRequest)
-        if (response.isSuccessful && response.code() == 204) {
+        if (response.isSuccessful && response.code() == 200) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             sharedPreference.updateUserSession(response.body()!!)
             _userUpdateResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))

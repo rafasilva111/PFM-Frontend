@@ -3,6 +3,8 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
+import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 
@@ -227,28 +229,55 @@ class RecipeRepositoryImp @Inject constructor(
         }
     }
 
-    private val _functionGetCommentsOnRecipe = MutableLiveData<Event<NetworkResult<CommentList>>>()
-    override val functionGetCommentsOnRecipe: LiveData<Event<NetworkResult<CommentList>>>
-        get() = _functionGetCommentsOnRecipe
+    /// COMMENTS SECTION
 
-    override suspend fun getCommentsOnRecipe(recipeId: Int) {
-        _functionGetCommentsOnRecipe.postValue(Event(NetworkResult.Loading()))
+    private val _functionGetCommentsOnRecipePaginated = MutableLiveData<Event<NetworkResult<CommentList>>>()
+    override val functionGetCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
+        get() = _functionGetCommentsOnRecipePaginated
+
+    override suspend fun getCommentsOnRecipePaginated(recipeId: Int,page: Int) {
+        _functionGetCommentsOnRecipePaginated.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.getCommentsByRecipe(recipeId)
+        val response =remoteDataSource.getCommentsByRecipePaginated(recipeId,page)
         if (response.isSuccessful && response.body() != null) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             Log.i(TAG, "handleResponse: response body -> ${response.body()}")
-            _functionGetCommentsOnRecipe.postValue(Event(NetworkResult.Success(
+            _functionGetCommentsOnRecipePaginated.postValue(Event(NetworkResult.Success(
                 response.body()!!
             )))
         }
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()
             Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
-            _functionGetCommentsOnRecipe.postValue(Event(NetworkResult.Error(errorObj)))
+            _functionGetCommentsOnRecipePaginated.postValue(Event(NetworkResult.Error(errorObj)))
         }
         else{
-            _functionGetCommentsOnRecipe.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            _functionGetCommentsOnRecipePaginated.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+    private val _functionCreateCommentOnRecipe = MutableLiveData<Event<NetworkResult<Comment>>>()
+    override val functionCreateCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
+        get() = _functionCreateCommentOnRecipe
+
+    override suspend fun createCommentOnRecipe(recipeId: Int,comment: CreateCommentRequest) {
+        _functionCreateCommentOnRecipe.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
+        val response =remoteDataSource.createComments(recipeId,comment)
+        if (response.isSuccessful && response.body() != null) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            Log.i(TAG, "handleResponse: response body -> ${response.body()}")
+            _functionCreateCommentOnRecipe.postValue(Event(NetworkResult.Success(
+                response.body()!!
+            )))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
+            _functionCreateCommentOnRecipe.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _functionCreateCommentOnRecipe.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
     }
 

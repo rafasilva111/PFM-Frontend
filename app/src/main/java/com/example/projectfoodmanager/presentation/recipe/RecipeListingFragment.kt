@@ -61,7 +61,7 @@ class RecipeListingFragment : Fragment() {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
                 // use pos to reset current page to pos page, so it will refresh the pos page
-                refreshPage =  ceil((pos+1).toFloat()/5).toInt()
+                refreshPage =  ceil((pos+1).toFloat()/PaginationNumber.DEFAULT).toInt()
                 findNavController().navigate(R.id.action_recipeListingFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("Recipe",item)
                 })
@@ -86,7 +86,6 @@ class RecipeListingFragment : Fragment() {
                 }
 
             },
-            this.recipeViewModel,
             sharedPreference
         )
     }
@@ -110,10 +109,9 @@ class RecipeListingFragment : Fragment() {
 
             val userSession: User? = sharedPreference.getUserSession()
             if (userSession != null && userSession.img_source.isNotEmpty()){
-                val imgRef = Firebase.storage.reference.child(userSession.img_source)
+                val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${userSession.img_source}")
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                    val imageURL = Uri.toString()
-                    Glide.with(binding.ivProfilePic.context).load(imageURL).into(binding.ivProfilePic)
+                    Glide.with(binding.ivProfilePic.context).load(Uri.toString()).into(binding.ivProfilePic)
                 }
                     .addOnFailureListener {
                         Glide.with(binding.ivProfilePic.context)
@@ -306,8 +304,8 @@ class RecipeListingFragment : Fragment() {
                         if (refreshPage != 0) {
                             binding.progressBar.hide()
                             val lastIndex =
-                                if (recipeList.size >= 5) (refreshPage * 5) - 1 else recipeList.size - 1
-                            var firstIndex = if (recipeList.size >= 5) lastIndex - 4 else 0
+                                if (recipeList.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) - 1 else recipeList.size - 1
+                            var firstIndex = if (recipeList.size >= PaginationNumber.DEFAULT) lastIndex - 4 else 0
 
                             recipeList.subList(firstIndex, lastIndex + 1).clear()
 
@@ -320,7 +318,8 @@ class RecipeListingFragment : Fragment() {
 
                             //reset control variables
                             refreshPage = 0
-                        } else {
+                        }
+                        else {
                             binding.progressBar.hide()
 
                             currentPage = it.data!!._metadata.current_page

@@ -29,7 +29,8 @@
         tools:layout="@layout/fragment_recipe_detail" >
         <action
             android:id="@+id/action_receitaDetailFragment_to_receitaCommentsFragment"
-            app:destination="@id/receitaCommentsFragment" />
+            app:destination="@id/receitaCommentsFragment"
+            app:popUpTo="@id/receitaDetailFragment" />
         <action
             android:id="@+id/action_receitaDetailFragment_to_recipeListingFragment"
             app:destination="@id/recipeListingFragment"

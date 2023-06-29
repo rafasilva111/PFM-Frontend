@@ -4,8 +4,9 @@ package com.example.projectfoodmanager.data.repository.datasource
 import com.example.projectfoodmanager.data.model.modelRequest.CommentRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
+import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
@@ -40,14 +41,14 @@ interface RemoteDataSource {
 	suspend fun removeSave(recipeId: Int): Response<Unit>
 
 	//comments
-	suspend fun createComments(comments: CommentRequest): Response<CommentResponse>
-	suspend fun getCommentsByUser(userId: String): Response<CommentResponse>
-	suspend fun getCommentsByRecipe(recipeId: Int): Response<CommentList>
-	suspend fun updateComments(userId: String, comments : CommentRequest): Response<CommentResponse>
-	suspend fun deleteComments(recipeId: String, userId: String): Response<String>
+	suspend fun createComments(recipeId: Int,comment: CreateCommentRequest): Response<Comment>
+	suspend fun getCommentsByUser(userId: Int): Response<Comment>
+	suspend fun getCommentsByRecipePaginated(recipeId: Int,page: Int): Response<CommentList>
+	suspend fun updateComment(commentId: Int, comment: Comment): Response<Comment>
+	suspend fun deleteComment(commentId: Int): Response<Unit>
 
 	//followers
-	suspend fun createFollower( userSenderId: String, userReceiverId: String): Response<FollowerResponse>
+	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>
 	suspend fun getFollowers(): Response<FollowList>
 	suspend fun getFolloweds(): Response<FollowList>
 

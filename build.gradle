@@ -17,7 +17,7 @@ buildscript {
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.44.2'
         classpath 'com.android.tools.build:gradle:3.4.3'
         classpath 'com.google.firebase:firebase-appdistribution-gradle:4.0.0'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.5'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.6'
 
     }
 }
@@ -30,6 +30,7 @@ plugins {
 allprojects {
 
     repositories {
+        gradlePluginPortal()
         google()  // Google's Maven repository
         mavenCentral()  // Maven Central repository
         maven { url "https://jitpack.io" }

@@ -5,8 +5,9 @@ import com.example.projectfoodmanager.data.api.ApiInterface
 import com.example.projectfoodmanager.data.model.modelRequest.CommentRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
+import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
@@ -95,24 +96,24 @@ class RemoteDataSourceImpl @Inject constructor(
 	}
 
 	//Comments
-	override suspend fun createComments(comment : CommentRequest): Response<CommentResponse> {
-		return apiInterface.createComments(comment = comment)
+	override suspend fun createComments(recipeId: Int,comment : CreateCommentRequest): Response<Comment> {
+		return apiInterface.createComments(recipeId= recipeId,comment = comment)
 	}
-	override suspend fun getCommentsByRecipe(recipeId: Int): Response<CommentList> {
-		return apiInterface.getCommentsByRecipe(recipeId = recipeId)
+	override suspend fun getCommentsByRecipePaginated(recipeId: Int,page: Int): Response<CommentList> {
+		return apiInterface.getCommentsByRecipe(recipeId = recipeId,page = page)
 	}
-	override suspend fun getCommentsByUser(userId: String): Response<CommentResponse> {
+	override suspend fun getCommentsByUser(userId: Int): Response<Comment> {
 		return apiInterface.getCommentsByUser(userId = userId)
 	}
-	override suspend fun updateComments(userId: String,comment : CommentRequest): Response<CommentResponse> {
-		return apiInterface.updateComments(userId=userId,comment = comment)
+	override suspend fun updateComment(commentId: Int,comment : Comment): Response<Comment> {
+		return apiInterface.updateComments(commentId=commentId,comment = comment)
 	}
-	override suspend fun deleteComments(userId: String,recipeId : String): Response<String> {
-		return apiInterface.deleteComments(userId = userId, recipeId = recipeId)
+	override suspend fun deleteComment(commentId: Int): Response<Unit> {
+		return apiInterface.deleteComments(commentId= commentId)
 	}
 
 	//Followers
-	override suspend fun createFollower( userSenderId: String, userReceiverId: String): Response<FollowerResponse> {
+	override suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse> {
 		return apiInterface.createFollower(userSenderId = userSenderId,userReceiverId = userReceiverId)
 	}
 	override suspend fun getFollowers(): Response<FollowList> {

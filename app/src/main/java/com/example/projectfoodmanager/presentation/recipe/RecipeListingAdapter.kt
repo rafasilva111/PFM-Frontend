@@ -17,7 +17,6 @@ class RecipeListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit,
     val onLikeClicked: (Recipe, Boolean) -> Unit,
     val onSaveClicked: (Recipe, Boolean) -> Unit,
-    private val recipeViewModel: RecipeViewModel,
     private val sharedPreference: SharedPreference
 ) : RecyclerView.Adapter<RecipeListingAdapter.MyViewHolder>() {
 

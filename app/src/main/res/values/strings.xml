@@ -75,6 +75,10 @@
     <string name="description">Description</string>
     <string name="Update">Atualizar</string>
     <string name="recipe_removed_saved">Save remove</string>
+    <string name="username">%1$s %2$s</string>
+    <string name="Camera">Camera</string>
+    <string name="Gallery">Gallery</string>
+    <string name="escolhe_uma_forma">Escolhe uma forma:</string>
 
     <string-array name="gender_array">
         <item>Masculino</item>

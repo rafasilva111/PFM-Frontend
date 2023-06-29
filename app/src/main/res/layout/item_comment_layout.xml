@@ -7,81 +7,172 @@
     android:outlineProvider="none"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:id="@+id/CV_comment">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/CL_Comment"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="visible">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/img_autor_CV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/img_autor_CV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        app:cardCornerRadius="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:id="@+id/IV_Author"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/img_profile"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/TV_c_Author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/fedoka"
+            android:text="Nome"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
+            app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
+
+        <TextView
+            android:id="@+id/TV_c_Data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/TV_c_Message"
+            app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
+
+        <TextView
+            android:id="@+id/TV_c_Message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/layout_comment"
+            android:backgroundTint="#E8E8E8"
+            android:text="Comentario"
+            android:paddingStart="15dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="15dp"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/TV_c_Author"
+            app:layout_constraintTop_toBottomOf="@+id/TV_c_Author" />
 
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/img_profile" />
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/ic_like"
+            app:layout_constraintBottom_toBottomOf="@+id/TV_c_NLikes"
+            app:layout_constraintEnd_toStartOf="@+id/TV_c_NLikes"
+            app:layout_constraintTop_toTopOf="@+id/TV_c_NLikes" />
 
-    </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/TV_c_NLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="0 gostos"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="@+id/TV_c_Message"
+            app:layout_constraintTop_toBottomOf="@+id/TV_c_Message" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/TV_c_Author"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:fontFamily="@font/fedoka"
-        android:text="Nome"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
-        app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/CL_Comment_Owner"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="gone">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/img_autor_CV_Owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/TV_c_Data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Data"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/TV_c_Message"
-        app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
+            <ImageView
+                android:id="@+id/IV_Author_Owner"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/img_profile" />
 
-    <TextView
-        android:id="@+id/TV_c_Message"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/layout_comment"
-        android:backgroundTint="#E8E8E8"
-        android:text="Comentario"
-        android:paddingStart="15dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="15dp"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/TV_c_Author"
-        app:layout_constraintTop_toBottomOf="@+id/TV_c_Author" />
+        </androidx.cardview.widget.CardView>
 
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="5dp"
-        android:src="@drawable/ic_like"
-        app:layout_constraintBottom_toBottomOf="@+id/TV_c_NLikes"
-        app:layout_constraintEnd_toStartOf="@+id/TV_c_NLikes"
-        app:layout_constraintTop_toTopOf="@+id/TV_c_NLikes" />
+        <TextView
+            android:id="@+id/TV_c_Author_Owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-    <TextView
-        android:id="@+id/TV_c_NLikes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="0 gostos"
-        android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="@+id/TV_c_Message"
-        app:layout_constraintTop_toBottomOf="@+id/TV_c_Message" />
+            android:layout_marginEnd="44dp"
+            android:fontFamily="@font/fedoka"
+            android:text="Nome"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/img_autor_CV_Owner"
+            app:layout_constraintTop_toTopOf="@+id/img_autor_CV_Owner" />
+
+        <TextView
+            android:id="@+id/TV_c_Message_Owner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/layout_comment"
+            android:backgroundTint="#E8E8E8"
+            android:paddingStart="15dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="15dp"
+            android:paddingBottom="10dp"
+            android:text="Comentario"
+            android:textSize="13sp"
+
+            app:layout_constraintEnd_toEndOf="@+id/TV_c_Author_Owner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TV_c_Author_Owner" />
+        <TextView
+            android:id="@+id/TV_c_Data_Owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/TV_c_Message_Owner"
+            app:layout_constraintTop_toTopOf="@+id/img_autor_CV_Owner" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/ic_like"
+            app:layout_constraintBottom_toBottomOf="@+id/TV_c_NLikes_Owner"
+            app:layout_constraintStart_toEndOf="@+id/TV_c_NLikes_Owner"
+            app:layout_constraintTop_toTopOf="@+id/TV_c_NLikes_Owner" />
+
+        <TextView
+            android:id="@+id/TV_c_NLikes_Owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="0 gostos"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@+id/TV_c_Message_Owner"
+            app:layout_constraintTop_toBottomOf="@+id/TV_c_Message_Owner" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

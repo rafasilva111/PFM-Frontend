@@ -1,16 +1,12 @@
 package com.example.projectfoodmanager.presentation.recipe.details
 
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import android.widget.ListAdapter
-import android.widget.ListView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -28,8 +24,8 @@ import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
+import com.google.android.material.badge.ExperimentalBadgeUtils
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,24 +47,23 @@ class RecipeDetailFragment : Fragment() {
     lateinit var sharedPreference: SharedPreference
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        observer()
+        bindObservers()
 
-        if (this::binding.isInitialized){
+        if (this::binding.isInitialized) {
             return binding.root
-        }else {
+        } else {
             // Inflate the layout for this fragment
             binding = FragmentRecipeDetailNewBinding.inflate(layoutInflater)
 
             return binding.root
         }
     }
-
+    @ExperimentalBadgeUtils
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         objRecipe = arguments?.getParcelable("Recipe")
         //requireActivity().window.statusBarColor =  requireContext().getColor(R.color.transparent)
@@ -76,9 +71,30 @@ class RecipeDetailFragment : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
-        if(objRecipe!=null){
-            if (isOnline(view.context)){
-                recipeViewModel.getCommentsOnRecipe(objRecipe!!.id)
+        if (objRecipe != null) {
+            if (isOnline(view.context)) {
+
+                binding.commentsFB.viewTreeObserver.addOnGlobalLayoutListener(object :
+                    ViewTreeObserver.OnGlobalLayoutListener {
+
+                    override fun onGlobalLayout() {
+                        val badgeDrawable = BadgeDrawable.create(requireContext())
+                        badgeDrawable.number = objRecipe!!.comments
+                        badgeDrawable.horizontalOffset = 30
+                        badgeDrawable.verticalOffset = 20
+
+                        BadgeUtils.attachBadgeDrawable(
+                            badgeDrawable,
+                            binding.commentsFB,
+                            null
+                        )
+
+                        // Remove the listener once it's no longer needed
+                        binding.commentsFB.viewTreeObserver.removeOnGlobalLayoutListener(
+                            this
+                        )
+                    }
+                })
             }
 
             setUI(objRecipe!!)
@@ -91,119 +107,113 @@ class RecipeDetailFragment : Fragment() {
     private fun setUI(recipe: Recipe) {
 
 
+        // comments
 
-            // TODO: Inserir imagem do autor da receita
-            binding.AutorTV.text = recipe.company
-            binding.IVSource.setOnClickListener {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
-                startActivity(browserIntent)
+        val bundle = Bundle()
+        bundle.putInt("recipe_id", recipe.id)
+        bundle.putInt("user_id", recipe.id)
+
+        binding.commentsFB.setOnClickListener {
+            findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment,bundle)
+        }
+
+
+
+
+
+        // TODO: Inserir imagem do autor da receita
+        binding.AutorTV.text = recipe.company
+        binding.IVSource.setOnClickListener {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
+            startActivity(browserIntent)
+        }
+        binding.TVRef.text = recipe.id.toString()
+
+        val imgRef = Firebase.storage.reference.child(recipe.img_source)
+        imgRef.downloadUrl.addOnSuccessListener { Uri ->
+            val imageURL = Uri.toString()
+            Glide.with(binding.IVRecipe.context).load(imageURL).into(binding.IVRecipe)
+        }
+
+        //info
+        binding.TVTitle.text = recipe.title
+        binding.TVDate.text = recipe.created_date
+        binding.radtingRecipe.rating = recipe.source_rating.toFloat()
+        binding.ratingMedTV.text = recipe.source_rating.toString()
+
+        binding.numberLikeTV.text = recipe.likes.toString()
+
+        // check for user likes
+        val user: User? = sharedPreference.getUserSession()
+
+        if (user != null) {
+            if (user!!.checkIfLiked(recipe) != -1) {
+                binding.likeIB.setImageResource(R.drawable.ic_like_active)
+            } else
+                binding.likeIB.setImageResource(R.drawable.ic_like_black)
+        }
+
+        binding.likeIB.setOnClickListener {
+            if (sharedPreference.getUserSession()!!.checkIfLiked(recipe) == -1) {
+                recipeViewModel.addLikeOnRecipe(recipe.id)
+            } else {
+                recipeViewModel.removeLikeOnRecipe(recipe.id)
             }
-            binding.TVRef.text = recipe.id.toString()
+        }
 
-            val imgRef = Firebase.storage.reference.child(recipe.img_source)
-            imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                val imageURL = Uri.toString()
-                Glide.with(binding.IVRecipe.context).load(imageURL).into(binding.IVRecipe)
+
+        // check for user saves
+
+        if (user != null) {
+            if (user!!.checkIfSaved(recipe) != -1) {
+                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
+            } else
+                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
+        }
+
+        binding.favoritesIB.setOnClickListener {
+            if (sharedPreference.getUserSession()!!.checkIfSaved(recipe) == -1) {
+                recipeViewModel.addSaveOnRecipe(recipe.id)
+            } else {
+                recipeViewModel.removeSaveOnRecipe(recipe.id)
+            }
+        }
+
+
+        binding.TVTime.text = recipe.time
+        binding.TVDifficulty.text = recipe.difficulty
+        binding.TVPortion.text = recipe.portion
+
+        // tabs
+
+        binding.recipeDetailTab.removeAllTabs()
+
+        val fragmentAdapter = FragmentAdapter(requireActivity().supportFragmentManager, lifecycle, recipe)
+
+        binding.recipeDetailTab.addTab(binding.recipeDetailTab.newTab().setText("Recipe"))
+        binding.recipeDetailTab.addTab(binding.recipeDetailTab.newTab().setText("Nutrition"))
+
+
+        binding.recipeInfoViewPager.adapter = fragmentAdapter
+        // enables back from comments
+        binding.recipeInfoViewPager.isSaveEnabled = false
+
+        binding.recipeDetailTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab != null)
+                    binding.recipeInfoViewPager.currentItem = tab.position
             }
 
-            //info
-            binding.TVTitle.text = recipe.title
-            binding.TVDate.text = recipe.created_date
-            binding.radtingRecipe.rating = recipe.source_rating.toFloat()
-            binding.ratingMedTV.text = recipe.source_rating.toString()
-
-            binding.numberLikeTV.text = recipe.likes.toString()
-
-            // check for user likes
-            val user: User? = sharedPreference.getUserSession()
-
-            if (user!=null){
-                if(user!!.checkIfLiked(recipe) != -1){
-                    binding.likeIB.setImageResource(R.drawable.ic_like_active)
-                }
-                else
-                    binding.likeIB.setImageResource(R.drawable.ic_like_black)
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
             }
 
-            binding.likeIB.setOnClickListener {
-                if(sharedPreference.getUserSession()!!.checkIfLiked(recipe) == -1) {
-                    recipeViewModel.addLikeOnRecipe(recipe.id)
-                }
-                else
-                {
-                    recipeViewModel.removeLikeOnRecipe(recipe.id)
-                }
+            override fun onTabReselected(tab: TabLayout.Tab?) {
             }
 
+        })
 
-
-            // check for user saves
-
-            if (user!=null){
-                if(user!!.checkIfSaved(recipe) != -1){
-                    binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
-                }
-                else
-                    binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
-            }
-
-            binding.favoritesIB.setOnClickListener {
-                if(sharedPreference.getUserSession()!!.checkIfSaved(recipe) == -1) {
-                    recipeViewModel.addSaveOnRecipe(recipe.id)
-                }
-                else
-                {
-                    recipeViewModel.removeSaveOnRecipe(recipe.id)
-                }
-            }
-
-
-            binding.TVTime.text = recipe.time
-            binding.TVDifficulty.text = recipe.difficulty
-            binding.TVPortion.text = recipe.portion
-
-            //tabs
-            //val recipeTabFragment = RecipeTabFragment(recipe)
-            //val nutritionTabFragment = NutritionTabFragment(recipe)
-
-
-            val fragmentAdapter = FragmentAdapter(requireActivity().supportFragmentManager,lifecycle,recipe)
-
-            binding.recipeDetailTab.addTab(binding.recipeDetailTab.newTab().setText("Recipe"))
-            binding.recipeDetailTab.addTab(binding.recipeDetailTab.newTab().setText("Nutrition"))
-
-
-            //fragmentAdapter.addFragment(recipeTabFragment, "Recipe")
-            //fragmentAdapter.addFragment(nutritionTabFragment, "Nutrition")
-
-            binding.recipeInfoViewPager.adapter = fragmentAdapter
-            //binding.recipeDetailTab.setupWithViewPager(binding.recipeInfoViewPager)
-//
-//            TabLayoutMediator(binding.recipeDetailTab,binding.recipeInfoViewPager){ tab,position->
-//                when(position){
-//                    0->{
-//                        tab.text="Recipe"
-//                    }
-//                    1->{
-//                        tab.text="Nutrition"
-//                    }
-//                }
-//            }
-            binding.recipeDetailTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    if( tab != null)
-                        binding.recipeInfoViewPager.currentItem = tab.position
-                }
-
-                override fun onTabUnselected(tab: TabLayout.Tab?) {
-                }
-
-                override fun onTabReselected(tab: TabLayout.Tab?) {
-                }
-
-            })
-
-        binding.recipeInfoViewPager.registerOnPageChangeCallback(object:ViewPager2.OnPageChangeCallback(){
+        binding.recipeInfoViewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 binding.recipeDetailTab.selectTab(binding.recipeDetailTab.getTabAt(position))
@@ -211,14 +221,12 @@ class RecipeDetailFragment : Fragment() {
         })
 
 
-            binding.backIB.setOnClickListener {
-                findNavController().navigateUp()
-            }
-
-
-
-
+        binding.backIB.setOnClickListener {
+            findNavController().navigateUp()
         }
+
+
+    }
 
     private fun updateUI(recipe: Recipe) {
 
@@ -227,399 +235,40 @@ class RecipeDetailFragment : Fragment() {
 
         binding.numberLikeTV.text = recipe.likes.toString()
 
-        if (user!=null){
-            if(user!!.checkIfLiked(recipe) != -1){
+        if (user != null) {
+            if (user!!.checkIfLiked(recipe) != -1) {
                 binding.likeIB.setImageResource(R.drawable.ic_like_active)
-            }
-            else
+            } else
                 binding.likeIB.setImageResource(R.drawable.ic_like_black)
         }
 
         // check for user saves
 
-        if (user!=null){
-            if(user!!.checkIfSaved(recipe) != -1){
+        if (user != null) {
+            if (user!!.checkIfSaved(recipe) != -1) {
                 binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
-            }
-            else
+            } else
                 binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
         }
 
     }
 
-   /* private fun updateUI() {
 
-        objRecipe = arguments?.getParcelable("Recipe")
-
-        objRecipe?.let { recipe ->
-            binding.TVTitle.text = recipe.title
-            binding.TVDate.text = recipe.created_date
-            binding.TVTime.text = recipe.time
-            binding.TVDifficulty.text = recipe.difficulty
-            binding.TVPortion.text = recipe.portion
-
-            // TODO: Falta implementar o rating externo
-            //  binding.tvRateExt.text = "Classifcação: " + recipe.remote_rating
-            //  binding.tvRateInt.text = "not implemented"
-            binding.TVDescriptionInfo.text = recipe.description
-
-            val list : List<String> = recipe.tags
-            //val list : List<String> = recipe.tags.split("\\")
-
-
-            // TODO: Obter a lista ordenada da base de dados
-            val list_orderByLenght : List<String> = recipe.tags.sortedBy { it.length }
-            val mutList : MutableList<String> = list_orderByLenght.toMutableList()
-            mutList.removeAt(0)
-
-
-            //al with = resources.getDimension(R.dimen.text_margin).toInt()
-
-            //layoutParams.setMargins(margin, margin, margin, margin)
-
-
-
-            for (item: String in mutList) {
-
-                val chip = Chip(context)
-
-                chip.apply {
-                    text = item
-                    textSize= 12F
-                    chipEndPadding=0F
-
-                    textStartPadding=0F
-                    textAlignment=View.TEXT_ALIGNMENT_CENTER
-
-                    when (item.lowercase()) {
-                        RecipeListingFragmentFilters.CARNE -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_carne, null)
-                        RecipeListingFragmentFilters.PEIXE -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_peixe, null)
-                        RecipeListingFragmentFilters.SOPA -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_sopa, null)
-                        RecipeListingFragmentFilters.VEGETARIANA -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_vegeteriana, null)
-                        RecipeListingFragmentFilters.FRUTA -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_fruta, null)
-                        RecipeListingFragmentFilters.BEBIDAS -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_bebida, null)
-                        RecipeListingFragmentFilters.SALADA -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_salada, null)
-                        RecipeListingFragmentFilters.PIZZA -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_pizza, null)
-                        RecipeListingFragmentFilters.SOBREMESA -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_sobremesa, null)
-                        RecipeListingFragmentFilters.SANDES -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_sandes, null)
-                        RecipeListingFragmentFilters.LANCHE -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_lanche, null)
-                        RecipeListingFragmentFilters.PEQUENO_ALMOCO -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_peq_almoco, null)
-                        RecipeListingFragmentFilters.JANTAR -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_jantar, null)
-                        RecipeListingFragmentFilters.ALMOCO -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_almoco, null)
-                        RecipeListingFragmentFilters.PETISCO -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_petiscos, null)
-                    }
-
-                    isClickable = false
-                    isCheckable = false
-                    binding.apply {
-                        CHTags.addView(chip as View)
-                        chip.setOnCloseIconClickListener {
-                            CHTags.removeView(chip as View)
-                        }
-                    }
-
-                }
-                *//*     chip.text = item.toString()
-                     chip.isCloseIconVisible = true
-                     chip.setBackgroundColor(resources.getColor(R.color.red))
-                     chip.setChipIconResource(R.drawable.ic_like_red)
-                     chip.setOnCloseIconClickListener{
-                         binding.CHTags.addView(chip)
-                     }*//*
-
-            }
-
-
-            //List_Ingredients
-            binding.LVIngridientsInfo.isClickable = false
-            val itemsAdapterIngrtedients: IngridientsListingAdapter? =
-                this.context?.let { IngridientsListingAdapter(it,recipe.ingredients) }
-            binding.LVIngridientsInfo.adapter = itemsAdapterIngrtedients
-            setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
-
-            binding.LLContIngredients.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-            binding.CVTitleIngredients.setOnClickListener {
-
-                val state = if(binding.LVIngridientsInfo.visibility== View.GONE) View.VISIBLE else View.GONE
-
-
-                TransitionManager.beginDelayedTransition(binding.LLContIngredients, AutoTransition())
-                binding.LVIngridientsInfo.visibility= state
-
-
-
-                if(state==View.VISIBLE){
-                    binding.IVArrowIngrid.animate().rotationBy(90F).setDuration(5).start()
-                    binding.SRLDetails.fullScroll(View.FOCUS_DOWN)
-                }else{
-                    binding.IVArrowIngrid.animate().rotationBy(-90F).setDuration(5).start()
-
-                }
-
-            }
-
-
-
-            //List_Preparation
-            binding.LVPreparationInfo.isClickable = false
-            val itemsAdapterPreparation: PreparationListingAdapter? =
-                this.context?.let { PreparationListingAdapter(it,recipe.preparation) }
-            binding.LVPreparationInfo.adapter = itemsAdapterPreparation
-
-            setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
-
-            binding.LLContPreparation.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-
-            binding.CVTitlePreparation.setOnClickListener{
-                val state = if(binding.LVPreparationInfo.visibility== View.GONE) View.VISIBLE else View.GONE
-
-
-                TransitionManager.beginDelayedTransition(binding.LLContPreparation, AutoTransition())
-                binding.LVPreparationInfo.visibility= state
-
-
-
-                if(state==View.VISIBLE){
-                    binding.IVArrowPrep.animate().rotationBy(90F).setDuration(5).start()
-                    //   binding.SRLDetails.fullScroll(View.AUTOFILL_TYPE_LIST)
-                }else{
-                    binding.IVArrowPrep.animate().rotationBy(-90F).setDuration(5).start()
-                }
-            }
-
-            //Nutrition
-
-            if(recipe.nutrition_informations!=null){
-
-                //-->Resume nutrition
-                binding.TVRDoseEnergia.text=recipe.nutrition_informations.energia
-                binding.TVRPercEnergia.text=recipe.nutrition_informations.energia_perc
-                binding.TVRDoseGordura.text=recipe.nutrition_informations.gordura
-                binding.TVRPercGordura.text=recipe.nutrition_informations.gordura_perc
-                binding.TVRDoseGordSat.text=recipe.nutrition_informations.gordura_saturada
-                binding.TVRPercGordSat.text=recipe.nutrition_informations.gordura_saturada_perc
-
-                //-->Table_Nutrition
-                binding.TVDoseEnergia.text=recipe.nutrition_informations.energia
-                binding.TVPercEnergia.text=recipe.nutrition_informations.energia_perc
-                binding.TVDoseGordura.text=recipe.nutrition_informations.gordura
-                binding.TVPercGordura.text=recipe.nutrition_informations.gordura_perc
-                binding.TVDoseGordSat.text=recipe.nutrition_informations.gordura_saturada
-                binding.TVPercGordSat.text=recipe.nutrition_informations.gordura_saturada_perc
-                binding.TVDoseHCarbono.text=recipe.nutrition_informations.hidratos_carbonos
-
-                //binding.TVPercHCarbono.text=recipe.nutrition_informations.get(NutritionTable.HIDRATOS_CARBONO_PERC)
-                binding.TVDoseHCAcucar.text=recipe.nutrition_informations.hidratos_carbonos_acucares
-                binding.TVPercHCAcucar.text=recipe.nutrition_informations.hidratos_carbonos_acucares_perc
-                binding.TVDoseFibra.text=recipe.nutrition_informations.fibra
-                binding.TVPercFibra.text=recipe.nutrition_informations.fibra_perc
-                binding.TVDoseProteina.text=recipe.nutrition_informations.proteina
-
-                //binding.TVPercProteina.text=recipe.nutrition_informations.get(NutritionTable.PROTEINA_PERC)
-
-                binding.LLContNutrition.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-
-                binding.CVTitleNutrition.setOnClickListener{
-                    val state = if(binding.LLContNutrition.visibility== View.GONE) View.VISIBLE else View.GONE
-
-
-                    TransitionManager.beginDelayedTransition(binding.LLContNutrition, AutoTransition())
-                    binding.LLContNutrition.visibility= state
-
-
-
-                    if(state==View.VISIBLE){
-                        binding.IVArrowNutri.animate().rotationBy(90F).setDuration(5).start()
-                        //   binding.SRLDetails.fullScroll(View.AUTOFILL_TYPE_LIST)
-                    }else{
-                        binding.IVArrowNutri.animate().rotationBy(-90F).setDuration(5).start()
-                    }
-                }
-
-            }
-
-
-
-            // TODO: Inserir imagem do autor da receita
-            binding.TVAutor.text=recipe.company
-            binding.IVSource.setOnClickListener {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.img_source))
-                startActivity(browserIntent)
-            }
-            binding.TVRef.text = "Ref: " + recipe.id
-
-            val imgRef = Firebase.storage.reference.child(recipe.img_source)
-            imgRef.downloadUrl.addOnSuccessListener {Uri->
-                val imageURL = Uri.toString()
-                Glide.with(binding.IVRecipe.context).load(imageURL).into(binding.IVRecipe)
-            }
-
-
-            // TODO: Falta registar o numero de comentarios
-            // TODO: Falta registar o numero de gostos
-            binding.CVComments.setOnClickListener {
-                //findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment)
-            }
-
-            //like function
-
-            *//*authModel.getUserSession_old { user ->
-                if (user != null) {
-                    if ( user.liked_recipes.indexOf(recipe)!=-1){
-                        binding.likeIB.setImageResource(R.drawable.ic_like_red)
-                    }
-                }
-            }*//*
-
-
-            *//*binding.likeIB.setOnClickListener {
-                authModel.getUserSession_old { user ->
-                    if (user != null){
-                        if ( user.liked_recipes.indexOf(recipe)!=-1){
-                            authModel.removeLikeOnRecipe(recipe)
-                            viewModel.removeLikeOnRecipe(user.id,recipe)
-                            binding.likeIB.setImageResource(R.drawable.ic_like_black)
-                            toast("Removido o seu gosto da receita...")
-                        }
-                        else{
-                            authModel.addLikeOnRecipe(recipe)
-                            viewModel.addLikeOnRecipe(user.id,recipe)
-                            binding.likeIB.setImageResource(R.drawable.ic_like_red)
-                            toast("Adicionado o seu gosto à receita.")
-                        }
-                    }
-                }
-            }
-
-            //favorite function
-
-            authModel.getUserSession_old { user ->
-                if (user != null) {
-                    if ( user.favorite_recipes.indexOf(recipe)!=-1){
-                        binding.favoritesIB.setImageResource(R.drawable.ic_favorito_white)
-                    }
-                }
-            }
-
-            binding.favoritesIB.setOnClickListener {
-                authModel.getUserSession_old { user ->
-                    if (user != null){
-                        if ( user.favorite_recipes.indexOf(recipe)!=-1){
-                            authModel.removeFavoriteRecipe(recipe)
-                            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
-                            toast("Receita removida dos favoritos.")
-                        }
-                        else{
-                            authModel.addFavoriteRecipe(recipe)
-                            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_white)
-                            toast("Receita adicionada aos favoritos.")
-                        }
-                    }
-                }
-            }*//*
-
-            binding.backIB.setOnClickListener {
-                findNavController().navigateUp()
-            }
-
-
-        }
-    }*/
-    /*  private fun observer() {
-          authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
-              when (state) {
-                  is UiState.Loading -> {
-                      //todo
-                  }
-                  is UiState.Failure -> {
-
-                      toast(state.error)
-                  }
-                  is UiState.Success -> {
-                      toast(state.data.second)
-                  }
-              }
-          }
-      }*/
-  /*  private fun observer() {
-        authModel.updateFavoriteList.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is UiState.Loading -> {
-                    //todo
-                }
-                is UiState.Failure -> {
-
-                    toast(state.error)
-                }
-                is UiState.Success -> {
-                    toast(state.data.second)
-                }
-            }
-        }
-    }*/
-
-    private fun observer() {
-
-        recipeViewModel.functionGetCommentsOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let{
-                when (it) {
-                    is NetworkResult.Success -> { it
-
-                        binding.commentsFB.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-                            @SuppressLint("UnsafeOptInUsageError")
-                            override fun onGlobalLayout() {
-                                val badgeDrawable = BadgeDrawable.create(requireContext())
-                                val teste = it.data?._metadata?.total_items
-                                badgeDrawable.number = it.data?._metadata?.total_items ?: 0
-                                badgeDrawable.horizontalOffset = 30
-                                badgeDrawable.verticalOffset = 20
-
-                                BadgeUtils.attachBadgeDrawable(badgeDrawable, binding.commentsFB, null)
-
-                                // Remove the listener once it's no longer needed
-                                binding.commentsFB.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                            }
-                        })
-
-                    }
-                    is NetworkResult.Error -> {
-                        Log.d(TAG, "observer: " + it.message.toString())
-
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        })
-
+    private fun bindObservers() {
 
         // Like function
 
 
         recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let{
+            it.getContentIfNotHandled()?.let {
                 when (it) {
-                    is NetworkResult.Success -> { it
+                    is NetworkResult.Success -> {
+                        it
                         toast(getString(R.string.recipe_liked))
 
                         // updates local list
-                        if (objRecipe!!.id == it.data){
-                            objRecipe!!.likes ++
+                        if (objRecipe!!.id == it.data) {
+                            objRecipe!!.likes++
                             sharedPreference.addLikeToUserSession(objRecipe!!)
                             updateUI(objRecipe!!)
                         }
@@ -635,14 +284,15 @@ class RecipeDetailFragment : Fragment() {
         })
 
         recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let{
+            it.getContentIfNotHandled()?.let {
                 when (it) {
-                    is NetworkResult.Success -> { it
+                    is NetworkResult.Success -> {
+                        it
                         toast(getString(R.string.recipe_removed_liked))
 
                         // updates local list
-                        if (objRecipe!!.id == it.data){
-                            objRecipe!!.likes --
+                        if (objRecipe!!.id == it.data) {
+                            objRecipe!!.likes--
                             sharedPreference.removeLikeFromUserSession(objRecipe!!)
                             updateUI(objRecipe!!)
                         }
@@ -660,13 +310,14 @@ class RecipeDetailFragment : Fragment() {
         // save function
 
         recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let{
+            it.getContentIfNotHandled()?.let {
                 when (it) {
-                    is NetworkResult.Success -> { it
+                    is NetworkResult.Success -> {
+                        it
                         toast(getString(R.string.recipe_saved))
 
                         // updates local list
-                        if (objRecipe!!.id == it.data){
+                        if (objRecipe!!.id == it.data) {
                             sharedPreference.addSaveToUserSession(objRecipe!!)
                             updateUI(objRecipe!!)
                         }
@@ -682,13 +333,14 @@ class RecipeDetailFragment : Fragment() {
         })
 
         recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let{
+            it.getContentIfNotHandled()?.let {
                 when (it) {
-                    is NetworkResult.Success -> { it
+                    is NetworkResult.Success -> {
+                        it
                         toast(getString(R.string.recipe_removed_saved))
 
                         // updates local list
-                        if (objRecipe!!.id == it.data){
+                        if (objRecipe!!.id == it.data) {
                             sharedPreference.removeSaveFromUserSession(objRecipe!!)
                             updateUI(objRecipe!!)
                         }
@@ -710,43 +362,15 @@ class RecipeDetailFragment : Fragment() {
     }
 
 
-    private fun parse_hash_maps(ingredients: HashMap<String, String>): ArrayList<String> {
-
-        var arrayList = ArrayList<String>()
-        for (item in ingredients.keys){
-
-            arrayList.add(item+": " + ingredients.get(item))
-        }
-        return arrayList
-    }
-
-
-
-
-    fun setListViewHeightBasedOnChildren(myListView: ListView?) {
-        val adapter: ListAdapter = myListView!!.getAdapter()
-        var totalHeight = 0
-        for (i in 0 until adapter.getCount()) {
-            val item: View = adapter.getView(i, null, myListView)
-            item.measure(0, 0)
-
-            totalHeight += item.measuredHeight
-        }
-        val params: ViewGroup.LayoutParams = myListView.getLayoutParams()
-        params.height = totalHeight + myListView.getDividerHeight() * (adapter.getCount() - 1)
-        myListView.setLayoutParams(params)
-        myListView.requestLayout()
-    }
-
     override fun onResume() {
         requireActivity().window.decorView.systemUiVisibility = 0
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
+        requireActivity().window.statusBarColor = requireContext().getColor(R.color.main_color)
         super.onResume()
     }
 
     override fun onPause() {
         requireActivity().window.decorView.systemUiVisibility = 8192
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
+        requireActivity().window.statusBarColor = requireContext().getColor(R.color.background_1)
         super.onPause()
     }
 }

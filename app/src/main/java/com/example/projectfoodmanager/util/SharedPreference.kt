@@ -64,6 +64,5 @@ class SharedPreference @Inject constructor(
 
     fun updateUserSession(user: User) {
         saveUserSession(user)
-
     }
 }
