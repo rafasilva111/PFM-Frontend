@@ -1,10 +1,11 @@
 package com.example.projectfoodmanager.data.api
 
-import com.example.projectfoodmanager.data.model.modelRequest.CommentRequest
+
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.data.model.modelResponse.CommentResponse
+import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
@@ -79,24 +80,27 @@ interface ApiInterface {
 
 
     //comments
-    @POST("/comments")
-    suspend fun createComments(@Body comment : CommentRequest): Response<CommentResponse>
+    @POST("$API_V1_BASE_URL/comment")
+    suspend fun createComments(@Query("recipe_id") recipeId: Int,@Body comment : CreateCommentRequest): Response<Comment>
+
+    @GET("$API_V1_BASE_URL/comment")
+    suspend fun getComment(@Query("userId") commentId: Int): Response<Comment>
 
     @GET("$API_V1_BASE_URL/comment/list")
-    suspend fun getCommentsByRecipe(@Query("recipe_id") recipeId: Int): Response<CommentList>
+    suspend fun getCommentsByRecipe(@Query("recipe_id") recipeId: Int,@Query("page") page: Int): Response<CommentList>
 
-    @GET("/comments")
-    suspend fun getCommentsByUser(@Query("userId") userId: String): Response<CommentResponse>
+    @GET("$API_V1_BASE_URL/comment")
+    suspend fun getCommentsByUser(@Query("userId") userId: Int): Response<Comment>
 
-    @PUT("/comments")
-    suspend fun updateComments(@Query("userId") userId: String,@Body comment : CommentRequest): Response<CommentResponse>
+    @PUT("$API_V1_BASE_URL/comment")
+    suspend fun updateComments(@Query("commentId") commentId: Int,@Body comment : Comment): Response<Comment>
 
-    @DELETE("/comments")
-    suspend fun deleteComments(@Query("recipeId") recipeId: String,@Query("userId") userId: String): Response<String>
+    @DELETE("$API_V1_BASE_URL/comment")
+    suspend fun deleteComments(@Query("commentId") commentId: Int): Response<Unit>
 
     //followers
-    @POST("/followers")
-    suspend fun createFollower(@Query("userSenderId") userSenderId: String,@Query("userReceiverId") userReceiverId: String): Response<FollowerResponse>
+    @POST("$API_V1_BASE_URL/followers")
+    suspend fun createFollower(@Query("userSenderId") userSenderId: Int,@Query("userReceiverId") userReceiverId: Int): Response<FollowerResponse>
 
     @GET("$API_V1_BASE_URL/follow/list/followers")
     suspend fun getFollowers(): Response<FollowList>

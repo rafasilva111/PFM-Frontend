@@ -83,6 +83,7 @@ class SplashFragment : Fragment() {
                     is NetworkResult.Error -> {
                         findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                         tokenManager.deleteToken()
+                        
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -98,7 +99,6 @@ class SplashFragment : Fragment() {
     }
 
     override fun onPause() {
-        val mainActivity = activity as? MainActivity
         requireActivity().window.decorView.systemUiVisibility = 8192
         requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
         super.onPause()

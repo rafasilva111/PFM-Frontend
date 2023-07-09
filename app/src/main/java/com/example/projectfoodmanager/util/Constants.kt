@@ -7,7 +7,7 @@ val LOGIN_TIME:Long = 2000
 
 object Constants {
     // TODO: Primeira coisa a fazer quando testar
-    const val BASE_URL = "http://192.168.1.104:5000/"
+    const val BASE_URL = "http://192.168.1.110:5000/"
     //const val BASE_URL = "http://35.180.118.91/"
     const val USER_TOKEN = "user_token"
     const val USER_SESSION = "user_session"
@@ -39,6 +39,11 @@ object FireStorePaginations{
     const val RECIPE_LIMIT: Long = 5
 }
 
+object PaginationNumber{
+    const val DEFAULT: Int = 5
+    const val COMMENTS: Int = 20
+}
+
 object SharedPrefConstants {
     const val LOCAL_SHARED_PREF = "local_shared_pref"
     const val USER_SESSION = "user_session"
@@ -46,10 +51,6 @@ object SharedPrefConstants {
     var METADATA = "metadata"
 }
 
-object MetadataConstants{
-    const val FIRST_TIME_LOGIN = "first_time_login"
-
-}
 
 
 object RecipeListingFragmentFilters {

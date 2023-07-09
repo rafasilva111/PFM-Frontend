@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
+import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
@@ -26,7 +28,7 @@ class RecipeViewModel @Inject constructor (
 
 ): ViewModel() {
 
-    val TAG: String = "RecipeViewModel"
+    private val TAG: String = "RecipeViewModel"
 
     private val _recipes = MutableLiveData<UiState<List<Recipe>>>()
     val recipe: LiveData<UiState<List<Recipe>>>
@@ -112,14 +114,25 @@ class RecipeViewModel @Inject constructor (
     // COMMENT FUNCTION
 
 
-    val functionGetCommentsOnRecipe: LiveData<Event<NetworkResult<CommentList>>>
-        get() = repository.functionGetCommentsOnRecipe
+    val functionGetCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
+        get() = repository.functionGetCommentsOnRecipePaginated
 
-    fun getCommentsOnRecipe(recipeId: Int) {
+    fun getCommentsOnRecipePaginated(recipeId: Int,page: Int) {
         viewModelScope.launch {
-            repository.getCommentsOnRecipe(recipeId)
+            repository.getCommentsOnRecipePaginated(recipeId,page)
         }
     }
+
+    val functionCreateCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
+        get() = repository.functionCreateCommentOnRecipe
+
+    fun createCommentOnRecipe(recipeId: Int, comment: CreateCommentRequest) {
+        viewModelScope.launch {
+            repository.createCommentOnRecipe(recipeId,comment)
+        }
+    }
+
+
 
 
 }

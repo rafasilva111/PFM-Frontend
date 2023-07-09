@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.recipe.CommentsFragment"
+    tools:context=".presentation.recipe.comments.CommentsFragment"
     android:background="@color/color_3">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,11 +55,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout6">
 
-        <ListView
-            android:id="@+id/LV_comments"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@android:color/transparent" />
+            android:divider="@android:color/transparent"
+            android:listSelector="@android:color/transparent"
+
+            />
 
     </ScrollView>
 
@@ -85,6 +88,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:id="@+id/IVcommentBottonImage"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:src="@drawable/img_profile" />
@@ -92,6 +96,7 @@
         </androidx.cardview.widget.CardView>
 
         <EditText
+            android:id="@+id/ETcomment"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
@@ -105,12 +110,12 @@
             android:scrollHorizontally="false"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button"
+            app:layout_constraintEnd_toStartOf="@+id/publishButton"
             app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
             app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/publishButton"
             android:layout_width="85dp"
             android:layout_height="50dp"
             android:layout_marginEnd="10dp"

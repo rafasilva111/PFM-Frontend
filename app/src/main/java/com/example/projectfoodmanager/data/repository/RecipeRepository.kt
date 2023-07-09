@@ -1,6 +1,8 @@
 package com.example.projectfoodmanager.data.repository
 
 import androidx.lifecycle.LiveData
+import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
+import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 
@@ -23,8 +25,8 @@ interface RecipeRepository {
     val functionRemoveSaveOnRecipe: LiveData<Event<NetworkResult<Int>>>
 
     // comment
-    val functionGetCommentsOnRecipe: LiveData<Event<NetworkResult<CommentList>>>
-
+    val functionGetCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
+    val functionCreateCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
 
     suspend fun getRecipesPaginated(page: Int)
     suspend fun getRecipesByTitleAndTags(title: String, searchPage: Int)
@@ -33,5 +35,6 @@ interface RecipeRepository {
     suspend fun removeSaveOnRecipe(recipeId: Int)
     suspend fun addSaveOnRecipe(recipeId: Int)
     suspend fun getUserLikedRecipes()
-    suspend fun getCommentsOnRecipe(recipeId: Int)
+    suspend fun getCommentsOnRecipePaginated(recipeId: Int,page: Int)
+    suspend fun createCommentOnRecipe(recipeId: Int,comment: CreateCommentRequest)
 }

@@ -77,7 +77,9 @@
                         android:id="@+id/ivProfilePicOnProfile"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:src="@drawable/img_profile" />
+                        android:src="@drawable/img_profile"
+                        android:scaleType="fitXY"
+                        android:adjustViewBounds="true"/>
                 </androidx.cardview.widget.CardView>
 
 
