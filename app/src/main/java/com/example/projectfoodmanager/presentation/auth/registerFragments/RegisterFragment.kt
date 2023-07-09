@@ -3,14 +3,19 @@ package com.example.projectfoodmanager.ui.auth.registerFragments
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,12 +28,16 @@ import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_COD
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
 import java.time.DateTimeException
 import java.time.LocalDate
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -91,17 +100,153 @@ class RegisterFragment : Fragment() {
 
             }
         }
+        binding.backIB.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
-        binding.imageView.setOnClickListener {
+        binding.uploadImageFB.setOnClickListener {
             selectImageFromGallery()
         }
+
         binding.dateEt.setOnClickListener {
-            initDatePicker(year,month,day)
+
+            if (binding.emailEt.isFocusable)
+                binding.emailEt.clearFocus()
+
+            val calendar = Calendar.getInstance()
+
+            Locale.setDefault(Locale("pt"));
+            val today = MaterialDatePicker.todayInUtcMilliseconds()
+            calendar.timeInMillis = today
+            val lastValidMonth = calendar.timeInMillis
+
+            // Build constraints.
+            val constraintsBuilder =
+                CalendarConstraints.Builder()
+                    .setEnd(lastValidMonth)
+
+            val currentDate = LocalDate.now()
+            val selectedMillis = currentDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+
+            val mtDatePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Selecione a sua data de nascimento")
+                .setTheme(R.style.Widget_AppTheme_MaterialDatePicker)
+                .setCalendarConstraints(constraintsBuilder.build()) // Set the calendar constraints
+                .setSelection(selectedMillis)
+                .build()
+
+            mtDatePicker.addOnPositiveButtonClickListener{ selection ->
+
+                val selectedDate = Date(selection)
+                val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val formattedDate = formatter.format(selectedDate)
+
+                binding.dateEt.setText(formattedDate)
+            }
+
+            mtDatePicker.show(parentFragmentManager,"DatePicker")
         }
 
-        binding.backIB.setOnClickListener {
-                findNavController().navigateUp()
+
+        //-------------- VALIDATIONS --------------
+
+        binding.firstNameEt.setOnFocusChangeListener { view, hasfocus ->
+            if (!hasfocus){
+                if (binding.firstNameEt.text.isNullOrEmpty()){
+                    binding.firstNameTL.isErrorEnabled=true
+                    binding.firstNameTL.error=getString(R.string.enter_first_name)
+                    //toast(getString(R.string.enter_first_name))
+                }else{
+                    binding.firstNameTL.isErrorEnabled=false
+                }
+            }
         }
+
+        binding.lastNameEt.setOnFocusChangeListener { view, hasfocus ->
+            if (!hasfocus){
+                if (binding.lastNameEt.text.isNullOrEmpty()){
+                    binding.lastNameTL.isErrorEnabled=true
+                    binding.lastNameTL.error=getString(R.string.enter_last_name)
+                    // toast(getString(R.string.enter_last_name))
+                }else{
+                    binding.lastNameTL.isErrorEnabled=false
+                }
+            }
+        }
+
+        binding.emailEt.setOnFocusChangeListener { view, hasfocus ->
+            if (!hasfocus){
+                if (binding.emailEt.text.isNullOrEmpty()){
+                    binding.emailTL.isErrorEnabled=true
+                    binding.emailTL.error=getString(R.string.enter_email)
+                }else if (!binding.emailEt.text.toString().isValidEmail()){
+                    binding.emailTL.isErrorEnabled=true
+                    binding.emailTL.error=getString(R.string.invalid_email)
+                }else{
+                    binding.emailTL.isErrorEnabled=false
+                }
+            }
+        }
+
+        binding.dateEt.setOnFocusChangeListener { view, hasfocus ->
+            if (!hasfocus){
+                if (binding.dateEt.text.isNullOrEmpty()){
+                    binding.dateTL.isErrorEnabled=true
+                    binding.dateTL.error=getString(R.string.enter_birthdate)
+                }else{
+                    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/M/yyyy")
+                    try {
+                        val dateTime: LocalDate = LocalDate.parse(binding.dateEt.text.toString(), formatter)
+                        if (dateTime >= LocalDate.now()){
+                            binding.dateTL.isErrorEnabled=true
+                            binding.dateTL.error=getString(R.string.invalid_birthdate_2)
+                        }else{
+                            binding.dateTL.isErrorEnabled=false
+                        }
+                    }
+                    catch (e: DateTimeException){
+                        binding.dateTL.isErrorEnabled=true
+                        binding.dateTL.error=getString(R.string.invalid_birthdate)
+                    }
+                }
+            }else{
+                val imm = binding.dateTL.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+        }
+
+        binding.sexEt.setOnFocusChangeListener { view, hasfocus ->
+            if (!hasfocus){
+                if (binding.sexEt.text.isNullOrEmpty()){
+                    binding.sexTL.isErrorEnabled=true
+                    binding.sexTL.error=getString(R.string.invalid_sex)
+                }else{
+                    binding.sexTL.isErrorEnabled=false
+                }
+            }else{
+                val imm = binding.sexTL.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+        }
+
+        binding.passEt.setOnFocusChangeListener { view, hasfocus ->
+
+            if (!hasfocus){
+                if (binding.passEt.text.isNullOrEmpty()){
+                    binding.passwordTL.isErrorEnabled=true
+                    binding.passwordTL.error=getString(R.string.enter_password)
+                    //toast(getString(R.string.enter_password))
+                }else if (binding.passEt.text.toString().length < 8){
+                    binding.passwordTL.isErrorEnabled=true
+                    binding.passwordTL.error=getString(R.string.invalid_password_1)
+
+                } else{
+                    binding.passwordTL.isErrorEnabled=false
+                }
+            }
+        }
+
+
         binding.registerBtn.setOnClickListener {
             if (validation()){
                 findNavController().navigate(R.id.action_registerFragment_to_biodataFragment_navigation,Bundle().apply {
@@ -230,43 +375,6 @@ class RegisterFragment : Fragment() {
         }
 
         return isValid
-    }
-
-    private fun initDatePicker(year:Int,month:Int,day:Int) {
-
-        // on below line we are creating a
-        // variable for date picker dialog.
-        val datePickerDialog = DatePickerDialog(
-            // on below line we are passing context.
-            requireContext(),
-            { _, year, monthOfYear, dayOfMonth ->
-                // on below line we are setting
-                // date to our text view.
-
-                //val editable = Editable.Factory.getInstance().newEditable(dayOfMonth.toString() + "/" + (monthOfYear + 1).toString() + "/" + year.toString())
-                var dayOfMonth_: String
-                if (dayOfMonth<10)
-                    dayOfMonth_ = "0$dayOfMonth"
-                else
-                    dayOfMonth_ = "$dayOfMonth"
-                var monthOfYear_: String
-                if ((monthOfYear + 1)<10)
-                    monthOfYear_ = "0${monthOfYear + 1}"
-                else
-                    monthOfYear_ = "${monthOfYear + 1}"
-
-
-                binding.dateEt.setText("$dayOfMonth_/$monthOfYear_/${year}")
-            },
-            // on below line we are passing year, month
-            // and day for the selected date in our date picker.
-            year,
-            month,
-            day
-        )
-        // at last we are calling show
-        // to display our date picker dialog.
-        datePickerDialog.show()
     }
 
     private fun selectImageFromGallery() {
