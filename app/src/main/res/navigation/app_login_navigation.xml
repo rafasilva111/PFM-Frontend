@@ -104,12 +104,20 @@
             app:popExitAnim="@anim/to_right"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_homeFragment_to_testeFragment"
+            app:destination="@id/testeFragment" />
     </fragment>
 
     <action
         android:id="@+id/action_homeFragment"
         app:destination="@id/homeFragment"
         app:popUpToInclusive="true"/>
+    <fragment
+        android:id="@+id/testeFragment"
+        android:name="com.example.projectfoodmanager.TesteFragment"
+        android:label="fragment_teste"
+        tools:layout="@layout/fragment_teste" />
 
 
 </navigation>
