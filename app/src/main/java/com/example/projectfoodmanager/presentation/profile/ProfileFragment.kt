@@ -254,10 +254,6 @@ class ProfileFragment : Fragment() {
                         launchImageCrop(uri)
                     }
                 }
-
-                else{
-
-                }
             }
         }
 
@@ -310,10 +306,12 @@ class ProfileFragment : Fragment() {
 
         var destination:String=StringBuilder(UUID.randomUUID().toString()).toString()
         var options: UCrop.Options=UCrop.Options()
+        options.setCropGridColor(Color.TRANSPARENT)
+        options.setStatusBarColor(resources.getColor(R.color.main_color))
 
         startActivityForResult(UCrop.of(Uri.parse(uri.toString()), Uri.fromFile(File(requireContext().cacheDir,destination)))
             .withOptions(options)
-            .withAspectRatio(0F, 0F)
+            .withAspectRatio(3F, 4F)
             .useSourceImageAspectRatio()
             .withMaxResultSize(2000, 2000).getIntent(requireContext()),UCrop.REQUEST_CROP);
 
@@ -352,7 +350,6 @@ class ProfileFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
                         toast("Dados atualizados com sucesso")
-                        findNavController().navigateUp()
 
                     }
                     is NetworkResult.Error -> {
@@ -477,10 +474,6 @@ class ProfileFragment : Fragment() {
         Glide.with(this)
             .load(uri)
             .into(binding.ivProfilePicOnProfile)
-    }
-
-    companion object {
-        private const val REQUEST_IMAGE_PICKER = 1
     }
 
 }
