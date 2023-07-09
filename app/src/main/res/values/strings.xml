@@ -79,6 +79,8 @@
     <string name="Camera">Camera</string>
     <string name="Gallery">Gallery</string>
     <string name="escolhe_uma_forma">Escolhe uma forma:</string>
+    <string name="back"><![CDATA[<-]]></string>
+    <string name="forward"><![CDATA[->]]></string>
 
     <string-array name="gender_array">
         <item>Masculino</item>
