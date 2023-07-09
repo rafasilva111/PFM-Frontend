@@ -62,6 +62,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
+    private var fileName: String? = null
     lateinit var binding: FragmentProfileBinding
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private val authViewModel by activityViewModels<AuthViewModel>()
@@ -262,7 +263,9 @@ class ProfileFragment : Fragment() {
 
             setImage(resultUri!!)
 
-            val fileName = UUID.randomUUID().toString() + ".png"
+            if (fileName == null)
+                fileName = UUID.randomUUID().toString() + ".png"
+
             authViewModel.updateUser(UserRequest(img_source = fileName))
             val storageRef = Firebase.storage.reference.child("$user_profile_images$fileName")
 
@@ -384,8 +387,8 @@ class ProfileFragment : Fragment() {
         try {
 
             imageFolder.mkdirs()
-            val file: File = File(imageFolder,"captured_image.png")
-            val stream: FileOutputStream = FileOutputStream(file)
+            val file = File(imageFolder,"captured_image.png")
+            val stream = FileOutputStream(file)
             image?.compress(Bitmap.CompressFormat.JPEG,100,stream)
             stream.flush()
             stream.close()
