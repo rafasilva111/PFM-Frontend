@@ -20,7 +20,6 @@ class SharedPreference @Inject constructor(
     }
 
     fun getUserSession(): User {
-
         return gson.fromJson(
             sharedPreferences.getString(Constants.USER_SESSION, ""),
             User::class.java

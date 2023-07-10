@@ -299,7 +299,7 @@ class ProfileFragment : Fragment() {
             val storageRef = Firebase.storage.reference.child("$user_profile_images$fileName")
 
             storageRef.putFile(resultUri)
-                .addOnSuccessListener { taskSnapshot ->
+                .addOnSuccessListener {
                     // Image upload success
                     // You can perform additional operations here if needed
 
@@ -314,7 +314,7 @@ class ProfileFragment : Fragment() {
                             .into(binding.profileIV)
                     }
                 }
-                .addOnFailureListener { exception ->
+                .addOnFailureListener {
                     // Image upload failed
                     // Handle the failure gracefully
                 }
