@@ -7,10 +7,39 @@
     android:layout_height="match_parent"
     tools:context=".presentation.recipe.RecipeListingFragment">
 
+    <ImageView
+        android:id="@+id/verifyIV"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="-25dp"
+        android:layout_marginBottom="-25dp"
+        android:elevation="8dp"
+        android:src="@drawable/verified"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/profileCV"
+        app:layout_constraintStart_toEndOf="@+id/profileCV" />
+
+
+    <ImageView
+        android:id="@+id/vipIV"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="-15dp"
+        android:background="@drawable/layout_circle_bg"
+        android:backgroundTint="#FDEFC5"
+        android:elevation="8dp"
+        android:padding="5dp"
+        android:src="@drawable/vip"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@+id/profileCV"
+        app:layout_constraintStart_toStartOf="@+id/profileCV"
+        app:layout_constraintTop_toBottomOf="@+id/profileCV" />
+
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
+            android:id="@+id/profileCV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:foreground="@drawable/border_vip"
             app:cardCornerRadius="70dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"

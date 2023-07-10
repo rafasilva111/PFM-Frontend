@@ -126,7 +126,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
+                android:id="@+id/profileCV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="70dp"
@@ -141,7 +141,8 @@
                     android:layout_height="130dp"
                     android:src="@drawable/img_profile"
                     android:scaleType="fitXY"
-                    android:adjustViewBounds="true"/>
+                    android:adjustViewBounds="true"
+                    android:tag="default_img"/>
             </androidx.cardview.widget.CardView>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -153,8 +154,8 @@
                 android:visibility="visible"
                 app:borderWidth="0dp"
                 app:fabCustomSize="50dp"
-                app:layout_constraintBottom_toBottomOf="@+id/cardView"
-                app:layout_constraintEnd_toEndOf="@+id/cardView"
+                app:layout_constraintBottom_toBottomOf="@+id/profileCV"
+                app:layout_constraintEnd_toEndOf="@+id/profileCV"
                 app:tint="@null"/>
 
             <com.google.android.material.textfield.TextInputLayout

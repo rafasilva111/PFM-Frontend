@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
@@ -105,22 +106,6 @@ class RecipeListingFragment : Fragment() {
             return binding.root
         }else {
 
-            // load profile image
-
-            val userSession: User? = sharedPreference.getUserSession()
-            if (userSession != null && userSession.img_source.isNotEmpty()){
-                val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${userSession.img_source}")
-                imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                    Glide.with(binding.ivProfilePic.context).load(Uri.toString()).into(binding.ivProfilePic)
-                }
-                    .addOnFailureListener {
-                        Glide.with(binding.ivProfilePic.context)
-                            .load(R.drawable.good_food_display___nci_visuals_online)
-                            .into(binding.ivProfilePic)
-                    }
-            }
-
-
             binding = FragmentRecipeListingBinding.inflate(layoutInflater)
             manager = LinearLayoutManager(activity)
             manager.orientation=LinearLayoutManager.HORIZONTAL
@@ -187,9 +172,34 @@ class RecipeListingFragment : Fragment() {
 
         // user data
         val user = sharedPreference.getUserSession()
-        if (user!= null){
-            binding.tvName.text =  getString(R.string.full_name, user.first_name, user.last_name)
+
+        binding.tvName.text =  getString(R.string.full_name, user.first_name, user.last_name)
+
+        if(user.user_type != "V"){
+            binding.profileCV.foreground=null
+            binding.vipIV.visibility=View.INVISIBLE
         }
+
+        if(user.verified)
+            binding.verifyIV.visibility=View.VISIBLE
+
+
+        if (user.img_source.contains("avatar")){
+            val avatar= Avatar.getAvatarByName(user.img_source)
+            binding.ivProfilePic.setImageResource(avatar!!.imgId)
+
+        }else{
+            val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${user.img_source}")
+            imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                Glide.with(binding.ivProfilePic.context).load(Uri.toString()).into(binding.ivProfilePic)
+            }
+                .addOnFailureListener {
+                    Glide.with(binding.ivProfilePic.context)
+                        .load(R.drawable.good_food_display___nci_visuals_online)
+                        .into(binding.ivProfilePic)
+                }
+        }
+
 
 
         if (isOnline(view.context)) {
@@ -363,8 +373,6 @@ class RecipeListingFragment : Fragment() {
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-
-
                         // isto é usado para atualizar os likes caso o user vá a detail view
 
                         if (refreshPage != 0) {

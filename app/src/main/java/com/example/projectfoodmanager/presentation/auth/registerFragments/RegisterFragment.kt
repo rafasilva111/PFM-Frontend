@@ -2,8 +2,8 @@
 package com.example.projectfoodmanager.ui.auth.registerFragments
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
@@ -22,8 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
-import android.widget.Button
+import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,12 +30,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.projectfoodmanager.AvatarGVAdapter
 import com.example.projectfoodmanager.BuildConfig
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.Avatar
+import com.example.projectfoodmanager.data.model.Avatar.Companion.avatarArrayList
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
 import com.example.projectfoodmanager.util.*
@@ -54,6 +57,7 @@ import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.*
 import java.lang.ref.WeakReference
+import java.text.SimpleDateFormat
 import java.time.DateTimeException
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -66,6 +70,7 @@ class RegisterFragment : Fragment() {
 
     private var fileName: String? = null
     lateinit var finalUri: Uri
+    private var selectedAvatar: String? = null
     val authViewModel: AuthViewModel by viewModels()
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
@@ -111,17 +116,15 @@ class RegisterFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val c = Calendar.getInstance()
-        val year = c.get(Calendar.YEAR)
-        val month = c.get(Calendar.MONTH)
-        val day = c.get(Calendar.DAY_OF_MONTH)
 
         bindObservers()
 
         Locale.setDefault(Locale("pt"));
+
+        toast(binding.imageView.tag.toString())
 
         binding.skipBiodata.setOnClickListener {
             // todo melhorar a estétitica
@@ -150,7 +153,7 @@ class RegisterFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.imageView.setOnClickListener {
+        binding.uploadImageFB.setOnClickListener {
 
             //USER CONFIRMATION DIALOG
             // set the custom layout
@@ -163,16 +166,14 @@ class RegisterFragment : Fragment() {
             myDialog.setCancelable(true)
             myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-            val cameraBtn = dialogBinding.findViewById<Button>(R.id.btnConfCamera)
-            val galleryBtn = dialogBinding.findViewById<Button>(R.id.btnConfGallery)
+            val cameraIV = dialogBinding.findViewById<ImageView>(R.id.cameraIV)
+            val galleryIV = dialogBinding.findViewById<ImageView>(R.id.galletyIV)
             val cancelBtn = dialogBinding.findViewById<Button>(R.id.btnConfCancel)
 
-            cameraBtn.setOnClickListener {
+            cameraIV.setOnClickListener{
                 if (checkPermission()) {
                     pickFromCamera()
-                }
-
-                else{
+                }else{
                     toast( "Allow all permissions")
                     requestPermission()
                 }
@@ -180,17 +181,37 @@ class RegisterFragment : Fragment() {
                 myDialog.dismiss()
             }
 
-            galleryBtn.setOnClickListener {
+            galleryIV.setOnClickListener {
                 if (checkPermission()) {
                     pickFromGallery()
-                }
-
-                else{
+                }else{
                     toast( "Allow all permissions")
                     requestPermission()
                 }
                 myDialog.dismiss()
             }
+
+            val avatarGV= dialogBinding.findViewById<GridView>(R.id.gvAvatar)
+
+            val adapter = AvatarGVAdapter(requireContext(), avatarArrayList)
+            avatarGV.adapter = adapter
+
+            avatarGV.onItemClickListener = AdapterView.OnItemClickListener{ parent, view, position, id ->
+
+                val avatar= adapter.getItem(position)
+
+                // Handle the item selection here
+                selectedAvatar = avatar!!.getName()
+
+                binding.imageView.setImageResource(avatar.imgId)
+                //TODO: ver com o RAFA
+
+                binding.imageView.tag=ImageTagsConstants.SELECTED_AVATAR
+                myDialog.dismiss()
+
+
+            }
+
 
             cancelBtn.setOnClickListener {
                 myDialog.dismiss()
@@ -314,9 +335,22 @@ class RegisterFragment : Fragment() {
                 }else{
                     binding.sexTL.isErrorEnabled=false
                 }
+
             }else{
                 val imm = binding.sexTL.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
+            }
+        }
+
+        binding.sexEt.addTextChangedListener {
+            //TODO: ver com o RAFA
+
+            var tag= binding.imageView.tag
+            if(tag == ImageTagsConstants.DEFAULT || tag == ImageTagsConstants.RANDOM_AVATAR) {
+                val randAvatar = randomAvatarImg(binding.sexEt.text.toString())
+                selectedAvatar = randAvatar.getName()
+                binding.imageView.setImageResource(randAvatar.imgId)
+                binding.imageView.tag=ImageTagsConstants.RANDOM_AVATAR
             }
         }
 
@@ -330,7 +364,6 @@ class RegisterFragment : Fragment() {
                 }else if (binding.passEt.text.toString().length < 8){
                     binding.passwordTL.isErrorEnabled=true
                     binding.passwordTL.error=getString(R.string.invalid_password_1)
-
                 } else{
                     binding.passwordTL.isErrorEnabled=false
                 }
@@ -355,14 +388,20 @@ class RegisterFragment : Fragment() {
 
     fun getUserRequest(): UserRequest {
 
+        var img:String=""
         var sex = binding.sexEt.text.toString()
         if (sex == "Masculino")
             sex = "M"
         else if(sex == "Feminino")
             sex = "F"
-        else if  (sex == "Nao responder")
+        else if (sex == "Nao responder")
                 sex = "Nao responder"
+        //TODO: ver com o RAFA
 
+        if (selectedAvatar != null)
+            img = selectedAvatar!!
+        else if (fileName!=null)
+            img= fileName!!
 
         return UserRequest(
             first_name = binding.firstNameEt.text.toString(),
@@ -370,8 +409,37 @@ class RegisterFragment : Fragment() {
             email = binding.emailEt.text.toString(),
             birth_date = binding.dateEt.text.toString(),
             password = binding.passEt.text.toString(),
-            sex = sex
+            sex = sex,
+            img_source=img
         )
+    }
+
+    private fun randomAvatarImg(sex: String): Avatar {
+
+        //TODO: ver com o RAFA
+        var sexCode:String = ""
+        if (sex == "Masculino")
+            sexCode = "M"
+        else if(sex == "Feminino")
+            sexCode = "F"
+        else if (sex == "Nao responder")
+            sexCode = "ND"
+
+        var rdIndex:Int? = null
+        when (sexCode) {
+            "M" ->{
+                rdIndex = (0 until 5).random()
+                return avatarArrayList[rdIndex]
+            }
+            "F" ->  {
+                rdIndex= (6 until 10).random()
+                return avatarArrayList[rdIndex]
+            }
+            else -> {
+                rdIndex= (0 until 10).random()
+                return avatarArrayList[rdIndex]
+            }
+        }
     }
 
     fun validation(): Boolean {
@@ -667,6 +735,10 @@ class RegisterFragment : Fragment() {
     }
 
     private fun setImage(uri: Uri){
+        //TODO: ver com o RAFA
+        binding.imageView.tag=ImageTagsConstants.FOTO
+        selectedAvatar=null
+
         Glide.with(this)
             .load(uri)
             .into(binding.imageView)
