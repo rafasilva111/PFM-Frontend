@@ -7,7 +7,8 @@ val LOGIN_TIME:Long = 2000
 
 object Constants {
     // TODO: Primeira coisa a fazer quando testar
-    const val BASE_URL = "http://192.168.1.110:5000/"
+    //rafa const val BASE_URL = "http://192.168.1.110:5000/"
+    const val BASE_URL = "http://192.168.1.104:5000"
     //const val BASE_URL = "http://35.180.118.91/"
     const val USER_TOKEN = "user_token"
     const val USER_SESSION = "user_session"
@@ -51,6 +52,14 @@ object SharedPrefConstants {
     var METADATA = "metadata"
 }
 
+object ImageTagsConstants{
+    const val FOTO ="foto"
+    const val DEFAULT ="default_img"
+    const val SELECTED_AVATAR ="select_avatar"
+    const val RANDOM_AVATAR ="random_avatar"
+
+
+}
 
 
 object RecipeListingFragmentFilters {

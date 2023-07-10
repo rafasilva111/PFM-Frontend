@@ -107,6 +107,63 @@ class BioDataFragment : Fragment() {
 
         }
 
+        binding.weightEt.setOnFocusChangeListener { view, hasfocus ->
+            if (!hasfocus){
+                val heightTxt = binding.heightEt.text.toString()
+
+                if (heightTxt.isNullOrEmpty()) {
+                    binding.heightTL.isErrorEnabled=true
+                    binding.heightTL.error=getString(R.string.heightEt_problem)
+                    //toast(getString(R.string.heightEt_problem))
+                } else if (heightTxt.toIntOrNull() != null) {
+                    if (heightTxt.toIntOrNull()  !in 120..300){
+                        binding.heightTL.isErrorEnabled=true
+                        binding.heightTL.error=getString(R.string.heightEt_problem)
+                        //toast(getString(R.string.heightEt_problem))
+                    }
+                } else if (heightTxt.toFloatOrNull() != null){
+                    val heightFloat = heightTxt.toFloatOrNull()
+                    if (heightFloat!! !in 1.20..3.0) {
+                        binding.heightTL.isErrorEnabled=true
+                        binding.heightTL.error=getString(R.string.heightEt_problem)
+                        //toast(getString(R.string.heightEt_problem))
+                    } else {
+                        binding.heightEt.setText((heightFloat * 100).toString())
+                        if ((heightFloat * 100) !in 120.0..300.0){
+                            binding.heightTL.isErrorEnabled=true
+                            binding.heightTL.error=getString(R.string.heightEt_problem)
+                            //toast(getString(R.string.heightEt_problem))
+                        }
+                    }
+                }else{
+                    binding.heightTL.isErrorEnabled=false
+                }
+
+            }
+        }
+
+        binding.heightEt.setOnFocusChangeListener { view, hasfocus ->
+
+            if (!hasfocus){
+                if (binding.weightEt.text.toString().isNullOrEmpty()) {
+                    binding.weightTL.isErrorEnabled=true
+                    binding.weightTL.error=getString(R.string.enter_weight)
+                    //toast(getString(R.string.enter_weight))
+                }else if (binding.weightEt.text.toString().toFloatOrNull() == null){
+                    binding.weightTL.isErrorEnabled=true
+                    binding.weightTL.error=getString(R.string.enter_weight)
+                    //toast(getString(R.string.enter_weight))
+                }else if (binding.weightEt.text.toString().toFloatOrNull()!! !in 30.0..200.0) {
+                    binding.weightTL.isErrorEnabled=true
+                    binding.weightTL.error=getString(R.string.weightEt_problem_2)
+                    //toast(getString(R.string.weightEt_problem_2))
+                }else{
+                    binding.weightTL.isErrorEnabled=false
+                }
+            }
+        }
+
+
 
         binding.registerBtn.setOnClickListener {
             if (validation()) {

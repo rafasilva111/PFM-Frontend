@@ -19,11 +19,12 @@ class SharedPreference @Inject constructor(
         sharedPreferences.edit().putBoolean(Constants.IS_FIRST_APP_LAUNCH, value).apply()
     }
 
-    fun getUserSession(): User? {
-        val user = gson.fromJson(sharedPreferences.getString(Constants.USER_SESSION,""), User::class.java)
-        if (user == null)
-            return null
-         return user
+    fun getUserSession(): User {
+
+        return gson.fromJson(
+            sharedPreferences.getString(Constants.USER_SESSION, ""),
+            User::class.java
+        )
     }
 
     fun saveUserSession(user: User) {

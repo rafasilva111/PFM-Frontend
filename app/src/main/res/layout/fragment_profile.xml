@@ -62,11 +62,38 @@
                     app:layout_constraintTop_toTopOf="@+id/textView"
                     app:layout_constraintVertical_bias="0.914" />
 
+                <ImageView
+                    android:id="@+id/verifyIV"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="5dp"
+                    android:elevation="8dp"
+                    android:src="@drawable/verified"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="@+id/nameTV"
+                    app:layout_constraintEnd_toStartOf="@+id/nameTV"
+                    app:layout_constraintTop_toTopOf="@+id/nameTV" />
+
+                <ImageView
+                    android:id="@+id/vipIV"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginBottom="-25dp"
+                    android:background="@drawable/layout_circle_bg"
+                    android:backgroundTint="#FDEFC5"
+                    android:elevation="8dp"
+                    android:padding="5dp"
+                    android:src="@drawable/vip"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toTopOf="@+id/profileCV"
+                    app:layout_constraintEnd_toEndOf="@+id/profileCV" />
+
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView"
+                    android:id="@+id/profileCV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
+                    android:foreground="@drawable/border_vip"
                     app:cardCornerRadius="70dp"
                     app:layout_constraintBottom_toTopOf="@+id/nameTV"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -74,13 +101,28 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView">
 
                     <ImageView
-                        android:id="@+id/ivProfilePicOnProfile"
+                        android:id="@+id/profileIV"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:src="@drawable/img_profile"
                         android:scaleType="fitXY"
                         android:adjustViewBounds="true"/>
                 </androidx.cardview.widget.CardView>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/uploadImageFB"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="-8dp"
+                    android:layout_marginBottom="-8dp"
+                    android:backgroundTint="@color/ellipse_65_color"
+                    android:src="@drawable/upload_image"
+                    android:visibility="visible"
+                    app:borderWidth="0dp"
+                    app:fabCustomSize="50dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/profileCV"
+                    app:layout_constraintEnd_toEndOf="@+id/profileCV"
+                    app:tint="@null" />
 
 
                 <TextView
@@ -95,10 +137,10 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/cardView"
+                    app:layout_constraintEnd_toEndOf="@+id/profileCV"
                     app:layout_constraintHorizontal_bias="0.298"
-                    app:layout_constraintStart_toStartOf="@+id/cardView"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView" />
+                    app:layout_constraintStart_toStartOf="@+id/profileCV"
+                    app:layout_constraintTop_toBottomOf="@+id/profileCV" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

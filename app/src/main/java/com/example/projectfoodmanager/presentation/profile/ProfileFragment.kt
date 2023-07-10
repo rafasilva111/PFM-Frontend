@@ -2,7 +2,6 @@ package com.example.projectfoodmanager.presentation.profile
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
@@ -20,8 +19,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Button
-import android.widget.Toast
+import android.widget.GridView
+import android.widget.ImageView
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -34,19 +35,18 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.projectfoodmanager.AvatarGVAdapter
 import com.example.projectfoodmanager.BuildConfig
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
+import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FireStorage.user_profile_images
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.SharedPreference
-import com.example.projectfoodmanager.util.TokenManager
 import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_CODE
-import com.example.projectfoodmanager.util.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -63,6 +63,7 @@ import javax.inject.Inject
 class ProfileFragment : Fragment() {
 
     private var fileName: String? = null
+    private var selectedAvatar: String? = null
     lateinit var binding: FragmentProfileBinding
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private val authViewModel by activityViewModels<AuthViewModel>()
@@ -161,23 +162,35 @@ class ProfileFragment : Fragment() {
 
         binding.nameTV.text =  getString(R.string.full_name, userSession!!.first_name, userSession.last_name)
 
+        if(userSession.user_type != "V"){
+            binding.profileCV.foreground=null
+            binding.vipIV.visibility=View.INVISIBLE
+        }
+
+        if(userSession.verified)
+            binding.verifyIV.visibility=View.VISIBLE
+
+
+
         // load profile image offline
 
         if (isOnline(view.context)) {
-
             // load profile image online
 
-            if (userSession.img_source != "") {
+            if (userSession.img_source.contains("avatar")){
+                val avatar= Avatar.getAvatarByName(userSession.img_source)
+                binding.profileIV.setImageResource(avatar!!.imgId)
+
+            }else{
                 val imgRef = Firebase.storage.reference.child("$user_profile_images${userSession.img_source}")
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
                     val imageURL = Uri.toString()
-                    Glide.with(binding.ivProfilePicOnProfile.context).load(imageURL)
-                        .into(binding.ivProfilePicOnProfile)
+                    Glide.with(binding.profileIV.context).load(imageURL)
+                        .into(binding.profileIV)
                 }
             }
 
-
-            binding.ivProfilePicOnProfile.setOnClickListener {
+            binding.uploadImageFB.setOnClickListener {
 
                 //USER CONFIRMATION DIALOG
                 // set the custom layout
@@ -190,16 +203,14 @@ class ProfileFragment : Fragment() {
                 myDialog.setCancelable(true)
                 myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-                val cameraBtn = dialogBinding.findViewById<Button>(R.id.btnConfCamera)
-                val galleryBtn = dialogBinding.findViewById<Button>(R.id.btnConfGallery)
+                val cameraIV = dialogBinding.findViewById<ImageView>(R.id.cameraIV)
+                val galleryIV = dialogBinding.findViewById<ImageView>(R.id.galletyIV)
                 val cancelBtn = dialogBinding.findViewById<Button>(R.id.btnConfCancel)
 
-                cameraBtn.setOnClickListener {
+                cameraIV.setOnClickListener{
                     if (checkPermission()) {
                         pickFromCamera()
-                    }
-
-                    else{
+                    }else{
                         toast( "Allow all permissions")
                         requestPermission()
                     }
@@ -207,16 +218,33 @@ class ProfileFragment : Fragment() {
                     myDialog.dismiss()
                 }
 
-                galleryBtn.setOnClickListener {
+                galleryIV.setOnClickListener {
                     if (checkPermission()) {
                         pickFromGallery()
-                    }
-
-                    else{
+                    }else{
                         toast( "Allow all permissions")
                         requestPermission()
                     }
                     myDialog.dismiss()
+                }
+
+                val avatarGV= dialogBinding.findViewById<GridView>(R.id.gvAvatar)
+
+                val adapter = AvatarGVAdapter(requireContext(), Avatar.avatarArrayList)
+                avatarGV.adapter = adapter
+
+                avatarGV.onItemClickListener = AdapterView.OnItemClickListener{ parent, view, position, id ->
+
+                    val avatar= adapter.getItem(position)
+
+                    // Handle the item selection here
+                    selectedAvatar = avatar!!.getName()
+                    authViewModel.updateUser(UserRequest(img_source = selectedAvatar))
+
+                    binding.profileIV.setImageResource(avatar.imgId)
+
+                    myDialog.dismiss()
+
                 }
 
                 cancelBtn.setOnClickListener {
@@ -266,6 +294,7 @@ class ProfileFragment : Fragment() {
             if (fileName == null)
                 fileName = UUID.randomUUID().toString() + ".png"
 
+
             authViewModel.updateUser(UserRequest(img_source = fileName))
             val storageRef = Firebase.storage.reference.child("$user_profile_images$fileName")
 
@@ -280,9 +309,9 @@ class ProfileFragment : Fragment() {
                         // Do something with the imageURL (e.g., save it in your userSession)
 
                         // Update the ImageView with the uploaded image
-                        Glide.with(binding.ivProfilePicOnProfile.context)
+                        Glide.with(binding.profileIV.context)
                             .load(imageURL)
-                            .into(binding.ivProfilePicOnProfile)
+                            .into(binding.profileIV)
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -474,9 +503,11 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setImage(uri: Uri){
+        selectedAvatar=null
+
         Glide.with(this)
             .load(uri)
-            .into(binding.ivProfilePicOnProfile)
+            .into(binding.profileIV)
     }
 
 }

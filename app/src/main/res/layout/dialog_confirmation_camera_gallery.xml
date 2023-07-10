@@ -3,100 +3,254 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="600dp"
     android:background="@drawable/layout_bg"
-    android:backgroundTint="@color/color_3"
-    android:padding="15dp">
+    android:backgroundTint="@color/white"
+    android:elevation="8dp">
 
-
-    <Button
-        android:id="@+id/btnConfCancel"
-        android:layout_width="200dp"
-        android:layout_height="36dp"
-        android:layout_margin="15dp"
-        android:layout_weight="1"
-        android:padding="2dp"
-        android:text="@string/Camera"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:backgroundTint="@color/grey"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout10" />
 
     <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+        android:id="@+id/textView10"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:background="@drawable/rectangle_575_shape"
+        android:backgroundTint="@color/main_color"
         android:fontFamily="@font/fedoka"
-        android:text="Queres mudar de foto de perfil?"
-        android:textColor="@color/black"
-        android:textSize="20sp"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:text="Escolha uma imagem de perfil"
+        android:textColor="@color/white"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="350dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/darker_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
-    <TextView
-        android:id="@+id/tvDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/escolhe_uma_forma"
-        android:textColor="@color/grey_2"
-        android:textSize="16sp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout10"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="14dp"
-        android:orientation="horizontal"
+        android:layout_height="500dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDescription">
+        app:layout_constraintTop_toBottomOf="@+id/textView10">
+
+        <LinearLayout
+            android:id="@+id/linearLayout11"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="50dp"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/cameraIV"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/card_cat"
+                    android:backgroundTint="#F1F1F1"
+                    android:padding="10dp"
+                    android:src="@drawable/camera" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:layout_marginTop="5dp"
+                    android:text="Camera"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/galletyIV"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/card_cat"
+                    android:backgroundTint="#F1F1F1"
+                    android:padding="10dp"
+                    android:src="@drawable/gallery" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:layout_marginTop="5dp"
+                    android:text="Gallery"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="2dp"
+                android:layout_margin="10dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fedoka"
+                android:text="OU" />
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="2dp"
+                android:layout_margin="10dp"
+                android:background="@android:color/darker_gray" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
+
+            <GridView
+                android:id="@+id/gvAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:horizontalSpacing="6dp"
+                android:numColumns="3"
+                android:verticalSpacing="6dp" />
+
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/btnConfCamera"
-            android:layout_width="0dp"
+            android:id="@+id/btnConfCancel"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_margin="15dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/black"
+            android:padding="2dp"
+            android:fontFamily="@font/fedoka"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout13" />
+
+
+        <!--</LinearLayout>
+        <Button
+            android:id="@+id/btnConfCancel"
+            android:layout_width="200dp"
             android:layout_height="36dp"
             android:layout_margin="15dp"
             android:layout_weight="1"
+            android:backgroundTint="@color/grey"
             android:padding="2dp"
             android:text="@string/Camera"
             android:textAllCaps="false"
-            android:textColor="@color/white" />
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout10" />
 
-        <Button
-            android:id="@+id/btnConfGallery"
-            android:layout_width="0dp"
-            android:layout_height="36dp"
-            android:layout_margin="15dp"
-            android:layout_weight="1"
-            android:padding="2dp"
-            android:text="@string/Gallery"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
 
-    </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="14dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDescription">
+
+            <Button
+                android:id="@+id/btnConfCamera"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_margin="15dp"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:text="@string/Camera"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btnConfGallery"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_margin="15dp"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:text="@string/Gallery"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="350dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/escolhe_uma_forma"
+            android:textAlignment="center"
+            android:textColor="@color/grey_2"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
+        -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 
