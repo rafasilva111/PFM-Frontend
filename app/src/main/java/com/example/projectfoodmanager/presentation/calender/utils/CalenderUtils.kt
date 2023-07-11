@@ -63,7 +63,7 @@ class CalenderUtils {
             while (currentHelper.isAfter(oneWeekAgo)){
                 if (currentHelper.dayOfWeek == DayOfWeek.SUNDAY)
                     return currentHelper
-                currentHelper = current.minusDays(1)
+                currentHelper = currentHelper.minusDays(1)
             }
 
             return null

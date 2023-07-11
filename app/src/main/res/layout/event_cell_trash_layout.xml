@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:orientation="vertical"
-    tools:context=".presentation.calender.TrashEventAdapter">
+    tools:context=".presentation.calender.RecipeAdapter">
 
         <TextView
             android:layout_width="match_parent"

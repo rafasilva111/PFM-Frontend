@@ -34,11 +34,15 @@ class WeeklyFragment : Fragment() {
         )
     }
 
+
     private val recipeAdapter by lazy{
-        val teste = arrayListOf<EventTrash>()
-        teste.add(EventTrash("curti", LocalTime.now(), LocalDate.now()))
-        TrashEventAdapter(
-            teste
+        RecipeAdapter(
+            daysInWeekArray(
+                selectedDate
+            ),
+            onItemClicked = {text ->
+
+            }
         )
     }
 
@@ -57,7 +61,7 @@ class WeeklyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.previousBtn.setOnClickListener{
-            selectedDate = selectedDate.plusWeeks(1)
+            selectedDate = selectedDate.minusWeeks(1)
             updateMonthView()
         }
 
@@ -70,13 +74,6 @@ class WeeklyFragment : Fragment() {
             findNavController().navigate(R.id.action_weeklyFragment_to_eventEditTrashFragment)
         }
 
-        val manager = LinearLayoutManager(activity)
-        binding.recipesRV.layoutManager = manager
-
-        val teste = arrayListOf<EventTrash>()
-        teste.add(EventTrash("curti", LocalTime.now(), LocalDate.now()))
-
-        recipeAdapter.updateList(teste)
     }
 
     private fun setWeeklyView() {
@@ -107,9 +104,11 @@ class WeeklyFragment : Fragment() {
     }
 
     private fun setEventAdapter() {
+        selectedDate = LocalDate.now()
+        binding.monthYearTV.text = CalenderUtils.formatDateMonthYear(selectedDate)
+
+        val layoutManager: RecyclerView.LayoutManager =LinearLayoutManager(activity?.applicationContext)
+        binding.recipesRV.layoutManager = layoutManager
         binding.recipesRV.adapter = recipeAdapter
-        val teste = EventTrash.eventsForDate(selectedDate)
-        teste.add(EventTrash("curti", LocalTime.now(), LocalDate.now()))
-        recipeAdapter.updateList(EventTrash.eventsForDate(selectedDate))
     }
 }

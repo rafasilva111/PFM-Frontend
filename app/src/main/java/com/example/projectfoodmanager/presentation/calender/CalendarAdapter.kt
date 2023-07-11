@@ -17,6 +17,9 @@ class CalendarAdapter(
     private val onItemClicked: (String) -> Unit,
 ) :
     RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
+
+    private var unselected: Boolean = true
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view: View = inflater.inflate(R.layout.calendar_cell, parent, false)
@@ -37,7 +40,7 @@ class CalendarAdapter(
             holder.dayOfMonth.text = ""
         else{
             holder.dayOfMonth.text =  date.dayOfMonth.toString()
-            if (date == selectedDate)
+            if (date == selectedDate && selectedDate == LocalDate.now())
                 holder.parentView.setBackgroundColor(Color.GRAY)
             else
                 holder.parentView.setBackgroundColor(Color.TRANSPARENT)
