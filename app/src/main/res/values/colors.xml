@@ -8,6 +8,13 @@
     <color name="color_4">#60E7E7E7</color>
     <color name="main_color">#62162F</color>
     <color name="tabMenu_color">#FBBB18</color>
+
+    <color name="success">#4CAF50</color>
+    <color name="warning">#FFEB3B</color>
+    <color name="info">#47C6FF</color>
+    <color name="error">#FF2A1A</color>
+    <color name="vip">#FFC107</color>
+
 <!--    <color name="bordeux">#62162F</color>-->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
@@ -18,6 +25,7 @@
     <color name="transparent">#00FFFFFF</color>
 
     //-------------------------
+
     <color name="catg_carne">#FD7A70</color>//Carne
     <color name="catg_peixe">#8BCCFF</color>//Peixe
     <color name="catg_sopa">#FDF39A</color>//Sopa

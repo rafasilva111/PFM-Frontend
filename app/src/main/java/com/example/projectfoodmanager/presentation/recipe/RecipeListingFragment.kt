@@ -1,11 +1,19 @@
 package com.example.projectfoodmanager.presentation.recipe
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.SearchView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -17,17 +25,17 @@ import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
-import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
+import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.ceil
+
 
 @AndroidEntryPoint
 class RecipeListingFragment : Fragment() {
@@ -56,6 +64,7 @@ class RecipeListingFragment : Fragment() {
     private var refreshPage: Int = 0
 
     private val TAG: String = "RecipeListingFragment"
+    private var oldFiltTag: String =""
     lateinit var binding: FragmentRecipeListingBinding
     private val recipeViewModel by activityViewModels<RecipeViewModel>()
     private val adapter by lazy {
@@ -260,35 +269,47 @@ class RecipeListingFragment : Fragment() {
 
             //nav search bottom
 
-            binding.IBMeat.setOnClickListener {
+            binding.meatFiltIB.setOnClickListener {
                 newSearch = true
                 stringToSearch=RecipeListingFragmentFilters.CARNE
                 recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE)
+
+                filterOnClick("meat")
             }
-            binding.IBFish.setOnClickListener {
+            binding.fishFiltIB.setOnClickListener {
                 newSearch = true
                 stringToSearch=RecipeListingFragmentFilters.PEIXE
                 recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE)
+
+                filterOnClick("fish")
             }
-            binding.IBSoup.setOnClickListener {
+
+            binding.soupFiltIB.setOnClickListener {
                 newSearch = true
                 stringToSearch=RecipeListingFragmentFilters.SOPA
                 recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA)
+
+                filterOnClick("soup")
             }
-            binding.IBVegi.setOnClickListener {
+            binding.vegiFiltIB.setOnClickListener {
                 newSearch = true
                 stringToSearch=RecipeListingFragmentFilters.VEGETARIANA
                 recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA)
+
+                filterOnClick("vegi")
             }
-            binding.IBFruit.setOnClickListener {
+            binding.fruitFiltIB.setOnClickListener {
                 newSearch = true
                 stringToSearch=RecipeListingFragmentFilters.FRUTA
                 recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA)
+
+                filterOnClick("fruit")
             }
-            binding.IBDrink.setOnClickListener {
+            binding.drinkFiltIB.setOnClickListener {
                 newSearch = true
                 stringToSearch=RecipeListingFragmentFilters.BEBIDAS
                 recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS)
+                filterOnClick("drink")
             }
         }
         else{
@@ -300,6 +321,44 @@ class RecipeListingFragment : Fragment() {
 
     private fun showValidationErrors(error: String) {
         toast(error)
+    }
+
+
+    private fun filterOnClick(tag:String){
+
+        //GET OLD CLICK
+        if (oldFiltTag!=""){
+            val updateOld = oldFiltTag
+            oldFiltTag = tag
+            val oldCL: ConstraintLayout? = binding.root.findViewWithTag(updateOld+"CL") as? ConstraintLayout
+            oldCL?.apply {
+                backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
+                elevation=0f
+            }
+
+            val oldTV: TextView? = binding.root.findViewWithTag(updateOld+"TV") as? TextView
+            oldTV?.apply {
+                setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white)))
+            }
+
+            val oldIB: ImageButton? = binding.root.findViewWithTag(updateOld+"_filt_IB") as? ImageButton
+            oldIB?.apply {
+                backgroundTintList=ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
+            }
+        }else{
+            oldFiltTag = tag
+        }
+
+        val cl: ConstraintLayout? = binding.root.findViewWithTag(tag+"CL") as? ConstraintLayout
+        cl?.backgroundTintList= ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color))
+        cl?.elevation=3f
+
+        val tv: TextView? = binding.root.findViewWithTag(tag+"TV") as? TextView
+        tv?.setTextColor(resources.getColor(R.color.white))
+
+        val iv: ImageView? = binding.root.findViewWithTag(tag+"_filt_IB") as? ImageView
+        iv?.backgroundTintList= ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_1))
+
     }
 
     private fun bindObservers() {

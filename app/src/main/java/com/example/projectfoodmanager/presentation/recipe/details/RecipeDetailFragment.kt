@@ -182,6 +182,19 @@ class RecipeDetailFragment : Fragment() {
 
         binding.TVTime.text = recipe.time
         binding.TVDifficulty.text = recipe.difficulty
+
+        when(recipe.difficulty){
+            RecipeDifficultyConstants.LOW->{
+                binding.IV3.setImageResource(R.drawable.low_difficulty)
+            }
+            RecipeDifficultyConstants.MEDIUM->{
+                binding.IV3.setImageResource(R.drawable.medium_difficulty)
+            }
+            RecipeDifficultyConstants.HIGH->{
+                binding.IV3.setImageResource(R.drawable.high_difficulty)
+            }
+        }
+
         binding.TVPortion.text = recipe.portion
 
         // tabs

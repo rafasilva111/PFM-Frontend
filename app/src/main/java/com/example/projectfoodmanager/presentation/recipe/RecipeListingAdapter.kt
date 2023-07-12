@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
+import com.example.projectfoodmanager.util.RecipeDifficultyConstants
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.SharedPreference
 import com.google.firebase.ktx.Firebase
@@ -80,35 +81,61 @@ class RecipeListingAdapter(
 
             }
 
-            binding.dateLabel.text = item.created_date
-            binding.recipeTitle.text = item.title
-            binding.TVDescription.text = item.description.toString()
+            binding.authorTV.text = item.company
+            val imgRef = Firebase.storage.reference.child(item.img_source)
+            imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                val imageURL = Uri.toString()
+                Glide.with(binding.authorIV.context).load(imageURL).into(binding.authorIV)
+            }
+
+            //TODO: Ver com o Rafa -> author verificado ou não
+
+            //TODO: Ver com o Rafa -> receita é verificada ou não
+
+            //TODO: Ver com o Rafa -> Recolher apenas a data e não a data e o horas
+            binding.dateTV.text = item.created_date
+            binding.recipeTitleTV.text = item.title
+            binding.recipeDescriptionTV.text = item.description.toString()
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
+            binding.nLikeTV.text = item.likes.toString()
 
             // get user from shared prefrences
             val user = sharedPreference.getUserSession()
 
-            // like function
-            binding.like.setImageResource(R.drawable.ic_like)
+            binding.ratingRecipeRB.rating = item.source_rating.toFloat()
+            binding.ratingMedTV.text = item.source_rating.toString()
 
-            if (item.likes == 1) {
-                binding.TVRate.text = "1 Gosto"
-            } else {
-                binding.TVRate.text = item.likes.toString() + " Gosto"
+
+            binding.timeTV.text = item.time
+            binding.difficultyTV.text = item.difficulty
+
+            when(item.difficulty){
+                RecipeDifficultyConstants.LOW->{
+                    binding.difficultyIV.setImageResource(R.drawable.low_difficulty)
+                }
+                RecipeDifficultyConstants.MEDIUM->{
+                    binding.difficultyIV.setImageResource(R.drawable.medium_difficulty)
+                }
+                RecipeDifficultyConstants.HIGH->{
+                    binding.difficultyIV.setImageResource(R.drawable.high_difficulty)
+                }
             }
-            binding.dateLabel.text = item.created_date
 
+            binding.portionTV.text = item.portion
+
+
+            //--------- LIKES ---------
+            //TODO: Ver com o Rafa -> LIKES
             // check for user likes
-
             if (user!=null){
                 if(user!!.checkIfLiked(item) != -1){
-                    binding.like.setImageResource(R.drawable.ic_like_active)
+                    binding.likeIB.setImageResource(R.drawable.ic_like_active)
                 }
                 else
-                    binding.like.setImageResource(R.drawable.ic_like)
+                    binding.likeIB.setImageResource(R.drawable.ic_like_black)
             }
 
-            binding.like.setOnClickListener {
+            binding.likeIB.setOnClickListener {
                 if(user!!.checkIfLiked(item) == -1) {
                     onLikeClicked.invoke(item, true)
                 }
@@ -117,21 +144,32 @@ class RecipeListingAdapter(
                     onLikeClicked.invoke(item, false)
                 }
             }
+            //TODO: Ver com o Rafa -> DETAIL VIEW ESTA ASSIM
+
+            /*  binding.likeIB.setOnClickListener {
+             if (sharedPreference.getUserSession()!!.checkIfLiked(item) == -1) {
+                 recipeViewModel.addLikeOnRecipe(recipe.id)
+             } else {
+                 recipeViewModel.removeLikeOnRecipe(recipe.id)
+             }
+         }*/
 
             // favorite function
-            binding.saved.setImageResource(R.drawable.ic_favorite)
+//            binding.favoritesIB.setImageResource(R.drawable.ic_favorite)
 
             // check for user likes
 
+            //--------- FAVORITES ---------
+            //TODO: Ver com o Rafa -> FAVORITES
             if (user!=null){
                 if(user!!.checkIfSaved(item) != -1){
-                    binding.saved.setImageResource(R.drawable.ic_favorito_active)
+                    binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
                 }
                 else
-                    binding.saved.setImageResource(R.drawable.ic_favorite)
+                    binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
             }
 
-            binding.saved.setOnClickListener {
+            binding.favoritesIB.setOnClickListener {
                 if(user!!.checkIfSaved(item) == -1) {
                     onSaveClicked.invoke(item, true)
                 }
@@ -140,6 +178,14 @@ class RecipeListingAdapter(
                     onSaveClicked.invoke(item, false)
                 }
             }
+
+ /*           binding.favoritesIB.setOnClickListener {
+                if (sharedPreference.getUserSession()!!.checkIfSaved(recipe) == -1) {
+                    recipeViewModel.addSaveOnRecipe(recipe.id)
+                } else {
+                    recipeViewModel.removeSaveOnRecipe(recipe.id)
+                }
+            }*/
 
         }
     }
