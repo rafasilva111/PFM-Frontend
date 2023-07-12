@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -124,8 +125,6 @@ class RegisterFragment : Fragment() {
 
         Locale.setDefault(Locale("pt"));
 
-        toast(binding.imageView.tag.toString())
-
         binding.skipBiodata.setOnClickListener {
             // todo melhorar a estétitica
             if (validation()) {
@@ -134,19 +133,21 @@ class RegisterFragment : Fragment() {
 
                     val refStorage = Firebase.storage.reference.child("$user_profile_images$fileName")
                     refStorage.putFile(file_uri!!)
-                        .addOnSuccessListener(
-                            OnSuccessListener<UploadTask.TaskSnapshot> { taskSnapshot ->
-                                Log.d(TAG, "uploadImageToFirebase: success")
-                                authViewModel.registerUser(getUserRequest())
-                            })
+                        .addOnSuccessListener {
+                            Log.d(TAG, "uploadImageToFirebase: success")
+                            authViewModel.registerUser(getUserRequest())
+                        }
 
-                        ?.addOnFailureListener(OnFailureListener { e ->
-                            Log.d(TAG, "uploadImageToFirebase: "+e)
-                        })
+                        .addOnFailureListener { e ->
+                            Log.d(TAG, "uploadImageToFirebase: $e")
+                        }
                 }
                 else
+
                     authViewModel.registerUser(getUserRequest())
 
+            }else{
+                Toast(context).showCustomToast ("Por favor preencha os campos em falta",ToastConstants.ERROR, requireActivity())
             }
         }
         binding.backIB.setOnClickListener {
@@ -191,6 +192,7 @@ class RegisterFragment : Fragment() {
                 myDialog.dismiss()
             }
 
+
             val avatarGV= dialogBinding.findViewById<GridView>(R.id.gvAvatar)
 
             val adapter = AvatarGVAdapter(requireContext(), avatarArrayList)
@@ -200,16 +202,18 @@ class RegisterFragment : Fragment() {
 
                 val avatar= adapter.getItem(position)
 
-                // Handle the item selection here
-                selectedAvatar = avatar!!.getName()
+                if (avatar!!.reserved){
+                    Toast(context).showCustomToast ("Este avatar apenas esta disponivel para VIP!\n Registe-se e depois pode adquirir o VIP",ToastConstants.VIP, requireActivity())
+                }else{
+                    // Handle the item selection here
+                    selectedAvatar = avatar!!.getName()
 
-                binding.imageView.setImageResource(avatar.imgId)
-                //TODO: ver com o RAFA
+                    binding.imageView.setImageResource(avatar.imgId)
 
-                binding.imageView.tag=ImageTagsConstants.SELECTED_AVATAR
-                myDialog.dismiss()
+                    binding.imageView.tag=ImageTagsConstants.SELECTED_AVATAR
+                    myDialog.dismiss()
 
-
+                }
             }
 
 
@@ -343,9 +347,7 @@ class RegisterFragment : Fragment() {
         }
 
         binding.sexEt.addTextChangedListener {
-            //TODO: ver com o RAFA
-
-            var tag= binding.imageView.tag
+            val tag= binding.imageView.tag
             if(tag == ImageTagsConstants.DEFAULT || tag == ImageTagsConstants.RANDOM_AVATAR) {
                 val randAvatar = randomAvatarImg(binding.sexEt.text.toString())
                 selectedAvatar = randAvatar.getName()
@@ -388,20 +390,18 @@ class RegisterFragment : Fragment() {
 
     fun getUserRequest(): UserRequest {
 
-        var img:String=""
-        var sex = binding.sexEt.text.toString()
-        if (sex == "Masculino")
-            sex = "M"
-        else if(sex == "Feminino")
-            sex = "F"
-        else if (sex == "Nao responder")
-                sex = "Nao responder"
-        //TODO: ver com o RAFA
+        val sex: String = when (binding.sexEt.text.toString()) {
+            "Masculino" -> SexConstants.M
+            "Feminino" -> SexConstants.F
+            else -> SexConstants.NA
+        }
 
-        if (selectedAvatar != null)
+        var img = ""
+        if (selectedAvatar != null){
             img = selectedAvatar!!
-        else if (fileName!=null)
+        }else if (fileName!=null){
             img= fileName!!
+        }
 
         return UserRequest(
             first_name = binding.firstNameEt.text.toString(),
@@ -416,29 +416,10 @@ class RegisterFragment : Fragment() {
 
     private fun randomAvatarImg(sex: String): Avatar {
 
-        //TODO: ver com o RAFA
-        var sexCode:String = ""
-        if (sex == "Masculino")
-            sexCode = "M"
-        else if(sex == "Feminino")
-            sexCode = "F"
-        else if (sex == "Nao responder")
-            sexCode = "ND"
-
-        var rdIndex:Int? = null
-        when (sexCode) {
-            "M" ->{
-                rdIndex = (0 until 5).random()
-                return avatarArrayList[rdIndex]
-            }
-            "F" ->  {
-                rdIndex= (6 until 10).random()
-                return avatarArrayList[rdIndex]
-            }
-            else -> {
-                rdIndex= (0 until 10).random()
-                return avatarArrayList[rdIndex]
-            }
+        when(sex) {
+            "Masculino" -> return avatarArrayList[(0 until 5).random()]
+            "Feminino" -> return avatarArrayList[(6 until 10).random()]
+            else -> return avatarArrayList[(0 until 10).random()]
         }
     }
 
@@ -575,7 +556,7 @@ class RegisterFragment : Fragment() {
             val storageRef = Firebase.storage.reference.child("$user_profile_images$fileName")
 
             storageRef.putFile(resultUri)
-                .addOnSuccessListener { taskSnapshot ->
+                .addOnSuccessListener {
                     // Image upload success
                     // You can perform additional operations here if needed
 
@@ -596,7 +577,6 @@ class RegisterFragment : Fragment() {
                 }
             finalUri=resultUri
 
-            // todo
             saveEditedImage()
         }
     }
@@ -612,10 +592,12 @@ class RegisterFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
                         findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-                        toast(getString(R.string.user_registered_successfully))
+                        Toast(context).showCustomToast (getString(R.string.user_registered_successfully),ToastConstants.SUCCESS, requireActivity())
+                        //toast(getString(R.string.user_registered_successfully))
                     }
                     is NetworkResult.Error -> {
-                        toast(it.message.toString())
+                        Toast(context).showCustomToast (it.message.toString(),ToastConstants.ERROR, requireActivity())
+                        //toast(it.message.toString())
                     }
                     is NetworkResult.Loading -> {
                         // todo falta aqui um loading bar
@@ -735,7 +717,6 @@ class RegisterFragment : Fragment() {
     }
 
     private fun setImage(uri: Uri){
-        //TODO: ver com o RAFA
         binding.imageView.tag=ImageTagsConstants.FOTO
         selectedAvatar=null
 

@@ -52,15 +52,31 @@ object SharedPrefConstants {
     var METADATA = "metadata"
 }
 
+object SexConstants{
+    const val M = "M"
+    const val F = "F"
+    const val NA = "NA"
+}
+
 object ImageTagsConstants{
     const val FOTO ="foto"
     const val DEFAULT ="default_img"
     const val SELECTED_AVATAR ="select_avatar"
     const val RANDOM_AVATAR ="random_avatar"
-
-
 }
 
+object ToastConstants{
+    const val SUCCESS = 0
+    const val ALERT = 1
+    const val INFO = 2
+    const val ERROR = -1
+    const val VIP = 3
+}
+object RecipeDifficultyConstants{
+    const val LOW ="Fácil"
+    const val MEDIUM ="Moderada"
+    const val HIGH ="Dificil"
+}
 
 object RecipeListingFragmentFilters {
     val CARNE ="carne"

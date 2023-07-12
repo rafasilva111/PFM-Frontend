@@ -71,6 +71,9 @@ class FavoritesRecipeListingAdapter(
 
 
         fun bind(item: Recipe) {
+            binding.authorTV.text = item.company
+
+            //TODO: Ver com o Rafa -> inconcistencia comparado com o recipe listing adptar
             val imgRef = Firebase.storage.reference.child(item.img_source)
             imgRef.downloadUrl.addOnSuccessListener { Uri ->
                 val imageURL = Uri.toString()
@@ -81,31 +84,43 @@ class FavoritesRecipeListingAdapter(
                         .load(R.drawable.good_food_display___nci_visuals_online)
                         .into(binding.imageView)
                 }
-            binding.dateLabel.text = item.created_date
-            binding.recipeTitle.text = item.title
-            binding.TVAutor.text = item.company
-            binding.TVDescription.text = item.description.toString()
+
+
+
+            //TODO: Ver com o Rafa -> author verificado ou não
+
+            //TODO: Ver com o Rafa -> receita é verificada ou não
+
+            binding.dateTV.text = item.created_date
+            binding.recipeTitleTV.text = item.title
+            binding.recipeDescriptionTV.text = item.description.toString()
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
 
 
-            if (item.likes == 1) {
-                binding.TVRate.text = "1 Gosto"
-            } else {
-                binding.TVRate.text = "${item.likes} Gostos"
-            }
+            //TODO: Ver com o Rafa -> [get user from shared prefrences ]
+            // inconcistencia comparado com o recipe listing adptar
 
-            // like function
 
+            binding.ratingRecipeRB.rating = item.source_rating.toFloat()
+            binding.ratingMedTV.text = item.source_rating.toString()
+
+            binding.timeTV.text = item.time
+            binding.difficultyTV.text = item.difficulty
+            binding.portionTV.text = item.portion
+
+            //--------- LIKES ---------
+            //TODO: Ver com o Rafa -> LIKES
+            // check for user likes
 
             if (user!=null){
                 if(user!!.checkIfLiked(item) != -1){
-                    binding.like.setImageResource(R.drawable.ic_like_active)
+                    binding.favoritesIB.setImageResource(R.drawable.ic_like_active)
                 }
                 else
-                    binding.like.setImageResource(R.drawable.ic_like)
+                    binding.likeIB.setImageResource(R.drawable.ic_like_black)
             }
 
-            binding.like.setOnClickListener {
+            binding.likeIB.setOnClickListener {
                 if(user!!.checkIfLiked(item) == -1) {
                     onLikeClicked.invoke(item, true)
                 }
@@ -115,20 +130,24 @@ class FavoritesRecipeListingAdapter(
                 }
             }
 
+            //TODO: Ver com o Rafa ->
+/*
             // favorite function
-            binding.saved.setImageResource(R.drawable.ic_favorite)
-
-            // check for user likes
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorite)
+*/
+            //--------- FAVORITES ---------
+            //TODO: Ver com o Rafa -> FAVORITES
+            // check for user FAVORITES
 
             if (user!=null){
                 if(user!!.checkIfSaved(item) != -1){
-                    binding.saved.setImageResource(R.drawable.ic_favorito_active)
+                    binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
                 }
                 else
-                    binding.saved.setImageResource(R.drawable.ic_favorite)
+                    binding.favoritesIB.setImageResource(R.drawable.ic_favorite)
             }
 
-            binding.saved.setOnClickListener {
+            binding.favoritesIB.setOnClickListener {
                 if(user!!.checkIfSaved(item) == -1) {
                     onSaveClicked.invoke(item, true)
                 }

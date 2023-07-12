@@ -144,35 +144,31 @@ class RecipeDetailFragment : Fragment() {
         binding.numberLikeTV.text = recipe.likes.toString()
 
         // check for user likes
-        val user: User? = sharedPreference.getUserSession()
+        val user: User = sharedPreference.getUserSession()
 
-        if (user != null) {
-            if (user!!.checkIfLiked(recipe) != -1) {
-                binding.likeIB.setImageResource(R.drawable.ic_like_active)
-            } else
-                binding.likeIB.setImageResource(R.drawable.ic_like_black)
-        }
+        //--------- LIKES ---------
+        if (user.checkIfLiked(recipe) != -1) {
+            binding.likeIB.setImageResource(R.drawable.ic_like_active)
+        } else
+            binding.likeIB.setImageResource(R.drawable.ic_like_black)
+
 
         binding.likeIB.setOnClickListener {
-            if (sharedPreference.getUserSession()!!.checkIfLiked(recipe) == -1) {
+            if (sharedPreference.getUserSession().checkIfLiked(recipe) == -1) {
                 recipeViewModel.addLikeOnRecipe(recipe.id)
             } else {
                 recipeViewModel.removeLikeOnRecipe(recipe.id)
             }
         }
 
-
-        // check for user saves
-
-        if (user != null) {
-            if (user!!.checkIfSaved(recipe) != -1) {
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
-            } else
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
-        }
+        //--------- FAVORITES ---------
+        if (user.checkIfSaved(recipe) != -1) {
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
+        } else
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
 
         binding.favoritesIB.setOnClickListener {
-            if (sharedPreference.getUserSession()!!.checkIfSaved(recipe) == -1) {
+            if (sharedPreference.getUserSession().checkIfSaved(recipe) == -1) {
                 recipeViewModel.addSaveOnRecipe(recipe.id)
             } else {
                 recipeViewModel.removeSaveOnRecipe(recipe.id)
@@ -182,6 +178,19 @@ class RecipeDetailFragment : Fragment() {
 
         binding.TVTime.text = recipe.time
         binding.TVDifficulty.text = recipe.difficulty
+
+        when(recipe.difficulty){
+            RecipeDifficultyConstants.LOW->{
+                binding.IV3.setImageResource(R.drawable.low_difficulty)
+            }
+            RecipeDifficultyConstants.MEDIUM->{
+                binding.IV3.setImageResource(R.drawable.medium_difficulty)
+            }
+            RecipeDifficultyConstants.HIGH->{
+                binding.IV3.setImageResource(R.drawable.high_difficulty)
+            }
+        }
+
         binding.TVPortion.text = recipe.portion
 
         // tabs
