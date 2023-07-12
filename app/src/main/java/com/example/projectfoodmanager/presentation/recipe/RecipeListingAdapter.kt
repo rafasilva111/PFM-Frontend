@@ -12,6 +12,8 @@ import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.SharedPreference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class RecipeListingAdapter(
@@ -92,10 +94,12 @@ class RecipeListingAdapter(
 
             //TODO: Ver com o Rafa -> receita é verificada ou não
 
-            //TODO: Ver com o Rafa -> Recolher apenas a data e não a data e o horas
-            binding.dateTV.text = item.created_date
+            val format = SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH)
+            val date: Date? = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.ENGLISH).parse(item.created_date)
+
+            binding.dateTV.text = format.format(date!!)
             binding.recipeTitleTV.text = item.title
-            binding.recipeDescriptionTV.text = item.description.toString()
+            binding.recipeDescriptionTV.text = item.description
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
             binding.nLikeTV.text = item.likes.toString()
 
@@ -103,7 +107,7 @@ class RecipeListingAdapter(
             val user = sharedPreference.getUserSession()
 
             binding.ratingRecipeRB.rating = item.source_rating.toFloat()
-            binding.ratingMedTV.text = item.source_rating.toString()
+            binding.ratingMedTV.text = item.source_rating
 
 
             binding.timeTV.text = item.time
@@ -125,18 +129,15 @@ class RecipeListingAdapter(
 
 
             //--------- LIKES ---------
-            //TODO: Ver com o Rafa -> LIKES
-            // check for user likes
-            if (user!=null){
-                if(user!!.checkIfLiked(item) != -1){
-                    binding.likeIB.setImageResource(R.drawable.ic_like_active)
-                }
-                else
-                    binding.likeIB.setImageResource(R.drawable.ic_like_black)
+            if(user.checkIfLiked(item) != -1){
+                binding.likeIB.setImageResource(R.drawable.ic_like_active)
             }
+            else
+                binding.likeIB.setImageResource(R.drawable.ic_like_black)
+
 
             binding.likeIB.setOnClickListener {
-                if(user!!.checkIfLiked(item) == -1) {
+                if(user.checkIfLiked(item) == -1) {
                     onLikeClicked.invoke(item, true)
                 }
                 else
@@ -144,33 +145,17 @@ class RecipeListingAdapter(
                     onLikeClicked.invoke(item, false)
                 }
             }
-            //TODO: Ver com o Rafa -> DETAIL VIEW ESTA ASSIM
 
-            /*  binding.likeIB.setOnClickListener {
-             if (sharedPreference.getUserSession()!!.checkIfLiked(item) == -1) {
-                 recipeViewModel.addLikeOnRecipe(recipe.id)
-             } else {
-                 recipeViewModel.removeLikeOnRecipe(recipe.id)
-             }
-         }*/
-
-            // favorite function
-//            binding.favoritesIB.setImageResource(R.drawable.ic_favorite)
-
-            // check for user likes
 
             //--------- FAVORITES ---------
-            //TODO: Ver com o Rafa -> FAVORITES
-            if (user!=null){
-                if(user!!.checkIfSaved(item) != -1){
-                    binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
-                }
-                else
-                    binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
+            if(user.checkIfSaved(item) != -1){
+                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
             }
+            else
+                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
 
             binding.favoritesIB.setOnClickListener {
-                if(user!!.checkIfSaved(item) == -1) {
+                if(user.checkIfSaved(item) == -1) {
                     onSaveClicked.invoke(item, true)
                 }
                 else
@@ -178,14 +163,6 @@ class RecipeListingAdapter(
                     onSaveClicked.invoke(item, false)
                 }
             }
-
- /*           binding.favoritesIB.setOnClickListener {
-                if (sharedPreference.getUserSession()!!.checkIfSaved(recipe) == -1) {
-                    recipeViewModel.addSaveOnRecipe(recipe.id)
-                } else {
-                    recipeViewModel.removeSaveOnRecipe(recipe.id)
-                }
-            }*/
 
         }
     }

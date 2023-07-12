@@ -327,7 +327,7 @@ class RecipeListingFragment : Fragment() {
     private fun filterOnClick(tag:String){
 
         //GET OLD CLICK
-        if (oldFiltTag!=""){
+        if (oldFiltTag.isBlank() || oldFiltTag!=tag){
             val updateOld = oldFiltTag
             oldFiltTag = tag
             val oldCL: ConstraintLayout? = binding.root.findViewWithTag(updateOld+"CL") as? ConstraintLayout
@@ -338,13 +338,34 @@ class RecipeListingFragment : Fragment() {
 
             val oldTV: TextView? = binding.root.findViewWithTag(updateOld+"TV") as? TextView
             oldTV?.apply {
-                setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white)))
+                setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
             }
 
             val oldIB: ImageButton? = binding.root.findViewWithTag(updateOld+"_filt_IB") as? ImageButton
             oldIB?.apply {
                 backgroundTintList=ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
             }
+            //ignorar este warning
+        }else if (oldFiltTag==tag){
+            val oldCL: ConstraintLayout? = binding.root.findViewWithTag(tag+"CL") as? ConstraintLayout
+            oldCL?.apply {
+                backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
+                elevation=0f
+            }
+
+            val oldTV: TextView? = binding.root.findViewWithTag(tag+"TV") as? TextView
+            oldTV?.apply {
+                setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
+            }
+
+            val oldIB: ImageButton? = binding.root.findViewWithTag(tag+"_filt_IB") as? ImageButton
+            oldIB?.apply {
+                backgroundTintList=ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
+            }
+            oldFiltTag=""
+            recipeViewModel.getRecipesPaginated(1)
+            currentPage=1
+            return
         }else{
             oldFiltTag = tag
         }
@@ -394,7 +415,8 @@ class RecipeListingFragment : Fragment() {
                             currentPage = it.data!!._metadata.current_page
 
                             if(it.data.result.isEmpty()){
-                                binding.offlineTV.text = "Não existem receitas..."
+                                //TODO: Não funciona com os filtros
+                                binding.offlineTV.text = getString(R.string.no_recipes_found)
                                 binding.offlineTV.visibility=View.VISIBLE
                             }else{
                                 binding.offlineTV.visibility=View.GONE
@@ -497,7 +519,6 @@ class RecipeListingFragment : Fragment() {
                     is NetworkResult.Success -> {
 
                         binding.progressBar.hide()
-                        toast(getString(R.string.recipe_liked))
 
                         // updates local list
                         for (item in recipeList.toMutableList()) {
@@ -524,7 +545,6 @@ class RecipeListingFragment : Fragment() {
                     is NetworkResult.Success -> {
 
                         binding.progressBar.hide()
-                        toast(getString(R.string.recipe_removed_liked))
 
                         // updates local list
                         for (item in recipeList.toMutableList()) {
@@ -552,8 +572,6 @@ class RecipeListingFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
                         binding.progressBar.hide()
-                        toast(getString(R.string.recipe_saved))
-
                         // updates local list
                         for (item in recipeList.toMutableList()) {
                             if (item.id == it.data) {
@@ -577,8 +595,6 @@ class RecipeListingFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
                         binding.progressBar.hide()
-                        toast(getString(R.string.recipe_removed_from_saves))
-
                         // updates local list
                         for (item in recipeList.toMutableList()) {
                             if (item.id == it.data) {
@@ -598,32 +614,6 @@ class RecipeListingFragment : Fragment() {
         }
 
     }
-
-
-    /*fun observer() {
-        authModel.user.observe(viewLifecycleOwner){ response ->
-            when(response){
-                is Resource.Loading -> {
-                    Log.i(TAG,"Loading...")
-                }
-                is Resource.Success -> {
-                    response.data
-                    val user = response.data
-                    binding.tvName.text = user!!.first_name + " " + user!!.last_name
-                    Log.i(TAG,"${response.data}")
-                }
-                is Resource.Error -> {
-                    if (response.code == ERROR_CODES.SESSION_INVALID){
-                        findNavController().navigate(R.id.action_recipeListingFragment_to_loginFragment)
-                        //todo delete user prefs
-                        toast(getString(R.string.invalid_session))
-                    }
-                    Log.i(TAG,"${response.message}")
-                }
-                else -> {}
-            }
-        }
-    }*/
 
     private fun changeVisibilityMenu(state : Boolean){
         val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
