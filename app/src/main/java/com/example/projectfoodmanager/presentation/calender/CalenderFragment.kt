@@ -13,7 +13,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentCalenderBinding
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.daysInMonthArray
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.formatDateMonthYear
-import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.selectedDate
+import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.currentDate
 import com.example.projectfoodmanager.util.toast
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +29,7 @@ class CalenderFragment : Fragment() {
     private val adapter by lazy {
             CalendarAdapter(
                 daysInMonthArray(
-                    selectedDate
+                    currentDate
             ),
             onItemClicked = {text ->
                 toast(text)
@@ -55,20 +55,20 @@ class CalenderFragment : Fragment() {
         }
 
         binding.previousBtn.setOnClickListener{
-            selectedDate = selectedDate.minusMonths(1)
+            currentDate = currentDate.minusMonths(1)
             updateMonthView()
         }
 
         binding.nextBtn.setOnClickListener{
-            selectedDate = selectedDate.plusMonths(1)
+            currentDate = currentDate.plusMonths(1)
             updateMonthView()
         }
 
     }
 
     private fun setMonthView() {
-        selectedDate = LocalDate.now()
-        binding.monthYearTV.text = formatDateMonthYear(selectedDate)
+        currentDate = LocalDate.now()
+        binding.monthYearTV.text = formatDateMonthYear(currentDate)
 
         val layoutManager: RecyclerView.LayoutManager =
             GridLayoutManager(activity?.applicationContext, 7)
@@ -78,9 +78,9 @@ class CalenderFragment : Fragment() {
 
     private fun updateMonthView() {
 
-        binding.monthYearTV.text = formatDateMonthYear(selectedDate)
+        binding.monthYearTV.text = formatDateMonthYear(currentDate)
         adapter.updateList(daysInMonthArray(
-            selectedDate
+            currentDate
         ))
     }
 }

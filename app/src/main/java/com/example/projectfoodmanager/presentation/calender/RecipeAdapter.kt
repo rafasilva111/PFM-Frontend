@@ -31,7 +31,7 @@ class RecipeAdapter(
                 holder.dayOfMonth.text = ""
             else{
                 holder.dayOfMonth.text =  date.dayOfMonth.toString()
-                if (date == CalenderUtils.selectedDate)
+                if (date == CalenderUtils.currentDate)
                     holder.parentView.setBackgroundColor(Color.GRAY)
                 else
                     holder.parentView.setBackgroundColor(Color.TRANSPARENT)
@@ -59,7 +59,7 @@ class RecipeAdapter(
 
                 itemView.setOnClickListener {
                     if (dayOfMonth.text.isNotBlank() ){
-                        CalenderUtils.selectedDate = days[bindingAdapterPosition]!!
+                        CalenderUtils.currentDate = days[bindingAdapterPosition]!!
                         onItemClicked.invoke( dayOfMonth.text as String) }
                     notifyDataSetChanged()
                 }

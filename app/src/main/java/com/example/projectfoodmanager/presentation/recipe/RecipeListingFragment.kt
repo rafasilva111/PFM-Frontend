@@ -326,60 +326,40 @@ class RecipeListingFragment : Fragment() {
 
     private fun filterOnClick(tag:String){
 
-        //GET OLD CLICK
-        if (oldFiltTag.isBlank() || oldFiltTag!=tag){
-            val updateOld = oldFiltTag
-            oldFiltTag = tag
-            val oldCL: ConstraintLayout? = binding.root.findViewWithTag(updateOld+"CL") as? ConstraintLayout
-            oldCL?.apply {
-                backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
-                elevation=0f
-            }
+        val clToUpdate: ConstraintLayout? = binding.root.findViewWithTag(oldFiltTag + "CL") as? ConstraintLayout
+        val tvToUpdate: TextView? = binding.root.findViewWithTag(oldFiltTag + "TV") as? TextView
+        val ibToUpdate: ImageButton? = binding.root.findViewWithTag(oldFiltTag + "_filt_IB") as? ImageButton
 
-            val oldTV: TextView? = binding.root.findViewWithTag(updateOld+"TV") as? TextView
-            oldTV?.apply {
-                setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
-            }
-
-            val oldIB: ImageButton? = binding.root.findViewWithTag(updateOld+"_filt_IB") as? ImageButton
-            oldIB?.apply {
-                backgroundTintList=ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
-            }
-            //ignorar este warning
-        }else if (oldFiltTag==tag){
-            val oldCL: ConstraintLayout? = binding.root.findViewWithTag(tag+"CL") as? ConstraintLayout
-            oldCL?.apply {
-                backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
-                elevation=0f
-            }
-
-            val oldTV: TextView? = binding.root.findViewWithTag(tag+"TV") as? TextView
-            oldTV?.apply {
-                setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
-            }
-
-            val oldIB: ImageButton? = binding.root.findViewWithTag(tag+"_filt_IB") as? ImageButton
-            oldIB?.apply {
-                backgroundTintList=ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
-            }
-            oldFiltTag=""
-            recipeViewModel.getRecipesPaginated(1)
-            currentPage=1
-            return
-        }else{
-            oldFiltTag = tag
+        clToUpdate?.apply {
+            backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
+            elevation = 0f
         }
 
-        val cl: ConstraintLayout? = binding.root.findViewWithTag(tag+"CL") as? ConstraintLayout
-        cl?.backgroundTintList= ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color))
-        cl?.elevation=3f
+        tvToUpdate?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
 
-        val tv: TextView? = binding.root.findViewWithTag(tag+"TV") as? TextView
+        ibToUpdate?.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
+
+        if (oldFiltTag == tag) {
+            oldFiltTag = ""
+            recipeViewModel.getRecipesPaginated(1)
+            currentPage = 1
+            return
+        }
+
+        oldFiltTag = tag
+
+        val cl: ConstraintLayout? = binding.root.findViewWithTag(tag + "CL") as? ConstraintLayout
+        val tv: TextView? = binding.root.findViewWithTag(tag + "TV") as? TextView
+        val ib: ImageButton? = binding.root.findViewWithTag(tag + "_filt_IB") as? ImageButton
+
+        cl?.apply {
+            backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color))
+            elevation = 3f
+        }
+
         tv?.setTextColor(resources.getColor(R.color.white))
 
-        val iv: ImageView? = binding.root.findViewWithTag(tag+"_filt_IB") as? ImageView
-        iv?.backgroundTintList= ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_1))
-
+        ib?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_1))
     }
 
     private fun bindObservers() {

@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter
 
 class CalenderUtils {
     companion object {
-        var selectedDate: LocalDate = LocalDate.now()
+        var currentDate: LocalDate = LocalDate.now()
 
 
         fun formatDateMonthYear(date: LocalDate): String? {

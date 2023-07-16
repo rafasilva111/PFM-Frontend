@@ -13,10 +13,9 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentWeeklyBinding
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.daysInWeekArray
-import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.selectedDate
+import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.currentDate
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
-import java.time.LocalTime
 
 @AndroidEntryPoint
 class WeeklyFragment : Fragment() {
@@ -26,7 +25,7 @@ class WeeklyFragment : Fragment() {
     private val adapter by lazy {
         CalendarAdapter(
             daysInWeekArray(
-                selectedDate
+                currentDate
             ),
             onItemClicked = {text ->
 
@@ -38,7 +37,7 @@ class WeeklyFragment : Fragment() {
     private val recipeAdapter by lazy{
         RecipeAdapter(
             daysInWeekArray(
-                selectedDate
+                currentDate
             ),
             onItemClicked = {text ->
 
@@ -61,12 +60,12 @@ class WeeklyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.previousBtn.setOnClickListener{
-            selectedDate = selectedDate.minusWeeks(1)
+            currentDate = currentDate.minusWeeks(1)
             updateMonthView()
         }
 
         binding.nextBtn.setOnClickListener{
-            selectedDate = selectedDate.plusWeeks(1)
+            currentDate = currentDate.plusWeeks(1)
             updateMonthView()
         }
 
@@ -77,35 +76,35 @@ class WeeklyFragment : Fragment() {
     }
 
     private fun setWeeklyView() {
-        selectedDate = LocalDate.now()
-        binding.monthYearTV.text = CalenderUtils.formatDateMonthYear(selectedDate)
+        currentDate = LocalDate.now()
+        binding.monthYearTV.text = CalenderUtils.formatDateMonthYear(currentDate)
 
         val layoutManager: RecyclerView.LayoutManager =
             GridLayoutManager(activity?.applicationContext, 7)
         binding.calendarRecyclerView.layoutManager = layoutManager
         binding.calendarRecyclerView.adapter = adapter
-        setEventAdapter()
+        //setEventAdapter()
     }
 
 
     private fun updateMonthView() {
 
-        binding.monthYearTV.text = CalenderUtils.formatDateMonthYear(selectedDate)
+        binding.monthYearTV.text = CalenderUtils.formatDateMonthYear(currentDate)
         adapter.updateList(
                 daysInWeekArray(
-                selectedDate
+                currentDate
             )
         )
     }
 
     override fun onResume() {
         super.onResume()
-        setEventAdapter()
+        //setEventAdapter()
     }
 
     private fun setEventAdapter() {
-        selectedDate = LocalDate.now()
-        binding.monthYearTV.text = CalenderUtils.formatDateMonthYear(selectedDate)
+        currentDate = LocalDate.now()
+        binding.monthYearTV.text = CalenderUtils.formatDateMonthYear(currentDate)
 
         val layoutManager: RecyclerView.LayoutManager =LinearLayoutManager(activity?.applicationContext)
         binding.recipesRV.layoutManager = layoutManager
