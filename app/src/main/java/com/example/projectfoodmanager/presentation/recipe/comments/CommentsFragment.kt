@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
@@ -106,7 +107,7 @@ class CommentsFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        val userSession: User? = sharedPreference.getUserSession()
+        val userSession: User = sharedPreference.getUserSession()
 
         if (isOnline(view.context)) {
 
@@ -130,14 +131,22 @@ class CommentsFragment : Fragment() {
             }
 
 
-            if (userSession?.img_source != null && userSession.img_source != "") {
+            if (userSession.img_source.contains("avatar")){
+                val avatar= Avatar.getAvatarByName(userSession.img_source)
+                binding.IVcommentBottonImage.setImageResource(avatar!!.imgId)
+
+            }else{
                 val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${userSession.img_source}")
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                    Glide.with(binding.IVcommentBottonImage.context).load(Uri.toString())
-                        .into(binding.IVcommentBottonImage)
+                    Glide.with(binding.IVcommentBottonImage.context).load(Uri.toString()).into(binding.IVcommentBottonImage)
                 }
-
+                    .addOnFailureListener {
+                        Glide.with(binding.IVcommentBottonImage.context)
+                            .load(R.drawable.good_food_display___nci_visuals_online)
+                            .into(binding.IVcommentBottonImage)
+                    }
             }
+
 
         }
         else{

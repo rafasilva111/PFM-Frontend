@@ -182,15 +182,17 @@ class RecipeListingFragment : Fragment() {
         // user data
         val user = sharedPreference.getUserSession()
 
-        binding.tvName.text =  getString(R.string.full_name, user.first_name, user.last_name)
+        binding.tvName.text =  getString(R.string.full_name, user.name)
 
+        //VIP HEADER
         if(user.user_type != "V"){
             binding.profileCV.foreground=null
             binding.vipIV.visibility=View.INVISIBLE
         }
 
+        //VERIFIED HEADER
         if(user.verified)
-            binding.verifyIV.visibility=View.VISIBLE
+            binding.verifyUserHeaderIV.visibility=View.VISIBLE
 
 
         if (user.img_source.contains("avatar")){
@@ -428,7 +430,6 @@ class RecipeListingFragment : Fragment() {
         }
 
         // Search Function
-
         recipeViewModel.recipeSearchByTitleAndTagsResponseLiveData.observe(viewLifecycleOwner
         ) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {

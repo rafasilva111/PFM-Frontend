@@ -1,12 +1,15 @@
 package com.example.projectfoodmanager.presentation.recipe
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
+import com.example.projectfoodmanager.util.FireStorage
 import com.example.projectfoodmanager.util.RecipeDifficultyConstants
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.util.SharedPreference
@@ -83,16 +86,28 @@ class RecipeListingAdapter(
 
             }
 
-            binding.authorTV.text = item.company
-            val imgRef = Firebase.storage.reference.child(item.img_source)
-            imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                val imageURL = Uri.toString()
-                Glide.with(binding.authorIV.context).load(imageURL).into(binding.authorIV)
+            binding.authorTV.text = item.backgrounds[0].user.name
+
+            if (!item.backgrounds[0].user.verified){
+                binding.verifyUserIV.visibility=View.INVISIBLE
             }
 
-            //TODO: Ver com o Rafa -> author verificado ou não
+            if (item.backgrounds[0].user.img_source.contains("avatar")){
+                val avatar= Avatar.getAvatarByName(item.backgrounds[0].user.img_source)
+                binding.authorIV.setImageResource(avatar!!.imgId)
 
-            //TODO: Ver com o Rafa -> receita é verificada ou não
+            }else{
+                val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.backgrounds[0].user.img_source}")
+                imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                    Glide.with(binding.authorIV.context).load(Uri.toString()).into(binding.authorIV)
+                }
+                    .addOnFailureListener {
+                        Glide.with(binding.authorIV.context)
+                            .load(R.drawable.good_food_display___nci_visuals_online)
+                            .into(binding.authorIV)
+                    }
+            }
+
 
             val format = SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH)
             val date: Date? = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.ENGLISH).parse(item.created_date)
@@ -102,6 +117,14 @@ class RecipeListingAdapter(
             binding.recipeDescriptionTV.text = item.description
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
             binding.nLikeTV.text = item.likes.toString()
+
+            if (!item.verified){
+                binding.verifyRecipeIV.visibility= View.INVISIBLE
+                binding.verifyRecipeTV.visibility= View.INVISIBLE
+            }else{
+                binding.verifyRecipeIV.visibility= View.VISIBLE
+                binding.verifyRecipeTV.visibility= View.VISIBLE
+            }
 
             // get user from shared prefrences
             val user = sharedPreference.getUserSession()

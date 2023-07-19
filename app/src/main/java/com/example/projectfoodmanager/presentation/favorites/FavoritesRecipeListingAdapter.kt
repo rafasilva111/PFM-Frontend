@@ -1,17 +1,22 @@
 package com.example.projectfoodmanager.presentation.favorites
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
+import com.example.projectfoodmanager.util.FireStorage
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class FavoritesRecipeListingAdapter(
@@ -73,7 +78,7 @@ class FavoritesRecipeListingAdapter(
         fun bind(item: Recipe) {
             binding.authorTV.text = item.company
 
-            //TODO: Ver com o Rafa -> inconcistencia comparado com o recipe listing adptar
+            //------- IMAGEM DA RECIPE -------
             val imgRef = Firebase.storage.reference.child(item.img_source)
             imgRef.downloadUrl.addOnSuccessListener { Uri ->
                 val imageURL = Uri.toString()
@@ -85,20 +90,48 @@ class FavoritesRecipeListingAdapter(
                         .into(binding.imageView)
                 }
 
+            //------- AUTOR DA RECIPE -------
+            binding.authorTV.text = item.backgrounds[0].user.name
+
+            if (!item.backgrounds[0].user.verified){
+                binding.verifyUserIV.visibility=View.INVISIBLE
+            }
+
+            if (item.backgrounds[0].user.img_source.contains("avatar")){
+                val avatar= Avatar.getAvatarByName(item.backgrounds[0].user.img_source)
+                binding.authorIV.setImageResource(avatar!!.imgId)
+
+            }else{
+                val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.backgrounds[0].user.img_source}")
+                imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                    Glide.with(binding.authorIV.context).load(Uri.toString()).into(binding.authorIV)
+                }
+                    .addOnFailureListener {
+                        Glide.with(binding.authorIV.context)
+                            .load(R.drawable.good_food_display___nci_visuals_online)
+                            .into(binding.authorIV)
+                    }
+            }
 
 
-            //TODO: Ver com o Rafa -> author verificado ou não
+            //------- INFOS DA RECIPE -------
+            val format = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+            val date: Date? = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(item.created_date)
 
-            //TODO: Ver com o Rafa -> receita é verificada ou não
-
-            binding.dateTV.text = item.created_date
+            binding.dateTV.text = format.format(date!!)
             binding.recipeTitleTV.text = item.title
             binding.recipeDescriptionTV.text = item.description.toString()
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
+            binding.nLikeTV.text = item.likes.toString()
 
-
-            //TODO: Ver com o Rafa -> [get user from shared prefrences ]
-            // inconcistencia comparado com o recipe listing adptar
+            //------- RECEITA VERIFICADA OU NÃO -------
+            if (!item.verified){
+                binding.verifyRecipeIV.visibility= View.INVISIBLE
+                binding.verifyRecipeTV.visibility= View.INVISIBLE
+            }else{
+                binding.verifyRecipeIV.visibility= View.VISIBLE
+                binding.verifyRecipeTV.visibility= View.VISIBLE
+            }
 
 
             binding.ratingRecipeRB.rating = item.source_rating.toFloat()
@@ -130,15 +163,7 @@ class FavoritesRecipeListingAdapter(
                 }
             }
 
-            //TODO: Ver com o Rafa ->
-/*
-            // favorite function
-            binding.favoritesIB.setImageResource(R.drawable.ic_favorite)
-*/
             //--------- FAVORITES ---------
-            //TODO: Ver com o Rafa -> FAVORITES
-            // check for user FAVORITES
-
             if (user!=null){
                 if(user!!.checkIfSaved(item) != -1){
                     binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)

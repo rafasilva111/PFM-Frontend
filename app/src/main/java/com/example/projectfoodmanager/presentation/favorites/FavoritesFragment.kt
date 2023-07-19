@@ -1,6 +1,8 @@
 package com.example.projectfoodmanager.presentation.favorites
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -9,8 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -56,6 +62,7 @@ class FavoritesFragment : Fragment() {
 
 
     val TAG: String = "FavoritesFragmentFragment"
+    private var oldFiltTag: String =""
 
     private val adapter by lazy {
         FavoritesRecipeListingAdapter(
@@ -217,23 +224,29 @@ class FavoritesFragment : Fragment() {
 
         // bottom nav bar
 
-        binding.IBMeat.setOnClickListener {
+        binding.meatFiltIB.setOnClickListener {
             recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE)
+            filterOnClick("meat")
         }
-        binding.IBFish.setOnClickListener {
+        binding.fishFiltIB.setOnClickListener {
             recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE)
+            filterOnClick("fish")
         }
-        binding.IBSoup.setOnClickListener {
+        binding.soupFiltIB.setOnClickListener {
             recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA)
+            filterOnClick("soup")
         }
-        binding.IBVegi.setOnClickListener {
+        binding.vegiFiltIB.setOnClickListener {
             recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA)
+            filterOnClick("vegi")
         }
-        binding.IBFruit.setOnClickListener {
+        binding.fruitFiltIB.setOnClickListener {
             recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA)
+            filterOnClick("fruit")
         }
-        binding.IBDrink.setOnClickListener {
+        binding.drinkFiltIB.setOnClickListener {
             recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS)
+            filterOnClick("drink")
         }
 
         binding.recyclerView.adapter = adapter
@@ -307,6 +320,44 @@ class FavoritesFragment : Fragment() {
 
     }
 
+    private fun filterOnClick(tag:String){
+
+        val clToUpdate: ConstraintLayout? = binding.root.findViewWithTag(oldFiltTag + "CL") as? ConstraintLayout
+        val tvToUpdate: TextView? = binding.root.findViewWithTag(oldFiltTag + "TV") as? TextView
+        val ibToUpdate: ImageButton? = binding.root.findViewWithTag(oldFiltTag + "_filt_IB") as? ImageButton
+
+        clToUpdate?.apply {
+            backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
+            elevation = 0f
+        }
+
+        tvToUpdate?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
+
+        ibToUpdate?.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
+
+        if (oldFiltTag == tag) {
+            oldFiltTag = ""
+            recipeViewModel.getRecipesPaginated(1)
+            //TODO: Rafa-> No recipe listing acrescentou se isto, mas aqui como esta diferente não sei
+            //currentPage = 1
+            return
+        }
+
+        oldFiltTag = tag
+
+        val cl: ConstraintLayout? = binding.root.findViewWithTag(tag + "CL") as? ConstraintLayout
+        val tv: TextView? = binding.root.findViewWithTag(tag + "TV") as? TextView
+        val ib: ImageButton? = binding.root.findViewWithTag(tag + "_filt_IB") as? ImageButton
+
+        cl?.apply {
+            backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color))
+            elevation = 3f
+        }
+
+        tv?.setTextColor(resources.getColor(R.color.white))
+
+        ib?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_1))
+    }
 
     private fun bindObservers() {
 

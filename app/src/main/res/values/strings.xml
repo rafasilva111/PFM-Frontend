@@ -67,7 +67,8 @@
     <string name="login_string">Entrar</string>
     <string name="recipe_removed_from_saves">Save revomed.</string>
     <string name="recipe_saved">Recipe saved.</string>
-    <string name="full_name">%1$s %2$s</string>
+<!--    <string name="full_name">%1$s %2$s</string>-->
+    <string name="full_name">%1$s</string>
     <string name="goals_biodata_confirmation">You don\'t have you\'re biodata insered, and it is required to proceed, do you want to insert?</string>
     <string name="biodata_update">Atualização</string>
     <string name="warning">Atenção</string>

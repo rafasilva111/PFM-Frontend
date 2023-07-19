@@ -60,7 +60,7 @@
 		android:layout_width="357dp"
 		android:layout_height="50dp"
 		android:layout_marginTop="123dp"
-		android:background="@drawable/rectangle_575_shape"
+		android:background="@drawable/rectangle_simple"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/goodbites" />

@@ -16,6 +16,7 @@ import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.currentDate
 import com.example.projectfoodmanager.util.toast
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
@@ -50,6 +51,13 @@ class CalenderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.addRegisterIB.setOnClickListener {
+            findNavController().navigate(R.id.action_calenderFragment_to_newCalenderEntryFragment)
+            changeVisibilityMenu(false)
+
+        }
+
+
         binding.weeklyViewBtn.setOnClickListener {
             findNavController().navigate(R.id.action_calenderFragment_to_weeklyFragment)
         }
@@ -64,6 +72,11 @@ class CalenderFragment : Fragment() {
             updateMonthView()
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        changeVisibilityMenu(true)
     }
 
     private fun setMonthView() {
@@ -83,4 +96,17 @@ class CalenderFragment : Fragment() {
             currentDate
         ))
     }
+
+    private fun changeVisibilityMenu(state : Boolean){
+        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        if(state){
+            menu!!.visibility=View.VISIBLE
+        }else{
+            menu!!.visibility=View.GONE
+        }
+    }
+
+
+
 }

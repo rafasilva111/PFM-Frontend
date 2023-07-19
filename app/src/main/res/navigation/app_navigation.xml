@@ -17,8 +17,7 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_recipeListingFragment_to_receitaDetailFragment"
-            app:destination="@id/receitaDetailFragment"/>
-
+            app:destination="@id/receitaDetailFragment" />
     </fragment>
 
 
@@ -31,11 +30,7 @@
             android:id="@+id/action_receitaDetailFragment_to_receitaCommentsFragment"
             app:destination="@id/receitaCommentsFragment"
             app:popUpTo="@id/receitaDetailFragment" />
-        <action
-            android:id="@+id/action_receitaDetailFragment_to_recipeListingFragment"
-            app:destination="@id/recipeListingFragment"
-            app:popUpTo="@id/recipeListingFragment"
-            app:popUpToInclusive="true"/>
+
     </fragment>
 
 
@@ -84,6 +79,9 @@
         <action
             android:id="@+id/action_calenderFragment_to_weeklyFragment"
             app:destination="@id/weeklyFragment" />
+        <action
+            android:id="@+id/action_calenderFragment_to_newCalenderEntryFragment"
+            app:destination="@id/newCalenderEntryFragment" />
     </fragment>
     <fragment
         android:id="@+id/goalsFragment"
@@ -117,6 +115,15 @@
         android:id="@+id/eventEditTrashFragment"
         android:name="com.example.projectfoodmanager.presentation.calender.EventEditTrashFragment"
         android:label="EventEditTrashFragment" />
+    <fragment
+        android:id="@+id/newCalenderEntryFragment"
+        android:name="com.example.projectfoodmanager.presentation.calender.insertCalenderEntry.NewCalenderEntryFragment"
+        android:label="fragment_new_calender_entry"
+        tools:layout="@layout/fragment_new_calender_entry" >
+        <action
+            android:id="@+id/action_newCalenderEntryFragment_to_receitaDetailFragment"
+            app:destination="@id/receitaDetailFragment" />
+    </fragment>
 
 
 </navigation>

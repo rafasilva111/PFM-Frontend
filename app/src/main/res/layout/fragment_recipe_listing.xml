@@ -8,7 +8,7 @@
     tools:context=".presentation.recipe.RecipeListingFragment">
 
     <ImageView
-        android:id="@+id/verifyIV"
+        android:id="@+id/verifyUserHeaderIV"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="-25dp"
@@ -82,18 +82,17 @@
             app:layout_constraintStart_toStartOf="@+id/tvWelcome"
             app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
 
-        <SearchView
+        <android.widget.SearchView
             android:id="@+id/SVsearch"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:background="@drawable/layout_bg_low"
-            android:backgroundTint="#F1F1F1"
+            android:backgroundTint="#ECECEC"
             android:layout_marginTop="30dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:padding="5dp"
             android:iconifiedByDefault="false"
-            android:queryBackground="@android:color/transparent"
             android:queryHint="Search Recipe"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

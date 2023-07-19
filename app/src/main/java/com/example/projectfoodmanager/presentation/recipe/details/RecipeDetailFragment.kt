@@ -15,9 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.databinding.FragmentRecipeDetailNewBinding
+import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
@@ -35,7 +36,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
     val TAG: String = "ReceitaDetailFragment"
-    lateinit var binding: FragmentRecipeDetailNewBinding
+    lateinit var binding: FragmentRecipeDetailBinding
     var objRecipe: Recipe? = null
     val recipeViewModel: RecipeViewModel by viewModels()
     val authViewModel: AuthViewModel by viewModels()
@@ -58,7 +59,7 @@ class RecipeDetailFragment : Fragment() {
             return binding.root
         } else {
             // Inflate the layout for this fragment
-            binding = FragmentRecipeDetailNewBinding.inflate(layoutInflater)
+            binding = FragmentRecipeDetailBinding.inflate(layoutInflater)
 
             return binding.root
         }
@@ -122,11 +123,31 @@ class RecipeDetailFragment : Fragment() {
 
 
         // TODO: Inserir imagem do autor da receita
-        binding.AutorTV.text = recipe.company
+        binding.AutorTV.text = recipe.backgrounds[0].user.name
+
+        if (recipe.backgrounds[0].user.img_source.contains("avatar")){
+            val avatar= Avatar.getAvatarByName(recipe.backgrounds[0].user.img_source)
+            binding.autorIV.setImageResource(avatar!!.imgId)
+
+        }else{
+            val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${recipe.backgrounds[0].user.img_source}")
+            imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                Glide.with(binding.autorIV.context).load(Uri.toString()).into(binding.autorIV)
+            }
+                .addOnFailureListener {
+                    Glide.with(binding.autorIV.context)
+                        .load(R.drawable.good_food_display___nci_visuals_online)
+                        .into(binding.autorIV)
+                }
+        }
+
+
         binding.IVSource.setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
             startActivity(browserIntent)
         }
+
+
         binding.TVRef.text = recipe.id.toString()
 
         val imgRef = Firebase.storage.reference.child(recipe.img_source)
