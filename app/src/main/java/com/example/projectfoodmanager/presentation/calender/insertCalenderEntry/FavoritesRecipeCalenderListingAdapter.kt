@@ -73,8 +73,8 @@ class FavoritesRecipeCalenderListingAdapter(
 
 
         fun bind(item: Recipe) {
-            binding.authorTV.text = item.company
-
+            //binding.authorTV.text = item.company
+            // todo ver com o rui
             val imgRef = Firebase.storage.reference.child(item.img_source)
             imgRef.downloadUrl.addOnSuccessListener { Uri ->
                 val imageURL = Uri.toString()

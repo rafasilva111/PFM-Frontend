@@ -93,7 +93,7 @@ class NewCalenderEntryFragment : Fragment() {
         //valida shared preferences
         try {
             val user = sharedPreference.getUserSession()
-            adapter.updateList(user.saved_recipes.toMutableList(), user)
+            adapter.updateList(user.getSavedRecipes(), user)
 
         } catch (e: Exception) {
             Log.d(TAG, "onViewCreated: User had no shared prefences...")
@@ -107,7 +107,7 @@ class NewCalenderEntryFragment : Fragment() {
 
         }
 
-        binding.tagCV.setOnTouchListener { v, event ->
+        binding.tagCV.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     // Apply visual feedback when the card is touched (e.g., change background color, apply elevation effect)
@@ -125,7 +125,7 @@ class NewCalenderEntryFragment : Fragment() {
 
         }
 
-        binding.dateCV.setOnTouchListener { v, event ->
+        binding.dateCV.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     // Apply visual feedback when the card is touched (e.g., change background color, apply elevation effect)
@@ -143,7 +143,7 @@ class NewCalenderEntryFragment : Fragment() {
 
         }
 
-        binding.timeCV.setOnTouchListener { v, event ->
+        binding.timeCV.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     // Apply visual feedback when the card is touched (e.g., change background color, apply elevation effect)

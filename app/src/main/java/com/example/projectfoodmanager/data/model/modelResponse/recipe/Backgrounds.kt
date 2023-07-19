@@ -7,6 +7,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Backgrounds(
     val id: Int,
-    val type: String?,
+    val type: String,
     val user: User
 ): Parcelable
