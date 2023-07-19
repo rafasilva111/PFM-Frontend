@@ -404,8 +404,6 @@ class RegisterFragment : Fragment() {
         }
 
         return UserRequest(
-//            first_name = binding.firstNameEt.text.toString(),
-//            last_name = binding.lastNameEt.text.toString(),
             name =  binding.firstNameEt.text.toString() + " "+ binding.lastNameEt.text.toString(),
             email = binding.emailEt.text.toString(),
             birth_date = binding.dateEt.text.toString(),
