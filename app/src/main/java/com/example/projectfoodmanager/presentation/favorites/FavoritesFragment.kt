@@ -81,7 +81,7 @@ class FavoritesFragment : Fragment() {
 
             },
             onSaveClicked = {item,saved ->
-                val teste = sharedPreference.getUserSession()
+                
                 if(saved){
                     recipeViewModel.addSaveOnRecipe(item.id)
                 }
@@ -168,7 +168,7 @@ class FavoritesFragment : Fragment() {
         binding.btnLiked.setOnClickListener {
             binding.cvCreateRecipe.visibility = View.GONE
             toast(getString(R.string.get_liked_recipes))
-            binding.tvNoRecipes.isVisible = sharedPreference.getUserSession()!!.liked_recipes.isEmpty()
+            binding.tvNoRecipes.isVisible = sharedPreference.getUserSession().getLikedRecipes().isEmpty()
 
 
             if (buttonPressed != binding.btnLiked) {
@@ -178,15 +178,15 @@ class FavoritesFragment : Fragment() {
 
             }
 
-            adapter.updateList(user!!.liked_recipes.toMutableList(), user!!)
+            adapter.updateList(user!!.getLikedRecipes(), user!!)
 
         }
 
         binding.btnSaved.setOnClickListener {
             binding.cvCreateRecipe.visibility = View.GONE
             toast(getString(R.string.get_saved_recipes))
-            val userSession: User? = sharedPreference.getUserSession()
-            binding.tvNoRecipes.isVisible = userSession!!.saved_recipes.isEmpty()
+            val userSession: User = sharedPreference.getUserSession()
+            binding.tvNoRecipes.isVisible = userSession.getSavedRecipes().isEmpty()
 
             if (buttonPressed != binding.btnSaved) {
                 buttonPressed?.setBackgroundColor(resources.getColor(R.color.main_color))
@@ -194,7 +194,7 @@ class FavoritesFragment : Fragment() {
                 buttonPressed?.setBackgroundColor(resources.getColor(R.color.black))
             }
 
-            adapter.updateList(userSession!!.saved_recipes.toMutableList(), user!!)
+            adapter.updateList(userSession.getSavedRecipes(), user!!)
 
         }
 
@@ -302,7 +302,7 @@ class FavoritesFragment : Fragment() {
                     binding.tvNoRecipes.visibility = View.GONE
 
                     // Primeira lista a aparecer
-                    adapter.updateList(user!!.liked_recipes.toMutableList(),user!!)
+                    adapter.updateList(user!!.getLikedRecipes(),user!!)
                 }
             } catch (e: Exception) {
                 Log.d(TAG, "onViewCreated: User had no shared prefences...")
@@ -386,7 +386,7 @@ class FavoritesFragment : Fragment() {
                                 binding.tvNoRecipes.visibility = View.GONE
 
                                 // Primeira lista a aparecer
-                                adapter.updateList(user!!.liked_recipes.toMutableList(),user!!)
+                                adapter.updateList(user!!.getLikedRecipes(),user!!)
                             }
                         } catch (e: Exception) {
                             Log.d(TAG, "onViewCreated: User had no shared prefences...")
@@ -427,19 +427,23 @@ class FavoritesFragment : Fragment() {
         // Like function
 
 
-        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let{
+        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { it ->
+            it.getContentIfNotHandled()?.let {
                 when (it) {
-                    is NetworkResult.Success -> { it
+                    is NetworkResult.Success -> {
                         binding.progressBar.hide()
                         toast(getString(R.string.recipe_liked))
 
                         val listOnAdapter = adapter.getAdapterList()
                         // updates local list
-                        for (item in listOnAdapter){
-                            if (item.id == it.data){
-                                item.likes ++
-                                adapter.updateItem(listOnAdapter.indexOf(item),item,sharedPreference.addLikeToUserSession(item))
+                        for (item in listOnAdapter) {
+                            if (item.id == it.data) {
+                                item.likes++
+                                adapter.updateItem(
+                                    listOnAdapter.indexOf(item),
+                                    item,
+                                    sharedPreference.addLikeToUserSession(item)
+                                )
                                 break
                             }
                         }
@@ -453,12 +457,13 @@ class FavoritesFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
 
-        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let{
+        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { it ->
+            it.getContentIfNotHandled()?.let {
                 when (it) {
-                    is NetworkResult.Success -> { it
+                    is NetworkResult.Success -> {
+                        
                         binding.progressBar.hide()
                         toast(getString(R.string.recipe_removed_liked))
 
@@ -466,10 +471,14 @@ class FavoritesFragment : Fragment() {
 
 
                         // updates local list
-                        for (item in listOnAdapter.toMutableList()){
-                            if (item.id == it.data){
-                                item.likes --
-                                adapter.updateItem(listOnAdapter.indexOf(item),item,sharedPreference.removeLikeFromUserSession(item))
+                        for (item in listOnAdapter.toMutableList()) {
+                            if (item.id == it.data) {
+                                item.likes--
+                                adapter.updateItem(
+                                    listOnAdapter.indexOf(item),
+                                    item,
+                                    sharedPreference.removeLikeFromUserSession(item)
+                                )
                                 break
                             }
                         }
@@ -483,7 +492,7 @@ class FavoritesFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
 
         // save function
 
