@@ -77,13 +77,6 @@ class RecipeListingAdapter(
                     val imageURL = Uri.toString()
                     Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
                 }
-                .addOnFailureListener {
-                    Glide.with(binding.imageView.context)
-                        .load(R.drawable.good_food_display___nci_visuals_online)
-                        .into(binding.imageView)
-                }
-                //Firebase.storage.reference.putFile()
-
             }
 
             binding.authorTV.text = item.backgrounds[0].user.name
@@ -101,11 +94,6 @@ class RecipeListingAdapter(
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
                     Glide.with(binding.authorIV.context).load(Uri.toString()).into(binding.authorIV)
                 }
-                    .addOnFailureListener {
-                        Glide.with(binding.authorIV.context)
-                            .load(R.drawable.good_food_display___nci_visuals_online)
-                            .into(binding.authorIV)
-                    }
             }
 
 
