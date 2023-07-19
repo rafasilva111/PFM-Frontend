@@ -2,12 +2,10 @@ package com.example.projectfoodmanager.presentation.calender
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
@@ -21,19 +19,14 @@ class CalendarAdapter(
 ) :
     RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
 
-    private var unselected: Boolean = true
+    private var selected: View? = null
+    private var currentDatePainted: View? = null
 
     //private var currentSelected: TextView
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view: View = inflater.inflate(R.layout.calendar_cell, parent, false)
-        val layoutParams = view.layoutParams
-
- /*       if (days.size> 15)
-            layoutParams.height = (parent.height * 0.166666666).toInt()
-        else
-            layoutParams.height = parent.height*/
         return CalendarViewHolder(parent.context,view,days)
     }
 
@@ -46,48 +39,73 @@ class CalendarAdapter(
         else{
             holder.dayOfMonth.text =  date.dayOfMonth.toString()
             if (date == currentDate && currentDate == LocalDate.now()) {
-                //holder.parentView.setBackgroundColor(Color.GRAY)
-                colorPresentDay(holder)
+                currentDatePainted = holder.itemView
+                selected = holder.itemView
+                colorSelectedDay(holder.itemView,holder.parentView.context)
 
             }else {
-                colorDefaultDay(holder)
+                colorUnselectedDay(holder.itemView,holder.parentView.context)
             }
         }
 
 
     }
 
-    private fun colorDefaultDay(holder: CalendarViewHolder) {
-        holder.dayOfMonth.backgroundTintList = ColorStateList.valueOf(
+
+
+    private fun colorCurrentDay(itemView: View, context: Context) {
+        val dayOfMonth = itemView.findViewById<TextView>(R.id.cellDayText)
+        dayOfMonth.backgroundTintList = ColorStateList.valueOf(
             ContextCompat.getColor(
-                holder.parentView.context,
-                R.color.transparent
+                context,
+                R.color.gray
             )
         )
 
-        holder.dayOfMonth.setTextColor(
+        dayOfMonth.setTextColor(
             ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    holder.parentView.context,
-                    R.color.black
+                    context,
+                    R.color.white
+                )
+            )
+        )
+
+    }
+
+    private fun colorSelectedDay(itemView: View, context: Context) {
+        val dayOfMonth = itemView.findViewById<TextView>(R.id.cellDayText)
+        dayOfMonth.backgroundTintList = ColorStateList.valueOf(
+            ContextCompat.getColor(
+                context,
+                R.color.main_color
+            )
+        )
+
+        dayOfMonth.setTextColor(
+            ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    context,
+                    R.color.white
                 )
             )
         )
     }
 
-    private fun colorPresentDay(holder: CalendarViewHolder) {
-        holder.dayOfMonth.backgroundTintList = ColorStateList.valueOf(
+    private fun colorUnselectedDay(itemView: View, context: Context) {
+        val dayOfMonth = itemView.findViewById<TextView>(R.id.cellDayText)
+        dayOfMonth.backgroundTintList = ColorStateList.valueOf(
             ContextCompat.getColor(
-                holder.parentView.context,
-                R.color.main_color
+                context,
+                R.color.transparent
             )
         )
 
-        holder.dayOfMonth.setTextColor(
+        dayOfMonth.setTextColor(
             ColorStateList.valueOf(
                 ContextCompat.getColor(
-                    holder.parentView.context,
-                    R.color.white
+                    context,
+                    R.color.black
                 )
             )
         )
@@ -113,14 +131,28 @@ class CalendarAdapter(
 
             itemView.setOnClickListener {
                 if (dayOfMonth.text.isNotBlank() ){
-
                     onItemClicked.invoke( dayOfMonth.text as String)
                 }
-                    notifyDataSetChanged()
+
+
+
+                if (currentDatePainted == selected)
+                    colorCurrentDay(selected!!,context)
+                else
+                    colorUnselectedDay(selected!!, context)
+
+
+                selected = itemView
+                colorSelectedDay(selected!!,context)
+
             }
 
         }
 
     }
+
+
+
+
 
 }
