@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.currentDate
+import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.selectedDate
 import java.time.LocalDate
 
 
@@ -41,6 +42,7 @@ class CalendarAdapter(
             if (date == currentDate && currentDate == LocalDate.now()) {
                 currentDatePainted = holder.itemView
                 selected = holder.itemView
+                selectedDate = date
                 colorSelectedDay(holder.itemView,holder.parentView.context)
 
             }else {
@@ -130,21 +132,22 @@ class CalendarAdapter(
             parentView = itemView.findViewById(R.id.parentView)
 
             itemView.setOnClickListener {
-                if (dayOfMonth.text.isNotBlank() ){
-                    onItemClicked.invoke( dayOfMonth.text as String)
+
+                if(days[position] != null){
+                    if (dayOfMonth.text.isNotBlank() ){
+                        onItemClicked.invoke( dayOfMonth.text as String)
+                    }
+                    if (currentDatePainted == selected)
+                        colorCurrentDay(selected!!,context)
+                    else
+                        colorUnselectedDay(selected!!, context)
+
+
+                    selected = itemView
+                    selectedDate = days[position]!!
+
+                    colorSelectedDay(selected!!,context)
                 }
-
-
-
-                if (currentDatePainted == selected)
-                    colorCurrentDay(selected!!,context)
-                else
-                    colorUnselectedDay(selected!!, context)
-
-
-                selected = itemView
-                colorSelectedDay(selected!!,context)
-
             }
 
         }

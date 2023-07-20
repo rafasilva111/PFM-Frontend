@@ -1,7 +1,7 @@
 package com.example.projectfoodmanager.data.repository.datasource
 
 
-import com.example.projectfoodmanager.data.model.modelRequest.CommentRequest
+import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
@@ -46,6 +46,9 @@ interface RemoteDataSource {
 	suspend fun getCommentsByRecipePaginated(recipeId: Int,page: Int): Response<CommentList>
 	suspend fun updateComment(commentId: Int, comment: Comment): Response<Comment>
 	suspend fun deleteComment(commentId: Int): Response<Unit>
+
+	//calender
+	suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<Unit>
 
 	//followers
 	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>

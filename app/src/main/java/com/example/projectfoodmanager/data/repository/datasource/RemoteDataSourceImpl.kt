@@ -2,7 +2,7 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.api.ApiInterface
-import com.example.projectfoodmanager.data.model.modelRequest.CommentRequest
+import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
@@ -110,6 +110,11 @@ class RemoteDataSourceImpl @Inject constructor(
 	}
 	override suspend fun deleteComment(commentId: Int): Response<Unit> {
 		return apiInterface.deleteComments(commentId= commentId)
+	}
+
+	//Calender
+	override suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<Unit> {
+		return apiInterface.createCalenderEntry(recipeId= recipeId,calenderEntryRequest = comment)
 	}
 
 	//Followers

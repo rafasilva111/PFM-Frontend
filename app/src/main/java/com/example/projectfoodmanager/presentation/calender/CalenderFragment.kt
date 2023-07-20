@@ -19,7 +19,7 @@ import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
-
+import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.selectedDate
 
 @AndroidEntryPoint
 class CalenderFragment : Fragment() {

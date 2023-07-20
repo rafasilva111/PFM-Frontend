@@ -87,6 +87,8 @@
     <string name="last_name">Apelido</string>
     <string name="first_name">Nome</string>
     <string name="cancel">Cancel</string>
+    <string name="calender_formated_date">%1$s:%2$s</string>
+    <string name="no_recipes_saved">No recipes saved...</string>
 
     <string-array name="gender_array">
         <item>Masculino</item>
