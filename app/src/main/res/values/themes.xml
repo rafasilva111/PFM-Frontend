@@ -3,12 +3,12 @@
     <style name="Theme.ProjectFoodManager" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/main_color</item>
-        <item name="colorAccent">@color/white</item>
+        <item name="colorAccent">@color/main_color</item>
         <item name="colorSurface">@color/white</item>
         <item name="android:windowBackground">@color/background_1</item>
         <item name="android:navigationBarColor">@color/main_color</item>
         <item name="android:windowLightStatusBar">true</item>
-
+        <item name="materialAlertDialogTheme">@style/MaterialAlertDialog</item>
 
 <!--        <item name="materialTimePickerStyle">@style/ThemeOverlay.App.MaterialTimePicker</item>-->
 

@@ -17,8 +17,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="330dp"
-            android:layout_height="200dp"
+            android:layout_width="370dp"
+            android:layout_height="240dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -55,15 +55,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="25dp"
-                app:cardCornerRadius="15dp"
+                app:cardCornerRadius="20dp"
                 app:cardElevation="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/CV_image_recipe">
 
                 <ImageView
                     android:id="@+id/authorIV"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/img_pingo_doce" />
 
             </androidx.cardview.widget.CardView>
@@ -71,7 +71,7 @@
             <TextView
                 android:id="@+id/authorTV"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="25dp"
                 android:layout_marginStart="-25dp"
                 android:background="@drawable/layout_bg_rounded_1"
                 android:backgroundTint="#252525"
@@ -84,15 +84,15 @@
                 android:paddingBottom="2dp"
                 android:text="Author"
                 android:textColor="@color/white"
-                android:textSize="8sp"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_autor_CV"
                 app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
                 app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
 
             <ImageView
                 android:id="@+id/verifyUserIV"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_marginStart="-10dp"
                 android:layout_marginTop="-5dp"
                 android:elevation="8dp"
@@ -117,8 +117,8 @@
 
             <ImageButton
                 android:id="@+id/favoritesIB"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="30dp"
                 android:background="@drawable/bg_action_btn"
@@ -137,10 +137,9 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="330dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="70dp"
-        android:paddingTop="10dp"
+        android:layout_width="370dp"
+        android:layout_height="270dp"
+        android:layout_marginTop="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/constraintLayout12"
         app:layout_constraintStart_toStartOf="@+id/constraintLayout12"
@@ -148,8 +147,8 @@
 
         <ImageButton
             android:id="@+id/likeIB"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginTop="-17dp"
             android:layout_marginEnd="45dp"
             android:background="@drawable/layout_circle_bg"
@@ -163,26 +162,27 @@
 
         <TextView
             android:id="@+id/nLikeTV"
-            android:layout_width="30dp"
-            android:layout_height="15dp"
-            android:layout_marginStart="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-8dp"
+            android:layout_marginStart="-10dp"
             android:background="@drawable/layout_bg_rounded_1"
             android:backgroundTint="#F8F8F8"
             android:elevation="10dp"
-            android:layout_marginTop="-8dp"
-            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:padding="2dp"
             android:text="0"
             android:textColor="@color/black"
-            android:textSize="8sp"
+            android:textSize="10sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/likeIB"
+            app:layout_constraintStart_toEndOf="@+id/likeIB"
             app:layout_constraintTop_toTopOf="@+id/likeIB" />
 
         <ImageView
             android:id="@+id/verifyRecipeIV"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="-20dp"
             android:elevation="11dp"
@@ -193,7 +193,7 @@
         <TextView
             android:id="@+id/verifyRecipeTV"
             android:layout_width="100dp"
-            android:layout_height="18dp"
+            android:layout_height="20dp"
             android:layout_marginStart="-18dp"
             android:background="@drawable/layout_bg_rounded_1"
             android:backgroundTint="#FFEBB0"
@@ -203,7 +203,7 @@
             android:padding="2dp"
             android:text="Verificada"
             android:textColor="@color/black"
-            android:textSize="11sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/verifyRecipeIV"
             app:layout_constraintStart_toEndOf="@+id/verifyRecipeIV"
             app:layout_constraintTop_toTopOf="@+id/verifyRecipeIV" />
@@ -211,7 +211,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="220dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
@@ -232,12 +232,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/fedoka"
+                    android:justificationMode="inter_word"
                     android:text="Recipe Title"
                     android:textColor="@color/black"
-                    android:textSize="14dp"
+                    android:textSize="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -263,7 +264,7 @@
                     android:text="4,5"
                     android:fontFamily="@font/fredoka_regular"
                     android:textColor="#838383"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/ratingRecipeRB"
                     app:layout_constraintStart_toEndOf="@+id/ratingRecipeRB"
@@ -292,7 +293,7 @@
                     android:text="02/03/2022"
                     android:fontFamily="@font/fredoka_regular"
                     android:textAlignment="center"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="@+id/recipeTitleTV"
                     app:layout_constraintTop_toBottomOf="@+id/recipeTitleTV" />
 
@@ -300,13 +301,13 @@
                 <TextView
                     android:id="@+id/recipeDescriptionTV"
                     android:layout_width="0dp"
-                    android:layout_height="60dp"
+                    android:layout_height="70dp"
                     android:layout_marginTop="8dp"
                     android:justificationMode="inter_word"
                     android:text="Descrição"
                     android:fontFamily="@font/fredoka_regular"
                     android:textAlignment="gravity"
-                    android:textSize="10sp"
+                    android:textSize="12sp"
                     android:maxLines="3"
                     android:ellipsize="end"
                     app:layout_constraintEnd_toEndOf="@+id/recipeTitleTV"
@@ -332,8 +333,8 @@
 
                         <ImageView
                             android:id="@+id/timeIV"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
+                            android:layout_width="17dp"
+                            android:layout_height="17dp"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/ic_clock"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -349,7 +350,7 @@
                             android:gravity="center|start"
                             android:text="Time"
                             android:textColor="@color/grey_2"
-                            android:textSize="10sp"
+                            android:textSize="12sp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="@+id/IV_1"
                             app:layout_constraintStart_toStartOf="@+id/IV_1"
@@ -365,8 +366,8 @@
 
                         <ImageView
                             android:id="@+id/difficultyIV"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
+                            android:layout_width="17dp"
+                            android:layout_height="17dp"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/low_difficulty"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -382,7 +383,7 @@
                             android:gravity="center|start"
                             android:text="Difficulty"
                             android:textColor="@color/grey_2"
-                            android:textSize="10sp"
+                            android:textSize="12sp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="@+id/IV_1"
                             app:layout_constraintStart_toStartOf="@+id/IV_1"
@@ -398,8 +399,8 @@
 
                         <ImageView
                             android:id="@+id/portionIV"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
+                            android:layout_width="17dp"
+                            android:layout_height="17dp"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/ic_portion"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -415,7 +416,7 @@
                             android:gravity="center|start"
                             android:text="Portion"
                             android:textColor="@color/grey_2"
-                            android:textSize="10sp"
+                            android:textSize="12sp"
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="@+id/IV_1"
                             app:layout_constraintStart_toStartOf="@+id/IV_1"

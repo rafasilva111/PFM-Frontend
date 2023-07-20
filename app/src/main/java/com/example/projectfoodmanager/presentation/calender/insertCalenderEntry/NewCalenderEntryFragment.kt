@@ -1,6 +1,7 @@
 package com.example.projectfoodmanager.presentation.calender.insertCalenderEntry
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -47,6 +49,8 @@ class NewCalenderEntryFragment : Fragment() {
     lateinit var binding: FragmentNewCalenderEntryBinding
     private var snapHelper: SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
+    private var checkedTag: Int= 0
+
 
     val TAG: String = "NewCalenderEntryFragment"
 
@@ -113,10 +117,24 @@ class NewCalenderEntryFragment : Fragment() {
 
 
         binding.tagCV.setOnClickListener {
-            //TODO: DIALOG CATEGORIAS
-            MaterialAlertDialogBuilder(requireContext(),  R.style.ThemeOverlay_App_MaterialAlertDialog)
+            val tags = resources.getStringArray(R.array.tagEntryCalender_array).toList()
+            val adapter = ArrayAdapter(requireContext(), R.layout.item_checked_text_view, tags)
 
-            .show()
+            val builder = MaterialAlertDialogBuilder(requireActivity(), R.style.MaterialAlertDialog)
+                .setTitle("Selecione a categoria")
+                .setPositiveButton("ok") { dialog, which ->
+                    binding.tagValTV.text= tags[checkedTag]
+                }
+                .setSingleChoiceItems(adapter, checkedTag) { dialog, which ->
+                    // Handle the item selection here
+                    checkedTag = which
+                }
+                .setNeutralButton("Cancel") { dialog,which->
+                    dialog.dismiss()
+                }
+
+            builder.create()
+            builder.show()
         }
 
         binding.tagCV.setOnTouchListener { _, event ->
@@ -134,7 +152,7 @@ class NewCalenderEntryFragment : Fragment() {
         }
 
         binding.dateCV.setOnClickListener {
-            val datePicker =
+           val datePicker =
                 MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Selecione a data")
                     .setTheme(R.style.Widget_AppTheme_MaterialDatePicker)

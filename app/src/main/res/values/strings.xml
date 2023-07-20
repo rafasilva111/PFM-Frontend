@@ -95,9 +95,13 @@
     </string-array>
 
     <string-array name="tagEntryCalender_array">
-        <item>Teste-1</item>
-        <item>Teste-2</item>
-        <item>Teste-2</item>
+        <item>Pequeno Almoço</item>
+        <item>Lanche da manhã</item>
+        <item>Almoço</item>
+        <item>Lanche da tarde</item>
+        <item>Jantar</item>
+        <item>Ceia</item>
     </string-array>
+
 
 </resources>

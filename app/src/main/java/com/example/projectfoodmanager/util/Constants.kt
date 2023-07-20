@@ -74,6 +74,15 @@ object ImageTagsConstants{
     const val RANDOM_AVATAR ="random_avatar"
 }
 
+object CALENDAR_MEALS_TAG {
+    const val PEQUENO_ALMOCO = "PEQUENO ALMOÇO"
+    const val LANCHE_DA_MANHA = "LANCHE DA MANHÃ"
+    const val ALMOCO = "ALMOÇO"
+    const val LANCHE_DA_TARDE = "LANCHE DA TARDE"
+    const val JANTAR = "JANTAR"
+    const val CEIA = "CEIA"
+}
+
 object ToastConstants{
     const val SUCCESS = 0
     const val ALERT = 1

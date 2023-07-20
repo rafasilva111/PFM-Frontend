@@ -52,6 +52,9 @@
         <item name="android:visibility">gone</item>
     </style>
 
+    <style name="MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:windowBackground">@color/background_1</item>
+    </style>
 
     <style name="MaterialCalendarTheme" parent="ThemeOverlay.Material3.Light">
         <!-- Header panel -->
