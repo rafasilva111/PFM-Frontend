@@ -130,6 +130,22 @@
             app:layout_constraintTop_toBottomOf="@+id/SVsearch"
             app:layout_constraintVertical_bias="1.0" />
 
+        <TextView
+            android:id="@+id/tv_no_recipes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/fredoka_regular"
+            android:text="@string/no_recipes_saved"
+            android:textAlignment="gravity"
+            android:textColor="@color/black"
+            android:textSize="@dimen/headerCat"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

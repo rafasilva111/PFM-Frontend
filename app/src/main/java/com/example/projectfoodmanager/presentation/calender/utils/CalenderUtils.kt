@@ -1,5 +1,6 @@
 package com.example.projectfoodmanager.presentation.calender.utils
 
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -9,6 +10,8 @@ import java.time.format.DateTimeFormatter
 class CalenderUtils {
     companion object {
         var currentDate: LocalDate = LocalDate.now()
+        var selectedDate: LocalDate = LocalDate.now()
+        var currentRecipeId: String? = null
 
 
         fun formatDateMonthYear(date: LocalDate): String? {

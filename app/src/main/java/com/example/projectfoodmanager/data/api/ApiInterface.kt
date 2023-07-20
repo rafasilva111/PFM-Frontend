@@ -1,6 +1,7 @@
 package com.example.projectfoodmanager.data.api
 
 
+import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
@@ -97,6 +98,12 @@ interface ApiInterface {
 
     @DELETE("$API_V1_BASE_URL/comment")
     suspend fun deleteComments(@Query("commentId") commentId: Int): Response<Unit>
+
+    // calender
+
+    @POST("$API_V1_BASE_URL/calendar")
+    suspend fun createCalenderEntry(@Query("recipe_id") recipeId: Int,@Body calenderEntryRequest : CalenderEntryRequest): Response<Unit>
+
 
     //followers
     @POST("$API_V1_BASE_URL/followers")

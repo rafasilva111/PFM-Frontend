@@ -3,6 +3,7 @@ package com.example.projectfoodmanager.presentation.calender.insertCalenderEntry
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.graphics.Color
+import android.opengl.Visibility
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
@@ -20,19 +21,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBinding
-import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.SharedPreference
-import com.example.projectfoodmanager.util.TokenManager
-import com.example.projectfoodmanager.util.toast
+import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.selectedDate
+import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.dialog.MaterialDialogs
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_KEYBOARD
 import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,13 +50,12 @@ class NewCalenderEntryFragment : Fragment() {
     lateinit var tokenManager: TokenManager
 
     private val authViewModel: AuthViewModel by viewModels()
-
+    private val calenderViewModel: CalendarViewModel by viewModels()
 
     lateinit var binding: FragmentNewCalenderEntryBinding
     private var snapHelper: SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
     private var checkedTag: Int= 0
-
 
     val TAG: String = "NewCalenderEntryFragment"
 
@@ -70,9 +75,10 @@ class NewCalenderEntryFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         bindObservers()
+
 
         //todo check for internet connection
         if (this::binding.isInitialized) {
@@ -104,9 +110,14 @@ class NewCalenderEntryFragment : Fragment() {
         }
 
         //valida shared preferences
+        // insere as saved recipes
         try {
             val user = sharedPreference.getUserSession()
-            adapter.updateList(user.getSavedRecipes(), user)
+            val recipes = user.getSavedRecipes()
+            if (recipes.isEmpty())
+                binding.tvNoRecipes.visibility = View.VISIBLE
+            else
+                adapter.updateList(user.getSavedRecipes(), user)
 
         } catch (e: Exception) {
             Log.d(TAG, "onViewCreated: User had no shared prefences...")
@@ -173,6 +184,7 @@ class NewCalenderEntryFragment : Fragment() {
 
         }
 
+        binding.dateValTV.text = selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         binding.dateCV.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -187,6 +199,7 @@ class NewCalenderEntryFragment : Fragment() {
             false
         }
 
+        binding.timeValTV.text = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
         binding.timeCV.setOnClickListener {
 
             val isSystem24Hour = is24HourFormat(context)
@@ -200,15 +213,15 @@ class NewCalenderEntryFragment : Fragment() {
                     .setTitleText("Digite a que horário pretende")
                     .build()
 
+            picker.addOnPositiveButtonClickListener {
+                binding.timeValTV.text= getString(R.string.calender_formated_date,String.format("%02d", picker.hour),String.format("%02d", picker.minute))
+            }
 
             picker.addOnCancelListener {
                 picker.dismiss()
             }
 
-            picker.addOnPositiveButtonClickListener {
-                binding.timeValTV.text= picker.hour.toString() + ":" + picker.minute.toString()
 
-            }
 
             MaterialTimePicker.Builder().setInputMode(INPUT_MODE_KEYBOARD)
 
@@ -234,10 +247,38 @@ class NewCalenderEntryFragment : Fragment() {
             }
             false
         }
+
+        binding.completeRegIB.setOnClickListener {
+            val localDateTime  = LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))
+            val calenderEntryRequest = CalenderEntryRequest(tag = CALENDAR_MEALS_TAG.ALMOCO,formatLocalTimeToServerTime(localDateTime))
+            val teste = manager.findFirstCompletelyVisibleItemPosition()
+            if (teste == -1)
+                toast("No recipe selected...")
+            else
+                calenderViewModel.createEntryOnCalender(teste,calenderEntryRequest)
+        }
     }
 
 
     private fun bindObservers() {
+
+        calenderViewModel.createEntryOnCalenderLiveData.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+
+                        findNavController().navigateUp()
+                    }
+                    is NetworkResult.Error -> {
+                        Log.d(TAG, "bindObservers: ${it.message}.")
+                    }
+                    is NetworkResult.Loading -> {
+                        //binding.progressBar.isVisible = true
+                    }
+                }
+            }
+        }
+
 
         authViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let {
