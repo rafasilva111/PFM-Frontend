@@ -22,6 +22,15 @@ object ERROR_CODES {
     const val BAD_INPUTS = "401"
 }
 
+object CALENDAR_MEALS_TAG {
+    const val PEQUENO_ALMOCO = "PEQUENO ALMOÇO"
+    const val LANCHE_DA_MANHA = "LANCHE DA MANHÃ"
+    const val ALMOCO = "ALMOÇO"
+    const val LANCHE_DA_TARDE = "LANCHE DA TARDE"
+    const val JANTAR = "JANTAR"
+    const val CEIA = "CEIA"
+}
+
 object actionResultCodes{
     const val GALLERY_REQUEST_CODE = 1
 }

@@ -140,11 +140,6 @@ class CommentsFragment : Fragment() {
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
                     Glide.with(binding.IVcommentBottonImage.context).load(Uri.toString()).into(binding.IVcommentBottonImage)
                 }
-                    .addOnFailureListener {
-                        Glide.with(binding.IVcommentBottonImage.context)
-                            .load(R.drawable.good_food_display___nci_visuals_online)
-                            .into(binding.IVcommentBottonImage)
-                    }
             }
 
 

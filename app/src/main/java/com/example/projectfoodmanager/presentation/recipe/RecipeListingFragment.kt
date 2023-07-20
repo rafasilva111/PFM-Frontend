@@ -204,11 +204,7 @@ class RecipeListingFragment : Fragment() {
             imgRef.downloadUrl.addOnSuccessListener { Uri ->
                 Glide.with(binding.ivProfilePic.context).load(Uri.toString()).into(binding.ivProfilePic)
             }
-                .addOnFailureListener {
-                    Glide.with(binding.ivProfilePic.context)
-                        .load(R.drawable.good_food_display___nci_visuals_online)
-                        .into(binding.ivProfilePic)
-                }
+
         }
 
 

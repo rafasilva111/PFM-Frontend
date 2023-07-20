@@ -77,35 +77,23 @@ class RecipeListingAdapter(
                     val imageURL = Uri.toString()
                     Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
                 }
-                .addOnFailureListener {
-                    Glide.with(binding.imageView.context)
-                        .load(R.drawable.good_food_display___nci_visuals_online)
-                        .into(binding.imageView)
-                }
-                //Firebase.storage.reference.putFile()
-
             }
 
-            binding.authorTV.text = item.backgrounds[0].user.name
+            binding.authorTV.text = item.created_by.name
 
-            if (!item.backgrounds[0].user.verified){
+            if (!item.created_by.verified){
                 binding.verifyUserIV.visibility=View.INVISIBLE
             }
 
-            if (item.backgrounds[0].user.img_source.contains("avatar")){
-                val avatar= Avatar.getAvatarByName(item.backgrounds[0].user.img_source)
+            if (item.created_by.img_source.contains("avatar")){
+                val avatar= Avatar.getAvatarByName(item.created_by.img_source)
                 binding.authorIV.setImageResource(avatar!!.imgId)
 
             }else{
-                val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.backgrounds[0].user.img_source}")
+                val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.created_by.img_source}")
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
                     Glide.with(binding.authorIV.context).load(Uri.toString()).into(binding.authorIV)
                 }
-                    .addOnFailureListener {
-                        Glide.with(binding.authorIV.context)
-                            .load(R.drawable.good_food_display___nci_visuals_online)
-                            .into(binding.authorIV)
-                    }
             }
 
 
