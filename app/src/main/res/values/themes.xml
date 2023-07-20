@@ -1,12 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ProjectFoodManager" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.ProjectFoodManager" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/main_color</item>
-        <item name="colorPrimaryVariant">@color/main_color</item>
-        <item name="colorPrimaryDark">@color/background_1</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="android:windowBackground">@color/background_1</item>
         <item name="android:navigationBarColor">@color/main_color</item>
         <item name="android:windowLightStatusBar">true</item>
+
+
+<!--        <item name="materialTimePickerStyle">@style/ThemeOverlay.App.MaterialTimePicker</item>-->
 
         <!-- Secondary brand color. -->
         <item name="colorSecondaryVariant">@color/main_color</item>

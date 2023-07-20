@@ -3,12 +3,15 @@ package com.example.projectfoodmanager.presentation.calender.insertCalenderEntry
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +24,12 @@ import com.example.projectfoodmanager.util.SharedPreference
 import com.example.projectfoodmanager.util.TokenManager
 import com.example.projectfoodmanager.util.toast
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.dialog.MaterialDialogs
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_KEYBOARD
+import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -79,7 +88,7 @@ class NewCalenderEntryFragment : Fragment() {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "WrongConstant")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //bindObservers()
@@ -104,7 +113,10 @@ class NewCalenderEntryFragment : Fragment() {
 
 
         binding.tagCV.setOnClickListener {
+            //TODO: DIALOG CATEGORIAS
+            MaterialAlertDialogBuilder(requireContext(),  R.style.ThemeOverlay_App_MaterialAlertDialog)
 
+            .show()
         }
 
         binding.tagCV.setOnTouchListener { _, event ->
@@ -122,6 +134,24 @@ class NewCalenderEntryFragment : Fragment() {
         }
 
         binding.dateCV.setOnClickListener {
+            val datePicker =
+                MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Selecione a data")
+                    .setTheme(R.style.Widget_AppTheme_MaterialDatePicker)
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .build()
+            datePicker.dialog?.setCanceledOnTouchOutside(false)
+
+            datePicker.show(parentFragmentManager, "DatePicker");
+
+            datePicker.addOnCancelListener {
+                datePicker.dismiss()
+            }
+
+            datePicker.addOnPositiveButtonClickListener {
+                binding.dateValTV.text= datePicker.headerText
+
+            }
 
         }
 
@@ -139,9 +169,39 @@ class NewCalenderEntryFragment : Fragment() {
             false
         }
 
-        binding.dateCV.setOnClickListener {
+        binding.timeCV.setOnClickListener {
+
+            val isSystem24Hour = is24HourFormat(context)
+            val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+
+            val picker =
+                MaterialTimePicker.Builder()
+                    .setTimeFormat(clockFormat)
+                    .setHour(0)
+                    .setMinute(0)
+                    .setTitleText("Digite a que horário pretende")
+                    .build()
+
+
+            picker.addOnCancelListener {
+                picker.dismiss()
+            }
+
+            picker.addOnPositiveButtonClickListener {
+                binding.timeValTV.text= picker.hour.toString() + ":" + picker.minute.toString()
+
+            }
+
+            MaterialTimePicker.Builder().setInputMode(INPUT_MODE_KEYBOARD)
+
+            picker.show(parentFragmentManager, "TimePicker");
+            picker.dialog?.setCanceledOnTouchOutside(false)
+
+
 
         }
+
+
 
         binding.timeCV.setOnTouchListener { _, event ->
             when (event.action) {

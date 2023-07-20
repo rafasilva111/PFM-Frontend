@@ -7,6 +7,9 @@
         <item name="android:navigationBarColor">@color/purple_500</item>
     </style>
 
+<!--    <style name="ThemeOverlay.App.MaterialTimePicker" parent="@style/ThemeOverlay.Material3.MaterialTimePicker">
+        <item name="colorSurface">@color/background_1</item>
+    </style>-->
 <!--    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
         <item name="queryHintTextAppearance">@style/SearchViewQueryHintTextAppearance</item>
     </style>
@@ -16,7 +19,7 @@
     </style>-->
 
 
-    <style name="Theme.App" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <!--<style name="Theme.App" parent="Theme.M"
         <item name="colorPrimary">@color/main_color</item>
         <item name="colorOnSurface">@color/main_color</item>
         <item name="colorError">@color/main_color</item>
@@ -24,7 +27,7 @@
         <item name="textAppearanceCaption">@style/TextAppearance.App.Caption</item>
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
 
-    </style>
+    </style>-->
 
     <style name="TextAppearance.App.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="fontFamily">@font/fedoka</item>
@@ -41,13 +44,44 @@
         <item name="cornerSize">4dp</item>
     </style>
 
-    <style name="Widget.AppTheme.MaterialDatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+    <style name="Widget.AppTheme.MaterialDatePicker" parent="ThemeOverlay.Material3.MaterialCalendar">
         <item name="materialCalendarHeaderToggleButton">@style/Widget.AppTheme.MaterialCalendar.HeaderToggleButton</item>
     </style>
 
-    <style name="Widget.AppTheme.MaterialCalendar.HeaderToggleButton" parent="Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton">
+    <style name="Widget.AppTheme.MaterialCalendar.HeaderToggleButton" parent="Widget.Material3.MaterialCalendar.HeaderToggleButton">
         <item name="android:visibility">gone</item>
     </style>
+
+
+    <style name="MaterialCalendarTheme" parent="ThemeOverlay.Material3.Light">
+        <!-- Header panel -->
+    </style>
+    <style name="MaterialAlertDialog.Material3" parent="Widget.Material3.MaterialTimePicker.Display">
+        <!--<item name="android:background">?attr/colorPrimary</item>-->
+        <item name="android:background">@color/black</item>
+    </style>
+    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+    </style>
+<!--
+
+    <style name="CustomTimePickerDialog" parent="Widget.Material3.MaterialTimePicker">
+        &lt;!&ndash;disable iconButton&ndash;&gt;
+        <item name="materialTimePickerStyle">@style/CustomTimePicker</item>
+    </style>
+
+    &lt;!&ndash;disable iconButton&ndash;&gt;
+    <style name="CustomTimePicker" parent="Widget.Material3.MaterialTimePicker.Display">
+        <item name="android:timePickerMode">clock</item>
+        <item name="android:timePickerStyle">@style/Widget.Custom.TimePicker</item>
+    </style>
+
+    &lt;!&ndash;disable iconButton&ndash;&gt;
+    <style name="Widget.Custom.TimePicker" parent="Widget.Material3.MaterialTimePicker.Display">
+        <item name="android:selectableItemBackground">@null</item>
+    </style>
+-->
+
+
 
 
 </resources>

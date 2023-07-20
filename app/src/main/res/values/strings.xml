@@ -93,4 +93,11 @@
         <item>Feminino</item>
         <item>Nao responder</item>
     </string-array>
+
+    <string-array name="tagEntryCalender_array">
+        <item>Teste-1</item>
+        <item>Teste-2</item>
+        <item>Teste-2</item>
+    </string-array>
+
 </resources>

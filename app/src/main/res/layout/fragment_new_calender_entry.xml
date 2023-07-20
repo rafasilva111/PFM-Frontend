@@ -22,6 +22,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/black" />
 
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/fedoka"
+        android:text="Novo registo"
+        android:textColor="@color/black"
+        android:textSize="@dimen/subTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/CloseRegIB"
+        app:layout_constraintStart_toEndOf="@+id/CloseRegIB"
+        app:layout_constraintTop_toTopOf="@+id/CloseRegIB" />
+
 
     <ImageButton
         android:id="@+id/completeRegIB"
@@ -38,18 +51,6 @@
         app:tint="@color/black" />
 
 
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:fontFamily="@font/fedoka"
-        android:text="Novo registo"
-        android:textColor="@color/black"
-        android:textSize="@dimen/subTitle"
-        app:layout_constraintBottom_toBottomOf="@+id/CloseRegIB"
-        app:layout_constraintStart_toEndOf="@+id/CloseRegIB"
-        app:layout_constraintTop_toTopOf="@+id/CloseRegIB" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -220,6 +221,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/tag_val_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
@@ -290,13 +292,14 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/date_val_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
                     android:layout_weight="4"
                     android:fontFamily="@font/fredoka_regular"
                     android:gravity="center_vertical"
-                    android:text="--/--/----"
+                    android:text="00/00/0000"
                     android:textAlignment="textEnd"
                     android:textSize="12sp"
                     tools:ignore="RtlCompat" />
@@ -361,13 +364,14 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/time_val_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
                     android:layout_weight="4"
                     android:fontFamily="@font/fredoka_regular"
                     android:gravity="center_vertical"
-                    android:text="--:--"
+                    android:text="00:00"
                     android:textAlignment="textEnd"
                     android:textSize="12sp"
                     tools:ignore="RtlCompat" />
