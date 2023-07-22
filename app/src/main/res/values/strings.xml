@@ -51,11 +51,11 @@
     <string name="recipe_removed_liked">Removed like.</string>
     <string name="user_registered_successfully">User registered successfully.</string>
     <string name="logout_confirmation_description">Are you sure you want to exit!</string>
-    <string name="favorite_tab_coment">Comentados</string>
-    <string name="favorite_tab_created">Criados</string>
-    <string name="favorite_tab_saved">Guardados</string>
-    <string name="favorite_tab_liked">Gostos</string>
-    <string name="favorite_tab_last_seen">Ultimas receitas vistas</string>
+    <string name="tab_coment">Comentados</string>
+    <string name="tab_created">Criados</string>
+    <string name="tab_saved">Guardados</string>
+    <string name="tab_liked">Curtidas</string>
+    <string name="tab_last_seen">Ultimas receitas vistas</string>
     <string name="recipe_listing_filter_sugestions">Sugestões</string>
     <string name="recipe_listing_filter_best">Melhor classificadas</string>
     <string name="recipe_listing_filter_recent">Mais recentes</string>

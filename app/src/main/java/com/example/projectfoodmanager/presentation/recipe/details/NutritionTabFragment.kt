@@ -42,33 +42,33 @@ class NutritionTabFragment(recipe: Recipe) : Fragment() {
         //Nutrition
         objRecipe?.let { recipe ->
 
-            binding.energiaDoseTV.text = recipe.nutrional_table.energia
-            binding.energiaPercTV.text = recipe.nutrional_table.energia_perc
-            binding.energiaPB.progress = recipe.nutrional_table.energia_perc.dropLast(1).toInt()
+            binding.energiaDoseTV.text = recipe.nutrition_information.energia
+            binding.energiaPercTV.text = recipe.nutrition_information.energia_perc
+            binding.energiaPB.progress = recipe.nutrition_information.energia_perc.dropLast(1).toInt()
 
-            binding.fibraDoseTV.text = recipe.nutrional_table.fibra
-            binding.fibraPercTV.text = recipe.nutrional_table.fibra_perc
-            binding.fibraPB.progress = recipe.nutrional_table.fibra_perc.dropLast(1).toInt()
+            binding.fibraDoseTV.text = recipe.nutrition_information.fibra
+            binding.fibraPercTV.text = recipe.nutrition_information.fibra_perc
+            binding.fibraPB.progress = recipe.nutrition_information.fibra_perc.dropLast(1).toInt()
 
-            binding.proteinaDoseTV.text = recipe.nutrional_table.proteina
+            binding.proteinaDoseTV.text = recipe.nutrition_information.proteina
             //binding.proteinaPercTV.text = recipe.nutrition_informations.proteina_perc
             //binding.proteinaPB.progress = recipe.nutrition_informations.proteina_perc.dropLast(1).toInt()
 
-            binding.gorduraDoseTV.text = recipe.nutrional_table.gordura
-            binding.gorduraPercTV.text = recipe.nutrional_table.gordura_perc
-            binding.gorduraPB.progress = recipe.nutrional_table.gordura_perc.dropLast(1).toInt()
+            binding.gorduraDoseTV.text = recipe.nutrition_information.gordura
+            binding.gorduraPercTV.text = recipe.nutrition_information.gordura_perc
+            binding.gorduraPB.progress = recipe.nutrition_information.gordura_perc.dropLast(1).toInt()
 
-            binding.gorduraSaturadosDoseTV.text = recipe.nutrional_table.gordura_saturada
-            binding.gorduraSaturadosPercTV.text = recipe.nutrional_table.gordura_saturada_perc
-            binding.gorduraSaturadosPB.progress = recipe.nutrional_table.gordura_saturada_perc.dropLast(1).toInt()
+            binding.gorduraSaturadosDoseTV.text = recipe.nutrition_information.gordura_saturada
+            binding.gorduraSaturadosPercTV.text = recipe.nutrition_information.gordura_saturada_perc
+            binding.gorduraSaturadosPB.progress = recipe.nutrition_information.gordura_saturada_perc.dropLast(1).toInt()
 
-            binding.hidratosCarbonoDoseTV.text = recipe.nutrional_table.hidratos_carbonos
+            binding.hidratosCarbonoDoseTV.text = recipe.nutrition_information.hidratos_carbonos
             //binding.hidratosCarbonoPercTV.text = recipe.nutrition_informations.hidratos_carbonos_perc
             //binding.hidratosCarbonoPB.progress = recipe.nutrition_informations.hidratos_carbonos_perc.dropLast(1).toInt()
 
-            binding.hidratosAcucaresDoseTV.text = recipe.nutrional_table.hidratos_carbonos_acucares
-            binding.hidratosAcucaresPercTV.text = recipe.nutrional_table.hidratos_carbonos_acucares_perc
-            binding.hidratosAcucaresPB.progress = recipe.nutrional_table.hidratos_carbonos_acucares_perc.dropLast(1).toInt()
+            binding.hidratosAcucaresDoseTV.text = recipe.nutrition_information.hidratos_carbonos_acucares
+            binding.hidratosAcucaresPercTV.text = recipe.nutrition_information.hidratos_carbonos_acucares_perc
+            binding.hidratosAcucaresPB.progress = recipe.nutrition_information.hidratos_carbonos_acucares_perc.dropLast(1).toInt()
 
         }
 

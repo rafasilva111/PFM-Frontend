@@ -65,7 +65,7 @@
             android:fontFamily="@font/fedoka"
             android:text="@string/recipe_listing_welcome"
             android:textColor="#000000"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/fedoka"
+            android:fontFamily="@font/fredoka_regular"
             android:text="@string/recipe_listing_name"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -111,72 +111,64 @@
                 android:id="@+id/HSV_filter_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
                 android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvName">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/SVsearch"
+                    app:singleSelection="true">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_sugestoes"
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.App.Chip"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:background="@drawable/bg_default"
-                        app:backgroundTint="@color/black"
+                        android:layout_height="wrap_content"
                         android:text="@string/recipe_listing_filter_sugestions"
-                        android:textColor="@color/white"
-                        android:textSize="9sp"
-                        android:textStyle="bold"
-                        android:layout_margin="5dp"/>
+                        android:textSize="15sp"
+                        app:chipMinHeight="20dp" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_melhores"
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.App.Chip"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:background="@drawable/bg_default"
-                        app:backgroundTint="@color/black"
+                        android:layout_height="wrap_content"
+                        android:text="@string/recipe_listing_filter_sugestions"
+                        android:textSize="15sp"
+                        app:chipMinHeight="20dp" />
+
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.App.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/recipe_listing_filter_best"
-                        android:textColor="@color/white"
-                        android:textSize="9sp"
-                        android:layout_margin="5dp"
-                        android:textStyle="bold"/>
+                        android:textSize="15sp"
+                        app:chipMinHeight="20dp" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_recentes"
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.App.Chip"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/bg_default"
-                        app:backgroundTint="@color/black"
+                        android:layout_height="wrap_content"
                         android:text="@string/recipe_listing_filter_recent"
-                        android:textColor="@color/white"
-                        android:textSize="9sp"
-                        android:textStyle="bold"
-                        android:layout_margin="5dp"/>
+                        android:textSize="15sp"
+                        app:chipMinHeight="20dp" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_personalizadas"
+                    <com.google.android.material.chip.Chip
+                        style="@style/Widget.App.Chip"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/bg_default"
-                        app:backgroundTint="@color/black"
+                        android:layout_height="wrap_content"
                         android:text="@string/recipe_listing_filter_personalized_sugestions"
-                        android:textColor="@color/white"
-                        android:textSize="9sp"
-                        android:textStyle="bold"
-                        android:layout_margin="5dp" />
+                        android:textSize="15sp"
+                        app:chipMinHeight="20dp" />
 
-                </LinearLayout>
-
+                </com.google.android.material.chip.ChipGroup>
 
             </HorizontalScrollView>
 

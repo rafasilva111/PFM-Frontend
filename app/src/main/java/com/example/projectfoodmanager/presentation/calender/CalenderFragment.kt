@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentCalenderBinding
+import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.daysInMonthArray
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.formatDateMonthYear
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.currentDate
@@ -27,7 +28,7 @@ class CalenderFragment : Fragment() {
     val authViewModel: AuthViewModel by viewModels()
     val TAG: String = "ProfileFragment"
 
-    private val adapter by lazy {
+    private val adapterCalMonth by lazy {
             CalendarAdapter(
                 daysInMonthArray(
                     currentDate
@@ -37,6 +38,30 @@ class CalenderFragment : Fragment() {
             }
         )
     }
+
+    private val adapterCalWeekly by lazy {
+        CalendarAdapter(
+            CalenderUtils.daysInWeekArray(
+                currentDate
+            ),
+            onItemClicked = {text ->
+
+            }
+        )
+    }
+
+
+    private val recipeAdapter by lazy{
+        RecipeAdapter(
+            CalenderUtils.daysInWeekArray(
+                currentDate
+            ),
+            onItemClicked = {text ->
+
+            }
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -57,19 +82,24 @@ class CalenderFragment : Fragment() {
 
         }
 
+        binding.monthViewBtn.setOnClickListener {
+            setMonthView()
+        }
+
 
         binding.weeklyViewBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_calenderFragment_to_weeklyFragment)
+            setWeeklyView()
         }
+
 
         binding.previousBtn.setOnClickListener{
             currentDate = currentDate.minusMonths(1)
-            updateMonthView()
+            updateView()
         }
 
         binding.nextBtn.setOnClickListener{
             currentDate = currentDate.plusMonths(1)
-            updateMonthView()
+            updateView()
         }
 
     }
@@ -80,21 +110,57 @@ class CalenderFragment : Fragment() {
     }
 
     private fun setMonthView() {
+        binding.calWeeklyRV.visibility=View.INVISIBLE
+        binding.calMonthRV.visibility=View.VISIBLE
+
         currentDate = LocalDate.now()
         binding.monthYearTV.text = formatDateMonthYear(currentDate)
 
         val layoutManager: RecyclerView.LayoutManager =
             GridLayoutManager(activity?.applicationContext, 7)
-        binding.calendarRecyclerView.layoutManager = layoutManager
-        binding.calendarRecyclerView.adapter = adapter
+        binding.calMonthRV.layoutManager = layoutManager
+        binding.calMonthRV.adapter = adapterCalMonth
     }
 
-    private fun updateMonthView() {
+/*    private fun updateMonthView() {
 
         binding.monthYearTV.text = formatDateMonthYear(currentDate)
         adapter.updateList(daysInMonthArray(
             currentDate
         ))
+    }*/
+
+    private fun setWeeklyView() {
+
+        binding.calMonthRV.visibility=View.INVISIBLE
+        binding.calWeeklyRV.visibility=View.VISIBLE
+
+        currentDate = LocalDate.now()
+        binding.monthYearTV.text = CalenderUtils.formatDateMonthYear(currentDate)
+
+        val layoutManager: RecyclerView.LayoutManager =
+            GridLayoutManager(activity?.applicationContext, 7)
+        binding.calWeeklyRV.layoutManager = layoutManager
+        binding.calWeeklyRV.adapter = adapterCalWeekly
+        //setEventAdapter()
+    }
+
+
+    private fun updateView() {
+
+        binding.monthYearTV.text = CalenderUtils.formatDateMonthYear(currentDate)
+
+        if (binding.calMonthRV.visibility==View.VISIBLE){
+            adapterCalMonth.updateList(daysInMonthArray(
+                currentDate
+            ))
+        }else{
+            adapterCalWeekly.updateList(
+                CalenderUtils.daysInWeekArray(
+                    currentDate
+                )
+            )
+        }
     }
 
     private fun changeVisibilityMenu(state : Boolean){

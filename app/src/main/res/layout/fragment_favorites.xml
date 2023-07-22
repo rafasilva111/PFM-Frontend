@@ -59,80 +59,60 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvName">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                app:singleSelection="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/SVsearch">
 
-            <Button
-                android:id="@+id/btn_liked"
-                android:backgroundTint="#E3E3E4"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="@string/favorite_tab_liked"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:layout_margin="3dp"
-                />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_liked"
+                    android:checked="true"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-            <Button
-                android:id="@+id/btn_saved"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#E3E3E4"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="@string/favorite_tab_saved"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:layout_margin="3dp"
-                />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_saved"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-            <Button
-                android:id="@+id/btn_created"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#E3E3E4"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="@string/favorite_tab_created"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:layout_marginLeft="13dp"
-                />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_created"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-            <Button
-                android:id="@+id/btn_comment"
-                android:background="@drawable/layout_bg"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="@string/favorite_tab_coment"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:layout_margin="3dp"
-                />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_coment"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-            <Button
-                android:id="@+id/btn_recentes"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#E3E3E4"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="@string/favorite_tab_last_seen"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:layout_margin="3dp"/>
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_last_seen"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-
-            </LinearLayout>
+            </com.google.android.material.chip.ChipGroup>
 
         </HorizontalScrollView>
 

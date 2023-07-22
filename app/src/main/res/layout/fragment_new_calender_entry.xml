@@ -106,15 +106,48 @@
             app:layout_constraintStart_toStartOf="@+id/headerRecipeSelectCatLL"
             app:layout_constraintTop_toBottomOf="@+id/headerRecipeSelectCatLL" />
 
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/SVsearch">
+
+            <com.google.android.material.chip.Chip
+                style="@style/Widget.App.Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Guardadas"
+                android:textSize="15sp"
+                app:chipMinHeight="20dp" />
+
+            <com.google.android.material.chip.Chip
+                style="@style/Widget.App.Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Curtidas"
+                android:textSize="15sp"
+                app:chipMinHeight="20dp" />
+
+            <com.google.android.material.chip.Chip
+                style="@style/Widget.App.Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Criadas"
+                android:textSize="15sp"
+                app:chipMinHeight="20dp" />
+
+        </com.google.android.material.chip.ChipGroup>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/favoritesRV"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
             android:elevation="8dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -127,7 +160,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/SVsearch"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroup"
             app:layout_constraintVertical_bias="1.0" />
 
         <TextView
@@ -146,7 +179,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
@@ -154,6 +186,7 @@
         android:layout_width="match_parent"
         android:layout_height="7dp"
         android:background="#E3E3E4"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout9" />

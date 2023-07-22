@@ -9,7 +9,7 @@
         <item name="android:navigationBarColor">@color/main_color</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="materialAlertDialogTheme">@style/MaterialAlertDialog</item>
-
+        <item name="chipStyle">@style/Widget.App.Chip</item>
 <!--        <item name="materialTimePickerStyle">@style/ThemeOverlay.App.MaterialTimePicker</item>-->
 
         <!-- Secondary brand color. -->

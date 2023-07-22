@@ -251,7 +251,9 @@ class RecipeListingFragment : Fragment() {
 
             //nav search toppom
 
-            binding.btnSugestoes.setOnClickListener {
+            //TODO: RAFA Denvolver filtros mas com as chipViews
+            //old
+ /*           binding.btnSugestoes.setOnClickListener {
                 toast("Em desenvolvimento...")
             }
             binding.btnMelhores.setOnClickListener {
@@ -262,7 +264,7 @@ class RecipeListingFragment : Fragment() {
             }
             binding.btnPersonalizadas.setOnClickListener {
                 toast("Em desenvolvimento...")
-            }
+            }*/
 
 
             //nav search bottom

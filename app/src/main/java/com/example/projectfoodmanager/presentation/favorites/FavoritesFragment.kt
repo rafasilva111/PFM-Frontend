@@ -161,67 +161,67 @@ class FavoritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bindObservers()
 
-        binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
 
-        //todo: RAFA
-        // top nav bar
-        binding.btnLiked.setOnClickListener {
-            binding.cvCreateRecipe.visibility = View.GONE
-            toast(getString(R.string.get_liked_recipes))
-            binding.tvNoRecipes.isVisible = sharedPreference.getUserSession().getLikedRecipes().isEmpty()
+        //TODO: RAFA Denvolver filtros mas com as chipViews
+        //old
+        //binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
+        /*      binding.btnLiked.setOnClickListener {
+                  binding.cvCreateRecipe.visibility = View.GONE
+                  toast(getString(R.string.get_liked_recipes))
+                  binding.tvNoRecipes.isVisible = sharedPreference.getUserSession().getLikedRecipes().isEmpty()
 
 
-            if (buttonPressed != binding.btnLiked) {
-                binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
-                buttonPressed = binding.btnLiked
-                buttonPressed?.background= resources.getDrawable(R.drawable.bg_default)
+                  if (buttonPressed != binding.btnLiked) {
+                      binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
+                      buttonPressed = binding.btnLiked
+                      buttonPressed?.background= resources.getDrawable(R.drawable.bg_default)
 
-            }
+                  }
 
-            adapter.updateList(user!!.getLikedRecipes(), user!!)
+                  adapter.updateList(user!!.getLikedRecipes(), user!!)
 
-        }
+              }
 
-        binding.btnSaved.setOnClickListener {
-            binding.cvCreateRecipe.visibility = View.GONE
-            toast(getString(R.string.get_saved_recipes))
-            val userSession: User = sharedPreference.getUserSession()
-            binding.tvNoRecipes.isVisible = userSession.getSavedRecipes().isEmpty()
+              binding.btnSaved.setOnClickListener {
+                  binding.cvCreateRecipe.visibility = View.GONE
+                  toast(getString(R.string.get_saved_recipes))
+                  val userSession: User = sharedPreference.getUserSession()
+                  binding.tvNoRecipes.isVisible = userSession.getSavedRecipes().isEmpty()
 
-            if (buttonPressed != binding.btnSaved) {
-                buttonPressed?.setBackgroundColor(resources.getColor(R.color.main_color))
-                buttonPressed = binding.btnSaved
-                buttonPressed?.setBackgroundColor(resources.getColor(R.color.black))
-            }
+                  if (buttonPressed != binding.btnSaved) {
+                      buttonPressed?.setBackgroundColor(resources.getColor(R.color.main_color))
+                      buttonPressed = binding.btnSaved
+                      buttonPressed?.setBackgroundColor(resources.getColor(R.color.black))
+                  }
 
-            adapter.updateList(userSession.getSavedRecipes(), user!!)
+                  adapter.updateList(userSession.getSavedRecipes(), user!!)
 
-        }
+              }
 
-        binding.btnCreated.setOnClickListener {
-            binding.cvCreateRecipe.visibility = View.VISIBLE
-            //Todo: RAFAEL
-            toast("Em desenvolvimento...")
-            adapter.updateList(mutableListOf(), user!!)
+              binding.btnCreated.setOnClickListener {
+                  binding.cvCreateRecipe.visibility = View.VISIBLE
+                  //Todo: RAFAEL
+                  toast("Em desenvolvimento...")
+                  adapter.updateList(mutableListOf(), user!!)
 
-        }
+              }
 
-        binding.btnComment.setOnClickListener {
-            binding.cvCreateRecipe.visibility = View.GONE
-            //Todo: RAFAEL
-            toast("Em desenvolvimento...")
-            adapter.updateList(mutableListOf(), user!!)
+              binding.btnComment.setOnClickListener {
+                  binding.cvCreateRecipe.visibility = View.GONE
+                  //Todo: RAFAEL
+                  toast("Em desenvolvimento...")
+                  adapter.updateList(mutableListOf(), user!!)
 
-        }
+              }
 
-        binding.btnRecentes.setOnClickListener {
-            binding.cvCreateRecipe.visibility = View.GONE
-            //Todo: RAFAEL
-            toast("Em desenvolvimento...")
-            adapter.updateList(mutableListOf(), user!!)
+              binding.btnRecentes.setOnClickListener {
+                  binding.cvCreateRecipe.visibility = View.GONE
+                  //Todo: RAFAEL
+                  toast("Em desenvolvimento...")
+                  adapter.updateList(mutableListOf(), user!!)
 
-        }
-
+              }
+      */
         // bottom nav bar
 
         binding.meatFiltIB.setOnClickListener {

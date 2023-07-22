@@ -29,7 +29,6 @@
                 android:layout_height="match_parent"
                 app:cardCornerRadius="20dp"
                 android:layout_margin="10dp"
-                app:cardElevation="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -62,8 +61,8 @@
 
                 <ImageView
                     android:id="@+id/authorIV"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:src="@drawable/img_pingo_doce" />
 
             </androidx.cardview.widget.CardView>
@@ -71,7 +70,7 @@
             <TextView
                 android:id="@+id/authorTV"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="-25dp"
                 android:background="@drawable/layout_bg_rounded_1"
                 android:backgroundTint="#252525"
@@ -84,15 +83,15 @@
                 android:paddingBottom="2dp"
                 android:text="Author"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_autor_CV"
                 app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
                 app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
 
             <ImageView
                 android:id="@+id/verifyUserIV"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="-10dp"
                 android:layout_marginTop="-5dp"
                 android:elevation="8dp"
@@ -137,8 +136,8 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="370dp"
-        android:layout_height="270dp"
+        android:layout_width="371dp"
+        android:layout_height="250dp"
         android:layout_marginTop="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/constraintLayout12"
@@ -211,14 +210,14 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="200dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/layout_item_recipes"
             android:backgroundTint="@color/white"
             app:cardCornerRadius="20dp"
-            app:cardElevation="8dp"
+            app:cardElevation="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
