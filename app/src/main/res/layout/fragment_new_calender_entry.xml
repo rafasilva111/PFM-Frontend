@@ -51,8 +51,6 @@
         app:tint="@color/black" />
 
 
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout9"
         android:layout_width="match_parent"
@@ -62,34 +60,68 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CloseRegIB">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/headerRecipeSelectCatLL"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_margin="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:orientation="horizontal"
+            android:background="@drawable/layout_bg"
+            android:backgroundTint="@color/white"
+            android:elevation="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageButton
+                android:id="@+id/previous_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:background="@null"
+                android:onClick="previousMonthAction"
+                android:rotation="-180"
+                android:src="@drawable/ic_arrow_right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
+                android:id="@+id/listingIV"
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_favorito_active" />
+                android:src="@drawable/ic_favorito_active"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/listingTV"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/listingTV"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/fredoka_regular"
-                android:text="Receitas guardadas"
-                android:textAlignment="gravity"
-                android:textSize="@dimen/headerCat"
                 android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:text="Favorites"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+            <ImageButton
+                android:id="@+id/next_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:background="@null"
+                android:onClick="nextMonthAction"
+                android:src="@drawable/ic_arrow_right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <android.widget.SearchView
             android:id="@+id/SVsearch"
@@ -106,41 +138,6 @@
             app:layout_constraintStart_toStartOf="@+id/headerRecipeSelectCatLL"
             app:layout_constraintTop_toBottomOf="@+id/headerRecipeSelectCatLL" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:singleSelection="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/SVsearch">
-
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.App.Chip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="Guardadas"
-                android:textSize="15sp"
-                app:chipMinHeight="20dp" />
-
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.App.Chip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Curtidas"
-                android:textSize="15sp"
-                app:chipMinHeight="20dp" />
-
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.App.Chip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Criadas"
-                android:textSize="15sp"
-                app:chipMinHeight="20dp" />
-
-        </com.google.android.material.chip.ChipGroup>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/favoritesRV"
@@ -148,6 +145,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
             android:elevation="8dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -160,8 +158,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chipGroup"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="@+id/SVsearch"
+            app:layout_constraintVertical_bias="1.0"
+            />
 
         <TextView
             android:id="@+id/tv_no_recipes"
@@ -277,7 +276,7 @@
                     android:layout_weight="4"
                     android:fontFamily="@font/fredoka_regular"
                     android:gravity="center_vertical"
-                    android:text="Nenhum"
+                    android:text="@string/none"
                     android:textAlignment="textEnd"
                     android:textSize="12sp"
                     tools:ignore="RtlCompat" />

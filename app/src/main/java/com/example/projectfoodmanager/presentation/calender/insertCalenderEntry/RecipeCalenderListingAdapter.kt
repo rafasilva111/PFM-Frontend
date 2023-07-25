@@ -17,9 +17,9 @@ import java.util.*
 import javax.inject.Inject
 
 
-class FavoritesRecipeCalenderListingAdapter(
+class RecipeCalenderListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit
-) : RecyclerView.Adapter<FavoritesRecipeCalenderListingAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<RecipeCalenderListingAdapter.MyViewHolder>() {
 
     @Inject
     lateinit var sharedPreference: SharedPreference
@@ -88,16 +88,6 @@ class FavoritesRecipeCalenderListingAdapter(
 
             if (user==null)
                 user= sharedPreference.getUserSession()
-
-
-
-            //TODO: Ver com o Rafa -> author verificado ou não
-
-
-
-
-            //TODO: Ver com o Rafa -> receita é verificada ou não
-
 
 
             val format = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)

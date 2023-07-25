@@ -33,6 +33,8 @@ import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.floor
@@ -57,7 +59,7 @@ class FavoritesFragment : Fragment() {
     private lateinit var scrollListener: RecyclerView.OnScrollListener
 
     private var searchMode: Boolean = false
-    private var user: User? = null
+    lateinit var user: User
     private var buttonPressed: Button? = null
 
 
@@ -160,70 +162,40 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindObservers()
+        user = sharedPreference.getUserSession()
+        //valida shared preferences
+        try {
+
+            if (user.liked_recipes.isNullOrEmpty()) {
+                Log.d(TAG, "onViewCreated: user.saved_recipes is empty")
+                //Mensagem sem receitas
+                binding.tvNoRecipes.visibility = View.VISIBLE
+
+            } else {
+                //Mensagem com receitas
+                binding.tvNoRecipes.visibility = View.GONE
+
+                // Primeira lista a aparecer
+                adapter.updateList(user.getLikedRecipes(), user)
+            }
+        } catch (e: Exception) {
+            Log.d(TAG, "onViewCreated: User had no shared prefences...")
+            // se não tiver shared preferences o user não tem sessão válida
+            //tera um comportamento diferente offilne
+            authViewModel.logoutUser()
+        }
 
 
-        //TODO: RAFA Denvolver filtros mas com as chipViews
-        //old
-        //binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
-        /*      binding.btnLiked.setOnClickListener {
-                  binding.cvCreateRecipe.visibility = View.GONE
-                  toast(getString(R.string.get_liked_recipes))
-                  binding.tvNoRecipes.isVisible = sharedPreference.getUserSession().getLikedRecipes().isEmpty()
+        //filtros mas com as chipViews
+        val chipGroup: ChipGroup = binding.chipGroup
+        chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
+            if (checkedId.isNotEmpty())
+                group.findViewById<Chip>(checkedId[0])?.let { updateView(it) }
+        }
 
 
-                  if (buttonPressed != binding.btnLiked) {
-                      binding.btnLiked.setBackgroundResource(R.drawable.bg_default)
-                      buttonPressed = binding.btnLiked
-                      buttonPressed?.background= resources.getDrawable(R.drawable.bg_default)
 
-                  }
-
-                  adapter.updateList(user!!.getLikedRecipes(), user!!)
-
-              }
-
-              binding.btnSaved.setOnClickListener {
-                  binding.cvCreateRecipe.visibility = View.GONE
-                  toast(getString(R.string.get_saved_recipes))
-                  val userSession: User = sharedPreference.getUserSession()
-                  binding.tvNoRecipes.isVisible = userSession.getSavedRecipes().isEmpty()
-
-                  if (buttonPressed != binding.btnSaved) {
-                      buttonPressed?.setBackgroundColor(resources.getColor(R.color.main_color))
-                      buttonPressed = binding.btnSaved
-                      buttonPressed?.setBackgroundColor(resources.getColor(R.color.black))
-                  }
-
-                  adapter.updateList(userSession.getSavedRecipes(), user!!)
-
-              }
-
-              binding.btnCreated.setOnClickListener {
-                  binding.cvCreateRecipe.visibility = View.VISIBLE
-                  //Todo: RAFAEL
-                  toast("Em desenvolvimento...")
-                  adapter.updateList(mutableListOf(), user!!)
-
-              }
-
-              binding.btnComment.setOnClickListener {
-                  binding.cvCreateRecipe.visibility = View.GONE
-                  //Todo: RAFAEL
-                  toast("Em desenvolvimento...")
-                  adapter.updateList(mutableListOf(), user!!)
-
-              }
-
-              binding.btnRecentes.setOnClickListener {
-                  binding.cvCreateRecipe.visibility = View.GONE
-                  //Todo: RAFAEL
-                  toast("Em desenvolvimento...")
-                  adapter.updateList(mutableListOf(), user!!)
-
-              }
-      */
-        // bottom nav bar
-
+        // bottom filters
         binding.meatFiltIB.setOnClickListener {
             recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE)
             filterOnClick("meat")
@@ -289,28 +261,79 @@ class FavoritesFragment : Fragment() {
 
             toast("Está offline")
 
-            //valida shared preferences
-            try {
-                user = sharedPreference.getUserSession()
-                if (user!!.liked_recipes.isNullOrEmpty()) {
-                    Log.d(TAG, "onViewCreated: user.saved_recipes is empty")
-                    //Mensagem sem receitas
+
+
+        }
+    }
+
+    private fun updateView(currentTabSelected: View) {
+
+        when(currentTabSelected){
+            binding.chipCurtidas -> {
+                // gostos
+
+                //list
+                val recipes = user.getLikedRecipes()
+                if (recipes.isEmpty()){
                     binding.tvNoRecipes.visibility = View.VISIBLE
-
-                } else {
-                    //Mensagem com receitas
-                    binding.tvNoRecipes.visibility = View.GONE
-
-                    // Primeira lista a aparecer
-                    adapter.updateList(user!!.getLikedRecipes(),user!!)
+                    binding.tvNoRecipes.text = getString(R.string.no_recipes_liked)
                 }
-            } catch (e: Exception) {
-                Log.d(TAG, "onViewCreated: User had no shared prefences...")
-                // se não tiver shared preferences o user não tem sessão válida
-                //tera um comportamento diferente offilne
-                authViewModel.logoutUser()
-            }
+                else
+                    binding.tvNoRecipes.visibility = View.INVISIBLE
 
+                adapter.updateList(recipes, user)
+
+            }
+            binding.chipGuardados ->{
+                // favoritos
+
+                //list
+                val recipes = user.getSavedRecipes()
+                if (recipes.isEmpty()){
+                    binding.tvNoRecipes.visibility = View.VISIBLE
+                    binding.tvNoRecipes.text = getString(R.string.no_recipes_saved)
+                }
+                else
+                    binding.tvNoRecipes.visibility = View.INVISIBLE
+
+                adapter.updateList(recipes, user)
+            }
+            binding.chipCriadas ->{
+                // criadas
+
+                //list
+                val recipes = user.getCreateRecipes()
+                if (recipes.isEmpty()){
+                    binding.tvNoRecipes.visibility = View.VISIBLE
+                    binding.tvNoRecipes.text = getString(R.string.no_recipes_created)
+                }
+                else
+                    binding.tvNoRecipes.visibility = View.INVISIBLE
+
+                adapter.updateList(recipes, user)
+
+            }
+            binding.chipCommented ->{
+                // criadas
+
+                //list
+                // todo rafael falta implementar isto, só pode ser feito online
+                binding.tvNoRecipes.visibility = View.VISIBLE
+                binding.tvNoRecipes.text = getString(R.string.not_implemented)
+
+                adapter.updateList(mutableListOf(), user)
+            }
+            binding.chipLastSeem ->{
+                // criadas
+
+                //list
+                // todo rafael falta implementar isto, só pode ser feito online
+
+                binding.tvNoRecipes.visibility = View.VISIBLE
+                binding.tvNoRecipes.text = getString(R.string.not_implemented)
+
+                adapter.updateList(mutableListOf(), user)
+            }
         }
     }
 

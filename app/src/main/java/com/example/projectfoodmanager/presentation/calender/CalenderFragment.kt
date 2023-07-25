@@ -136,7 +136,7 @@ class CalenderFragment : Fragment() {
         binding.calWeeklyRV.visibility=View.VISIBLE
 
         currentDate = LocalDate.now()
-        binding.monthYearTV.text = CalenderUtils.formatDateMonthYear(currentDate)
+        binding.monthYearTV.text = formatDateMonthYear(currentDate)
 
         val layoutManager: RecyclerView.LayoutManager =
             GridLayoutManager(activity?.applicationContext, 7)
@@ -148,7 +148,7 @@ class CalenderFragment : Fragment() {
 
     private fun updateView() {
 
-        binding.monthYearTV.text = CalenderUtils.formatDateMonthYear(currentDate)
+        binding.monthYearTV.text = formatDateMonthYear(currentDate)
 
         if (binding.calMonthRV.visibility==View.VISIBLE){
             adapterCalMonth.updateList(daysInMonthArray(

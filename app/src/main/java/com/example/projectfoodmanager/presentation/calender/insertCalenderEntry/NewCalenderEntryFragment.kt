@@ -1,9 +1,7 @@
 package com.example.projectfoodmanager.presentation.calender.insertCalenderEntry
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.graphics.Color
-import android.opengl.Visibility
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
@@ -13,7 +11,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,6 +20,7 @@ import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBinding
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.selectedDate
 import com.example.projectfoodmanager.util.*
@@ -56,12 +54,17 @@ class NewCalenderEntryFragment : Fragment() {
     private var snapHelper: SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
     private var checkedTag: Int= 0
+    private var recipeRecyclerViewList: MutableList<Recipe> = mutableListOf()
 
     val TAG: String = "NewCalenderEntryFragment"
 
 
+    lateinit var user: User
+    private var currentTabSelected :Int = 0
+
+
     private val adapter by lazy {
-        FavoritesRecipeCalenderListingAdapter(
+        RecipeCalenderListingAdapter(
             onItemClicked = { _, item ->
                 findNavController().navigate(R.id.action_newCalenderEntryFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("Recipe",item)
@@ -109,16 +112,11 @@ class NewCalenderEntryFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        //valida shared preferences
-        // insere as saved recipes
-        try {
-            val user = sharedPreference.getUserSession()
-            val recipes = user.getSavedRecipes()
-            if (recipes.isEmpty())
-                binding.tvNoRecipes.visibility = View.VISIBLE
-            else
-                adapter.updateList(user.getSavedRecipes(), user)
+        // default list
 
+        try {
+            user = sharedPreference.getUserSession()
+            updateView(currentTabSelected)
         } catch (e: Exception) {
             Log.d(TAG, "onViewCreated: User had no shared prefences...")
             // se não tiver shared preferences o user não tem sessão válida
@@ -126,6 +124,20 @@ class NewCalenderEntryFragment : Fragment() {
             authViewModel.logoutUser()
         }
 
+        // change listing items
+
+        binding.nextBtn.setOnClickListener {
+            updateView(++currentTabSelected)
+        }
+
+        binding.previousBtn.setOnClickListener {
+
+            updateView(--currentTabSelected)
+        }
+
+
+
+        // form body
 
         binding.tagCV.setOnClickListener {
             val tags = resources.getStringArray(R.array.tagEntryCalender_array).toList()
@@ -133,14 +145,14 @@ class NewCalenderEntryFragment : Fragment() {
 
             val builder = MaterialAlertDialogBuilder(requireActivity(), R.style.MaterialAlertDialog)
                 .setTitle("Selecione a categoria")
-                .setPositiveButton("ok") { dialog, which ->
+                .setPositiveButton("ok") { _, _ ->
                     binding.tagValTV.text= tags[checkedTag]
                 }
-                .setSingleChoiceItems(adapter, checkedTag) { dialog, which ->
+                .setSingleChoiceItems(adapter, checkedTag) { _, which ->
                     // Handle the item selection here
                     checkedTag = which
                 }
-                .setNeutralButton("Cancel") { dialog,which->
+                .setNeutralButton("Cancel") { dialog, _ ->
                     dialog.dismiss()
                 }
 
@@ -202,14 +214,14 @@ class NewCalenderEntryFragment : Fragment() {
         binding.timeValTV.text = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
         binding.timeCV.setOnClickListener {
 
-            val isSystem24Hour = is24HourFormat(context)
-            val clockFormat = if (isSystem24Hour) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+            val clockFormat = if (is24HourFormat(context)) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+            val timeNow = LocalTime.now()
 
             val picker =
                 MaterialTimePicker.Builder()
                     .setTimeFormat(clockFormat)
-                    .setHour(0)
-                    .setMinute(0)
+                    .setHour(timeNow.hour)
+                    .setMinute(timeNow.minute)
                     .setTitleText("Digite a que horário pretende")
                     .build()
 
@@ -249,14 +261,111 @@ class NewCalenderEntryFragment : Fragment() {
         }
 
         binding.completeRegIB.setOnClickListener {
-            val localDateTime  = LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))
-            val calenderEntryRequest = CalenderEntryRequest(tag = CALENDAR_MEALS_TAG.ALMOCO,formatLocalTimeToServerTime(localDateTime))
-            val teste = manager.findFirstCompletelyVisibleItemPosition()
-            if (teste == -1)
-                toast("No recipe selected...")
-            else
-                calenderViewModel.createEntryOnCalender(teste,calenderEntryRequest)
+
+            val (valid,message) = validation()
+            if (valid) {
+                val (recipe_id,calenderEntryRequest) = getCalenderEntryRequest()
+                calenderViewModel.createEntryOnCalender(recipe_id,calenderEntryRequest)
+            }
+            else{
+                Toast(context).showCustomToast (message, requireActivity(),ToastConstants.ALERT)
+            }
+
+
         }
+    }
+    private fun updateView(currentTabSelected: Int) {
+
+        when(currentTabSelected){
+            0 -> {
+                // salvos
+                // tab title
+                binding.listingTV.text = "Guardados"
+                binding.listingIV.setImageResource(R.drawable.ic_favorito_active)
+                binding.previousBtn.visibility = View.GONE
+
+                //list
+                val recipes = user.getSavedRecipes()
+                if (recipes.isEmpty()){
+                    binding.tvNoRecipes.visibility = View.VISIBLE
+                    binding.tvNoRecipes.text = getString(R.string.no_recipes_saved)
+                }
+                else
+                    binding.tvNoRecipes.visibility = View.INVISIBLE
+
+                recipeRecyclerViewList = recipes
+                adapter.updateList(recipeRecyclerViewList, user)
+
+            }
+            1 ->{
+                // favoritos
+                // tab title
+                binding.listingTV.text = "Favoritos"
+                binding.listingIV.setImageResource(R.drawable.ic_like_active)
+                binding.previousBtn.visibility = View.VISIBLE
+                binding.nextBtn.visibility = View.VISIBLE
+
+                //list
+                val recipes = user.getLikedRecipes()
+                if (recipes.isEmpty()){
+                    binding.tvNoRecipes.visibility = View.VISIBLE
+                    binding.tvNoRecipes.text = getString(R.string.no_recipes_liked)
+                }
+                else
+                    binding.tvNoRecipes.visibility = View.INVISIBLE
+
+                recipeRecyclerViewList = recipes
+                adapter.updateList(recipeRecyclerViewList, user)
+            }
+            2 ->{
+                // criados
+                // tab title
+                binding.listingTV.text = "Criados"
+                // todo rui falta aqui um icon para os creados
+                binding.listingIV.setImageResource(R.drawable.ic_favorito_active)
+                binding.nextBtn.visibility = View.GONE
+
+                //list
+                val recipes = user.getCreateRecipes()
+                if (recipes.isEmpty()){
+                    binding.tvNoRecipes.visibility = View.VISIBLE
+                    binding.tvNoRecipes.text = getString(R.string.no_recipes_created)
+                }
+                else
+                    binding.tvNoRecipes.visibility = View.INVISIBLE
+
+
+                recipeRecyclerViewList = recipes
+                adapter.updateList(recipeRecyclerViewList, user)
+
+            }
+            else->{
+
+            }
+        }
+    }
+
+
+    private fun validation():Pair<Boolean,String> {
+
+        val localDateTime  = LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))
+
+        if (recipeRecyclerViewList.isEmpty())
+            return false to "No recipe selected."
+
+        if (localDateTime < LocalDateTime.now())
+            return false to "Date should be before today."
+
+        if (binding.tagValTV.text == getString(R.string.none))
+            return false to "Tag cant be none."
+
+        return true to ""
+
+    }
+
+    private fun getCalenderEntryRequest(): Pair<Int,CalenderEntryRequest> {
+        val localDateTime  = LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))
+        return recipeRecyclerViewList[manager.findFirstCompletelyVisibleItemPosition()].id to CalenderEntryRequest(tag = binding.tagValTV.text.toString().uppercase(),formatLocalTimeToServerTime(localDateTime))
     }
 
 
@@ -266,8 +375,9 @@ class NewCalenderEntryFragment : Fragment() {
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-
+                        Toast(context).showCustomToast ("Nova entrada no calendario adicionada.", requireActivity())
                         findNavController().navigateUp()
+
                     }
                     is NetworkResult.Error -> {
                         Log.d(TAG, "bindObservers: ${it.message}.")

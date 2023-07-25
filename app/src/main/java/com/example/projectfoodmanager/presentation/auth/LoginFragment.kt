@@ -2,7 +2,6 @@ package com.example.projectfoodmanager.presentation.auth
 
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -113,7 +112,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun showValidationErrors(error: String) {
-        Toast(context).showCustomToast(error,ToastConstants.ERROR,requireActivity())
+        Toast(context).showCustomToast(error,requireActivity(),ToastConstants.ERROR)
        // toast(error)
     }
 

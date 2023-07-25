@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.example.projectfoodmanager.R
 
 
@@ -32,7 +33,7 @@ fun Activity.toast(msg: String?){
 fun String.isValidEmail() =
     isNotEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
-fun Toast.showCustomToast(message: String,type: Int, activity: Activity) {
+fun Toast.showCustomToast(message: String, activity: Activity, type: Int = ToastConstants.SUCCESS) {
 
     val layout = activity.layoutInflater.inflate (R.layout.item_toast, activity.findViewById(R.id.toast_container))
 

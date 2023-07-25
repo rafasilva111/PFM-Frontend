@@ -84,33 +84,27 @@ class FavoritesRecipeListingAdapter(
                 val imageURL = Uri.toString()
                 Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
             }
-                .addOnFailureListener {
-                    Glide.with(binding.imageView.context)
-                        .load(R.drawable.good_food_display___nci_visuals_online)
-                        .into(binding.imageView)
-                }
 
             //------- AUTOR DA RECIPE -------
-            binding.authorTV.text = item.backgrounds[0].user.name
 
-            if (!item.backgrounds[0].user.verified){
-                binding.verifyUserIV.visibility=View.INVISIBLE
-            }
+            // todo rafael fix esta merda
+            if (item.created_by != null) {
+                binding.authorTV.text = item.created_by.name
 
-            if (item.backgrounds[0].user.img_source.contains("avatar")){
-                val avatar= Avatar.getAvatarByName(item.backgrounds[0].user.img_source)
-                binding.authorIV.setImageResource(avatar!!.imgId)
-
-            }else{
-                val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.backgrounds[0].user.img_source}")
-                imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                    Glide.with(binding.authorIV.context).load(Uri.toString()).into(binding.authorIV)
+                if (!item.created_by.verified) {
+                    binding.verifyUserIV.visibility = View.INVISIBLE
                 }
-                    .addOnFailureListener {
-                        Glide.with(binding.authorIV.context)
-                            .load(R.drawable.good_food_display___nci_visuals_online)
+
+                if (item.created_by.img_source.contains("avatar")) {
+                    val avatar = Avatar.getAvatarByName(item.backgrounds[0].user.img_source)
+                    binding.authorIV.setImageResource(avatar!!.imgId)
+
+                } else {
+                    Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.backgrounds[0].user.img_source}").downloadUrl.addOnSuccessListener { Uri ->
+                        Glide.with(binding.authorIV.context).load(Uri.toString())
                             .into(binding.authorIV)
                     }
+                }
             }
 
 
@@ -147,7 +141,7 @@ class FavoritesRecipeListingAdapter(
 
             if (user!=null){
                 if(user!!.checkIfLiked(item) != -1){
-                    binding.favoritesIB.setImageResource(R.drawable.ic_like_active)
+                    binding.likeIB.setImageResource(R.drawable.ic_like_active)
                 }
                 else
                     binding.likeIB.setImageResource(R.drawable.ic_like_black)
@@ -169,7 +163,7 @@ class FavoritesRecipeListingAdapter(
                     binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
                 }
                 else
-                    binding.favoritesIB.setImageResource(R.drawable.ic_favorite)
+                    binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
             }
 
             binding.favoritesIB.setOnClickListener {

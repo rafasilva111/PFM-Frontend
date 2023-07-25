@@ -73,6 +73,7 @@
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.App.Chip"
+                    android:id="@+id/chipCurtidas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tab_liked"
@@ -82,6 +83,7 @@
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.App.Chip"
+                    android:id="@+id/chipGuardados"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tab_saved"
@@ -90,6 +92,7 @@
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.App.Chip"
+                    android:id="@+id/chipCriadas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tab_created"
@@ -98,6 +101,7 @@
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.App.Chip"
+                    android:id="@+id/chipCommented"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tab_coment"
@@ -106,6 +110,7 @@
 
                 <com.google.android.material.chip.Chip
                     style="@style/Widget.App.Chip"
+                    android:id="@+id/chipLastSeem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tab_last_seen"
