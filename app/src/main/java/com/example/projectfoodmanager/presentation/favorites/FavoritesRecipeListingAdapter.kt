@@ -96,11 +96,11 @@ class FavoritesRecipeListingAdapter(
                 }
 
                 if (item.created_by.img_source.contains("avatar")) {
-                    val avatar = Avatar.getAvatarByName(item.backgrounds[0].user.img_source)
+                    val avatar = Avatar.getAvatarByName(item.created_by.img_source)
                     binding.authorIV.setImageResource(avatar!!.imgId)
 
                 } else {
-                    Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.backgrounds[0].user.img_source}").downloadUrl.addOnSuccessListener { Uri ->
+                    Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.created_by.img_source}").downloadUrl.addOnSuccessListener { Uri ->
                         Glide.with(binding.authorIV.context).load(Uri.toString())
                             .into(binding.authorIV)
                     }

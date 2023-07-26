@@ -17,9 +17,9 @@ import java.util.*
 import javax.inject.Inject
 
 
-class RecipeCalenderListingAdapter(
+class RecipeCalenderEntryListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit
-) : RecyclerView.Adapter<RecipeCalenderListingAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<RecipeCalenderEntryListingAdapter.MyViewHolder>() {
 
     @Inject
     lateinit var sharedPreference: SharedPreference

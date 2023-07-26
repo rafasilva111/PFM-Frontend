@@ -64,7 +64,7 @@ class NewCalenderEntryFragment : Fragment() {
 
 
     private val adapter by lazy {
-        RecipeCalenderListingAdapter(
+        RecipeCalenderEntryListingAdapter(
             onItemClicked = { _, item ->
                 findNavController().navigate(R.id.action_newCalenderEntryFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("Recipe",item)

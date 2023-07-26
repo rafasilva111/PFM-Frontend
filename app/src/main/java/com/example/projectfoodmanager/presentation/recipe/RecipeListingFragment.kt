@@ -270,45 +270,30 @@ class RecipeListingFragment : Fragment() {
             //nav search bottom
 
             binding.meatFiltIB.setOnClickListener {
-                newSearch = true
-                stringToSearch=RecipeListingFragmentFilters.CARNE
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE)
 
+                changeFilterSearch(RecipeListingFragmentFilters.CARNE)
                 filterOnClick("meat")
+
             }
             binding.fishFiltIB.setOnClickListener {
-                newSearch = true
-                stringToSearch=RecipeListingFragmentFilters.PEIXE
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE)
-
+                changeFilterSearch(RecipeListingFragmentFilters.PEIXE)
                 filterOnClick("fish")
             }
 
             binding.soupFiltIB.setOnClickListener {
-                newSearch = true
-                stringToSearch=RecipeListingFragmentFilters.SOPA
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA)
-
+                changeFilterSearch(RecipeListingFragmentFilters.SOPA)
                 filterOnClick("soup")
             }
             binding.vegiFiltIB.setOnClickListener {
-                newSearch = true
-                stringToSearch=RecipeListingFragmentFilters.VEGETARIANA
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA)
-
+                changeFilterSearch(RecipeListingFragmentFilters.VEGETARIANA)
                 filterOnClick("vegi")
             }
             binding.fruitFiltIB.setOnClickListener {
-                newSearch = true
-                stringToSearch=RecipeListingFragmentFilters.FRUTA
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA)
-
+                changeFilterSearch(RecipeListingFragmentFilters.FRUTA)
                 filterOnClick("fruit")
             }
             binding.drinkFiltIB.setOnClickListener {
-                newSearch = true
-                stringToSearch=RecipeListingFragmentFilters.BEBIDAS
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS)
+                changeFilterSearch(RecipeListingFragmentFilters.BEBIDAS)
                 filterOnClick("drink")
             }
         }
@@ -392,25 +377,32 @@ class RecipeListingFragment : Fragment() {
                         else {
                             binding.progressBar.hide()
 
-                            currentPage = it.data!!._metadata.current_page
+                            // check if list empty
 
-                            if(it.data.result.isEmpty()){
+                            if(it.data!!.result.isEmpty()){
                                 //TODO: Não funciona com os filtros
                                 binding.offlineTV.text = getString(R.string.no_recipes_found)
                                 binding.offlineTV.visibility=View.VISIBLE
+                                return@let
                             }else{
                                 binding.offlineTV.visibility=View.GONE
 
                             }
 
+                            // sets page data
 
-                            // check next page to failed missed calls to api
+                            currentPage = it.data!!._metadata.current_page
                             nextPage = it.data._metadata.next != null
 
+                            // checks if new search
 
-                            for (recipe in it.data.result) {
-                                recipeList.add(recipe)
+                            if (recipeList.isNotEmpty() && currentPage == 1){
+                                recipeList = it.data.result
                             }
+                            else{
+                                recipeList += it.data.result
+                            }
+
                             adapter.updateList(recipeList)
                         }
 
@@ -592,6 +584,18 @@ class RecipeListingFragment : Fragment() {
             }
         }
 
+    }
+    private fun changeFilterSearch(string: String){
+        if (stringToSearch == string){
+            newSearch = false
+            stringToSearch=""
+            recipeViewModel.getRecipesPaginated()
+        }
+        else{
+            newSearch = true
+            stringToSearch=string
+            recipeViewModel.getRecipesByTitleAndTags(string)
+        }
     }
 
     private fun changeVisibilityMenu(state : Boolean){

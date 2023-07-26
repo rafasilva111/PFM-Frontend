@@ -39,7 +39,7 @@ class RecipeViewModel @Inject constructor (
         get() = repository.recipeResponseLiveData
 
 
-    fun getRecipesPaginated(page: Int){
+    fun getRecipesPaginated(page: Int = 1){
         viewModelScope.launch {
             repository.getRecipesPaginated(page)
         }

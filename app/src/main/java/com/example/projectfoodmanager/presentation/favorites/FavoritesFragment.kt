@@ -360,7 +360,7 @@ class FavoritesFragment : Fragment() {
 
         if (oldFiltTag == tag) {
             oldFiltTag = ""
-            recipeViewModel.getRecipesPaginated(1)
+            recipeViewModel.getRecipesPaginated()
             //TODO: Rafa-> No recipe listing acrescentou se isto, mas aqui como esta diferente não sei
             //currentPage = 1
             return

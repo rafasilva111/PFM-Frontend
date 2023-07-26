@@ -11,10 +11,10 @@ import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils
 import java.time.LocalDate
 
 
-class RecipeAdapter(
+class RecipeCalenderAdapter(
     private var days: ArrayList<LocalDate?>,
     private val onItemClicked: (String) -> Unit,
-) :RecyclerView.Adapter<RecipeAdapter.RecipeCalenderViewHolder>() {
+) :RecyclerView.Adapter<RecipeCalenderAdapter.RecipeCalenderViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCalenderViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val view: View = inflater.inflate(R.layout.calendar_cell, parent, false)

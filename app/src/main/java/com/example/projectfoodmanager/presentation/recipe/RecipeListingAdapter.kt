@@ -76,6 +76,8 @@ class RecipeListingAdapter(
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
                     val imageURL = Uri.toString()
                     Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
+                }.addOnFailureListener {
+                    Glide.with(binding.imageView.context).load(R.drawable.good_food_display___nci_visuals_online).into(binding.imageView)
                 }
             }
 

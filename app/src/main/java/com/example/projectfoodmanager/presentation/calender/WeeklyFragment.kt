@@ -34,8 +34,8 @@ class WeeklyFragment : Fragment() {
     }
 
 
-    private val recipeAdapter by lazy{
-        RecipeAdapter(
+    private val recipeCalenderAdapter by lazy{
+        RecipeCalenderAdapter(
             daysInWeekArray(
                 currentDate
             ),
@@ -108,6 +108,6 @@ class WeeklyFragment : Fragment() {
 
         val layoutManager: RecyclerView.LayoutManager =LinearLayoutManager(activity?.applicationContext)
         binding.recipesRV.layoutManager = layoutManager
-        binding.recipesRV.adapter = recipeAdapter
+        binding.recipesRV.adapter = recipeCalenderAdapter
     }
 }

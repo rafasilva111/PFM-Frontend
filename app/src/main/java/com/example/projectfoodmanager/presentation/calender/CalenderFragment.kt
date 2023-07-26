@@ -20,7 +20,6 @@ import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
-import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.selectedDate
 
 @AndroidEntryPoint
 class CalenderFragment : Fragment() {
@@ -51,8 +50,8 @@ class CalenderFragment : Fragment() {
     }
 
 
-    private val recipeAdapter by lazy{
-        RecipeAdapter(
+    private val recipeCalenderAdapter by lazy{
+        RecipeCalenderAdapter(
             CalenderUtils.daysInWeekArray(
                 currentDate
             ),
@@ -132,7 +131,7 @@ class CalenderFragment : Fragment() {
 
     private fun setWeeklyView() {
 
-        binding.calMonthRV.visibility=View.INVISIBLE
+        binding.calMonthRV.visibility=View.GONE
         binding.calWeeklyRV.visibility=View.VISIBLE
 
         currentDate = LocalDate.now()
@@ -142,6 +141,7 @@ class CalenderFragment : Fragment() {
             GridLayoutManager(activity?.applicationContext, 7)
         binding.calWeeklyRV.layoutManager = layoutManager
         binding.calWeeklyRV.adapter = adapterCalWeekly
+
         //setEventAdapter()
     }
 
