@@ -61,6 +61,10 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getRecipePaginated(page = page)
 	}
 
+	override suspend fun getRecipesPaginatedSorted(page: Int,by:String): Response<RecipeList> {
+		return apiInterface.getRecipePaginatedSorted(page = page,by = by)
+	}
+
 	override suspend fun getRecipesByTitleAndTags(
 		string: String,
 		page: Int

@@ -31,6 +31,7 @@ interface RemoteDataSource {
 	suspend fun createRecipe(recipe : RecipeRequest): Response<Recipe>
 	suspend fun getRecipe(recipeId: Int): Response<Recipe>
 	suspend fun getRecipesPaginated(page: Int): Response<RecipeList>
+	suspend fun getRecipesPaginatedSorted(page: Int,by:String): Response<RecipeList>
 	suspend fun getRecipesByTitleAndTags(string: String, page: Int): Response<RecipeList>
 	suspend fun updateRecipe(recipeId: Int,recipe: RecipeRequest): Response<Recipe>
 	suspend fun deleteRecipe(recipeId: Int): Response<String>

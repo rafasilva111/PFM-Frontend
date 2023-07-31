@@ -93,6 +93,9 @@
     <string name="no_recipes_liked">No recipes liked...</string>
     <string name="no_recipes_created">No recipes created...</string>
     <string name="not_implemented">Not implemented yet...</string>
+    <string name="most_saved">Mais guardadas</string>
+    <string name="random">Ao calhas</string>
+    <string name="most_liked">Mais gostadas</string>
 
     <string-array name="gender_array">
         <item>Masculino</item>

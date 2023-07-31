@@ -61,6 +61,13 @@ object SharedPrefConstants {
     var METADATA = "metadata"
 }
 
+object RecipesSortingType {
+    const val DATE = "DATE"
+    const val LIKES = "LIKES"
+    const val SAVES = "SAVES"
+    const val RANDOM = "RANDOM"
+}
+
 object SexConstants{
     const val M = "M"
     const val F = "F"

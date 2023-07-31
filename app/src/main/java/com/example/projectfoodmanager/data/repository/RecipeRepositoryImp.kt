@@ -55,6 +55,42 @@ class RecipeRepositoryImp @Inject constructor(
         }
     }
 
+    // paginated and sorted
+
+    private val _recipeSortedResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeList>>>()
+    override val recipeSortedResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
+        get() = _recipeSortedResponseLiveData
+
+
+    override suspend fun getRecipesPaginatedSorted(page: Int,by:String) {
+        _recipeResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: Making request to page $page.")
+        val response =remoteDataSource.getRecipesPaginatedSorted(page,by)
+
+        //handle response RecipeListResponse
+
+        if (response.isSuccessful && response.body() != null) {
+            Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: Request was sucessfull.")
+            Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: Response body -> ${response.body()}.")
+            _recipeSortedResponseLiveData.postValue(Event(NetworkResult.Success(
+                response.body()!!
+            )))
+        }
+        else if(response.errorBody()!=null){
+            try {
+                Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: Request was not sucessfull.")
+                val errorObj = response.errorBody()!!.charStream().readText()
+                Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: $errorObj")
+                _recipeSortedResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+            } catch (_: Exception) {
+
+            }
+        }
+        else{
+            _recipeSortedResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
     private val _recipeSearchByTitleAndTagsResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeList>>>()
     override val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
         get() = _recipeSearchByTitleAndTagsResponseLiveData
@@ -83,6 +119,9 @@ class RecipeRepositoryImp @Inject constructor(
             _recipeSearchByTitleAndTagsResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
     }
+
+
+
 
     /// like function
 

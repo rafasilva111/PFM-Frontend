@@ -7,9 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -30,6 +28,8 @@ import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +41,7 @@ import kotlin.math.ceil
 class RecipeListingFragment : Fragment() {
 
     // constantes (cuidado com esta merda)
+
 
 
     private var recipeList: MutableList<Recipe> = mutableListOf()
@@ -67,6 +68,12 @@ class RecipeListingFragment : Fragment() {
     private var oldFiltTag: String =""
     lateinit var binding: FragmentRecipeListingBinding
     private val recipeViewModel by activityViewModels<RecipeViewModel>()
+
+    // chips filter
+
+    private var chipSelected: String? = null
+
+
     private val adapter by lazy {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
@@ -147,7 +154,11 @@ class RecipeListingFragment : Fragment() {
                         //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
 
                         if ((pastVisibleItem + 1) >= recipeList.size){
-                            if (stringToSearch.isNullOrEmpty()) {
+
+                            if (chipSelected != null){
+                                recipeViewModel.getRecipesPaginatedSorted(++currentPage,chipSelected!!)
+                            }
+                            else if (stringToSearch.isNullOrEmpty()) {
                                 recipeViewModel.getRecipesPaginated(++currentPage)
                             } else {
                                 recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!, ++currentPage)
@@ -249,22 +260,12 @@ class RecipeListingFragment : Fragment() {
 
 
 
-            //nav search toppom
-
-            //TODO: RAFA Denvolver filtros mas com as chipViews
-            //old
- /*           binding.btnSugestoes.setOnClickListener {
-                toast("Em desenvolvimento...")
+            //filtros mas com as chipViews
+            val chipGroup: ChipGroup = binding.chipGroup
+            chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
+                if (checkedId.isNotEmpty())
+                    group.findViewById<Chip>(checkedId[0])?.let { updateView(it) }
             }
-            binding.btnMelhores.setOnClickListener {
-                toast("Em desenvolvimento...")
-            }
-            binding.btnRecentes.setOnClickListener {
-                toast("Em desenvolvimento...")
-            }
-            binding.btnPersonalizadas.setOnClickListener {
-                toast("Em desenvolvimento...")
-            }*/
 
 
             //nav search bottom
@@ -481,6 +482,79 @@ class RecipeListingFragment : Fragment() {
         }
 
 
+        // chips filter
+
+        recipeViewModel.recipeSortedResponseLiveData.observe(viewLifecycleOwner
+        ) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        // isto é usado para atualizar os likes caso o user vá a detail view
+
+                        if (refreshPage != 0) {
+                            binding.progressBar.hide()
+                            val lastIndex =
+                                if (recipeList.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) - 1 else recipeList.size - 1
+                            var firstIndex = if (recipeList.size >= PaginationNumber.DEFAULT) lastIndex - 4 else 0
+
+                            recipeList.subList(firstIndex, lastIndex + 1).clear()
+
+
+                            for (recipe in it.data!!.result) {
+                                recipeList.add(firstIndex, recipe)
+                                firstIndex++
+                            }
+                            adapter.updateList(recipeList)
+
+                            //reset control variables
+                            refreshPage = 0
+                        }
+                        else {
+                            binding.progressBar.hide()
+
+                            // check if list empty
+
+                            if(it.data!!.result.isEmpty()){
+                                binding.offlineTV.text = getString(R.string.no_recipes_found)
+                                binding.offlineTV.visibility=View.VISIBLE
+                                return@let
+                            }else{
+                                binding.offlineTV.visibility=View.GONE
+
+                            }
+
+                            // sets page data
+
+                            currentPage = it.data._metadata.current_page
+                            nextPage = it.data._metadata.next != null
+
+                            // checks if new search
+
+                            if (recipeList.isNotEmpty() && currentPage == 1){
+                                recipeList = it.data.result
+                            }
+                            else{
+                                recipeList += it.data.result
+                            }
+
+                            adapter.updateList(recipeList)
+                        }
+
+                        binding.progressBar.hide()
+
+                    }
+                    is NetworkResult.Error -> {
+                        binding.progressBar.hide()
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.show()
+                    }
+                }
+            }
+        }
+
+
         // Like function
 
 
@@ -595,6 +669,68 @@ class RecipeListingFragment : Fragment() {
             newSearch = true
             stringToSearch=string
             recipeViewModel.getRecipesByTitleAndTags(string)
+        }
+    }
+
+    private fun updateView(currentTabSelected: View) {
+
+        when(currentTabSelected){
+            binding.recipeListingFilterRecent -> {
+                // recent
+                if (chipSelected!=null && chipSelected== RecipesSortingType.DATE){
+                    chipSelected = null
+                    recipeViewModel.getRecipesPaginated()
+                }
+                else{
+                    chipSelected = RecipesSortingType.DATE
+                    recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.DATE)
+                }
+
+
+
+            }
+            binding.recipeListingFilterSugestions -> {
+                // gostos
+                // todo
+            }
+            binding.recipeListingFilterPersonalizedSugestions -> {
+                // gostos
+                // todo
+            }
+            binding.random -> {
+                // random
+                if (chipSelected!=null && chipSelected== RecipesSortingType.RANDOM){
+                    chipSelected = null
+                    recipeViewModel.getRecipesPaginated()
+                }
+                else{
+                    chipSelected = RecipesSortingType.RANDOM
+                    recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.RANDOM)
+                }
+            }
+            binding.mostLiked -> {
+                // gostos
+
+                if (chipSelected!=null && chipSelected== RecipesSortingType.LIKES){
+                    chipSelected = null
+                    recipeViewModel.getRecipesPaginated()
+                }
+                else{
+                    chipSelected = RecipesSortingType.LIKES
+                    recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.LIKES)
+                }
+            }
+            binding.mostSaved -> {
+                // saves
+                if (chipSelected!=null && chipSelected== RecipesSortingType.SAVES){
+                    chipSelected = null
+                    recipeViewModel.getRecipesPaginated()
+                }
+                else{
+                    chipSelected = RecipesSortingType.SAVES
+                    recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.SAVES)
+                }
+            }
         }
     }
 

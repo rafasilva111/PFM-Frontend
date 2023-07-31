@@ -45,6 +45,15 @@ class RecipeViewModel @Inject constructor (
         }
     }
 
+    val recipeSortedResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
+        get() = repository.recipeSortedResponseLiveData
+
+    fun getRecipesPaginatedSorted(page: Int = 1,by:String){
+        viewModelScope.launch {
+            repository.getRecipesPaginatedSorted(page,by)
+        }
+    }
+
     val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
         get() = repository.recipeSearchByTitleAndTagsResponseLiveData
 

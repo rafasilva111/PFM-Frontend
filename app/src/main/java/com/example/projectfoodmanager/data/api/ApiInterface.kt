@@ -55,6 +55,9 @@ interface ApiInterface {
     suspend fun getRecipePaginated(@Query("page") page: Int): Response<RecipeList>
 
     @GET("$API_V1_BASE_URL/recipe/list")
+    suspend fun getRecipePaginatedSorted(@Query("page") page: Int,@Query("by") by: String): Response<RecipeList>
+
+    @GET("$API_V1_BASE_URL/recipe/list")
     suspend fun getRecipesByTitleAndTags(@Query("string")string: String,@Query("page") page: Int): Response<RecipeList>
 
     @PUT("$API_V1_BASE_URL/recipe")
