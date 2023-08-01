@@ -144,7 +144,7 @@ class RegisterFragment : Fragment() {
                     authViewModel.registerUser(getUserRequest())
 
             }else{
-                Toast(context).showCustomToast ("Por favor preencha os campos em falta", requireActivity(),ToastConstants.ERROR)
+                Toast(context).showCustomToast ("Por favor preencha os campos em falta", requireActivity(),ToastType.ERROR)
             }
         }
         binding.backIB.setOnClickListener {
@@ -200,7 +200,7 @@ class RegisterFragment : Fragment() {
                 val avatar= adapter.getItem(position)
 
                 if (avatar!!.reserved){
-                    Toast(context).showCustomToast ("Este avatar apenas esta disponivel para VIP!\n Registe-se e depois pode adquirir o VIP", requireActivity(),ToastConstants.VIP)
+                    Toast(context).showCustomToast ("Este avatar apenas esta disponivel para VIP!\n Registe-se e depois pode adquirir o VIP", requireActivity(),ToastType.VIP)
                 }else{
                     // Handle the item selection here
                     selectedAvatar = avatar.getName()
@@ -589,11 +589,11 @@ class RegisterFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
                         findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-                        Toast(context).showCustomToast (getString(R.string.user_registered_successfully), requireActivity(),ToastConstants.SUCCESS)
+                        Toast(context).showCustomToast (getString(R.string.user_registered_successfully), requireActivity(),ToastType.SUCCESS)
                         //toast(getString(R.string.user_registered_successfully))
                     }
                     is NetworkResult.Error -> {
-                        Toast(context).showCustomToast (it.message.toString(), requireActivity(),ToastConstants.ERROR)
+                        Toast(context).showCustomToast (it.message.toString(), requireActivity(),ToastType.ERROR)
                         //toast(it.message.toString())
                     }
                     is NetworkResult.Loading -> {

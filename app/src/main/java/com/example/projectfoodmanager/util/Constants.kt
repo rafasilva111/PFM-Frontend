@@ -82,7 +82,7 @@ object ImageTagsConstants{
 }
 
 
-object ToastConstants{
+object ToastType{
     const val SUCCESS = 0
     const val ALERT = 1
     const val INFO = 2

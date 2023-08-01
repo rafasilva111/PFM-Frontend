@@ -6,6 +6,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderList
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
@@ -14,6 +15,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import retrofit2.Response
+import java.time.LocalDateTime
 
 interface RemoteDataSource {
 
@@ -50,11 +52,15 @@ interface RemoteDataSource {
 
 	//calender
 	suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<Unit>
+	suspend fun getEntryOnCalender(fromDate: String, toDate: String):  Response<CalenderList>
+	suspend fun getEntryOnCalender(date: String):  Response<CalenderList>
 
 	//followers
 	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>
 	suspend fun getFollowers(): Response<FollowList>
 	suspend fun getFolloweds(): Response<FollowList>
+
+
 
 
 }

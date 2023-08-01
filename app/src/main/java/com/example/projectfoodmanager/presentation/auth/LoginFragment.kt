@@ -12,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import androidx.lifecycle.Observer
-import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
@@ -112,7 +111,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun showValidationErrors(error: String) {
-        Toast(context).showCustomToast(error,requireActivity(),ToastConstants.ERROR)
+        Toast(context).showCustomToast(error,requireActivity(),ToastType.ERROR)
        // toast(error)
     }
 

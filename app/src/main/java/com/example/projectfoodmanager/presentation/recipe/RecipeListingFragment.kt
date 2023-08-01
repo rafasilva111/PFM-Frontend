@@ -306,7 +306,7 @@ class RecipeListingFragment : Fragment() {
 
 
     private fun showValidationErrors(error: String) {
-        toast(error)
+        toast(error, type = ToastType.ERROR)
     }
 
 

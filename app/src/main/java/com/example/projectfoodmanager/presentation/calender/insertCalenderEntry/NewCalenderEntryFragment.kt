@@ -26,7 +26,7 @@ import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.viewmodels.CalendarViewModel
+import com.example.projectfoodmanager.viewmodels.CalenderViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -48,7 +48,7 @@ class NewCalenderEntryFragment : Fragment() {
     lateinit var tokenManager: TokenManager
 
     private val authViewModel: AuthViewModel by viewModels()
-    private val calenderViewModel: CalendarViewModel by viewModels()
+    private val calenderViewModel: CalenderViewModel by viewModels()
 
     lateinit var binding: FragmentNewCalenderEntryBinding
     private var snapHelper: SnapHelper = PagerSnapHelper()
@@ -190,7 +190,10 @@ class NewCalenderEntryFragment : Fragment() {
             }
 
             datePicker.addOnPositiveButtonClickListener {
-                binding.dateValTV.text= datePicker.headerText
+                if(datePicker.headerText.length == 9)
+                    binding.dateValTV.text= "0"+datePicker.headerText
+                else
+                    binding.dateValTV.text= datePicker.headerText
 
             }
 
@@ -268,7 +271,7 @@ class NewCalenderEntryFragment : Fragment() {
                 calenderViewModel.createEntryOnCalender(recipe_id,calenderEntryRequest)
             }
             else{
-                Toast(context).showCustomToast (message, requireActivity(),ToastConstants.ALERT)
+                Toast(context).showCustomToast (message, requireActivity(),ToastType.ALERT)
             }
 
 
@@ -375,7 +378,7 @@ class NewCalenderEntryFragment : Fragment() {
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-                        Toast(context).showCustomToast ("Nova entrada no calendario adicionada.", requireActivity())
+                        toast ("Nova entrada no calendario adicionada.")
                         findNavController().navigateUp()
 
                     }
