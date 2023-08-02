@@ -17,6 +17,10 @@ import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,10 +43,26 @@ class RecipeViewModel @Inject constructor (
         get() = repository.recipeResponseLiveData
 
 
-    fun getRecipesPaginated(page: Int){
+    fun getRecipesPaginated(page: Int = 1){
         viewModelScope.launch {
             repository.getRecipesPaginated(page)
         }
+    }
+
+    val recipeSortedResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
+        get() = repository.recipeSortedResponseLiveData
+
+    fun getRecipesPaginatedSorted(page: Int = 1,by:String){
+        val triggerFlow = MutableSharedFlow<Unit>()
+        triggerFlow
+            .debounce(300) // wait for 300ms of inactivity before emitting the latest value
+            .onEach {
+                viewModelScope.launch {
+                    repository.getRecipesPaginatedSorted(page,by)
+                }
+            }
+            .launchIn(viewModelScope)
+        triggerFlow.tryEmit(Unit)
     }
 
     val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>

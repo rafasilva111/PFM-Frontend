@@ -23,6 +23,7 @@ class CreateRecepiFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_create_recepi, container, false)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CreateRecepiViewModel::class.java)

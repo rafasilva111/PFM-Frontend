@@ -211,8 +211,7 @@ class BioDataFragment : Fragment() {
     fun getUserRequest():UserRequest {
 
         return UserRequest(
-            first_name = objUser!!.first_name,
-            last_name = objUser!!.last_name,
+            name= objUser!!.name,
             email = objUser!!.email,
             birth_date = objUser!!.birth_date,
             password = objUser!!.password,

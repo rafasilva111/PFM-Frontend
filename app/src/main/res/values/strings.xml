@@ -51,11 +51,11 @@
     <string name="recipe_removed_liked">Removed like.</string>
     <string name="user_registered_successfully">User registered successfully.</string>
     <string name="logout_confirmation_description">Are you sure you want to exit!</string>
-    <string name="favorite_tab_coment">Comentados</string>
-    <string name="favorite_tab_created">Criados</string>
-    <string name="favorite_tab_saved">Guardados</string>
-    <string name="favorite_tab_liked">Gostos</string>
-    <string name="favorite_tab_last_seen">Ultimas receitas vistas</string>
+    <string name="tab_coment">Comentados</string>
+    <string name="tab_created">Criados</string>
+    <string name="tab_saved">Guardados</string>
+    <string name="tab_liked">Curtidas</string>
+    <string name="tab_last_seen">Ultimas receitas vistas</string>
     <string name="recipe_listing_filter_sugestions">Sugestões</string>
     <string name="recipe_listing_filter_best">Melhor classificadas</string>
     <string name="recipe_listing_filter_recent">Mais recentes</string>
@@ -67,7 +67,8 @@
     <string name="login_string">Entrar</string>
     <string name="recipe_removed_from_saves">Save revomed.</string>
     <string name="recipe_saved">Recipe saved.</string>
-    <string name="full_name">%1$s %2$s</string>
+    <!--    <string name="full_name">%1$s %2$s</string>-->
+    <string name="full_name">%1$s</string>
     <string name="goals_biodata_confirmation">You don\'t have you\'re biodata insered, and it is required to proceed, do you want to insert?</string>
     <string name="biodata_update">Atualização</string>
     <string name="warning">Atenção</string>
@@ -86,10 +87,30 @@
     <string name="last_name">Apelido</string>
     <string name="first_name">Nome</string>
     <string name="cancel">Cancel</string>
+    <string name="calender_formated_date">%1$s:%2$s</string>
+    <string name="no_recipes_saved">No recipes saved...</string>
+    <string name="none">Nenhum</string>
+    <string name="no_recipes_liked">No recipes liked...</string>
+    <string name="no_recipes_created">No recipes created...</string>
+    <string name="not_implemented">Not implemented yet...</string>
+    <string name="most_saved">Mais guardadas</string>
+    <string name="random">Ao calhas</string>
+    <string name="most_liked">Mais gostadas</string>
 
     <string-array name="gender_array">
         <item>Masculino</item>
         <item>Feminino</item>
         <item>Nao responder</item>
     </string-array>
+
+    <string-array name="tagEntryCalender_array">
+        <item>Pequeno Almoço</item>
+        <item>Lanche da manhã</item>
+        <item>Almoço</item>
+        <item>Lanche da tarde</item>
+        <item>Jantar</item>
+        <item>Ceia</item>
+    </string-array>
+
+
 </resources>

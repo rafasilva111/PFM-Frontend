@@ -2,11 +2,13 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.api.ApiInterface
-import com.example.projectfoodmanager.data.model.modelRequest.CommentRequest
+import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
@@ -61,6 +63,10 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getRecipePaginated(page = page)
 	}
 
+	override suspend fun getRecipesPaginatedSorted(page: Int,by:String): Response<RecipeList> {
+		return apiInterface.getRecipePaginatedSorted(page = page,by = by)
+	}
+
 	override suspend fun getRecipesByTitleAndTags(
 		string: String,
 		page: Int
@@ -110,6 +116,19 @@ class RemoteDataSourceImpl @Inject constructor(
 	}
 	override suspend fun deleteComment(commentId: Int): Response<Unit> {
 		return apiInterface.deleteComments(commentId= commentId)
+	}
+
+	//Calender
+	override suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<Unit> {
+		return apiInterface.createCalenderEntry(recipeId= recipeId,calenderEntryRequest = comment)
+	}
+
+	override suspend fun getEntryOnCalender(fromDate: String,toDate: String): Response<CalenderDatedEntryList> {
+		return apiInterface.getEntryOnCalender(fromDate = fromDate,toDate = toDate)
+	}
+
+	override suspend fun getEntryOnCalender(date: String): Response<CalenderEntryList> {
+		return apiInterface.getEntryOnCalender(date = date)
 	}
 
 	//Followers

@@ -38,6 +38,7 @@
         app:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:itemActiveIndicatorStyle="@null"
         app:layout_constraintStart_toStartOf="parent"
         app:itemBackground="@drawable/activity_main_tab_background"
         app:itemIconTint="#FFFFFF"

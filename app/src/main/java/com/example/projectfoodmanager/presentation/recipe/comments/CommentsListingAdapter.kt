@@ -2,7 +2,6 @@ package com.example.projectfoodmanager.presentation.recipe.comments;
 
 import android.content.Context
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemCommentLayoutBinding
@@ -19,15 +19,17 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import javax.inject.Inject
+import java.util.*
 
 class CommentsListingAdapter(
     val sharedPreferences: SharedPreference
 ): RecyclerView.Adapter<CommentsListingAdapter.MyViewHolder>() {
 
+    private var userSession: User? = null
     private var i : Int = 0
     private val TAG: String? = "RecipeListingAdapter"
     private var list: MutableList<Comment> = arrayListOf()
@@ -81,7 +83,7 @@ class CommentsListingAdapter(
             if (owner){
                 binding.CLComment.visibility = View.GONE
                 binding.CLCommentOwner.visibility = View.VISIBLE
-                binding.TVCAuthorOwner.text = context.getString(R.string.username, item.user!!.first_name, item.user.last_name)
+                binding.TVCAuthorOwner.text = context.getString(R.string.full_name, item.user!!.name)
                 binding.TVCMessageOwner.text = item.text
 
                 if (item.updated_date !=item.created_date){
@@ -108,14 +110,25 @@ class CommentsListingAdapter(
                     }
                 }
 
-                val userSession: User? = sharedPreferences.getUserSession()
-                if (userSession?.img_source != null && userSession.img_source != "") {
-                    val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${userSession.img_source}")
+
+                if (userSession==null)
+                    userSession = sharedPreferences.getUserSession()
+
+
+                if (userSession!!.img_source.contains("avatar")){
+                    val avatar= Avatar.getAvatarByName(userSession!!.img_source)
+                    binding.IVAuthorOwner.setImageResource(avatar!!.imgId)
+
+                }else{
+                    val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${userSession!!.img_source}")
                     imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                        val imageURL = Uri.toString()
-                        Glide.with(binding.IVAuthorOwner.context).load(imageURL)
-                            .into(binding.IVAuthorOwner)
+                        Glide.with(binding.IVAuthorOwner.context).load(Uri.toString()).into(binding.IVAuthorOwner)
                     }
+                        .addOnFailureListener {
+                            Glide.with(binding.IVAuthorOwner.context)
+                                .load(R.drawable.good_food_display___nci_visuals_online)
+                                .into(binding.IVAuthorOwner)
+                        }
                 }
 
 //            binding.CVComment.setOnLongClickListener { true
@@ -127,7 +140,7 @@ class CommentsListingAdapter(
             else{
                 binding.CLComment.visibility = View.VISIBLE
                 binding.CLCommentOwner.visibility = View.GONE
-                binding.TVCAuthor.text = context.getString(R.string.username, item.user!!.first_name, item.user.last_name)
+                binding.TVCAuthor.text = context.getString(R.string.full_name, item.user!!.name)
                 binding.TVCMessage.text = item.text
                 if (item.updated_date !=item.created_date){
                     // created date
@@ -194,9 +207,10 @@ class CommentsListingAdapter(
     private fun getRelativeTime(timeString: String): String? {
         return try {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
-            val currentDateTime = LocalDateTime.now()
+            val currentDateTime = LocalDateTime.now().atZone(ZoneId.of("Europe/Lisbon"))
             val messageDateTime = LocalDateTime.parse(timeString, formatter)
             val duration = Duration.between(messageDateTime, currentDateTime)
+
 
             return when {
                 duration.seconds < 60 -> "Just now"

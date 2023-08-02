@@ -21,18 +21,18 @@ fun View.show(){
     visibility=View.VISIBLE
 }
 
-fun Fragment.toast(msg: String?){
-    Toast.makeText(requireContext(),msg,Toast.LENGTH_LONG).show()
+fun Fragment.toast(msg: String, type: Int = ToastType.SUCCESS){
+    Toast(context).showCustomToast (msg, requireActivity(), type)
 }
 
-fun Activity.toast(msg: String?){
-    Toast.makeText(baseContext,msg,Toast.LENGTH_LONG).show()
+fun Activity.toast(msg: String, type: Int = ToastType.SUCCESS){
+    Toast(baseContext).showCustomToast (msg, this, type)
 }
 
 fun String.isValidEmail() =
     isNotEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
-fun Toast.showCustomToast(message: String,type: Int, activity: Activity) {
+fun Toast.showCustomToast(message: String, activity: Activity, type: Int = ToastType.SUCCESS) {
 
     val layout = activity.layoutInflater.inflate (R.layout.item_toast, activity.findViewById(R.id.toast_container))
 
@@ -46,31 +46,31 @@ fun Toast.showCustomToast(message: String,type: Int, activity: Activity) {
 
 
     when (type){
-        ToastConstants.SUCCESS -> {
+        ToastType.SUCCESS -> {
             title.text="Sucess"
             cardIcon.setCardBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(activity.baseContext, R.color.success)))
             title.backgroundTintList= ColorStateList.valueOf(ContextCompat.getColor(activity.baseContext, R.color.success))
             img.setImageResource(R.drawable.ic_sucess)
         }
-        ToastConstants.ALERT -> {
+        ToastType.ALERT -> {
             title.text="Alert"
             cardIcon.setCardBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(activity.baseContext, R.color.warning)))
             title.backgroundTintList= ColorStateList.valueOf(ContextCompat.getColor(activity.baseContext, R.color.warning))
             img.setImageResource(R.drawable.ic_warning)
         }
-        ToastConstants.INFO -> {
+        ToastType.INFO -> {
             title.text="Information"
             cardIcon.setCardBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(activity.baseContext, R.color.info)))
             title.backgroundTintList= ColorStateList.valueOf(ContextCompat.getColor(activity.baseContext, R.color.info))
             img.setImageResource(R.drawable.ic_info)
         }
-        ToastConstants.ERROR -> {
+        ToastType.ERROR -> {
             title.text="Error"
             cardIcon.setCardBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(activity.baseContext, R.color.error)))
             title.backgroundTintList= ColorStateList.valueOf(ContextCompat.getColor(activity.baseContext, R.color.error))
             img.setImageResource(R.drawable.ic_error)
         }
-        ToastConstants.VIP -> {
+        ToastType.VIP -> {
             title.text="Vip"
             cardIcon.setCardBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(activity.baseContext, R.color.vip)))
             title.backgroundTintList= ColorStateList.valueOf(ContextCompat.getColor(activity.baseContext, R.color.vip))

@@ -47,12 +47,9 @@ import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FireStorage.user_profile_images
 import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_CODE
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
@@ -93,17 +90,17 @@ class RegisterFragment : Fragment() {
         activityResultLauncher  =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode== AppCompatActivity.RESULT_OK) {
-                    var extras: Bundle? = result.data?.extras
-                    var imageUri: Uri
-                    var imageBitmap = extras?.get("data") as Bitmap
-                    var imageResult: WeakReference<Bitmap> = WeakReference(
+                    val extras: Bundle? = result.data?.extras
+                    val imageUri: Uri
+                    val imageBitmap = extras?.get("data") as Bitmap
+                    val imageResult: WeakReference<Bitmap> = WeakReference(
                         Bitmap.createScaledBitmap(
                             imageBitmap, imageBitmap.width, imageBitmap.height, false
                         ).copy(
                             Bitmap.Config.RGB_565, true
                         )
                     )
-                    var bm = imageResult.get()
+                    val bm = imageResult.get()
 
                     // todo look into this
                     imageUri = saveImage(bm, requireContext())
@@ -147,7 +144,7 @@ class RegisterFragment : Fragment() {
                     authViewModel.registerUser(getUserRequest())
 
             }else{
-                Toast(context).showCustomToast ("Por favor preencha os campos em falta",ToastConstants.ERROR, requireActivity())
+                Toast(context).showCustomToast ("Por favor preencha os campos em falta", requireActivity(),ToastType.ERROR)
             }
         }
         binding.backIB.setOnClickListener {
@@ -198,15 +195,15 @@ class RegisterFragment : Fragment() {
             val adapter = AvatarGVAdapter(requireContext(), avatarArrayList)
             avatarGV.adapter = adapter
 
-            avatarGV.onItemClickListener = AdapterView.OnItemClickListener{ parent, view, position, id ->
+            avatarGV.onItemClickListener = AdapterView.OnItemClickListener{ _, _, position, _ ->
 
                 val avatar= adapter.getItem(position)
 
                 if (avatar!!.reserved){
-                    Toast(context).showCustomToast ("Este avatar apenas esta disponivel para VIP!\n Registe-se e depois pode adquirir o VIP",ToastConstants.VIP, requireActivity())
+                    Toast(context).showCustomToast ("Este avatar apenas esta disponivel para VIP!\n Registe-se e depois pode adquirir o VIP", requireActivity(),ToastType.VIP)
                 }else{
                     // Handle the item selection here
-                    selectedAvatar = avatar!!.getName()
+                    selectedAvatar = avatar.getName()
 
                     binding.imageView.setImageResource(avatar.imgId)
 
@@ -266,8 +263,8 @@ class RegisterFragment : Fragment() {
 
         //-------------- VALIDATIONS --------------
 
-        binding.firstNameEt.setOnFocusChangeListener { view, hasfocus ->
-            if (!hasfocus){
+        binding.firstNameEt.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus){
                 if (binding.firstNameEt.text.isNullOrEmpty()){
                     binding.firstNameTL.isErrorEnabled=true
                     binding.firstNameTL.error=getString(R.string.enter_first_name)
@@ -278,8 +275,8 @@ class RegisterFragment : Fragment() {
             }
         }
 
-        binding.lastNameEt.setOnFocusChangeListener { view, hasfocus ->
-            if (!hasfocus){
+        binding.lastNameEt.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus){
                 if (binding.lastNameEt.text.isNullOrEmpty()){
                     binding.lastNameTL.isErrorEnabled=true
                     binding.lastNameTL.error=getString(R.string.enter_last_name)
@@ -290,8 +287,8 @@ class RegisterFragment : Fragment() {
             }
         }
 
-        binding.emailEt.setOnFocusChangeListener { view, hasfocus ->
-            if (!hasfocus){
+        binding.emailEt.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus){
                 if (binding.emailEt.text.isNullOrEmpty()){
                     binding.emailTL.isErrorEnabled=true
                     binding.emailTL.error=getString(R.string.enter_email)
@@ -304,8 +301,8 @@ class RegisterFragment : Fragment() {
             }
         }
 
-        binding.dateEt.setOnFocusChangeListener { view, hasfocus ->
-            if (!hasfocus){
+        binding.dateEt.setOnFocusChangeListener { view, hasFocus ->
+            if (!hasFocus){
                 if (binding.dateEt.text.isNullOrEmpty()){
                     binding.dateTL.isErrorEnabled=true
                     binding.dateTL.error=getString(R.string.enter_birthdate)
@@ -331,8 +328,8 @@ class RegisterFragment : Fragment() {
             }
         }
 
-        binding.sexEt.setOnFocusChangeListener { view, hasfocus ->
-            if (!hasfocus){
+        binding.sexEt.setOnFocusChangeListener { view, hasFocus ->
+            if (!hasFocus){
                 if (binding.sexEt.text.isNullOrEmpty()){
                     binding.sexTL.isErrorEnabled=true
                     binding.sexTL.error=getString(R.string.invalid_sex)
@@ -356,9 +353,9 @@ class RegisterFragment : Fragment() {
             }
         }
 
-        binding.passEt.setOnFocusChangeListener { view, hasfocus ->
+        binding.passEt.setOnFocusChangeListener { _, hasFocus ->
 
-            if (!hasfocus){
+            if (!hasFocus){
                 if (binding.passEt.text.isNullOrEmpty()){
                     binding.passwordTL.isErrorEnabled=true
                     binding.passwordTL.error=getString(R.string.enter_password)
@@ -388,7 +385,7 @@ class RegisterFragment : Fragment() {
 
 
 
-    fun getUserRequest(): UserRequest {
+    private fun getUserRequest(): UserRequest {
 
         val sex: String = when (binding.sexEt.text.toString()) {
             "Masculino" -> SexConstants.M
@@ -404,8 +401,7 @@ class RegisterFragment : Fragment() {
         }
 
         return UserRequest(
-            first_name = binding.firstNameEt.text.toString(),
-            last_name = binding.lastNameEt.text.toString(),
+            name =  binding.firstNameEt.text.toString() + " "+ binding.lastNameEt.text.toString(),
             email = binding.emailEt.text.toString(),
             birth_date = binding.dateEt.text.toString(),
             password = binding.passEt.text.toString(),
@@ -423,7 +419,7 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    fun validation(): Boolean {
+    private fun validation(): Boolean {
 
         var isValid = true
         //first_name
@@ -532,6 +528,7 @@ class RegisterFragment : Fragment() {
         )
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
@@ -587,16 +584,16 @@ class RegisterFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        authViewModel.userRegisterLiveData.observe(viewLifecycleOwner) {
+        authViewModel.userRegisterLiveData.observe(viewLifecycleOwner) { it ->
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
                         findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-                        Toast(context).showCustomToast (getString(R.string.user_registered_successfully),ToastConstants.SUCCESS, requireActivity())
+                        Toast(context).showCustomToast (getString(R.string.user_registered_successfully), requireActivity(),ToastType.SUCCESS)
                         //toast(getString(R.string.user_registered_successfully))
                     }
                     is NetworkResult.Error -> {
-                        Toast(context).showCustomToast (it.message.toString(),ToastConstants.ERROR, requireActivity())
+                        Toast(context).showCustomToast (it.message.toString(), requireActivity(),ToastType.ERROR)
                         //toast(it.message.toString())
                     }
                     is NetworkResult.Loading -> {

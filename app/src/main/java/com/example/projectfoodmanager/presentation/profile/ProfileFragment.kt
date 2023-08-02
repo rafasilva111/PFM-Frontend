@@ -156,19 +156,16 @@ class ProfileFragment : Fragment() {
 
 
 
-        val userSession: User? = sharedPreference.getUserSession()
+        val userSession: User = sharedPreference.getUserSession()
 
         // set layout data before internet verification
 
-        binding.nameTV.text =  getString(R.string.full_name, userSession!!.first_name, userSession.last_name)
+        binding.nameTV.text =  getString(R.string.full_name, userSession.name)
 
         if(userSession.user_type != "V"){
             binding.profileCV.foreground=null
             binding.vipIV.visibility=View.INVISIBLE
         }
-
-        if(userSession.verified)
-            binding.verifyIV.visibility=View.VISIBLE
 
 
 
@@ -274,6 +271,7 @@ class ProfileFragment : Fragment() {
         super.onPause()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {

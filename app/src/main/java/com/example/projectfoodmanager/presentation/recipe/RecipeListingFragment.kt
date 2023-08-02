@@ -7,9 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -30,6 +28,8 @@ import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +41,7 @@ import kotlin.math.ceil
 class RecipeListingFragment : Fragment() {
 
     // constantes (cuidado com esta merda)
+
 
 
     private var recipeList: MutableList<Recipe> = mutableListOf()
@@ -67,6 +68,12 @@ class RecipeListingFragment : Fragment() {
     private var oldFiltTag: String =""
     lateinit var binding: FragmentRecipeListingBinding
     private val recipeViewModel by activityViewModels<RecipeViewModel>()
+
+    // chips filter
+
+    private var chipSelected: String? = null
+
+
     private val adapter by lazy {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
@@ -147,7 +154,11 @@ class RecipeListingFragment : Fragment() {
                         //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
 
                         if ((pastVisibleItem + 1) >= recipeList.size){
-                            if (stringToSearch.isNullOrEmpty()) {
+
+                            if (chipSelected != null){
+                                recipeViewModel.getRecipesPaginatedSorted(++currentPage,chipSelected!!)
+                            }
+                            else if (stringToSearch.isNullOrEmpty()) {
                                 recipeViewModel.getRecipesPaginated(++currentPage)
                             } else {
                                 recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!, ++currentPage)
@@ -159,7 +170,7 @@ class RecipeListingFragment : Fragment() {
                     }
                     else if (!noMoreRecipesMessagePresented){
                         noMoreRecipesMessagePresented = true
-                        toast("Sorry cant find more recipes.")
+                        toast("Sorry cant find more recipes.",ToastType.ALERT)
                     }
                     binding.recyclerView.addOnScrollListener(scrollListener)
                 }
@@ -182,15 +193,17 @@ class RecipeListingFragment : Fragment() {
         // user data
         val user = sharedPreference.getUserSession()
 
-        binding.tvName.text =  getString(R.string.full_name, user.first_name, user.last_name)
+        binding.tvName.text =  getString(R.string.full_name, user.name)
 
+        //VIP HEADER
         if(user.user_type != "V"){
             binding.profileCV.foreground=null
             binding.vipIV.visibility=View.INVISIBLE
         }
 
+        //VERIFIED HEADER
         if(user.verified)
-            binding.verifyIV.visibility=View.VISIBLE
+            binding.verifyUserHeaderIV.visibility=View.VISIBLE
 
 
         if (user.img_source.contains("avatar")){
@@ -202,11 +215,7 @@ class RecipeListingFragment : Fragment() {
             imgRef.downloadUrl.addOnSuccessListener { Uri ->
                 Glide.with(binding.ivProfilePic.context).load(Uri.toString()).into(binding.ivProfilePic)
             }
-                .addOnFailureListener {
-                    Glide.with(binding.ivProfilePic.context)
-                        .load(R.drawable.good_food_display___nci_visuals_online)
-                        .into(binding.ivProfilePic)
-                }
+
         }
 
 
@@ -251,64 +260,41 @@ class RecipeListingFragment : Fragment() {
 
 
 
-            //nav search toppom
-
-            binding.btnSugestoes.setOnClickListener {
-                toast("Em desenvolvimento...")
-            }
-            binding.btnMelhores.setOnClickListener {
-                toast("Em desenvolvimento...")
-            }
-            binding.btnRecentes.setOnClickListener {
-                toast("Em desenvolvimento...")
-            }
-            binding.btnPersonalizadas.setOnClickListener {
-                toast("Em desenvolvimento...")
+            //filtros mas com as chipViews
+            val chipGroup: ChipGroup = binding.chipGroup
+            chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
+                if (checkedId.isNotEmpty())
+                    group.findViewById<Chip>(checkedId[0])?.let { updateView(it) }
             }
 
 
             //nav search bottom
 
             binding.meatFiltIB.setOnClickListener {
-                newSearch = true
-                stringToSearch=RecipeListingFragmentFilters.CARNE
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.CARNE)
 
+                changeFilterSearch(RecipeListingFragmentFilters.CARNE)
                 filterOnClick("meat")
+
             }
             binding.fishFiltIB.setOnClickListener {
-                newSearch = true
-                stringToSearch=RecipeListingFragmentFilters.PEIXE
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.PEIXE)
-
+                changeFilterSearch(RecipeListingFragmentFilters.PEIXE)
                 filterOnClick("fish")
             }
 
             binding.soupFiltIB.setOnClickListener {
-                newSearch = true
-                stringToSearch=RecipeListingFragmentFilters.SOPA
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.SOPA)
-
+                changeFilterSearch(RecipeListingFragmentFilters.SOPA)
                 filterOnClick("soup")
             }
             binding.vegiFiltIB.setOnClickListener {
-                newSearch = true
-                stringToSearch=RecipeListingFragmentFilters.VEGETARIANA
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.VEGETARIANA)
-
+                changeFilterSearch(RecipeListingFragmentFilters.VEGETARIANA)
                 filterOnClick("vegi")
             }
             binding.fruitFiltIB.setOnClickListener {
-                newSearch = true
-                stringToSearch=RecipeListingFragmentFilters.FRUTA
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.FRUTA)
-
+                changeFilterSearch(RecipeListingFragmentFilters.FRUTA)
                 filterOnClick("fruit")
             }
             binding.drinkFiltIB.setOnClickListener {
-                newSearch = true
-                stringToSearch=RecipeListingFragmentFilters.BEBIDAS
-                recipeViewModel.getRecipesByTitleAndTags(RecipeListingFragmentFilters.BEBIDAS)
+                changeFilterSearch(RecipeListingFragmentFilters.BEBIDAS)
                 filterOnClick("drink")
             }
         }
@@ -320,66 +306,46 @@ class RecipeListingFragment : Fragment() {
 
 
     private fun showValidationErrors(error: String) {
-        toast(error)
+        toast(error, type = ToastType.ERROR)
     }
 
 
     private fun filterOnClick(tag:String){
 
-        //GET OLD CLICK
-        if (oldFiltTag.isBlank() || oldFiltTag!=tag){
-            val updateOld = oldFiltTag
-            oldFiltTag = tag
-            val oldCL: ConstraintLayout? = binding.root.findViewWithTag(updateOld+"CL") as? ConstraintLayout
-            oldCL?.apply {
-                backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
-                elevation=0f
-            }
+        val clToUpdate: ConstraintLayout? = binding.root.findViewWithTag(oldFiltTag + "CL") as? ConstraintLayout
+        val tvToUpdate: TextView? = binding.root.findViewWithTag(oldFiltTag + "TV") as? TextView
+        val ibToUpdate: ImageButton? = binding.root.findViewWithTag(oldFiltTag + "_filt_IB") as? ImageButton
 
-            val oldTV: TextView? = binding.root.findViewWithTag(updateOld+"TV") as? TextView
-            oldTV?.apply {
-                setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
-            }
-
-            val oldIB: ImageButton? = binding.root.findViewWithTag(updateOld+"_filt_IB") as? ImageButton
-            oldIB?.apply {
-                backgroundTintList=ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
-            }
-            //ignorar este warning
-        }else if (oldFiltTag==tag){
-            val oldCL: ConstraintLayout? = binding.root.findViewWithTag(tag+"CL") as? ConstraintLayout
-            oldCL?.apply {
-                backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
-                elevation=0f
-            }
-
-            val oldTV: TextView? = binding.root.findViewWithTag(tag+"TV") as? TextView
-            oldTV?.apply {
-                setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
-            }
-
-            val oldIB: ImageButton? = binding.root.findViewWithTag(tag+"_filt_IB") as? ImageButton
-            oldIB?.apply {
-                backgroundTintList=ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
-            }
-            oldFiltTag=""
-            recipeViewModel.getRecipesPaginated(1)
-            currentPage=1
-            return
-        }else{
-            oldFiltTag = tag
+        clToUpdate?.apply {
+            backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
+            elevation = 0f
         }
 
-        val cl: ConstraintLayout? = binding.root.findViewWithTag(tag+"CL") as? ConstraintLayout
-        cl?.backgroundTintList= ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color))
-        cl?.elevation=3f
+        tvToUpdate?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
 
-        val tv: TextView? = binding.root.findViewWithTag(tag+"TV") as? TextView
+        ibToUpdate?.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
+
+        if (oldFiltTag == tag) {
+            oldFiltTag = ""
+            recipeViewModel.getRecipesPaginated(1)
+            currentPage = 1
+            return
+        }
+
+        oldFiltTag = tag
+
+        val cl: ConstraintLayout? = binding.root.findViewWithTag(tag + "CL") as? ConstraintLayout
+        val tv: TextView? = binding.root.findViewWithTag(tag + "TV") as? TextView
+        val ib: ImageButton? = binding.root.findViewWithTag(tag + "_filt_IB") as? ImageButton
+
+        cl?.apply {
+            backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color))
+            elevation = 3f
+        }
+
         tv?.setTextColor(resources.getColor(R.color.white))
 
-        val iv: ImageView? = binding.root.findViewWithTag(tag+"_filt_IB") as? ImageView
-        iv?.backgroundTintList= ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_1))
-
+        ib?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_1))
     }
 
     private fun bindObservers() {
@@ -412,25 +378,32 @@ class RecipeListingFragment : Fragment() {
                         else {
                             binding.progressBar.hide()
 
-                            currentPage = it.data!!._metadata.current_page
+                            // check if list empty
 
-                            if(it.data.result.isEmpty()){
+                            if(it.data!!.result.isEmpty()){
                                 //TODO: Não funciona com os filtros
                                 binding.offlineTV.text = getString(R.string.no_recipes_found)
                                 binding.offlineTV.visibility=View.VISIBLE
+                                return@let
                             }else{
                                 binding.offlineTV.visibility=View.GONE
 
                             }
 
+                            // sets page data
 
-                            // check next page to failed missed calls to api
+                            currentPage = it.data!!._metadata.current_page
                             nextPage = it.data._metadata.next != null
 
+                            // checks if new search
 
-                            for (recipe in it.data.result) {
-                                recipeList.add(recipe)
+                            if (recipeList.isNotEmpty() && currentPage == 1){
+                                recipeList = it.data.result
                             }
+                            else{
+                                recipeList += it.data.result
+                            }
+
                             adapter.updateList(recipeList)
                         }
 
@@ -448,7 +421,6 @@ class RecipeListingFragment : Fragment() {
         }
 
         // Search Function
-
         recipeViewModel.recipeSearchByTitleAndTagsResponseLiveData.observe(viewLifecycleOwner
         ) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
@@ -493,6 +465,79 @@ class RecipeListingFragment : Fragment() {
                             // safe call for debaunce
                             currentPage = it.data._metadata.current_page
                             // se houver next page soma se não não faz nada
+                        }
+
+                        binding.progressBar.hide()
+
+                    }
+                    is NetworkResult.Error -> {
+                        binding.progressBar.hide()
+                        showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.show()
+                    }
+                }
+            }
+        }
+
+
+        // chips filter
+
+        recipeViewModel.recipeSortedResponseLiveData.observe(viewLifecycleOwner
+        ) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        // isto é usado para atualizar os likes caso o user vá a detail view
+
+                        if (refreshPage != 0) {
+                            binding.progressBar.hide()
+                            val lastIndex =
+                                if (recipeList.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) - 1 else recipeList.size - 1
+                            var firstIndex = if (recipeList.size >= PaginationNumber.DEFAULT) lastIndex - 4 else 0
+
+                            recipeList.subList(firstIndex, lastIndex + 1).clear()
+
+
+                            for (recipe in it.data!!.result) {
+                                recipeList.add(firstIndex, recipe)
+                                firstIndex++
+                            }
+                            adapter.updateList(recipeList)
+
+                            //reset control variables
+                            refreshPage = 0
+                        }
+                        else {
+                            binding.progressBar.hide()
+
+                            // check if list empty
+
+                            if(it.data!!.result.isEmpty()){
+                                binding.offlineTV.text = getString(R.string.no_recipes_found)
+                                binding.offlineTV.visibility=View.VISIBLE
+                                return@let
+                            }else{
+                                binding.offlineTV.visibility=View.GONE
+
+                            }
+
+                            // sets page data
+
+                            currentPage = it.data._metadata.current_page
+                            nextPage = it.data._metadata.next != null
+
+                            // checks if new search
+
+                            if (recipeList.isNotEmpty() && currentPage == 1){
+                                recipeList = it.data.result
+                            }
+                            else{
+                                recipeList += it.data.result
+                            }
+
+                            adapter.updateList(recipeList)
                         }
 
                         binding.progressBar.hide()
@@ -614,6 +659,80 @@ class RecipeListingFragment : Fragment() {
         }
 
     }
+    private fun changeFilterSearch(string: String){
+        if (stringToSearch == string){
+            newSearch = false
+            stringToSearch=""
+            recipeViewModel.getRecipesPaginated()
+        }
+        else{
+            newSearch = true
+            stringToSearch=string
+            recipeViewModel.getRecipesByTitleAndTags(string)
+        }
+    }
+
+    private fun updateView(currentTabSelected: View) {
+
+        when(currentTabSelected){
+            binding.recipeListingFilterRecent -> {
+                // recent
+                if (chipSelected!=null && chipSelected== RecipesSortingType.DATE){
+                    chipSelected = null
+                    recipeViewModel.getRecipesPaginated()
+                }
+                else{
+                    chipSelected = RecipesSortingType.DATE
+                    recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.DATE)
+                }
+
+
+
+            }
+            binding.recipeListingFilterSugestions -> {
+                // gostos
+                // todo
+            }
+            binding.recipeListingFilterPersonalizedSugestions -> {
+                // gostos
+                // todo
+            }
+            binding.random -> {
+                // random
+                if (chipSelected!=null && chipSelected== RecipesSortingType.RANDOM){
+                    chipSelected = null
+                    recipeViewModel.getRecipesPaginated()
+                }
+                else{
+                    chipSelected = RecipesSortingType.RANDOM
+                    recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.RANDOM)
+                }
+            }
+            binding.mostLiked -> {
+                // gostos
+
+                if (chipSelected!=null && chipSelected== RecipesSortingType.LIKES){
+                    chipSelected = null
+                    recipeViewModel.getRecipesPaginated()
+                }
+                else{
+                    chipSelected = RecipesSortingType.LIKES
+                    recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.LIKES)
+                }
+            }
+            binding.mostSaved -> {
+                // saves
+                if (chipSelected!=null && chipSelected== RecipesSortingType.SAVES){
+                    chipSelected = null
+                    recipeViewModel.getRecipesPaginated()
+                }
+                else{
+                    chipSelected = RecipesSortingType.SAVES
+                    recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.SAVES)
+                }
+            }
+        }
+    }
 
     private fun changeVisibilityMenu(state : Boolean){
         val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
@@ -624,5 +743,7 @@ class RecipeListingFragment : Fragment() {
             menu!!.visibility=View.GONE
         }
     }
+
+
 
 }

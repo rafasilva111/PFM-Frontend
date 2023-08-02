@@ -13,6 +13,7 @@ interface RecipeRepository {
 
 
     val recipeResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
+    val recipeSortedResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
     val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
 
     // like
@@ -29,6 +30,7 @@ interface RecipeRepository {
     val functionCreateCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
 
     suspend fun getRecipesPaginated(page: Int)
+    suspend fun getRecipesPaginatedSorted(page: Int,by:String)
     suspend fun getRecipesByTitleAndTags(title: String, searchPage: Int)
     suspend fun addLikeOnRecipe(recipeId: Int)
     suspend fun removeLikeOnRecipe(recipeId: Int)

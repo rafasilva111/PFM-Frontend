@@ -41,7 +41,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="descrição"
-                    android:textSize="12sp"/>
+                    android:fontFamily="@font/fredoka_regular"
+                    android:textSize="13sp"/>
 
             </LinearLayout>
 

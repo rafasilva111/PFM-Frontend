@@ -7,13 +7,26 @@
     android:layout_height="match_parent"
     tools:context=".presentation.favorites.FavoritesFragment">
 
+    <TextView
+        android:id="@+id/titleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/fedoka"
+        android:text="Favoritos"
+        android:textColor="@color/black"
+        android:textSize="@dimen/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <SearchView
         android:id="@+id/SVsearch"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/layout_bg_low"
         android:iconifiedByDefault="false"
@@ -23,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/titleTV" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
@@ -46,80 +59,65 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvName">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                app:singleSelection="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/SVsearch">
 
-            <Button
-                android:id="@+id/btn_liked"
-                android:backgroundTint="#E3E3E4"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="@string/favorite_tab_liked"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:layout_margin="3dp"
-                />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/chipCurtidas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_liked"
+                    android:checked="true"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-            <Button
-                android:id="@+id/btn_saved"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#E3E3E4"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="@string/favorite_tab_saved"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:layout_margin="3dp"
-                />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/chipGuardados"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_saved"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-            <Button
-                android:id="@+id/btn_created"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#E3E3E4"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="@string/favorite_tab_created"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:layout_marginLeft="13dp"
-                />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/chipCriadas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_created"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-            <Button
-                android:id="@+id/btn_comment"
-                android:background="@drawable/layout_bg"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="@string/favorite_tab_coment"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:layout_margin="3dp"
-                />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/chipCommented"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_coment"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-            <Button
-                android:id="@+id/btn_recentes"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#E3E3E4"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="@string/favorite_tab_last_seen"
-                android:textColor="@color/white"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:layout_margin="3dp"/>
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/chipLastSeem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_last_seen"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-
-            </LinearLayout>
+            </com.google.android.material.chip.ChipGroup>
 
         </HorizontalScrollView>
 
@@ -217,194 +215,330 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cv_create_recipe" />
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        android:scrollbars="none"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <!--FILT_MEAT-->
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:padding="2dp">
 
-
-            <TextView
-                android:id="@+id/TV_Filt_meat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/fedoka"
-                android:text="Carne"
-                android:textAllCaps="true"
-                android:textColor="#000000"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/IB_Meat"
-                app:layout_constraintStart_toStartOf="@+id/IB_Meat"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageButton
-                android:id="@+id/IB_Meat"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/meatCL"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/card_cat"
-                android:padding="9dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_meat"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/TV_Filt_meat"
-                tools:ignore="SpeakableTextPresentCheck" />
-
-            <TextView
-                android:id="@+id/TV_Filt_Fish"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/fedoka"
-                android:text="Peixe"
-                android:textAllCaps="true"
-                android:textColor="#000000"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/IB_Fish"
-                app:layout_constraintStart_toStartOf="@+id/IB_Fish"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageButton
-                android:id="@+id/IB_Fish"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="15dp"
-                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
                 android:background="@drawable/card_cat"
-                android:padding="9dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_fish"
-                app:layout_constraintStart_toEndOf="@+id/IB_Meat"
-                app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Fish" />
+                android:backgroundTint="@color/transparent"
+                android:elevation="0dp"
+                android:tag="meatCL">
 
-            <TextView
-                android:id="@+id/TV_Filt_Soup"
-                android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/meatTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/fedoka"
+                    android:tag="meatTV"
+                    android:text="Carne"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/main_color"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toEndOf="@+id/meat_filt_IB"
+                    app:layout_constraintStart_toStartOf="@+id/meat_filt_IB"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <ImageButton
+                    android:id="@+id/meat_filt_IB"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="3dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/card_cat"
+                    android:backgroundTint="#F3F3F3"
+                    android:padding="11dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_meat"
+                    android:tag="meat_filt_IB"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/meatTV" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+        <!--FILT_FISH-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="2dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fishCL"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/fedoka"
-                android:text="Sopa"
-                android:textAllCaps="true"
-                android:textColor="#000000"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/IB_Soup"
-                app:layout_constraintStart_toStartOf="@+id/IB_Soup"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageButton
-                android:id="@+id/IB_Soup"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="15dp"
-                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
                 android:background="@drawable/card_cat"
-                android:padding="9dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_soup"
-                app:layout_constraintStart_toEndOf="@+id/IB_Fish"
-                app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Soup" />
+                android:backgroundTint="@color/transparent"
+                android:elevation="0dp"
+                android:tag="fishCL">
 
-            <TextView
-                android:id="@+id/TV_Filt_Vegi"
-                android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/fishTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/fedoka"
+                    android:tag="fishTV"
+                    android:text="Peixe"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/main_color"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toEndOf="@+id/fish_filt_IB"
+                    app:layout_constraintStart_toStartOf="@+id/fish_filt_IB"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <ImageButton
+                    android:id="@+id/fish_filt_IB"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="3dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/card_cat"
+                    android:backgroundTint="#F3F3F3"
+                    android:padding="8dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_fish"
+                    android:tag="fish_filt_IB"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fishTV" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+        <!--FILT_SOUP-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="2dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/soupCL"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/fedoka"
-                android:text="Salada"
-                android:textAllCaps="true"
-                android:textColor="#000000"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/IB_Vegi"
-                app:layout_constraintStart_toStartOf="@+id/IB_Vegi"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageButton
-                android:id="@+id/IB_Vegi"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="15dp"
-                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
                 android:background="@drawable/card_cat"
-                android:padding="7dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_veget"
-                app:layout_constraintStart_toEndOf="@+id/IB_Soup"
-                app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Vegi"
-                tools:ignore="SpeakableTextPresentCheck" />
+                android:backgroundTint="@color/transparent"
+                android:elevation="0dp"
+                android:tag="soupCL">
 
-            <TextView
-                android:id="@+id/TV_Filt_Fruit"
-                android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/soupTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/fedoka"
+                    android:tag="soupTV"
+                    android:text="Sopa"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/main_color"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toEndOf="@+id/soup_filt_IB"
+                    app:layout_constraintStart_toStartOf="@+id/soup_filt_IB"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <ImageButton
+                    android:id="@+id/soup_filt_IB"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="3dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/card_cat"
+                    android:backgroundTint="#F3F3F3"
+                    android:padding="11dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_soup"
+                    android:tag="soup_filt_IB"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/soupTV" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+        <!--FILT_VEGI-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="2dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/vegiCL"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/fedoka"
-                android:text="Fruta"
-                android:textAllCaps="true"
-                android:textColor="#000000"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/IB_Fruit"
-                app:layout_constraintStart_toStartOf="@+id/IB_Fruit"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageButton
-                android:id="@+id/IB_Fruit"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="15dp"
-                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
                 android:background="@drawable/card_cat"
-                android:padding="7dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_fruit"
-                app:layout_constraintStart_toEndOf="@+id/IB_Vegi"
-                app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Fruit"
-                tools:ignore="SpeakableTextPresentCheck" />
+                android:backgroundTint="@color/transparent"
+                android:elevation="0dp"
+                android:tag="vegiCL">
+
+                <TextView
+                    android:id="@+id/vegiTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/fedoka"
+                    android:tag="vegiTV"
+                    android:text="Salada"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/main_color"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toEndOf="@+id/vegi_filt_IB"
+                    app:layout_constraintStart_toStartOf="@+id/vegi_filt_IB"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-            <TextView
-                android:id="@+id/TV_Filt_Drink"
-                android:layout_width="match_parent"
+                <ImageButton
+                    android:id="@+id/vegi_filt_IB"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="3dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/card_cat"
+                    android:backgroundTint="#F3F3F3"
+                    android:padding="11dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_veget"
+                    android:tag="vegi_filt_IB"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/vegiTV" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+        <!--FILT_FRUIT-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="2dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fruitCL"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/fedoka"
-                android:text="Bebida"
-                android:textAllCaps="true"
-                android:textColor="#000000"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@+id/IB_Drink"
-                app:layout_constraintStart_toStartOf="@+id/IB_Drink"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <ImageButton
-                android:id="@+id/IB_Drink"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="15dp"
-                android:adjustViewBounds="true"
+                android:layout_margin="5dp"
                 android:background="@drawable/card_cat"
-                android:padding="10dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/img_drink"
-                app:layout_constraintStart_toEndOf="@+id/IB_Fruit"
-                app:layout_constraintTop_toBottomOf="@+id/TV_Filt_Drink" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:backgroundTint="@color/transparent"
+                android:elevation="0dp"
+                android:tag="fruitCL">
+
+                <TextView
+                    android:id="@+id/fruitTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/fedoka"
+                    android:tag="fruitTV"
+                    android:text="Fruta"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/main_color"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toEndOf="@+id/fruit_filt_IB"
+                    app:layout_constraintStart_toStartOf="@+id/fruit_filt_IB"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-    </HorizontalScrollView>
+                <ImageButton
+                    android:id="@+id/fruit_filt_IB"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="3dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/card_cat"
+                    android:backgroundTint="#F3F3F3"
+                    android:padding="11dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_fruit"
+                    android:tag="fruit_filt_IB"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/fruitTV" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+        <!--FILT_DRINK-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="2dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/drinkCL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/card_cat"
+                android:backgroundTint="@color/transparent"
+                android:elevation="0dp"
+                android:tag="drinkCL">
+
+                <TextView
+                    android:id="@+id/drinkTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/fedoka"
+                    android:tag="drinkTV"
+                    android:text="Bebida"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/main_color"
+                    android:textSize="11sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/drink_filt_IB"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <ImageButton
+                    android:id="@+id/drink_filt_IB"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="3dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/card_cat"
+                    android:backgroundTint="#F3F3F3"
+                    android:padding="11dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_drink"
+                    android:tag="drink_filt_IB"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/drinkTV" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

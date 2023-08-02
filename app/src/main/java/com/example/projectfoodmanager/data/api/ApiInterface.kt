@@ -1,10 +1,13 @@
 package com.example.projectfoodmanager.data.api
 
 
+import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
@@ -54,6 +57,9 @@ interface ApiInterface {
     suspend fun getRecipePaginated(@Query("page") page: Int): Response<RecipeList>
 
     @GET("$API_V1_BASE_URL/recipe/list")
+    suspend fun getRecipePaginatedSorted(@Query("page") page: Int,@Query("by") by: String): Response<RecipeList>
+
+    @GET("$API_V1_BASE_URL/recipe/list")
     suspend fun getRecipesByTitleAndTags(@Query("string")string: String,@Query("page") page: Int): Response<RecipeList>
 
     @PUT("$API_V1_BASE_URL/recipe")
@@ -97,6 +103,18 @@ interface ApiInterface {
 
     @DELETE("$API_V1_BASE_URL/comment")
     suspend fun deleteComments(@Query("commentId") commentId: Int): Response<Unit>
+
+    // calender
+
+    @POST("$API_V1_BASE_URL/calendar")
+    suspend fun createCalenderEntry(@Query("recipe_id") recipeId: Int,@Body calenderEntryRequest : CalenderEntryRequest): Response<Unit>
+
+    @GET("$API_V1_BASE_URL/calendar/list")
+    suspend fun getEntryOnCalender(@Query("date")date: String): Response<CalenderEntryList>
+
+    @GET("$API_V1_BASE_URL/calendar/list")
+    suspend fun getEntryOnCalender(@Query("from_date") fromDate:String,@Query("to_date") toDate: String): Response<CalenderDatedEntryList>
+
 
     //followers
     @POST("$API_V1_BASE_URL/followers")

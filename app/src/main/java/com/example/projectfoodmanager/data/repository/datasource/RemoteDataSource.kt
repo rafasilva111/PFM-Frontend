@@ -1,11 +1,13 @@
 package com.example.projectfoodmanager.data.repository.datasource
 
 
-import com.example.projectfoodmanager.data.model.modelRequest.CommentRequest
+import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
@@ -31,6 +33,7 @@ interface RemoteDataSource {
 	suspend fun createRecipe(recipe : RecipeRequest): Response<Recipe>
 	suspend fun getRecipe(recipeId: Int): Response<Recipe>
 	suspend fun getRecipesPaginated(page: Int): Response<RecipeList>
+	suspend fun getRecipesPaginatedSorted(page: Int,by:String): Response<RecipeList>
 	suspend fun getRecipesByTitleAndTags(string: String, page: Int): Response<RecipeList>
 	suspend fun updateRecipe(recipeId: Int,recipe: RecipeRequest): Response<Recipe>
 	suspend fun deleteRecipe(recipeId: Int): Response<String>
@@ -47,10 +50,17 @@ interface RemoteDataSource {
 	suspend fun updateComment(commentId: Int, comment: Comment): Response<Comment>
 	suspend fun deleteComment(commentId: Int): Response<Unit>
 
+	//calender
+	suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<Unit>
+	suspend fun getEntryOnCalender(date: String):  Response<CalenderEntryList>
+	suspend fun getEntryOnCalender(fromDate: String, toDate: String):  Response<CalenderDatedEntryList>
+
 	//followers
 	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>
 	suspend fun getFollowers(): Response<FollowList>
 	suspend fun getFolloweds(): Response<FollowList>
+
+
 
 
 }

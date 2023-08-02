@@ -28,11 +28,23 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesRepository(
+    fun providesAuthRepository(
         remoteDataSource: RemoteDataSourceImpl,
         sharedPreference: SharedPreference
     ): AuthRepository {
         return AuthRepositoryImp(
+            remoteDataSource = remoteDataSource,
+            sharedPreference = sharedPreference
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun providesCalenderRepository(
+        remoteDataSource: RemoteDataSourceImpl,
+        sharedPreference: SharedPreference
+    ): CalenderRepository {
+        return CalenderRepositoryImp(
             remoteDataSource = remoteDataSource,
             sharedPreference = sharedPreference
         )

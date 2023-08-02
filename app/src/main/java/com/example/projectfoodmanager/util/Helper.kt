@@ -9,6 +9,9 @@ import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import java.lang.Exception
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class Helper {
     companion object {
@@ -24,6 +27,11 @@ class Helper {
 
             }
         }
+
+        fun formatLocalTimeToServerTime(localTime: LocalDateTime): String{
+            return localTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"))
+        }
+
         fun isOnline(context: Context): Boolean {
             val connectivityManager =
                 context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

@@ -35,7 +35,7 @@
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="20dp"
                     android:fontFamily="@font/fedoka"
                     android:text="Perfil"
                     android:textColor="@color/white"
@@ -63,7 +63,7 @@
                     app:layout_constraintVertical_bias="0.914" />
 
                 <ImageView
-                    android:id="@+id/verifyIV"
+                    android:id="@+id/verifyUserIV"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginEnd="5dp"
@@ -92,7 +92,7 @@
                     android:id="@+id/profileCV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="25dp"
                     android:foreground="@drawable/border_vip"
                     app:cardCornerRadius="70dp"
                     app:layout_constraintBottom_toTopOf="@+id/nameTV"
@@ -111,15 +111,15 @@
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/uploadImageFB"
-                    android:layout_width="50dp"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="-8dp"
-                    android:layout_marginBottom="-8dp"
+                    android:layout_marginEnd="-9dp"
+                    android:layout_marginBottom="-9dp"
                     android:backgroundTint="@color/ellipse_65_color"
                     android:src="@drawable/upload_image"
                     android:visibility="visible"
                     app:borderWidth="0dp"
-                    app:fabCustomSize="50dp"
+                    app:fabCustomSize="40dp"
                     app:layout_constraintBottom_toBottomOf="@+id/profileCV"
                     app:layout_constraintEnd_toEndOf="@+id/profileCV"
                     app:tint="@null" />

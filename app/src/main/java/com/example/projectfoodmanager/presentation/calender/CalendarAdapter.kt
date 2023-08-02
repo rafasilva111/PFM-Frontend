@@ -1,35 +1,34 @@
 package com.example.projectfoodmanager.presentation.calender
 
-import android.graphics.Color
+import android.content.Context
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils
+import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.currentDate
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.selectedDate
 import java.time.LocalDate
 
 
 class CalendarAdapter(
     private var days: ArrayList<LocalDate?>,
-    private val onItemClicked: (String) -> Unit,
+    private val onItemClicked: (LocalDate) -> Unit,
 ) :
     RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
 
-    private var unselected: Boolean = true
+    private var selected: View? = null
+    private var currentDatePainted: View? = null
+
+    //private var currentSelected: TextView
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view: View = inflater.inflate(R.layout.calendar_cell, parent, false)
-        val layoutParams = view.layoutParams
-
-        if (days.size> 15)
-            layoutParams.height = (parent.height * 0.166666666).toInt()
-        else
-            layoutParams.height = parent.height
-        return CalendarViewHolder(view,days)
+        return CalendarViewHolder(parent.context,view,days)
     }
 
 
@@ -40,12 +39,78 @@ class CalendarAdapter(
             holder.dayOfMonth.text = ""
         else{
             holder.dayOfMonth.text =  date.dayOfMonth.toString()
-            if (date == selectedDate && selectedDate == LocalDate.now())
-                holder.parentView.setBackgroundColor(Color.GRAY)
-            else
-                holder.parentView.setBackgroundColor(Color.TRANSPARENT)
+            if (date == currentDate && currentDate == LocalDate.now()) {
+                currentDatePainted = holder.itemView
+                selected = holder.itemView
+                selectedDate = date
+                colorSelectedDay(holder.itemView,holder.parentView.context)
+
+            }else {
+                colorUnselectedDay(holder.itemView,holder.parentView.context)
+            }
         }
 
+
+    }
+
+
+
+    private fun colorCurrentDay(itemView: View, context: Context) {
+        val dayOfMonth = itemView.findViewById<TextView>(R.id.cellDayText)
+        dayOfMonth.backgroundTintList = ColorStateList.valueOf(
+            ContextCompat.getColor(
+                context,
+                R.color.gray
+            )
+        )
+
+        dayOfMonth.setTextColor(
+            ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    context,
+                    R.color.white
+                )
+            )
+        )
+
+    }
+
+    private fun colorSelectedDay(itemView: View, context: Context) {
+        val dayOfMonth = itemView.findViewById<TextView>(R.id.cellDayText)
+        dayOfMonth.backgroundTintList = ColorStateList.valueOf(
+            ContextCompat.getColor(
+                context,
+                R.color.main_color
+            )
+        )
+
+        dayOfMonth.setTextColor(
+            ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    context,
+                    R.color.white
+                )
+            )
+        )
+    }
+
+    private fun colorUnselectedDay(itemView: View, context: Context) {
+        val dayOfMonth = itemView.findViewById<TextView>(R.id.cellDayText)
+        dayOfMonth.backgroundTintList = ColorStateList.valueOf(
+            ContextCompat.getColor(
+                context,
+                R.color.transparent
+            )
+        )
+
+        dayOfMonth.setTextColor(
+            ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    context,
+                    R.color.black
+                )
+            )
+        )
     }
 
     override fun getItemCount(): Int {
@@ -57,7 +122,7 @@ class CalendarAdapter(
         notifyDataSetChanged()
     }
 
-    inner class CalendarViewHolder constructor(itemView: View,days: ArrayList<LocalDate?>) :
+    inner class CalendarViewHolder constructor(context: Context, itemView: View,days: ArrayList<LocalDate?>) :
         RecyclerView.ViewHolder(itemView) {
         val dayOfMonth: TextView
         val parentView: View
@@ -67,14 +132,30 @@ class CalendarAdapter(
             parentView = itemView.findViewById(R.id.parentView)
 
             itemView.setOnClickListener {
-                if (dayOfMonth.text.isNotBlank() ){
-                    selectedDate = days[bindingAdapterPosition]!!
-                    onItemClicked.invoke( dayOfMonth.text as String) }
-                    notifyDataSetChanged()
+
+                if(days[position] != null){
+                    if (dayOfMonth.text.isNotBlank() ){
+                        onItemClicked.invoke( days[position]!!)
+                    }
+                    if (currentDatePainted == selected)
+                        colorCurrentDay(selected!!,context)
+                    else
+                        colorUnselectedDay(selected!!, context)
+
+
+                    selected = itemView
+                    selectedDate = days[position]!!
+
+                    colorSelectedDay(selected!!,context)
                 }
+            }
 
         }
 
     }
+
+
+
+
 
 }

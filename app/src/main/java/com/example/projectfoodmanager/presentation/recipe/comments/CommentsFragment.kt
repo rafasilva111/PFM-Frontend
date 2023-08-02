@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
@@ -24,6 +25,7 @@ import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
@@ -89,24 +91,13 @@ class CommentsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun onResume() {
-        requireActivity().window.decorView.systemUiVisibility = 0
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
-        super.onResume()
-    }
-
-    override fun onPause() {
-        requireActivity().window.decorView.systemUiVisibility = 8192
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
-        super.onPause()
-    }
 
     private fun setUI(view:View){
         binding.backIB.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        val userSession: User? = sharedPreference.getUserSession()
+        val userSession: User = sharedPreference.getUserSession()
 
         if (isOnline(view.context)) {
 
@@ -121,7 +112,7 @@ class CommentsFragment : Fragment() {
                 recipeViewModel.getCommentsOnRecipePaginated(recipeId,refreshPage)
 
             // create a comment
-            binding.publishButton.setOnClickListener {
+            binding.publishIB.setOnClickListener {
 
                 recipeViewModel.createCommentOnRecipe(
                     recipeId,
@@ -130,14 +121,17 @@ class CommentsFragment : Fragment() {
             }
 
 
-            if (userSession?.img_source != null && userSession.img_source != "") {
+            if (userSession.img_source.contains("avatar")){
+                val avatar= Avatar.getAvatarByName(userSession.img_source)
+                binding.IVcommentBottonImage.setImageResource(avatar!!.imgId)
+
+            }else{
                 val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${userSession.img_source}")
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                    Glide.with(binding.IVcommentBottonImage.context).load(Uri.toString())
-                        .into(binding.IVcommentBottonImage)
+                    Glide.with(binding.IVcommentBottonImage.context).load(Uri.toString()).into(binding.IVcommentBottonImage)
                 }
-
             }
+
 
         }
         else{
@@ -228,8 +222,6 @@ class CommentsFragment : Fragment() {
             }
         })
 
-
-
        /* // Like function
 
 
@@ -280,6 +272,7 @@ class CommentsFragment : Fragment() {
                 }
             }
         })*/
+
 
     }
 

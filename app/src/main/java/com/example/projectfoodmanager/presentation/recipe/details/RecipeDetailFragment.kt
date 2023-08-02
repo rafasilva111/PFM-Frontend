@@ -1,12 +1,10 @@
 package com.example.projectfoodmanager.presentation.recipe.details
 
 
-import android.content.Intent
-import android.net.Uri
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -14,32 +12,43 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.projectfoodmanager.ModalBottomSheet
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.Avatar
+import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
+import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.databinding.FragmentRecipeDetailNewBinding
+import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
+import com.example.projectfoodmanager.presentation.recipe.comments.CommentsFragment
+import com.example.projectfoodmanager.presentation.recipe.comments.CommentsListingAdapter
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
-import com.google.android.material.badge.BadgeDrawable
-import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.badge.ExperimentalBadgeUtils
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.*
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
     val TAG: String = "ReceitaDetailFragment"
-    lateinit var binding: FragmentRecipeDetailNewBinding
+    lateinit var binding: FragmentRecipeDetailBinding
     var objRecipe: Recipe? = null
     val recipeViewModel: RecipeViewModel by viewModels()
     val authViewModel: AuthViewModel by viewModels()
     lateinit var manager: LinearLayoutManager
+
+
 
     private lateinit var adapter: FragmentAdapter
 
@@ -58,7 +67,7 @@ class RecipeDetailFragment : Fragment() {
             return binding.root
         } else {
             // Inflate the layout for this fragment
-            binding = FragmentRecipeDetailNewBinding.inflate(layoutInflater)
+            binding = FragmentRecipeDetailBinding.inflate(layoutInflater)
 
             return binding.root
         }
@@ -73,7 +82,7 @@ class RecipeDetailFragment : Fragment() {
 
         if (objRecipe != null) {
             if (isOnline(view.context)) {
-
+/*
                 binding.commentsFB.viewTreeObserver.addOnGlobalLayoutListener(object :
                     ViewTreeObserver.OnGlobalLayoutListener {
 
@@ -94,7 +103,7 @@ class RecipeDetailFragment : Fragment() {
                             this
                         )
                     }
-                })
+                })*/
             }
 
             setUI(objRecipe!!)
@@ -104,6 +113,7 @@ class RecipeDetailFragment : Fragment() {
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setUI(recipe: Recipe) {
 
 
@@ -113,20 +123,83 @@ class RecipeDetailFragment : Fragment() {
         bundle.putInt("recipe_id", recipe.id)
         bundle.putInt("user_id", recipe.id)
 
-        binding.commentsFB.setOnClickListener {
+
+
+        binding.commentsCV.setOnClickListener {
             findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment,bundle)
         }
 
+/*        //val standardBottomSheet = findViewById<FrameLayout>(R.id.standard_bottom_sheet)
+        val adaptiveViewBS = BottomSheetBehavior.from(binding.adaptiveViewBS!!)
+        // Use this to programmatically apply behavior attributes; eg.
+        adaptiveViewBS.saveFlags = BottomSheetBehavior.SAVE_ALL
+        adaptiveViewBS.setState(STATE_HIDDEN);*/
 
+/*        binding.commentsCV.setOnClickListener {
 
+            //adaptiveViewBS.setState(STATE_COLLAPSED);
 
+            val modalBottomSheet = ModalBottomSheet()
+            modalBottomSheet.show(parentFragmentManager, ModalBottomSheet.TAG)
+
+            //standardBottomSheetBehavior.isDraggable=false
+*//*            val newFragment = CommentsFragment()
+            newFragment.arguments = bundle
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentFL, newFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()*//*
+        }*/
+
+    /*   adaptiveViewBS.addBottomSheetCallback(object : BottomSheetCallback() {
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                // Handle state change
+                val bottomSheet = BottomSheetBehavior.from(bottomSheet)
+                if (bottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                    // Bottom sheet is in full-screen mode
+                    //toast("FULL-MODE")
+                  //  bottomSheet.isDraggable=false
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // Handle slide offset change
+            }
+        })
+
+        binding.dragHandle!!.setOnTouchListener { view, motionEvent ->
+            if(motionEvent.action == MotionEvent.ACTION_DOWN) {
+              //     adaptiveViewBS.isDraggable=true
+            }
+            true
+        }*/
 
         // TODO: Inserir imagem do autor da receita
-        binding.AutorTV.text = recipe.company
-        binding.IVSource.setOnClickListener {
+        binding.AutorTV.text = recipe.created_by.name
+
+        if (recipe.created_by.img_source.contains("avatar")){
+            val avatar= Avatar.getAvatarByName(recipe.created_by.img_source)
+            binding.autorIV.setImageResource(avatar!!.imgId)
+
+        }else{
+            val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${recipe.created_by.img_source}")
+            imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                Glide.with(binding.autorIV.context).load(Uri.toString()).into(binding.autorIV)
+            }
+                .addOnFailureListener {
+                    Glide.with(binding.autorIV.context)
+                        .load(R.drawable.good_food_display___nci_visuals_online)
+                        .into(binding.autorIV)
+                }
+        }
+
+
+  /*      binding.IVSource.setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
             startActivity(browserIntent)
-        }
+        }*/
+
+
         binding.TVRef.text = recipe.id.toString()
 
         val imgRef = Firebase.storage.reference.child(recipe.img_source)
@@ -136,9 +209,13 @@ class RecipeDetailFragment : Fragment() {
         }
 
         //info
-        binding.TVTitle.text = recipe.title
-        binding.TVDate.text = recipe.created_date
-        binding.radtingRecipe.rating = recipe.source_rating.toFloat()
+
+        val format = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+        val date: Date? = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(recipe.created_date)
+
+        binding.dateTV.text = format.format(date!!)
+        binding.titleTV.text = recipe.title
+        binding.ratingRecipeRB.rating = recipe.source_rating.toFloat()
         binding.ratingMedTV.text = recipe.source_rating.toString()
 
         binding.numberLikeTV.text = recipe.likes.toString()
@@ -165,7 +242,7 @@ class RecipeDetailFragment : Fragment() {
         if (user.checkIfSaved(recipe) != -1) {
             binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
         } else
-            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorite_noclick)
 
         binding.favoritesIB.setOnClickListener {
             if (sharedPreference.getUserSession().checkIfSaved(recipe) == -1) {
@@ -176,22 +253,22 @@ class RecipeDetailFragment : Fragment() {
         }
 
 
-        binding.TVTime.text = recipe.time
-        binding.TVDifficulty.text = recipe.difficulty
+        binding.timeTV.text = recipe.time
+        binding.dificultyTV.text = recipe.difficulty
 
         when(recipe.difficulty){
             RecipeDifficultyConstants.LOW->{
-                binding.IV3.setImageResource(R.drawable.low_difficulty)
+                binding.IV2.setImageResource(R.drawable.low_difficulty)
             }
             RecipeDifficultyConstants.MEDIUM->{
-                binding.IV3.setImageResource(R.drawable.medium_difficulty)
+                binding.IV2.setImageResource(R.drawable.medium_difficulty)
             }
             RecipeDifficultyConstants.HIGH->{
-                binding.IV3.setImageResource(R.drawable.high_difficulty)
+                binding.IV2.setImageResource(R.drawable.high_difficulty)
             }
         }
 
-        binding.TVPortion.text = recipe.portion
+        binding.portionTV.text = recipe.portion
 
         // tabs
 
@@ -257,8 +334,11 @@ class RecipeDetailFragment : Fragment() {
             if (user!!.checkIfSaved(recipe) != -1) {
                 binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
             } else
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
+                binding.favoritesIB.setImageResource(R.drawable.ic_favorite_noclick)
         }
+
+
+
 
     }
 
@@ -363,7 +443,6 @@ class RecipeDetailFragment : Fragment() {
                 }
             }
         })
-
     }
 
     private fun showValidationErrors(toString: String) {

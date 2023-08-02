@@ -2,24 +2,38 @@ package com.example.projectfoodmanager.util
 
 
 
-val SPLASH_TIME:Long = 3000
-val LOGIN_TIME:Long = 2000
+const val SPLASH_TIME:Long = 1000
+const val LOGIN_TIME:Long = 2000
 
 object Constants {
     // TODO: Primeira coisa a fazer quando testar
     //rui const val BASE_URL = "http://192.168.1.104:5000/"
-    const val BASE_URL = "http://192.168.1.110:5000"
+    const val BASE_URL = "http://192.168.1.72:5000"
     //const val BASE_URL = "http://35.180.118.91/"
     const val USER_TOKEN = "user_token"
-    const val USER_SESSION = "user_session"
+
     const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"
     const val PREFS_TOKEN_FILE = "prefs_token_file"
+}
+
+object SharedPreferencesConstants{
+    const val USER_SESSION = "user_session"
+    const val USER_CALENDER_SESSION = "user_calender_session"
 }
 
 object ERROR_CODES {
     const val SESSION_INVALID = 404
     const val UNAUTORIZED = 403
     const val BAD_INPUTS = "401"
+}
+
+object CALENDAR_MEALS_TAG {
+    const val PEQUENO_ALMOCO = "PEQUENO ALMOÇO"
+    const val LANCHE_DA_MANHA = "LANCHE DA MANHÃ"
+    const val ALMOCO = "ALMOÇO"
+    const val LANCHE_DA_TARDE = "LANCHE DA TARDE"
+    const val JANTAR = "JANTAR"
+    const val CEIA = "CEIA"
 }
 
 object actionResultCodes{
@@ -52,6 +66,13 @@ object SharedPrefConstants {
     var METADATA = "metadata"
 }
 
+object RecipesSortingType {
+    const val DATE = "DATE"
+    const val LIKES = "LIKES"
+    const val SAVES = "SAVES"
+    const val RANDOM = "RANDOM"
+}
+
 object SexConstants{
     const val M = "M"
     const val F = "F"
@@ -65,7 +86,8 @@ object ImageTagsConstants{
     const val RANDOM_AVATAR ="random_avatar"
 }
 
-object ToastConstants{
+
+object ToastType{
     const val SUCCESS = 0
     const val ALERT = 1
     const val INFO = 2

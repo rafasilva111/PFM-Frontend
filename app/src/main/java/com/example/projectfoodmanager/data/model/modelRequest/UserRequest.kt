@@ -7,10 +7,8 @@ import java.io.Serializable
 
 @Parcelize
 data class UserRequest(
-    @SerializedName("first_name")
-    val first_name: String? = null,
-    @SerializedName("last_name")
-    val last_name: String? = null,
+    @SerializedName("name")
+    val name: String? = null,
     @SerializedName("birth_date")
     val birth_date: String? = null,
     @SerializedName("email")

@@ -17,8 +17,7 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_recipeListingFragment_to_receitaDetailFragment"
-            app:destination="@id/receitaDetailFragment"/>
-
+            app:destination="@id/receitaDetailFragment" />
     </fragment>
 
 
@@ -31,11 +30,7 @@
             android:id="@+id/action_receitaDetailFragment_to_receitaCommentsFragment"
             app:destination="@id/receitaCommentsFragment"
             app:popUpTo="@id/receitaDetailFragment" />
-        <action
-            android:id="@+id/action_receitaDetailFragment_to_recipeListingFragment"
-            app:destination="@id/recipeListingFragment"
-            app:popUpTo="@id/recipeListingFragment"
-            app:popUpToInclusive="true"/>
+
     </fragment>
 
 
@@ -84,6 +79,12 @@
         <action
             android:id="@+id/action_calenderFragment_to_weeklyFragment"
             app:destination="@id/weeklyFragment" />
+        <action
+            android:id="@+id/action_calenderFragment_to_newCalenderEntryFragment"
+            app:destination="@id/newCalenderEntryFragment" />
+        <action
+            android:id="@+id/action_calenderFragment_to_calenderIngredientsFragment"
+            app:destination="@id/calenderIngredientsFragment" />
     </fragment>
     <fragment
         android:id="@+id/goalsFragment"
@@ -108,15 +109,21 @@
         android:id="@+id/weeklyFragment"
         android:name="com.example.projectfoodmanager.presentation.calender.WeeklyFragment"
         android:label="fragment_weekly"
-        tools:layout="@layout/fragment_weekly" >
+        tools:layout="@layout/fragment_weekly" />
+    <fragment
+        android:id="@+id/newCalenderEntryFragment"
+        android:name="com.example.projectfoodmanager.presentation.calender.insertCalenderEntry.NewCalenderEntryFragment"
+        android:label="fragment_new_calender_entry"
+        tools:layout="@layout/fragment_new_calender_entry" >
         <action
-            android:id="@+id/action_weeklyFragment_to_eventEditTrashFragment"
-            app:destination="@id/eventEditTrashFragment" />
+            android:id="@+id/action_newCalenderEntryFragment_to_receitaDetailFragment"
+            app:destination="@id/receitaDetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/eventEditTrashFragment"
-        android:name="com.example.projectfoodmanager.presentation.calender.EventEditTrashFragment"
-        android:label="EventEditTrashFragment" />
+        android:id="@+id/calenderIngredientsFragment"
+        android:name="com.example.projectfoodmanager.presentation.calender.ingredients.CalenderIngredientsFragment"
+        android:label="fragment_calender_ingredients"
+        tools:layout="@layout/fragment_calender_ingredients" />
 
 
 </navigation>

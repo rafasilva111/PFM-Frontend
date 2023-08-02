@@ -11,10 +11,10 @@ import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils
 import java.time.LocalDate
 
 
-class RecipeAdapter(
+class RecipeCalenderAdapter(
     private var days: ArrayList<LocalDate?>,
     private val onItemClicked: (String) -> Unit,
-) :RecyclerView.Adapter<RecipeAdapter.RecipeCalenderViewHolder>() {
+) :RecyclerView.Adapter<RecipeCalenderAdapter.RecipeCalenderViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeCalenderViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val view: View = inflater.inflate(R.layout.calendar_cell, parent, false)
@@ -31,7 +31,7 @@ class RecipeAdapter(
                 holder.dayOfMonth.text = ""
             else{
                 holder.dayOfMonth.text =  date.dayOfMonth.toString()
-                if (date == CalenderUtils.selectedDate)
+                if (date == CalenderUtils.currentDate)
                     holder.parentView.setBackgroundColor(Color.GRAY)
                 else
                     holder.parentView.setBackgroundColor(Color.TRANSPARENT)
@@ -59,7 +59,7 @@ class RecipeAdapter(
 
                 itemView.setOnClickListener {
                     if (dayOfMonth.text.isNotBlank() ){
-                        CalenderUtils.selectedDate = days[bindingAdapterPosition]!!
+                        CalenderUtils.currentDate = days[bindingAdapterPosition]!!
                         onItemClicked.invoke( dayOfMonth.text as String) }
                     notifyDataSetChanged()
                 }

@@ -4,44 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.recipe.comments.CommentsFragment"
-    android:background="@color/color_3">
+    android:background="@color/background_1"
+    tools:context=".presentation.recipe.comments.CommentsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout6"
+        android:id="@+id/constraintLayout15"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@drawable/layout_bg_rounded_2_corners_v1"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
         <ImageButton
             android:id="@+id/backIB"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="35dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#00000000"
-            android:elevation="1dp"
-            android:outlineProvider="none"
-            android:src="@drawable/ic_back_black"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_action_btn"
+            android:padding="10dp"
+            android:rotation="180"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_arrow"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout6" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black" />
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/textView11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:fontFamily="@font/fedoka"
             android:text="Comentários"
-            android:textColor="@color/color_3"
-            android:textSize="22dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/subTitle"
             app:layout_constraintBottom_toBottomOf="@+id/backIB"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/backIB"
             app:layout_constraintTop_toTopOf="@+id/backIB" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -50,19 +52,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout15">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:divider="@android:color/transparent"
-            android:listSelector="@android:color/transparent"
-
-            />
+            android:listSelector="@android:color/transparent" />
 
     </ScrollView>
 
@@ -70,12 +69,11 @@
         android:id="@+id/constraintLayout11"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/white"
+        android:elevation="4dp"
         android:paddingBottom="20dp"
-        android:background="@drawable/layout_rounded_topleft_topright"
-        android:backgroundTint="#99DADADA">
+        android:layout_gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/img_autor_CV"
@@ -97,36 +95,36 @@
 
         <EditText
             android:id="@+id/ETcomment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:background="@color/transparent"
+            android:background="@drawable/bg_default"
+            android:backgroundTint="#E6E6E6"
             android:gravity="top"
             android:hint="Comentar..."
             android:inputType="textMultiLine"
+            android:padding="12dp"
             android:scrollbars="vertical"
             android:scrollHorizontally="false"
             android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/publishButton"
             app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
             app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
 
-        <Button
-            android:id="@+id/publishButton"
-            android:layout_width="85dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="10dp"
+        <ImageButton
+            android:id="@+id/publishIB"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/bg_default"
             android:backgroundTint="@color/main_color"
-            android:fontFamily="@font/fedoka"
-            android:text="Publicar"
-            android:textAllCaps="false"
-            android:textSize="10sp"
+            android:padding="10dp"
+            android:src="@drawable/ic_send_message"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
-
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

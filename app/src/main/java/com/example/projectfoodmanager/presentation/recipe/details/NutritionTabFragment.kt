@@ -6,10 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentNutritionTabBinding
-import com.example.projectfoodmanager.databinding.FragmentRecipeTabBinding
 
 class NutritionTabFragment(recipe: Recipe) : Fragment() {
 
@@ -44,33 +42,33 @@ class NutritionTabFragment(recipe: Recipe) : Fragment() {
         //Nutrition
         objRecipe?.let { recipe ->
 
-            binding.energiaDoseTV.text = recipe.nutrition_informations.energia
-            binding.energiaPercTV.text = recipe.nutrition_informations.energia_perc
-            binding.energiaPB.progress = recipe.nutrition_informations.energia_perc.dropLast(1).toInt()
+            binding.energiaDoseTV.text = recipe.nutrition_information.energia
+            binding.energiaPercTV.text = recipe.nutrition_information.energia_perc
+            binding.energiaPB.progress = recipe.nutrition_information.energia_perc.dropLast(1).toInt()
 
-            binding.fibraDoseTV.text = recipe.nutrition_informations.fibra
-            binding.fibraPercTV.text = recipe.nutrition_informations.fibra_perc
-            binding.fibraPB.progress = recipe.nutrition_informations.fibra_perc.dropLast(1).toInt()
+            binding.fibraDoseTV.text = recipe.nutrition_information.fibra
+            binding.fibraPercTV.text = recipe.nutrition_information.fibra_perc
+            binding.fibraPB.progress = recipe.nutrition_information.fibra_perc.dropLast(1).toInt()
 
-            binding.proteinaDoseTV.text = recipe.nutrition_informations.proteina
+            binding.proteinaDoseTV.text = recipe.nutrition_information.proteina
             //binding.proteinaPercTV.text = recipe.nutrition_informations.proteina_perc
             //binding.proteinaPB.progress = recipe.nutrition_informations.proteina_perc.dropLast(1).toInt()
 
-            binding.gorduraDoseTV.text = recipe.nutrition_informations.gordura
-            binding.gorduraPercTV.text = recipe.nutrition_informations.gordura_perc
-            binding.gorduraPB.progress = recipe.nutrition_informations.gordura_perc.dropLast(1).toInt()
+            binding.gorduraDoseTV.text = recipe.nutrition_information.gordura
+            binding.gorduraPercTV.text = recipe.nutrition_information.gordura_perc
+            binding.gorduraPB.progress = recipe.nutrition_information.gordura_perc.dropLast(1).toInt()
 
-            binding.gorduraSaturadosDoseTV.text = recipe.nutrition_informations.gordura_saturada
-            binding.gorduraSaturadosPercTV.text = recipe.nutrition_informations.gordura_saturada_perc
-            binding.gorduraSaturadosPB.progress = recipe.nutrition_informations.gordura_saturada_perc.dropLast(1).toInt()
+            binding.gorduraSaturadosDoseTV.text = recipe.nutrition_information.gordura_saturada
+            binding.gorduraSaturadosPercTV.text = recipe.nutrition_information.gordura_saturada_perc
+            binding.gorduraSaturadosPB.progress = recipe.nutrition_information.gordura_saturada_perc.dropLast(1).toInt()
 
-            binding.hidratosCarbonoDoseTV.text = recipe.nutrition_informations.hidratos_carbonos
+            binding.hidratosCarbonoDoseTV.text = recipe.nutrition_information.hidratos_carbonos
             //binding.hidratosCarbonoPercTV.text = recipe.nutrition_informations.hidratos_carbonos_perc
             //binding.hidratosCarbonoPB.progress = recipe.nutrition_informations.hidratos_carbonos_perc.dropLast(1).toInt()
 
-            binding.hidratosAcucaresDoseTV.text = recipe.nutrition_informations.hidratos_carbonos_acucares
-            binding.hidratosAcucaresPercTV.text = recipe.nutrition_informations.hidratos_carbonos_acucares_perc
-            binding.hidratosAcucaresPB.progress = recipe.nutrition_informations.hidratos_carbonos_acucares_perc.dropLast(1).toInt()
+            binding.hidratosAcucaresDoseTV.text = recipe.nutrition_information.hidratos_carbonos_acucares
+            binding.hidratosAcucaresPercTV.text = recipe.nutrition_information.hidratos_carbonos_acucares_perc
+            binding.hidratosAcucaresPB.progress = recipe.nutrition_information.hidratos_carbonos_acucares_perc.dropLast(1).toInt()
 
         }
 
