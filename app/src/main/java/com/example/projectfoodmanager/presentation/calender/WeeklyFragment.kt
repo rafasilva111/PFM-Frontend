@@ -69,9 +69,6 @@ class WeeklyFragment : Fragment() {
             updateMonthView()
         }
 
-        binding.addRecipeBtn.setOnClickListener{
-            findNavController().navigate(R.id.action_weeklyFragment_to_eventEditTrashFragment)
-        }
 
     }
 
