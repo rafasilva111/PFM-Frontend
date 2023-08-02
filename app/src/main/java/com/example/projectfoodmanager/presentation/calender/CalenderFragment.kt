@@ -69,7 +69,7 @@ class CalenderFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
 
-        ): View? {
+        ): View {
         binding = FragmentCalenderBinding.inflate(layoutInflater)
         setMonthView()
 
@@ -103,6 +103,10 @@ class CalenderFragment : Fragment() {
         binding.nextBtn.setOnClickListener {
             currentDate = currentDate.plusMonths(1)
             updateCalenderView()
+        }
+
+        binding.addBasketIB.setOnClickListener {
+            findNavController().navigate(R.id.action_calenderFragment_to_calenderIngredientsFragment)
         }
 
         if (Helper.isOnline(view.context)) {
@@ -189,8 +193,8 @@ class CalenderFragment : Fragment() {
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-                        val teste = it.data
-                        toast(it.message.toString())
+
+                        toast("Sucesso")
 
                     }
                     is NetworkResult.Error -> {

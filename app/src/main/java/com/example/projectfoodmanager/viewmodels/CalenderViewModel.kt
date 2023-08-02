@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.repository.CalenderRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -33,7 +33,7 @@ class CalenderViewModel @Inject constructor(
         }
     }
 
-    val getEntryOnCalenderLiveData: LiveData<Event<NetworkResult<CalenderList>>>
+    val getEntryOnCalenderLiveData: LiveData<Event<NetworkResult<CalenderEntryList>>>
         get() = repository.getEntryOnCalenderLiveData
 
     fun getEntryOnCalender(date:LocalDateTime){
@@ -42,12 +42,23 @@ class CalenderViewModel @Inject constructor(
         }
     }
 
-    fun getEntryOnCalender(fromDate:LocalDateTime,toDate: LocalDateTime){
+    val getCalenderDatedEntryList: LiveData<Event<NetworkResult<CalenderDatedEntryList>>>
+        get() = repository.getCalenderDatedEntryList
+
+    fun getCalenderDatedEntryList(fromDate:LocalDateTime,toDate: LocalDateTime,cleanseOldRegistry:Boolean = false){
         viewModelScope.launch {
-            repository.getEntryOnCalender(fromDate,toDate)
+            repository.getCalenderDatedEntryList(fromDate,toDate,cleanseOldRegistry)
         }
     }
 
+    /*val getCalenderDatedEntryList: LiveData<Event<NetworkResult<CalenderDatedEntryList>>>
+        get() = repository.getCalenderDatedEntryList
+
+    fun getCalenderIngredients(fromDate: LocalDateTime, toDate: LocalDateTime) {
+        viewModelScope.launch {
+            repository.getCalenderIngredients(fromDate,toDate,cleanseOldRegistry)
+        }
+    }*/
 
 
 }

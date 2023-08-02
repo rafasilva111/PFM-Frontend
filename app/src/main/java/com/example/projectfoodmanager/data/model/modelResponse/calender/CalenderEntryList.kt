@@ -4,7 +4,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.metadata.Metadata
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class CalenderList(
+data class CalenderEntryList(
     val _metadata: Metadata,
     val result: MutableList<CalenderEntry>
 ): Parcelable

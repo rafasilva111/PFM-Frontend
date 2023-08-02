@@ -6,7 +6,8 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
@@ -109,10 +110,10 @@ interface ApiInterface {
     suspend fun createCalenderEntry(@Query("recipe_id") recipeId: Int,@Body calenderEntryRequest : CalenderEntryRequest): Response<Unit>
 
     @GET("$API_V1_BASE_URL/calendar/list")
-    suspend fun getEntryOnCalender(@Query("date")date: String): Response<CalenderList>
+    suspend fun getEntryOnCalender(@Query("date")date: String): Response<CalenderEntryList>
 
     @GET("$API_V1_BASE_URL/calendar/list")
-    suspend fun getEntryOnCalender(@Query("fromDate") fromDate:String,@Query("toDate") toDate: String): Response<CalenderList>
+    suspend fun getEntryOnCalender(@Query("from_date") fromDate:String,@Query("to_date") toDate: String): Response<CalenderDatedEntryList>
 
 
     //followers

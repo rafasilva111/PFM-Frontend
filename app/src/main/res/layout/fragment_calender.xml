@@ -37,7 +37,20 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/white" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <ImageButton
+        android:id="@+id/addBasketIB"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/bg_default"
+        android:backgroundTint="@color/main_color"
+        android:src="@drawable/ic_baseline_shopping_basket_24"
+        app:layout_constraintEnd_toStartOf="@+id/addRegisterIB"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout14"
             android:layout_width="match_parent"
             android:layout_height="30dp"
