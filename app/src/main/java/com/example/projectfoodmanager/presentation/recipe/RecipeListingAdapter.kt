@@ -122,6 +122,7 @@ class RecipeListingAdapter(
             binding.ratingRecipeRB.rating = item.source_rating.toFloat()
             binding.ratingMedTV.text = item.source_rating
 
+/*
 
             binding.timeTV.text = item.time
             binding.difficultyTV.text = item.difficulty
@@ -139,6 +140,7 @@ class RecipeListingAdapter(
             }
 
             binding.portionTV.text = item.portion
+*/
 
 
             //--------- LIKES ---------
@@ -165,7 +167,7 @@ class RecipeListingAdapter(
                 binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
             }
             else
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
+                binding.favoritesIB.setImageResource(R.drawable.ic_favorite_noclick)
 
             binding.favoritesIB.setOnClickListener {
                 if(user.checkIfSaved(item) == -1) {

@@ -72,6 +72,10 @@
         <item name="fontFamily">@font/fredoka_regular</item>
     </style>
 
+    <style name="CustomRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_star_filled</item>
+        <item name="android:indeterminateDrawable">@drawable/custom_star_empty</item>
+    </style>
 
 
 

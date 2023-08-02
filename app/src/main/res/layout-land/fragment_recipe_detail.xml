@@ -41,14 +41,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:adjustViewBounds="true"
-                    android:contentDescription="recipe_image"
                     android:foreground="#43000000"
                     android:scaleType="fitXY"
                     android:src="@drawable/good_food_display___nci_visuals_online"
+                    android:contentDescription="recipe_image"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
 
                 <ImageButton
                     android:id="@+id/backIB"
@@ -246,7 +247,7 @@
                     android:backgroundTint="#EDEDED"
                     android:contentDescription="like"
                     android:elevation="4dp"
-                    android:padding="8dp"
+                    android:padding="5dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_like_black"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -263,9 +264,10 @@
                     android:backgroundTint="#F8F8F8"
                     android:elevation="8dp"
                     android:gravity="center"
+                    android:padding="2dp"
                     android:text="0"
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="8sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/likeIB"
                     app:layout_constraintTop_toTopOf="@+id/likeIB" />
@@ -677,8 +679,7 @@
     </ScrollView>
 
 <!--
-
-   <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -691,132 +692,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:elevation="8dp"
-            app:behavior_peekHeight="500dp"
+            app:behavior_peekHeight="200dp"
             android:background="@drawable/bg_bottomsheet"
             android:backgroundTint="#EFEFEF"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" >
 
+            &lt;!&ndash; Drag handle for accessibility &ndash;&gt;
             <com.google.android.material.bottomsheet.BottomSheetDragHandleView
                 android:id="@+id/drag_handle"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:backgroundTint="@color/black"
-                android:layout_gravity="top"/>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-&lt;!&ndash;
-                <ScrollView
-                    android:id="@+id/SRL_details"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:fillViewport="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:divider="@android:color/transparent"
-                        android:listSelector="@android:color/transparent"
-
-                        />
-
-                </ScrollView>
-
-
-                <androidx.coordinatorlayout.widget.CoordinatorLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
-
-                    <FrameLayout
-                        android:id="@+id/adaptive2ViewBS"
-                        style="@style/Widget.Material3.BottomSheet"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:elevation="8dp"
-                        app:behavior_peekHeight="80dp"
-                        android:background="@drawable/bg_bottomsheet"
-                        android:backgroundTint="#EFEFEF"
-                        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" >
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/constraintLayout11"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            android:elevation="4dp"
-                            android:paddingBottom="20dp"
-                            android:layout_gravity="bottom"
-                            app:layout_constraintBottom_toBottomOf="parent">
-
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/img_autord_CV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="15dp"
-                                android:layout_marginTop="20dp"
-                                app:cardCornerRadius="20dp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
-
-                                <ImageView
-                                    android:id="@+id/IVcommentBottonImage"
-                                    android:layout_width="35dp"
-                                    android:layout_height="35dp"
-                                    android:src="@drawable/img_profile" />
-
-                            </androidx.cardview.widget.CardView>
-
-                            <EditText
-                                android:id="@+id/ETcomment"
-                                android:layout_width="260dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:background="@drawable/bg_default"
-                                android:backgroundTint="#E6E6E6"
-                                android:gravity="top"
-                                android:hint="Comentar..."
-                                android:inputType="textMultiLine"
-                                android:padding="10dp"
-                                android:scrollbars="vertical"
-                                android:scrollHorizontally="false"
-                                android:textSize="15sp"
-                                app:layout_constraintBottom_toBottomOf="@+id/img_autord_CV"
-                                app:layout_constraintStart_toEndOf="@+id/img_autord_CV"
-                                app:layout_constraintTop_toTopOf="@+id/img_autord_CV" />
-
-                            <ImageButton
-                                android:id="@+id/publishIB"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginEnd="20dp"
-                                android:background="@drawable/bg_default"
-                                android:backgroundTint="@color/main_color"
-                                android:padding="10dp"
-                                android:src="@drawable/ic_send_message"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    </FrameLayout>
-
-                </androidx.coordinatorlayout.widget.CoordinatorLayout>&ndash;&gt;
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                android:backgroundTint="@color/black" />
 
         </FrameLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
--->
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>-->
 
 
 

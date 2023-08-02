@@ -31,7 +31,7 @@ class CalenderUtils {
 
         fun daysInMonthArray(date: LocalDate): ArrayList<LocalDate?> {
 
-            val daysInMonthArray = ArrayList<LocalDate?>()
+            var daysInMonthArray = ArrayList<LocalDate?>()
             val yearMonth = YearMonth.from(date)
             val daysInMonth = yearMonth.lengthOfMonth()
             val firstOfMonth: LocalDate = date.withDayOfMonth(1)
@@ -43,8 +43,14 @@ class CalenderUtils {
                     daysInMonthArray.add(LocalDate.of(date.year, date.month,i - dayOfWeek))
                 }
             }
+
+            val allNull = daysInMonthArray.take(7).all { it == null }
+
+            if (allNull)
+                return ArrayList(daysInMonthArray.drop(7))
             return daysInMonthArray
         }
+
 
         fun daysInWeekArray(date: LocalDate): ArrayList<LocalDate?> {
             val days = arrayListOf<LocalDate?>()

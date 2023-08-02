@@ -32,11 +32,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnLogin.setOnClickListener {
+        binding.loginBTN.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
         }
 
-        binding.btnRegister.setOnClickListener {
+        binding.registerBTN.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
         }
 

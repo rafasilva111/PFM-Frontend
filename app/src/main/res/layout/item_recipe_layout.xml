@@ -61,8 +61,8 @@
 
                 <ImageView
                     android:id="@+id/authorIV"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/img_pingo_doce" />
 
             </androidx.cardview.widget.CardView>
@@ -70,8 +70,8 @@
             <TextView
                 android:id="@+id/authorTV"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginStart="-25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="-20dp"
                 android:background="@drawable/layout_bg_rounded_1"
                 android:backgroundTint="#252525"
                 android:elevation="8dp"
@@ -83,7 +83,7 @@
                 android:paddingBottom="2dp"
                 android:text="Author"
                 android:textColor="@color/white"
-                android:textSize="10sp"
+                android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="@+id/img_autor_CV"
                 app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
                 app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
@@ -180,8 +180,8 @@
 
         <ImageView
             android:id="@+id/verifyRecipeIV"
-            android:layout_width="43dp"
-            android:layout_height="43dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="-20dp"
             android:elevation="11dp"
@@ -202,7 +202,7 @@
             android:padding="2dp"
             android:text="Verificada"
             android:textColor="@color/black"
-            android:textSize="12sp"
+            android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="@+id/verifyRecipeIV"
             app:layout_constraintStart_toEndOf="@+id/verifyRecipeIV"
             app:layout_constraintTop_toTopOf="@+id/verifyRecipeIV" />
@@ -226,12 +226,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="30dp"
+                    android:alpha="0.6"
+                    android:elevation="3dp"
+                    android:src="@drawable/ic_baseline_calendar_month_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/dateTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.7"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:padding="2dp"
+                    android:text="02/03/2022"
+                    android:textAlignment="center"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+                    app:layout_constraintStart_toEndOf="@+id/imageView9"
+                    app:layout_constraintTop_toTopOf="@+id/imageView9" />
+
                 <TextView
                     android:id="@+id/recipeTitleTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="20dp"
                     android:fontFamily="@font/fedoka"
                     android:justificationMode="inter_word"
@@ -240,7 +267,20 @@
                     android:textSize="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/dateTV" />
+
+                <TextView
+                    android:id="@+id/ratingMedTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:text="4,5"
+                    android:textColor="#838383"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/recipeTitleTV"
+                    app:layout_constraintTop_toBottomOf="@+id/recipeTitleTV" />
 
 
                 <RatingBar
@@ -248,71 +288,58 @@
                     style="?android:attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="5dp"
                     android:isIndicator="true"
                     android:max="5"
                     android:progressTint="#FFC107"
-                    app:layout_constraintStart_toStartOf="@+id/recipeTitleTV"
-                    app:layout_constraintTop_toBottomOf="@+id/recipeTitleTV" />
-
-                <TextView
-                    android:id="@+id/ratingMedTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="4,5"
-                    android:fontFamily="@font/fredoka_regular"
-                    android:textColor="#838383"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/ratingRecipeRB"
-                    app:layout_constraintStart_toEndOf="@+id/ratingRecipeRB"
-                    app:layout_constraintTop_toTopOf="@+id/ratingRecipeRB" />
-
-
+                    app:layout_constraintBottom_toBottomOf="@+id/ratingMedTV"
+                    app:layout_constraintStart_toEndOf="@+id/ratingMedTV"
+                    app:layout_constraintTop_toTopOf="@+id/ratingMedTV" />
 
                 <ImageView
-                    android:id="@+id/imageView9"
+                    android:id="@+id/imageVixxew9"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
+                    android:layout_marginEnd="5dp"
                     android:alpha="0.6"
                     android:elevation="3dp"
-                    android:src="@drawable/ic_baseline_calendar_month_24"
-                    app:layout_constraintBottom_toBottomOf="@+id/dateTV"
-                    app:layout_constraintEnd_toStartOf="@+id/dateTV"
-                    app:layout_constraintTop_toTopOf="@+id/dateTV" />
+                    android:src="@drawable/ic_bars_code"
+                    app:layout_constraintBottom_toBottomOf="@+id/idTV"
+                    app:layout_constraintEnd_toStartOf="@+id/idTV"
+                    app:layout_constraintTop_toTopOf="@+id/idTV" />
 
                 <TextView
-                    android:id="@+id/dateTV"
+                    android:id="@+id/idTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
                     android:alpha="0.7"
-                    android:padding="2dp"
-                    android:text="02/03/2022"
                     android:fontFamily="@font/fredoka_regular"
+                    android:padding="2dp"
+                    android:text="0"
                     android:textAlignment="center"
                     android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@+id/recipeTitleTV"
-                    app:layout_constraintTop_toBottomOf="@+id/recipeTitleTV" />
-
+                    app:layout_constraintBottom_toBottomOf="@+id/ratingRecipeRB"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/ratingRecipeRB" />
 
                 <TextView
                     android:id="@+id/recipeDescriptionTV"
                     android:layout_width="0dp"
                     android:layout_height="70dp"
-                    android:layout_marginTop="8dp"
-                    android:justificationMode="inter_word"
-                    android:text="Descrição"
-                    android:fontFamily="@font/fredoka_regular"
-                    android:textAlignment="gravity"
-                    android:textSize="12sp"
-                    android:maxLines="3"
+                    android:layout_marginTop="10dp"
                     android:ellipsize="end"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:justificationMode="inter_word"
+                    android:maxLines="3"
+                    android:text="Descrição"
+                    android:textAlignment="gravity"
+                    android:textSize="13sp"
                     app:layout_constraintEnd_toEndOf="@+id/recipeTitleTV"
-                    app:layout_constraintStart_toStartOf="@+id/ratingRecipeRB"
+                    app:layout_constraintStart_toStartOf="@+id/recipeTitleTV"
                     app:layout_constraintTop_toBottomOf="@+id/ratingRecipeRB" />
 
+<!--
 
                 <LinearLayout
                     android:id="@+id/linearLayout"
@@ -424,6 +451,7 @@
                     </LinearLayout>
 
                 </LinearLayout>
+-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -101,7 +101,7 @@ class NewCalenderEntryFragment : Fragment() {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility", "WrongConstant")
+    @SuppressLint("ClickableViewAccessibility", "WrongConstant", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //bindObservers()
@@ -190,13 +190,18 @@ class NewCalenderEntryFragment : Fragment() {
             }
 
             datePicker.addOnPositiveButtonClickListener {
-                binding.dateValTV.text= datePicker.headerText
+
+                if(datePicker.headerText.length == 9)
+                    binding.dateValTV.text= "0"+datePicker.headerText
 
             }
 
         }
 
         binding.dateValTV.text = selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+
+
+
         binding.dateCV.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {

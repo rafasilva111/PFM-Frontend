@@ -2,94 +2,79 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent" android:layout_height="match_parent"
-	tools:context=".HomeFragment">
+	tools:context=".HomeFragment"
+	android:background="@drawable/background">
 
+	<ImageView
+		android:id="@+id/imageView5"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:foreground="#99000000"
+		android:scaleType="matrix"
+		android:src="@drawable/background"
+		tools:layout_editor_absoluteX="30dp"
+		tools:layout_editor_absoluteY="16dp" />
 
 	<View
 		android:id="@+id/ellipse_65"
 		android:layout_width="212.32dp"
 		android:layout_height="213.69dp"
-		android:layout_marginTop="48dp"
+		android:layout_marginTop="120dp"
 		android:background="@drawable/ellipse_65_shape"
+		android:backgroundTint="@color/main_color"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.497"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
 
 	<ImageView
-		android:id="@+id/home_img"
-		android:layout_width="121dp"
+		android:id="@+id/imageView6"
+		android:layout_width="120dp"
 		android:layout_height="120dp"
-		android:contentDescription="image_458"
-		android:src="@drawable/home_img"
+		android:src="@drawable/ic_logo"
 		app:layout_constraintBottom_toBottomOf="@+id/ellipse_65"
 		app:layout_constraintEnd_toEndOf="@+id/ellipse_65"
+		app:layout_constraintHorizontal_bias="0.497"
 		app:layout_constraintStart_toStartOf="@+id/ellipse_65"
 		app:layout_constraintTop_toTopOf="@+id/ellipse_65" />
 
-
-	<ImageView
-		android:id="@+id/btnLogin"
-		android:layout_width="357dp"
-		android:layout_height="50dp"
-		android:layout_marginTop="32dp"
-		android:contentDescription="rectangle_574"
-		android:src="@drawable/home_button_bordeaux"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
-
 	<TextView
-		android:id="@+id/login"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="4dp"
+		android:layout_marginTop="28dp"
 		android:fontFamily="@font/fedoka"
-		android:text="@string/login_string"
-		android:textColor="@color/_bg__android_large___2_ek2_color"
-		android:textSize="25sp"
-		app:layout_constraintBottom_toBottomOf="@+id/btnLogin"
-		app:layout_constraintEnd_toEndOf="@+id/btnLogin"
-		app:layout_constraintHorizontal_bias="0.498"
-		app:layout_constraintStart_toStartOf="@+id/btnLogin"
-		app:layout_constraintTop_toTopOf="@+id/btnLogin"
-		app:layout_constraintVertical_bias="0.2" />
-
-	<View
-		android:id="@+id/btnRegister"
-		android:layout_width="357dp"
-		android:layout_height="50dp"
-		android:layout_marginTop="123dp"
-		android:background="@drawable/rectangle_simple"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/goodbites" />
-
-	<TextView
-		android:id="@+id/register"
-		android:fontFamily="@font/fedoka"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="@string/register_string"
-		android:textColor="@color/main_color"
-		android:textSize="25sp"
-		app:layout_constraintBottom_toBottomOf="@+id/btnRegister"
-		app:layout_constraintEnd_toEndOf="@+id/btnRegister"
-		app:layout_constraintStart_toStartOf="@+id/btnRegister"
-		app:layout_constraintTop_toTopOf="@+id/btnRegister" />
-
-	<TextView
-		android:id="@+id/goodbites"
-		android:fontFamily="@font/fedoka"
-		android:layout_width="wrap_content"
-		android:layout_height="93dp"
-		android:layout_marginTop="36dp"
 		android:text="@string/goodbites"
-		android:textColor="@color/main_color"
-		android:textSize="50sp"
+		android:textColor="@color/white"
+		android:textSize="@dimen/title_icon"
 		android:textStyle="bold"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/ellipse_65" />
+
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/loginBTN"
+		android:layout_width="match_parent"
+		android:layout_height="50dp"
+		android:layout_marginStart="30dp"
+		android:layout_marginEnd="30dp"
+		android:layout_marginBottom="20dp"
+		android:fontFamily="@font/fredoka_one"
+		android:text="@string/login_string"
+		android:textSize="@dimen/textBTN"
+		app:layout_constraintBottom_toTopOf="@+id/registerBTN"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/registerBTN"
+		android:layout_width="180dp"
+		android:layout_height="50dp"
+		android:layout_marginBottom="40dp"
+		android:fontFamily="@font/fredoka_one"
+		android:text="@string/register_string"
+		android:textSize="@dimen/textBTN"
+		app:backgroundTint="#9A818181"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

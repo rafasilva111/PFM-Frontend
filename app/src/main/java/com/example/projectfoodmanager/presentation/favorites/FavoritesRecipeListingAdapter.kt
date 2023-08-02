@@ -131,9 +131,9 @@ class FavoritesRecipeListingAdapter(
             binding.ratingRecipeRB.rating = item.source_rating.toFloat()
             binding.ratingMedTV.text = item.source_rating.toString()
 
-            binding.timeTV.text = item.time
+/*            binding.timeTV.text = item.time
             binding.difficultyTV.text = item.difficulty
-            binding.portionTV.text = item.portion
+            binding.portionTV.text = item.portion*/
 
             //--------- LIKES ---------
             //TODO: Ver com o Rafa -> LIKES
