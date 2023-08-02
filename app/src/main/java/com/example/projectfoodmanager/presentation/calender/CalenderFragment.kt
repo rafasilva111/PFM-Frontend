@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,8 +16,9 @@ import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.daysInMonthArray
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.formatDateMonthYear
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.currentDate
-import com.example.projectfoodmanager.util.toast
+import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.CalenderViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -25,15 +27,17 @@ import java.time.LocalDate
 class CalenderFragment : Fragment() {
     lateinit var binding: FragmentCalenderBinding
     val authViewModel: AuthViewModel by viewModels()
+    private val calenderViewModel by activityViewModels<CalenderViewModel>()
+
     val TAG: String = "ProfileFragment"
 
     private val adapterCalMonth by lazy {
-            CalendarAdapter(
-                daysInMonthArray(
-                    currentDate
+        CalendarAdapter(
+            daysInMonthArray(
+                currentDate
             ),
-            onItemClicked = {text ->
-                toast(text)
+            onItemClicked = { selectedDate ->
+                calenderViewModel.getEntryOnCalender(selectedDate.atStartOfDay())
             }
         )
     }
@@ -43,19 +47,19 @@ class CalenderFragment : Fragment() {
             CalenderUtils.daysInWeekArray(
                 currentDate
             ),
-            onItemClicked = {text ->
+            onItemClicked = { text ->
 
             }
         )
     }
 
 
-    private val recipeCalenderAdapter by lazy{
+    private val recipeCalenderAdapter by lazy {
         RecipeCalenderAdapter(
             CalenderUtils.daysInWeekArray(
                 currentDate
             ),
-            onItemClicked = {text ->
+            onItemClicked = { text ->
 
             }
         )
@@ -65,7 +69,7 @@ class CalenderFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
 
-        ): View? {
+        ): View {
         binding = FragmentCalenderBinding.inflate(layoutInflater)
         setMonthView()
 
@@ -91,14 +95,24 @@ class CalenderFragment : Fragment() {
         }
 
 
-        binding.previousBtn.setOnClickListener{
+        binding.previousBtn.setOnClickListener {
             currentDate = currentDate.minusMonths(1)
-            updateView()
+            updateCalenderView()
         }
 
-        binding.nextBtn.setOnClickListener{
+        binding.nextBtn.setOnClickListener {
             currentDate = currentDate.plusMonths(1)
-            updateView()
+            updateCalenderView()
+        }
+
+        binding.addBasketIB.setOnClickListener {
+            findNavController().navigate(R.id.action_calenderFragment_to_calenderIngredientsFragment)
+        }
+
+        if (Helper.isOnline(view.context)) {
+            bindObservers()
+
+            calenderViewModel.getEntryOnCalender(currentDate.atStartOfDay())
         }
 
     }
@@ -109,8 +123,8 @@ class CalenderFragment : Fragment() {
     }
 
     private fun setMonthView() {
-        binding.calWeeklyRV.visibility=View.INVISIBLE
-        binding.calMonthRV.visibility=View.VISIBLE
+        binding.calWeeklyRV.visibility = View.INVISIBLE
+        binding.calMonthRV.visibility = View.VISIBLE
 
         currentDate = LocalDate.now()
         binding.monthYearTV.text = formatDateMonthYear(currentDate)
@@ -131,8 +145,8 @@ class CalenderFragment : Fragment() {
 
     private fun setWeeklyView() {
 
-        binding.calMonthRV.visibility=View.GONE
-        binding.calWeeklyRV.visibility=View.VISIBLE
+        binding.calMonthRV.visibility = View.GONE
+        binding.calWeeklyRV.visibility = View.VISIBLE
 
         currentDate = LocalDate.now()
         binding.monthYearTV.text = formatDateMonthYear(currentDate)
@@ -146,15 +160,17 @@ class CalenderFragment : Fragment() {
     }
 
 
-    private fun updateView() {
+    private fun updateCalenderView() {
 
         binding.monthYearTV.text = formatDateMonthYear(currentDate)
 
-        if (binding.calMonthRV.visibility==View.VISIBLE){
-            adapterCalMonth.updateList(daysInMonthArray(
-                currentDate
-            ))
-        }else{
+        if (binding.calMonthRV.visibility == View.VISIBLE) {
+            adapterCalMonth.updateList(
+                daysInMonthArray(
+                    currentDate
+                )
+            )
+        } else {
             adapterCalWeekly.updateList(
                 CalenderUtils.daysInWeekArray(
                     currentDate
@@ -163,13 +179,34 @@ class CalenderFragment : Fragment() {
         }
     }
 
-    private fun changeVisibilityMenu(state : Boolean){
+    private fun changeVisibilityMenu(state: Boolean) {
         val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
-        if(state){
-            menu!!.visibility=View.VISIBLE
-        }else{
-            menu!!.visibility=View.GONE
+        if (state) {
+            menu!!.visibility = View.VISIBLE
+        } else {
+            menu!!.visibility = View.GONE
+        }
+    }
+    private fun bindObservers() {
+        calenderViewModel.getEntryOnCalenderLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+
+                        toast("Sucesso")
+
+                    }
+                    is NetworkResult.Error -> {
+                        toast(it.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        //todo rui falta progress bar
+                        //binding.progressBar.show()
+
+                    }
+                }
+            }
         }
     }
 

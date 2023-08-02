@@ -8,5 +8,6 @@ data class Ingredient(
     val id: Int,
     val ingredient: IngredientBase,
     val quantity_original: String,
-    val quantity_normalized: Float
+    val quantity_normalized: Float,
+    val units_normalized: String
 ) : Parcelable

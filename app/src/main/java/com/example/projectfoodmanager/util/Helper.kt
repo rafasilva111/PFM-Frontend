@@ -29,7 +29,7 @@ class Helper {
         }
 
         fun formatLocalTimeToServerTime(localTime: LocalDateTime): String{
-            return localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))
+            return localTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"))
         }
 
         fun isOnline(context: Context): Boolean {

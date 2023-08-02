@@ -19,6 +19,7 @@ data class Recipe(
     val nutrition_information: NutritionInformations,
     val portion: String,
     val preparation: List<Preparation>,
+    val rating: Double = 0.0,
     val source_link: String,
     val source_rating: String,
     var tags: List<String> = arrayListOf(),

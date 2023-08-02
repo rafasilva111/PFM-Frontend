@@ -6,6 +6,8 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
@@ -50,11 +52,15 @@ interface RemoteDataSource {
 
 	//calender
 	suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<Unit>
+	suspend fun getEntryOnCalender(date: String):  Response<CalenderEntryList>
+	suspend fun getEntryOnCalender(fromDate: String, toDate: String):  Response<CalenderDatedEntryList>
 
 	//followers
 	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>
 	suspend fun getFollowers(): Response<FollowList>
 	suspend fun getFolloweds(): Response<FollowList>
+
+
 
 
 }

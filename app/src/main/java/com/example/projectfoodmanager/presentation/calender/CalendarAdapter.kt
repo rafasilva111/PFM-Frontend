@@ -16,7 +16,7 @@ import java.time.LocalDate
 
 class CalendarAdapter(
     private var days: ArrayList<LocalDate?>,
-    private val onItemClicked: (String) -> Unit,
+    private val onItemClicked: (LocalDate) -> Unit,
 ) :
     RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
 
@@ -135,7 +135,7 @@ class CalendarAdapter(
 
                 if(days[position] != null){
                     if (dayOfMonth.text.isNotBlank() ){
-                        onItemClicked.invoke( dayOfMonth.text as String)
+                        onItemClicked.invoke( days[position]!!)
                     }
                     if (currentDatePainted == selected)
                         colorCurrentDay(selected!!,context)
