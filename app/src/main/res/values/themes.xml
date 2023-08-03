@@ -14,6 +14,7 @@
 
         <!-- Secondary brand color. -->
         <item name="colorSecondaryVariant">@color/main_color</item>
+        <item name="checkboxStyle">@style/MyCheckboxStyle</item>
 <!--        <item name="android:datePickerStyle">@style/MyDatePicker</item>-->
 
         <!--        <item name="android:windowLightStatusBar">true</item>-->

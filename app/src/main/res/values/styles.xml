@@ -78,6 +78,11 @@
     </style>
 
 
+    <style name="MyCheckboxStyle" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="colorOnSurface">@color/transparent</item> <!-- for checked state -->
+        <item name="colorSecondary">@color/success</item> <!-- for unchecked state -->
+    </style>
+
 
 <!--
 

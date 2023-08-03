@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBinding
@@ -33,10 +34,12 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_KEYBOARD
 import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -51,6 +54,9 @@ class NewCalenderEntryFragment : Fragment() {
     private val calenderViewModel: CalenderViewModel by viewModels()
 
     lateinit var binding: FragmentNewCalenderEntryBinding
+
+    var objCalEntry: CalenderEntry? = null
+
     private var snapHelper: SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
     private var checkedTag: Int= 0
@@ -95,16 +101,34 @@ class NewCalenderEntryFragment : Fragment() {
             snapHelper.attachToRecyclerView(binding.favoritesRV)
 
 
+
+
             //setRecyclerViewScrollListener()
 
             return binding.root
         }
     }
 
+    private fun fillTheViewToCalEntry() {
+        //TODO: Mostrar apenas a receita associada
+        //binding.favoritesRV.adapter = adapter.updateList(objCalEntry.recipe)
+
+
+
+    }
+
     @SuppressLint("ClickableViewAccessibility", "WrongConstant", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //bindObservers()
+
+        objCalEntry = arguments?.getParcelable("CalenderEntry")
+
+        if (objCalEntry!=null){
+            fillTheViewToCalEntry()
+        }
+
+
 
         binding.favoritesRV.adapter = adapter
 
@@ -113,7 +137,6 @@ class NewCalenderEntryFragment : Fragment() {
         }
 
         // default list
-
         try {
             user = sharedPreference.getUserSession()
             updateView(currentTabSelected)
@@ -138,26 +161,8 @@ class NewCalenderEntryFragment : Fragment() {
 
 
         // form body
-
         binding.tagCV.setOnClickListener {
-            val tags = resources.getStringArray(R.array.tagEntryCalender_array).toList()
-            val adapter = ArrayAdapter(requireContext(), R.layout.item_checked_text_view, tags)
-
-            val builder = MaterialAlertDialogBuilder(requireActivity(), R.style.MaterialAlertDialog)
-                .setTitle("Selecione a categoria")
-                .setPositiveButton("ok") { _, _ ->
-                    binding.tagValTV.text= tags[checkedTag]
-                }
-                .setSingleChoiceItems(adapter, checkedTag) { _, which ->
-                    // Handle the item selection here
-                    checkedTag = which
-                }
-                .setNeutralButton("Cancel") { dialog, _ ->
-                    dialog.dismiss()
-                }
-
-            builder.create()
-            builder.show()
+            showTagDialog()
         }
 
         binding.tagCV.setOnTouchListener { _, event ->
@@ -175,15 +180,7 @@ class NewCalenderEntryFragment : Fragment() {
         }
 
         binding.dateCV.setOnClickListener {
-           val datePicker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Selecione a data")
-                    .setTheme(R.style.Widget_AppTheme_MaterialDatePicker)
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .build()
-            datePicker.dialog?.setCanceledOnTouchOutside(false)
-
-            datePicker.show(parentFragmentManager, "DatePicker");
+           val datePicker = showDatePickerDialog()
 
             datePicker.addOnCancelListener {
                 datePicker.dismiss()
@@ -249,8 +246,6 @@ class NewCalenderEntryFragment : Fragment() {
 
         }
 
-
-
         binding.timeCV.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -270,7 +265,14 @@ class NewCalenderEntryFragment : Fragment() {
             val (valid,message) = validation()
             if (valid) {
                 val (recipe_id,calenderEntryRequest) = getCalenderEntryRequest()
-                calenderViewModel.createEntryOnCalender(recipe_id,calenderEntryRequest)
+                if (objCalEntry != null){
+                    //UPDATE calenderEntry
+                    //TODO:Open dialog to confirmation ACTION
+                    //TODO:Update calEntry
+                }else{
+                    //CREATE calenderEntry
+                    calenderViewModel.createEntryOnCalender(recipe_id,calenderEntryRequest)
+                }
             }
             else{
                 Toast(context).showCustomToast (message, requireActivity(),ToastType.ALERT)
@@ -279,6 +281,58 @@ class NewCalenderEntryFragment : Fragment() {
 
         }
     }
+
+    private fun showTagDialog() {
+        val tags = resources.getStringArray(R.array.tagEntryCalender_array).toList()
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_checked_text_view, tags)
+
+        if (objCalEntry!=null){
+            for ((index, tag) in tags.withIndex()) {
+                if(objCalEntry!!.tag.lowercase() == tag.lowercase())
+                    checkedTag=index
+            }
+        }
+
+        val builder = MaterialAlertDialogBuilder(requireActivity(), R.style.MaterialAlertDialog)
+            .setTitle("Selecione a categoria")
+            .setPositiveButton("ok") { _, _ ->
+                binding.tagValTV.text = tags[checkedTag]
+            }
+            .setSingleChoiceItems(adapter, checkedTag) { _, which ->
+                // Handle the item selection here
+                checkedTag = which
+            }
+            .setNeutralButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+        builder.create()
+        builder.show()
+    }
+
+    private fun showDatePickerDialog(): MaterialDatePicker<Long> {
+        var date: Long? = null
+        if(objCalEntry!=null){
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            date = dateFormat.parse(objCalEntry!!.realization_date) as Nothing?
+        }else{
+            date = MaterialDatePicker.todayInUtcMilliseconds()
+        }
+
+
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Selecione a data")
+                .setTheme(R.style.Widget_AppTheme_MaterialDatePicker)
+                .setSelection(date)
+                .build()
+        datePicker.dialog?.setCanceledOnTouchOutside(false)
+
+        datePicker.show(parentFragmentManager, "DatePicker")
+
+        return datePicker
+    }
+
     private fun updateView(currentTabSelected: Int) {
 
         when(currentTabSelected){

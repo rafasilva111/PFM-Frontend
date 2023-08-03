@@ -36,13 +36,19 @@
     <color name="catg_bebida">#FFDAA2</color>//Bebida
     <color name="catg_salada">#C1EC8F</color>//Salada
     <color name="catg_pizza">#ff69b4</color>
-    <color name="catg_sobremesa">#00bfff</color>
     <color name="catg_sandes">#ff7f50</color>
-    <color name="catg_lanche">#add8e6</color>
-    <color name="catg_peq_almoco">#90ee90</color>
-    <color name="catg_jantar">#ff6347</color>
-    <color name="catg_almoco">#E1AEDF</color>
-    <color name="catg_petiscos">#AE725F</color>
+
+    // REFEIÇÃO-------------------------
+    <color name="catg_sobremesa">#00bfff</color>
+    <color name="catg_entradas">#AE725F</color>
+
+    // -------------------------
+    <color name="catg_peq_almoco">#F0E68C</color>
+    <color name="catg_lanche_manha">#ADD8E6</color>
+    <color name="catg_almoco">#FFB6C1</color>
+    <color name="catg_lanche_tarde">#E0FFFF</color>
+    <color name="catg_jantar">#D8BFD8</color>
+    <color name="catg_ceia">#F0FFFF</color>
 
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true" >#ff69b4</color>
 

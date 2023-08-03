@@ -45,9 +45,15 @@ class CalenderUtils {
             }
 
             val allNull = daysInMonthArray.take(7).all { it == null }
+            val lastAllNull = daysInMonthArray.takeLast(7).all { it == null }
+
 
             if (allNull)
                 return ArrayList(daysInMonthArray.drop(7))
+
+            if (lastAllNull)
+                return ArrayList(daysInMonthArray.dropLast(7))
+
             return daysInMonthArray
         }
 

@@ -9,8 +9,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentCalenderBinding
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.daysInMonthArray
@@ -25,7 +28,11 @@ import java.time.LocalDate
 
 @AndroidEntryPoint
 class CalenderFragment : Fragment() {
+
+    private var calenderEntryList: MutableList<CalenderEntry> = mutableListOf()
+
     lateinit var binding: FragmentCalenderBinding
+
     val authViewModel: AuthViewModel by viewModels()
     private val calenderViewModel by activityViewModels<CalenderViewModel>()
 
@@ -53,8 +60,19 @@ class CalenderFragment : Fragment() {
         )
     }
 
+    private val adapterEntry by lazy{
+        CalendarEntryAdapter(
+            onItemClicked = { pos, item ->
+                findNavController().navigate(R.id.action_calenderFragment_to_newCalenderEntryFragment,Bundle().apply {
+                    putParcelable("CalenderEntry",item)
+                })
 
-    private val recipeCalenderAdapter by lazy {
+                changeVisibilityMenu(false)
+            }
+        )
+    }
+
+  /*  private val recipeCalenderAdapter by lazy {
         RecipeCalenderAdapter(
             CalenderUtils.daysInWeekArray(
                 currentDate
@@ -63,7 +81,7 @@ class CalenderFragment : Fragment() {
 
             }
         )
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,6 +91,11 @@ class CalenderFragment : Fragment() {
         binding = FragmentCalenderBinding.inflate(layoutInflater)
         setMonthView()
 
+        val manager = LinearLayoutManager(activity)
+
+        binding.calEntrysRV.layoutManager = manager
+
+        bindObservers()
         return binding.root
     }
 
@@ -109,8 +132,10 @@ class CalenderFragment : Fragment() {
             findNavController().navigate(R.id.action_calenderFragment_to_calenderIngredientsFragment)
         }
 
+
         if (Helper.isOnline(view.context)) {
-            bindObservers()
+            binding.calEntrysRV.adapter = adapterEntry
+            binding.nRegistersTV.text= adapterEntry.itemCount.toString()
 
             calenderViewModel.getEntryOnCalender(currentDate.atStartOfDay())
         }
@@ -194,7 +219,15 @@ class CalenderFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
 
-                        toast("Sucesso")
+                        adapterEntry.updateList(it.data!!.result)
+
+                        if (it.data!!.result.size != 0){
+                            binding.nRegistersTV.text= "("+ it.data!!.result.size.toString() + ")"
+                            binding.emptyRegTV.visibility=View.INVISIBLE
+                        }else{
+                            binding.nRegistersTV.text= "("+ 0 + ")"
+                            binding.emptyRegTV.visibility=View.VISIBLE
+                        }
 
                     }
                     is NetworkResult.Error -> {

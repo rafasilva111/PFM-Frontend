@@ -92,7 +92,9 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
                             context.resources.getColorStateList(R.color.catg_sobremesa, null)
                         RecipeListingFragmentFilters.SANDES -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_sandes, null)
-                        RecipeListingFragmentFilters.LANCHE -> chipBackgroundColor =
+
+                        //TODO: é para ser visto melhor
+                       /* RecipeListingFragmentFilters.LANCHE -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_lanche, null)
                         RecipeListingFragmentFilters.PEQUENO_ALMOCO -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_peq_almoco, null)
@@ -101,7 +103,7 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
                         RecipeListingFragmentFilters.ALMOCO -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_almoco, null)
                         RecipeListingFragmentFilters.PETISCO -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_petiscos, null)
+                            context.resources.getColorStateList(R.color.catg_petiscos, null)*/
                         else ->
                             chipBackgroundColor =
                                 context.resources.getColorStateList(R.color.grey, null)
