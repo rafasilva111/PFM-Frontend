@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.data.model.modelResponse.calender
 
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplefied
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import kotlinx.android.parcel.Parcelize
 
@@ -9,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 data class CalenderEntry(
     val id: Int,
     val user: User,
-    val recipe: Recipe,
+    val recipe: RecipeSimplefied,
     val tag: String,
     val created_date: String,
     val realization_date: String,

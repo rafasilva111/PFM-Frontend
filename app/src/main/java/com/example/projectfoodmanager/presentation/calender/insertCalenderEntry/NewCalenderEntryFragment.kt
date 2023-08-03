@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.presentation.calender.insertCalenderEntry
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
@@ -117,12 +118,17 @@ class NewCalenderEntryFragment : Fragment() {
 
     }
 
-    @SuppressLint("ClickableViewAccessibility", "WrongConstant", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //bindObservers()
 
-        objCalEntry = arguments?.getParcelable("CalenderEntry")
+        if (Build.VERSION.SDK_INT >= 33) {
+            // TIRAMISU
+            objCalEntry = arguments?.getParcelable("CalenderEntry", CalenderEntry::class.java)
+        } else {
+            objCalEntry = arguments?.getParcelable("CalenderEntry")
+        }
+
 
         if (objCalEntry!=null){
             fillTheViewToCalEntry()
