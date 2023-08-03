@@ -32,6 +32,10 @@ class Helper {
             return localTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"))
         }
 
+        fun formatLocalTimeToFormatTime(localTime: LocalDateTime): String{
+            return localTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+        }
+
         fun isOnline(context: Context): Boolean {
             val connectivityManager =
                 context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

@@ -77,9 +77,6 @@
         android:label="CalenderFragment"
         tools:layout="@layout/fragment_calender">
         <action
-            android:id="@+id/action_calenderFragment_to_weeklyFragment"
-            app:destination="@id/weeklyFragment" />
-        <action
             android:id="@+id/action_calenderFragment_to_newCalenderEntryFragment"
             app:destination="@id/newCalenderEntryFragment" />
         <action
@@ -105,11 +102,6 @@
         android:id="@+id/updateBiodata"
         android:name="com.example.projectfoodmanager.presentation.goals.UpdateBiodata"
         android:label="UpdateBiodata" />
-    <fragment
-        android:id="@+id/weeklyFragment"
-        android:name="com.example.projectfoodmanager.presentation.calender.WeeklyFragment"
-        android:label="fragment_weekly"
-        tools:layout="@layout/fragment_weekly" />
     <fragment
         android:id="@+id/newCalenderEntryFragment"
         android:name="com.example.projectfoodmanager.presentation.calender.insertCalenderEntry.NewCalenderEntryFragment"

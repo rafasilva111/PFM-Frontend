@@ -20,7 +20,7 @@
         android:text="Quantity"/>
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/checkDoneCB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
