@@ -1,10 +1,9 @@
 package com.example.projectfoodmanager.presentation.auth
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -156,11 +155,15 @@ class LoginFragment : Fragment() {
 
                 when (it) {
                     is NetworkResult.Success -> {
-                        Handler().postDelayed({
+
+                        /*Handler().postDelayed({
                             setButtonVisibility(visibility = true)
                                 findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
 
-                        }, LOGIN_TIME)
+                        }, LOGIN_TIME)*/
+
+                        setButtonVisibility(visibility = true)
+                        findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
                     }
                     is NetworkResult.Error -> {
                         binding.loginBtn.isVisible = true
@@ -179,7 +182,17 @@ class LoginFragment : Fragment() {
 
 
     override fun onResume() {
-        requireActivity().window.decorView.systemUiVisibility = 0
+
+        // decaprecated after api 30
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().window.insetsController?.let { controller ->
+                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                controller.hide(WindowInsets.Type.systemBars())
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
         requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
         changeVisib_Menu(false)
 
@@ -187,7 +200,17 @@ class LoginFragment : Fragment() {
     }
 
     override fun onPause() {
-        requireActivity().window.decorView.systemUiVisibility = 8192
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val window = requireActivity().window
+            val controller = window.insetsController
+            if (controller != null) {
+                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                window.setDecorFitsSystemWindows(false)
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        }
         requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
 
         super.onPause()

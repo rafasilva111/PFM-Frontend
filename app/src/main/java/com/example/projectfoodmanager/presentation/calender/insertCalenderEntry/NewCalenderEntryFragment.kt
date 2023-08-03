@@ -56,7 +56,7 @@ class NewCalenderEntryFragment : Fragment() {
     private var checkedTag: Int= 0
     private var recipeRecyclerViewList: MutableList<Recipe> = mutableListOf()
 
-    val TAG: String = "NewCalenderEntryFragment"
+    private val TAG: String = "NewCalenderEntryFragment"
 
 
     lateinit var user: User
@@ -80,20 +80,17 @@ class NewCalenderEntryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        bindObservers()
-
-
-        //todo check for internet connection
         if (this::binding.isInitialized) {
             return binding.root
         } else {
             binding = FragmentNewCalenderEntryBinding.inflate(layoutInflater)
+
+            bindObservers()
             manager = LinearLayoutManager(activity)
             manager.orientation = LinearLayoutManager.HORIZONTAL
             manager.reverseLayout = false
             binding.favoritesRV.layoutManager = manager
             snapHelper.attachToRecyclerView(binding.favoritesRV)
-
 
             //setRecyclerViewScrollListener()
 
@@ -192,7 +189,7 @@ class NewCalenderEntryFragment : Fragment() {
             datePicker.addOnPositiveButtonClickListener {
 
                 if(datePicker.headerText.length == 9)
-                    binding.dateValTV.text= "0"+datePicker.headerText
+                    binding.dateValTV.text= getString(R.string.date_text, "0" + datePicker.headerText)
 
             }
 

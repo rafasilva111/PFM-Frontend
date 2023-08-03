@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.presentation.recipe.details
 
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -59,22 +60,28 @@ class RecipeDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         bindObservers()
 
-        if (this::binding.isInitialized) {
-            return binding.root
+        return if (this::binding.isInitialized) {
+            binding.root
         } else {
             // Inflate the layout for this fragment
             binding = FragmentRecipeDetailBinding.inflate(layoutInflater)
 
-            return binding.root
+            binding.root
         }
     }
     @ExperimentalBadgeUtils
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        objRecipe = arguments?.getParcelable("Recipe")
+
+        if (Build.VERSION.SDK_INT >= 33) {
+            // TIRAMISU
+            objRecipe = arguments?.getParcelable("Recipe", Recipe::class.java)
+        } else {
+            objRecipe = arguments?.getParcelable("Recipe")
+        }
         //requireActivity().window.statusBarColor =  requireContext().getColor(R.color.transparent)
 
 

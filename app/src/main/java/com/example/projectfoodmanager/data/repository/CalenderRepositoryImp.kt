@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredientList
 
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
@@ -57,7 +58,6 @@ class CalenderRepositoryImp @Inject constructor(
         val response =remoteDataSource.getEntryOnCalender(formatLocalTimeToServerTime(date))
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            // todo rafael add on shared preferences
             sharedPreference.saveSingleCalenderEntry(date,response.body()!!)
             _functionGetEntryOnCalender.postValue(Event(NetworkResult.Success(response.body()!!
             )))
@@ -82,7 +82,6 @@ class CalenderRepositoryImp @Inject constructor(
         val response =remoteDataSource.getEntryOnCalender(formatLocalTimeToServerTime(fromDate),formatLocalTimeToServerTime(toDate))
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            // todo rafael add on shared preferences
             sharedPreference.saveMultipleCalenderEntrys(response.body()!!,cleanseOldRegistry)
             _functionGetCalenderDatedEntryList.postValue(Event(NetworkResult.Success(response.body()!!
             )))
@@ -94,6 +93,30 @@ class CalenderRepositoryImp @Inject constructor(
         }
         else{
             _functionGetCalenderDatedEntryList.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+
+    private val _functionGetCalenderIngredients = MutableLiveData<Event<NetworkResult<CalenderIngredientList>>>()
+    override val getCalenderIngredients: LiveData<Event<NetworkResult<CalenderIngredientList>>>
+        get() = _functionGetCalenderIngredients
+
+    override suspend fun getCalenderIngredients(fromDate: LocalDateTime, toDate: LocalDateTime) {
+        _functionGetCalenderIngredients.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
+        val response =remoteDataSource.getCalenderIngredients(formatLocalTimeToServerTime(fromDate),formatLocalTimeToServerTime(toDate))
+        if (response.isSuccessful) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            _functionGetCalenderIngredients.postValue(Event(NetworkResult.Success(response.body()!!
+            )))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
+            _functionGetCalenderIngredients.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _functionGetCalenderIngredients.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
     }
 

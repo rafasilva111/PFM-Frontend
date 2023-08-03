@@ -31,7 +31,6 @@ class TesteFragment : Fragment(){
         val view = inflater.inflate(R.layout.fragment_teste, container, false)
         Locale.setDefault(Locale("pt"));
 
-        var picker: DatePickerDialog
         view.findViewById<Button>(R.id.DatePicker).setOnClickListener {
 
 /*

@@ -1,30 +1,70 @@
 package com.example.projectfoodmanager.presentation.calender.ingredients
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.databinding.FragmentCalenderIngredientsBinding
+import androidx.recyclerview.widget.RecyclerView
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredient
 import com.example.projectfoodmanager.databinding.ItemCalenderIngredientEntryBinding
 
 
-class CalenderIngredientsAdapter(context: Context, private val items: List<String>) : ArrayAdapter<String>(context, 0, items) {
-    private val inflater = LayoutInflater.from(context)
+class CalenderIngredientsAdapter(
+    val onItemClicked: (Int, CalenderIngredient) -> Unit,
+) : RecyclerView.Adapter<CalenderIngredientsAdapter.MyViewHolder>() {
 
-    private class ViewHolder(val binding: ItemCalenderIngredientEntryBinding)
+    private val TAG: String? = "CalenderEntryAdapter"
+    private var list: MutableList<CalenderIngredient> = arrayListOf()
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val viewHolder = convertView?.tag as? ViewHolder
-            ?: ViewHolder(ItemCalenderIngredientEntryBinding.inflate(inflater, parent, false)).apply {
-                binding.root.tag = this
-            }
 
-        val item = items[position]
-        viewHolder.binding.nameTV.text = item
-        viewHolder.binding.quantityTV.text = item
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val itemView = ItemCalenderIngredientEntryBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return MyViewHolder(itemView)
+    }
 
-        return viewHolder.binding.root
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val item = list[position]
+        holder.bind(item)
+    }
+
+    fun updateList(list: MutableList<CalenderIngredient>) {
+        this.list = list
+        notifyDataSetChanged()
+    }
+
+    fun updateItem(position: Int, item: CalenderIngredient) {
+        list.removeAt(position)
+        list.add(position, item)
+        notifyItemChanged(position)
+    }
+
+
+    fun cleanList() {
+        this.list = arrayListOf()
+        notifyDataSetChanged()
+    }
+
+    fun removeItem(position: Int) {
+        list.removeAt(position)
+        notifyItemChanged(position)
+    }
+
+    override fun getItemCount(): Int {
+        return list.size
+    }
+
+
+    inner class MyViewHolder(private val binding: ItemCalenderIngredientEntryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: CalenderIngredient) {
+
+
+            binding.nameTV.text = item.name
+            binding.quantityTV.text = item.quantity.toString() + " " + item.units
+
+
+        }
     }
 }

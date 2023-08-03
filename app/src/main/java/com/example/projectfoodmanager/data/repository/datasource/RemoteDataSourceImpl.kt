@@ -9,6 +9,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateComm
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredientList
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
@@ -129,6 +130,10 @@ class RemoteDataSourceImpl @Inject constructor(
 
 	override suspend fun getEntryOnCalender(date: String): Response<CalenderEntryList> {
 		return apiInterface.getEntryOnCalender(date = date)
+	}
+
+	override suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<CalenderIngredientList> {
+		return apiInterface.getCalenderIngredients(fromDate = fromDate,toDate = toDate)
 	}
 
 	//Followers

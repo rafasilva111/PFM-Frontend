@@ -111,15 +111,10 @@ class RecipeListingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //observer()
-        //todo check for internet connection
-
-        var flags: Int = requireActivity().window.decorView.systemUiVisibility
-
         bindObservers()
 
-        if (this::binding.isInitialized){
-            return binding.root
+        return if (this::binding.isInitialized){
+            binding.root
         }else {
 
             binding = FragmentRecipeListingBinding.inflate(layoutInflater)
@@ -131,9 +126,9 @@ class RecipeListingFragment : Fragment() {
 
 
             setRecyclerViewScrollListener()
-            return binding.root
+            binding.root
         }
-        }
+    }
 
 
 

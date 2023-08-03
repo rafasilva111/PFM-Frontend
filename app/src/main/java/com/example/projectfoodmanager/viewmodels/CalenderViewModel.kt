@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredientList
 import com.example.projectfoodmanager.data.repository.CalenderRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -42,7 +43,7 @@ class CalenderViewModel @Inject constructor(
         }
     }
 
-    val getCalenderDatedEntryList: LiveData<Event<NetworkResult<CalenderDatedEntryList>>>
+    val getCalenderDatedEntryListLiveData: LiveData<Event<NetworkResult<CalenderDatedEntryList>>>
         get() = repository.getCalenderDatedEntryList
 
     fun getCalenderDatedEntryList(fromDate:LocalDateTime,toDate: LocalDateTime,cleanseOldRegistry:Boolean = false){
@@ -51,14 +52,15 @@ class CalenderViewModel @Inject constructor(
         }
     }
 
-    /*val getCalenderDatedEntryList: LiveData<Event<NetworkResult<CalenderDatedEntryList>>>
-        get() = repository.getCalenderDatedEntryList
+
+    val getCalenderIngredientsLiveData: LiveData<Event<NetworkResult<CalenderIngredientList>>>
+        get() = repository.getCalenderIngredients
 
     fun getCalenderIngredients(fromDate: LocalDateTime, toDate: LocalDateTime) {
         viewModelScope.launch {
-            repository.getCalenderIngredients(fromDate,toDate,cleanseOldRegistry)
+            repository.getCalenderIngredients(fromDate,toDate)
         }
-    }*/
+    }
 
 
 }

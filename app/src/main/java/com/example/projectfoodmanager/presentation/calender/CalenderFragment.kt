@@ -47,23 +47,13 @@ class CalenderFragment : Fragment() {
             CalenderUtils.daysInWeekArray(
                 currentDate
             ),
-            onItemClicked = { text ->
+            onItemClicked = { _ ->
 
             }
         )
     }
 
 
-    private val recipeCalenderAdapter by lazy {
-        RecipeCalenderAdapter(
-            CalenderUtils.daysInWeekArray(
-                currentDate
-            ),
-            onItemClicked = { text ->
-
-            }
-        )
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,7 +96,9 @@ class CalenderFragment : Fragment() {
         }
 
         binding.addBasketIB.setOnClickListener {
-            findNavController().navigate(R.id.action_calenderFragment_to_calenderIngredientsFragment)
+            findNavController().navigate(R.id.action_calenderFragment_to_calenderIngredientsFragment,Bundle().apply {
+                putInt("month",currentDate.monthValue)
+            })
         }
 
         if (Helper.isOnline(view.context)) {
@@ -194,8 +186,7 @@ class CalenderFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
 
-                        toast("Sucesso")
-
+                        
                     }
                     is NetworkResult.Error -> {
                         toast(it.message.toString(), type = ToastType.ERROR)

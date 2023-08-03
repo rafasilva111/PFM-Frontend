@@ -96,6 +96,7 @@
     <string name="most_saved">Mais guardadas</string>
     <string name="random">Ao calhas</string>
     <string name="most_liked">Mais gostadas</string>
+    <string name="date_text">%1$s</string>
 
     <string-array name="gender_array">
         <item>Masculino</item>

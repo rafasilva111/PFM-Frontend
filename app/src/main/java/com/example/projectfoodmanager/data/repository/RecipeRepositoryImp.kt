@@ -96,10 +96,10 @@ class RecipeRepositoryImp @Inject constructor(
         get() = _recipeSearchByTitleAndTagsResponseLiveData
 
 
-    override suspend fun getRecipesByTitleAndTags(string: String, searchPage: Int) {
+    override suspend fun getRecipesByTitleAndTags(title: String, searchPage: Int) {
         _recipeSearchByTitleAndTagsResponseLiveData.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making login request.")
-        val response =remoteDataSource.getRecipesByTitleAndTags(string,searchPage)
+        val response =remoteDataSource.getRecipesByTitleAndTags(title,searchPage)
 
         //handle response RecipeListResponse
 

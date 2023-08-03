@@ -1,19 +1,17 @@
 package com.example.projectfoodmanager.presentation.calender
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentWeeklyBinding
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils
-import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.daysInWeekArray
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.currentDate
+import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.daysInWeekArray
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
@@ -27,7 +25,7 @@ class WeeklyFragment : Fragment() {
             daysInWeekArray(
                 currentDate
             ),
-            onItemClicked = {text ->
+            onItemClicked = { _ ->
 
             }
         )
@@ -39,7 +37,7 @@ class WeeklyFragment : Fragment() {
             daysInWeekArray(
                 currentDate
             ),
-            onItemClicked = {text ->
+            onItemClicked = { _ ->
 
             }
         )
