@@ -50,4 +50,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        window.decorView.systemUiVisibility = 8192
+        window.navigationBarColor = this.getColor(R.color.main_color)
+        window.statusBarColor =  this.getColor(R.color.background_1)
+    }
 }

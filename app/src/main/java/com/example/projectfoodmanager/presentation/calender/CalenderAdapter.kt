@@ -14,11 +14,11 @@ import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.
 import java.time.LocalDate
 
 
-class CalendarAdapter(
+class CalenderAdapter(
     private var days: ArrayList<LocalDate?>,
     private val onItemClicked: (LocalDate) -> Unit,
 ) :
-    RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
+    RecyclerView.Adapter<CalenderAdapter.CalendarViewHolder>() {
 
     private var selected: View? = null
     private var currentDatePainted: View? = null
@@ -135,7 +135,7 @@ class CalendarAdapter(
 
                 if(days[position] != null){
                     if (dayOfMonth.text.isNotBlank() ){
-                        onItemClicked.invoke( days[position]!!)
+                        onItemClicked.invoke(days[position]!!)
                     }
                     if (currentDatePainted == selected)
                         colorCurrentDay(selected!!,context)

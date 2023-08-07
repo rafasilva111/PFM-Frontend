@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentCalenderIngredientsBinding
@@ -69,8 +70,16 @@ class CalenderIngredientsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.backRegIB.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+
         fromDate = LocalDateTime.now().withMonth(defaultMonth).withDayOfMonth(1)
         toDate = fromDate.with(TemporalAdjusters.lastDayOfMonth())
+
+
 
         calenderViewModel.getCalenderIngredients(fromDate, toDate)
 
@@ -82,7 +91,6 @@ class CalenderIngredientsFragment : Fragment() {
             val datePicker =
                 MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Selecione a data")
-                    .setTheme(R.style.Widget_AppTheme_MaterialDatePicker)
                     .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                     .build()
             datePicker.dialog?.setCanceledOnTouchOutside(false)
@@ -110,7 +118,6 @@ class CalenderIngredientsFragment : Fragment() {
             val datePicker =
                 MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Selecione a data")
-                    .setTheme(R.style.Widget_AppTheme_MaterialDatePicker)
                     .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                     .build()
             datePicker.dialog?.setCanceledOnTouchOutside(false)

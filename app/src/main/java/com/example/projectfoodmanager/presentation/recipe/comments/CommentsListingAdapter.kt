@@ -23,7 +23,6 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
-import java.util.*
 
 class CommentsListingAdapter(
     val sharedPreferences: SharedPreference
@@ -126,7 +125,7 @@ class CommentsListingAdapter(
                     }
                         .addOnFailureListener {
                             Glide.with(binding.IVAuthorOwner.context)
-                                .load(R.drawable.good_food_display___nci_visuals_online)
+                                .load(R.drawable.default_image_display)
                                 .into(binding.IVAuthorOwner)
                         }
                 }

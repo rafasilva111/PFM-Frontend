@@ -1,31 +1,25 @@
 package com.example.projectfoodmanager.presentation.calender
 
 import android.content.res.ColorStateList
-import android.provider.CalendarContract.CalendarEntity
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.ItemCalenderEntryBinding
-import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToFormatTime
-import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import java.util.*
+import java.time.format.DateTimeFormatter
 
 
-class CalendarEntryAdapter(
+class CalenderEntryAdapter(
     val onItemClicked: (Int, CalenderEntry) -> Unit,
-) : RecyclerView.Adapter<CalendarEntryAdapter.MyViewHolder>() {
+    val onDoneClicked: (Boolean, CalenderEntry) -> Unit,
+) : RecyclerView.Adapter<CalenderEntryAdapter.MyViewHolder>() {
 
     private val TAG: String? = "CalenderEntryAdapter"
     private var list: MutableList<CalenderEntry> = arrayListOf()
@@ -91,10 +85,20 @@ class CalendarEntryAdapter(
             }
             binding.tagTV.backgroundTintList= getColorTag(item.tag)
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
-            binding.timeTV.text = formatLocalTimeToFormatTime(LocalDateTime.parse(item.realization_date))
+
+
+            binding.timeTV.text = formatLocalTimeToFormatTime(LocalDateTime.parse(item.realization_date,DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss")))
+
+
+            //TODO: Melhorar por causa da sharedpreferences
 
             binding.checkDoneCB.isChecked = item.checked_done
 
+            binding.checkDoneCB.setOnClickListener {
+
+                onDoneClicked.invoke(binding.checkDoneCB.isChecked,item)
+
+            }
 
         }
 

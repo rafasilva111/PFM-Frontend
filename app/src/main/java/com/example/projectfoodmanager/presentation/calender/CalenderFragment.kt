@@ -1,9 +1,11 @@
 package com.example.projectfoodmanager.presentation.calender
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -12,14 +14,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentCalenderBinding
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.daysInMonthArray
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.formatDateMonthYear
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.currentDate
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.CalenderViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -39,37 +42,45 @@ class CalenderFragment : Fragment() {
     val TAG: String = "ProfileFragment"
 
     private val adapterCalMonth by lazy {
-        CalendarAdapter(
+        CalenderAdapter(
             daysInMonthArray(
                 currentDate
             ),
             onItemClicked = { selectedDate ->
+               //TODO: Confirmar com o rafa
+                binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
                 calenderViewModel.getEntryOnCalender(selectedDate.atStartOfDay())
             }
         )
     }
 
     private val adapterCalWeekly by lazy {
-        CalendarAdapter(
+        CalenderAdapter(
             CalenderUtils.daysInWeekArray(
                 currentDate
             ),
-            onItemClicked = { _ ->
-
+            onItemClicked = { selectedDate ->
+                //TODO: Confirmar com o rafa
+                binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
+                calenderViewModel.getEntryOnCalender(selectedDate.atStartOfDay())
             }
         )
     }
 
     private val adapterEntry by lazy{
-        CalendarEntryAdapter(
+        CalenderEntryAdapter(
             onItemClicked = { pos, item ->
-                findNavController().navigate(R.id.action_calenderFragment_to_newCalenderEntryFragment,Bundle().apply {
+                findNavController().navigate(R.id.action_calenderFragment_to_calendarEntryDetailFragment,Bundle().apply {
                     putParcelable("CalenderEntry",item)
                 })
 
                 changeVisibilityMenu(false)
+            },
+            onDoneClicked = { checkDone, item->
+                calenderViewModel.pathCalenderEntry(item.id, CalenderEntryPatchRequest(checked_done = checkDone))
             }
         )
+
     }
 
   /*  private val recipeCalenderAdapter by lazy {
@@ -90,6 +101,7 @@ class CalenderFragment : Fragment() {
         ): View {
         binding = FragmentCalenderBinding.inflate(layoutInflater)
         setMonthView()
+        binding.registersDateTV.text= formatLocalDateToFormatDate(currentDate)
 
         val manager = LinearLayoutManager(activity)
 
@@ -102,6 +114,7 @@ class CalenderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         binding.addRegisterIB.setOnClickListener {
             findNavController().navigate(R.id.action_calenderFragment_to_newCalenderEntryFragment)
             changeVisibilityMenu(false)
@@ -110,11 +123,27 @@ class CalenderFragment : Fragment() {
 
         binding.monthViewBtn.setOnClickListener {
             setMonthView()
+            binding.monthViewBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color))
+            binding.monthViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.white)))
+
+            binding.weeklyViewBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.grayLightBTN))
+            binding.weeklyViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color)))
+
+            //TODO: ao trocar de vistas o dia que se mantemn selecionado deve continuar o mesmo
         }
 
 
         binding.weeklyViewBtn.setOnClickListener {
             setWeeklyView()
+
+            binding.weeklyViewBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color))
+            binding.weeklyViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.white)))
+
+            binding.monthViewBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.grayLightBTN))
+            binding.monthViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color)))
+
+            //TODO: ao trocar de vistas o dia que se mantemn selecionado deve continuar o mesmo
+
         }
 
 
@@ -132,6 +161,8 @@ class CalenderFragment : Fragment() {
             findNavController().navigate(R.id.action_calenderFragment_to_calenderIngredientsFragment,Bundle().apply {
                 putInt("month",currentDate.monthValue)
             })
+            changeVisibilityMenu(false)
+
         }
 
 
@@ -146,6 +177,9 @@ class CalenderFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        requireActivity().window.decorView.systemUiVisibility = 8192
+        requireActivity().window.navigationBarColor = requireActivity().getColor(R.color.main_color)
+        requireActivity().window.statusBarColor =  requireActivity().getColor(R.color.background_1)
         changeVisibilityMenu(true)
     }
 
@@ -154,7 +188,7 @@ class CalenderFragment : Fragment() {
         binding.calMonthRV.visibility = View.VISIBLE
 
         currentDate = LocalDate.now()
-        binding.monthYearTV.text = formatDateMonthYear(currentDate)
+        binding.monthYearTV.text = formatDateMonthYear(currentDate)!!.replaceFirstChar { it.uppercase() }
 
         val layoutManager: RecyclerView.LayoutManager =
             GridLayoutManager(activity?.applicationContext, 7)
@@ -176,8 +210,7 @@ class CalenderFragment : Fragment() {
         binding.calWeeklyRV.visibility = View.VISIBLE
 
         currentDate = LocalDate.now()
-        binding.monthYearTV.text = formatDateMonthYear(currentDate)
-
+        binding.monthYearTV.text = formatDateMonthYear(currentDate)!!.replaceFirstChar { it.uppercase() }
         val layoutManager: RecyclerView.LayoutManager =
             GridLayoutManager(activity?.applicationContext, 7)
         binding.calWeeklyRV.layoutManager = layoutManager
@@ -189,7 +222,7 @@ class CalenderFragment : Fragment() {
 
     private fun updateCalenderView() {
 
-        binding.monthYearTV.text = formatDateMonthYear(currentDate)
+        binding.monthYearTV.text = formatDateMonthYear(currentDate)!!.capitalize()
 
         if (binding.calMonthRV.visibility == View.VISIBLE) {
             adapterCalMonth.updateList(
@@ -215,6 +248,7 @@ class CalenderFragment : Fragment() {
             menu!!.visibility = View.GONE
         }
     }
+
     private fun bindObservers() {
         calenderViewModel.getEntryOnCalenderLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
@@ -223,12 +257,37 @@ class CalenderFragment : Fragment() {
 
                         adapterEntry.updateList(it.data!!.result)
 
-                        if (it.data!!.result.size != 0){
-                            binding.nRegistersTV.text= "("+ it.data!!.result.size.toString() + ")"
+                        if (it.data.result.size != 0){
+                            binding.nRegistersTV.text= it.data.result.size.toString()
                             binding.emptyRegTV.visibility=View.INVISIBLE
                         }else{
-                            binding.nRegistersTV.text= "("+ 0 + ")"
+                            binding.nRegistersTV.text= "0"
                             binding.emptyRegTV.visibility=View.VISIBLE
+                        }
+
+                    }
+                    is NetworkResult.Error -> {
+                        toast(it.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        //todo rui falta progress bar
+                        //binding.progressBar.show()
+
+                    }
+                }
+            }
+        }
+
+
+        calenderViewModel.pathCalenderEntryLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+
+                        if(it.data!!.checked_done){
+                            toast("Refeição consumida")
+                        }else{
+                            toast("Refeição não consumida")
                         }
 
                     }
@@ -245,6 +304,11 @@ class CalenderFragment : Fragment() {
         }
     }
 
+
+    override fun onPause() {
+        super.onPause()
+        //Todo: RAFA fazer save das calendersEntrys mediante a sharedpreferences e não diretamente
+    }
 
 
 }

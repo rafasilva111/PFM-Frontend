@@ -2,16 +2,19 @@ package com.example.projectfoodmanager.presentation.recipe
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsetsController
 import android.widget.ImageButton
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -25,6 +28,7 @@ import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -70,9 +74,7 @@ class RecipeListingFragment : Fragment() {
     private val recipeViewModel by activityViewModels<RecipeViewModel>()
 
     // chips filter
-
     private var chipSelected: String? = null
-
 
     private val adapter by lazy {
         RecipeListingAdapter(
@@ -116,6 +118,22 @@ class RecipeListingFragment : Fragment() {
         return if (this::binding.isInitialized){
             binding.root
         }else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val window = requireActivity().window
+                window.decorView.systemUiVisibility = 8192
+                window.setDecorFitsSystemWindows(true)
+                val controller = window.insetsController
+                if (controller != null) {
+                    controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                }
+            } else {
+                @Suppress("DEPRECATION")
+                requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                WindowCompat.setDecorFitsSystemWindows(requireActivity().window, true)
+            }
+
+            requireActivity().window.navigationBarColor = requireContext().getColor(R.color.main_color)
+            requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
 
             binding = FragmentRecipeListingBinding.inflate(layoutInflater)
             manager = LinearLayoutManager(activity)
@@ -129,8 +147,6 @@ class RecipeListingFragment : Fragment() {
             binding.root
         }
     }
-
-
 
 
     private fun setRecyclerViewScrollListener() {
@@ -185,10 +201,10 @@ class RecipeListingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         changeVisibilityMenu(true)
 
-        // user data
+        //Get User in SharedPreferences
         val user = sharedPreference.getUserSession()
 
-        binding.tvName.text =  getString(R.string.full_name, user.name)
+        binding.tvName.text =  formatNameToNameUpper(getString(R.string.full_name, user.name))
 
         //VIP HEADER
         if(user.user_type != "V"){
@@ -200,7 +216,7 @@ class RecipeListingFragment : Fragment() {
         if(user.verified)
             binding.verifyUserHeaderIV.visibility=View.VISIBLE
 
-
+        //Set Profile Image
         if (user.img_source.contains("avatar")){
             val avatar= Avatar.getAvatarByName(user.img_source)
             binding.ivProfilePic.setImageResource(avatar!!.imgId)
@@ -212,7 +228,6 @@ class RecipeListingFragment : Fragment() {
             }
 
         }
-
 
 
         if (isOnline(view.context)) {
@@ -263,14 +278,18 @@ class RecipeListingFragment : Fragment() {
             }
 
 
-            //nav search bottom
+            //Go to Notifications Fragment
+            binding.notificationIV.setOnClickListener {
+                findNavController().navigate(R.id.action_recipeListingFragment_to_notificationFragment)
+                changeVisibilityMenu(false)
+            }
 
+            //Tag filter
             binding.meatFiltIB.setOnClickListener {
-
                 changeFilterSearch(RecipeListingFragmentFilters.CARNE)
                 filterOnClick("meat")
-
             }
+
             binding.fishFiltIB.setOnClickListener {
                 changeFilterSearch(RecipeListingFragmentFilters.PEIXE)
                 filterOnClick("fish")
@@ -280,33 +299,33 @@ class RecipeListingFragment : Fragment() {
                 changeFilterSearch(RecipeListingFragmentFilters.SOPA)
                 filterOnClick("soup")
             }
+
             binding.vegiFiltIB.setOnClickListener {
                 changeFilterSearch(RecipeListingFragmentFilters.VEGETARIANA)
                 filterOnClick("vegi")
             }
+
             binding.fruitFiltIB.setOnClickListener {
                 changeFilterSearch(RecipeListingFragmentFilters.FRUTA)
                 filterOnClick("fruit")
             }
+
             binding.drinkFiltIB.setOnClickListener {
                 changeFilterSearch(RecipeListingFragmentFilters.BEBIDAS)
                 filterOnClick("drink")
             }
-        }
-        else{
+
+        } else{
             binding.offlineTV.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.GONE
         }
     }
 
-
     private fun showValidationErrors(error: String) {
         toast(error, type = ToastType.ERROR)
     }
 
-
     private fun filterOnClick(tag:String){
-
         val clToUpdate: ConstraintLayout? = binding.root.findViewWithTag(oldFiltTag + "CL") as? ConstraintLayout
         val tvToUpdate: TextView? = binding.root.findViewWithTag(oldFiltTag + "TV") as? TextView
         val ibToUpdate: ImageButton? = binding.root.findViewWithTag(oldFiltTag + "_filt_IB") as? ImageButton
@@ -654,6 +673,7 @@ class RecipeListingFragment : Fragment() {
         }
 
     }
+
     private fun changeFilterSearch(string: String){
         if (stringToSearch == string){
             newSearch = false
@@ -680,9 +700,6 @@ class RecipeListingFragment : Fragment() {
                     chipSelected = RecipesSortingType.DATE
                     recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.DATE)
                 }
-
-
-
             }
             binding.recipeListingFilterSugestions -> {
                 // gostos
@@ -739,6 +756,9 @@ class RecipeListingFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
 
 
 }

@@ -1,12 +1,14 @@
 package com.example.projectfoodmanager.data.repository.datasource
 
 
-import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredientList
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
@@ -56,13 +58,15 @@ interface RemoteDataSource {
 	suspend fun getEntryOnCalender(date: String):  Response<CalenderEntryList>
 	suspend fun getEntryOnCalender(fromDate: String, toDate: String):  Response<CalenderDatedEntryList>
 	suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<CalenderIngredientList>
+	suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Unit>
+	suspend fun pathCalenderEntry(calenderEntryId: Int,calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
 
 
 	//followers
 	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>
-	suspend fun getFollowers(): Response<FollowList>
-	suspend fun getFolloweds(): Response<FollowList>
-
+	suspend fun getFollowers(userId: Int): Response<FollowList>
+	suspend fun getFolloweds(idUser: Int): Response<FollowList>
+	suspend fun getFollowRequests(): Response<FollowList>
 
 
 }

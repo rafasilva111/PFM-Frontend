@@ -12,7 +12,7 @@
     <color name="checked">#FFFFDAA2</color>
 
     <color name="success">#4CAF50</color>
-    <color name="warning">#FFEB3B</color>
+    <color name="warning">#FFCF21</color>
     <color name="info">#47C6FF</color>
     <color name="error">#FF2A1A</color>
     <color name="vip">#FFC107</color>
@@ -82,6 +82,7 @@
 
     <!--calendar colors-->
     <color name="gray">#888</color>
+    <color name="grayLightBTN">#F4F4F4</color>
     <color name="blue">#0000FF</color>
 
 

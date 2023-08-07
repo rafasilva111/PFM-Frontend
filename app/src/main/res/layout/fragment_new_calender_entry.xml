@@ -141,7 +141,6 @@
             android:id="@+id/favoritesRV"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-
             android:layout_marginTop="20dp"
             android:elevation="8dp"
             android:focusable="true"
@@ -226,6 +225,7 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="@dimen/headerCat"
+                android:layout_marginStart="5dp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -235,6 +235,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
+            app:cardBackgroundColor="@color/transparent"
             app:contentPadding="5dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -249,7 +250,7 @@
                 android:paddingEnd="20dp">
 
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_width="18dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:alpha="0.4"
@@ -265,7 +266,7 @@
                     android:gravity="center_vertical"
                     android:text="Categoria"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/tag_val_TV"
@@ -276,8 +277,9 @@
                     android:fontFamily="@font/fredoka_regular"
                     android:gravity="center_vertical"
                     android:text="@string/none"
+                    android:alpha="0.8"
                     android:textAlignment="textEnd"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     tools:ignore="RtlCompat" />
 
                 <ImageView
@@ -307,6 +309,7 @@
             android:layout_height="40dp"
             app:cardElevation="0dp"
             app:contentPadding="5dp"
+            app:cardBackgroundColor="@color/transparent"
             android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -320,7 +323,7 @@
                 android:paddingEnd="20dp">
 
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_width="18dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:alpha="0.4"
@@ -336,7 +339,7 @@
                     android:gravity="center_vertical"
                     android:text="Data"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/date_val_TV"
@@ -348,7 +351,8 @@
                     android:gravity="center_vertical"
                     android:text="00/00/0000"
                     android:textAlignment="textEnd"
-                    android:textSize="12sp"
+                    android:alpha="0.8"
+                    android:textSize="13sp"
                     tools:ignore="RtlCompat" />
 
                 <ImageView
@@ -379,6 +383,7 @@
             android:layout_height="40dp"
             app:cardElevation="0dp"
             app:contentPadding="5dp"
+            app:cardBackgroundColor="@color/transparent"
             android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -392,7 +397,7 @@
                 android:paddingEnd="20dp">
 
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_width="18dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:alpha="0.4"
@@ -408,7 +413,7 @@
                     android:gravity="center_vertical"
                     android:text="Hora"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/time_val_TV"
@@ -420,7 +425,8 @@
                     android:gravity="center_vertical"
                     android:text="00:00"
                     android:textAlignment="textEnd"
-                    android:textSize="12sp"
+                    android:alpha="0.8"
+                    android:textSize="13sp"
                     tools:ignore="RtlCompat" />
 
                 <ImageView

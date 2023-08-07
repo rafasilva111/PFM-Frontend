@@ -33,6 +33,7 @@ import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,6 +73,8 @@ class FavoritesFragment : Fragment() {
                     findNavController().navigate(R.id.action_favoritesFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("Recipe",item)
                 })
+                changeVisibilityMenu(false)
+
             },
             onLikeClicked = {item,like ->
                 if(like){
@@ -176,6 +179,7 @@ class FavoritesFragment : Fragment() {
                 binding.tvNoRecipes.visibility = View.GONE
 
                 // Primeira lista a aparecer
+                val test= user.getLikedRecipes()
                 adapter.updateList(user.getLikedRecipes(), user)
             }
         } catch (e: Exception) {
@@ -448,8 +452,6 @@ class FavoritesFragment : Fragment() {
         })
 
         // Like function
-
-
         recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { it ->
             it.getContentIfNotHandled()?.let {
                 when (it) {
@@ -674,6 +676,16 @@ class FavoritesFragment : Fragment() {
             }
         }
         return false
+    }
+
+    private fun changeVisibilityMenu(state: Boolean) {
+        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        if (state) {
+            menu!!.visibility = View.VISIBLE
+        } else {
+            menu!!.visibility = View.GONE
+        }
     }
 }
 

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.repository.AuthRepository
@@ -21,6 +20,7 @@ class AuthViewModel @Inject constructor(
     val repository: AuthRepository,
     val sharedPreference: SharedPreference
 ): ViewModel() {
+
     private val TAG:String ="AuthViewModel"
 
 
@@ -71,24 +71,32 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    val userFollowersResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
-        get() = repository.userFollowersResponseLiveData
+    val getUserFollowersLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = repository.userFollowersLiveData
 
-    fun getUserFollowers(){
+    fun getFollowers(id_user: Int) {
         viewModelScope.launch {
-            repository.getUserFollowers()
+            repository.getUserFollowers(id_user)
         }
     }
 
-    val userFolloweesResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
-        get() = repository.userFolloweesResponseLiveData
+    val getUserFollowedsLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = repository.userFollowedsLiveData
 
-    fun getUserFollowees(){
+    fun getFolloweds(id_user: Int){
         viewModelScope.launch {
-            repository.getUserFollowees()
+            repository.getUserFolloweds(id_user)
         }
     }
 
 
+    val getUserFollowRequestsLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = repository.userFollowRequestsLiveData
+
+    fun getFollowRequests(){
+        viewModelScope.launch {
+            repository.getUserFollowRequests()
+        }
+    }
 
 }

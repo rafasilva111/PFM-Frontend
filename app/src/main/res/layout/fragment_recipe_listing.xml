@@ -8,6 +8,17 @@
     tools:context=".presentation.recipe.RecipeListingFragment">
 
     <ImageView
+        android:id="@+id/notificationIV"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_notification"
+        app:layout_constraintEnd_toStartOf="@+id/profileCV"
+        app:layout_constraintTop_toTopOf="@+id/tvWelcome" />
+
+
+    <ImageView
         android:id="@+id/verifyUserHeaderIV"
         android:layout_width="30dp"
         android:layout_height="30dp"

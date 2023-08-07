@@ -80,11 +80,14 @@ class RecipeCalenderEntryListingAdapter(
                 val imageURL = Uri.toString()
                 Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
             }
-                .addOnFailureListener {
-                    Glide.with(binding.imageView.context)
-                        .load(R.drawable.good_food_display___nci_visuals_online)
-                        .into(binding.imageView)
-                }
+            .addOnFailureListener {
+                binding.imageView.setImageResource(R.drawable.default_image_display)
+/*                Glide.with(binding.imageView.context)
+                    .load(R.drawable.good_food_display___nci_visuals_online)
+                    .into(binding.imageView)*/
+            }
+
+
 
             if (user==null)
                 user= sharedPreference.getUserSession()

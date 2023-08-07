@@ -138,7 +138,7 @@
                     android:layout_height="30dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/layout_bg"
-                    app:backgroundTint="#F4F4F4"
+                    app:backgroundTint="@color/grayLightBTN"
                     android:padding="0dp"
                     android:text="Semana"
                     android:textColor="@color/main_color"
@@ -260,45 +260,70 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout2" />
 
-    <LinearLayout
-        android:id="@+id/headerCatLL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view4">
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_detail"
-            app:tint="#505050" />
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/headerDateCatLL"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/fredoka_regular"
-            android:text="Registos"
-            android:textAlignment="gravity"
-            android:textColor="@color/black"
-            android:textSize="@dimen/headerCat"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view4">
 
-        <TextView
-            android:id="@+id/nRegistersTV"
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_calender"
+                app:tint="#505050" />
+
+
+            <TextView
+                android:id="@+id/registersDateTV"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:alpha="0.8"
+                android:fontFamily="@font/fredoka_regular"
+                android:text="00/00/0000"
+                android:textAlignment="gravity"
+                android:textSize="@dimen/headerCat" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/headerRegistersCatLL"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/fredoka_regular"
-            android:text="(0)"
-            android:layout_marginStart="5dp"
-            android:textAlignment="gravity"
-            android:alpha="0.8"
-            android:textSize="@dimen/headerCat" />
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view4">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/nRegistersTV"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:alpha="0.8"
+                android:fontFamily="@font/fredoka_regular"
+                android:text="(0)"
+                android:textAlignment="gravity"
+                android:textSize="@dimen/headerCat" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:alpha="0.8"
+                android:fontFamily="@font/fredoka_regular"
+                android:text="Refeições"
+                android:textAlignment="gravity"
+                android:textSize="@dimen/headerCat" />
+
+
+        </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/calEntrysRV"
@@ -308,7 +333,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerCatLL" />
+        app:layout_constraintTop_toBottomOf="@+id/headerDateCatLL" />
 
     <TextView
         android:id="@+id/emptyRegTV"
@@ -316,11 +341,13 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/fredoka_regular"
         android:text="Sem registos"
+        android:textSize="15sp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerCatLL"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toTopOf="@+id/calEntrysRV" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

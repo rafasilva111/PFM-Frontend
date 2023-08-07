@@ -25,7 +25,7 @@
     <item
         android:id="@+id/profileFragment"
         android:title="Profile"
-        android:icon="@drawable/ic_baseline_person_24"
+        android:icon="@drawable/ic_person"
         app:showAsAction="ifRoom"/>
 
 

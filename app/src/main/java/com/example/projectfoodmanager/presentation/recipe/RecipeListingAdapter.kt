@@ -10,8 +10,9 @@ import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.util.FireStorage
-import com.example.projectfoodmanager.util.RecipeDifficultyConstants
-import com.example.projectfoodmanager.viewmodels.RecipeViewModel
+import com.example.projectfoodmanager.util.Helper
+import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
+import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.util.SharedPreference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -77,27 +78,20 @@ class RecipeListingAdapter(
                     val imageURL = Uri.toString()
                     Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
                 }.addOnFailureListener {
-                    Glide.with(binding.imageView.context).load(R.drawable.good_food_display___nci_visuals_online).into(binding.imageView)
+                    Glide.with(binding.imageView.context).load(R.drawable.default_image_display).into(binding.imageView)
                 }
             }
 
-            binding.authorTV.text = item.created_by.name
+            binding.nameAuthorTV.text = formatNameToNameUpper(item.created_by.name)
 
-            if (!item.created_by.verified){
+            if (item.created_by.verified){
+                binding.verifyUserIV.visibility=View.VISIBLE
+            }else{
                 binding.verifyUserIV.visibility=View.INVISIBLE
             }
 
-            if (item.created_by.img_source.contains("avatar")){
-                val avatar= Avatar.getAvatarByName(item.created_by.img_source)
-                binding.authorIV.setImageResource(avatar!!.imgId)
-
-            }else{
-                val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.created_by.img_source}")
-                imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                    Glide.with(binding.authorIV.context).load(Uri.toString()).into(binding.authorIV)
-                }
-            }
-
+            //AUTHOR-> IMG
+            loadUserImage(binding.imgAuthorIV,item.created_by.img_source)
 
             val format = SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH)
             val date: Date? = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.ENGLISH).parse(item.created_date)

@@ -2,10 +2,12 @@ package com.example.projectfoodmanager.presentation.recipe.details
 
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -21,9 +23,11 @@ import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
+import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils
 import com.example.projectfoodmanager.presentation.recipe.comments.CommentsFragment
 import com.example.projectfoodmanager.presentation.recipe.comments.CommentsListingAdapter
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
@@ -62,6 +66,23 @@ class RecipeDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+/*        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val window = requireActivity().window
+            window.decorView.systemUiVisibility = 0
+            window.setDecorFitsSystemWindows(false)
+            val controller = window.insetsController
+            if (controller != null) {
+                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+        }
+
+        requireActivity().window.navigationBarColor = Color.TRANSPARENT
+        requireActivity().window.statusBarColor = Color.TRANSPARENT*/
+
         bindObservers()
 
         return if (this::binding.isInitialized) {
@@ -73,6 +94,10 @@ class RecipeDetailFragment : Fragment() {
             binding.root
         }
     }
+
+
+
+
     @ExperimentalBadgeUtils
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -120,7 +145,6 @@ class RecipeDetailFragment : Fragment() {
     }
 
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun setUI(recipe: Recipe) {
 
 
@@ -181,25 +205,51 @@ class RecipeDetailFragment : Fragment() {
             true
         }*/
 
-        // TODO: Inserir imagem do autor da receita
-        binding.AutorTV.text = recipe.created_by.name
+        //AUTHOR-> NAME
+        binding.nameAuthorTV.text = formatNameToNameUpper(recipe.created_by.name)
 
+        //AUTHOR-> IMG
         if (recipe.created_by.img_source.contains("avatar")){
             val avatar= Avatar.getAvatarByName(recipe.created_by.img_source)
-            binding.autorIV.setImageResource(avatar!!.imgId)
+            binding.imageAuthorIV.setImageResource(avatar!!.imgId)
 
         }else{
             val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${recipe.created_by.img_source}")
             imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                Glide.with(binding.autorIV.context).load(Uri.toString()).into(binding.autorIV)
+                Glide.with(binding.imageAuthorIV.context).load(Uri.toString()).into(binding.imageAuthorIV)
             }
-                .addOnFailureListener {
-                    Glide.with(binding.autorIV.context)
-                        .load(R.drawable.good_food_display___nci_visuals_online)
-                        .into(binding.autorIV)
-                }
+            .addOnFailureListener {
+                Glide.with(binding.imageAuthorIV.context)
+                    .load(R.drawable.img_profile)
+                    .into(binding.imageAuthorIV)
+            }
         }
 
+        //AUTHOR-> VERIFIED
+        if(recipe.created_by.verified){
+            binding.verifyUserIV.visibility = View.VISIBLE
+        }else{
+            binding.verifyUserIV.visibility = View.INVISIBLE
+        }
+
+        binding.profileAuthorCV.setOnClickListener {
+
+     /*       val view : View = layoutInflater.inflate(R.layout.modal_bottom_sheet_profile,null)
+            val dialog = BottomSheetDialog(requireContext())
+            dialog.behavior.state=BottomSheetBehavior.STATE_COLLAPSED
+            dialog.behavior.peekHeight=650
+
+            dialog.setContentView(view)
+            dialog.show()*/
+            //findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,bundle)
+
+            findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,Bundle().apply {
+                putInt("userID",recipe.created_by.id)
+                putString("userName",recipe.created_by.name)
+                putInt("followType",FollowType.FOLLOWERS)
+            })
+
+        }
 
   /*      binding.IVSource.setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
@@ -349,12 +399,9 @@ class RecipeDetailFragment : Fragment() {
 
     }
 
-
     private fun bindObservers() {
 
         // Like function
-
-
         recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let {
                 when (it) {

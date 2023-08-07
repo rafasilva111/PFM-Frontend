@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_recipeListingFragment_to_receitaDetailFragment"
             app:destination="@id/receitaDetailFragment" />
+        <action
+            android:id="@+id/action_recipeListingFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
     </fragment>
 
 
@@ -28,8 +31,10 @@
         tools:layout="@layout/fragment_recipe_detail" >
         <action
             android:id="@+id/action_receitaDetailFragment_to_receitaCommentsFragment"
-            app:destination="@id/receitaCommentsFragment"
-            app:popUpTo="@id/receitaDetailFragment" />
+            app:destination="@id/receitaCommentsFragment"/>
+        <action
+            android:id="@+id/action_receitaDetailFragment_to_followerFragment"
+            app:destination="@id/followerFragment" />
 
     </fragment>
 
@@ -82,6 +87,9 @@
         <action
             android:id="@+id/action_calenderFragment_to_calenderIngredientsFragment"
             app:destination="@id/calenderIngredientsFragment" />
+        <action
+            android:id="@+id/action_calenderFragment_to_calendarEntryDetailFragment"
+            app:destination="@id/calendarEntryDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/goalsFragment"
@@ -116,6 +124,38 @@
         android:name="com.example.projectfoodmanager.presentation.calender.ingredients.CalenderIngredientsFragment"
         android:label="fragment_calender_ingredients"
         tools:layout="@layout/fragment_calender_ingredients" />
+    <fragment
+        android:id="@+id/calendarEntryDetailFragment"
+        android:name="com.example.projectfoodmanager.presentation.calender.CalendarEntryDetailFragment"
+        android:label="fragment_calendar_entry_detail"
+        tools:layout="@layout/fragment_calendar_entry_detail" >
+        <action
+            android:id="@+id/action_calendarEntryDetailFragment_to_receitaDetailFragment"
+            app:destination="@id/receitaDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/followerFragment"
+        android:name="com.example.projectfoodmanager.presentation.follower.FollowerFragment"
+        android:label="fragment_follower"
+        tools:layout="@layout/fragment_follower" >
+        <action
+            android:id="@+id/action_followerFragment_to_followRequestFragment"
+            app:destination="@id/followRequestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/followRequestFragment"
+        android:name="com.example.projectfoodmanager.presentation.follower.FollowRequestFragment"
+        android:label="fragment_follow_request"
+        tools:layout="@layout/fragment_follow_request" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.example.projectfoodmanager.presentation.notification.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" >
+        <action
+            android:id="@+id/action_notificationFragment_to_followRequestFragment"
+            app:destination="@id/followRequestFragment" />
+    </fragment>
 
 
 </navigation>

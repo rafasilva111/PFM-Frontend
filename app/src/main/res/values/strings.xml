@@ -50,7 +50,7 @@
     <string name="recipe_liked">Recipe liked.</string>
     <string name="recipe_removed_liked">Removed like.</string>
     <string name="user_registered_successfully">User registered successfully.</string>
-    <string name="logout_confirmation_description">Are you sure you want to exit!</string>
+    <string name="logout_confirmation_description">Are you sure you want to exit?</string>
     <string name="tab_coment">Comentados</string>
     <string name="tab_created">Criados</string>
     <string name="tab_saved">Guardados</string>
@@ -97,6 +97,15 @@
     <string name="random">Ao calhas</string>
     <string name="most_liked">Mais gostadas</string>
     <string name="date_text">%1$s</string>
+    <string name="followers">Followers</string>
+    <string name="followeds">Followeds</string>
+    <string name="no_followers">No followers</string>
+    <string name="no_followeds">No followeds</string>
+    <string name="name">Name</string>
+    <string name="follow">Follow</string>
+    <string name="follow_remove">Remove</string>
+    <string name="follow_requests">Follow requests</string>
+    <string name="notifications">Notifications</string>
 
     <string-array name="gender_array">
         <item>Masculino</item>

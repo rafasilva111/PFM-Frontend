@@ -2,12 +2,14 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.api.ApiInterface
-import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredientList
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
@@ -136,14 +138,33 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getCalenderIngredients(fromDate = fromDate,toDate = toDate)
 	}
 
+	override suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Unit> {
+		return apiInterface.deleteCalenderEntry(calenderEntryId)
+	}
+
+	override suspend fun pathCalenderEntry(calenderEntryId: Int,calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry> {
+		return apiInterface.pathCalenderEntry(calenderEntryId,calenderPatchRequest)
+	}
+
 	//Followers
 	override suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse> {
 		return apiInterface.createFollower(userSenderId = userSenderId,userReceiverId = userReceiverId)
 	}
-	override suspend fun getFollowers(): Response<FollowList> {
-		return apiInterface.getFollowers()
+	override suspend fun getFollowers(userId: Int): Response<FollowList> {
+
+		if(userId==-1)
+			return apiInterface.getFollowers()
+
+		return apiInterface.getFollowersByUser(userId)
 	}
-	override suspend fun getFolloweds(): Response<FollowList> {
-		return apiInterface.getFolloweds()
+	override suspend fun getFolloweds(userId: Int): Response<FollowList> {
+		if(userId==-1)
+			return apiInterface.getFolloweds()
+
+		return apiInterface.getFollowedsByUser(userId)
+	}
+
+	override suspend fun getFollowRequests(): Response<FollowList> {
+		return apiInterface.getFollowRequests()
 	}
 }

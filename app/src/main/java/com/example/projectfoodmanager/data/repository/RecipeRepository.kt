@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
+import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 
 import com.example.projectfoodmanager.util.Event
@@ -39,4 +40,5 @@ interface RecipeRepository {
     suspend fun getUserLikedRecipes()
     suspend fun getCommentsOnRecipePaginated(recipeId: Int,page: Int)
     suspend fun createCommentOnRecipe(recipeId: Int,comment: CreateCommentRequest)
+
 }

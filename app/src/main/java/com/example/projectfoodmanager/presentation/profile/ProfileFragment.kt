@@ -48,6 +48,7 @@ import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_CODE
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.yalantis.ucrop.UCrop
@@ -115,7 +116,7 @@ class ProfileFragment : Fragment() {
 
             //USER CONFIRMATION DIALOG
             // set the custom layout
-            val dialogBinding : View = layoutInflater.inflate(R.layout.dialog_confirmation_from_user, null);
+/*            val dialogBinding : View = layoutInflater.inflate(R.layout.dialog_confirmation_from_user, null);
 
             val myDialog = Dialog(requireContext())
             myDialog.setContentView(dialogBinding)
@@ -136,7 +137,22 @@ class ProfileFragment : Fragment() {
                 myDialog.dismiss()
             }
 
-            myDialog.show()
+            myDialog.show()*/
+
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setIcon(R.drawable.ic_logout)
+                .setTitle("Logout")
+                .setMessage(resources.getString(R.string.logout_confirmation_description))
+                .setPositiveButton("Sim") { dialog, which ->
+                    // Adicione aqui o código para apagar o registro
+                    authViewModel.logoutUser()
+                }
+                .setNegativeButton("Não") { dialog, which ->
+                    // Adicione aqui o código para cancelar a exclusão do registro
+                    dialog.dismiss()
+                }
+                .show()
 
         }
 
@@ -253,7 +269,7 @@ class ProfileFragment : Fragment() {
 
             // get followers
 
-            authViewModel.getUserFollowees()
+            //authViewModel.getFolloweds()
 
         }
 

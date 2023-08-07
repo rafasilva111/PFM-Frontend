@@ -3,8 +3,10 @@ package com.example.projectfoodmanager.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredientList
 import com.example.projectfoodmanager.data.repository.CalenderRepository
@@ -22,6 +24,7 @@ class CalenderViewModel @Inject constructor(
     val repository: CalenderRepository,
     val sharedPreference: SharedPreference
 ): ViewModel() {
+
 
     private val TAG:String ="CalendarViewModel"
 
@@ -62,5 +65,25 @@ class CalenderViewModel @Inject constructor(
         }
     }
 
+
+    val deleteCalenderEntryLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.deleteCalenderEntry
+
+
+    fun deleteCalenderEntry(calenderEntryId: Int) {
+        viewModelScope.launch {
+            repository.deleteCalenderEntry(calenderEntryId)
+        }
+    }
+
+
+    val pathCalenderEntryLiveData: LiveData<Event<NetworkResult<CalenderEntry>>>
+        get() = repository.pathCalenderEntry
+
+    fun pathCalenderEntry(calenderEntryId: Int,calenderPatchRequest : CalenderEntryPatchRequest) {
+        viewModelScope.launch {
+            repository.pathCalenderEntry(calenderEntryId,calenderPatchRequest)
+        }
+    }
 
 }

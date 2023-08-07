@@ -151,17 +151,12 @@ class AuthRepositoryImp @Inject constructor(
 
 
     private val _userFollowersResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
-    override val userFollowersResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
+    override val userFollowersLiveData: LiveData<Event<NetworkResult<FollowList>>>
         get() = _userFollowersResponseLiveData
 
-    private val _userFolloweesResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
-    override val userFolloweesResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
-        get() = _userFolloweesResponseLiveData
-
-
-    override suspend fun getUserFollowers() {
+    override suspend fun getUserFollowers(idUser: Int) {
         _userFollowersResponseLiveData.postValue(Event(NetworkResult.Loading()))
-        val response = remoteDataSource.getFollowers()
+        val response = remoteDataSource.getFollowers(idUser)
         if (response.isSuccessful && response.code() == 200) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             _userFollowersResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
@@ -178,9 +173,14 @@ class AuthRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun getUserFollowees() {
-        _userFolloweesResponseLiveData.postValue(Event(NetworkResult.Loading()))
-        val response = remoteDataSource.getFolloweds()
+
+    private val _userFollowedsResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
+    override val userFollowedsLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = _userFollowedsResponseLiveData
+
+    override suspend fun getUserFolloweds(userId: Int) {
+        _userFollowedsResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        val response = remoteDataSource.getFolloweds(userId)
         if (response.isSuccessful && response.code() == 200) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             _userFollowersResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
@@ -189,10 +189,33 @@ class AuthRepositoryImp @Inject constructor(
             val errorObj = response.errorBody()!!.charStream().readText()
             Log.i(TAG, "updateUser: request made was not sucessfull: $errorObj")
 
-            _userFolloweesResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+            _userFollowedsResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
         }
         else{
-            _userFolloweesResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            _userFollowedsResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+
+    private val _userFollowRequestsResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
+    override val userFollowRequestsLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = _userFollowRequestsResponseLiveData
+
+    override suspend fun getUserFollowRequests() {
+        _userFollowedsResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        val response = remoteDataSource.getFollowRequests()
+        if (response.isSuccessful && response.code() == 200) {
+            Log.i(TAG, "updateUser: request made was sucessfull.")
+            _userFollowRequestsResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "updateUser: request made was not sucessfull: $errorObj")
+
+            _userFollowRequestsResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _userFollowRequestsResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
     }
 

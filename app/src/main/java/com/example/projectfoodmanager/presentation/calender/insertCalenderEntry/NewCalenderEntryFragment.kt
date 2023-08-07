@@ -1,16 +1,11 @@
 package com.example.projectfoodmanager.presentation.calender.insertCalenderEntry
 
-import android.annotation.SuppressLint
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -19,8 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBinding
@@ -35,12 +29,10 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_KEYBOARD
 import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -55,8 +47,6 @@ class NewCalenderEntryFragment : Fragment() {
     private val calenderViewModel: CalenderViewModel by viewModels()
 
     lateinit var binding: FragmentNewCalenderEntryBinding
-
-    var objCalEntry: CalenderEntry? = null
 
     private var snapHelper: SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
@@ -86,10 +76,17 @@ class NewCalenderEntryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().window.decorView.systemUiVisibility = 8192
+        requireActivity().window.navigationBarColor = requireContext().getColor(R.color.background_1)
+        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
 
         if (this::binding.isInitialized) {
             return binding.root
         } else {
+            requireActivity().window.navigationBarColor = Color.TRANSPARENT
+            requireActivity().window.statusBarColor = Color.TRANSPARENT
+
+
             binding = FragmentNewCalenderEntryBinding.inflate(layoutInflater)
 
             bindObservers()
@@ -105,31 +102,9 @@ class NewCalenderEntryFragment : Fragment() {
         }
     }
 
-    private fun fillTheViewToCalEntry() {
-        //TODO: Mostrar apenas a receita associada
-        //binding.favoritesRV.adapter = adapter.updateList(objCalEntry.recipe)
-
-
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //bindObservers()
-
-        if (Build.VERSION.SDK_INT >= 33) {
-            // TIRAMISU
-            objCalEntry = arguments?.getParcelable("CalenderEntry", CalenderEntry::class.java)
-        } else {
-            objCalEntry = arguments?.getParcelable("CalenderEntry")
-        }
-
-
-        if (objCalEntry!=null){
-            fillTheViewToCalEntry()
-        }
-
-
 
         binding.favoritesRV.adapter = adapter
 
@@ -158,8 +133,6 @@ class NewCalenderEntryFragment : Fragment() {
 
             updateView(--currentTabSelected)
         }
-
-
 
         // form body
         binding.tagCV.setOnClickListener {
@@ -198,8 +171,6 @@ class NewCalenderEntryFragment : Fragment() {
 
         binding.dateValTV.text = selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
 
-
-
         binding.dateCV.setOnTouchListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -217,33 +188,7 @@ class NewCalenderEntryFragment : Fragment() {
         binding.timeValTV.text = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
         binding.timeCV.setOnClickListener {
 
-            val clockFormat = if (is24HourFormat(context)) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
-            val timeNow = LocalTime.now()
-
-            val picker =
-                MaterialTimePicker.Builder()
-                    .setTimeFormat(clockFormat)
-                    .setHour(timeNow.hour)
-                    .setMinute(timeNow.minute)
-                    .setTitleText("Digite a que horário pretende")
-                    .build()
-
-            picker.addOnPositiveButtonClickListener {
-                binding.timeValTV.text= getString(R.string.calender_formated_date,String.format("%02d", picker.hour),String.format("%02d", picker.minute))
-            }
-
-            picker.addOnCancelListener {
-                picker.dismiss()
-            }
-
-
-
-            MaterialTimePicker.Builder().setInputMode(INPUT_MODE_KEYBOARD)
-
-            picker.show(parentFragmentManager, "TimePicker");
-            picker.dialog?.setCanceledOnTouchOutside(false)
-
-
+            showTimePickerDialog()
 
         }
 
@@ -266,14 +211,7 @@ class NewCalenderEntryFragment : Fragment() {
             val (valid,message) = validation()
             if (valid) {
                 val (recipe_id,calenderEntryRequest) = getCalenderEntryRequest()
-                if (objCalEntry != null){
-                    //UPDATE calenderEntry
-                    //TODO:Open dialog to confirmation ACTION
-                    //TODO:Update calEntry
-                }else{
-                    //CREATE calenderEntry
-                    calenderViewModel.createEntryOnCalender(recipe_id,calenderEntryRequest)
-                }
+                calenderViewModel.createEntryOnCalender(recipe_id,calenderEntryRequest)
             }
             else{
                 Toast(context).showCustomToast (message, requireActivity(),ToastType.ALERT)
@@ -283,18 +221,45 @@ class NewCalenderEntryFragment : Fragment() {
         }
     }
 
+    private fun showTimePickerDialog() {
+        val clockFormat =
+            if (is24HourFormat(context)) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
+        val timeNow = LocalTime.now()
+
+        val picker =
+            MaterialTimePicker.Builder()
+                .setTimeFormat(clockFormat)
+                .setHour(timeNow.hour)
+                .setMinute(timeNow.minute)
+                .setTitleText("Digite a que horário pretende")
+                .build()
+
+        picker.addOnPositiveButtonClickListener {
+            binding.timeValTV.text = getString(
+                R.string.calender_formated_date,
+                String.format("%02d", picker.hour),
+                String.format("%02d", picker.minute)
+            )
+        }
+
+        picker.addOnCancelListener {
+            picker.dismiss()
+        }
+
+
+
+        MaterialTimePicker.Builder().setInputMode(INPUT_MODE_KEYBOARD)
+
+        picker.show(parentFragmentManager, "TimePicker");
+        picker.dialog?.setCanceledOnTouchOutside(false)
+    }
+
     private fun showTagDialog() {
         val tags = resources.getStringArray(R.array.tagEntryCalender_array).toList()
         val adapter = ArrayAdapter(requireContext(), R.layout.item_checked_text_view, tags)
 
-        if (objCalEntry!=null){
-            for ((index, tag) in tags.withIndex()) {
-                if(objCalEntry!!.tag.lowercase() == tag.lowercase())
-                    checkedTag=index
-            }
-        }
-
-        val builder = MaterialAlertDialogBuilder(requireActivity(), R.style.MaterialAlertDialog)
+       // val builder = MaterialAlertDialogBuilder(requireActivity(), R.style.MaterialAlertDialog)
+        val builder = MaterialAlertDialogBuilder(requireActivity())
             .setTitle("Selecione a categoria")
             .setPositiveButton("ok") { _, _ ->
                 binding.tagValTV.text = tags[checkedTag]
@@ -312,20 +277,10 @@ class NewCalenderEntryFragment : Fragment() {
     }
 
     private fun showDatePickerDialog(): MaterialDatePicker<Long> {
-        var date: Long? = null
-        if(objCalEntry!=null){
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            date = dateFormat.parse(objCalEntry!!.realization_date) as Nothing?
-        }else{
-            date = MaterialDatePicker.todayInUtcMilliseconds()
-        }
-
-
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Selecione a data")
-                .setTheme(R.style.Widget_AppTheme_MaterialDatePicker)
-                .setSelection(date)
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build()
         datePicker.dialog?.setCanceledOnTouchOutside(false)
 
@@ -405,7 +360,6 @@ class NewCalenderEntryFragment : Fragment() {
         }
     }
 
-
     private fun validation():Pair<Boolean,String> {
 
         val localDateTime  = LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))
@@ -423,11 +377,10 @@ class NewCalenderEntryFragment : Fragment() {
 
     }
 
-    private fun getCalenderEntryRequest(): Pair<Int,CalenderEntryRequest> {
+    private fun getCalenderEntryRequest(): Pair<Int, CalenderEntryRequest> {
         val localDateTime  = LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))
         return recipeRecyclerViewList[manager.findFirstCompletelyVisibleItemPosition()].id to CalenderEntryRequest(tag = binding.tagValTV.text.toString().uppercase(),formatLocalTimeToServerTime(localDateTime))
     }
-
 
     private fun bindObservers() {
 
@@ -470,7 +423,5 @@ class NewCalenderEntryFragment : Fragment() {
         }
 
     }
-
-
 
 }

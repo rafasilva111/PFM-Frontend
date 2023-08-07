@@ -14,5 +14,5 @@ data class CalenderEntry(
     val tag: String,
     val created_date: String,
     val realization_date: String,
-    val checked_done: Boolean
+    var checked_done: Boolean
 ) : Parcelable

@@ -3,42 +3,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_1"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.calender.ingredients.CalenderIngredientsFragment">
+
+    <ImageButton
+        android:id="@+id/backRegIB"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_action_btn"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_back_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/fedoka"
+        android:text="Ingredientes"
+        android:textColor="@color/black"
+        android:textSize="@dimen/subTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/backRegIB"
+        app:layout_constraintStart_toEndOf="@+id/backRegIB"
+        app:layout_constraintTop_toTopOf="@+id/backRegIB" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/backRegIB">
 
         <LinearLayout
-            android:id="@+id/headerCatLL"
+            android:id="@+id/headerFilterCatLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/ic_detail"
-                app:tint="#00A3FF" />
+                android:src="@drawable/ic_filter"
+                app:tint="#7A7A7A" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
                 android:fontFamily="@font/fredoka_regular"
-                android:text="Ingredients List"
+                android:text="Filtrar"
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="@dimen/headerCat"
@@ -48,25 +76,25 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/fromDateCV"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
+            app:cardBackgroundColor="@color/transparent"
             app:cardElevation="0dp"
             app:contentPadding="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/headerCatLL">
+            app:layout_constraintEnd_toEndOf="@+id/headerFilterCatLL"
+            app:layout_constraintStart_toStartOf="@+id/headerFilterCatLL"
+            app:layout_constraintTop_toBottomOf="@+id/headerFilterCatLL">
 
             <LinearLayout
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:paddingStart="20dp"
                 android:paddingEnd="20dp">
 
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_width="17dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:alpha="0.4"
@@ -81,8 +109,9 @@
                     android:fontFamily="@font/fredoka_regular"
                     android:gravity="center_vertical"
                     android:text="From date"
+                    android:textStyle=""
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/from_date_val_TV"
@@ -93,8 +122,9 @@
                     android:fontFamily="@font/fredoka_regular"
                     android:gravity="center_vertical"
                     android:text="00/00/0000"
+                    android:alpha="0.8"
                     android:textAlignment="textEnd"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     tools:ignore="RtlCompat" />
 
                 <ImageView
@@ -120,24 +150,24 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/toDateCV"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:clickable="true"
+            app:cardBackgroundColor="@color/transparent"
             app:cardElevation="0dp"
             app:contentPadding="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/fromDateCV"
+            app:layout_constraintStart_toStartOf="@+id/fromDateCV"
             app:layout_constraintTop_toBottomOf="@+id/view3">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:paddingStart="20dp"
                 android:paddingEnd="20dp">
 
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_width="17dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:alpha="0.4"
@@ -153,7 +183,7 @@
                     android:gravity="center_vertical"
                     android:text="To date"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/to_date_val_TV"
@@ -164,8 +194,9 @@
                     android:fontFamily="@font/fredoka_regular"
                     android:gravity="center_vertical"
                     android:text="00/00/0000"
+                    android:alpha="0.8"
                     android:textAlignment="textEnd"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     tools:ignore="RtlCompat" />
 
                 <ImageView
@@ -186,18 +217,57 @@
         android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="7dp"
+        android:layout_marginTop="10dp"
         android:background="#E3E3E4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout10" />
 
+
+    <LinearLayout
+        android:id="@+id/headerIngredientsListCatLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_add_recipe"
+            app:tint="#7A7A7A" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/fredoka_regular"
+            android:text="Lista de ingredientes"
+            android:textAlignment="gravity"
+            android:textColor="@color/black"
+            android:textSize="@dimen/headerCat"
+            android:layout_marginStart="5dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/calenderIngridientsLV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/view2"
-        tools:layout_editor_absoluteX="0dp">
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerIngredientsListCatLL">
 
     </androidx.recyclerview.widget.RecyclerView>
 

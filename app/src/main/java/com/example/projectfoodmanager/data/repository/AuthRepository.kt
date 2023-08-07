@@ -3,7 +3,6 @@ package com.example.projectfoodmanager.data.repository
 import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.util.Event
@@ -16,9 +15,10 @@ interface AuthRepository {
     val userAuthLiveData: LiveData<Event<NetworkResult<UserAuthResponse>>>
     val userLogoutLiveData: LiveData<Event<NetworkResult<String>>>
     val userLiveData: LiveData<Event<NetworkResult<User>>>
-    val userFollowersResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
-    val userFolloweesResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
+    val userFollowersLiveData: LiveData<Event<NetworkResult<FollowList>>>
+    val userFollowedsLiveData: LiveData<Event<NetworkResult<FollowList>>>
     val userUpdateLiveData: LiveData<Event<NetworkResult<User>>>
+    val userFollowRequestsLiveData: LiveData<Event<NetworkResult<FollowList>>>
 
     //User
     suspend fun registerUser(user : UserRequest)
@@ -26,9 +26,9 @@ interface AuthRepository {
     suspend fun getUserSession()
     suspend fun logoutUser()
     suspend fun updateUser(userRequest: UserRequest)
-    suspend fun getUserFollowers()
-    suspend fun getUserFollowees()
-
+    suspend fun getUserFollowers(idUser: Int)
+    suspend fun getUserFolloweds(id_user: Int)
+    suspend fun getUserFollowRequests()
 
 
 }

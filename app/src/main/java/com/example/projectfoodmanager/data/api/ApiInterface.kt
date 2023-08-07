@@ -1,12 +1,14 @@
 package com.example.projectfoodmanager.data.api
 
 
-import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredientList
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
@@ -119,6 +121,12 @@ interface ApiInterface {
     @GET("$API_V1_BASE_URL/calendar/ingredients/list")
     suspend fun getCalenderIngredients(@Query("from_date") fromDate: String,@Query("to_date") toDate: String): Response<CalenderIngredientList>
 
+    @DELETE("$API_V1_BASE_URL/calendar")
+    suspend fun deleteCalenderEntry(@Query("id") calenderEntryId: Int): Response<Unit>
+
+    @PATCH("$API_V1_BASE_URL/calendar")
+    suspend fun pathCalenderEntry(@Query("id") calenderEntryId: Int,@Body calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
+
 
     //followers
 
@@ -126,11 +134,19 @@ interface ApiInterface {
     suspend fun createFollower(@Query("userSenderId") userSenderId: Int,@Query("userReceiverId") userReceiverId: Int): Response<FollowerResponse>
 
     @GET("$API_V1_BASE_URL/follow/list/followers")
+    suspend fun getFollowersByUser(@Query("user_Id") userId: Int): Response<FollowList>
+
+    @GET("$API_V1_BASE_URL/follow/list/followers")
     suspend fun getFollowers(): Response<FollowList>
 
     @GET("$API_V1_BASE_URL/follow/list/followeds")
     suspend fun getFolloweds(): Response<FollowList>
 
+    @GET("$API_V1_BASE_URL/follow/list/followeds")
+    suspend fun getFollowedsByUser(@Query("user_Id") userId: Int): Response<FollowList>
+
+    @GET("$API_V1_BASE_URL/follow/requests/list")
+    suspend fun getFollowRequests(): Response<FollowList>
 
 
 }

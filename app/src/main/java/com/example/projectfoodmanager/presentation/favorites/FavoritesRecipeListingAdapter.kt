@@ -88,22 +88,26 @@ class FavoritesRecipeListingAdapter(
             //------- AUTOR DA RECIPE -------
 
             // todo rafael fix esta merda
-            if (item.created_by != null) {
-                binding.authorTV.text = item.created_by.name
+            binding.nameAuthorTV.text = item.created_by.name
 
-                if (!item.created_by.verified) {
-                    binding.verifyUserIV.visibility = View.INVISIBLE
+            if (!item.created_by.verified) {
+                binding.verifyUserIV.visibility = View.INVISIBLE
+            }
+
+            //AUTHOR-> IMG
+            if (item.created_by.img_source.contains("avatar")){
+                val avatar= Avatar.getAvatarByName(item.created_by.img_source)
+                binding.imgAuthorIV.setImageResource(avatar!!.imgId)
+
+            }else{
+                val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.created_by.img_source}")
+                imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                    Glide.with(binding.imgAuthorIV.context).load(Uri.toString()).into(binding.imgAuthorIV)
                 }
-
-                if (item.created_by.img_source.contains("avatar")) {
-                    val avatar = Avatar.getAvatarByName(item.created_by.img_source)
-                    binding.authorIV.setImageResource(avatar!!.imgId)
-
-                } else {
-                    Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.created_by.img_source}").downloadUrl.addOnSuccessListener { Uri ->
-                        Glide.with(binding.authorIV.context).load(Uri.toString())
-                            .into(binding.authorIV)
-                    }
+                .addOnFailureListener {
+                    Glide.with(binding.imgAuthorIV.context)
+                        .load(R.drawable.img_profile)
+                        .into(binding.imgAuthorIV)
                 }
             }
 
@@ -117,6 +121,8 @@ class FavoritesRecipeListingAdapter(
             binding.recipeDescriptionTV.text = item.description.toString()
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
             binding.nLikeTV.text = item.likes.toString()
+
+
 
             //------- RECEITA VERIFICADA OU NÃO -------
             if (!item.verified){
@@ -163,7 +169,7 @@ class FavoritesRecipeListingAdapter(
                     binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
                 }
                 else
-                    binding.favoritesIB.setImageResource(R.drawable.ic_favorito_black)
+                    binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
             }
 
             binding.favoritesIB.setOnClickListener {
