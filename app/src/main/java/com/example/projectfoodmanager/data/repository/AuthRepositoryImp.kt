@@ -7,6 +7,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -178,9 +179,9 @@ class AuthRepositoryImp @Inject constructor(
     override val userFollowedsLiveData: LiveData<Event<NetworkResult<FollowList>>>
         get() = _userFollowedsResponseLiveData
 
-    override suspend fun getUserFolloweds(userId: Int) {
+    override suspend fun getUserFolloweds(id_user: Int) {
         _userFollowedsResponseLiveData.postValue(Event(NetworkResult.Loading()))
-        val response = remoteDataSource.getFolloweds(userId)
+        val response = remoteDataSource.getFolloweds(id_user)
         if (response.isSuccessful && response.code() == 200) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             _userFollowersResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
@@ -219,4 +220,28 @@ class AuthRepositoryImp @Inject constructor(
         }
     }
 
+
+    private val _getUserRecipesBackgroundLiveData = MutableLiveData<Event<NetworkResult<UserRecipeBackgrounds>>>()
+    override val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
+        get() = _getUserRecipesBackgroundLiveData
+
+    override suspend fun getUserRecipesBackground() {
+        _getUserRecipesBackgroundLiveData.postValue(Event(NetworkResult.Loading()))
+        val response = remoteDataSource.getUserRecipesBackground()
+        if (response.isSuccessful && response.code() == 200) {
+            sharedPreference.saveUserRecipesSession(response.body()!!)
+            Log.i(TAG, "updateUser: request made was sucessfull.")
+            _getUserRecipesBackgroundLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "updateUser: request made was not sucessfull: $errorObj")
+
+            _getUserRecipesBackgroundLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _getUserRecipesBackgroundLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+
+    }
 }

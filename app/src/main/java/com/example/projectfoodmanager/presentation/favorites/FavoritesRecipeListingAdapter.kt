@@ -11,6 +11,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.util.FireStorage
+import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.firebase.ktx.Firebase
@@ -77,10 +78,9 @@ class FavoritesRecipeListingAdapter(
 
         fun bind(item: Recipe) {
             //binding.authorTV.text = item.company
-            // todo ver com o rui
             //------- IMAGEM DA RECIPE -------
-            val imgRef = Firebase.storage.reference.child(item.img_source)
-            imgRef.downloadUrl.addOnSuccessListener { Uri ->
+            val imgRecipeRef = Firebase.storage.reference.child(item.img_source)
+            imgRecipeRef.downloadUrl.addOnSuccessListener { Uri ->
                 val imageURL = Uri.toString()
                 Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
             }
@@ -113,10 +113,8 @@ class FavoritesRecipeListingAdapter(
 
 
             //------- INFOS DA RECIPE -------
-            val format = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-            val date: Date? = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(item.created_date)
 
-            binding.dateTV.text = format.format(date!!)
+            binding.dateTV.text = formatServerTimeToDateString(item.created_date)
             binding.recipeTitleTV.text = item.title
             binding.recipeDescriptionTV.text = item.description.toString()
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }

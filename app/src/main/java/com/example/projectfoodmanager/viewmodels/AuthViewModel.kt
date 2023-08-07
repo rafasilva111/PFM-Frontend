@@ -7,6 +7,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.repository.AuthRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -96,6 +97,15 @@ class AuthViewModel @Inject constructor(
     fun getFollowRequests(){
         viewModelScope.launch {
             repository.getUserFollowRequests()
+        }
+    }
+
+    val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
+        get() = repository.getUserRecipesBackground
+
+    fun getUserRecipesBackground() {
+        viewModelScope.launch {
+            repository.getUserRecipesBackground()
         }
     }
 

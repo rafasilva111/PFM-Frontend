@@ -5,6 +5,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 
@@ -19,6 +20,7 @@ interface AuthRepository {
     val userFollowedsLiveData: LiveData<Event<NetworkResult<FollowList>>>
     val userUpdateLiveData: LiveData<Event<NetworkResult<User>>>
     val userFollowRequestsLiveData: LiveData<Event<NetworkResult<FollowList>>>
+    val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
 
     //User
     suspend fun registerUser(user : UserRequest)
@@ -29,6 +31,7 @@ interface AuthRepository {
     suspend fun getUserFollowers(idUser: Int)
     suspend fun getUserFolloweds(id_user: Int)
     suspend fun getUserFollowRequests()
+    suspend fun getUserRecipesBackground()
 
 
 }

@@ -18,6 +18,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import retrofit2.Response
 
 interface RemoteDataSource {
@@ -30,6 +31,7 @@ interface RemoteDataSource {
 	suspend fun getUserById(userId: Int): Response<UserAuthResponse>
 	suspend fun updateUser(user: UserRequest): Response<User>
 	suspend fun deleteUser(userId: Int): Response<String>
+	suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
 
 
 	//recipe
@@ -67,6 +69,7 @@ interface RemoteDataSource {
 	suspend fun getFollowers(userId: Int): Response<FollowList>
 	suspend fun getFolloweds(idUser: Int): Response<FollowList>
 	suspend fun getFollowRequests(): Response<FollowList>
+
 
 
 }

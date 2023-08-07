@@ -92,7 +92,7 @@ class RecipeCalenderEntryListingAdapter(
 
             if (user==null)
                 user= sharedPreference.getUserSession()
-            
+
             binding.dateTV.text = formatServerTimeToDateString(item.created_date)
             binding.recipeTitleTV.text = item.title
             binding.recipeDescriptionTV.text = item.description.toString()

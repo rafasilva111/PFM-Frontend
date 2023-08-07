@@ -18,6 +18,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResp
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import retrofit2.Response
 import retrofit2.http.*
 const val API_V1_BASE_URL = "api/v1"
@@ -40,14 +41,19 @@ interface ApiInterface {
     @POST("$API_V1_BASE_URL/user")
     suspend fun patchUser(@Body user : UserRequest): Response<Unit>
 
-    @GET("/user")
+    @GET("$API_V1_BASE_URL/user")
     suspend fun getUser(@Query("id") userId: Int): Response<UserAuthResponse>
 
     @PATCH("$API_V1_BASE_URL/user")
     suspend fun updateUser(@Body user : UserRequest): Response<User>
 
-    @DELETE("/user")
+    @DELETE("$API_V1_BASE_URL/user")
     suspend fun deleteUser(@Query("id") userId: Int): Response<String>
+
+
+    @GET("$API_V1_BASE_URL/auth/recipes")
+    suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
+
 
     //recipe
     @POST("$API_V1_BASE_URL/recipe")
@@ -147,6 +153,9 @@ interface ApiInterface {
 
     @GET("$API_V1_BASE_URL/follow/requests/list")
     suspend fun getFollowRequests(): Response<FollowList>
+
+
+
 
 
 }
