@@ -9,6 +9,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
+import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.SharedPreference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -91,12 +92,8 @@ class RecipeCalenderEntryListingAdapter(
 
             if (user==null)
                 user= sharedPreference.getUserSession()
-
-
-            val format = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-            val date: Date? = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(item.created_date)
-
-            binding.dateTV.text = format.format(date!!)
+            
+            binding.dateTV.text = formatServerTimeToDateString(item.created_date)
             binding.recipeTitleTV.text = item.title
             binding.recipeDescriptionTV.text = item.description.toString()
             binding.itemLayout.setOnClickListener {

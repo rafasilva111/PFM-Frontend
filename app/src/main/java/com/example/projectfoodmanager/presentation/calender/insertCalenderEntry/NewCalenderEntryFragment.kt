@@ -1,6 +1,7 @@
 package com.example.projectfoodmanager.presentation.calender.insertCalenderEntry
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
@@ -59,6 +60,8 @@ class NewCalenderEntryFragment : Fragment() {
     lateinit var user: User
     private var currentTabSelected :Int = 0
 
+    private var objRecipe: Recipe? = null
+
 
     private val adapter by lazy {
         RecipeCalenderEntryListingAdapter(
@@ -85,6 +88,15 @@ class NewCalenderEntryFragment : Fragment() {
         } else {
             requireActivity().window.navigationBarColor = Color.TRANSPARENT
             requireActivity().window.statusBarColor = Color.TRANSPARENT
+
+
+            // when objRecipe is supplied from recipeDetail
+            objRecipe = if (Build.VERSION.SDK_INT >= 33) {
+                // TIRAMISU
+                arguments?.getParcelable("Recipe", Recipe::class.java)
+            } else {
+                arguments?.getParcelable("Recipe")
+            }
 
 
             binding = FragmentNewCalenderEntryBinding.inflate(layoutInflater)
@@ -115,12 +127,19 @@ class NewCalenderEntryFragment : Fragment() {
         // default list
         try {
             user = sharedPreference.getUserSession()
-            updateView(currentTabSelected)
         } catch (e: Exception) {
             Log.d(TAG, "onViewCreated: User had no shared prefences...")
             // se não tiver shared preferences o user não tem sessão válida
             //tera um comportamento diferente offilne
             authViewModel.logoutUser()
+        }
+
+        // se viewer recipe
+        if (objRecipe == null){
+            updateView(currentTabSelected)
+        }
+        else{
+            updateView(3)
         }
 
         // change listing items
@@ -130,7 +149,6 @@ class NewCalenderEntryFragment : Fragment() {
         }
 
         binding.previousBtn.setOnClickListener {
-
             updateView(--currentTabSelected)
         }
 
@@ -336,9 +354,9 @@ class NewCalenderEntryFragment : Fragment() {
                 // criados
                 // tab title
                 binding.listingTV.text = "Criados"
-                // todo rui falta aqui um icon para os creados
+                // todo rui falta aqui um icon para os criados
                 binding.listingIV.setImageResource(R.drawable.ic_favorito_active)
-                binding.nextBtn.visibility = View.GONE
+
 
                 //list
                 val recipes = user.getCreateRecipes()
@@ -354,7 +372,26 @@ class NewCalenderEntryFragment : Fragment() {
                 adapter.updateList(recipeRecyclerViewList, user)
 
             }
-            else->{
+            3 ->{
+                // todas as receitas
+                // tab title
+                binding.listingTV.text = "Todas as receitas"
+                // todo rui falta aqui um icon para todas as receitas
+                binding.listingIV.setImageResource(R.drawable.ic_baseline_menu_book_24)
+                binding.nextBtn.visibility = View.GONE
+
+                //list
+                // todo rafa get all recipes
+                if(objRecipe == null){
+
+                }
+                else{
+                    recipeRecyclerViewList = mutableListOf()
+                    recipeRecyclerViewList.add(objRecipe!!)
+                    adapter.updateList(recipeRecyclerViewList, user)
+                }
+
+
 
             }
         }

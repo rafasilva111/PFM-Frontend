@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_receitaDetailFragment_to_followerFragment"
             app:destination="@id/followerFragment" />
+        <action
+            android:id="@+id/action_receitaDetailFragment_to_newCalenderEntryFragment"
+            app:destination="@id/newCalenderEntryFragment" />
 
     </fragment>
 
