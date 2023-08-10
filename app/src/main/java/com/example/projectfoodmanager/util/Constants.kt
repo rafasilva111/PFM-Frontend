@@ -15,6 +15,12 @@ object Constants {
     const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"
     const val PREFS_TOKEN_FILE = "prefs_token_file"
 }
+object FIREBASE_NOTIFICATIONS {
+    const val BASE_URL = "https://fcm.googleapis.com"
+    const val SERVER_KEY = "AAAA9vy8Bpg:APA91bHyfumwp_y_Gnv3qVb5h19WTpM2EfZ_a6Un6CoIhJ6KCSO3nyx10ip2eg9i4lM0_K79krSoVp6PoiKk3SWUQP1LxnYZ9KYQcEM9Q_ofCxsfhf-ragQiC9U3fPBOaALxAKcZ5VLR"
+    const val CONTENT_TYPE = "application/json"
+}
+
 
 object SharedPreferencesConstants{
     const val USER_SESSION = "user_session"

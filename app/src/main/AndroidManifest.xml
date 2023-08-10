@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"  tools:node="replace"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -34,20 +35,25 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="fullSensor"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <service android:name=".di.FirebaseService"
+            android:exported="false"
+            android:permission="com.google.android.c2dm.permission.SEND"
+            >
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.android.c2dm.permission.RECEIVE"/>
+            </intent-filter>
 
+        </service>
 
         <provider
             android:authorities="${applicationId}.provider"
             android:name="androidx.core.content.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
-
-
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/fileproviderpaths">
-
             </meta-data>
-
         </provider>
     </application>
 

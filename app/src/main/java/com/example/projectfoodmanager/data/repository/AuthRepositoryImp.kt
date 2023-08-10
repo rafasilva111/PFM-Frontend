@@ -205,7 +205,7 @@ class AuthRepositoryImp @Inject constructor(
     override suspend fun getUserFollowRequests() {
         _userFollowedsResponseLiveData.postValue(Event(NetworkResult.Loading()))
         val response = remoteDataSource.getFollowRequests()
-        if (response.isSuccessful && response.code() == 200) {
+        if (response.isSuccessful) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             _userFollowRequestsResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
         }
