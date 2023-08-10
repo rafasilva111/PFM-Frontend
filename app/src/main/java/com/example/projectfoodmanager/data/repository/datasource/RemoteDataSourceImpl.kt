@@ -20,6 +20,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.util.FollowType
 import retrofit2.Response
 import javax.inject.Inject

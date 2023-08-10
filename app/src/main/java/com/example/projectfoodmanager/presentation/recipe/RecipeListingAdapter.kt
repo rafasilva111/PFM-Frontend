@@ -100,8 +100,6 @@ class RecipeListingAdapter(
             binding.dateTV.text = formatServerTimeToDateString(item.created_date)
             binding.recipeTitleTV.text = item.title
 
-            binding.dateTV.text = formatLocalDateToFormatDate(formatServerTimeToLocalDateTime(item.created_date))
-
             // string -> localTimeDate
             binding.recipeDescriptionTV.text = item.description
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }

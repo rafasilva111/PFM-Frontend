@@ -70,9 +70,6 @@ class Helper {
             return localTime.format(DateTimeFormatter.ofPattern("HH:mm"))
         }
 
-        fun formatServerTimeToLocalDateTime(localDateTimeString: String): LocalDateTime{
-            return LocalDateTime.parse(localDateTimeString, DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"))
-        }
 
         fun isOnline(context: Context): Boolean {
             val connectivityManager =

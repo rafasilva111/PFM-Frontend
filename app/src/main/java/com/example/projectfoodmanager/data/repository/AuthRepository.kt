@@ -23,7 +23,7 @@ interface AuthRepository {
     val postUserAcceptFollowRequest: LiveData<Event<NetworkResult<Int>>>
     val postUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
     val deleteUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
-
+    val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
 
     //User
     suspend fun registerUser(user : UserRequest)
@@ -37,4 +37,5 @@ interface AuthRepository {
     suspend fun postUserAcceptFollowRequest(idUser: Int)
     suspend fun deleteUserFollowRequest(followType: Int, userId: Int)
     suspend fun postUserFollowRequest(userId: Int)
+    suspend fun getUserRecipesBackground()
 }

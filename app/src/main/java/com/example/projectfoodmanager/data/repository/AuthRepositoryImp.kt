@@ -150,6 +150,32 @@ class AuthRepositoryImp @Inject constructor(
 
     }
 
+    private val _getUserRecipesBackgroundLiveData = MutableLiveData<Event<NetworkResult<UserRecipeBackgrounds>>>()
+    override val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
+        get() = _getUserRecipesBackgroundLiveData
+
+    override suspend fun getUserRecipesBackground() {
+        _getUserRecipesBackgroundLiveData.postValue(Event(NetworkResult.Loading()))
+        val response = remoteDataSource.getUserRecipesBackground()
+        if (response.isSuccessful) {
+            sharedPreference.saveUserRecipesSession(response.body()!!)
+            Log.i(TAG, "updateUser: request made was sucessfull.")
+            _getUserRecipesBackgroundLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "updateUser: request made was not sucessfull: $errorObj")
+
+            _getUserRecipesBackgroundLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _getUserRecipesBackgroundLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+
+    }
+
+
+
 
     private val _userFollowersResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
     override val getUserFollowers: LiveData<Event<NetworkResult<FollowList>>>

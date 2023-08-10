@@ -22,6 +22,7 @@ import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToFormatTime
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
+import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.viewmodels.CalenderViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -109,7 +110,7 @@ class CalendarEntryDetailFragment : Fragment() {
         }
 
         //--> DATE
-        binding.dateTV.text =formatLocalDateToFormatDate(Helper.formatServerTimeToLocalDateTime(objCalEntry.recipe.created_date))
+        binding.dateTV.text =formatServerTimeToDateString(objCalEntry.recipe.created_date)
 
         //--> ID
         binding.idTV.text = objCalEntry.recipe.id.toString()

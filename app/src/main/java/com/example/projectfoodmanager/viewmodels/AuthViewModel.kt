@@ -73,6 +73,15 @@ class AuthViewModel @Inject constructor(
     }
 
 
+    val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
+        get() = repository.getUserRecipesBackground
+
+    fun getUserRecipesBackground() {
+        viewModelScope.launch {
+            repository.getUserRecipesBackground()
+        }
+    }
+
     //---------- FOLLOW -------------
 
     //GET followers by userID or authenticated user
