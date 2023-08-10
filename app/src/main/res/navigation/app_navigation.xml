@@ -115,7 +115,11 @@
         android:id="@+id/settingsFragment"
         android:name="com.example.projectfoodmanager.presentation.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_blankFragment"
+            app:destination="@id/blankFragment" />
+    </fragment>
     <fragment
         android:id="@+id/updateBiodata"
         android:name="com.example.projectfoodmanager.presentation.goals.UpdateBiodata"
@@ -182,5 +186,10 @@
             android:id="@+id/action_profileBottomSheetDialog_to_followerFragment"
             app:destination="@id/followerFragment" />
     </dialog>
+    <fragment
+        android:id="@+id/blankFragment"
+        android:name="com.example.projectfoodmanager.BlankFragment"
+        android:label="fragment_blank"
+        tools:layout="@layout/fragment_blank" />
 
 </navigation>

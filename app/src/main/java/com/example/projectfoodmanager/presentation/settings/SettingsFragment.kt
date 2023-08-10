@@ -32,6 +32,9 @@ class SettingsFragment : Fragment() {
         binding.backIB.setOnClickListener {
             findNavController().navigateUp()
         }
+        binding.CL6.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_blankFragment)
+        }
 
     }
 

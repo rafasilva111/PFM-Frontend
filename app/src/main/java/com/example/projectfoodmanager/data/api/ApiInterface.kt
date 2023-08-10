@@ -21,9 +21,12 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import retrofit2.Response
 import retrofit2.http.*
-const val API_V1_BASE_URL = "api/v1"
 
 interface ApiInterface {
+
+    companion object{
+        const val API_V1_BASE_URL = "api/v1"
+    }
 
     //user
     @POST("$API_V1_BASE_URL/auth")
