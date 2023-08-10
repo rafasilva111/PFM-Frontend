@@ -116,7 +116,7 @@ class Helper {
                 Glide.with(recipeIV.context).load(imageURL).into(recipeIV)
             }
             .addOnFailureListener {
-                recipeIV.setImageResource(R.drawable.img_profile)
+                recipeIV.setImageResource(R.drawable.default_image_display)
             }
 
         }
