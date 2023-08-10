@@ -28,8 +28,10 @@ import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.changeVisibilityMenu
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
+import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
@@ -85,7 +87,7 @@ class RecipeListingFragment : Fragment() {
                     putParcelable("Recipe",item)
                 })
 
-                changeVisibilityMenu(false)
+                changeVisibilityMenu(false,activity)
             },
             onLikeClicked = {item,like ->
                 if(like){
@@ -118,7 +120,7 @@ class RecipeListingFragment : Fragment() {
         return if (this::binding.isInitialized){
             binding.root
         }else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+           /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 val window = requireActivity().window
                 window.decorView.systemUiVisibility = 8192
                 window.setDecorFitsSystemWindows(true)
@@ -133,7 +135,7 @@ class RecipeListingFragment : Fragment() {
             }
 
             requireActivity().window.navigationBarColor = requireContext().getColor(R.color.main_color)
-            requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
+            requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)*/
 
             binding = FragmentRecipeListingBinding.inflate(layoutInflater)
             manager = LinearLayoutManager(activity)
@@ -199,7 +201,7 @@ class RecipeListingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        changeVisibilityMenu(true)
+        changeVisibilityMenu(true,activity)
 
         //Get User in SharedPreferences
         val user = sharedPreference.getUserSession()
@@ -217,17 +219,7 @@ class RecipeListingFragment : Fragment() {
             binding.verifyUserHeaderIV.visibility=View.VISIBLE
 
         //Set Profile Image
-        if (user.img_source.contains("avatar")){
-            val avatar= Avatar.getAvatarByName(user.img_source)
-            binding.ivProfilePic.setImageResource(avatar!!.imgId)
-
-        }else{
-            val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${user.img_source}")
-            imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                Glide.with(binding.ivProfilePic.context).load(Uri.toString()).into(binding.ivProfilePic)
-            }
-
-        }
+        loadUserImage(binding.ivProfilePic,user.img_source)
 
 
         if (isOnline(view.context)) {
@@ -281,7 +273,7 @@ class RecipeListingFragment : Fragment() {
             //Go to Notifications Fragment
             binding.notificationIV.setOnClickListener {
                 findNavController().navigate(R.id.action_recipeListingFragment_to_notificationFragment)
-                changeVisibilityMenu(false)
+                changeVisibilityMenu(false,activity)
             }
 
             //Tag filter
@@ -746,18 +738,25 @@ class RecipeListingFragment : Fragment() {
         }
     }
 
-    private fun changeVisibilityMenu(state : Boolean){
-        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-
-        if(state){
-            menu!!.visibility=View.VISIBLE
-        }else{
-            menu!!.visibility=View.GONE
-        }
-    }
-
     override fun onResume() {
         super.onResume()
+        val window = requireActivity().window
+
+
+        //BACKGROUND in NAVIGATION BAR
+        window.statusBarColor = requireContext().getColor(R.color.background_1)
+        window.navigationBarColor = requireContext().getColor(R.color.main_color)
+
+        //TextColor in NAVIGATION BAR
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = 0
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
     }
 
 

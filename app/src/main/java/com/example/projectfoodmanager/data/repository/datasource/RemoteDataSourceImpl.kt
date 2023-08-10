@@ -20,6 +20,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.util.FollowType
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -142,16 +143,16 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.deleteCalenderEntry(calenderEntryId)
 	}
 
-	override suspend fun pathCalenderEntry(calenderEntryId: Int,calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry> {
-		return apiInterface.pathCalenderEntry(calenderEntryId,calenderPatchRequest)
+	override suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry> {
+		return apiInterface.patchCalenderEntry(calenderEntryId,calenderPatchRequest)
 	}
 
 	//Followers
 	override suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse> {
 		return apiInterface.createFollower(userSenderId = userSenderId,userReceiverId = userReceiverId)
 	}
-	override suspend fun getFollowers(userId: Int): Response<FollowList> {
 
+	override suspend fun getFollowers(userId: Int): Response<FollowList> {
 		if(userId==-1)
 			return apiInterface.getFollowers()
 
@@ -166,5 +167,21 @@ class RemoteDataSourceImpl @Inject constructor(
 
 	override suspend fun getFollowRequests(): Response<FollowList> {
 		return apiInterface.getFollowRequests()
+	}
+
+	override suspend fun postAcceptFollowRequest(userId: Int): Response<Unit> {
+		return apiInterface.postAcceptFollowRequest(userId)
+	}
+
+	override suspend fun deleteFollowRequest(followType:Int, userId: Int): Response<Unit> {
+		when(followType){
+			FollowType.FOLLOWERS -> return apiInterface.deleteFollowerRequest(userId)
+			FollowType.FOLLOWEDS -> return apiInterface.deleteFollowedRequest(userId)
+			else -> return apiInterface.deleteAcceptFollowRequest(userId)
+		}
+	}
+
+	override suspend fun postFollowRequest(userId: Int): Response<Unit> {
+		return apiInterface.postFollowRequest(userId)
 	}
 }

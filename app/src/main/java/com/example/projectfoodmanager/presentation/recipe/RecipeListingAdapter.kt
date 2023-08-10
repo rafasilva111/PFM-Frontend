@@ -11,12 +11,16 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.util.FireStorage
 import com.example.projectfoodmanager.util.Helper
+import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
+import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToLocalDateTime
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.util.SharedPreference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -72,32 +76,32 @@ class RecipeListingAdapter(
 
     inner class MyViewHolder(private val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Recipe) {
-            if (!item.img_source.isNullOrEmpty()){
-                val imgRef = Firebase.storage.reference.child(item.img_source)
-                imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                    val imageURL = Uri.toString()
-                    Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
-                }.addOnFailureListener {
-                    Glide.with(binding.imageView.context).load(R.drawable.default_image_display).into(binding.imageView)
-                }
-            }
 
+            //Load Author img
+            loadUserImage(binding.imgAuthorIV,item.created_by.img_source)
+
+            //Load Author name
             binding.nameAuthorTV.text = formatNameToNameUpper(item.created_by.name)
 
+            //Validate that the author is verified
             if (item.created_by.verified){
                 binding.verifyUserIV.visibility=View.VISIBLE
             }else{
                 binding.verifyUserIV.visibility=View.INVISIBLE
             }
 
-            //AUTHOR-> IMG
-            loadUserImage(binding.imgAuthorIV,item.created_by.img_source)
+            if (!item.img_source.isEmpty()){
+                //-> Load Recipe img
+                Helper.loadRecipeImage(binding.imageView,item.img_source)
+            }
 
-            val format = SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH)
-            val date: Date? = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.ENGLISH).parse(item.created_date)
 
-            binding.dateTV.text = format.format(date!!)
+
             binding.recipeTitleTV.text = item.title
+
+            binding.dateTV.text = formatLocalDateToFormatDate(formatServerTimeToLocalDateTime(item.created_date))
+
+            // string -> localTimeDate
             binding.recipeDescriptionTV.text = item.description
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
             binding.nLikeTV.text = item.likes.toString()
@@ -136,7 +140,6 @@ class RecipeListingAdapter(
             binding.portionTV.text = item.portion
 */
 
-
             //--------- LIKES ---------
             if(user.checkIfLiked(item) != -1){
                 binding.likeIB.setImageResource(R.drawable.ic_like_active)
@@ -161,7 +164,7 @@ class RecipeListingAdapter(
                 binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
             }
             else
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorite_noclick)
+                binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
 
             binding.favoritesIB.setOnClickListener {
                 if(user.checkIfSaved(item) == -1) {

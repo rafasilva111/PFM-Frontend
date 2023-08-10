@@ -142,29 +142,30 @@ class CalenderRepositoryImp @Inject constructor(
         }
         else{
             _functionDeleteCalenderEntry.postValue(Event(NetworkResult.Error("Something Went Wrong")))
-        }    }
+        }
+    }
 
-    private val _functionPathCalenderEntry = MutableLiveData<Event<NetworkResult<CalenderEntry>>>()
-    override val pathCalenderEntry: LiveData<Event<NetworkResult<CalenderEntry>>>
-        get() = _functionPathCalenderEntry
+    private val _functionPatchCalenderEntry = MutableLiveData<Event<NetworkResult<CalenderEntry>>>()
+    override val patchCalenderEntry: LiveData<Event<NetworkResult<CalenderEntry>>>
+        get() = _functionPatchCalenderEntry
 
 
-    override suspend fun pathCalenderEntry(calenderEntryId: Int,calenderPatchRequest : CalenderEntryPatchRequest) {
-        _functionPathCalenderEntry.postValue(Event(NetworkResult.Loading()))
+    override suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest) {
+        _functionPatchCalenderEntry.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.pathCalenderEntry(calenderEntryId,calenderPatchRequest)
+        val response =remoteDataSource.patchCalenderEntry(calenderEntryId,calenderPatchRequest)
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             //TODO: Rafa path calenderEntry da shared preferences ??
-            _functionPathCalenderEntry.postValue(Event(NetworkResult.Success(response.body()!!
+            _functionPatchCalenderEntry.postValue(Event(NetworkResult.Success(response.body()!!
             )))
         }
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()
             Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
-            _functionPathCalenderEntry.postValue(Event(NetworkResult.Error(errorObj)))
+            _functionPatchCalenderEntry.postValue(Event(NetworkResult.Error(errorObj)))
         }
         else{
-            _functionPathCalenderEntry.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            _functionPatchCalenderEntry.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }    }
 }

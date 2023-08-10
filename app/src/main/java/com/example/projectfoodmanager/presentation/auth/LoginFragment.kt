@@ -39,23 +39,6 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val window = requireActivity().window
-            window.decorView.systemUiVisibility = 0
-            window.setDecorFitsSystemWindows(true)
-            val controller = window.insetsController
-            if (controller != null) {
-                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
-        } else {
-            @Suppress("DEPRECATION")
-            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, true)
-        }
-
-        requireActivity().window.navigationBarColor = requireContext().getColor(R.color.main_color)
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
-
         binding = FragmentLoginBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -115,17 +98,6 @@ class LoginFragment : Fragment() {
             binding.passwordTL.isErrorEnabled=false
         }
         return isValid
-    }
-
-
-
-    private fun changeVisib_Menu(state : Boolean){
-        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        if(state){
-            menu!!.visibility=View.VISIBLE
-        }else{
-            menu!!.visibility=View.GONE
-        }
     }
 
     private fun showValidationErrors(error: String) {
@@ -201,49 +173,24 @@ class LoginFragment : Fragment() {
 
 
     override fun onResume() {
-
-        // decaprecated after api 30
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val window = requireActivity().window
-            window.decorView.systemUiVisibility = 0
-            window.setDecorFitsSystemWindows(true)
-            val controller = window.insetsController
-            if (controller != null) {
-                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
-        } else {
-            @Suppress("DEPRECATION")
-            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, true)
-        }
-
-        requireActivity().window.navigationBarColor = requireContext().getColor(R.color.main_color)
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
-        changeVisib_Menu(false)
-
         super.onResume()
-    }
 
-    override fun onPause() {
+        val window = requireActivity().window
+
+        //BACKGROUND in NAVIGATION BAR
+        window.statusBarColor = requireContext().getColor(R.color.main_color)
+        window.navigationBarColor = requireContext().getColor(R.color.main_color)
+
+        //TextColor in NAVIGATION BAR
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val window = requireActivity().window
-            window.decorView.systemUiVisibility = 0
-            window.setDecorFitsSystemWindows(true)
-            val controller = window.insetsController
-            if (controller != null) {
-                controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
+            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
         } else {
             @Suppress("DEPRECATION")
-            requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, true)
+            window.decorView.systemUiVisibility = 0
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
 
-        requireActivity().window.navigationBarColor = requireContext().getColor(R.color.main_color)
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
-
-        super.onPause()
     }
-
-
 }

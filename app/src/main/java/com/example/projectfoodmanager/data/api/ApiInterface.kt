@@ -125,7 +125,7 @@ interface ApiInterface {
     suspend fun deleteCalenderEntry(@Query("id") calenderEntryId: Int): Response<Unit>
 
     @PATCH("$API_V1_BASE_URL/calendar")
-    suspend fun pathCalenderEntry(@Query("id") calenderEntryId: Int,@Body calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
+    suspend fun patchCalenderEntry(@Query("id") calenderEntryId: Int, @Body calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
 
 
     //followers
@@ -134,7 +134,7 @@ interface ApiInterface {
     suspend fun createFollower(@Query("userSenderId") userSenderId: Int,@Query("userReceiverId") userReceiverId: Int): Response<FollowerResponse>
 
     @GET("$API_V1_BASE_URL/follow/list/followers")
-    suspend fun getFollowersByUser(@Query("user_Id") userId: Int): Response<FollowList>
+    suspend fun getFollowersByUser(@Query("user_id") userId: Int): Response<FollowList>
 
     @GET("$API_V1_BASE_URL/follow/list/followers")
     suspend fun getFollowers(): Response<FollowList>
@@ -143,10 +143,32 @@ interface ApiInterface {
     suspend fun getFolloweds(): Response<FollowList>
 
     @GET("$API_V1_BASE_URL/follow/list/followeds")
-    suspend fun getFollowedsByUser(@Query("user_Id") userId: Int): Response<FollowList>
+    suspend fun getFollowedsByUser(@Query("user_id") userId: Int): Response<FollowList>
 
+    //FOLLOW REQUESTS
     @GET("$API_V1_BASE_URL/follow/requests/list")
     suspend fun getFollowRequests(): Response<FollowList>
+
+    //ACCEPT FOLLOW REQUEST
+    @POST("$API_V1_BASE_URL/follow/requests")
+    suspend fun postAcceptFollowRequest(@Query("user_follower_id") userId: Int): Response<Unit>
+
+    //DELETE FOLLOW REQUEST
+    @DELETE("$API_V1_BASE_URL/follow/requests")
+    suspend fun deleteAcceptFollowRequest(@Query("user_follower_id") userId: Int): Response<Unit>
+
+    //SEND FOLLOW REQUEST
+    @POST("$API_V1_BASE_URL/follow")
+    suspend fun postFollowRequest(@Query("user_id") userId: Int): Response<Unit>
+
+    //REMOVE FOLLOWER
+    @DELETE("$API_V1_BASE_URL/follow")
+    suspend fun deleteFollowerRequest(@Query("user_follower_id") userId: Int): Response<Unit>
+
+    //REMOVE FOLLOWED
+    @DELETE("$API_V1_BASE_URL/follow")
+    suspend fun deleteFollowedRequest(@Query("user_followed_id") userId: Int): Response<Unit>
+
 
 
 }

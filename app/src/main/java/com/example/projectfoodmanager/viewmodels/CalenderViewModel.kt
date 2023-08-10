@@ -77,12 +77,12 @@ class CalenderViewModel @Inject constructor(
     }
 
 
-    val pathCalenderEntryLiveData: LiveData<Event<NetworkResult<CalenderEntry>>>
-        get() = repository.pathCalenderEntry
+    val patchCalenderEntryLiveData: LiveData<Event<NetworkResult<CalenderEntry>>>
+        get() = repository.patchCalenderEntry
 
-    fun pathCalenderEntry(calenderEntryId: Int,calenderPatchRequest : CalenderEntryPatchRequest) {
+    fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest) {
         viewModelScope.launch {
-            repository.pathCalenderEntry(calenderEntryId,calenderPatchRequest)
+            repository.patchCalenderEntry(calenderEntryId,calenderPatchRequest)
         }
     }
 

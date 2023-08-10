@@ -19,6 +19,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsetsController
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
@@ -44,6 +45,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FireStorage.user_profile_images
+import com.example.projectfoodmanager.util.Helper.Companion.changeVisibilityMenu
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_CODE
@@ -183,27 +185,39 @@ class ProfileFragment : Fragment() {
             binding.vipIV.visibility=View.INVISIBLE
         }
 
+        binding.nFollowedsTV.text = userSession.followeds.toString()
+        binding.nFollowersTV.text = userSession.followers.toString()
+        //TODO: nRecipe created by user
+        //binding.nRecipesTV.text = userSession.recipes.toString()
 
 
+        binding.followedsLL.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_followerFragment,Bundle().apply {
+                putInt("userID",-1)
+                putInt("followType",FollowType.FOLLOWEDS)
+                putString("userName",userSession.name)
+            })
+            changeVisibilityMenu(false,activity)
+        }
+
+        binding.followersLL.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_followerFragment,Bundle().apply {
+                putInt("userID",-1)
+                putInt("followType",FollowType.FOLLOWERS)
+                putString("userName",userSession.name)
+            })
+            changeVisibilityMenu(false,activity)
+        }
         // load profile image offline
 
         if (isOnline(view.context)) {
             // load profile image online
 
-            if (userSession.img_source.contains("avatar")){
-                val avatar= Avatar.getAvatarByName(userSession.img_source)
-                binding.profileIV.setImageResource(avatar!!.imgId)
-
-            }else{
-                val imgRef = Firebase.storage.reference.child("$user_profile_images${userSession.img_source}")
-                imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                    val imageURL = Uri.toString()
-                    Glide.with(binding.profileIV.context).load(imageURL)
-                        .into(binding.profileIV)
-                }
-            }
+            //-> Load Author img
+            Helper.loadUserImage(binding.profileIV, userSession.img_source)
 
             binding.uploadImageFB.setOnClickListener {
+
 
                 //USER CONFIRMATION DIALOG
                 // set the custom layout
@@ -267,25 +281,33 @@ class ProfileFragment : Fragment() {
                 myDialog.show()
             }
 
-            // get followers
-
-            //authViewModel.getFolloweds()
-
         }
 
     }
 
     override fun onResume() {
-        requireActivity().window.decorView.systemUiVisibility = 0
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
         super.onResume()
+        val window = requireActivity().window
+
+        //BACKGROUND in NAVIGATION BAR
+        window.statusBarColor = requireContext().getColor(R.color.main_color)
+        window.navigationBarColor = requireContext().getColor(R.color.main_color)
+
+        //TextColor in NAVIGATION BAR
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = 0
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        }
+
+        changeVisibilityMenu(true,activity)
+
     }
 
-    override fun onPause() {
-        requireActivity().window.decorView.systemUiVisibility = 8192
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
-        super.onPause()
-    }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -378,7 +400,7 @@ class ProfileFragment : Fragment() {
                         sharedPreference.deleteUserSession()
                         toast("Logout feito com sucesso!")
                         findNavController().navigate(R.id.action_profile_to_login)
-                        changeVisib_Menu(false)
+                        changeVisibilityMenu(false,activity)
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(it.message.toString())
@@ -411,15 +433,6 @@ class ProfileFragment : Fragment() {
         })
 
 
-    }
-
-    private fun changeVisib_Menu(state : Boolean){
-        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        if(state){
-            menu!!.visibility=View.VISIBLE
-        }else{
-            menu!!.visibility=View.GONE
-        }
     }
 
     // todo look into this
@@ -458,7 +471,6 @@ class ProfileFragment : Fragment() {
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
-
 
     private fun pickFromCamera(){
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)

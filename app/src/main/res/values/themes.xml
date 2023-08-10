@@ -16,7 +16,10 @@
 
         <item name="materialAlertDialogTheme">@style/MaterialAlertDialog</item>
         <item name="materialCalendarTheme">@style/DatePicker</item>
-<!--        <item name="materialTimePickerTheme">@style/TimePicker</item>-->
+        <item name="bottomSheetDragHandleStyle">@style/Widget.MaterialComponents.BottomSheet.DragHandle</item>
+        <item name="bottomSheetStyle">@style/Widget.MaterialComponents.BottomSheet.DragHandle</item>
+
+        <!--        <item name="materialTimePickerTheme">@style/TimePicker</item>-->
 
 
         <!--

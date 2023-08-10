@@ -13,11 +13,8 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentCalendarEntryDetailBinding
@@ -30,16 +27,12 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -56,9 +49,11 @@ class CalendarEntryDetailFragment : Fragment() {
     private val calenderViewModel by activityViewModels<CalenderViewModel>()
     private lateinit var savedDate:String
     private lateinit var savedTime:String
+    private lateinit var oldDate:LocalDate
+    private lateinit var newDate:LocalDate
+    private lateinit var oldTime:LocalTime
+    private lateinit var newTime:LocalTime
     private lateinit var tagsList:List<String>
-    private lateinit var calenderEntryPatchRequest: CalenderEntryPatchRequest
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -93,35 +88,15 @@ class CalendarEntryDetailFragment : Fragment() {
 
         //SET RECEITA
 
-        //-> LOAD AUTHOR IMG
+        //-> Load Author name
         binding.authorTV.text = objCalEntry.recipe.created_by.name
-        if (objCalEntry.recipe.created_by.img_source.contains("avatar")){
-            val avatar= Avatar.getAvatarByName(objCalEntry!!.recipe.created_by.img_source)
-            binding.authorIV.setImageResource(avatar!!.imgId)
 
-        }else{
-            val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${objCalEntry.recipe.created_by.img_source}")
-            imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                Glide.with(binding.authorIV.context).load(Uri.toString()).into(binding.authorIV)
-            }
-            .addOnFailureListener {
-                Glide.with(binding.authorIV.context)
-                    .load(R.drawable.img_profile)
-                    .into(binding.authorIV)
-            }
-        }
+        //-> Load Author img
+        Helper.loadUserImage(binding.authorIV, objCalEntry.recipe.created_by.img_source)
 
-        //-> LOAD RECIPE IMG
-        val imgRef = Firebase.storage.reference.child(objCalEntry.recipe.img_source)
-        imgRef.downloadUrl.addOnSuccessListener { Uri ->
-            val imageURL = Uri.toString()
-            Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
-        }
-        .addOnFailureListener {
-            Glide.with(binding.imageView.context)
-                .load(R.drawable.default_image_display)
-                .into(binding.imageView)
-        }
+        //-> Load Recipe img
+        Helper.loadRecipeImage(binding.imageView,objCalEntry.recipe.img_source)
+
 
         //--> AUTHOR NAME
         binding.authorTV.text= objCalEntry.recipe.created_by.name
@@ -134,14 +109,13 @@ class CalendarEntryDetailFragment : Fragment() {
         }
 
         //--> DATE
-        val format = SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH)
-        val date: Date? = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.ENGLISH).parse(objCalEntry.recipe.created_date)
+        binding.dateTV.text =formatLocalDateToFormatDate(Helper.formatServerTimeToLocalDateTime(objCalEntry.recipe.created_date))
 
-        binding.dateTV.text = format.format(date!!)
         //--> ID
         binding.idTV.text = objCalEntry.recipe.id.toString()
+
         //--> VERIFIED
-        //TODO
+
  /*       if (objCalEntry.recipe.verified){
             binding.verifyRecipeIV.visibility= View.INVISIBLE
             binding.verifyRecipeTV.visibility= View.INVISIBLE
@@ -225,8 +199,6 @@ class CalendarEntryDetailFragment : Fragment() {
         //--> SET ON DATE CLICK
         binding.dateCV.setOnClickListener {
             showDatePickerDialog()
-
-
         }
 
         binding.dateCV.setOnTouchListener { _, event ->
@@ -242,7 +214,6 @@ class CalendarEntryDetailFragment : Fragment() {
             }
             false
         }
-
 
         //--> SET TIME VALUE
         savedTime=  formatLocalTimeToFormatTime(LocalDateTime.parse(objCalEntry.realization_date,DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss")))
@@ -297,7 +268,7 @@ class CalendarEntryDetailFragment : Fragment() {
                     // Adicione aqui o código para apagar o registro
                     val (valid,message) = validation()
                     if (valid) {
-                        calenderViewModel.pathCalenderEntry(objCalEntry.id,calenderEntryPatchRequest)
+                        calenderViewModel.patchCalenderEntry(calenderEntryId = objCalEntry.id, calenderPatchRequest = getCalenderEntryRequest())
                     }
                     else{
                         Toast(context).showCustomToast (message, requireActivity(),ToastType.ALERT)
@@ -316,35 +287,48 @@ class CalendarEntryDetailFragment : Fragment() {
     private fun validation():Pair<Boolean,String> {
 
         val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        val oldDate = LocalDate.parse(savedDate, dateFormatter)
-        val newDate = LocalDate.parse(binding.dateValTV.text, dateFormatter)
+        oldDate = LocalDate.parse(savedDate, dateFormatter)
+        newDate = LocalDate.parse(binding.dateValTV.text, dateFormatter)
 
         val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-        val oldTime = LocalTime.parse(savedTime, timeFormatter)
-        val newTime = LocalTime.parse(binding.timeValTV.text, timeFormatter)
+        oldTime = LocalTime.parse(savedTime, timeFormatter)
+        newTime = LocalTime.parse(binding.timeValTV.text, timeFormatter)
 
-/*        if(newCheckedTag==oldCheckedTag && newDate.equals(oldDate) && newTime.equals(oldTime))
-            return false to "Nothing changed"*/
-
-        if (tagSelected!=oldTagSelected){
-            calenderEntryPatchRequest= CalenderEntryPatchRequest(tag = binding.tagValTV.text.toString().uppercase())
-        //TODO: Esta condiçao não esta das melhores, é preciso fazer uma analise mais sobria
-        }else if(!newDate.equals(oldDate) || !newTime.equals(oldTime)){
-            val localDateTime  = LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))
-
-            if (localDateTime < LocalDateTime.now()) {
-                return false to "Date should be before today."
-            }
-            calenderEntryPatchRequest= CalenderEntryPatchRequest(realization_date = formatLocalTimeToServerTime(localDateTime))
-
-        }else{
+        if(tagSelected==oldTagSelected && newDate == oldDate && newTime == oldTime)
             return false to "Nothing changed"
+
+        val localDateTime  = LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))
+
+        if (localDateTime < LocalDateTime.now()) {
+            return false to "Date should be before today."
         }
 
         return true to ""
     }
 
+    private fun getCalenderEntryRequest(): CalenderEntryPatchRequest {
 
+        var calenderEntryPatchRequest: CalenderEntryPatchRequest? = null
+
+        //TODO: Esta condiçao não esta das melhores, é preciso fazer uma analise mais sobria
+        //Se a tag selected é diferente da tag antiga e a data hora não mudaram
+        if (tagSelected!=oldTagSelected && (newDate == oldDate && newTime.equals(oldTime))) {
+            calenderEntryPatchRequest= CalenderEntryPatchRequest(tag=tagsList[tagSelected])
+        }else if(tagSelected==oldTagSelected && (newDate != oldDate || newTime != oldTime)){
+            calenderEntryPatchRequest= CalenderEntryPatchRequest(realization_date = formatLocalTimeToServerTime(LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))))
+        }else{
+            calenderEntryPatchRequest= CalenderEntryPatchRequest(tag = binding.tagValTV.text.toString().uppercase(), realization_date = formatLocalTimeToServerTime(LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))))
+        }
+
+      /*  val isTagChanged = tagSelected != oldTagSelected
+        val isDateTimeChanged = !newDate.equals(oldDate) || !newTime.equals(newTime)
+        val newTag = if (isTagChanged) tagsList[tagSelected] else binding.tagValTV.text.toString().uppercase()
+        val newRealizationDate = if (isDateTimeChanged) formatLocalTimeToServerTime(LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))) else null
+        calenderEntryPatchRequest = CalenderEntryPatchRequest(tag = newTag, realization_date = newRealizationDate)
+*/
+
+        return calenderEntryPatchRequest
+    }
 
     private fun showTagDialog() {
         val adapter = ArrayAdapter(requireContext(), R.layout.item_checked_text_view, tagsList)
@@ -442,7 +426,7 @@ class CalendarEntryDetailFragment : Fragment() {
             }
         }
 
-        calenderViewModel.pathCalenderEntryLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        calenderViewModel.patchCalenderEntryLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {

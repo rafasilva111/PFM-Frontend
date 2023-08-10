@@ -7,15 +7,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemFollowerLayoutBinding
 import com.example.projectfoodmanager.util.FireStorage
+import com.example.projectfoodmanager.util.FollowType
 import com.example.projectfoodmanager.util.Helper
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 
-class FollowerListingAdaptar(followType: Int) : RecyclerView.Adapter<FollowerListingAdaptar.MyViewHolder>() {
+class FollowerListingAdaptar(
+    followType: Int,
+    val onItemClicked: (Int) -> Unit,
+    val onActionBTNClicked: (Int) -> Unit,
+    val onRemoveBTNClicked: (Int,Int) -> Unit,
+) : RecyclerView.Adapter<FollowerListingAdaptar.MyViewHolder>() {
 
     private val TAG: String? = "FollowerAdapter"
     private var list: MutableList<User> = arrayListOf()
@@ -62,22 +69,8 @@ class FollowerListingAdaptar(followType: Int) : RecyclerView.Adapter<FollowerLis
     inner class MyViewHolder(private val binding: ItemFollowerLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(user: User) {
 
-            if (user.img_source.contains("avatar")){
-                val avatar= Avatar.getAvatarByName(user.img_source)
-                binding.imgAuthorIV.setImageResource(avatar!!.imgId)
-
-            }else{
-                val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${user.img_source}")
-                imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                    Glide.with(binding.imgAuthorIV.context).load(Uri.toString()).into(binding.imgAuthorIV)
-                }
-                .addOnFailureListener {
-                    Glide.with(binding.imgAuthorIV.context)
-                        .load(R.drawable.img_profile)
-                        .into(binding.imgAuthorIV)
-                }
-            }
-
+            //Load Author img
+            Helper.loadUserImage(binding.imgAuthorIV, user.img_source)
 
             binding.nameTV.text= Helper.formatNameToNameUpper(user.name)
 
@@ -85,6 +78,42 @@ class FollowerListingAdaptar(followType: Int) : RecyclerView.Adapter<FollowerLis
                 binding.verifyUserIV.visibility=View.VISIBLE
             }else{
                 binding.verifyUserIV.visibility=View.INVISIBLE
+            }
+
+            when(followType){
+                FollowType.NOT_FOLLOWER ->{
+                    binding.removeFollowBTN.visibility=View.VISIBLE
+                    binding.removeFollowBTN.text="Remove"
+                    binding.actionFollowBTN.text="Confirmation"
+                }
+                FollowType.FOLLOWERS -> {
+                    binding.removeFollowBTN.visibility=View.VISIBLE
+                    binding.removeFollowBTN.text="Remove"
+                    binding.actionFollowBTN.visibility=View.GONE
+                }
+                FollowType.FOLLOWEDS -> {
+                    binding.removeFollowBTN.visibility=View.VISIBLE
+                    binding.removeFollowBTN.text="Followed"
+                    binding.actionFollowBTN.visibility=View.GONE
+                }
+            }
+
+            binding.itemLayoutCL.setOnClickListener {
+                onItemClicked.invoke(user.id)
+            }
+
+            binding.actionFollowBTN.setOnClickListener {
+
+                if (binding.removeFollowBTN.visibility==View.VISIBLE)
+                    binding.removeFollowBTN.visibility=View.GONE
+
+                onActionBTNClicked.invoke(user.id)
+            }
+
+            binding.removeFollowBTN.setOnClickListener {
+                binding.removeFollowBTN.visibility=View.GONE
+                binding.actionFollowBTN.text="Follow"
+                onRemoveBTNClicked.invoke(bindingAdapterPosition, user.id)
             }
 
         }

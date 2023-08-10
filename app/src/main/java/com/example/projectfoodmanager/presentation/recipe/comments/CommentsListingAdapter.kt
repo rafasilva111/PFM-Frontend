@@ -14,6 +14,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemCommentLayoutBinding
 import com.example.projectfoodmanager.util.FireStorage
+import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.SharedPreference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -80,6 +81,9 @@ class CommentsListingAdapter(
                              ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Comment, owner: Boolean) {
             if (owner){
+                if (userSession==null)
+                    userSession = sharedPreferences.getUserSession()
+
                 binding.CLComment.visibility = View.GONE
                 binding.CLCommentOwner.visibility = View.VISIBLE
                 binding.TVCAuthorOwner.text = context.getString(R.string.full_name, item.user!!.name)
@@ -110,25 +114,7 @@ class CommentsListingAdapter(
                 }
 
 
-                if (userSession==null)
-                    userSession = sharedPreferences.getUserSession()
-
-
-                if (userSession!!.img_source.contains("avatar")){
-                    val avatar= Avatar.getAvatarByName(userSession!!.img_source)
-                    binding.IVAuthorOwner.setImageResource(avatar!!.imgId)
-
-                }else{
-                    val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${userSession!!.img_source}")
-                    imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                        Glide.with(binding.IVAuthorOwner.context).load(Uri.toString()).into(binding.IVAuthorOwner)
-                    }
-                        .addOnFailureListener {
-                            Glide.with(binding.IVAuthorOwner.context)
-                                .load(R.drawable.default_image_display)
-                                .into(binding.IVAuthorOwner)
-                        }
-                }
+                Helper.loadUserImage(binding.IVAuthorOwner, userSession!!.img_source)
 
 //            binding.CVComment.setOnLongClickListener { true
 //                // TODO open profile
@@ -165,14 +151,9 @@ class CommentsListingAdapter(
                     }
                 }
 
-                if (item.user.img_source != "") {
-                    val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.user.img_source}")
-                    imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                        val imageURL = Uri.toString()
-                        Glide.with(binding.IVAuthor.context).load(imageURL)
-                            .into(binding.IVAuthor)
-                    }
-                }
+                //-> Load Author img
+                Helper.loadUserImage(binding.IVAuthor, item.user.img_source)
+
 
 //            binding.CVComment.setOnLongClickListener { true
 //                // TODO open profile

@@ -31,6 +31,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.changeVisibilityMenu
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -70,10 +71,10 @@ class FavoritesFragment : Fragment() {
     private val adapter by lazy {
         FavoritesRecipeListingAdapter(
             onItemClicked = { _, item ->
-                    findNavController().navigate(R.id.action_favoritesFragment_to_receitaDetailFragment,Bundle().apply {
+                findNavController().navigate(R.id.action_favoritesFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("Recipe",item)
                 })
-                changeVisibilityMenu(false)
+                changeVisibilityMenu(false,activity)
 
             },
             onLikeClicked = {item,like ->
@@ -678,14 +679,5 @@ class FavoritesFragment : Fragment() {
         return false
     }
 
-    private fun changeVisibilityMenu(state: Boolean) {
-        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-
-        if (state) {
-            menu!!.visibility = View.VISIBLE
-        } else {
-            menu!!.visibility = View.GONE
-        }
-    }
 }
 

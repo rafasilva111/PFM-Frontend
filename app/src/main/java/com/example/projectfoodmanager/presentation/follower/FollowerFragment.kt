@@ -1,10 +1,11 @@
 package com.example.projectfoodmanager.presentation.follower
 
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -15,6 +16,7 @@ import com.example.projectfoodmanager.databinding.FragmentFollowerBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -25,6 +27,7 @@ class FollowerFragment : Fragment() {
 
     // binding
     lateinit var binding: FragmentFollowerBinding
+    private var itemPosition: Int = -1
     private val authViewModel by activityViewModels<AuthViewModel>()
     private var userId: Int = -1
     private var userName: String? = null
@@ -33,17 +36,60 @@ class FollowerFragment : Fragment() {
 
     @Inject
     lateinit var sharedPreference: SharedPreference
-
     private val adapter by lazy {
         FollowerListingAdaptar(
-            followType
+            followType,
+            onItemClicked = {user_id ->
+                val bundle=Bundle()
+                if (currentUser.id==user_id){
+                    bundle.putInt("userID",-1)
+                }else{
+                    bundle.putInt("userID",user_id)
+                }
+
+                findNavController().navigate(R.id.action_followerFragment_to_profileBottomSheetDialog,bundle)
+
+            },
+            onActionBTNClicked = { user_Id ->
+                authViewModel.postFollowRequest(userId)
+            },
+            onRemoveBTNClicked = { postion,user_Id ->
+
+                itemPosition = postion
+                val title:String
+                val message:String
+
+                if (followType==FollowType.FOLLOWERS) {
+                    title = "Remover seguidor?"
+                    message = "Tem a certeza que pretende remover este seguidor?"
+                }else{
+                    title = "Deixar de seguir?"
+                    message = "Tem a certeza que pretende deixar de seguir?"
+                }
+
+                MaterialAlertDialogBuilder(requireContext())
+                    .setIcon(R.drawable.ic_follower_remove)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setPositiveButton("Sim") { dialog, which ->
+                        // Remove Follower or Followed
+                        authViewModel.deleteFollowRequest(followType,user_Id)
+
+                    }
+                    .setNegativeButton("Não") { dialog, which ->
+                        // Close Dialog
+                        dialog.dismiss()
+                    }
+                    .show()
+
+            }
         )
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         arguments?.let {
             userId = it.getInt("userID")
             userName = it.getString("userName")
@@ -100,7 +146,7 @@ class FollowerFragment : Fragment() {
     private fun eventClick() {
 
         if (followType==FollowType.FOLLOWERS){
-            if(currentUser.id==userId) {
+            if(currentUser.id==userId || userId==-1) {
                 binding.requestFollowCV.visibility = View.VISIBLE
             }else{
                 binding.requestFollowCV.visibility=View.GONE
@@ -169,7 +215,63 @@ class FollowerFragment : Fragment() {
                 }
             }
         }
+
+        authViewModel.postUserFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        toast("Pedido enviado com sucesso")
+                    }
+                    is NetworkResult.Error -> {
+                        toast(it.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        //todo rui falta progress bar
+                        //binding.progressBar.show()
+
+                    }
+                }
+            }
+        }
+
+        authViewModel.deleteUserFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        toast("Removido com sucesso")
+                        adapter.removeItem(itemPosition)
+                    }
+                    is NetworkResult.Error -> {
+                        toast(it.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        //todo rui falta progress bar
+                        //binding.progressBar.show()
+
+                    }
+                }
+            }
+        }
     }
 
+    override fun onResume() {
+        val window = requireActivity().window
+
+        //BACKGROUND in NAVIGATION BAR
+        window.statusBarColor = requireContext().getColor(R.color.background_1)
+        window.navigationBarColor = requireContext().getColor(R.color.background_1)
+
+        //TextColor in NAVIGATION BAR
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = 0
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+        super.onResume()
+    }
 
 }

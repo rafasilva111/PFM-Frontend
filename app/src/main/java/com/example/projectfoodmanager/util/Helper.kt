@@ -9,11 +9,14 @@ import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -44,9 +47,6 @@ class Helper {
             return localTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"))
         }
 
-        fun formatLocalDateTimeToServerLocalDateTime(localTime: LocalDateTime): LocalDateTime{
-            return LocalDateTime.parse(localTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss")))
-        }
 
         fun formatLocalDateToFormatDate(localTime: LocalDateTime): String{
             return localTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
@@ -58,6 +58,10 @@ class Helper {
 
         fun formatLocalTimeToFormatTime(localTime: LocalDateTime): String{
             return localTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+        }
+
+        fun formatServerTimeToLocalDateTime(localDateTimeString: String): LocalDateTime{
+            return LocalDateTime.parse(localDateTimeString, DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"))
         }
 
         fun isOnline(context: Context): Boolean {
@@ -92,11 +96,32 @@ class Helper {
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
                     Glide.with(imgAuthorIV.context).load(Uri.toString()).into(imgAuthorIV)
                 }
-                    .addOnFailureListener {
-                        Glide.with(imgAuthorIV.context)
-                            .load(R.drawable.img_profile)
-                            .into(imgAuthorIV)
-                    }
+                .addOnFailureListener {
+                    imgAuthorIV.setImageResource(R.drawable.img_profile)
+                }
+            }
+        }
+
+        fun loadRecipeImage(recipeIV: ImageView, imgSource: String) {
+            val imgRef = Firebase.storage.reference.child(imgSource)
+            imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                val imageURL = Uri.toString()
+                Glide.with(recipeIV.context).load(imageURL).into(recipeIV)
+            }
+            .addOnFailureListener {
+                recipeIV.setImageResource(R.drawable.img_profile)
+            }
+
+        }
+
+        fun changeVisibilityMenu(state: Boolean, activity: FragmentActivity?) {
+
+            val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+            if (state) {
+                menu!!.visibility = View.VISIBLE
+            } else {
+                menu!!.visibility = View.GONE
             }
         }
 

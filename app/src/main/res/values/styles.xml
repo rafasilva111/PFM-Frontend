@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Teste" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Teste" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#2196F3</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -95,6 +95,11 @@
         <item name="android:visibility">gone</item>
     </style>
 
+    <style name="Widget.MaterialComponents.BottomSheet.DragHandle" parent="Widget.Material3.BottomSheet.DragHandle">
+        <item name="tint">@color/white</item>
+        <!--Alpha can be added optionally to achieve nice color blend-->
+<!--        <item name="android:alpha">0.2</item>-->
+    </style>
 
 
 <!--    <style name="TimePicker" parent="Widget.Material3.MaterialTimePicker">

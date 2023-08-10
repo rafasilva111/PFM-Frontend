@@ -9,6 +9,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
+import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.SharedPreference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -73,30 +74,16 @@ class RecipeCalenderEntryListingAdapter(
 
 
         fun bind(item: Recipe) {
-            //binding.authorTV.text = item.company
-            // todo ver com o rui
-            val imgRef = Firebase.storage.reference.child(item.img_source)
-            imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                val imageURL = Uri.toString()
-                Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
-            }
-            .addOnFailureListener {
-                binding.imageView.setImageResource(R.drawable.default_image_display)
-/*                Glide.with(binding.imageView.context)
-                    .load(R.drawable.good_food_display___nci_visuals_online)
-                    .into(binding.imageView)*/
-            }
-
-
 
             if (user==null)
                 user= sharedPreference.getUserSession()
 
 
-            val format = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-            val date: Date? = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(item.created_date)
+            //Load Recipe img
+            Helper.loadRecipeImage(binding.imageView,item.img_source)
 
-            binding.dateTV.text = format.format(date!!)
+
+            binding.dateTV.text = Helper.formatLocalDateToFormatDate(Helper.formatServerTimeToLocalDateTime(item.created_date))
             binding.recipeTitleTV.text = item.title
             binding.recipeDescriptionTV.text = item.description.toString()
             binding.itemLayout.setOnClickListener {

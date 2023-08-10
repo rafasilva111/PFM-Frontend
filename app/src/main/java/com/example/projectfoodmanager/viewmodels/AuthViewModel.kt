@@ -71,8 +71,12 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+
+    //---------- FOLLOW -------------
+
+    //GET followers by userID or authenticated user
     val getUserFollowersLiveData: LiveData<Event<NetworkResult<FollowList>>>
-        get() = repository.userFollowersLiveData
+        get() = repository.getUserFollowers
 
     fun getFollowers(id_user: Int) {
         viewModelScope.launch {
@@ -80,8 +84,9 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    //GET followeds by userID or authenticated user
     val getUserFollowedsLiveData: LiveData<Event<NetworkResult<FollowList>>>
-        get() = repository.userFollowedsLiveData
+        get() = repository.getUserFolloweds
 
     fun getFolloweds(id_user: Int){
         viewModelScope.launch {
@@ -89,13 +94,46 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-
+    //GET follow requests (authenticated user)
     val getUserFollowRequestsLiveData: LiveData<Event<NetworkResult<FollowList>>>
-        get() = repository.userFollowRequestsLiveData
+        get() = repository.getUserFollowRequests
 
     fun getFollowRequests(){
         viewModelScope.launch {
             repository.getUserFollowRequests()
+        }
+    }
+
+    //POST accept follow requests by userID
+    val postUserAcceptFollowRequestLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.postUserAcceptFollowRequest
+
+
+    fun postAcceptFollowRequest(userId: Int) {
+        viewModelScope.launch {
+            repository.postUserAcceptFollowRequest(userId)
+        }
+    }
+
+    //POST follow request by userID
+    val postUserFollowRequestLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.postUserFollowRequest
+
+    fun postFollowRequest(userId: Int) {
+        viewModelScope.launch {
+            repository.postUserFollowRequest(userId)
+        }
+    }
+
+
+    //DELETE follow requests by userID
+    val deleteUserFollowRequestLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.deleteUserFollowRequest
+
+
+    fun deleteFollowRequest(followType:Int, userId: Int) {
+        viewModelScope.launch {
+            repository.deleteUserFollowRequest(followType,userId)
         }
     }
 

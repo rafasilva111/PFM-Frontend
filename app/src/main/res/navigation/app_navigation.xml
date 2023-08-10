@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_receitaDetailFragment_to_followerFragment"
             app:destination="@id/followerFragment" />
+        <action
+            android:id="@+id/action_receitaDetailFragment_to_profileBottomSheetDialog"
+            app:destination="@id/profileBottomSheetDialog" />
 
     </fragment>
 
@@ -65,6 +68,10 @@
             app:destination="@id/settingsFragment"
             app:popUpTo="@id/profileFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_profileFragment_to_followerFragment"
+            app:destination="@id/followerFragment" />
+
     </fragment>
 
     <fragment
@@ -141,12 +148,19 @@
         <action
             android:id="@+id/action_followerFragment_to_followRequestFragment"
             app:destination="@id/followRequestFragment" />
+        <action
+            android:id="@+id/action_followerFragment_to_profileBottomSheetDialog"
+            app:destination="@id/profileBottomSheetDialog" />
     </fragment>
     <fragment
         android:id="@+id/followRequestFragment"
         android:name="com.example.projectfoodmanager.presentation.follower.FollowRequestFragment"
         android:label="fragment_follow_request"
-        tools:layout="@layout/fragment_follow_request" />
+        tools:layout="@layout/fragment_follow_request" >
+        <action
+            android:id="@+id/action_followRequestFragment_to_profileBottomSheetDialog"
+            app:destination="@id/profileBottomSheetDialog" />
+    </fragment>
     <fragment
         android:id="@+id/notificationFragment"
         android:name="com.example.projectfoodmanager.presentation.notification.NotificationFragment"
@@ -156,6 +170,14 @@
             android:id="@+id/action_notificationFragment_to_followRequestFragment"
             app:destination="@id/followRequestFragment" />
     </fragment>
-
+    <dialog
+        android:id="@+id/profileBottomSheetDialog"
+        android:name="com.example.projectfoodmanager.presentation.profile.ProfileBottomSheetDialog"
+        android:label="fragment_profile_bottom_sheet_dialog"
+        tools:layout="@layout/fragment_profile_bottom_sheet_dialog" >
+        <action
+            android:id="@+id/action_profileBottomSheetDialog_to_followerFragment"
+            app:destination="@id/followerFragment" />
+    </dialog>
 
 </navigation>

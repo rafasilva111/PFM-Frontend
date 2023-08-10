@@ -59,14 +59,16 @@ interface RemoteDataSource {
 	suspend fun getEntryOnCalender(fromDate: String, toDate: String):  Response<CalenderDatedEntryList>
 	suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<CalenderIngredientList>
 	suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Unit>
-	suspend fun pathCalenderEntry(calenderEntryId: Int,calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
+	suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
 
 
 	//followers
 	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>
 	suspend fun getFollowers(userId: Int): Response<FollowList>
-	suspend fun getFolloweds(idUser: Int): Response<FollowList>
+	suspend fun getFolloweds(userId: Int): Response<FollowList>
 	suspend fun getFollowRequests(): Response<FollowList>
-
+	suspend fun postAcceptFollowRequest(userId: Int): Response<Unit>
+    suspend fun deleteFollowRequest(followType: Int, userId: Int): Response<Unit>
+	suspend fun postFollowRequest(userId: Int): Response<Unit>
 
 }

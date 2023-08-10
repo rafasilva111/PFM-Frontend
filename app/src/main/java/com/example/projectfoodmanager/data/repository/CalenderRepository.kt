@@ -19,12 +19,12 @@ interface CalenderRepository {
     val getCalenderDatedEntryList: LiveData<Event<NetworkResult<CalenderDatedEntryList>>>
     val getCalenderIngredients: LiveData<Event<NetworkResult<CalenderIngredientList>>>
     val deleteCalenderEntry: LiveData<Event<NetworkResult<Int>>>
-    val pathCalenderEntry: LiveData<Event<NetworkResult<CalenderEntry>>>
+    val patchCalenderEntry: LiveData<Event<NetworkResult<CalenderEntry>>>
 
     suspend fun createEntryOnCalender(recipeId: Int,comment: CalenderEntryRequest)
     suspend fun getEntryOnCalender(date: LocalDateTime)
     suspend fun getCalenderDatedEntryList(fromDate: LocalDateTime,toDate:LocalDateTime,cleanseOldRegistry: Boolean)
     suspend fun getCalenderIngredients(fromDate: LocalDateTime, toDate: LocalDateTime)
     suspend fun deleteCalenderEntry(calenderEntryId: Int)
-    suspend fun pathCalenderEntry(calenderEntryId: Int,calenderPatchRequest : CalenderEntryPatchRequest)
+    suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest)
 }

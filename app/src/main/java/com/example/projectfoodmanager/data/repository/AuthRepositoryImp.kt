@@ -151,13 +151,13 @@ class AuthRepositoryImp @Inject constructor(
 
 
     private val _userFollowersResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
-    override val userFollowersLiveData: LiveData<Event<NetworkResult<FollowList>>>
+    override val getUserFollowers: LiveData<Event<NetworkResult<FollowList>>>
         get() = _userFollowersResponseLiveData
 
     override suspend fun getUserFollowers(idUser: Int) {
         _userFollowersResponseLiveData.postValue(Event(NetworkResult.Loading()))
         val response = remoteDataSource.getFollowers(idUser)
-        if (response.isSuccessful && response.code() == 200) {
+        if (response.isSuccessful) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             _userFollowersResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
 
@@ -175,7 +175,7 @@ class AuthRepositoryImp @Inject constructor(
 
 
     private val _userFollowedsResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
-    override val userFollowedsLiveData: LiveData<Event<NetworkResult<FollowList>>>
+    override val getUserFolloweds: LiveData<Event<NetworkResult<FollowList>>>
         get() = _userFollowedsResponseLiveData
 
     override suspend fun getUserFolloweds(userId: Int) {
@@ -197,26 +197,97 @@ class AuthRepositoryImp @Inject constructor(
     }
 
 
-    private val _userFollowRequestsResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
-    override val userFollowRequestsLiveData: LiveData<Event<NetworkResult<FollowList>>>
-        get() = _userFollowRequestsResponseLiveData
+    private val _functionUserFollowRequestsResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
+    override val getUserFollowRequests: LiveData<Event<NetworkResult<FollowList>>>
+        get() = _functionUserFollowRequestsResponseLiveData
+
 
     override suspend fun getUserFollowRequests() {
         _userFollowedsResponseLiveData.postValue(Event(NetworkResult.Loading()))
         val response = remoteDataSource.getFollowRequests()
         if (response.isSuccessful && response.code() == 200) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
-            _userFollowRequestsResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+            _functionUserFollowRequestsResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
         }
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()
             Log.i(TAG, "updateUser: request made was not sucessfull: $errorObj")
 
-            _userFollowRequestsResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+            _functionUserFollowRequestsResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
         }
         else{
-            _userFollowRequestsResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            _functionUserFollowRequestsResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
     }
+
+
+
+    private val _functionPostUserAcceptFollowRequest = MutableLiveData<Event<NetworkResult<Int>>>()
+    override val postUserAcceptFollowRequest: LiveData<Event<NetworkResult<Int>>>
+        get() = _functionPostUserAcceptFollowRequest
+
+    override suspend fun postUserAcceptFollowRequest(userID: Int) {
+        _functionPostUserAcceptFollowRequest.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
+        val response =remoteDataSource.postAcceptFollowRequest(userID)
+        if (response.isSuccessful) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            _functionPostUserAcceptFollowRequest.postValue(Event(NetworkResult.Success(response.code())))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
+            _functionPostUserAcceptFollowRequest.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _functionPostUserAcceptFollowRequest.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+    private val _functionPostUserFollowRequest = MutableLiveData<Event<NetworkResult<Int>>>()
+    override val postUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
+        get() = _functionPostUserFollowRequest
+
+    override suspend fun postUserFollowRequest(userId: Int) {
+        _functionPostUserFollowRequest.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
+        val response =remoteDataSource.postFollowRequest(userId)
+        if (response.isSuccessful) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            _functionPostUserFollowRequest.postValue(Event(NetworkResult.Success(response.code())))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
+            _functionPostUserFollowRequest.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _functionPostUserFollowRequest.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+    private val _functionDeleteUserFollowRequest = MutableLiveData<Event<NetworkResult<Int>>>()
+    override val deleteUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
+        get() = _functionDeleteUserFollowRequest
+
+    override suspend fun deleteUserFollowRequest(followType:Int ,userId: Int) {
+        _functionDeleteUserFollowRequest.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
+        val response =remoteDataSource.deleteFollowRequest(followType,userId)
+        if (response.isSuccessful) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            _functionDeleteUserFollowRequest.postValue(Event(NetworkResult.Success(response.code())))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
+            _functionDeleteUserFollowRequest.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _functionDeleteUserFollowRequest.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+
 
 }

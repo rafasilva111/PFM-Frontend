@@ -1,6 +1,7 @@
 package com.example.projectfoodmanager.presentation.calender.insertCalenderEntry
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
@@ -55,10 +56,8 @@ class NewCalenderEntryFragment : Fragment() {
 
     private val TAG: String = "NewCalenderEntryFragment"
 
-
     lateinit var user: User
     private var currentTabSelected :Int = 0
-
 
     private val adapter by lazy {
         RecipeCalenderEntryListingAdapter(
@@ -69,8 +68,6 @@ class NewCalenderEntryFragment : Fragment() {
             }
         )
     }
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -162,8 +159,12 @@ class NewCalenderEntryFragment : Fragment() {
 
             datePicker.addOnPositiveButtonClickListener {
 
-                if(datePicker.headerText.length == 9)
+                if(datePicker.headerText.length == 9){
                     binding.dateValTV.text= getString(R.string.date_text, "0" + datePicker.headerText)
+                }else{
+                    binding.dateValTV.text= datePicker.headerText
+                }
+
 
             }
 
@@ -424,4 +425,24 @@ class NewCalenderEntryFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        val window = requireActivity().window
+
+        //BACKGROUND in NAVIGATION BAR
+        window.statusBarColor = requireContext().getColor(R.color.background_1)
+        window.navigationBarColor = requireContext().getColor(R.color.background_1)
+
+        //TextColor in NAVIGATION BAR
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = 0
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+    }
 }

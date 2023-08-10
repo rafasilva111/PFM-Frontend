@@ -8,13 +8,13 @@
     android:backgroundTint="@color/main_color">
 
 
-        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-            android:id="@+id/drag_handle"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:id="@+id/drag_handle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout18"
@@ -49,16 +49,17 @@
             android:id="@+id/constraintLayout16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:paddingBottom="20dp"
+            android:layout_marginTop="48dp"
             android:background="@drawable/layout_rounded_topleft_topright"
             android:backgroundTint="@color/white"
+            android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/nameAuthorTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
@@ -77,13 +78,13 @@
                 android:elevation="8dp"
                 android:src="@drawable/verified"
                 android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/textView2"
-                app:layout_constraintStart_toEndOf="@+id/textView2"
-                app:layout_constraintTop_toTopOf="@+id/textView2" />
+                app:layout_constraintBottom_toBottomOf="@+id/nameAuthorTV"
+                app:layout_constraintStart_toEndOf="@+id/nameAuthorTV"
+                app:layout_constraintTop_toTopOf="@+id/nameAuthorTV" />
 
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/materialButton"
+                android:id="@+id/followBTN"
                 android:layout_width="150dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
@@ -92,105 +93,33 @@
                 android:padding="0dp"
                 android:text="Seguir"
                 android:textAllCaps="false"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:textStyle="bold"
+                android:textColor="@color/white"
                 app:backgroundTint="#259FFF"
-                app:layout_constraintEnd_toEndOf="@+id/textView2"
-                app:layout_constraintStart_toStartOf="@+id/textView2"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                app:layout_constraintEnd_toEndOf="@+id/nameAuthorTV"
+                app:layout_constraintStart_toStartOf="@+id/nameAuthorTV"
+                app:layout_constraintTop_toBottomOf="@+id/nameAuthorTV" />
 
 
             <LinearLayout
                 android:id="@+id/linearLayout17"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="@+id/textView2"
-                app:layout_constraintStart_toStartOf="@+id/textView2"
-                app:layout_constraintTop_toBottomOf="@+id/materialButton">
+                app:layout_constraintEnd_toEndOf="@+id/nameAuthorTV"
+                app:layout_constraintStart_toStartOf="@+id/nameAuthorTV"
+                app:layout_constraintTop_toBottomOf="@+id/followBTN">
 
                 <TextView
-                    android:id="@+id/ratingMedTV"
+                    android:id="@+id/descriptionAuthorTV"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="50dp"
                     android:fontFamily="@font/fredoka_regular"
-                    android:text="4,5"
+                    android:text="Description"
                     android:textColor="#838383"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-
-                <RatingBar
-                    android:id="@+id/ratingRecipeRB"
-                    style="?android:attr/ratingBarStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:isIndicator="true"
-                    android:max="5"
-                    android:progressTint="#FFC107" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayout16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout17">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_marginEnd="5dp"
-                        android:background="@drawable/bg_card"
-                        android:contentDescription="difficulty"
-                        android:padding="5dp"
-                        android:src="@drawable/ic_link" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/fredoka_regular"
-                        android:gravity="center_vertical"
-                        android:text="www.pingodoce.com"
-                        android:textSize="13sp" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="40dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_marginEnd="5dp"
-                        android:background="@drawable/bg_card"
-                        android:contentDescription="difficulty"
-                        android:padding="5dp"
-                        android:src="@drawable/ic_recipe" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/fredoka_regular"
-                        android:gravity="center_vertical"
-                        android:text="+1000 receitas"
-                        android:textSize="13sp" />
-                </LinearLayout>
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
@@ -199,30 +128,35 @@
                 android:id="@+id/linearLayout18"
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout16">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout17"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout17"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout17">
+
 
                 <LinearLayout
+                    android:id="@+id/nFollowersLL"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
                         android:src="@drawable/ic_group" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/nFollowersTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/fredoka_one"
@@ -245,8 +179,7 @@
                 <View
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_margin="10dp"
                     android:layout_weight="1"
                     android:background="#BCBCBC"
                     android:rotation="180"
@@ -255,24 +188,25 @@
                     app:layout_constraintTop_toBottomOf="@+id/commentsCV" />
 
                 <LinearLayout
+                    android:id="@+id/nFollowedsLL"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
                         android:src="@drawable/ic_group" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="80dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="10dp"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/timeTV"
+                            android:id="@+id/nFollowedsTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/fredoka_one"
@@ -313,6 +247,7 @@
         android:layout_height="300dp"
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view4">
 
@@ -345,7 +280,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/nRegistersTV"
+                android:id="@+id/nRecipesTV"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
@@ -358,7 +293,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/emptyRegTV"
+            android:id="@+id/emptyRecipeTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/fredoka_regular"
@@ -370,6 +305,7 @@
             app:layout_constraintTop_toBottomOf="@+id/headerRecipesCatLL" />
 
         <LinearLayout
+            android:id="@+id/privateAccountLL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -411,8 +347,22 @@
 
 
         </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:id="@+id/emptyFollowTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/fredoka_regular"
+            android:text="@string/no_recipes_found"
+            android:textSize="15sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerRecipesCatLL" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

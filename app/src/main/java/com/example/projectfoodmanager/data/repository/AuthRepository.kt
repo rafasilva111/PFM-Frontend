@@ -15,10 +15,14 @@ interface AuthRepository {
     val userAuthLiveData: LiveData<Event<NetworkResult<UserAuthResponse>>>
     val userLogoutLiveData: LiveData<Event<NetworkResult<String>>>
     val userLiveData: LiveData<Event<NetworkResult<User>>>
-    val userFollowersLiveData: LiveData<Event<NetworkResult<FollowList>>>
-    val userFollowedsLiveData: LiveData<Event<NetworkResult<FollowList>>>
+    val getUserFollowers: LiveData<Event<NetworkResult<FollowList>>>
+    val getUserFolloweds: LiveData<Event<NetworkResult<FollowList>>>
     val userUpdateLiveData: LiveData<Event<NetworkResult<User>>>
-    val userFollowRequestsLiveData: LiveData<Event<NetworkResult<FollowList>>>
+    val getUserFollowRequests: LiveData<Event<NetworkResult<FollowList>>>
+    val postUserAcceptFollowRequest: LiveData<Event<NetworkResult<Int>>>
+    val postUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
+    val deleteUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
+
 
     //User
     suspend fun registerUser(user : UserRequest)
@@ -27,8 +31,9 @@ interface AuthRepository {
     suspend fun logoutUser()
     suspend fun updateUser(userRequest: UserRequest)
     suspend fun getUserFollowers(idUser: Int)
-    suspend fun getUserFolloweds(id_user: Int)
+    suspend fun getUserFolloweds(idUser: Int)
     suspend fun getUserFollowRequests()
-
-
+    suspend fun postUserAcceptFollowRequest(idUser: Int)
+    suspend fun deleteUserFollowRequest(followType: Int, userId: Int)
+    suspend fun postUserFollowRequest(userId: Int)
 }
