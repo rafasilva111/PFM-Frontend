@@ -6,6 +6,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.time.LocalDate
@@ -127,6 +128,13 @@ class SharedPreference @Inject constructor(
         }
     }
 
+    fun saveUserRecipesSession(userRecipeBackgrounds: UserRecipeBackgrounds) {
+        val user:User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
+        user.liked_recipes = userRecipeBackgrounds.result.recipes_liked
+        user.saved_recipes = userRecipeBackgrounds.result.recipes_saved
+        user.created_recipes = userRecipeBackgrounds.result.recipes_created
+        saveUserSession(user)
+    }
 
 
 }

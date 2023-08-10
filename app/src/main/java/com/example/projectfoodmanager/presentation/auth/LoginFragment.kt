@@ -16,8 +16,10 @@ import androidx.lifecycle.Observer
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.viewmodels.CalenderViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 
@@ -26,7 +28,10 @@ class LoginFragment : Fragment() {
 
     val TAG: String = "LoginFragment"
     lateinit var binding: FragmentLoginBinding
+
+
     private val authViewModel by activityViewModels<AuthViewModel>()
+    private val calenderViewModel by activityViewModels<CalenderViewModel>()
 
     @Inject
     lateinit var tokenManager: TokenManager
@@ -141,17 +146,19 @@ class LoginFragment : Fragment() {
             }
         })
 
-        authViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let{
-
+        authViewModel.userResponseLiveData.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
+                        LocalDateTime.now().let { dateNow ->
+                            calenderViewModel.getCalenderDatedEntryList(
+                                fromDate = dateNow.minusDays(15),
+                                toDate = dateNow.plusDays(15),
+                                cleanseOldRegistry = true
+                            )
+                        }
 
-                        /*Handler().postDelayed({
-                            setButtonVisibility(visibility = true)
-                                findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
-
-                        }, LOGIN_TIME)*/
+                        authViewModel.getUserRecipesBackground()
 
                         setButtonVisibility(visibility = true)
                         findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
@@ -168,7 +175,7 @@ class LoginFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
     }
 
 

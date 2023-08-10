@@ -13,6 +13,7 @@ import com.example.projectfoodmanager.util.FireStorage
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
+import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToLocalDateTime
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.util.SharedPreference
@@ -96,7 +97,7 @@ class RecipeListingAdapter(
             }
 
 
-
+            binding.dateTV.text = formatServerTimeToDateString(item.created_date)
             binding.recipeTitleTV.text = item.title
 
             binding.dateTV.text = formatLocalDateToFormatDate(formatServerTimeToLocalDateTime(item.created_date))

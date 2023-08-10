@@ -7,6 +7,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -178,9 +179,9 @@ class AuthRepositoryImp @Inject constructor(
     override val getUserFolloweds: LiveData<Event<NetworkResult<FollowList>>>
         get() = _userFollowedsResponseLiveData
 
-    override suspend fun getUserFolloweds(userId: Int) {
+    override suspend fun getUserFolloweds(id_user: Int) {
         _userFollowedsResponseLiveData.postValue(Event(NetworkResult.Loading()))
-        val response = remoteDataSource.getFolloweds(userId)
+        val response = remoteDataSource.getFolloweds(id_user)
         if (response.isSuccessful && response.code() == 200) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             _userFollowersResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))

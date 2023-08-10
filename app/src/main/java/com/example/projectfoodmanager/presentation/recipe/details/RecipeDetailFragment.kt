@@ -21,7 +21,9 @@ import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
+import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
+import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.badge.ExperimentalBadgeUtils
@@ -41,8 +43,8 @@ import javax.inject.Inject
 class RecipeDetailFragment : Fragment() {
     val TAG: String = "ReceitaDetailFragment"
     lateinit var binding: FragmentRecipeDetailBinding
-    var objRecipe: Recipe? = null
-    val recipeViewModel: RecipeViewModel by viewModels()
+    private var objRecipe: Recipe? = null
+    private val recipeViewModel: RecipeViewModel by viewModels()
     val authViewModel: AuthViewModel by viewModels()
     lateinit var manager: LinearLayoutManager
 
@@ -86,6 +88,12 @@ class RecipeDetailFragment : Fragment() {
 
 
         super.onViewCreated(view, savedInstanceState)
+
+        binding.calenderIB.setOnClickListener {
+            findNavController().navigate(R.id.action_receitaDetailFragment_to_newCalenderEntryFragment,Bundle().apply {
+                putParcelable("Recipe",objRecipe)
+            })
+        }
 
         if (objRecipe != null) {
             if (isOnline(view.context)) {
@@ -192,7 +200,7 @@ class RecipeDetailFragment : Fragment() {
 
         binding.profileAuthorCV.setOnClickListener {
 
-     /*       val view : View = layoutInflater.inflate(R.layout.modal_bottom_sheet_profile,null)
+     /*     val view : View = layoutInflater.inflate(R.layout.modal_bottom_sheet_profile,null)
             val dialog = BottomSheetDialog(requireContext())
             dialog.behavior.state=BottomSheetBehavior.STATE_COLLAPSED
             dialog.behavior.peekHeight=650
@@ -225,7 +233,8 @@ class RecipeDetailFragment : Fragment() {
         Helper.loadRecipeImage(binding.IVRecipe,recipe.img_source)
 
         //info
-        binding.dateTV.text = formatLocalDateToFormatDate(Helper.formatServerTimeToLocalDateTime(recipe.created_date))
+
+        binding.dateTV.text = formatServerTimeToDateString(recipe.created_date)
         binding.titleTV.text = recipe.title
         binding.ratingRecipeRB.rating = recipe.source_rating.toFloat()
         binding.ratingMedTV.text = recipe.source_rating.toString()

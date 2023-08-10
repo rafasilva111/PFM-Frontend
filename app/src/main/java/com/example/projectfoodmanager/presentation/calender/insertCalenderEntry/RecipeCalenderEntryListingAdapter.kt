@@ -78,12 +78,12 @@ class RecipeCalenderEntryListingAdapter(
             if (user==null)
                 user= sharedPreference.getUserSession()
 
+            binding.dateTV.text = formatServerTimeToDateString(item.created_date)
 
             //Load Recipe img
             Helper.loadRecipeImage(binding.imageView,item.img_source)
 
 
-            binding.dateTV.text = Helper.formatLocalDateToFormatDate(Helper.formatServerTimeToLocalDateTime(item.created_date))
             binding.recipeTitleTV.text = item.title
             binding.recipeDescriptionTV.text = item.description.toString()
             binding.itemLayout.setOnClickListener {

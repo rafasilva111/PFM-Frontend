@@ -55,6 +55,9 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.deleteUser(userId = userId)
 	}
 
+	override suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds> {
+		return apiInterface.getUserRecipesBackground()
+	}
 
 	//Recipe
 	override suspend fun createRecipe(recipe : RecipeRequest): Response<Recipe> {
@@ -158,11 +161,11 @@ class RemoteDataSourceImpl @Inject constructor(
 
 		return apiInterface.getFollowersByUser(userId)
 	}
-	override suspend fun getFolloweds(userId: Int): Response<FollowList> {
-		if(userId==-1)
+	override suspend fun getFolloweds(id_user: Int): Response<FollowList> {
+		if(id_user==-1)
 			return apiInterface.getFolloweds()
 
-		return apiInterface.getFollowedsByUser(userId)
+		return apiInterface.getFollowedsByUser(id_user)
 	}
 
 	override suspend fun getFollowRequests(): Response<FollowList> {

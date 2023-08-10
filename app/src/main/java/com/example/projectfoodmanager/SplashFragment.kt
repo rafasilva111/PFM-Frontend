@@ -78,13 +78,19 @@ class SplashFragment : Fragment() {
                 when (result) {
                     is NetworkResult.Success -> {
 
+
+                        // loads calender entrys
+
                         // get calender entrys from -15 days to +15 days to have smt in memory
-                        val date = LocalDateTime.now()
-                        calenderViewModel.getCalenderDatedEntryList(
-                            fromDate = date.minusDays(15),
-                            toDate = date.plusDays(15),
-                            cleanseOldRegistry = true
-                        )
+                        LocalDateTime.now().let { dateNow ->
+                            calenderViewModel.getCalenderDatedEntryList(
+                                fromDate = dateNow.minusDays(15),
+                                toDate = dateNow.plusDays(15),
+                                cleanseOldRegistry = true
+                            )
+                        }
+
+
 
                     }
                     is NetworkResult.Error -> {
@@ -105,6 +111,23 @@ class SplashFragment : Fragment() {
                 when (result) {
                     is NetworkResult.Success -> {
 
+                        // loads recipes entrys
+
+                        authViewModel.getUserRecipesBackground()
+
+                    }
+                    is NetworkResult.Error -> {
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        authViewModel.getUserRecipesBackground.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
                         findNavController().navigate(R.id.action_splashFragment_to_app_navigation)
                         toast(getString(R.string.welcome))
                     }

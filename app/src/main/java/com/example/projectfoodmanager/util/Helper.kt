@@ -43,6 +43,16 @@ class Helper {
                 Locale.getDefault()) else it.toString() } }
         }
 
+        // server string -> localTimeDate
+        fun formatServerTimeToLocalDateTime(localDateTimeString: String): LocalDateTime{
+            return LocalDateTime.parse(localDateTimeString, DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"))
+        }
+
+        // server string -> date string
+        fun formatServerTimeToDateString(localDateTimeString: String): String{
+            return localDateTimeString.split("T")[0]
+        }
+
         fun formatLocalTimeToServerTime(localTime: LocalDateTime): String{
             return localTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"))
         }
