@@ -119,6 +119,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_blankFragment"
             app:destination="@id/blankFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_securityFragment"
+            app:destination="@id/securityFragment" />
     </fragment>
     <fragment
         android:id="@+id/updateBiodata"
