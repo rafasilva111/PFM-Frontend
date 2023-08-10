@@ -88,17 +88,17 @@ class ProfileFragment : Fragment() {
         activityResultLauncher  =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode== AppCompatActivity.RESULT_OK) {
-                    var extras: Bundle? = result.data?.extras
-                    var imageUri: Uri
-                    var imageBitmap = extras?.get("data") as Bitmap
-                    var imageResult: WeakReference<Bitmap> = WeakReference(
+                    val extras: Bundle? = result.data?.extras
+                    val imageUri: Uri
+                    val imageBitmap = extras?.get("data") as Bitmap
+                    val imageResult: WeakReference<Bitmap> = WeakReference(
                         Bitmap.createScaledBitmap(
                             imageBitmap, imageBitmap.width, imageBitmap.height, false
                         ).copy(
                             Bitmap.Config.RGB_565, true
                         )
                     )
-                    var bm = imageResult.get()
+                    val bm = imageResult.get()
 
                     // todo look into this
                     imageUri = saveImage(bm, requireContext())

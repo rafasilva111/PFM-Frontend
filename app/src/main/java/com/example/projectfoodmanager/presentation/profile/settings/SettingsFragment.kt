@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.settings
+package com.example.projectfoodmanager.presentation.profile.settings
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -29,6 +29,10 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        binding.CLSecurity.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_securityFragment)
+        }
         binding.backIB.setOnClickListener {
             findNavController().navigateUp()
         }

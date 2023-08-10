@@ -1,21 +1,19 @@
 package com.example.projectfoodmanager.presentation.auth
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.view.*
 import android.widget.Toast
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
-import androidx.lifecycle.Observer
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.CalenderViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -150,6 +148,7 @@ class LoginFragment : Fragment() {
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
+
                         LocalDateTime.now().let { dateNow ->
                             calenderViewModel.getCalenderDatedEntryList(
                                 fromDate = dateNow.minusDays(15),
