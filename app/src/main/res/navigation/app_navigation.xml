@@ -106,9 +106,13 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.projectfoodmanager.presentation.settings.SettingsFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_securityFragment"
+            app:destination="@id/securityFragment" />
+    </fragment>
     <fragment
         android:id="@+id/updateBiodata"
         android:name="com.example.projectfoodmanager.presentation.goals.UpdateBiodata"
@@ -159,6 +163,11 @@
             android:id="@+id/action_notificationFragment_to_followRequestFragment"
             app:destination="@id/followRequestFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/securityFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.settings.SecurityFragment"
+        android:label="fragment_security"
+        tools:layout="@layout/fragment_security" />
 
 
 </navigation>

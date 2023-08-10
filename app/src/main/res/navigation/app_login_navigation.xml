@@ -115,7 +115,7 @@
         app:popUpToInclusive="true"/>
     <fragment
         android:id="@+id/testeFragment"
-        android:name="com.example.projectfoodmanager.TesteFragment"
+        android:name="com.example.projectfoodmanager.BlankFragment"
         android:label="fragment_teste"
         tools:layout="@layout/fragment_teste" />
 
