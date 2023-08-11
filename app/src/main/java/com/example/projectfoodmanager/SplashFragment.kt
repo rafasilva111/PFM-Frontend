@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +12,14 @@ import android.view.ViewGroup
 import android.view.WindowInsetsController
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationData
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.PushNotification
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.CalenderViewModel
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -79,7 +84,11 @@ class SplashFragment : Fragment() {
                     is NetworkResult.Success -> {
 
 
-                        // loads calender entrys
+
+                        FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+                            if (result.data!!.fmc_token != token)
+                                authViewModel.updateUser(UserRequest(fmc_token = token))
+                        }
 
                         // get calender entrys from -15 days to +15 days to have smt in memory
                         LocalDateTime.now().let { dateNow ->

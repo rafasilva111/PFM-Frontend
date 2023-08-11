@@ -132,7 +132,7 @@ class AuthRepositoryImp @Inject constructor(
     override suspend fun updateUser(userRequest: UserRequest) {
         _userUpdateResponseLiveData.postValue(Event(NetworkResult.Loading()))
         val response = remoteDataSource.updateUser(userRequest)
-        if (response.isSuccessful && response.code() == 200) {
+        if (response.isSuccessful) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             sharedPreference.updateUserSession(response.body()!!)
             _userUpdateResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))

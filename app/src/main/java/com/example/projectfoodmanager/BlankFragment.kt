@@ -66,7 +66,7 @@ class BlankFragment : Fragment() {
                     .sendNotification(
                         PushNotification(
                             NotificationData("FCM Notification","this notification from android"),
-                            token
+                            "e8vW1WSSSbWxt_IN26a15-:APA91bGyblnELUuP3p9rH-GkMJLucIwpJosCSYq0dASEA2PZrtWbw-z-0ovavseU03RHDiKMYaUO9TeqfoqSo_q0uZE-kLsbgJkG93tqsP6gXe7I1i6jtVlbeJB3lbntawFBVxfwzaDo"
                         )
                     )
             }

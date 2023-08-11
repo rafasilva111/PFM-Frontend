@@ -12,6 +12,7 @@ data class User(
     val birth_date: String?,
     val email: String,
     val description: String,
+    val fmc_token: String,
     val profile_type: String,
     val verified: Boolean,
     val user_type: String,
