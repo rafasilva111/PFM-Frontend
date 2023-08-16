@@ -15,14 +15,21 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFollowRequestBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.NotificationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class FollowRequestFragment : Fragment() {
+
     // binding
     lateinit var binding: FragmentFollowRequestBinding
+
+    // viewModels
     private val authViewModel by activityViewModels<AuthViewModel>()
+    private val notificationViewModel by activityViewModels<NotificationViewModel>()
+
+    // constants
     private lateinit var currentUser: User
     private var itemPosition: Int = -1
 
@@ -42,7 +49,7 @@ class FollowRequestFragment : Fragment() {
             onActionBTNClicked = { userId ->
                 authViewModel.postAcceptFollowRequest(userId)
             },
-            onRemoveBTNClicked = {position, userId ->
+            onRemoveBTNClicked = { _, userId ->
                 authViewModel.deleteFollowRequest(FollowType.NOT_FOLLOWER,userId)
 
             }
@@ -51,7 +58,7 @@ class FollowRequestFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         if (!this::binding.isInitialized) {
             binding = FragmentFollowRequestBinding.inflate(layoutInflater)
@@ -113,7 +120,6 @@ class FollowRequestFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
                         toast("Confirmação com sucesso")
-
                         //Get FollowRequests
                         //authViewModel.getFollowRequests()
                     }

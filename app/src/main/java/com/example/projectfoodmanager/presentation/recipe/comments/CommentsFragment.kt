@@ -14,21 +14,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
-import com.bumptech.glide.Glide
-import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentCommentsBinding
-import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -115,7 +108,7 @@ class CommentsFragment : Fragment() {
             // create a comment
             binding.publishIB.setOnClickListener {
 
-                recipeViewModel.createCommentOnRecipe(
+                recipeViewModel.postCommentOnRecipe(
                     recipeId,
                     CreateCommentRequest(text = binding.ETcomment.text.toString())
                 )
@@ -193,7 +186,7 @@ class CommentsFragment : Fragment() {
         })
 
 
-        recipeViewModel.functionCreateCommentOnRecipe.observe(viewLifecycleOwner, Observer {
+        recipeViewModel.functionPostCommentOnRecipe.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {

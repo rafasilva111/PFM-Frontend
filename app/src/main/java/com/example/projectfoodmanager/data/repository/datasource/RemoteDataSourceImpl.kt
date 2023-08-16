@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.api.ApiInterface
+import com.example.projectfoodmanager.data.api.ApiNotificationInterface
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
@@ -15,6 +16,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.PushNotification
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 
@@ -22,11 +24,13 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResp
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.util.FollowType
+import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
-	private val apiInterface: ApiInterface
+	private val apiInterface: ApiInterface,
+	private val apiNotificationInterface: ApiNotificationInterface
 ) : RemoteDataSource {
 
 	//User
@@ -187,5 +191,12 @@ class RemoteDataSourceImpl @Inject constructor(
 
 	override suspend fun postFollowRequest(userId: Int): Response<Unit> {
 		return apiInterface.postFollowRequest(userId)
+	}
+
+
+	//notifications
+
+	override suspend fun sendNotification(notificationModel: PushNotification): Response<ResponseBody> {
+		return apiNotificationInterface.sendNotification(notificationModel)
 	}
 }

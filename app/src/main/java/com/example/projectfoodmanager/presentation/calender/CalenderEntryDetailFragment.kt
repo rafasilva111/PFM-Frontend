@@ -249,7 +249,7 @@ class CalendarEntryDetailFragment : Fragment() {
                 .setMessage("Tem certeza de que deseja apagar o registo?")
                 .setPositiveButton("Sim") { dialog, which ->
                     // Adicione aqui o código para apagar o registro
-                    calenderViewModel.deleteCalenderEntry(objCalEntry.id)
+                    calenderViewModel.deleteCalenderEntry(objCalEntry)
 
                 }
                 .setNegativeButton("Não") { dialog, which ->

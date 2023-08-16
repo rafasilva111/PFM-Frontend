@@ -2,7 +2,7 @@ package com.example.projectfoodmanager.di
 
 
 
-import com.example.projectfoodmanager.data.api.ApiNotifications
+import com.example.projectfoodmanager.data.api.ApiNotificationInterface
 import com.example.projectfoodmanager.util.FIREBASE_NOTIFICATIONS.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,7 +17,7 @@ class RetrofitInstance {
         }
 
         val api by lazy {
-            retrofit.create(ApiNotifications::class.java)
+            retrofit.create(ApiNotificationInterface::class.java)
         }
     }
 }

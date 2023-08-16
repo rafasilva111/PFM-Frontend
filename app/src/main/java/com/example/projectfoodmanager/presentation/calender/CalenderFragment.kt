@@ -22,6 +22,7 @@ import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.daysInMonthArray
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.formatDateMonthYear
 import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.currentDate
+import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.selectedDate
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeVisibilityMenu
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
@@ -201,6 +202,7 @@ class CalenderFragment : Fragment() {
         binding.calMonthRV.visibility = View.VISIBLE
 
         currentDate = LocalDate.now()
+
         binding.monthYearTV.text = formatDateMonthYear(currentDate)!!.replaceFirstChar { it.uppercase() }
 
         val layoutManager: RecyclerView.LayoutManager =

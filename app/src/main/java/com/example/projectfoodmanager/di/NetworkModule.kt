@@ -1,8 +1,7 @@
 package com.example.projectfoodmanager.di
 
-import android.util.Log
 import com.example.projectfoodmanager.data.api.ApiInterface
-import com.example.projectfoodmanager.data.api.ApiNotifications
+import com.example.projectfoodmanager.data.api.ApiNotificationInterface
 import com.example.projectfoodmanager.data.api.AuthInterceptor
 import com.example.projectfoodmanager.util.Constants
 import com.example.projectfoodmanager.util.FIREBASE_NOTIFICATIONS
@@ -74,7 +73,7 @@ class NetworkModule {
 
 	@Provides
 	@Singleton
-	fun provideApi(@SecondRetrofit retrofit: Retrofit): ApiNotifications =
-		retrofit.create(ApiNotifications::class.java)
+	fun provideApi(@SecondRetrofit retrofit: Retrofit): ApiNotificationInterface =
+		retrofit.create(ApiNotificationInterface::class.java)
 
 }

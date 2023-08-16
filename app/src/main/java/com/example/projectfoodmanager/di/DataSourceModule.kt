@@ -1,6 +1,7 @@
 package com.example.projectfoodmanager.di
 
 import com.example.projectfoodmanager.data.api.ApiInterface
+import com.example.projectfoodmanager.data.api.ApiNotificationInterface
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourceImpl
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import dagger.Module
@@ -15,7 +16,7 @@ class DataSourceModule {
 
 	@Provides
 	@Singleton
-	fun provideRemoteDataSource(apiInterface: ApiInterface): RemoteDataSource {
-		return RemoteDataSourceImpl(apiInterface = apiInterface)
+	fun provideRemoteDataSource(apiInterface: ApiInterface, apiNotificationInterface: ApiNotificationInterface): RemoteDataSource {
+		return RemoteDataSourceImpl(apiInterface = apiInterface, apiNotificationInterface = apiNotificationInterface)
 	}
 }

@@ -39,13 +39,20 @@ class CalenderAdapter(
             holder.dayOfMonth.text = ""
         else{
             holder.dayOfMonth.text =  date.dayOfMonth.toString()
-            if (date == currentDate && currentDate == LocalDate.now()) {
-                currentDatePainted = holder.itemView
-                selected = holder.itemView
-                selectedDate = date
-                colorSelectedDay(holder.itemView,holder.parentView.context)
 
-            }else {
+            if (date == currentDate && date == selectedDate){
+                selected = holder.itemView
+                currentDatePainted = holder.itemView
+                colorSelectedDay(currentDatePainted!!, holder.parentView.context)
+            }
+            else if (date == currentDate) {
+                currentDatePainted = holder.itemView
+                colorCurrentDay(currentDatePainted!!, holder.parentView.context)
+            }else if (date == selectedDate) {
+                selected = holder.itemView
+                colorSelectedDay(selected!!, holder.parentView.context)
+            }
+            else {
                 colorUnselectedDay(holder.itemView,holder.parentView.context)
             }
         }
@@ -137,6 +144,7 @@ class CalenderAdapter(
                     if (dayOfMonth.text.isNotBlank() ){
                         onItemClicked.invoke(days[position]!!)
                     }
+
                     if (currentDatePainted == selected)
                         colorCurrentDay(selected!!,context)
                     else

@@ -60,7 +60,7 @@ class CalenderRepositoryImp @Inject constructor(
         val response =remoteDataSource.getEntryOnCalender(formatLocalTimeToServerTime(date))
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            sharedPreference.saveSingleCalenderEntry(date,response.body()!!)
+            sharedPreference.saveSingleCalenderDayEntry(date,response.body()!!.result)
             _functionGetEntryOnCalender.postValue(Event(NetworkResult.Success(response.body()!!
             )))
         }
@@ -126,13 +126,13 @@ class CalenderRepositoryImp @Inject constructor(
     override val deleteCalenderEntry: LiveData<Event<NetworkResult<Int>>>
         get() = _functionDeleteCalenderEntry
 
-    override suspend fun deleteCalenderEntry(calenderEntryId: Int) {
+    override suspend fun deleteCalenderEntry(calenderEntry: CalenderEntry) {
         _functionDeleteCalenderEntry.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.deleteCalenderEntry(calenderEntryId)
+        val response =remoteDataSource.deleteCalenderEntry(calenderEntry.id)
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            //TODO: Rafa apagar calenderEntry da shared preferences
+            sharedPreference.deleteCalenderEntry(calenderEntry)
             _functionDeleteCalenderEntry.postValue(Event(NetworkResult.Success(response.code())))
         }
         else if(response.errorBody()!=null){
@@ -157,6 +157,8 @@ class CalenderRepositoryImp @Inject constructor(
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             //TODO: Rafa path calenderEntry da shared preferences ??
+            sharedPreference.saveSingleCalenderEntry(response.body()!!)
+
             _functionPatchCalenderEntry.postValue(Event(NetworkResult.Success(response.body()!!
             )))
         }

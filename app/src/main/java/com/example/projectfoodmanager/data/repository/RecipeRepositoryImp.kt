@@ -296,7 +296,7 @@ class RecipeRepositoryImp @Inject constructor(
     }
 
     private val _functionCreateCommentOnRecipe = MutableLiveData<Event<NetworkResult<Comment>>>()
-    override val functionCreateCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
+    override val functionPostCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
         get() = _functionCreateCommentOnRecipe
 
     override suspend fun createCommentOnRecipe(recipeId: Int,comment: CreateCommentRequest) {
