@@ -83,9 +83,15 @@ class RecipeListingFragment : Fragment() {
             onItemClicked = {pos,item ->
                 // use pos to reset current page to pos page, so it will refresh the pos page
                 refreshPage =  ceil((pos+1).toFloat()/PaginationNumber.DEFAULT).toInt()
-                findNavController().navigate(R.id.action_recipeListingFragment_to_receitaDetailFragment,Bundle().apply {
+
+                //action_recipeListingFragment_to_newRecipeFragment
+
+                //OLD
+/*                findNavController().navigate(R.id.action_recipeListingFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("Recipe",item)
-                })
+                })*/
+
+                findNavController().navigate(R.id.action_recipeListingFragment_to_newRecipeFragment,null)
 
                 changeVisibilityMenu(false,activity)
             },

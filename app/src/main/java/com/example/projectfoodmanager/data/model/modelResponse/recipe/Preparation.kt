@@ -5,6 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Preparation(
-    val description: String,
+    var description: String,
     val step: Int
 ): Parcelable

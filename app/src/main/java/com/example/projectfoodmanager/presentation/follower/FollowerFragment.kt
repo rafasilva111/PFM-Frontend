@@ -23,8 +23,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class FollowerFragment : Fragment() {
 
-
-
     // binding
     lateinit var binding: FragmentFollowerBinding
     private var itemPosition: Int = -1

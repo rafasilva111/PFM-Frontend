@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class CalenderEntryPatchRequest(
-    val tag: String?=null,
-    val realization_date: String?=null,
+    var tag: String?=null,
+    var realization_date: String?=null,
     val checked_done:Boolean?=null
 ) : Parcelable

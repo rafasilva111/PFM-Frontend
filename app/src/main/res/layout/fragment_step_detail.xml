@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.recipe.create.steps.StepDetailFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--     <TextView
+                   android:id="@+id/textView2"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginStart="30dp"
+                   android:layout_marginTop="40dp"
+                   android:layout_marginEnd="30dp"
+                   android:fontFamily="@font/fredoka_regular"
+                   android:text="Imagem"
+                   android:textColor="@color/black"
+                   android:textSize="16sp"
+                   android:textStyle="bold"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toTopOf="parent" />
+
+               <androidx.cardview.widget.CardView
+                   android:id="@+id/cardView3"
+                   android:layout_width="270dp"
+                   android:layout_height="130dp"
+                   android:layout_marginTop="10dp"
+                   app:cardCornerRadius="20dp"
+                   app:layout_constraintEnd_toEndOf="@+id/textView2"
+                   app:layout_constraintStart_toStartOf="@+id/textView2"
+                   app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+                   <ImageView
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:foreground="#52000000"
+                       android:scaleType="fitXY"
+                       android:src="@drawable/default_image_display" />
+
+               </androidx.cardview.widget.CardView>-->
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/titleTL"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="20dp"
+                android:hint="Title"
+                android:outlineProvider="none"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:startIconDrawable="@drawable/ic_title">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/titleET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/descriptionTL"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="Description"
+                android:outlineProvider="none"
+                app:layout_constraintEnd_toEndOf="@+id/titleTL"
+                app:layout_constraintStart_toStartOf="@+id/titleTL"
+                app:layout_constraintTop_toBottomOf="@+id/titleTL"
+                app:counterEnabled="true"
+                app:counterMaxLength="255">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/descriptionET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:gravity="top"
+                    android:minLines="5"
+                    android:padding="10dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/timeTL"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="Time"
+                app:expandedHintEnabled="false"
+                android:outlineProvider="none"
+                app:layout_constraintEnd_toEndOf="@+id/titleTL"
+                app:layout_constraintStart_toStartOf="@+id/titleTL"
+                app:layout_constraintTop_toBottomOf="@+id/descriptionTL"
+                app:startIconDrawable="@drawable/ic_time">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/timeET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="Ex: 2:30"
+                    android:padding="0dp"
+                    android:focusable="false"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/difficultyTL"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="@+id/timeTL"
+                app:layout_constraintStart_toStartOf="@+id/timeTL"
+                app:layout_constraintTop_toBottomOf="@+id/timeTL"
+                app:startIconDrawable="@drawable/ic_difficulty">
+
+                <AutoCompleteTextView
+                    android:id="@+id/difficultyET"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="Difficulty"
+                    android:inputType="none"
+                    android:padding="0dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/portionTL"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="Portion"
+                app:expandedHintEnabled="false"
+                app:layout_constraintEnd_toEndOf="@+id/difficultyTL"
+                app:layout_constraintStart_toStartOf="@+id/difficultyTL"
+                app:layout_constraintTop_toBottomOf="@+id/difficultyTL"
+                app:startIconDrawable="@drawable/ic_portion">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/portionET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="Ex: 4 pessoas"
+                    android:padding="0dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/fredoka_one"
+                android:text="Categorias"
+                android:textColor="#494949"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/portionTL"
+                app:layout_constraintStart_toStartOf="@+id/portionTL"
+                app:layout_constraintTop_toBottomOf="@+id/portionTL" />
+
+            <View
+                android:id="@+id/view6"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_default"
+                android:backgroundTint="#575757"
+                app:layout_constraintEnd_toEndOf="@+id/textView4"
+                app:layout_constraintStart_toStartOf="@+id/textView4"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout16"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/textView4"
+                app:layout_constraintStart_toStartOf="@+id/textView4"
+                app:layout_constraintTop_toBottomOf="@+id/view6">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:text="Principais"
+                    android:textColor="#575757"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/view6"
+                    app:layout_constraintStart_toStartOf="@+id/view6"
+                    app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:text="(min 1 e max 3)"
+                    android:textColor="#9E8A8A8A"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="@+id/view6"
+                    app:layout_constraintStart_toStartOf="@+id/view6"
+                    app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+            </LinearLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/firstTagCG"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout16"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout16"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout16" />
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout21"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout16"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout16"
+                app:layout_constraintTop_toBottomOf="@+id/firstTagCG">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:text="Secundárias"
+                    android:textColor="#575757"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/view6"
+                    app:layout_constraintStart_toStartOf="@+id/view6"
+                    app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:text="(max 5)"
+                    android:textColor="#9E8A8A8A"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="@+id/view6"
+                    app:layout_constraintStart_toStartOf="@+id/view6"
+                    app:layout_constraintTop_toBottomOf="@+id/view6" />
+
+            </LinearLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/secTagCG"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout21"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout21"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout21" />
+
+            <TextView
+                android:id="@+id/emptyTagTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.3"
+                android:fontFamily="@font/fredoka_regular"
+                android:text="Nenhuma"
+                android:textColor="#000000"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="@+id/secTagCG"
+                app:layout_constraintTop_toTopOf="@+id/secTagCG" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tagSecTL"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                app:boxBackgroundColor="#00FFFFFF"
+                android:hint="Nova Tag"
+                app:expandedHintEnabled="false"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout21"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout21"
+                app:layout_constraintTop_toBottomOf="@+id/secTagCG">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tagSecET"
+                    android:backgroundTint="#00FFFFFF"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Digite um nome de uma tag"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addTagSecBTN"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#684CAF50"
+                android:elevation="8dp"
+                android:fontFamily="@font/fredoka_one"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:text="Adicionar"
+                android:textColor="#F0FFFFFF"
+                app:layout_constraintEnd_toEndOf="@+id/tagSecTL"
+                app:layout_constraintStart_toStartOf="@+id/tagSecTL"
+                app:layout_constraintTop_toBottomOf="@+id/tagSecTL" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/nextStepBTN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="40dp"
+                android:elevation="8dp"
+                android:fontFamily="@font/fredoka_regular"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:text="Continuar"
+                app:icon="@drawable/ic_arrow_right"
+                app:iconGravity="end"
+                app:iconPadding="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/tagSecTL"
+                app:layout_constraintTop_toBottomOf="@+id/addTagSecBTN" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/backIB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="40dp"
+                android:backgroundTint="@color/grayLightBTN"
+                android:elevation="8dp"
+                android:fontFamily="@font/fredoka_regular"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:text="Cancelar"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tagSecTL"
+                app:layout_constraintTop_toBottomOf="@+id/addTagSecBTN" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -83,7 +83,7 @@ class RegisterFragment : Fragment() {
     ): View {
         binding = FragmentRegisterBinding.inflate(layoutInflater)
         val genders = resources.getStringArray(R.array.gender_array)
-        val arrayAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_register_gender,genders)
+        val arrayAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_item,genders)
 
         binding.sexEt.setAdapter(arrayAdapter)
 
@@ -147,6 +147,7 @@ class RegisterFragment : Fragment() {
                 Toast(context).showCustomToast ("Por favor preencha os campos em falta", requireActivity(),ToastType.ERROR)
             }
         }
+
         binding.backIB.setOnClickListener {
             findNavController().navigateUp()
         }

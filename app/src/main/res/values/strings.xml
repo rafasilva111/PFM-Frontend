@@ -123,5 +123,21 @@
         <item>Ceia</item>
     </string-array>
 
+    <string-array name="recipeTags_array">
+        <item>Carne</item>
+        <item>Peixe</item>
+        <item>Sopa</item>
+        <item>Salada</item>
+        <item>Fruta</item>
+        <item>Pizza</item>
+        <item>Bebida</item>
+    </string-array>
+
+
+    <string-array name="recipeDifficulty_array">
+        <item>Fácil</item>
+        <item>Medio</item>
+        <item>Dificil</item>
+    </string-array>
 
 </resources>

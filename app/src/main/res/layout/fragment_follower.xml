@@ -56,8 +56,8 @@
             android:fontFamily="@font/fredoka_one"
             android:paddingBottom="5dp"
             android:text="@string/followers"
-            android:textSize="16sp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/followedsBTN"
@@ -67,18 +67,18 @@
             android:background="@color/transparent"
             android:fontFamily="@font/fredoka_one"
             android:text="@string/followeds"
-            android:textSize="16sp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="16sp" />
     </LinearLayout>
 
 
-    <com.google.android.material.search.SearchBar
+<!--    <com.google.android.material.search.SearchBar
         android:id="@+id/searchBar"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout19" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout19" />-->
 
 
     <LinearLayout
@@ -90,7 +90,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchBar">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout19">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/requestFollowCV"

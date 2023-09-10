@@ -309,24 +309,15 @@ class CalendarEntryDetailFragment : Fragment() {
 
     private fun getCalenderEntryRequest(): CalenderEntryPatchRequest {
 
-        var calenderEntryPatchRequest: CalenderEntryPatchRequest? = null
+        val calenderEntryPatchRequest: CalenderEntryPatchRequest =  CalenderEntryPatchRequest()
 
-        //TODO: Esta condiçao não esta das melhores, é preciso fazer uma analise mais sobria
-        //Se a tag selected é diferente da tag antiga e a data hora não mudaram
-        if (tagSelected!=oldTagSelected && (newDate == oldDate && newTime.equals(oldTime))) {
-            calenderEntryPatchRequest= CalenderEntryPatchRequest(tag=tagsList[tagSelected])
-        }else if(tagSelected==oldTagSelected && (newDate != oldDate || newTime != oldTime)){
-            calenderEntryPatchRequest= CalenderEntryPatchRequest(realization_date = formatLocalTimeToServerTime(LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))))
-        }else{
-            calenderEntryPatchRequest= CalenderEntryPatchRequest(tag = binding.tagValTV.text.toString().uppercase(), realization_date = formatLocalTimeToServerTime(LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))))
+        if (tagSelected!=oldTagSelected) {
+            calenderEntryPatchRequest.tag= tagsList[tagSelected].uppercase()
         }
 
-      /*  val isTagChanged = tagSelected != oldTagSelected
-        val isDateTimeChanged = !newDate.equals(oldDate) || !newTime.equals(newTime)
-        val newTag = if (isTagChanged) tagsList[tagSelected] else binding.tagValTV.text.toString().uppercase()
-        val newRealizationDate = if (isDateTimeChanged) formatLocalTimeToServerTime(LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))) else null
-        calenderEntryPatchRequest = CalenderEntryPatchRequest(tag = newTag, realization_date = newRealizationDate)
-*/
+        if(newDate != oldDate || newTime != oldTime){
+            calenderEntryPatchRequest.realization_date = formatLocalTimeToServerTime(LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm"))))
+        }
 
         return calenderEntryPatchRequest
     }

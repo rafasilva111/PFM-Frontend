@@ -617,7 +617,7 @@
                                 android:layout_marginEnd="5dp"
                                 android:background="@drawable/bg_card"
                                 android:padding="5dp"
-                                android:src="@drawable/ic_portion"
+                                android:src="@drawable/img_portion"
                                 android:contentDescription="portion"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"

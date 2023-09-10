@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_recipeListingFragment_to_notificationFragment"
             app:destination="@id/notificationFragment" />
+        <action
+            android:id="@+id/action_recipeListingFragment_to_newRecipeFragment"
+            app:destination="@id/newRecipeFragment" />
     </fragment>
 
 
@@ -199,5 +202,10 @@
         android:name="com.example.projectfoodmanager.BlankFragment"
         android:label="fragment_blank"
         tools:layout="@layout/fragment_blank" />
+    <fragment
+        android:id="@+id/newRecipeFragment"
+        android:name="com.example.projectfoodmanager.presentation.recipe.create.NewRecipeFragment"
+        android:label="fragment_new_recipe"
+        tools:layout="@layout/fragment_new_recipe" />
 
 </navigation>
