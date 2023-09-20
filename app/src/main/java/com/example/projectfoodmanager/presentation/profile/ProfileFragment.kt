@@ -116,32 +116,6 @@ class ProfileFragment : Fragment() {
         bindObservers()
         binding.logoutIB.setOnClickListener {
 
-            //USER CONFIRMATION DIALOG
-            // set the custom layout
-/*            val dialogBinding : View = layoutInflater.inflate(R.layout.dialog_confirmation_from_user, null);
-
-            val myDialog = Dialog(requireContext())
-            myDialog.setContentView(dialogBinding)
-
-            // create alert dialog
-            myDialog.setCancelable(true)
-            myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-            val yesBtn = dialogBinding.findViewById<Button>(R.id.btn_conf_Yes)
-            val cancelBtn = dialogBinding.findViewById<Button>(R.id.btn_conf_cancel)
-
-            yesBtn.setOnClickListener {
-                authViewModel.logoutUser()
-                myDialog.dismiss()
-            }
-
-            cancelBtn.setOnClickListener {
-                myDialog.dismiss()
-            }
-
-            myDialog.show()*/
-
-
             MaterialAlertDialogBuilder(requireContext())
                 .setIcon(R.drawable.ic_logout)
                 .setTitle("Logout")

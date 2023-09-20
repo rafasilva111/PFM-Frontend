@@ -1,10 +1,9 @@
-package com.example.projectfoodmanager.presentation.calender.insertCalenderEntry
+package com.example.projectfoodmanager.presentation.calendar.insertCalenderEntry
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
@@ -12,10 +11,6 @@ import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.SharedPreference
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 
@@ -84,7 +79,7 @@ class RecipeCalenderEntryListingAdapter(
             //Load Recipe img
             Helper.loadRecipeImage(binding.imageView,item.img_source)
 
-
+            binding.idTV.text = item.id.toString()
             binding.recipeTitleTV.text = item.title
             binding.recipeDescriptionTV.text = item.description.toString()
             binding.itemLayout.setOnClickListener {

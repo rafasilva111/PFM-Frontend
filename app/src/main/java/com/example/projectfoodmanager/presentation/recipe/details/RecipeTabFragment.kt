@@ -49,7 +49,7 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
             binding.descriptionTV.text = recipe.description
 
 
-            val list: List<String> = recipe.tags
+            val list: List<String> = recipe.tags!!
 
 
             // TODO: Obter a lista ordenada da base de dados
@@ -188,9 +188,9 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
 //        }
             }
 
-            binding.numberIngridientsTV.text = recipe.ingredients.size.toString() + " Ingredientes"
+            binding.numberIngridientsTV.text = recipe.ingredientQuantities?.size.toString() + " Ingredientes"
             val itemsAdapterIngrtedients: IngridientsListingAdapter? =
-                this.context?.let { IngridientsListingAdapter(it, recipe.ingredients) }
+                this.context?.let { recipe.ingredientQuantities?.let { it1 -> IngridientsListingAdapter(it, it1) } }
             binding.LVIngridientsInfo.adapter = itemsAdapterIngrtedients
             setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
 
@@ -213,8 +213,8 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
 
 
 
-    fun setListViewHeightBasedOnChildren(myListView: ListView?) {
-        val adapter: ListAdapter = myListView!!.getAdapter()
+    fun setListViewHeightBasedOnChildren(myListView: ListView) {
+        val adapter: ListAdapter = myListView.adapter
         var totalHeight = 0
         val teste = adapter.count
         val teste2 = adapter.getCount()

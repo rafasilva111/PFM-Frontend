@@ -5,12 +5,15 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingIngredientListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredientList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListSimplefied
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
@@ -58,10 +61,10 @@ interface RemoteDataSource {
 	suspend fun deleteComment(commentId: Int): Response<Unit>
 
 	//calender
-	suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<Unit>
+	suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<CalenderEntry>
 	suspend fun getEntryOnCalender(date: String):  Response<CalenderEntryList>
 	suspend fun getEntryOnCalender(fromDate: String, toDate: String):  Response<CalenderDatedEntryList>
-	suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<CalenderIngredientList>
+	suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingIngredientListSimplefied>
 	suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Unit>
 	suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
 
@@ -77,6 +80,11 @@ interface RemoteDataSource {
 
 	//notifications
 	suspend fun sendNotification(notificationModel: PushNotification): Response<ResponseBody>
+
+	// shopping list
+	suspend fun postShoppingList(shoppingIngredientList: ShoppingIngredientListRequest): Response<Unit>
+	suspend fun getShoppingList() : Response<ShoppingIngredientListList>
+	suspend fun getShoppingList(shoppingListId: Int): Response<ShoppingIngredientList>
 
 
 }

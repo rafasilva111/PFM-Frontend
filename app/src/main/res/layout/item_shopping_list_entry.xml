@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:id="@+id/shoppingListLayout">
 
     <ImageView
         android:id="@+id/imageView3"
@@ -22,27 +23,19 @@
         android:layout_marginStart="15dp"
         android:layout_marginEnd="30dp"
         android:layout_weight="1"
-        android:text="Ingredient"
+        android:text="List Name"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintEnd_toStartOf="@+id/quantityTV"
+        app:layout_constraintEnd_toStartOf="@+id/created_date"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
     <TextView
-        android:id="@+id/quantityTV"
+        android:id="@+id/created_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
         android:layout_weight="1"
-        android:text="Quantity"
-        app:layout_constraintBottom_toBottomOf="@+id/checkDoneCB"
-        app:layout_constraintEnd_toStartOf="@+id/checkDoneCB"
-        app:layout_constraintTop_toTopOf="@+id/checkDoneCB" />
-
-    <CheckBox
-        android:id="@+id/checkDoneCB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:text="Created Date"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

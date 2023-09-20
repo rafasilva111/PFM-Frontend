@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.calender
+package com.example.projectfoodmanager.presentation.calendar
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
@@ -16,10 +16,10 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-class CalenderEntryAdapter(
+class CalendarEntryAdapter(
     val onItemClicked: (Int, CalenderEntry) -> Unit,
     val onDoneClicked: (Boolean, CalenderEntry) -> Unit,
-) : RecyclerView.Adapter<CalenderEntryAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<CalendarEntryAdapter.MyViewHolder>() {
 
     private val TAG: String? = "CalenderEntryAdapter"
     private var list: MutableList<CalenderEntry> = arrayListOf()
@@ -53,12 +53,12 @@ class CalenderEntryAdapter(
     }
 
     fun removeItem(position: Int){
-        list.removeAt(position)
+        this.list.removeAt(position)
         notifyItemChanged(position)
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return this.list.size
     }
 
 

@@ -8,82 +8,86 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredientList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListSimplefied
 import com.example.projectfoodmanager.data.repository.CalenderRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.SharedPreference
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 
 @HiltViewModel
-class CalenderViewModel @Inject constructor(
-    val repository: CalenderRepository,
-    val sharedPreference: SharedPreference
+class CalendarViewModel @Inject constructor(
+    val repository: CalenderRepository
 ): ViewModel() {
 
 
     private val TAG:String ="CalendarViewModel"
 
-    val createEntryOnCalenderLiveData: LiveData<Event<NetworkResult<Boolean>>>
+    val createEntryOnCalendarLiveData: LiveData<Event<NetworkResult<CalenderEntry>>>
         get() = repository.createEntryOnCalender
 
-    fun createEntryOnCalender(recipeId: Int,calenderEntryRequest: CalenderEntryRequest){
+    fun createEntryOnCalendar(recipeId: Int, calenderEntryRequest: CalenderEntryRequest){
         viewModelScope.launch {
             repository.createEntryOnCalender(recipeId,calenderEntryRequest)
         }
     }
 
-    val getEntryOnCalenderLiveData: LiveData<Event<NetworkResult<CalenderEntryList>>>
-        get() = repository.getEntryOnCalenderLiveData
+    val getEntryOnCalendarLiveData: LiveData<Event<NetworkResult<CalenderEntryList>>>
+        get() = repository.getEntryOnCalendarLiveData
+    // cancel job if multiple times clicked
+    var getEntryOnCalenderJob: Job? = null
 
-    fun getEntryOnCalender(date:LocalDateTime){
-        viewModelScope.launch {
+    fun getEntryOnCalendar(date:LocalDateTime){
+        getEntryOnCalenderJob?.cancel()
+        getEntryOnCalenderJob = viewModelScope.launch {
             repository.getEntryOnCalender(date)
         }
     }
 
-    val getCalenderDatedEntryListLiveData: LiveData<Event<NetworkResult<CalenderDatedEntryList>>>
+    val getCalendarDatedEntryListLiveData: LiveData<Event<NetworkResult<CalenderDatedEntryList>>>
         get() = repository.getCalenderDatedEntryList
 
-    fun getCalenderDatedEntryList(fromDate:LocalDateTime,toDate: LocalDateTime,cleanseOldRegistry:Boolean = false){
+    fun getCalendarDatedEntryList(fromDate:LocalDateTime, toDate: LocalDateTime, cleanseOldRegistry:Boolean = false){
         viewModelScope.launch {
             repository.getCalenderDatedEntryList(fromDate,toDate,cleanseOldRegistry)
         }
     }
 
 
-    val getCalenderIngredientsLiveData: LiveData<Event<NetworkResult<CalenderIngredientList>>>
-        get() = repository.getCalenderIngredients
+    val getCalendarIngredientsLiveData: LiveData<Event<NetworkResult<ShoppingIngredientListSimplefied>>>
+        get() = repository.getCalendarIngredients
 
-    fun getCalenderIngredients(fromDate: LocalDateTime, toDate: LocalDateTime) {
+    fun getCalendarIngredients(fromDate: LocalDateTime, toDate: LocalDateTime) {
         viewModelScope.launch {
-            repository.getCalenderIngredients(fromDate,toDate)
+            repository.getCalendarIngredients(fromDate,toDate)
         }
     }
 
 
-    val deleteCalenderEntryLiveData: LiveData<Event<NetworkResult<Int>>>
-        get() = repository.deleteCalenderEntry
+    val deleteCalendarEntryLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.deleteCalendarEntry
 
 
-    fun deleteCalenderEntry(calenderEntry: CalenderEntry) {
+    fun deleteCalendarEntry(calenderEntry: CalenderEntry) {
         viewModelScope.launch {
             repository.deleteCalenderEntry(calenderEntry)
         }
     }
 
 
-    val patchCalenderEntryLiveData: LiveData<Event<NetworkResult<CalenderEntry>>>
-        get() = repository.patchCalenderEntry
+    val patchCalendarEntryLiveData: LiveData<Event<NetworkResult<CalenderEntry>>>
+        get() = repository.patchCalendarEntry
 
-    fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest) {
+    fun patchCalendarEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest) {
         viewModelScope.launch {
             repository.patchCalenderEntry(calenderEntryId,calenderPatchRequest)
         }
     }
+
+
 
 }

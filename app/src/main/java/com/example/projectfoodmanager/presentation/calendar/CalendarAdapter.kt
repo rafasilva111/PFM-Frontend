@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.calender
+package com.example.projectfoodmanager.presentation.calendar
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -9,16 +9,16 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.currentDate
-import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.selectedDate
+import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.currentDate
+import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
 import java.time.LocalDate
 
 
-class CalenderAdapter(
+class CalendarAdapter(
     private var days: ArrayList<LocalDate?>,
     private val onItemClicked: (LocalDate) -> Unit,
 ) :
-    RecyclerView.Adapter<CalenderAdapter.CalendarViewHolder>() {
+    RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
 
     private var selected: View? = null
     private var currentDatePainted: View? = null
@@ -35,6 +35,7 @@ class CalenderAdapter(
     override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
 
         val date = days[position]
+        val todayDate = LocalDate.now()
         if (date == null)
             holder.dayOfMonth.text = ""
         else{
@@ -45,7 +46,7 @@ class CalenderAdapter(
                 currentDatePainted = holder.itemView
                 colorSelectedDay(currentDatePainted!!, holder.parentView.context)
             }
-            else if (date == currentDate) {
+            else if (date == currentDate && currentDate == todayDate) {
                 currentDatePainted = holder.itemView
                 colorCurrentDay(currentDatePainted!!, holder.parentView.context)
             }else if (date == selectedDate) {
@@ -161,6 +162,8 @@ class CalenderAdapter(
         }
 
     }
+
+
 
 
 

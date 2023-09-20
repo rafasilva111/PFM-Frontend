@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.calender.insertCalenderEntry
+package com.example.projectfoodmanager.presentation.calendar.insertCalenderEntry
 
 import android.graphics.Color
 import android.os.Build
@@ -9,7 +9,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -19,11 +19,11 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBinding
-import com.example.projectfoodmanager.presentation.calender.utils.CalenderUtils.Companion.selectedDate
+import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.viewmodels.CalenderViewModel
+import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -39,29 +39,34 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class NewCalenderEntryFragment : Fragment() {
 
-    @Inject
-    lateinit var sharedPreference: SharedPreference
-    @Inject
-    lateinit var tokenManager: TokenManager
-
-    private val authViewModel: AuthViewModel by viewModels()
-    private val calenderViewModel: CalenderViewModel by viewModels()
-
+    // binding
     lateinit var binding: FragmentNewCalenderEntryBinding
 
+    // viewModels
+    private val authViewModel by activityViewModels<AuthViewModel>()
+    private val calendarViewModel by activityViewModels<CalendarViewModel>()
+
+    // constants
+    private val TAG: String = "NewCalenderEntryFragment"
     private var snapHelper: SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
     private var checkedTag: Int= 0
-    private var recipeRecyclerViewList: MutableList<Recipe> = mutableListOf()
-
-    private val TAG: String = "NewCalenderEntryFragment"
 
     lateinit var user: User
     private var currentTabSelected :Int = 0
 
     private var objRecipe: Recipe? = null
+    private var recipeRecyclerViewList: MutableList<Recipe> = mutableListOf()
+
+    // injects
+
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+    @Inject
+    lateinit var tokenManager: TokenManager
 
 
+    //adapters
     private val adapter by lazy {
         RecipeCalenderEntryListingAdapter(
             onItemClicked = { _, item ->
@@ -230,7 +235,7 @@ class NewCalenderEntryFragment : Fragment() {
             val (valid,message) = validation()
             if (valid) {
                 val (recipe_id,calenderEntryRequest) = getCalenderEntryRequest()
-                calenderViewModel.createEntryOnCalender(recipe_id,calenderEntryRequest)
+                calendarViewModel.createEntryOnCalendar(recipe_id,calenderEntryRequest)
             }
             else{
                 Toast(context).showCustomToast (message, requireActivity(),ToastType.ALERT)
@@ -422,10 +427,12 @@ class NewCalenderEntryFragment : Fragment() {
 
     private fun bindObservers() {
 
-        calenderViewModel.createEntryOnCalenderLiveData.observe(viewLifecycleOwner) {
+        calendarViewModel.createEntryOnCalendarLiveData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
+                        binding.detailsPanel.show()
+                        binding.progressBar.hide()
                         toast ("Nova entrada no calendario adicionada.")
                         findNavController().navigateUp()
 
@@ -434,7 +441,9 @@ class NewCalenderEntryFragment : Fragment() {
                         Log.d(TAG, "bindObservers: ${it.message}.")
                     }
                     is NetworkResult.Loading -> {
-                        //binding.progressBar.isVisible = true
+                        binding.detailsPanel.hide()
+                        binding.progressBar.show()
+
                     }
                 }
             }

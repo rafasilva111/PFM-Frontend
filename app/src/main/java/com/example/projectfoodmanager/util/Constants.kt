@@ -14,6 +14,7 @@ object Constants {
 
     const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"
     const val PREFS_TOKEN_FILE = "prefs_token_file"
+
 }
 object FIREBASE_NOTIFICATIONS {
     const val BASE_URL = "https://fcm.googleapis.com"

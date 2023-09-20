@@ -8,7 +8,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredientList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListSimplefied
 
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
@@ -25,8 +25,8 @@ class CalenderRepositoryImp @Inject constructor(
 
     private val TAG:String = "AuthRepositoryImp"
 
-    private val _functionCreateEntryOnCalender = MutableLiveData<Event<NetworkResult<Boolean>>>()
-    override val createEntryOnCalender: LiveData<Event<NetworkResult<Boolean>>>
+    private val _functionCreateEntryOnCalender = MutableLiveData<Event<NetworkResult<CalenderEntry>>>()
+    override val createEntryOnCalender: LiveData<Event<NetworkResult<CalenderEntry>>>
         get() = _functionCreateEntryOnCalender
 
     override suspend fun createEntryOnCalender(recipeId: Int,comment: CalenderEntryRequest) {
@@ -35,8 +35,8 @@ class CalenderRepositoryImp @Inject constructor(
         val response =remoteDataSource.createCalenderEntry(recipeId,comment)
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            _functionCreateEntryOnCalender.postValue(Event(NetworkResult.Success(response.isSuccessful
-            )))
+            sharedPreference.saveSingleCalendarEntry(response.body()!!)
+            _functionCreateEntryOnCalender.postValue(Event(NetworkResult.Success(response.body()!!)))
         }
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()
@@ -49,7 +49,7 @@ class CalenderRepositoryImp @Inject constructor(
     }
 
     private val _functionGetEntryOnCalender = MutableLiveData<Event<NetworkResult<CalenderEntryList>>>()
-    override val getEntryOnCalenderLiveData: LiveData<Event<NetworkResult<CalenderEntryList>>>
+    override val getEntryOnCalendarLiveData: LiveData<Event<NetworkResult<CalenderEntryList>>>
         get() = _functionGetEntryOnCalender
 
     override suspend fun getEntryOnCalender(date: LocalDateTime) {
@@ -60,7 +60,7 @@ class CalenderRepositoryImp @Inject constructor(
         val response =remoteDataSource.getEntryOnCalender(formatLocalTimeToServerTime(date))
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            sharedPreference.saveSingleCalenderDayEntry(date,response.body()!!.result)
+            sharedPreference.saveSingleCalendarDayEntry(date,response.body()!!.result)
             _functionGetEntryOnCalender.postValue(Event(NetworkResult.Success(response.body()!!
             )))
         }
@@ -84,7 +84,7 @@ class CalenderRepositoryImp @Inject constructor(
         val response =remoteDataSource.getEntryOnCalender(formatLocalTimeToServerTime(fromDate),formatLocalTimeToServerTime(toDate))
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            sharedPreference.saveMultipleCalenderEntrys(response.body()!!,cleanseOldRegistry)
+            sharedPreference.saveMultipleCalendarEntrys(response.body()!!,cleanseOldRegistry)
             _functionGetCalenderDatedEntryList.postValue(Event(NetworkResult.Success(response.body()!!
             )))
         }
@@ -99,11 +99,11 @@ class CalenderRepositoryImp @Inject constructor(
     }
 
 
-    private val _functionGetCalenderIngredients = MutableLiveData<Event<NetworkResult<CalenderIngredientList>>>()
-    override val getCalenderIngredients: LiveData<Event<NetworkResult<CalenderIngredientList>>>
+    private val _functionGetCalenderIngredients = MutableLiveData<Event<NetworkResult<ShoppingIngredientListSimplefied>>>()
+    override val getCalendarIngredients: LiveData<Event<NetworkResult<ShoppingIngredientListSimplefied>>>
         get() = _functionGetCalenderIngredients
 
-    override suspend fun getCalenderIngredients(fromDate: LocalDateTime, toDate: LocalDateTime) {
+    override suspend fun getCalendarIngredients(fromDate: LocalDateTime, toDate: LocalDateTime) {
         _functionGetCalenderIngredients.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
         val response =remoteDataSource.getCalenderIngredients(formatLocalTimeToServerTime(fromDate),formatLocalTimeToServerTime(toDate))
@@ -123,7 +123,7 @@ class CalenderRepositoryImp @Inject constructor(
     }
 
     private val _functionDeleteCalenderEntry = MutableLiveData<Event<NetworkResult<Int>>>()
-    override val deleteCalenderEntry: LiveData<Event<NetworkResult<Int>>>
+    override val deleteCalendarEntry: LiveData<Event<NetworkResult<Int>>>
         get() = _functionDeleteCalenderEntry
 
     override suspend fun deleteCalenderEntry(calenderEntry: CalenderEntry) {
@@ -132,7 +132,7 @@ class CalenderRepositoryImp @Inject constructor(
         val response =remoteDataSource.deleteCalenderEntry(calenderEntry.id)
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            sharedPreference.deleteCalenderEntry(calenderEntry)
+            sharedPreference.deleteCalendarEntry(calenderEntry)
             _functionDeleteCalenderEntry.postValue(Event(NetworkResult.Success(response.code())))
         }
         else if(response.errorBody()!=null){
@@ -146,7 +146,7 @@ class CalenderRepositoryImp @Inject constructor(
     }
 
     private val _functionPatchCalenderEntry = MutableLiveData<Event<NetworkResult<CalenderEntry>>>()
-    override val patchCalenderEntry: LiveData<Event<NetworkResult<CalenderEntry>>>
+    override val patchCalendarEntry: LiveData<Event<NetworkResult<CalenderEntry>>>
         get() = _functionPatchCalenderEntry
 
 
@@ -156,8 +156,7 @@ class CalenderRepositoryImp @Inject constructor(
         val response =remoteDataSource.patchCalenderEntry(calenderEntryId,calenderPatchRequest)
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            //TODO: Rafa path calenderEntry da shared preferences ??
-            sharedPreference.saveSingleCalenderEntry(response.body()!!)
+            sharedPreference.saveSingleCalendarEntry(response.body()!!)
 
             _functionPatchCalenderEntry.postValue(Event(NetworkResult.Success(response.body()!!
             )))
@@ -169,5 +168,8 @@ class CalenderRepositoryImp @Inject constructor(
         }
         else{
             _functionPatchCalenderEntry.postValue(Event(NetworkResult.Error("Something Went Wrong")))
-        }    }
+        }
+    }
+
+
 }

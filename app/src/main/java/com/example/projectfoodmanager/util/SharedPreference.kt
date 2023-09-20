@@ -35,6 +35,14 @@ class SharedPreference @Inject constructor(
         )
     }
 
+    fun saveUserRecipesSession(userRecipeBackgrounds: UserRecipeBackgrounds) {
+        val user:User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
+        user.liked_recipes = userRecipeBackgrounds.result.recipes_liked
+        user.saved_recipes = userRecipeBackgrounds.result.recipes_saved
+        user.created_recipes = userRecipeBackgrounds.result.recipes_created
+        saveUserSession(user)
+    }
+
     fun saveUserSession(user: User) {
         sharedPreferences.edit().putString(SharedPreferencesConstants.USER_SESSION,gson.toJson(user)).apply()
     }
@@ -76,7 +84,11 @@ class SharedPreference @Inject constructor(
         saveUserSession(user)
     }
 
-    private fun getFullCalenderEntrys(): TreeMap<String,MutableList<CalenderEntry>> {
+            // calender entrys
+
+    // Get
+
+    private fun getFullCalendarEntrys(): TreeMap<String,MutableList<CalenderEntry>> {
 
         val type = object : TypeToken<TreeMap<String, MutableList<CalenderEntry?>>>() {}.type
 
@@ -84,30 +96,43 @@ class SharedPreference @Inject constructor(
             return gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_CALENDER_SESSION,""),type)
         }catch (e: Exception) {
             // we order the hashmap by the date
-            val dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-            val dateComparator = compareByDescending<String> { LocalDate.parse(it, dateFormat) }
+            val dateComparator = compareByDescending<String> { LocalDate.parse(it, formatter) }
             return TreeMap<String,MutableList<CalenderEntry>>(dateComparator)
         }
     }
 
-    fun saveSingleCalenderEntry(calenderEntry: CalenderEntry) {
-        val fullCalenderEntryList = getFullCalenderEntrys()
-        val key = formatServerTimeToDateString(calenderEntry.realization_date)
-        val calenderDayEntrys = fullCalenderEntryList[key]
+    fun getEntryOnCalendar(atStartOfDay: LocalDateTime):MutableList<CalenderEntry>? {
+        val type = object : TypeToken<TreeMap<String, MutableList<CalenderEntry?>>>() {}.type
+        val formattedDate = atStartOfDay.format(formatter)
 
-        if (calenderDayEntrys != null) {
-            if (calenderEntry !in calenderDayEntrys){
-                calenderDayEntrys.add(calenderEntry)
-                fullCalenderEntryList[key] = calenderDayEntrys
-            }
+        val calender : TreeMap<String,MutableList<CalenderEntry>> = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_CALENDER_SESSION,""),type)
+
+        return calender[formattedDate]
+    }
+
+    // Save
+
+
+    fun saveSingleCalendarEntry(calenderEntry: CalenderEntry) {
+        val fullCalenderEntryList = getFullCalendarEntrys()
+        val dateString = formatServerTimeToDateString(calenderEntry.created_date)
+        if (dateString !in fullCalenderEntryList){
+            fullCalenderEntryList[dateString] = mutableListOf()
+            fullCalenderEntryList.comparator()
         }
+        fullCalenderEntryList[dateString]!!.add(calenderEntry)
 
+        val pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss")
+        fullCalenderEntryList[dateString]!!.sortBy { unit ->
+            LocalDateTime.parse(unit.created_date, pattern)
+        }
         sharedPreferences.edit().putString(SharedPreferencesConstants.USER_CALENDER_SESSION,gson.toJson(fullCalenderEntryList)).apply()
     }
 
+
     // overrides whats written
-    fun saveSingleCalenderDayEntry(date: LocalDateTime, calenderEntryList: MutableList<CalenderEntry>) {
-        val fullCalenderEntryList = getFullCalenderEntrys()
+    fun saveSingleCalendarDayEntry(date: LocalDateTime, calenderEntryList: MutableList<CalenderEntry>) {
+        val fullCalenderEntryList = getFullCalendarEntrys()
         val dateString = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         if (dateString in fullCalenderEntryList)
             fullCalenderEntryList[dateString] = calenderEntryList
@@ -120,8 +145,8 @@ class SharedPreference @Inject constructor(
     }
 
     // date must be dd/mm/yyyy
-    private fun saveSingleCalenderDayEntry(dateString: String, calenderEntryList: MutableList<CalenderEntry>) {
-        val fullCalenderEntryList = getFullCalenderEntrys()
+    private fun saveSingleCalendarDayEntry(dateString: String, calenderEntryList: MutableList<CalenderEntry>) {
+        val fullCalenderEntryList = getFullCalendarEntrys()
         if (dateString in fullCalenderEntryList)
             fullCalenderEntryList[dateString] = calenderEntryList
         else{
@@ -132,12 +157,13 @@ class SharedPreference @Inject constructor(
         sharedPreferences.edit().putString(SharedPreferencesConstants.USER_CALENDER_SESSION,gson.toJson(fullCalenderEntryList)).apply()
     }
 
-    fun saveMultipleCalenderEntrys(body: CalenderDatedEntryList,cleanseOldRegistry:Boolean = false) {
-        val fullCalenderEntryList = getFullCalenderEntrys()
+
+    fun saveMultipleCalendarEntrys(body: CalenderDatedEntryList, cleanseOldRegistry:Boolean = false) {
+        val fullCalenderEntryList = getFullCalendarEntrys()
 
         if (cleanseOldRegistry){
             // cleanse older registry
-            cleanseOldRegistry(fullCalenderEntryList)
+            cleanseOldCalendarRegistry(fullCalenderEntryList)
         }
 
         for (key in body.result.keys){
@@ -147,7 +173,9 @@ class SharedPreference @Inject constructor(
         sharedPreferences.edit().putString(SharedPreferencesConstants.USER_CALENDER_SESSION,gson.toJson(fullCalenderEntryList)).apply()
     }
 
-    private fun cleanseOldRegistry(fullCalenderEntryList: TreeMap<String,MutableList<CalenderEntry>>){
+    // Delete
+
+    private fun cleanseOldCalendarRegistry(fullCalenderEntryList: TreeMap<String,MutableList<CalenderEntry>>){
         val threeMonthsAgo  = LocalDate.now().minusMonths(3)
         fullCalenderEntryList.entries.removeIf { entry ->
             val entryDate = LocalDate.parse(entry.key, formatter)
@@ -155,23 +183,15 @@ class SharedPreference @Inject constructor(
         }
     }
 
-    fun saveUserRecipesSession(userRecipeBackgrounds: UserRecipeBackgrounds) {
-        val user:User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
-        user.liked_recipes = userRecipeBackgrounds.result.recipes_liked
-        user.saved_recipes = userRecipeBackgrounds.result.recipes_saved
-        user.created_recipes = userRecipeBackgrounds.result.recipes_created
-        saveUserSession(user)
-    }
-
-    fun deleteCalenderEntry(calenderEntry: CalenderEntry) {
-        val fullCalenderEntry = getFullCalenderEntrys()
+    fun deleteCalendarEntry(calenderEntry: CalenderEntry) {
+        val fullCalenderEntry = getFullCalendarEntrys()
 
         val key = formatServerTimeToDateString(calenderEntry.realization_date)
 
         val calenderDayEntrys = fullCalenderEntry[key]
         if (calenderDayEntrys != null){
             calenderDayEntrys.remove(calenderEntry)
-            saveSingleCalenderDayEntry(key,calenderDayEntrys)
+            saveSingleCalendarDayEntry(key,calenderDayEntrys)
         }
     }
 

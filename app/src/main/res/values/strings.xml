@@ -32,7 +32,7 @@
     <string name="favorites">Favoritos</string>
     <string name="offline_text">Utilizador está offline…</string>
     <string name="offline_desc">O utilizador necessita de estar online para aceder a esta aba.</string>
-    <string name="continuar">Ok, percebi.</string>
+    <string name="continuar">OK, percebi.</string>
     <string name="gender">Género</string>
     <string name="logout_completed">Logout completed successfully.</string>
     <string name="welcome">Tás cá outra vez porca?</string>
@@ -88,11 +88,11 @@
     <string name="first_name">Nome</string>
     <string name="cancel">Cancel</string>
     <string name="calender_formated_date">%1$s:%2$s</string>
-    <string name="no_recipes_saved">No recipes saved...</string>
+    <string name="no_recipes_saved">No recipes saved…</string>
     <string name="none">Nenhum</string>
-    <string name="no_recipes_liked">No recipes liked...</string>
-    <string name="no_recipes_created">No recipes created...</string>
-    <string name="not_implemented">Not implemented yet...</string>
+    <string name="no_recipes_liked">No recipes liked…</string>
+    <string name="no_recipes_created">No recipes created…</string>
+    <string name="not_implemented">Not implemented yet…</string>
     <string name="most_saved">Mais guardadas</string>
     <string name="random">Ao calhas</string>
     <string name="most_liked">Mais gostadas</string>
@@ -107,7 +107,26 @@
     <string name="no_follow_requests">No follow requests</string>
     <string name="notifications">Notifications</string>
     <string name="follow_requests">Follow requests</string>
-
+    <string name="quantity_placeholder">"%1$.2f %2$s "</string>
+    <string name="lista_de_ingredientes">Lista de ingredientes</string>
+    <string name="save_shopping_cart">Save shopping cart</string>
+    <string name="NOT_IMPLEMENT_YET">Not implemented yet</string>
+    <string name="portion_preferenced_by_user_secondary_description">This option is used to adjust the quantity of a recipe to match the user\'s preferences, making it easier to calculate the necessary items for the shopping list.</string>
+    <string name="portion_preferenced_by_user_description">The user has not indicated a preferred portion size, so please select one for them.</string>
+    <string name="portion_preferenced_by_user_use_recipes_portion">Use recipes portion\'s</string>
+    <string name="user_portion_preference">User\'s portion preference</string>
+    <string name="select">Select</string>
+    <string name="tv_first_recipes_portion">Choose the desired number of people for whom you\'d like to calculate the portion size of the recipe</string>
+    <string name="shopping_list_date">Shopping list %1$d/%2$d %3$d/%4$d</string>
+    <string name="listas_de_compras">Listas de compras</string>
+    <string name="lista_de_compras">Lista de compras</string>
+    <string name="no_shopping_lists">You don\'t have any shopping list...</string>
+    <string name="sem_registos">Sem registos</string>
+    <string name="recipes_title">Recipes</string>
+    <string name="calender_title">Calender</string>
+    <string name="favorites_title">Favorites</string>
+    <string name="goal_title">Goal</string>
+    <string name="profile_title">Profile</string>
     <string-array name="gender_array">
         <item>Masculino</item>
         <item>Feminino</item>

@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.calender
+package com.example.projectfoodmanager.presentation.calendar
 
 import android.graphics.Color
 import android.os.Build
@@ -23,7 +23,7 @@ import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFor
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToFormatTime
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
-import com.example.projectfoodmanager.viewmodels.CalenderViewModel
+import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -47,7 +47,7 @@ class CalendarEntryDetailFragment : Fragment() {
     private var tagSelected: Int= -1
     private var oldTagSelected: Int= -1
     lateinit var user: User
-    private val calenderViewModel by activityViewModels<CalenderViewModel>()
+    private val calendarViewModel by activityViewModels<CalendarViewModel>()
     private lateinit var savedDate:String
     private lateinit var savedTime:String
     private lateinit var oldDate:LocalDate
@@ -249,7 +249,7 @@ class CalendarEntryDetailFragment : Fragment() {
                 .setMessage("Tem certeza de que deseja apagar o registo?")
                 .setPositiveButton("Sim") { dialog, which ->
                     // Adicione aqui o código para apagar o registro
-                    calenderViewModel.deleteCalenderEntry(objCalEntry)
+                    calendarViewModel.deleteCalendarEntry(objCalEntry)
 
                 }
                 .setNegativeButton("Não") { dialog, which ->
@@ -269,7 +269,7 @@ class CalendarEntryDetailFragment : Fragment() {
                     // Adicione aqui o código para apagar o registro
                     val (valid,message) = validation()
                     if (valid) {
-                        calenderViewModel.patchCalenderEntry(calenderEntryId = objCalEntry.id, calenderPatchRequest = getCalenderEntryRequest())
+                        calendarViewModel.patchCalendarEntry(calenderEntryId = objCalEntry.id, calenderPatchRequest = getCalenderEntryRequest())
                     }
                     else{
                         Toast(context).showCustomToast (message, requireActivity(),ToastType.ALERT)
@@ -408,7 +408,7 @@ class CalendarEntryDetailFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        calenderViewModel.deleteCalenderEntryLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        calendarViewModel.deleteCalendarEntryLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -427,7 +427,7 @@ class CalendarEntryDetailFragment : Fragment() {
             }
         }
 
-        calenderViewModel.patchCalenderEntryLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        calendarViewModel.patchCalendarEntryLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {

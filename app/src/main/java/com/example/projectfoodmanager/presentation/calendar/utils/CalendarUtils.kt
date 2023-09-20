@@ -1,13 +1,12 @@
-package com.example.projectfoodmanager.presentation.calender.utils
+package com.example.projectfoodmanager.presentation.calendar.utils
 
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
-class CalenderUtils {
+class CalendarUtils {
     companion object {
         var currentDate: LocalDate = LocalDate.now()
         var selectedDate: LocalDate = LocalDate.now()
@@ -31,7 +30,7 @@ class CalenderUtils {
 
         fun daysInMonthArray(date: LocalDate): ArrayList<LocalDate?> {
 
-            var daysInMonthArray = ArrayList<LocalDate?>()
+            val daysInMonthArray = ArrayList<LocalDate?>()
             val yearMonth = YearMonth.from(date)
             val daysInMonth = yearMonth.lengthOfMonth()
             val firstOfMonth: LocalDate = date.withDayOfMonth(1)

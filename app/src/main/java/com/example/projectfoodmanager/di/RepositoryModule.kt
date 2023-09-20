@@ -60,4 +60,16 @@ object RepositoryModule {
             remoteDataSource = remoteDataSource
         )
     }
+
+    @Provides
+    @Singleton
+    fun providesShoppingListRepository(
+        remoteDataSource: RemoteDataSourceImpl,
+        sharedPreference: SharedPreference
+    ): ShoppingListRepository {
+        return ShoppingListRepositoryImp(
+            remoteDataSource = remoteDataSource,
+            sharedPreference = sharedPreference
+        )
+    }
 }
