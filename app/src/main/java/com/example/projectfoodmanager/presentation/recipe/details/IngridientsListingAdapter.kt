@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Ingredient
+import com.example.projectfoodmanager.data.model.modelResponse.ingredients.IngredientQuantity
 
 
 class IngridientsListingAdapter(
     val context: Context,
-    private val items: List<Ingredient>
+    private val items: List<IngredientQuantity>
 ):
     BaseAdapter() {
     private val inflater: LayoutInflater

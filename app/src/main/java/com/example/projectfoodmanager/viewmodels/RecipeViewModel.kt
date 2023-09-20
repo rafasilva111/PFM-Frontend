@@ -27,9 +27,6 @@ import javax.inject.Inject
 @HiltViewModel
 class RecipeViewModel @Inject constructor (
     val repository: RecipeRepository
-
-
-
 ): ViewModel() {
 
     private val TAG: String = "RecipeViewModel"
@@ -143,10 +140,10 @@ class RecipeViewModel @Inject constructor (
         }
     }
 
-    val functionCreateCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
-        get() = repository.functionCreateCommentOnRecipe
+    val functionPostCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
+        get() = repository.functionPostCommentOnRecipe
 
-    fun createCommentOnRecipe(recipeId: Int, comment: CreateCommentRequest) {
+    fun postCommentOnRecipe(recipeId: Int, comment: CreateCommentRequest) {
         viewModelScope.launch {
             repository.createCommentOnRecipe(recipeId,comment)
         }

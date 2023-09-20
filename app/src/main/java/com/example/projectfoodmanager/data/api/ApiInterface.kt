@@ -1,13 +1,19 @@
 package com.example.projectfoodmanager.data.api
 
 
-import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingIngredientListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListSimplefied
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
@@ -15,11 +21,15 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResp
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import retrofit2.Response
 import retrofit2.http.*
-const val API_V1_BASE_URL = "api/v1"
 
 interface ApiInterface {
+
+    companion object{
+        const val API_V1_BASE_URL = "api/v1"
+    }
 
     //user
     @POST("$API_V1_BASE_URL/auth")
@@ -37,14 +47,19 @@ interface ApiInterface {
     @POST("$API_V1_BASE_URL/user")
     suspend fun patchUser(@Body user : UserRequest): Response<Unit>
 
-    @GET("/user")
+    @GET("$API_V1_BASE_URL/user")
     suspend fun getUser(@Query("id") userId: Int): Response<UserAuthResponse>
 
     @PATCH("$API_V1_BASE_URL/user")
     suspend fun updateUser(@Body user : UserRequest): Response<User>
 
-    @DELETE("/user")
+    @DELETE("$API_V1_BASE_URL/user")
     suspend fun deleteUser(@Query("id") userId: Int): Response<String>
+
+
+    @GET("$API_V1_BASE_URL/auth/recipes")
+    suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
+
 
     //recipe
     @POST("$API_V1_BASE_URL/recipe")
@@ -107,7 +122,7 @@ interface ApiInterface {
     // calender
 
     @POST("$API_V1_BASE_URL/calendar")
-    suspend fun createCalenderEntry(@Query("recipe_id") recipeId: Int,@Body calenderEntryRequest : CalenderEntryRequest): Response<Unit>
+    suspend fun createCalenderEntry(@Query("recipe_id") recipeId: Int,@Body calenderEntryRequest : CalenderEntryRequest): Response<CalenderEntry>
 
     @GET("$API_V1_BASE_URL/calendar/list")
     suspend fun getEntryOnCalender(@Query("date")date: String): Response<CalenderEntryList>
@@ -115,10 +130,23 @@ interface ApiInterface {
     @GET("$API_V1_BASE_URL/calendar/list")
     suspend fun getEntryOnCalender(@Query("from_date") fromDate:String,@Query("to_date") toDate: String): Response<CalenderDatedEntryList>
 
+    @GET("$API_V1_BASE_URL/calendar/ingredients/list")
+    suspend fun getCalenderIngredients(@Query("from_date") fromDate: String,@Query("to_date") toDate: String): Response<ShoppingIngredientListSimplefied>
+
+    @DELETE("$API_V1_BASE_URL/calendar")
+    suspend fun deleteCalenderEntry(@Query("id") calenderEntryId: Int): Response<Unit>
+
+    @PATCH("$API_V1_BASE_URL/calendar")
+    suspend fun patchCalenderEntry(@Query("id") calenderEntryId: Int, @Body calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
+
 
     //followers
+
     @POST("$API_V1_BASE_URL/followers")
     suspend fun createFollower(@Query("userSenderId") userSenderId: Int,@Query("userReceiverId") userReceiverId: Int): Response<FollowerResponse>
+
+    @GET("$API_V1_BASE_URL/follow/list/followers")
+    suspend fun getFollowersByUser(@Query("user_id") userId: Int): Response<FollowList>
 
     @GET("$API_V1_BASE_URL/follow/list/followers")
     suspend fun getFollowers(): Response<FollowList>
@@ -126,6 +154,43 @@ interface ApiInterface {
     @GET("$API_V1_BASE_URL/follow/list/followeds")
     suspend fun getFolloweds(): Response<FollowList>
 
+    @GET("$API_V1_BASE_URL/follow/list/followeds")
+    suspend fun getFollowedsByUser(@Query("user_id") userId: Int): Response<FollowList>
+
+    //FOLLOW REQUESTS
+    @GET("$API_V1_BASE_URL/follow/requests/list")
+    suspend fun getFollowRequests(): Response<FollowList>
+
+    //ACCEPT FOLLOW REQUEST
+    @POST("$API_V1_BASE_URL/follow/requests")
+    suspend fun postAcceptFollowRequest(@Query("user_follower_id") userId: Int): Response<Unit>
+
+    //DELETE FOLLOW REQUEST
+    @DELETE("$API_V1_BASE_URL/follow/requests")
+    suspend fun deleteAcceptFollowRequest(@Query("user_follower_id") userId: Int): Response<Unit>
+
+    //SEND FOLLOW REQUEST
+    @POST("$API_V1_BASE_URL/follow")
+    suspend fun postFollowRequest(@Query("user_id") userId: Int): Response<Unit>
+
+    //REMOVE FOLLOWER
+    @DELETE("$API_V1_BASE_URL/follow")
+    suspend fun deleteFollowerRequest(@Query("user_follower_id") userId: Int): Response<Unit>
+
+    //REMOVE FOLLOWED
+    @DELETE("$API_V1_BASE_URL/follow")
+    suspend fun deleteFollowedRequest(@Query("user_followed_id") userId: Int): Response<Unit>
+
+    // Shopping list
+
+    @POST("$API_V1_BASE_URL/shopping_list")
+    suspend fun postShoppingList(@Body shoppingIngredientList: ShoppingIngredientListRequest): Response<Unit>
+
+    @GET("$API_V1_BASE_URL/shopping_list")
+    suspend fun getShoppingList(): Response<ShoppingIngredientListList>
+
+    @GET("$API_V1_BASE_URL/shopping_list")
+    suspend fun getShoppingList(@Query("id") shoppingListId: Int): Response<ShoppingIngredientList>
 
 
 }

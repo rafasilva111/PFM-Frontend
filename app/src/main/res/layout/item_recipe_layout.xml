@@ -40,7 +40,7 @@
                     android:layout_height="match_parent"
                     android:foreground="#2D000000"
                     android:scaleType="fitXY"
-                    android:src="@drawable/good_food_display___nci_visuals_online"
+                    android:src="@drawable/default_image_display"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -60,7 +60,7 @@
                 app:layout_constraintTop_toTopOf="@+id/CV_image_recipe">
 
                 <ImageView
-                    android:id="@+id/authorIV"
+                    android:id="@+id/imgAuthorIV"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/img_pingo_doce" />
@@ -68,7 +68,7 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/authorTV"
+                android:id="@+id/nameAuthorTV"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:layout_marginStart="-20dp"
@@ -97,8 +97,8 @@
                 android:elevation="8dp"
                 android:src="@drawable/verified"
                 android:visibility="visible"
-                app:layout_constraintStart_toEndOf="@+id/authorTV"
-                app:layout_constraintTop_toTopOf="@+id/authorTV" />
+                app:layout_constraintStart_toEndOf="@+id/nameAuthorTV"
+                app:layout_constraintTop_toTopOf="@+id/nameAuthorTV" />
 
             <!--        <ImageView
                         android:id="@+id/like"
@@ -124,7 +124,7 @@
                 android:elevation="9dp"
                 android:padding="5dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_favorito_black"
+                android:src="@drawable/ic_favorite_black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

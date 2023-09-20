@@ -1,22 +1,21 @@
 package com.example.projectfoodmanager.presentation.auth
 
+import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
-import androidx.lifecycle.Observer
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 
@@ -25,7 +24,10 @@ class LoginFragment : Fragment() {
 
     val TAG: String = "LoginFragment"
     lateinit var binding: FragmentLoginBinding
+
+
     private val authViewModel by activityViewModels<AuthViewModel>()
+    private val calendarViewModel by activityViewModels<CalendarViewModel>()
 
     @Inject
     lateinit var tokenManager: TokenManager
@@ -99,17 +101,6 @@ class LoginFragment : Fragment() {
         return isValid
     }
 
-
-
-    private fun changeVisib_Menu(state : Boolean){
-        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        if(state){
-            menu!!.visibility=View.VISIBLE
-        }else{
-            menu!!.visibility=View.GONE
-        }
-    }
-
     private fun showValidationErrors(error: String) {
         Toast(context).showCustomToast(error,requireActivity(),ToastType.ERROR)
        // toast(error)
@@ -151,16 +142,23 @@ class LoginFragment : Fragment() {
             }
         })
 
-        authViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let{
-
+        authViewModel.userResponseLiveData.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-                        Handler().postDelayed({
-                            setButtonVisibility(visibility = true)
-                                findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
 
-                        }, LOGIN_TIME)
+                        LocalDateTime.now().let { dateNow ->
+                            calendarViewModel.getCalendarDatedEntryList(
+                                fromDate = dateNow.minusDays(15),
+                                toDate = dateNow.plusDays(15),
+                                cleanseOldRegistry = true
+                            )
+                        }
+
+                        authViewModel.getUserRecipesBackground()
+
+                        setButtonVisibility(visibility = true)
+                        findNavController().navigate(R.id.action_loginFragment_to_home_navigation)
                     }
                     is NetworkResult.Error -> {
                         binding.loginBtn.isVisible = true
@@ -174,22 +172,29 @@ class LoginFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
     }
 
 
     override fun onResume() {
-        requireActivity().window.decorView.systemUiVisibility = 0
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
-        changeVisib_Menu(false)
-
         super.onResume()
-    }
 
-    override fun onPause() {
-        requireActivity().window.decorView.systemUiVisibility = 8192
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
+        val window = requireActivity().window
 
-        super.onPause()
+        //BACKGROUND in NAVIGATION BAR
+        window.statusBarColor = requireContext().getColor(R.color.main_color)
+        window.navigationBarColor = requireContext().getColor(R.color.main_color)
+
+        //TextColor in NAVIGATION BAR
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = 0
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+
     }
 }

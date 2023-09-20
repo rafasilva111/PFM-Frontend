@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.data.model.modelResponse.user
 
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplefied
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -11,25 +12,41 @@ data class User(
     val birth_date: String?,
     val email: String,
     val description: String,
+    val fmc_token: String?,
     val profile_type: String,
     val verified: Boolean,
     val user_type: String,
+    val user_portion: Int,
     val img_source: String="",
     val activity_level: Double = 0.0,
     val height: Double = 0.0,
     val sex: String?,
     val weight: Double = 0.0,
-    val age: Int?,
+    val age: Int? = 0,
     val rating: Double = 0.0,
     var liked_recipes: MutableList<Recipe>? = mutableListOf(),
     var saved_recipes: MutableList<Recipe>? = mutableListOf(),
     var created_recipes: MutableList<Recipe>? = mutableListOf(),
     val created_date: String?,
-    val updated_date: String?
+    val updated_date: String?,
+
+    val followers: Int = 0,
+    val followeds: Int = 0,
+    val followers_request: Int = 0,
+    val followeds_request: Int = 0
+
+
 ) : Parcelable {
 
 
     fun checkIfLiked(recipe: Recipe): Int {
+        return if (liked_recipes!=null && liked_recipes!!.isNotEmpty())
+            liked_recipes!!.indexOfFirst { it.id == recipe.id }
+        else
+            -1
+    }
+
+    fun checkIfLiked(recipe: RecipeSimplefied): Int {
         return if (liked_recipes!=null && liked_recipes!!.isNotEmpty())
             liked_recipes!!.indexOfFirst { it.id == recipe.id }
         else

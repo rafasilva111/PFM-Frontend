@@ -1,10 +1,12 @@
 package com.example.projectfoodmanager.presentation.recipe.details
 
 
-import android.annotation.SuppressLint
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -12,29 +14,27 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.example.projectfoodmanager.ModalBottomSheet
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Avatar
-import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
-import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
-import com.example.projectfoodmanager.presentation.recipe.comments.CommentsFragment
-import com.example.projectfoodmanager.presentation.recipe.comments.CommentsListingAdapter
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
+import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
+import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
+import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.badge.ExperimentalBadgeUtils
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
@@ -43,8 +43,8 @@ import javax.inject.Inject
 class RecipeDetailFragment : Fragment() {
     val TAG: String = "ReceitaDetailFragment"
     lateinit var binding: FragmentRecipeDetailBinding
-    var objRecipe: Recipe? = null
-    val recipeViewModel: RecipeViewModel by viewModels()
+    private var objRecipe: Recipe? = null
+    private val recipeViewModel: RecipeViewModel by viewModels()
     val authViewModel: AuthViewModel by viewModels()
     lateinit var manager: LinearLayoutManager
 
@@ -59,26 +59,41 @@ class RecipeDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         bindObservers()
 
-        if (this::binding.isInitialized) {
-            return binding.root
+        return if (this::binding.isInitialized) {
+            binding.root
         } else {
             // Inflate the layout for this fragment
             binding = FragmentRecipeDetailBinding.inflate(layoutInflater)
 
-            return binding.root
+            binding.root
         }
     }
+
+
+
+
     @ExperimentalBadgeUtils
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        objRecipe = arguments?.getParcelable("Recipe")
+
+        if (Build.VERSION.SDK_INT >= 33) {
+            // TIRAMISU
+            objRecipe = arguments?.getParcelable("Recipe", Recipe::class.java)
+        } else {
+            objRecipe = arguments?.getParcelable("Recipe")
+        }
         //requireActivity().window.statusBarColor =  requireContext().getColor(R.color.transparent)
 
 
         super.onViewCreated(view, savedInstanceState)
+
+        binding.calenderIB.setOnClickListener {
+            findNavController().navigate(R.id.action_receitaDetailFragment_to_newCalenderEntryFragment,Bundle().apply {
+                putParcelable("Recipe",objRecipe)
+            })
+        }
 
         if (objRecipe != null) {
             if (isOnline(view.context)) {
@@ -113,20 +128,15 @@ class RecipeDetailFragment : Fragment() {
     }
 
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun setUI(recipe: Recipe) {
 
 
-        // comments
-
-        val bundle = Bundle()
-        bundle.putInt("recipe_id", recipe.id)
-        bundle.putInt("user_id", recipe.id)
-
-
-
+        //Go CommentsFragment
         binding.commentsCV.setOnClickListener {
-            findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment,bundle)
+            findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment,Bundle().apply {
+                putInt("recipe_id", recipe.id)
+                putInt("user_id", recipe.id)
+            })
         }
 
 /*        //val standardBottomSheet = findViewById<FrameLayout>(R.id.standard_bottom_sheet)
@@ -174,25 +184,42 @@ class RecipeDetailFragment : Fragment() {
             true
         }*/
 
-        // TODO: Inserir imagem do autor da receita
-        binding.AutorTV.text = recipe.created_by.name
+        //AUTHOR-> NAME
+        binding.nameAuthorTV.text = formatNameToNameUpper(recipe.created_by.name)
 
-        if (recipe.created_by.img_source.contains("avatar")){
-            val avatar= Avatar.getAvatarByName(recipe.created_by.img_source)
-            binding.autorIV.setImageResource(avatar!!.imgId)
+        //AUTHOR-> IMG
+        Helper.loadUserImage(binding.imageAuthorIV, recipe.created_by.img_source)
 
+        //AUTHOR-> VERIFIED
+        if(recipe.created_by.verified){
+            binding.verifyUserIV.visibility = View.VISIBLE
         }else{
-            val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${recipe.created_by.img_source}")
-            imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                Glide.with(binding.autorIV.context).load(Uri.toString()).into(binding.autorIV)
-            }
-                .addOnFailureListener {
-                    Glide.with(binding.autorIV.context)
-                        .load(R.drawable.good_food_display___nci_visuals_online)
-                        .into(binding.autorIV)
-                }
+            binding.verifyUserIV.visibility = View.INVISIBLE
         }
 
+
+        binding.profileAuthorCV.setOnClickListener {
+
+     /*     val view : View = layoutInflater.inflate(R.layout.modal_bottom_sheet_profile,null)
+            val dialog = BottomSheetDialog(requireContext())
+            dialog.behavior.state=BottomSheetBehavior.STATE_COLLAPSED
+            dialog.behavior.peekHeight=650
+
+            dialog.setContentView(view)
+            dialog.show()*/
+            //findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,bundle)
+
+            findNavController().navigate(R.id.action_receitaDetailFragment_to_profileBottomSheetDialog,Bundle().apply {
+                putParcelable("User", recipe.created_by)
+            })
+
+  /*        findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,Bundle().apply {
+                putInt("userID",recipe.created_by.id)
+                putString("userName",recipe.created_by.name)
+                putInt("followType",FollowType.FOLLOWERS)
+            })
+*/
+        }
 
   /*      binding.IVSource.setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
@@ -202,18 +229,12 @@ class RecipeDetailFragment : Fragment() {
 
         binding.TVRef.text = recipe.id.toString()
 
-        val imgRef = Firebase.storage.reference.child(recipe.img_source)
-        imgRef.downloadUrl.addOnSuccessListener { Uri ->
-            val imageURL = Uri.toString()
-            Glide.with(binding.IVRecipe.context).load(imageURL).into(binding.IVRecipe)
-        }
+        //-> Load Recipe img
+        Helper.loadRecipeImage(binding.IVRecipe,recipe.img_source)
 
         //info
 
-        val format = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-        val date: Date? = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH).parse(recipe.created_date)
-
-        binding.dateTV.text = format.format(date!!)
+        binding.dateTV.text = formatServerTimeToDateString(recipe.created_date)
         binding.titleTV.text = recipe.title
         binding.ratingRecipeRB.rating = recipe.source_rating.toFloat()
         binding.ratingMedTV.text = recipe.source_rating.toString()
@@ -222,6 +243,7 @@ class RecipeDetailFragment : Fragment() {
 
         // check for user likes
         val user: User = sharedPreference.getUserSession()
+
 
         //--------- LIKES ---------
         if (user.checkIfLiked(recipe) != -1) {
@@ -242,7 +264,7 @@ class RecipeDetailFragment : Fragment() {
         if (user.checkIfSaved(recipe) != -1) {
             binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
         } else
-            binding.favoritesIB.setImageResource(R.drawable.ic_favorite_noclick)
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
 
         binding.favoritesIB.setOnClickListener {
             if (sharedPreference.getUserSession().checkIfSaved(recipe) == -1) {
@@ -334,7 +356,7 @@ class RecipeDetailFragment : Fragment() {
             if (user!!.checkIfSaved(recipe) != -1) {
                 binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
             } else
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorite_noclick)
+                binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
         }
 
 
@@ -342,12 +364,9 @@ class RecipeDetailFragment : Fragment() {
 
     }
 
-
     private fun bindObservers() {
 
         // Like function
-
-
         recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let {
                 when (it) {
@@ -451,14 +470,23 @@ class RecipeDetailFragment : Fragment() {
 
 
     override fun onResume() {
-        requireActivity().window.decorView.systemUiVisibility = 0
-        requireActivity().window.statusBarColor = requireContext().getColor(R.color.main_color)
+        val window = requireActivity().window
+
+        //BACKGROUND in NAVIGATION BAR
+        window.statusBarColor = requireContext().getColor(R.color.background_1)
+        window.navigationBarColor = requireContext().getColor(R.color.background_1)
+
+        //TextColor in NAVIGATION BAR
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = 0
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
         super.onResume()
     }
 
-    override fun onPause() {
-        requireActivity().window.decorView.systemUiVisibility = 8192
-        requireActivity().window.statusBarColor = requireContext().getColor(R.color.background_1)
-        super.onPause()
-    }
 }

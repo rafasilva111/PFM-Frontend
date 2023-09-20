@@ -19,6 +19,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsetsController
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
@@ -44,10 +45,12 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FireStorage.user_profile_images
+import com.example.projectfoodmanager.util.Helper.Companion.changeVisibilityMenu
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_CODE
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.yalantis.ucrop.UCrop
@@ -85,17 +88,17 @@ class ProfileFragment : Fragment() {
         activityResultLauncher  =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode== AppCompatActivity.RESULT_OK) {
-                    var extras: Bundle? = result.data?.extras
-                    var imageUri: Uri
-                    var imageBitmap = extras?.get("data") as Bitmap
-                    var imageResult: WeakReference<Bitmap> = WeakReference(
+                    val extras: Bundle? = result.data?.extras
+                    val imageUri: Uri
+                    val imageBitmap = extras?.get("data") as Bitmap
+                    val imageResult: WeakReference<Bitmap> = WeakReference(
                         Bitmap.createScaledBitmap(
                             imageBitmap, imageBitmap.width, imageBitmap.height, false
                         ).copy(
                             Bitmap.Config.RGB_565, true
                         )
                     )
-                    var bm = imageResult.get()
+                    val bm = imageResult.get()
 
                     // todo look into this
                     imageUri = saveImage(bm, requireContext())
@@ -113,30 +116,19 @@ class ProfileFragment : Fragment() {
         bindObservers()
         binding.logoutIB.setOnClickListener {
 
-            //USER CONFIRMATION DIALOG
-            // set the custom layout
-            val dialogBinding : View = layoutInflater.inflate(R.layout.dialog_confirmation_from_user, null);
-
-            val myDialog = Dialog(requireContext())
-            myDialog.setContentView(dialogBinding)
-
-            // create alert dialog
-            myDialog.setCancelable(true)
-            myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-            val yesBtn = dialogBinding.findViewById<Button>(R.id.btn_conf_Yes)
-            val cancelBtn = dialogBinding.findViewById<Button>(R.id.btn_conf_cancel)
-
-            yesBtn.setOnClickListener {
-                authViewModel.logoutUser()
-                myDialog.dismiss()
-            }
-
-            cancelBtn.setOnClickListener {
-                myDialog.dismiss()
-            }
-
-            myDialog.show()
+            MaterialAlertDialogBuilder(requireContext())
+                .setIcon(R.drawable.ic_logout)
+                .setTitle("Logout")
+                .setMessage(resources.getString(R.string.logout_confirmation_description))
+                .setPositiveButton("Sim") { dialog, which ->
+                    // Adicione aqui o código para apagar o registro
+                    authViewModel.logoutUser()
+                }
+                .setNegativeButton("Não") { dialog, which ->
+                    // Adicione aqui o código para cancelar a exclusão do registro
+                    dialog.dismiss()
+                }
+                .show()
 
         }
 
@@ -167,27 +159,39 @@ class ProfileFragment : Fragment() {
             binding.vipIV.visibility=View.INVISIBLE
         }
 
+        binding.nFollowedsTV.text = userSession.followeds.toString()
+        binding.nFollowersTV.text = userSession.followers.toString()
+        //TODO: nRecipe created by user
+        //binding.nRecipesTV.text = userSession.recipes.toString()
 
 
+        binding.followedsLL.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_followerFragment,Bundle().apply {
+                putInt("userID",-1)
+                putInt("followType",FollowType.FOLLOWEDS)
+                putString("userName",userSession.name)
+            })
+            changeVisibilityMenu(false,activity)
+        }
+
+        binding.followersLL.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_followerFragment,Bundle().apply {
+                putInt("userID",-1)
+                putInt("followType",FollowType.FOLLOWERS)
+                putString("userName",userSession.name)
+            })
+            changeVisibilityMenu(false,activity)
+        }
         // load profile image offline
 
         if (isOnline(view.context)) {
             // load profile image online
 
-            if (userSession.img_source.contains("avatar")){
-                val avatar= Avatar.getAvatarByName(userSession.img_source)
-                binding.profileIV.setImageResource(avatar!!.imgId)
-
-            }else{
-                val imgRef = Firebase.storage.reference.child("$user_profile_images${userSession.img_source}")
-                imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                    val imageURL = Uri.toString()
-                    Glide.with(binding.profileIV.context).load(imageURL)
-                        .into(binding.profileIV)
-                }
-            }
+            //-> Load Author img
+            Helper.loadUserImage(binding.profileIV, userSession.img_source)
 
             binding.uploadImageFB.setOnClickListener {
+
 
                 //USER CONFIRMATION DIALOG
                 // set the custom layout
@@ -251,25 +255,33 @@ class ProfileFragment : Fragment() {
                 myDialog.show()
             }
 
-            // get followers
-
-            authViewModel.getUserFollowees()
-
         }
 
     }
 
     override fun onResume() {
-        requireActivity().window.decorView.systemUiVisibility = 0
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
         super.onResume()
+        val window = requireActivity().window
+
+        //BACKGROUND in NAVIGATION BAR
+        window.statusBarColor = requireContext().getColor(R.color.main_color)
+        window.navigationBarColor = requireContext().getColor(R.color.main_color)
+
+        //TextColor in NAVIGATION BAR
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = 0
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        }
+
+        changeVisibilityMenu(true,activity)
+
     }
 
-    override fun onPause() {
-        requireActivity().window.decorView.systemUiVisibility = 8192
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
-        super.onPause()
-    }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -362,7 +374,7 @@ class ProfileFragment : Fragment() {
                         sharedPreference.deleteUserSession()
                         toast("Logout feito com sucesso!")
                         findNavController().navigate(R.id.action_profile_to_login)
-                        changeVisib_Menu(false)
+                        changeVisibilityMenu(false,activity)
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(it.message.toString())
@@ -395,15 +407,6 @@ class ProfileFragment : Fragment() {
         })
 
 
-    }
-
-    private fun changeVisib_Menu(state : Boolean){
-        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        if(state){
-            menu!!.visibility=View.VISIBLE
-        }else{
-            menu!!.visibility=View.GONE
-        }
     }
 
     // todo look into this
@@ -442,7 +445,6 @@ class ProfileFragment : Fragment() {
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
-
 
     private fun pickFromCamera(){
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)

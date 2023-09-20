@@ -3,42 +3,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_1"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.calender.ingredients.CalenderIngredientsFragment">
+    tools:context=".presentation.shoppingList.create.CalenderShoppingListFragment">
+
+    <ImageButton
+        android:id="@+id/backRegIB"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_action_btn"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_back_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/fedoka"
+        android:text="Lista de compras"
+        android:textColor="@color/black"
+        android:textSize="@dimen/subTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/backRegIB"
+        app:layout_constraintStart_toEndOf="@+id/backRegIB"
+        app:layout_constraintTop_toTopOf="@+id/backRegIB" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/backRegIB">
 
         <LinearLayout
-            android:id="@+id/headerDetailCatLL"
+            android:id="@+id/headerFilterCatLL2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_detail"
-                app:tint="#00A3FF" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
                 android:fontFamily="@font/fredoka_regular"
-                android:text="Ingredients List"
+                android:text="Nome:"
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="@dimen/headerCat"
@@ -47,25 +70,91 @@
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/tagCV"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:id="@+id/shoppingListNameCV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            app:cardBackgroundColor="@color/transparent"
             app:cardElevation="0dp"
             app:contentPadding="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/headerDetailCatLL">
+            app:layout_constraintEnd_toEndOf="@+id/headerFilterCatLL"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/headerFilterCatLL"
+            app:layout_constraintTop_toBottomOf="@+id/headerFilterCatLL2">
 
             <LinearLayout
+                android:id="@+id/shoppingListNameLL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+>
+
+                <EditText
+                    android:id="@+id/shoppingListName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="8"
+                    android:textSize="13sp"
+                    android:inputType="textPersonName"/>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/headerFilterCatLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shoppingListNameCV">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_filter"
+                app:tint="#7A7A7A" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/fredoka_regular"
+                android:text="Filtrar"
+                android:textAlignment="gravity"
+                android:textColor="@color/black"
+                android:textSize="@dimen/headerCat"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/fromDateCV"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            app:cardBackgroundColor="@color/transparent"
+            app:cardElevation="0dp"
+            app:contentPadding="5dp"
+            app:layout_constraintEnd_toEndOf="@+id/headerFilterCatLL"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/headerFilterCatLL"
+            app:layout_constraintTop_toBottomOf="@+id/headerFilterCatLL">
+
+            <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:paddingStart="20dp"
                 android:paddingEnd="20dp">
 
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_width="17dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:alpha="0.4"
@@ -81,7 +170,8 @@
                     android:gravity="center_vertical"
                     android:text="From date"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="13sp"
+                    android:textStyle="" />
 
                 <TextView
                     android:id="@+id/from_date_val_TV"
@@ -89,11 +179,77 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="5dp"
                     android:layout_weight="4"
+                    android:alpha="0.8"
                     android:fontFamily="@font/fredoka_regular"
                     android:gravity="center_vertical"
                     android:text="00/00/0000"
                     android:textAlignment="textEnd"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
+                    tools:ignore="RtlCompat" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:alpha="0.4"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_arrow" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/toDateCV"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="4dp"
+            android:clickable="true"
+            app:cardBackgroundColor="@color/transparent"
+            app:cardElevation="0dp"
+            app:contentPadding="5dp"
+            app:layout_constraintEnd_toEndOf="@+id/fromDateCV"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/fromDateCV"
+            app:layout_constraintTop_toBottomOf="@+id/view3">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingEnd="20dp">
+
+                <ImageView
+                    android:layout_width="17dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:alpha="0.4"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_calender" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="3"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:gravity="center_vertical"
+                    android:text="To date"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/to_date_val_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="4"
+                    android:alpha="0.8"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:gravity="center_vertical"
+                    android:text="00/00/0000"
+                    android:textAlignment="textEnd"
+                    android:textSize="13sp"
                     tools:ignore="RtlCompat" />
 
                 <ImageView
@@ -112,72 +268,12 @@
             android:id="@+id/view3"
             android:layout_width="340dp"
             android:layout_height="1dp"
+            android:layout_marginTop="4dp"
             android:background="#E3E3E4"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.45"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tagCV" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/fromDateCV"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:clickable="true"
-            app:cardElevation="0dp"
-            app:contentPadding="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view3">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp">
-
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:alpha="0.4"
-                    android:gravity="center_vertical"
-                    android:src="@drawable/ic_calender" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:layout_weight="3"
-                    android:fontFamily="@font/fredoka_regular"
-                    android:gravity="center_vertical"
-                    android:text="To date"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/to_date_val_TV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
-                    android:layout_weight="4"
-                    android:fontFamily="@font/fredoka_regular"
-                    android:gravity="center_vertical"
-                    android:text="00/00/0000"
-                    android:textAlignment="textEnd"
-                    android:textSize="12sp"
-                    tools:ignore="RtlCompat" />
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:alpha="0.4"
-                    android:gravity="center_vertical"
-                    android:src="@drawable/ic_arrow" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintTop_toBottomOf="@+id/fromDateCV" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -185,20 +281,117 @@
         android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="7dp"
+        android:layout_marginTop="10dp"
         android:background="#E3E3E4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout10" />
 
-    <ListView
-        android:id="@+id/ingridientsLV"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerIngredientsListCatLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/view2"
-        tools:layout_editor_absoluteX="0dp">
+        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2">
 
-    </ListView>
+        <ImageView
+            android:id="@+id/imageView15"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_add_recipe"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#7A7A7A" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/fredoka_regular"
+            android:text="@string/lista_de_ingredientes"
+            android:textAlignment="gravity"
+            android:textColor="@color/black"
+            android:textSize="@dimen/headerCat"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView15"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/save_shopping_cart"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/save_shopping_cart"
+            android:src="@drawable/ic_baseline_save"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/check_saved_recipes"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#7A7A7A" />
+
+        <ImageView
+            android:id="@+id/add_ingredient"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/save_shopping_cart"
+            android:src="@drawable/ic_plus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/save_shopping_cart"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#7A7A7A" />
+
+        <ImageView
+            android:id="@+id/check_saved_recipes"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_baseline_menu_book_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#7A7A7A" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="104dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerIngredientsListCatLL"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/calenderIngridientsLV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerIngredientsListCatLL">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

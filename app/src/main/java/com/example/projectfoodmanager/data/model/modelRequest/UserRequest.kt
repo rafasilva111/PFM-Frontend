@@ -11,6 +11,8 @@ data class UserRequest(
     val name: String? = null,
     @SerializedName("birth_date")
     val birth_date: String? = null,
+    @SerializedName("fmc_token")
+    val fmc_token: String? = null,
     @SerializedName("email")
     val email: String?= null,
     @SerializedName("password")
@@ -25,4 +27,6 @@ data class UserRequest(
     val sex: String?= null,
     @SerializedName("weight")
     val weight: Float? =-1F,
+    @SerializedName("user_portion")
+    val user_portion: Int? = null,
 ) : Serializable, Parcelable

@@ -2,26 +2,38 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.api.ApiInterface
-import com.example.projectfoodmanager.data.model.modelRequest.CalenderEntryRequest
+import com.example.projectfoodmanager.data.api.ApiNotificationInterface
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingIngredientListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListSimplefied
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.PushNotification
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.util.FollowType
+import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
-	private val apiInterface: ApiInterface
+	private val apiInterface: ApiInterface,
+	private val apiNotificationInterface: ApiNotificationInterface
 ) : RemoteDataSource {
 
 	//User
@@ -51,6 +63,9 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.deleteUser(userId = userId)
 	}
 
+	override suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds> {
+		return apiInterface.getUserRecipesBackground()
+	}
 
 	//Recipe
 	override suspend fun createRecipe(recipe : RecipeRequest): Response<Recipe> {
@@ -119,7 +134,7 @@ class RemoteDataSourceImpl @Inject constructor(
 	}
 
 	//Calender
-	override suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<Unit> {
+	override suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<CalenderEntry> {
 		return apiInterface.createCalenderEntry(recipeId= recipeId,calenderEntryRequest = comment)
 	}
 
@@ -131,14 +146,74 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getEntryOnCalender(date = date)
 	}
 
+	override suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingIngredientListSimplefied> {
+		return apiInterface.getCalenderIngredients(fromDate = fromDate,toDate = toDate)
+	}
+
+	override suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Unit> {
+		return apiInterface.deleteCalenderEntry(calenderEntryId)
+	}
+
+	override suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry> {
+		return apiInterface.patchCalenderEntry(calenderEntryId,calenderPatchRequest)
+	}
+
 	//Followers
 	override suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse> {
 		return apiInterface.createFollower(userSenderId = userSenderId,userReceiverId = userReceiverId)
 	}
-	override suspend fun getFollowers(): Response<FollowList> {
-		return apiInterface.getFollowers()
+
+	override suspend fun getFollowers(userId: Int): Response<FollowList> {
+		if(userId==-1)
+			return apiInterface.getFollowers()
+
+		return apiInterface.getFollowersByUser(userId)
 	}
-	override suspend fun getFolloweds(): Response<FollowList> {
-		return apiInterface.getFolloweds()
+	override suspend fun getFolloweds(id_user: Int): Response<FollowList> {
+		if(id_user==-1)
+			return apiInterface.getFolloweds()
+
+		return apiInterface.getFollowedsByUser(id_user)
+	}
+
+	override suspend fun getFollowRequests(): Response<FollowList> {
+		return apiInterface.getFollowRequests()
+	}
+
+	override suspend fun postAcceptFollowRequest(userId: Int): Response<Unit> {
+		return apiInterface.postAcceptFollowRequest(userId)
+	}
+
+	override suspend fun deleteFollowRequest(followType:Int, userId: Int): Response<Unit> {
+		when(followType){
+			FollowType.FOLLOWERS -> return apiInterface.deleteFollowerRequest(userId)
+			FollowType.FOLLOWEDS -> return apiInterface.deleteFollowedRequest(userId)
+			else -> return apiInterface.deleteAcceptFollowRequest(userId)
+		}
+	}
+
+	override suspend fun postFollowRequest(userId: Int): Response<Unit> {
+		return apiInterface.postFollowRequest(userId)
+	}
+
+
+	//notifications
+
+	override suspend fun sendNotification(notificationModel: PushNotification): Response<ResponseBody> {
+		return apiNotificationInterface.sendNotification(notificationModel)
+	}
+
+	// shopping list
+
+	override suspend fun postShoppingList(shoppingIngredientList: ShoppingIngredientListRequest): Response<Unit> {
+		return apiInterface.postShoppingList(shoppingIngredientList)
+	}
+
+	override suspend fun getShoppingList(): Response<ShoppingIngredientListList> {
+		return apiInterface.getShoppingList()
+	}
+
+	override suspend fun getShoppingList(shoppingListId: Int): Response<ShoppingIngredientList> {
+		return apiInterface.getShoppingList(shoppingListId)
 	}
 }

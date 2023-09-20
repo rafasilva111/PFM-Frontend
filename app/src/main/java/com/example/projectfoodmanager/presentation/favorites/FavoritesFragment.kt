@@ -31,8 +31,10 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.changeVisibilityMenu
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,9 +71,11 @@ class FavoritesFragment : Fragment() {
     private val adapter by lazy {
         FavoritesRecipeListingAdapter(
             onItemClicked = { _, item ->
-                    findNavController().navigate(R.id.action_favoritesFragment_to_receitaDetailFragment,Bundle().apply {
+                findNavController().navigate(R.id.action_favoritesFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("Recipe",item)
                 })
+                changeVisibilityMenu(false,activity)
+
             },
             onLikeClicked = {item,like ->
                 if(like){
@@ -176,6 +180,7 @@ class FavoritesFragment : Fragment() {
                 binding.tvNoRecipes.visibility = View.GONE
 
                 // Primeira lista a aparecer
+                val test= user.getLikedRecipes()
                 adapter.updateList(user.getLikedRecipes(), user)
             }
         } catch (e: Exception) {
@@ -448,8 +453,6 @@ class FavoritesFragment : Fragment() {
         })
 
         // Like function
-
-
         recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { it ->
             it.getContentIfNotHandled()?.let {
                 when (it) {
@@ -675,5 +678,6 @@ class FavoritesFragment : Fragment() {
         }
         return false
     }
+
 }
 

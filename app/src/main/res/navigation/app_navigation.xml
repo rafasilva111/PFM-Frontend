@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_recipeListingFragment_to_receitaDetailFragment"
             app:destination="@id/receitaDetailFragment" />
+        <action
+            android:id="@+id/action_recipeListingFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
     </fragment>
 
 
@@ -28,8 +31,16 @@
         tools:layout="@layout/fragment_recipe_detail" >
         <action
             android:id="@+id/action_receitaDetailFragment_to_receitaCommentsFragment"
-            app:destination="@id/receitaCommentsFragment"
-            app:popUpTo="@id/receitaDetailFragment" />
+            app:destination="@id/receitaCommentsFragment"/>
+        <action
+            android:id="@+id/action_receitaDetailFragment_to_followerFragment"
+            app:destination="@id/followerFragment" />
+        <action
+            android:id="@+id/action_receitaDetailFragment_to_newCalenderEntryFragment"
+            app:destination="@id/newCalenderEntryFragment" />
+        <action
+            android:id="@+id/action_receitaDetailFragment_to_profileBottomSheetDialog"
+            app:destination="@id/profileBottomSheetDialog" />
 
     </fragment>
 
@@ -60,6 +71,10 @@
             app:destination="@id/settingsFragment"
             app:popUpTo="@id/profileFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_profileFragment_to_followerFragment"
+            app:destination="@id/followerFragment" />
+
     </fragment>
 
     <fragment
@@ -70,21 +85,6 @@
         <action
             android:id="@+id/action_favoritesFragment_to_receitaDetailFragment"
             app:destination="@id/receitaDetailFragment"/>
-    </fragment>
-    <fragment
-        android:id="@+id/calenderFragment"
-        android:name="com.example.projectfoodmanager.presentation.calender.CalenderFragment"
-        android:label="CalenderFragment"
-        tools:layout="@layout/fragment_calender">
-        <action
-            android:id="@+id/action_calenderFragment_to_weeklyFragment"
-            app:destination="@id/weeklyFragment" />
-        <action
-            android:id="@+id/action_calenderFragment_to_newCalenderEntryFragment"
-            app:destination="@id/newCalenderEntryFragment" />
-        <action
-            android:id="@+id/action_calenderFragment_to_calenderIngredientsFragment"
-            app:destination="@id/calenderIngredientsFragment" />
     </fragment>
     <fragment
         android:id="@+id/goalsFragment"
@@ -98,21 +98,23 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.projectfoodmanager.presentation.settings.SettingsFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_blankFragment"
+            app:destination="@id/blankFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_securityFragment"
+            app:destination="@id/securityFragment" />
+    </fragment>
     <fragment
         android:id="@+id/updateBiodata"
         android:name="com.example.projectfoodmanager.presentation.goals.UpdateBiodata"
         android:label="UpdateBiodata" />
     <fragment
-        android:id="@+id/weeklyFragment"
-        android:name="com.example.projectfoodmanager.presentation.calender.WeeklyFragment"
-        android:label="fragment_weekly"
-        tools:layout="@layout/fragment_weekly" />
-    <fragment
         android:id="@+id/newCalenderEntryFragment"
-        android:name="com.example.projectfoodmanager.presentation.calender.insertCalenderEntry.NewCalenderEntryFragment"
+        android:name="com.example.projectfoodmanager.presentation.calendar.insertCalenderEntry.NewCalenderEntryFragment"
         android:label="fragment_new_calender_entry"
         tools:layout="@layout/fragment_new_calender_entry" >
         <action
@@ -121,9 +123,98 @@
     </fragment>
     <fragment
         android:id="@+id/calenderIngredientsFragment"
-        android:name="com.example.projectfoodmanager.presentation.calender.ingredients.CalenderIngredientsFragment"
+        android:name="com.example.projectfoodmanager.presentation.shoppingList.create.CalenderShoppingListFragment"
         android:label="fragment_calender_ingredients"
-        tools:layout="@layout/fragment_calender_ingredients" />
-
+        tools:layout="@layout/fragment_calender_ingredients" >
+        <action
+            android:id="@+id/action_calenderIngredientsFragment_to_shoppingListListingFragment"
+            app:destination="@id/shoppingListListingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/calendarEntryDetailFragment"
+        android:name="com.example.projectfoodmanager.presentation.calendar.CalendarEntryDetailFragment"
+        android:label="fragment_calendar_entry_detail"
+        tools:layout="@layout/fragment_calendar_entry_detail" >
+        <action
+            android:id="@+id/action_calendarEntryDetailFragment_to_receitaDetailFragment"
+            app:destination="@id/receitaDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/followerFragment"
+        android:name="com.example.projectfoodmanager.presentation.follower.FollowerFragment"
+        android:label="fragment_follower"
+        tools:layout="@layout/fragment_follower" >
+        <action
+            android:id="@+id/action_followerFragment_to_followRequestFragment"
+            app:destination="@id/followRequestFragment" />
+        <action
+            android:id="@+id/action_followerFragment_to_profileBottomSheetDialog"
+            app:destination="@id/profileBottomSheetDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/followRequestFragment"
+        android:name="com.example.projectfoodmanager.presentation.follower.FollowRequestFragment"
+        android:label="fragment_follow_request"
+        tools:layout="@layout/fragment_follow_request" >
+        <action
+            android:id="@+id/action_followRequestFragment_to_profileBottomSheetDialog"
+            app:destination="@id/profileBottomSheetDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.example.projectfoodmanager.presentation.notification.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" >
+        <action
+            android:id="@+id/action_notificationFragment_to_followRequestFragment"
+            app:destination="@id/followRequestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/securityFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.settings.SecurityFragment"
+        android:label="fragment_security"
+        tools:layout="@layout/fragment_security" />
+    <dialog
+        android:id="@+id/profileBottomSheetDialog"
+        android:name="com.example.projectfoodmanager.presentation.profile.ProfileBottomSheetDialog"
+        android:label="fragment_profile_bottom_sheet_dialog"
+        tools:layout="@layout/fragment_profile_bottom_sheet_dialog" >
+        <action
+            android:id="@+id/action_profileBottomSheetDialog_to_followerFragment"
+            app:destination="@id/followerFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/blankFragment"
+        android:name="com.example.projectfoodmanager.BlankFragment"
+        android:label="fragment_blank"
+        tools:layout="@layout/fragment_blank" />
+    <fragment
+        android:id="@+id/shoppingListListingFragment"
+        android:name="com.example.projectfoodmanager.presentation.shoppingList.list.ShoppingListsListingFragment"
+        android:label="ShoppingListListingFragment" >
+        <action
+            android:id="@+id/action_shoppingListListingFragment_to_shoppingListFragment"
+            app:destination="@id/shoppingListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/shoppingListFragment"
+        android:name="com.example.projectfoodmanager.presentation.shoppingList.ShoppingListFragment"
+        android:label="fragment_shopping_list_detail"
+        tools:layout="@layout/fragment_shopping_list_detail" />
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.example.projectfoodmanager.presentation.calendar.CalendarFragment"
+        android:label="fragment_calendar"
+        tools:layout="@layout/fragment_calendar" >
+        <action
+            android:id="@+id/action_calendarFragment_to_calendarEntryDetailFragment"
+            app:destination="@id/calendarEntryDetailFragment" />
+        <action
+            android:id="@+id/action_calendarFragment_to_newCalenderEntryFragment"
+            app:destination="@id/newCalenderEntryFragment" />
+        <action
+            android:id="@+id/action_calendarFragment_to_calenderIngredientsFragment"
+            app:destination="@id/calenderIngredientsFragment" />
+    </fragment>
 
 </navigation>

@@ -49,7 +49,7 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
             binding.descriptionTV.text = recipe.description
 
 
-            val list: List<String> = recipe.tags
+            val list: List<String> = recipe.tags!!
 
 
             // TODO: Obter a lista ordenada da base de dados
@@ -92,7 +92,9 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
                             context.resources.getColorStateList(R.color.catg_sobremesa, null)
                         RecipeListingFragmentFilters.SANDES -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_sandes, null)
-                        RecipeListingFragmentFilters.LANCHE -> chipBackgroundColor =
+
+                        //TODO: é para ser visto melhor
+                       /* RecipeListingFragmentFilters.LANCHE -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_lanche, null)
                         RecipeListingFragmentFilters.PEQUENO_ALMOCO -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_peq_almoco, null)
@@ -101,7 +103,7 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
                         RecipeListingFragmentFilters.ALMOCO -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_almoco, null)
                         RecipeListingFragmentFilters.PETISCO -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_petiscos, null)
+                            context.resources.getColorStateList(R.color.catg_petiscos, null)*/
                         else ->
                             chipBackgroundColor =
                                 context.resources.getColorStateList(R.color.grey, null)
@@ -186,9 +188,9 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
 //        }
             }
 
-            binding.numberIngridientsTV.text = recipe.ingredients.size.toString() + " Ingredientes"
+            binding.numberIngridientsTV.text = recipe.ingredientQuantities?.size.toString() + " Ingredientes"
             val itemsAdapterIngrtedients: IngridientsListingAdapter? =
-                this.context?.let { IngridientsListingAdapter(it, recipe.ingredients) }
+                this.context?.let { recipe.ingredientQuantities?.let { it1 -> IngridientsListingAdapter(it, it1) } }
             binding.LVIngridientsInfo.adapter = itemsAdapterIngrtedients
             setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
 
@@ -211,8 +213,8 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
 
 
 
-    fun setListViewHeightBasedOnChildren(myListView: ListView?) {
-        val adapter: ListAdapter = myListView!!.getAdapter()
+    fun setListViewHeightBasedOnChildren(myListView: ListView) {
+        val adapter: ListAdapter = myListView.adapter
         var totalHeight = 0
         val teste = adapter.count
         val teste2 = adapter.getCount()

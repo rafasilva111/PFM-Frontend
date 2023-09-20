@@ -60,19 +60,10 @@
                     app:layout_constraintBottom_toBottomOf="@+id/textView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/textView"
-                    app:layout_constraintVertical_bias="0.914" />
+                    app:layout_constraintVertical_bias="0.914"
+                    app:tint="@color/white" />
 
-                <ImageView
-                    android:id="@+id/verifyUserIV"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginEnd="5dp"
-                    android:elevation="8dp"
-                    android:src="@drawable/verified"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="@+id/nameTV"
-                    app:layout_constraintEnd_toStartOf="@+id/nameTV"
-                    app:layout_constraintTop_toTopOf="@+id/nameTV" />
+
 
                 <ImageView
                     android:id="@+id/vipIV"
@@ -125,6 +116,7 @@
                     app:tint="@null" />
 
 
+
                 <TextView
                     android:id="@+id/nameTV"
                     android:layout_width="wrap_content"
@@ -134,13 +126,27 @@
                     android:fontFamily="@font/fedoka"
                     android:text="Nome Apelido"
                     android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/profileCV"
                     app:layout_constraintHorizontal_bias="0.298"
                     app:layout_constraintStart_toStartOf="@+id/profileCV"
                     app:layout_constraintTop_toBottomOf="@+id/profileCV" />
+
+
+                <ImageView
+                    android:id="@+id/verifyUserIV"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="5dp"
+                    android:elevation="8dp"
+                    android:src="@drawable/verified"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="@+id/nameTV"
+                    app:layout_constraintStart_toEndOf="@+id/nameTV"
+                    app:layout_constraintTop_toTopOf="@+id/nameTV" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -165,6 +171,7 @@
                     app:layout_constraintStart_toStartOf="parent">
 
                     <LinearLayout
+                        android:id="@+id/recipesLL"
                         android:layout_width="100dp"
                         android:layout_height="50dp"
                         android:gravity="center"
@@ -174,23 +181,26 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/fedoka"
-                            android:text="Publicações"
+                            android:text="Receitas"
                             android:textAlignment="center"
                             android:textColor="#4A4A4A"
-                            android:textSize="15sp" />
+                            android:textSize="14sp"/>
 
                         <TextView
-                            android:id="@+id/tv_publications"
+                            android:id="@+id/nRecipesTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="0"
                             android:textAlignment="center"
-                            android:textColor="@color/main_color"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
+                            android:textColor="#4A4A4A"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:alpha="0.7"/>
+
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/followersLL"
                         android:layout_width="100dp"
                         android:layout_height="50dp"
                         android:gravity="center"
@@ -202,21 +212,24 @@
                             android:fontFamily="@font/fedoka"
                             android:text="Seguidores"
                             android:textAlignment="center"
-                            android:textColor="#3C3C3C"
-                            android:textSize="15sp" />
+                            android:textColor="#4A4A4A"
+                            android:textSize="14sp"
+                            />
 
                         <TextView
-                            android:id="@+id/tv_follow_me"
+                            android:id="@+id/nFollowersTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="0"
                             android:textAlignment="center"
-                            android:textColor="@color/main_color"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
+                            android:textColor="#4A4A4A"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:alpha="0.7"/>
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/followedsLL"
                         android:layout_width="100dp"
                         android:layout_height="50dp"
                         android:gravity="center"
@@ -228,18 +241,19 @@
                             android:fontFamily="@font/fedoka"
                             android:text="A seguir"
                             android:textAlignment="center"
-                            android:textColor="#3C3C3C"
-                            android:textSize="15sp" />
+                            android:textColor="#4A4A4A"
+                            android:textSize="14sp" />
 
                         <TextView
-                            android:id="@+id/textView4"
+                            android:id="@+id/nFollowedsTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="0"
                             android:textAlignment="center"
-                            android:textColor="@color/main_color"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
+                            android:textColor="#4A4A4A"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:alpha="0.7"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -288,7 +302,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
                             android:text="Dados Pessoais"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/perfilIV"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -335,7 +349,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
                             android:text="Favoritos"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/favoritosIV"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -382,7 +396,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
                             android:text="Objetivos"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/objetivosIV"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -429,7 +443,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
                             android:text="As minhas receitas"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/GostosIV"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -476,7 +490,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
                             android:text="Definições"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/SettingsIV"
                             app:layout_constraintTop_toTopOf="parent" />

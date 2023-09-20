@@ -8,13 +8,20 @@ const val LOGIN_TIME:Long = 2000
 object Constants {
     // TODO: Primeira coisa a fazer quando testar
     //rui const val BASE_URL = "http://192.168.1.104:5000/"
-    const val BASE_URL = "http://192.168.1.72:5000"
-    //const val BASE_URL = "http://35.180.118.91/"
+    const val BASE_URL = "http://192.168.1.110:5000"
+    //const val BASE_URL = "http://35.180.110.91/"
     const val USER_TOKEN = "user_token"
 
     const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"
     const val PREFS_TOKEN_FILE = "prefs_token_file"
+
 }
+object FIREBASE_NOTIFICATIONS {
+    const val BASE_URL = "https://fcm.googleapis.com"
+    const val SERVER_KEY = "AAAA9vy8Bpg:APA91bHyfumwp_y_Gnv3qVb5h19WTpM2EfZ_a6Un6CoIhJ6KCSO3nyx10ip2eg9i4lM0_K79krSoVp6PoiKk3SWUQP1LxnYZ9KYQcEM9Q_ofCxsfhf-ragQiC9U3fPBOaALxAKcZ5VLR"
+    const val CONTENT_TYPE = "application/json"
+}
+
 
 object SharedPreferencesConstants{
     const val USER_SESSION = "user_session"
@@ -84,6 +91,12 @@ object ImageTagsConstants{
     const val DEFAULT ="default_img"
     const val SELECTED_AVATAR ="select_avatar"
     const val RANDOM_AVATAR ="random_avatar"
+}
+
+object FollowType{
+    const val NOT_FOLLOWER = -1
+    const val FOLLOWERS = 0
+    const val FOLLOWEDS = 1
 }
 
 

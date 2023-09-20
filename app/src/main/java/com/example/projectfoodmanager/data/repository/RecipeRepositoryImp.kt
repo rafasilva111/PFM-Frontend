@@ -96,10 +96,10 @@ class RecipeRepositoryImp @Inject constructor(
         get() = _recipeSearchByTitleAndTagsResponseLiveData
 
 
-    override suspend fun getRecipesByTitleAndTags(string: String, searchPage: Int) {
+    override suspend fun getRecipesByTitleAndTags(title: String, searchPage: Int) {
         _recipeSearchByTitleAndTagsResponseLiveData.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making login request.")
-        val response =remoteDataSource.getRecipesByTitleAndTags(string,searchPage)
+        val response =remoteDataSource.getRecipesByTitleAndTags(title,searchPage)
 
         //handle response RecipeListResponse
 
@@ -195,7 +195,7 @@ class RecipeRepositoryImp @Inject constructor(
     override suspend fun removeLikeOnRecipe(recipeId: Int) {
         _functionRemoveLikeOnRecipe.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making removeLikeOnRecipe request.")
-        // fazer alterações na shared preferences aqui
+        // todo fazer alterações na shared preferences aqui
 
         val response =remoteDataSource.removeLike(recipeId)
         if (response.isSuccessful && response.code() == 204) {
@@ -249,7 +249,7 @@ class RecipeRepositoryImp @Inject constructor(
     override suspend fun removeSaveOnRecipe(recipeId: Int) {
         _functionRemoveSaveOnRecipe.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making removeLikeOnRecipe request.")
-        // fazer alterações na shared preferences aqui
+        // todo fazer alterações na shared preferences aqui
 
         val response =remoteDataSource.removeSave(recipeId)
         if (response.isSuccessful && response.code() == 204) {
@@ -296,7 +296,7 @@ class RecipeRepositoryImp @Inject constructor(
     }
 
     private val _functionCreateCommentOnRecipe = MutableLiveData<Event<NetworkResult<Comment>>>()
-    override val functionCreateCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
+    override val functionPostCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
         get() = _functionCreateCommentOnRecipe
 
     override suspend fun createCommentOnRecipe(recipeId: Int,comment: CreateCommentRequest) {

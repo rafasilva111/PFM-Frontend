@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_1"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.calender.insertCalenderEntry.NewCalenderEntryFragment">
+    tools:context=".presentation.calendar.insertCalenderEntry.NewCalenderEntryFragment">
 
 
     <ImageButton
@@ -80,7 +80,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:background="@null"
-                android:onClick="previousMonthAction"
                 android:rotation="-180"
                 android:src="@drawable/ic_arrow_right"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -116,7 +115,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:background="@null"
-                android:onClick="nextMonthAction"
                 android:src="@drawable/ic_arrow_right"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -143,7 +141,6 @@
             android:id="@+id/favoritesRV"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-
             android:layout_marginTop="20dp"
             android:elevation="8dp"
             android:focusable="true"
@@ -191,8 +188,10 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/details_panel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -201,14 +200,16 @@
         app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
-            android:id="@+id/headerDetailCatLL"
+            android:id="@+id/headerCatLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="20dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -226,6 +227,7 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="@dimen/headerCat"
+                android:layout_marginStart="5dp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -235,11 +237,12 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
+            app:cardBackgroundColor="@color/transparent"
             app:contentPadding="5dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/headerDetailCatLL">
+            app:layout_constraintTop_toBottomOf="@+id/headerCatLL">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -249,7 +252,7 @@
                 android:paddingEnd="20dp">
 
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_width="18dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:alpha="0.4"
@@ -265,7 +268,7 @@
                     android:gravity="center_vertical"
                     android:text="Categoria"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/tag_val_TV"
@@ -276,8 +279,9 @@
                     android:fontFamily="@font/fredoka_regular"
                     android:gravity="center_vertical"
                     android:text="@string/none"
+                    android:alpha="0.8"
                     android:textAlignment="textEnd"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     tools:ignore="RtlCompat" />
 
                 <ImageView
@@ -307,6 +311,7 @@
             android:layout_height="40dp"
             app:cardElevation="0dp"
             app:contentPadding="5dp"
+            app:cardBackgroundColor="@color/transparent"
             android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -320,7 +325,7 @@
                 android:paddingEnd="20dp">
 
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_width="18dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:alpha="0.4"
@@ -336,7 +341,7 @@
                     android:gravity="center_vertical"
                     android:text="Data"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/date_val_TV"
@@ -348,7 +353,8 @@
                     android:gravity="center_vertical"
                     android:text="00/00/0000"
                     android:textAlignment="textEnd"
-                    android:textSize="12sp"
+                    android:alpha="0.8"
+                    android:textSize="13sp"
                     tools:ignore="RtlCompat" />
 
                 <ImageView
@@ -379,6 +385,7 @@
             android:layout_height="40dp"
             app:cardElevation="0dp"
             app:contentPadding="5dp"
+            app:cardBackgroundColor="@color/transparent"
             android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -392,7 +399,7 @@
                 android:paddingEnd="20dp">
 
                 <ImageView
-                    android:layout_width="15dp"
+                    android:layout_width="18dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:alpha="0.4"
@@ -408,7 +415,7 @@
                     android:gravity="center_vertical"
                     android:text="Hora"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/time_val_TV"
@@ -420,7 +427,8 @@
                     android:gravity="center_vertical"
                     android:text="00:00"
                     android:textAlignment="textEnd"
-                    android:textSize="12sp"
+                    android:alpha="0.8"
+                    android:textSize="13sp"
                     tools:ignore="RtlCompat" />
 
                 <ImageView
@@ -436,4 +444,14 @@
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

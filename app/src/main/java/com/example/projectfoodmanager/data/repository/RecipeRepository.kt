@@ -27,7 +27,7 @@ interface RecipeRepository {
 
     // comment
     val functionGetCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
-    val functionCreateCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
+    val functionPostCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
 
     suspend fun getRecipesPaginated(page: Int)
     suspend fun getRecipesPaginatedSorted(page: Int,by:String)
@@ -39,4 +39,5 @@ interface RecipeRepository {
     suspend fun getUserLikedRecipes()
     suspend fun getCommentsOnRecipePaginated(recipeId: Int,page: Int)
     suspend fun createCommentOnRecipe(recipeId: Int,comment: CreateCommentRequest)
+
 }

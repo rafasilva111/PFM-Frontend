@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.repository.AuthRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -21,6 +21,7 @@ class AuthViewModel @Inject constructor(
     val repository: AuthRepository,
     val sharedPreference: SharedPreference
 ): ViewModel() {
+
     private val TAG:String ="AuthViewModel"
 
 
@@ -71,24 +72,79 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    val userFollowersResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
-        get() = repository.userFollowersResponseLiveData
 
-    fun getUserFollowers(){
+    val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
+        get() = repository.getUserRecipesBackground
+
+    fun getUserRecipesBackground() {
         viewModelScope.launch {
-            repository.getUserFollowers()
+            repository.getUserRecipesBackground()
         }
     }
 
-    val userFolloweesResponseLiveData: LiveData<Event<NetworkResult<FollowList>>>
-        get() = repository.userFolloweesResponseLiveData
+    //---------- FOLLOW -------------
 
-    fun getUserFollowees(){
+    //GET followers by userID or authenticated user
+    val getUserFollowersLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = repository.getUserFollowers
+
+    fun getFollowers(id_user: Int) {
         viewModelScope.launch {
-            repository.getUserFollowees()
+            repository.getUserFollowers(id_user)
+        }
+    }
+
+    //GET followeds by userID or authenticated user
+    val getUserFollowedsLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = repository.getUserFolloweds
+
+    fun getFolloweds(id_user: Int){
+        viewModelScope.launch {
+            repository.getUserFolloweds(id_user)
+        }
+    }
+
+    //GET follow requests (authenticated user)
+    val getUserFollowRequestsLiveData: LiveData<Event<NetworkResult<FollowList>>>
+        get() = repository.getUserFollowRequests
+
+    fun getFollowRequests(){
+        viewModelScope.launch {
+            repository.getUserFollowRequests()
+        }
+    }
+
+    //POST accept follow requests by userID
+    val postUserAcceptFollowRequestLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.postUserAcceptFollowRequest
+
+
+    fun postAcceptFollowRequest(userId: Int) {
+        viewModelScope.launch {
+            repository.postUserAcceptFollowRequest(userId)
+        }
+    }
+
+    //POST follow request by userID
+    val postUserFollowRequestLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.postUserFollowRequest
+
+    fun postFollowRequest(userId: Int) {
+        viewModelScope.launch {
+            repository.postUserFollowRequest(userId)
         }
     }
 
 
+    //DELETE follow requests by userID
+    val deleteUserFollowRequestLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.deleteUserFollowRequest
+
+
+    fun deleteFollowRequest(followType:Int, userId: Int) {
+        viewModelScope.launch {
+            repository.deleteUserFollowRequest(followType,userId)
+        }
+    }
 
 }

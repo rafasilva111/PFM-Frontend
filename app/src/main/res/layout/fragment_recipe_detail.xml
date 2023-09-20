@@ -42,9 +42,9 @@
                     android:layout_height="300dp"
                     android:adjustViewBounds="true"
                     android:contentDescription="recipe_image"
-                    android:foreground="#43000000"
+                    android:foreground="#56000000"
                     android:scaleType="fitXY"
-                    android:src="@drawable/good_food_display___nci_visuals_online"
+                    android:src="@drawable/default_image_display"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -125,13 +125,26 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
-                            android:id="@+id/autor_IV"
+                            android:id="@+id/imageAuthorIV"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:src="@drawable/img_pingo_doce"
                             android:contentDescription="autor"/>
 
                     </androidx.cardview.widget.CardView>
+
+                    <ImageView
+                        android:id="@+id/verifyUserIV"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="-15dp"
+                        android:layout_marginStart="-15dp"
+                        android:elevation="8dp"
+                        android:src="@drawable/verified"
+                        android:visibility="visible"
+                        app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
+                        app:layout_constraintTop_toBottomOf="@+id/img_autor_CV" />
+
 
                     <TextView
                         android:id="@+id/AutorLB"
@@ -159,7 +172,7 @@
                         app:tint="#878787" />-->
 
                     <TextView
-                        android:id="@+id/AutorTV"
+                        android:id="@+id/nameAuthorTV"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -173,7 +186,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/AutorLB" />
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/cardView10"
+                        android:id="@+id/profileAuthorCV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="70dp"
@@ -361,7 +374,7 @@
                     android:fontFamily="@font/fedoka"
                     android:text="Nome produto"
                     android:textColor="#000000"
-                    android:textSize="23sp"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -500,9 +513,9 @@
                             android:layout_height="match_parent"
                             android:layout_marginEnd="5dp"
                             android:background="@drawable/bg_card"
+                            android:contentDescription="time"
                             android:padding="5dp"
                             android:src="@drawable/ic_clock"
-                            android:contentDescription="time"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
