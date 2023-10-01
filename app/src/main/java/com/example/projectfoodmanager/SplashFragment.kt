@@ -16,6 +16,7 @@ import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
+import com.example.projectfoodmanager.viewmodels.ShoppingListViewModel
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
@@ -26,15 +27,21 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
 
+    // viewModels
+    private val authViewModel by activityViewModels<AuthViewModel>()
+    private val calendarViewModel by activityViewModels<CalendarViewModel>()
+    private val shoppingListViewModel by activityViewModels<ShoppingListViewModel>()
+
+    // constants
+    val TAG: String = "SplashFragment"
+
+    // injects
     @Inject
     lateinit var tokenManager: TokenManager
 
     @Inject
     lateinit var sharedPreference: SharedPreference
 
-    private val authViewModel by activityViewModels<AuthViewModel>()
-    private val calendarViewModel by activityViewModels<CalendarViewModel>()
-    val TAG: String = "SplashFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,9 +99,6 @@ class SplashFragment : Fragment() {
                                 cleanseOldRegistry = true
                             )
                         }
-
-
-
                     }
                     is NetworkResult.Error -> {
                         findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
@@ -114,8 +118,26 @@ class SplashFragment : Fragment() {
                 when (result) {
                     is NetworkResult.Success -> {
 
-                        // loads recipes entrys
+                        // loads user's recipes entrys
+                        shoppingListViewModel.getUserShoppingLists()
 
+                    }
+                    is NetworkResult.Error -> {
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+
+        shoppingListViewModel.getUserShoppingLists.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+
+                        // loads user's shopping lists
                         authViewModel.getUserRecipesBackground()
 
                     }

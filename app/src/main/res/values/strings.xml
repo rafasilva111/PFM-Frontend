@@ -127,6 +127,8 @@
     <string name="favorites_title">Favorites</string>
     <string name="goal_title">Goal</string>
     <string name="profile_title">Profile</string>
+    <string name="fragment_calender_ingredients_back_button">Back button</string>
+    <string name="fragment_calender_ingredients_lista_de_compras">Lista de compras</string>
     <string-array name="gender_array">
         <item>Masculino</item>
         <item>Feminino</item>

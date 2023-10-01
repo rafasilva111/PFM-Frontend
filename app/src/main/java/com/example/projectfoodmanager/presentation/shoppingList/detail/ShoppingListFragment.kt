@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.shoppingList
+package com.example.projectfoodmanager.presentation.shoppingList.detail
 
 import android.os.Build
 import android.os.Bundle
@@ -9,9 +9,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.databinding.FragmentShoppingListDetailBinding
-import com.example.projectfoodmanager.presentation.shoppingList.list.ShoppingListsListingAdapter
 import com.example.projectfoodmanager.util.SharedPreference
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.ShoppingListViewModel
@@ -31,7 +30,7 @@ class ShoppingListFragment : Fragment() {
 
     // constants
     private val TAG: String = "ShoppingListFragment"
-    private var shoppingList: ShoppingIngredientList? = null
+    private var shoppingList: ShoppingList? = null
 
     // injects
     @Inject
@@ -70,7 +69,7 @@ class ShoppingListFragment : Fragment() {
 
         if (Build.VERSION.SDK_INT >= 33) {
             // TIRAMISU
-            shoppingList = arguments?.getParcelable("shopping_list", ShoppingIngredientList::class.java)
+            shoppingList = arguments?.getParcelable("shopping_list", ShoppingList::class.java)
         } else {
             shoppingList = arguments?.getParcelable("shopping_list")
         }

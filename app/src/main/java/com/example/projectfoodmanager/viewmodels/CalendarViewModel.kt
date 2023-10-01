@@ -8,7 +8,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListSimplefied
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 import com.example.projectfoodmanager.data.repository.CalenderRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -58,7 +58,7 @@ class CalendarViewModel @Inject constructor(
     }
 
 
-    val getCalendarIngredientsLiveData: LiveData<Event<NetworkResult<ShoppingIngredientListSimplefied>>>
+    val getCalendarIngredientsLiveData: LiveData<Event<NetworkResult<ShoppingListSimplefied>>>
         get() = repository.getCalendarIngredients
 
     fun getCalendarIngredients(fromDate: LocalDateTime, toDate: LocalDateTime) {

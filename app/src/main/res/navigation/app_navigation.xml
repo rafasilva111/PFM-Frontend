@@ -198,7 +198,7 @@
     </fragment>
     <fragment
         android:id="@+id/shoppingListFragment"
-        android:name="com.example.projectfoodmanager.presentation.shoppingList.ShoppingListFragment"
+        android:name="com.example.projectfoodmanager.presentation.shoppingList.detail.ShoppingListFragment"
         android:label="fragment_shopping_list_detail"
         tools:layout="@layout/fragment_shopping_list_detail" />
     <fragment

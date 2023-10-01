@@ -15,7 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingIngredientListRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.databinding.FragmentCalenderIngredientsBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
@@ -31,6 +31,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class CalenderShoppingListFragment : Fragment() {
+
     // binding
     lateinit var binding: FragmentCalenderIngredientsBinding
 
@@ -49,6 +50,10 @@ class CalenderShoppingListFragment : Fragment() {
         // user's portion
     var user_portion: Int = -1 // portion can be -1 -> never selected, 1 -> use recipes portion, 2+ -> use our portions
 
+    // injects
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+
     // adapters
     private val calenderShoppingListAdapter by lazy {
         CalenderShoppingListAdapter(
@@ -59,9 +64,7 @@ class CalenderShoppingListFragment : Fragment() {
         )
     }
 
-    // injects
-    @Inject
-    lateinit var sharedPreference: SharedPreference
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,7 +82,7 @@ class CalenderShoppingListFragment : Fragment() {
             binding.calenderIngridientsLV.layoutManager = LinearLayoutManager(activity)
             binding.calenderIngridientsLV.adapter = calenderShoppingListAdapter
 
-            bindObservers()
+
 
             binding.root
         }
@@ -87,6 +90,10 @@ class CalenderShoppingListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // bind observers tem que ser aqui (não penses confia, já pensas te nisto)
+
+        bindObservers()
 
         // Set click listener for back button
         binding.backRegIB.setOnClickListener {
@@ -167,8 +174,8 @@ class CalenderShoppingListFragment : Fragment() {
         }
     }
 
-    private fun createShoppingListRequest(): ShoppingIngredientListRequest {
-        return ShoppingIngredientListRequest(
+    private fun createShoppingListRequest(): ShoppingListRequest {
+        return ShoppingListRequest(
             name = binding.shoppingListName.text.toString(),
             shopping_ingredients = calenderShoppingListAdapter.list
         )
@@ -205,7 +212,7 @@ class CalenderShoppingListFragment : Fragment() {
 
                     }
                     is NetworkResult.Error -> {
-
+                        toast("User can't create more shopping list's.",ToastType.ALERT)
                     }
                     is NetworkResult.Loading -> {
                         // todo rui loading bar
@@ -245,9 +252,11 @@ class CalenderShoppingListFragment : Fragment() {
     private fun updateSystemBarsAppearance() {
         val window = requireActivity().window
 
+        // set bottom bar color
+        window.navigationBarColor = requireContext().getColor(R.color.main_color)
+
         // Set background color for status and navigation bars
         window.statusBarColor = requireContext().getColor(R.color.background_1)
-        window.navigationBarColor = requireContext().getColor(R.color.background_1)
 
         // Set text color for status and navigation bars (for Android R and above)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

@@ -5,17 +5,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingIngredientRequest
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredient
 import com.example.projectfoodmanager.databinding.ItemShoppingIngredientBinding
 
 
 class CalenderShoppingListAdapter(
     val context: Context?,
-    val onItemClicked: (Int, ShoppingIngredient) -> Unit,
+    val onItemClicked: (Int, ShoppingIngredientRequest) -> Unit,
 ) : RecyclerView.Adapter<CalenderShoppingListAdapter.MyViewHolder>() {
 
     private val TAG: String = "CalenderEntryAdapter"
-    var list: MutableList<ShoppingIngredient> = arrayListOf()
+    var list: MutableList<ShoppingIngredientRequest> = arrayListOf()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -32,12 +33,12 @@ class CalenderShoppingListAdapter(
         holder.bind(item)
     }
 
-    fun updateList(list: MutableList<ShoppingIngredient>) {
+    fun updateList(list: MutableList<ShoppingIngredientRequest>) {
         this.list = list
         notifyDataSetChanged()
     }
 
-    fun updateItem(position: Int, item: ShoppingIngredient) {
+    fun updateItem(position: Int, item: ShoppingIngredientRequest) {
         list.removeAt(position)
         list.add(position, item)
         notifyItemChanged(position)
@@ -61,7 +62,7 @@ class CalenderShoppingListAdapter(
 
     inner class MyViewHolder(private val binding: ItemShoppingIngredientBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ShoppingIngredient) {
+        fun bind(item: ShoppingIngredientRequest) {
 
 
             binding.nameTV.text = item.ingredient.name

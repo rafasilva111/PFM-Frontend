@@ -7,15 +7,16 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
-import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingIngredientListRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListSimplefied
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
@@ -146,7 +147,7 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getEntryOnCalender(date = date)
 	}
 
-	override suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingIngredientListSimplefied> {
+	override suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingListSimplefied> {
 		return apiInterface.getCalenderIngredients(fromDate = fromDate,toDate = toDate)
 	}
 
@@ -204,16 +205,30 @@ class RemoteDataSourceImpl @Inject constructor(
 	}
 
 	// shopping list
-
-	override suspend fun postShoppingList(shoppingIngredientList: ShoppingIngredientListRequest): Response<Unit> {
-		return apiInterface.postShoppingList(shoppingIngredientList)
-	}
-
-	override suspend fun getShoppingList(): Response<ShoppingIngredientListList> {
+	//get
+	override suspend fun getShoppingList(): Response<ListOfShoppingLists> {
 		return apiInterface.getShoppingList()
 	}
 
-	override suspend fun getShoppingList(shoppingListId: Int): Response<ShoppingIngredientList> {
+	override suspend fun getShoppingList(shoppingListId: Int): Response<ShoppingList> {
 		return apiInterface.getShoppingList(shoppingListId)
 	}
+
+	// post
+	override suspend fun postShoppingList(shoppingListRequest: ShoppingListRequest): Response<ShoppingList> {
+		return apiInterface.postShoppingList(shoppingListRequest)
+	}
+
+	// put
+	override suspend fun putShoppingList(shoppingListId: Int, shoppingListRequest: ShoppingListRequest): Response<ShoppingList> {
+		return apiInterface.putShoppingList(shoppingListId,shoppingListRequest)
+	}
+
+	// delete
+	override suspend fun deleteShoppingList(shoppingListId: Int): Response<IdResponse> {
+		return apiInterface.deleteShoppingList(shoppingListId)
+	}
+
+
+
 }

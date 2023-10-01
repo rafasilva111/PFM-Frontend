@@ -45,11 +45,10 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FireStorage.user_profile_images
-import com.example.projectfoodmanager.util.Helper.Companion.changeVisibilityMenu
+import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_CODE
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -171,7 +170,7 @@ class ProfileFragment : Fragment() {
                 putInt("followType",FollowType.FOLLOWEDS)
                 putString("userName",userSession.name)
             })
-            changeVisibilityMenu(false,activity)
+            changeMenuVisibility(false,activity)
         }
 
         binding.followersLL.setOnClickListener {
@@ -180,7 +179,7 @@ class ProfileFragment : Fragment() {
                 putInt("followType",FollowType.FOLLOWERS)
                 putString("userName",userSession.name)
             })
-            changeVisibilityMenu(false,activity)
+            changeMenuVisibility(false,activity)
         }
         // load profile image offline
 
@@ -278,7 +277,7 @@ class ProfileFragment : Fragment() {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
 
-        changeVisibilityMenu(true,activity)
+        changeMenuVisibility(true,activity)
 
     }
 
@@ -374,7 +373,7 @@ class ProfileFragment : Fragment() {
                         sharedPreference.deleteUserSession()
                         toast("Logout feito com sucesso!")
                         findNavController().navigate(R.id.action_profile_to_login)
-                        changeVisibilityMenu(false,activity)
+                        changeMenuVisibility(false,activity)
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(it.message.toString())

@@ -5,15 +5,16 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
-import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingIngredientListRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListSimplefied
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
@@ -131,7 +132,7 @@ interface ApiInterface {
     suspend fun getEntryOnCalender(@Query("from_date") fromDate:String,@Query("to_date") toDate: String): Response<CalenderDatedEntryList>
 
     @GET("$API_V1_BASE_URL/calendar/ingredients/list")
-    suspend fun getCalenderIngredients(@Query("from_date") fromDate: String,@Query("to_date") toDate: String): Response<ShoppingIngredientListSimplefied>
+    suspend fun getCalenderIngredients(@Query("from_date") fromDate: String,@Query("to_date") toDate: String): Response<ShoppingListSimplefied>
 
     @DELETE("$API_V1_BASE_URL/calendar")
     suspend fun deleteCalenderEntry(@Query("id") calenderEntryId: Int): Response<Unit>
@@ -184,13 +185,19 @@ interface ApiInterface {
     // Shopping list
 
     @POST("$API_V1_BASE_URL/shopping_list")
-    suspend fun postShoppingList(@Body shoppingIngredientList: ShoppingIngredientListRequest): Response<Unit>
+    suspend fun postShoppingList(@Body shoppingIngredientList: ShoppingListRequest): Response<ShoppingList>
 
     @GET("$API_V1_BASE_URL/shopping_list")
-    suspend fun getShoppingList(): Response<ShoppingIngredientListList>
+    suspend fun getShoppingList(): Response<ListOfShoppingLists>
 
     @GET("$API_V1_BASE_URL/shopping_list")
-    suspend fun getShoppingList(@Query("id") shoppingListId: Int): Response<ShoppingIngredientList>
+    suspend fun getShoppingList(@Query("id") shoppingListId: Int): Response<ShoppingList>
+
+    @PUT("$API_V1_BASE_URL/shopping_list")
+    suspend fun putShoppingList(@Query("id")shoppingListId: Int,@Body shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
+
+    @DELETE("$API_V1_BASE_URL/shopping_list")
+    suspend fun deleteShoppingList(@Query("id")shoppingListId: Int): Response<IdResponse>
 
 
 }

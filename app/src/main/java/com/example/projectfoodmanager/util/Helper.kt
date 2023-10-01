@@ -16,10 +16,8 @@ import com.example.projectfoodmanager.data.model.Avatar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import java.util.*
@@ -137,7 +135,7 @@ class Helper {
 
 
 
-        fun changeVisibilityMenu(state: Boolean, activity: FragmentActivity?) {
+        fun changeMenuVisibility(state: Boolean, activity: FragmentActivity?) {
 
             val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 

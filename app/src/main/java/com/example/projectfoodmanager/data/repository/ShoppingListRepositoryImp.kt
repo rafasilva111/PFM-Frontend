@@ -3,9 +3,10 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingIngredientListRequest
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListList
+import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
+import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
@@ -21,27 +22,54 @@ class ShoppingListRepositoryImp @Inject constructor(
 
     private val TAG: String = "ShoppingListImp"
 
-    // Generic function to handle API requests and responses
+    /**
+     * Generic function to handle API requests and responses.
+     *
+     * @param liveData The LiveData where the result will be posted.
+     * @param saveSharedPreferences Flag to determine if the result should be saved in SharedPreferences.
+     * @param apiCall The API call to be executed.
+     */
     private suspend fun <T> handleApiResponse(
         liveData: MutableLiveData<Event<NetworkResult<T>>>,
+        saveSharedPreferences: Boolean = false,
+        deleteSharedPreferences: Boolean = false,
         apiCall: suspend () -> Response<T>
     ) {
-        // Post a loading state to indicate the request is in progress
-        liveData.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "Making API request.")
-
         try {
+            // Post a loading state to indicate the request is in progress
+            liveData.postValue(Event(NetworkResult.Loading()))
+            Log.i(TAG, "Making API request.")
+
             // Invoke the API call
             val response = apiCall.invoke()
 
-            // Check if the API request was successful
             if (response.isSuccessful) {
-                // Post a success result with the response body
-                liveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+                // API request was successful
+                val responseBody = response.body()
+                if (responseBody != null) {
+                    // Post a success result with the response body
+                    liveData.postValue(Event(NetworkResult.Success(responseBody)))
+
+                    // Optionally save data to SharedPreferences
+                    if (saveSharedPreferences) {
+                        if (responseBody is ShoppingList)
+                            sharedPreference.saveShoppingList(responseBody)
+
+                        if (responseBody is ListOfShoppingLists)
+                            sharedPreference.saveMultipleShoppingList(responseBody.result)
+                    }
+
+                    if (deleteSharedPreferences)
+                        if (responseBody is IdResponse)
+                            sharedPreference.deleteShoppingList(responseBody.id)
+                } else {
+                    // Handle the case where the response body is null
+                    liveData.postValue(Event(NetworkResult.Error("Response body is null")))
+                }
             } else if (response.errorBody() != null) {
                 // Handle the case where the API request was not successful and has an error body
                 val errorObj = response.errorBody()!!.charStream().readText()
-                Log.i(TAG, "API request was successful. Error: \n$errorObj")
+                Log.i(TAG, "API request was not successful. Error: \n$errorObj")
                 liveData.postValue(Event(NetworkResult.Error(errorObj)))
             } else {
                 // Handle the case where something went wrong without an error body
@@ -57,20 +85,19 @@ class ShoppingListRepositoryImp @Inject constructor(
 
     // get
 
-    private val _getShoppingListsLiveData = MutableLiveData<Event<NetworkResult<ShoppingIngredientListList>>>()
-    override val getShoppingListsLiveData: LiveData<Event<NetworkResult<ShoppingIngredientListList>>>
+    private val _getShoppingListsLiveData = MutableLiveData<Event<NetworkResult<ListOfShoppingLists>>>()
+    override val getShoppingListsLiveData: LiveData<Event<NetworkResult<ListOfShoppingLists>>>
         get() = _getShoppingListsLiveData
 
-    override suspend fun getShoppingLists() {
+    override suspend fun getUserShoppingLists() {
         // Use the handleApiResponse function to handle the API call and update LiveData
-        handleApiResponse(_getShoppingListsLiveData) {
+        handleApiResponse(_getShoppingListsLiveData, saveSharedPreferences = true) {
             remoteDataSource.getShoppingList()
         }
     }
 
-    private val _getShoppingListLiveData =
-        MutableLiveData<Event<NetworkResult<ShoppingIngredientList>>>()
-    override val getShoppingListLiveData: LiveData<Event<NetworkResult<ShoppingIngredientList>>>
+    private val _getShoppingListLiveData = MutableLiveData<Event<NetworkResult<ShoppingList>>>()
+    override val getShoppingListLiveData: LiveData<Event<NetworkResult<ShoppingList>>>
         get() = _getShoppingListLiveData
 
     override suspend fun getShoppingList(shoppingListId: Int) {
@@ -82,14 +109,44 @@ class ShoppingListRepositoryImp @Inject constructor(
 
     // post
 
-    private val _postShoppingListLiveData = MutableLiveData<Event<NetworkResult<Unit>>>()
-    override val postShoppingListLiveData: LiveData<Event<NetworkResult<Unit>>>
+    private val _postShoppingListLiveData = MutableLiveData<Event<NetworkResult<ShoppingList>>>()
+    override val postShoppingListLiveData: LiveData<Event<NetworkResult<ShoppingList>>>
         get() = _postShoppingListLiveData
 
-    override suspend fun postShoppingList(shoppingIngredientListRequest: ShoppingIngredientListRequest) {
+    override suspend fun postShoppingList(shoppingListRequest: ShoppingListRequest) {
         // Use the handleApiResponse function to handle the API call and update LiveData
-        handleApiResponse(_postShoppingListLiveData) {
-            remoteDataSource.postShoppingList(shoppingIngredientListRequest)
+        handleApiResponse(_postShoppingListLiveData, saveSharedPreferences = true) {
+            remoteDataSource.postShoppingList(shoppingListRequest)
+        }
+    }
+
+    // put
+
+    private val _putShoppingListLiveData = MutableLiveData<Event<NetworkResult<ShoppingList>>>()
+    override val putShoppingListLiveData: LiveData<Event<NetworkResult<ShoppingList>>>
+        get() = _putShoppingListLiveData
+
+    override suspend fun putShoppingList(shoppingListId: Int, shoppingListRequest: ShoppingListRequest) {
+        handleApiResponse(_putShoppingListLiveData, saveSharedPreferences = true) {
+            remoteDataSource.putShoppingList(shoppingListId,shoppingListRequest)
+        }
+    }
+
+    override suspend fun archiveShoppingList(shoppingListId: Int, shoppingListRequest: ShoppingListRequest) {
+        handleApiResponse(_putShoppingListLiveData, deleteSharedPreferences = true) {
+            remoteDataSource.putShoppingList(shoppingListId,shoppingListRequest)
+        }
+    }
+
+    // delete
+
+    private val _deleteShoppingListLiveData = MutableLiveData<Event<NetworkResult<IdResponse>>>()
+    override val deleteShoppingListLiveData: LiveData<Event<NetworkResult<IdResponse>>>
+        get() = _deleteShoppingListLiveData
+
+    override suspend fun deleteShoppingList(shoppingListId: Int) {
+        handleApiResponse(_deleteShoppingListLiveData, deleteSharedPreferences = true) {
+            remoteDataSource.deleteShoppingList(shoppingListId)
         }
     }
 }

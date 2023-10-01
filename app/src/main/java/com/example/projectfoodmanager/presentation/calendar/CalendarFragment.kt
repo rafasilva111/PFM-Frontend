@@ -29,7 +29,7 @@ import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.formatDateMonthYear
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
 import com.example.projectfoodmanager.util.*
-import com.example.projectfoodmanager.util.Helper.Companion.changeVisibilityMenu
+import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfMonth
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfWeek
@@ -58,7 +58,6 @@ class CalendarFragment : Fragment() {
 
     @Inject
     lateinit var sharedPreference: SharedPreference
-
 
     //adapters
     private val adapterCalMonth by lazy {
@@ -124,7 +123,7 @@ class CalendarFragment : Fragment() {
                 findNavController().navigate(R.id.action_calendarFragment_to_calendarEntryDetailFragment,Bundle().apply {
                     putParcelable("CalenderEntry",item)
                 })
-                changeVisibilityMenu(false,activity)
+                changeMenuVisibility(false,activity)
             },
             onDoneClicked = { checkDone, item->
                 calenderViewModel.patchCalendarEntry(item.id, CalenderEntryPatchRequest(checked_done = checkDone))
@@ -150,7 +149,7 @@ class CalendarFragment : Fragment() {
         ): View {
         binding = FragmentCalendarBinding.inflate(layoutInflater)
         setMonthView()
-        binding.registersDateTV.text= formatLocalDateToFormatDate(currentDate)
+        binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
 
         val manager = LinearLayoutManager(activity)
 
@@ -166,7 +165,7 @@ class CalendarFragment : Fragment() {
 
         binding.addRegisterIB.setOnClickListener {
             findNavController().navigate(R.id.action_calendarFragment_to_newCalenderEntryFragment)
-            changeVisibilityMenu(false,activity)
+            changeMenuVisibility(false,activity)
 
         }
 
@@ -279,7 +278,7 @@ class CalendarFragment : Fragment() {
             putString("from_date",toFromDate.first.atStartOfDay().toString())
             putString("to_date",toFromDate.second.atStartOfDay().toString())
         })
-        changeVisibilityMenu(false,activity)
+        changeMenuVisibility(false,activity)
     }
 
     override fun onResume() {
@@ -302,7 +301,7 @@ class CalendarFragment : Fragment() {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 
         }
-        changeVisibilityMenu(true,activity)
+        changeMenuVisibility(true,activity)
 
     }
 

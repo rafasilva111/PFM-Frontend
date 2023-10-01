@@ -10,6 +10,7 @@ import android.widget.ListAdapter
 import android.widget.ListView
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Tag
 import com.example.projectfoodmanager.databinding.FragmentRecipeTabBinding
 import com.example.projectfoodmanager.util.RecipeListingFragmentFilters
 import com.google.android.material.chip.Chip
@@ -49,29 +50,29 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
             binding.descriptionTV.text = recipe.description
 
 
-            val list: List<String> = recipe.tags!!
+            val list: List<Tag> = recipe.tags!!
 
 
             // TODO: Obter a lista ordenada da base de dados
-            val mutList: MutableList<String> = list.sortedBy { it.length }.toMutableList()
+            val mutList: MutableList<Tag> = list.sortedBy { it.title.length }.toMutableList()
             mutList.removeAt(0)
 
 
 
             binding.numberCategoriasTV.text = mutList.size.toString() + " Categorias"
-            for (item: String in mutList) {
+            for (item: Tag in mutList) {
 
                 val chip = Chip(context)
 
                 chip.apply {
-                    text = item
+                    text = item.title
                     textSize = 12F
                     chipEndPadding = 0F
 
                     textStartPadding = 0F
                     textAlignment = View.TEXT_ALIGNMENT_CENTER
 
-                    when (item.lowercase()) {
+                    when (item.title.lowercase()) {
                         RecipeListingFragmentFilters.CARNE -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_carne, null)
                         RecipeListingFragmentFilters.PEIXE -> chipBackgroundColor =

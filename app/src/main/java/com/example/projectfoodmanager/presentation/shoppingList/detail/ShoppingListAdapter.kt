@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.shoppingList
+package com.example.projectfoodmanager.presentation.shoppingList.detail
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -64,7 +64,6 @@ class ShoppingListAdapter(
         fun bind(item: ShoppingIngredient) {
             binding.nameTV.text = item.ingredient.name
             binding.quantityTV.text = context.getString(R.string.quantity_placeholder,item.quantity,item.units)
-            binding.checkDoneCB.isChecked = item.checked
         }
     }
 }

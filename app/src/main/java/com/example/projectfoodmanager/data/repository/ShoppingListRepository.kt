@@ -1,31 +1,37 @@
 package com.example.projectfoodmanager.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
-import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingIngredientListRequest
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListSimplefied
+import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
+import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
-import java.time.LocalDateTime
 
 interface ShoppingListRepository {
 
-    val getShoppingListLiveData: LiveData<Event<NetworkResult<ShoppingIngredientList>>>
-    val getShoppingListsLiveData: LiveData<Event<NetworkResult<ShoppingIngredientListList>>>
+    // get
+    val getShoppingListLiveData: LiveData<Event<NetworkResult<ShoppingList>>>
+    val getShoppingListsLiveData: LiveData<Event<NetworkResult<ListOfShoppingLists>>>
 
-    val postShoppingListLiveData: LiveData<Event<NetworkResult<Unit>>>
-
-
-    suspend fun getShoppingLists()
+    suspend fun getUserShoppingLists()
     suspend fun getShoppingList(shoppingListId : Int)
 
-    suspend fun postShoppingList(shoppingIngredientListRequest: ShoppingIngredientListRequest)
+    // post
+    val postShoppingListLiveData: LiveData<Event<NetworkResult<ShoppingList>>>
 
+    suspend fun postShoppingList(shoppingListRequest: ShoppingListRequest)
+
+    // put
+    val putShoppingListLiveData: LiveData<Event<NetworkResult<ShoppingList>>>
+
+    suspend fun putShoppingList(shoppingListId: Int, shoppingListRequest: ShoppingListRequest)
+
+    suspend fun archiveShoppingList(shoppingListId: Int, shoppingListRequest: ShoppingListRequest)
+
+    // delete
+    val deleteShoppingListLiveData: LiveData<Event<NetworkResult<IdResponse>>>
+
+    suspend fun deleteShoppingList(shoppingListId: Int)
 }

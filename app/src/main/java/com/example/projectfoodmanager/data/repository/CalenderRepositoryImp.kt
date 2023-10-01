@@ -8,7 +8,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingIngredientListSimplefied
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
@@ -35,7 +35,7 @@ class CalenderRepositoryImp @Inject constructor(
         val response =remoteDataSource.createCalenderEntry(recipeId,comment)
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            sharedPreference.saveSingleCalendarEntry(response.body()!!)
+            sharedPreference.saveCalendarEntry(response.body()!!)
             _functionCreateEntryOnCalender.postValue(Event(NetworkResult.Success(response.body()!!)))
         }
         else if(response.errorBody()!=null){
@@ -99,8 +99,8 @@ class CalenderRepositoryImp @Inject constructor(
     }
 
 
-    private val _functionGetCalenderIngredients = MutableLiveData<Event<NetworkResult<ShoppingIngredientListSimplefied>>>()
-    override val getCalendarIngredients: LiveData<Event<NetworkResult<ShoppingIngredientListSimplefied>>>
+    private val _functionGetCalenderIngredients = MutableLiveData<Event<NetworkResult<ShoppingListSimplefied>>>()
+    override val getCalendarIngredients: LiveData<Event<NetworkResult<ShoppingListSimplefied>>>
         get() = _functionGetCalenderIngredients
 
     override suspend fun getCalendarIngredients(fromDate: LocalDateTime, toDate: LocalDateTime) {
@@ -156,7 +156,7 @@ class CalenderRepositoryImp @Inject constructor(
         val response =remoteDataSource.patchCalenderEntry(calenderEntryId,calenderPatchRequest)
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            sharedPreference.saveSingleCalendarEntry(response.body()!!)
+            sharedPreference.saveCalendarEntry(response.body()!!)
 
             _functionPatchCalenderEntry.postValue(Event(NetworkResult.Success(response.body()!!
             )))

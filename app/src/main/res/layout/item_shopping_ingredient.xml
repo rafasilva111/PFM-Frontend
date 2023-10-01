@@ -32,20 +32,12 @@
         android:id="@+id/quantityTV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
         android:layout_weight="1"
+        android:textAlignment="center"
         android:text="Quantity"
-        app:layout_constraintBottom_toBottomOf="@+id/checkDoneCB"
-        app:layout_constraintEnd_toStartOf="@+id/checkDoneCB"
-        app:layout_constraintTop_toTopOf="@+id/checkDoneCB" />
-
-    <CheckBox
-        android:id="@+id/checkDoneCB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

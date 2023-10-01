@@ -25,7 +25,8 @@ object FIREBASE_NOTIFICATIONS {
 
 object SharedPreferencesConstants{
     const val USER_SESSION = "user_session"
-    const val USER_CALENDER_SESSION = "user_calender_session"
+    const val USER_SESSION_CALENDER = "user_session_calender"
+    const val USER_SESSION_SHOPPING_LISTS = "user_session_shopping_list"
 }
 
 object ERROR_CODES {

@@ -23,7 +23,7 @@ data class Recipe(
     var comments: Int,
     val views: Int, //Ainda não esta a ser usado
     val description: String,
-    var tags: List<String>? = arrayListOf(),
+    var tags: List<Tag>? = arrayListOf(),
     val ingredientQuantities: List<IngredientQuantity>? = arrayListOf(),
     val preparation: List<Preparation>,
     val nutrition_information: NutritionInformations,
