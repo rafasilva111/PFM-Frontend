@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.recipe.create.steps.StepIngredientsFragment">
+
+
+    <LinearLayout
+        android:id="@+id/preparation_LL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/fredoka_one"
+                android:text="Ingredientes"
+                android:textSize="16sp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/nStepsTV"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/fredoka_regular"
+                android:text="nº Ingredientes"
+                android:textAlignment="textEnd"
+                android:textColor="@color/grey_2"
+                android:textSize="13sp"/>
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_default"
+            android:backgroundTint="#787878"/>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ingredientsRV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout23"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preparation_LL" />
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout23"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/addIngredientBTN"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ingredienteTL"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="Ingredient"
+            android:outlineProvider="none"
+            android:padding="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/ingredientsRV"
+            app:layout_constraintStart_toStartOf="@+id/ingredientsRV"
+            app:layout_constraintTop_toBottomOf="@+id/ingredientsRV">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ingredientET"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="text"
+                android:padding="10dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/quantityTL"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Quant"
+            android:outlineProvider="none"
+            android:padding="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/ingredientsRV"
+            app:layout_constraintStart_toStartOf="@+id/ingredientsRV"
+            app:layout_constraintTop_toBottomOf="@+id/ingredienteTL">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/quantityET"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="text"
+                android:padding="10dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addIngredientBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#684CAF50"
+        android:elevation="8dp"
+        android:fontFamily="@font/fredoka_one"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:text="Adicionar"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/nextStepBTN"
+        app:layout_constraintEnd_toEndOf="@+id/nextStepBTN"
+        app:layout_constraintStart_toStartOf="@+id/materialButton" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/nextStepBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:elevation="8dp"
+        android:fontFamily="@font/fredoka_regular"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:text="Continuar"
+        app:icon="@drawable/ic_arrow_right"
+        app:iconGravity="end"
+        app:iconPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/backIB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/grayLightBTN"
+        android:elevation="8dp"
+        android:fontFamily="@font/fredoka_regular"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:text="Cancelar"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
