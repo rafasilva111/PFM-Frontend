@@ -5,12 +5,16 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredientList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
@@ -119,7 +123,7 @@ interface ApiInterface {
     // calender
 
     @POST("$API_V1_BASE_URL/calendar")
-    suspend fun createCalenderEntry(@Query("recipe_id") recipeId: Int,@Body calenderEntryRequest : CalenderEntryRequest): Response<Unit>
+    suspend fun createCalenderEntry(@Query("recipe_id") recipeId: Int,@Body calenderEntryRequest : CalenderEntryRequest): Response<CalenderEntry>
 
     @GET("$API_V1_BASE_URL/calendar/list")
     suspend fun getEntryOnCalender(@Query("date")date: String): Response<CalenderEntryList>
@@ -128,7 +132,7 @@ interface ApiInterface {
     suspend fun getEntryOnCalender(@Query("from_date") fromDate:String,@Query("to_date") toDate: String): Response<CalenderDatedEntryList>
 
     @GET("$API_V1_BASE_URL/calendar/ingredients/list")
-    suspend fun getCalenderIngredients(@Query("from_date") fromDate: String,@Query("to_date") toDate: String): Response<CalenderIngredientList>
+    suspend fun getCalenderIngredients(@Query("from_date") fromDate: String,@Query("to_date") toDate: String): Response<ShoppingListSimplefied>
 
     @DELETE("$API_V1_BASE_URL/calendar")
     suspend fun deleteCalenderEntry(@Query("id") calenderEntryId: Int): Response<Unit>
@@ -178,9 +182,22 @@ interface ApiInterface {
     @DELETE("$API_V1_BASE_URL/follow")
     suspend fun deleteFollowedRequest(@Query("user_followed_id") userId: Int): Response<Unit>
 
+    // Shopping list
 
+    @POST("$API_V1_BASE_URL/shopping_list")
+    suspend fun postShoppingList(@Body shoppingIngredientList: ShoppingListRequest): Response<ShoppingList>
 
+    @GET("$API_V1_BASE_URL/shopping_list")
+    suspend fun getShoppingList(): Response<ListOfShoppingLists>
 
+    @GET("$API_V1_BASE_URL/shopping_list")
+    suspend fun getShoppingList(@Query("id") shoppingListId: Int): Response<ShoppingList>
+
+    @PUT("$API_V1_BASE_URL/shopping_list")
+    suspend fun putShoppingList(@Query("id")shoppingListId: Int,@Body shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
+
+    @DELETE("$API_V1_BASE_URL/shopping_list")
+    suspend fun deleteShoppingList(@Query("id")shoppingListId: Int): Response<IdResponse>
 
 
 }

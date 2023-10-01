@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -14,8 +13,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.viewmodels.CalenderViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -29,7 +27,7 @@ class LoginFragment : Fragment() {
 
 
     private val authViewModel by activityViewModels<AuthViewModel>()
-    private val calenderViewModel by activityViewModels<CalenderViewModel>()
+    private val calendarViewModel by activityViewModels<CalendarViewModel>()
 
     @Inject
     lateinit var tokenManager: TokenManager
@@ -150,7 +148,7 @@ class LoginFragment : Fragment() {
                     is NetworkResult.Success -> {
 
                         LocalDateTime.now().let { dateNow ->
-                            calenderViewModel.getCalenderDatedEntryList(
+                            calendarViewModel.getCalendarDatedEntryList(
                                 fromDate = dateNow.minusDays(15),
                                 toDate = dateNow.plusDays(15),
                                 cleanseOldRegistry = true

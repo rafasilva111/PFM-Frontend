@@ -16,10 +16,10 @@ import com.example.projectfoodmanager.data.model.Avatar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAdjusters
 import java.util.*
 
 class Helper {
@@ -109,6 +109,18 @@ class Helper {
             }
         }
 
+        fun getStartAndEndOfWeek(date: LocalDate): Pair<LocalDate, LocalDate> {
+            val startOfWeek = date.with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY))
+            val endOfWeek = date.with(TemporalAdjusters.nextOrSame(java.time.DayOfWeek.SUNDAY))
+            return Pair(startOfWeek, endOfWeek)
+        }
+
+        fun getStartAndEndOfMonth(date: LocalDate): Pair<LocalDate, LocalDate> {
+            val startOfMonth = date.with(TemporalAdjusters.firstDayOfMonth())
+            val endOfMonth = date.with(TemporalAdjusters.lastDayOfMonth())
+            return Pair(startOfMonth, endOfMonth)
+        }
+
         fun loadRecipeImage(recipeIV: ImageView, imgSource: String) {
             val imgRef = Firebase.storage.reference.child(imgSource)
             imgRef.downloadUrl.addOnSuccessListener { Uri ->
@@ -121,7 +133,9 @@ class Helper {
 
         }
 
-        fun changeVisibilityMenu(state: Boolean, activity: FragmentActivity?) {
+
+
+        fun changeMenuVisibility(state: Boolean, activity: FragmentActivity?) {
 
             val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 

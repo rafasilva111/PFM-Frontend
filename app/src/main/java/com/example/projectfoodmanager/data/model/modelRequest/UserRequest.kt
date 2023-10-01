@@ -27,4 +27,6 @@ data class UserRequest(
     val sex: String?= null,
     @SerializedName("weight")
     val weight: Float? =-1F,
+    @SerializedName("user_portion")
+    val user_portion: Int? = null,
 ) : Serializable, Parcelable

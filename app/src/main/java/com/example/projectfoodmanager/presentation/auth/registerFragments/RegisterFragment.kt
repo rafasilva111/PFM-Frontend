@@ -132,7 +132,7 @@ class RegisterFragment : Fragment() {
                     refStorage.putFile(file_uri!!)
                         .addOnSuccessListener {
                             Log.d(TAG, "uploadImageToFirebase: success")
-                            authViewModel.registerUser(getUserRequest())
+                            authViewModel.registerUser(createUserRequest())
                         }
 
                         .addOnFailureListener { e ->
@@ -141,7 +141,7 @@ class RegisterFragment : Fragment() {
                 }
                 else
 
-                    authViewModel.registerUser(getUserRequest())
+                    authViewModel.registerUser(createUserRequest())
 
             }else{
                 Toast(context).showCustomToast ("Por favor preencha os campos em falta", requireActivity(),ToastType.ERROR)
@@ -374,7 +374,7 @@ class RegisterFragment : Fragment() {
         binding.registerBtn.setOnClickListener {
             if (validation()){
                 findNavController().navigate(R.id.action_registerFragment_to_biodataFragment_navigation,Bundle().apply {
-                    putParcelable("user",getUserRequest())
+                    putParcelable("user",createUserRequest())
                     if (file_uri != null){
                         putString("uri",file_uri.toString())
                     }
@@ -386,7 +386,7 @@ class RegisterFragment : Fragment() {
 
 
 
-    private fun getUserRequest(): UserRequest {
+    private fun createUserRequest(): UserRequest {
 
         val sex: String = when (binding.sexEt.text.toString()) {
             "Masculino" -> SexConstants.M

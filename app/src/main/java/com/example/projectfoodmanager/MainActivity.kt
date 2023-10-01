@@ -3,25 +3,16 @@ package com.example.projectfoodmanager
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.PushNotification
 import com.example.projectfoodmanager.databinding.ActivityMainBinding
-import com.example.projectfoodmanager.di.RetrofitInstance
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.util.toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

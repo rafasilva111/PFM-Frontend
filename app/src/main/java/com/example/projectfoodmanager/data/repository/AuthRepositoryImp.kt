@@ -181,9 +181,9 @@ class AuthRepositoryImp @Inject constructor(
     override val getUserFollowers: LiveData<Event<NetworkResult<FollowList>>>
         get() = _userFollowersResponseLiveData
 
-    override suspend fun getUserFollowers(idUser: Int) {
+    override suspend fun getUserFollowers(userId: Int) {
         _userFollowersResponseLiveData.postValue(Event(NetworkResult.Loading()))
-        val response = remoteDataSource.getFollowers(idUser)
+        val response = remoteDataSource.getFollowers(userId)
         if (response.isSuccessful) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             _userFollowersResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
@@ -205,9 +205,9 @@ class AuthRepositoryImp @Inject constructor(
     override val getUserFolloweds: LiveData<Event<NetworkResult<FollowList>>>
         get() = _userFollowedsResponseLiveData
 
-    override suspend fun getUserFolloweds(id_user: Int) {
+    override suspend fun getUserFolloweds(userId: Int) {
         _userFollowedsResponseLiveData.postValue(Event(NetworkResult.Loading()))
-        val response = remoteDataSource.getFolloweds(id_user)
+        val response = remoteDataSource.getFolloweds(userId)
         if (response.isSuccessful && response.code() == 200) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             _userFollowersResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
@@ -253,10 +253,10 @@ class AuthRepositoryImp @Inject constructor(
     override val postUserAcceptFollowRequest: LiveData<Event<NetworkResult<Int>>>
         get() = _functionPostUserAcceptFollowRequest
 
-    override suspend fun postUserAcceptFollowRequest(userID: Int) {
+    override suspend fun postUserAcceptFollowRequest(userId: Int) {
         _functionPostUserAcceptFollowRequest.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.postAcceptFollowRequest(userID)
+        val response =remoteDataSource.postAcceptFollowRequest(userId)
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             _functionPostUserAcceptFollowRequest.postValue(Event(NetworkResult.Success(response.code())))

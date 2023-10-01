@@ -2,19 +2,25 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.api.ApiInterface
+import com.example.projectfoodmanager.data.api.ApiNotificationInterface
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
+import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderIngredientList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.PushNotification
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 
@@ -22,11 +28,13 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResp
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.util.FollowType
+import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
-	private val apiInterface: ApiInterface
+	private val apiInterface: ApiInterface,
+	private val apiNotificationInterface: ApiNotificationInterface
 ) : RemoteDataSource {
 
 	//User
@@ -127,7 +135,7 @@ class RemoteDataSourceImpl @Inject constructor(
 	}
 
 	//Calender
-	override suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<Unit> {
+	override suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<CalenderEntry> {
 		return apiInterface.createCalenderEntry(recipeId= recipeId,calenderEntryRequest = comment)
 	}
 
@@ -139,7 +147,7 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getEntryOnCalender(date = date)
 	}
 
-	override suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<CalenderIngredientList> {
+	override suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingListSimplefied> {
 		return apiInterface.getCalenderIngredients(fromDate = fromDate,toDate = toDate)
 	}
 
@@ -188,4 +196,39 @@ class RemoteDataSourceImpl @Inject constructor(
 	override suspend fun postFollowRequest(userId: Int): Response<Unit> {
 		return apiInterface.postFollowRequest(userId)
 	}
+
+
+	//notifications
+
+	override suspend fun sendNotification(notificationModel: PushNotification): Response<ResponseBody> {
+		return apiNotificationInterface.sendNotification(notificationModel)
+	}
+
+	// shopping list
+	//get
+	override suspend fun getShoppingList(): Response<ListOfShoppingLists> {
+		return apiInterface.getShoppingList()
+	}
+
+	override suspend fun getShoppingList(shoppingListId: Int): Response<ShoppingList> {
+		return apiInterface.getShoppingList(shoppingListId)
+	}
+
+	// post
+	override suspend fun postShoppingList(shoppingListRequest: ShoppingListRequest): Response<ShoppingList> {
+		return apiInterface.postShoppingList(shoppingListRequest)
+	}
+
+	// put
+	override suspend fun putShoppingList(shoppingListId: Int, shoppingListRequest: ShoppingListRequest): Response<ShoppingList> {
+		return apiInterface.putShoppingList(shoppingListId,shoppingListRequest)
+	}
+
+	// delete
+	override suspend fun deleteShoppingList(shoppingListId: Int): Response<IdResponse> {
+		return apiInterface.deleteShoppingList(shoppingListId)
+	}
+
+
+
 }

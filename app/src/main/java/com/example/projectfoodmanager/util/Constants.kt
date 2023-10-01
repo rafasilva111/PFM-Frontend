@@ -14,6 +14,7 @@ object Constants {
 
     const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"
     const val PREFS_TOKEN_FILE = "prefs_token_file"
+
 }
 object FIREBASE_NOTIFICATIONS {
     const val BASE_URL = "https://fcm.googleapis.com"
@@ -24,7 +25,8 @@ object FIREBASE_NOTIFICATIONS {
 
 object SharedPreferencesConstants{
     const val USER_SESSION = "user_session"
-    const val USER_CALENDER_SESSION = "user_calender_session"
+    const val USER_SESSION_CALENDER = "user_session_calender"
+    const val USER_SESSION_SHOPPING_LISTS = "user_session_shopping_list"
 }
 
 object ERROR_CODES {

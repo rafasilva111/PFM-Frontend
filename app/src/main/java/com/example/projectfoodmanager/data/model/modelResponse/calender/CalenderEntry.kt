@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class CalenderEntry(
     val id: Int,
-    val user: User,
+    var user: User,
     val recipe: Recipe,
     val tag: String,
     val created_date: String,

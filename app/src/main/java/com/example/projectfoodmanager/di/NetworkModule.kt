@@ -1,8 +1,13 @@
 package com.example.projectfoodmanager.di
-
-import android.util.Log
+import com.google.gson.GsonBuilder
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
+import java.io.IOException
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import com.example.projectfoodmanager.data.api.ApiInterface
-import com.example.projectfoodmanager.data.api.ApiNotifications
+import com.example.projectfoodmanager.data.api.ApiNotificationInterface
 import com.example.projectfoodmanager.data.api.AuthInterceptor
 import com.example.projectfoodmanager.util.Constants
 import com.example.projectfoodmanager.util.FIREBASE_NOTIFICATIONS
@@ -48,6 +53,20 @@ class NetworkModule {
 				.writeTimeout(25, TimeUnit.SECONDS)
 		}.build()
 
+		val gson = GsonBuilder()
+			.registerTypeAdapter(LocalDateTime::class.java, object : TypeAdapter<LocalDateTime>() {
+				@Throws(IOException::class)
+				override fun write(out: JsonWriter, value: LocalDateTime) {
+					out.value(value.format(DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss")))
+				}
+
+				@Throws(IOException::class)
+				override fun read(input: JsonReader): LocalDateTime {
+					return LocalDateTime.parse(input.nextString(), DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"))
+				}
+			})
+			.create()
+
 		return Retrofit.Builder()
 			.addConverterFactory(GsonConverterFactory.create())
 			.client(client)
@@ -74,7 +93,7 @@ class NetworkModule {
 
 	@Provides
 	@Singleton
-	fun provideApi(@SecondRetrofit retrofit: Retrofit): ApiNotifications =
-		retrofit.create(ApiNotifications::class.java)
+	fun provideApi(@SecondRetrofit retrofit: Retrofit): ApiNotificationInterface =
+		retrofit.create(ApiNotificationInterface::class.java)
 
 }

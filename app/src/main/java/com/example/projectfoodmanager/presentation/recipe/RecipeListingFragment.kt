@@ -14,7 +14,6 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -22,22 +21,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
-import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.util.*
-import com.example.projectfoodmanager.util.Helper.Companion.changeVisibilityMenu
+import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.math.ceil
@@ -93,7 +87,7 @@ class RecipeListingFragment : Fragment() {
 
                 findNavController().navigate(R.id.action_recipeListingFragment_to_newRecipeFragment,null)
 
-                changeVisibilityMenu(false,activity)
+                changeMenuVisibility(false,activity)
             },
             onLikeClicked = {item,like ->
                 if(like){
@@ -207,7 +201,7 @@ class RecipeListingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        changeVisibilityMenu(true,activity)
+        changeMenuVisibility(true,activity)
 
         //Get User in SharedPreferences
         val user = sharedPreference.getUserSession()
@@ -279,7 +273,7 @@ class RecipeListingFragment : Fragment() {
             //Go to Notifications Fragment
             binding.notificationIV.setOnClickListener {
                 findNavController().navigate(R.id.action_recipeListingFragment_to_notificationFragment)
-                changeVisibilityMenu(false,activity)
+                changeMenuVisibility(false,activity)
             }
 
             //Tag filter

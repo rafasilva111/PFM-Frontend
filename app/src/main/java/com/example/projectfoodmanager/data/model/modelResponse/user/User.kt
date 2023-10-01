@@ -12,16 +12,17 @@ data class User(
     val birth_date: String?,
     val email: String,
     val description: String,
-    val fmc_token: String,
+    val fmc_token: String?,
     val profile_type: String,
     val verified: Boolean,
     val user_type: String,
+    val user_portion: Int,
     val img_source: String="",
     val activity_level: Double = 0.0,
     val height: Double = 0.0,
     val sex: String?,
     val weight: Double = 0.0,
-    val age: Int?,
+    val age: Int? = 0,
     val rating: Double = 0.0,
     var liked_recipes: MutableList<Recipe>? = mutableListOf(),
     var saved_recipes: MutableList<Recipe>? = mutableListOf(),
@@ -69,13 +70,6 @@ data class User(
     }
 
     fun checkIfSaved(recipe: Recipe): Int {
-        return if (saved_recipes!=null && saved_recipes!!.isNotEmpty())
-            saved_recipes!!.indexOfFirst { it.id == recipe.id }
-        else
-            -1
-    }
-
-    fun checkIfSaved(recipe: RecipeSimplefied): Int {
         return if (saved_recipes!=null && saved_recipes!!.isNotEmpty())
             saved_recipes!!.indexOfFirst { it.id == recipe.id }
         else

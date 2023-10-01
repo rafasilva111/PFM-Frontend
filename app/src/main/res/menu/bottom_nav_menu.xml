@@ -4,27 +4,27 @@
 
     <item
         android:id="@+id/recipeListingFragment"
-        android:title="Recipes"
+        android:title="@string/recipes_title"
         android:icon="@drawable/ic_baseline_menu_book_24"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/calenderFragment"
-        android:title="Calender"
+        android:id="@+id/calendarFragment"
+        android:title="@string/calender_title"
         android:icon="@drawable/ic_baseline_calendar_month_24"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/favoritesFragment"
-        android:title="Favorites"
+        android:title="@string/favorites_title"
         android:icon="@drawable/ic_like"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/goalsFragment"
-        android:title="Goal"
+        android:title="@string/goal_title"
         android:icon="@drawable/ic_baseline_celebration_24"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/profileFragment"
-        android:title="Profile"
+        android:title="@string/profile_title"
         android:icon="@drawable/ic_person"
         app:showAsAction="ifRoom"/>
 
