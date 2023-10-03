@@ -45,10 +45,10 @@
         android:layout_marginEnd="10dp"
         android:background="@drawable/bg_default"
         android:backgroundTint="@color/main_color"
-        android:src="@drawable/ic_baseline_shopping_basket_24"
+        android:src="@drawable/ic_shopping_basket"
         app:layout_constraintEnd_toStartOf="@+id/addRegisterIB"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white" />
+         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout14"

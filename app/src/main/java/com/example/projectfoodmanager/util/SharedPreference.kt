@@ -216,9 +216,6 @@ class SharedPreference @Inject constructor(
         val allShoppingLists = getAllShoppingList()
         allShoppingLists.add(shoppingList)
         sharedPreferences.edit().putString(SharedPreferencesConstants.USER_SESSION_SHOPPING_LISTS,gson.toJson(allShoppingLists)).apply()
-
-        val teste = getAllShoppingList()
-
     }
 
     fun saveMultipleShoppingList(listOfShoppingLists: MutableList<ShoppingList>){

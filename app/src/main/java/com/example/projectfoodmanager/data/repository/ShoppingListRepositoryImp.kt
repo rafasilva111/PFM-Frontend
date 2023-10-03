@@ -58,11 +58,12 @@ class ShoppingListRepositoryImp @Inject constructor(
                             sharedPreference.saveMultipleShoppingList(responseBody.result)
                     }
 
-                    if (deleteSharedPreferences)
+                    if (deleteSharedPreferences) {
                         if (responseBody is IdResponse)
                             sharedPreference.deleteShoppingList(responseBody.id)
                         if (responseBody is ShoppingList)
                             sharedPreference.deleteShoppingList(responseBody.id)
+                    }
                 } else {
                     // Handle the case where the response body is null
                     liveData.postValue(Event(NetworkResult.Error("Response body is null")))
