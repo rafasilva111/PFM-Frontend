@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_receitaDetailFragment_to_profileBottomSheetDialog"
             app:destination="@id/profileBottomSheetDialog" />
+        <action
+            android:id="@+id/action_receitaDetailFragment_to_newRecipeFragment"
+            app:destination="@id/newRecipeFragment" />
 
     </fragment>
 
@@ -216,5 +219,10 @@
             android:id="@+id/action_calendarFragment_to_calenderIngredientsFragment"
             app:destination="@id/calenderIngredientsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/newRecipeFragment"
+        android:name="com.example.projectfoodmanager.presentation.recipe.create.NewRecipeFragment"
+        android:label="fragment_new_recipe"
+        tools:layout="@layout/fragment_new_recipe" />
 
 </navigation>

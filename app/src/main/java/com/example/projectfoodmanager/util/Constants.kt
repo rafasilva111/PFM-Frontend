@@ -8,7 +8,7 @@ const val LOGIN_TIME:Long = 2000
 object Constants {
     // TODO: Primeira coisa a fazer quando testar
     //rui const val BASE_URL = "http://192.168.1.104:5000/"
-    const val BASE_URL = "http://192.168.1.110:5000"
+    const val BASE_URL = "http://192.168.1.104:5000"
     //const val BASE_URL = "http://35.180.110.91/"
     const val USER_TOKEN = "user_token"
 

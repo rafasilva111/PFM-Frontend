@@ -8,9 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
+import com.example.projectfoodmanager.data.model.modelResponse.ingredients.Ingredient
 import com.example.projectfoodmanager.data.model.modelResponse.ingredients.IngredientQuantity
 import com.example.projectfoodmanager.databinding.FragmentStepIngredientsBinding
+import com.example.projectfoodmanager.presentation.recipe.create.steps.util.StepUtil.Companion.createRecipe
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -27,24 +30,28 @@ class StepIngredientsFragment : Fragment() {
 
     // binding
     lateinit var binding: FragmentStepIngredientsBinding
-    private var ingredientList :List<IngredientQuantity> = mutableListOf()
 
-    private var objRecipe: RecipeRequest? = null
+    //private var objRecipe: RecipeRequest? = null
 
+    private val adapter by lazy{
+        IngredientsAdapter(
+            createRecipe!!.ingredients
+
+        ) { pos, item ->
+            isUpdate = true
+            itemToUpdated = item
+            position = pos
+
+            binding.ingredientET.setText(item.ingredient.name)
+            binding.quantityET.setText(item.quantity_original)
+
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= 33) {
-            // TIRAMISU
-            objRecipe = arguments?.getParcelable(ARG_RECIPE, RecipeRequest::class.java)!!
-        } else {
-            objRecipe = arguments?.getParcelable(ARG_RECIPE)!!
-        }
-
-        //Save ingredientsList of recipeRequest if not empty
-        if(!objRecipe!!.ingredients.isEmpty())
-            ingredientList= objRecipe!!.ingredients
-
+        if (createRecipe == null)
+            findNavController().navigateUp()
 
     }
 
@@ -60,24 +67,10 @@ class StepIngredientsFragment : Fragment() {
         return binding.root
     }
 
-
-    private val adapter by lazy{
-        IngredientsAdapter(
-            ingredientList
-
-        ) { pos, item ->
-            isUpdate = true
-            itemToUpdated = item
-            position = pos
-
-            binding.ingredientET.setText(item.ingredient.name)
-            binding.quantityET.setText(item.quantity_original)
-
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         setUI()
 
@@ -95,7 +88,7 @@ class StepIngredientsFragment : Fragment() {
                 isUpdate=false
             }else{
                 // todo
-                //adapter.addItem(IngredientQuantity(1, IngredientBase(1,binding.ingredientET.text.toString()),binding.quantityET.text.toString()))
+                adapter.addItem(IngredientQuantity(1, Ingredient(1,binding.ingredientET.text.toString()),binding.quantityET.text.toString(),0F,"colheres"))
                 binding.ingredientET.setText("")
                 binding.quantityET.setText("")
                 binding.ingredientET.clearFocus()
@@ -105,32 +98,21 @@ class StepIngredientsFragment : Fragment() {
 
         binding.nextStepBTN.setOnClickListener {
             // Create new fragment and transaction
-            val transaction = parentFragmentManager.beginTransaction()
-
+            //val transaction = parentFragmentManager.beginTransaction()
+            findNavController().navigate(R.id.action_stepIngredientsFragment_to_stepPreparationFragment)
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack if needed
          /*   transaction.replace(com.example.projectfoodmanager.R.id.frameRecipeFL, StepPreparationFragment())
             transaction.addToBackStack(null)
             // Commit the transaction
             transaction.commit()*/
-
-
-
         }
 
         binding.backIB.setOnClickListener {
 /*            val fragmentManager: FragmentManager? = fragmentManager
             fragmentManager!!.popBackStack()*/
 
-            val navController = findNavController()
-
-            //Send ingredientsList to previous Fragment
-            if (adapter.getItems()!!.isNotEmpty())
-                objRecipe!!.ingredients = adapter.getItems()!!
-                navController.previousBackStackEntry?.savedStateHandle?.set(ARG_RECIPE, objRecipe!!.ingredients)
-
-            navController.navigateUp()
-
+            findNavController().navigateUp()
         }
 
     }
@@ -142,6 +124,21 @@ class StepIngredientsFragment : Fragment() {
 
     }
 
+
+    override fun onResume() {
+        adapter.updateList(createRecipe!!.ingredients.toMutableList())
+
+        super.onResume()
+    }
+
+    override fun onPause() {
+
+        //Send ingredientsList to previous Fragment
+        if( adapter.getItems().isNotEmpty())
+            createRecipe!!.ingredients = adapter.getItems()
+
+        super.onPause()
+    }
 
     /*companion object {
         *//**
