@@ -18,6 +18,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.databinding.FragmentCalenderIngredientsBinding
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.updateSystemBarsAppearance
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.example.projectfoodmanager.viewmodels.ShoppingListViewModel
@@ -246,34 +247,9 @@ class CalenderShoppingListFragment : Fragment() {
         super.onResume()
 
         // Update UI elements for status bar and navigation bar
-        updateSystemBarsAppearance()
+        updateSystemBarsAppearance(requireActivity(),requireContext())
     }
 
-    private fun updateSystemBarsAppearance() {
-        val window = requireActivity().window
 
-        // set bottom bar color
-        window.navigationBarColor = requireContext().getColor(R.color.main_color)
-
-        // Set background color for status and navigation bars
-        window.statusBarColor = requireContext().getColor(R.color.background_1)
-
-        // Set text color for status and navigation bars (for Android R and above)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance(
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-            )
-            window.insetsController?.setSystemBarsAppearance(
-                WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
-                WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
-            )
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = 0
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
-    }
 
 }

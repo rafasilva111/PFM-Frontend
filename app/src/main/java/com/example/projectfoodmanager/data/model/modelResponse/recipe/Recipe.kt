@@ -23,9 +23,9 @@ data class Recipe(
     var comments: Int,
     val views: Int, //Ainda não esta a ser usado
     val description: String,
-    var tags: List<Tag>? = arrayListOf(),
-    val ingredientQuantities: List<IngredientQuantity>? = arrayListOf(),
-    val preparation: List<Preparation>,
-    val nutrition_information: NutritionInformations,
+    var tags: MutableList<Tag>? = mutableListOf(),
+    val ingredients: MutableList<IngredientQuantity>,
+    val preparation: MutableList<Preparation>,
+    val nutrition_information: NutritionInformations?,
     var created_by: User
 ) : Parcelable

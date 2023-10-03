@@ -296,13 +296,11 @@ class RecipeDetailFragment : Fragment() {
 
         binding.recipeDetailTab.removeAllTabs()
 
-        val fragmentAdapter = FragmentAdapter(requireActivity().supportFragmentManager, lifecycle, recipe)
-
         binding.recipeDetailTab.addTab(binding.recipeDetailTab.newTab().setText("Recipe"))
         binding.recipeDetailTab.addTab(binding.recipeDetailTab.newTab().setText("Nutrition"))
 
 
-        binding.recipeInfoViewPager.adapter = fragmentAdapter
+        binding.recipeInfoViewPager.adapter = FragmentAdapter(requireActivity().supportFragmentManager, lifecycle, recipe)
         // enables back from comments
         binding.recipeInfoViewPager.isSaveEnabled = false
 

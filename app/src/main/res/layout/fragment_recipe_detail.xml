@@ -97,7 +97,7 @@
                     android:elevation="9dp"
                     android:padding="5dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_favorite_noclick"
+                    android:src="@drawable/ic_favorite"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -572,7 +572,8 @@
                                 android:src="@drawable/low_difficulty"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:ignore="ImageContrastCheck,ImageContrastCheck,ImageContrastCheck" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -679,9 +680,10 @@
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/recipeInfo_ViewPager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:background="@color/transparent"
-                app:layout_constraintTop_toBottomOf="@+id/recipe_detail_tab" />
+                app:layout_constraintTop_toBottomOf="@+id/recipe_detail_tab"
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

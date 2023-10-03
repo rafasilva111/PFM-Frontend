@@ -99,6 +99,7 @@ class RecipeListingAdapter(
 
             binding.dateTV.text = formatServerTimeToDateString(item.created_date)
             binding.recipeTitleTV.text = item.title
+            binding.idTV.text = item.id.toString()
 
             // string -> localTimeDate
             binding.recipeDescriptionTV.text = item.description

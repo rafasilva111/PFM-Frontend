@@ -7,68 +7,78 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingIngredientRequest
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Preparation
+import com.example.projectfoodmanager.databinding.ItemCreateRecipePreparationLayoutBinding
+import com.example.projectfoodmanager.databinding.ItemRecipePreparationLayoutBinding
+
 
 
 class PreparationListingAdapter(
-    val context: Context,
-    private val items: List<Preparation>
-    ):
-    BaseAdapter() {
-    private val inflater: LayoutInflater
-            = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    val context: Context?,
+) : RecyclerView.Adapter<PreparationListingAdapter.MyViewHolder>() {
 
-    override fun getCount(): Int {
-        return items.size
+    private val TAG: String = "CalenderEntryAdapter"
+    var list: MutableList<Preparation> = arrayListOf()
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val itemView = ItemRecipePreparationLayoutBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return MyViewHolder(itemView)
     }
 
-    override fun getItem(p0: Int): Any {
-        return items[p0].toString()
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val item = list[position]
+        holder.bind(item)
     }
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
+    fun updateList(list: MutableList<Preparation>) {
+        this.list = list
+        notifyDataSetChanged()
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+    fun updateItem(position: Int, item: Preparation) {
+        list.removeAt(position)
+        list.add(position, item)
+        notifyItemChanged(position)
+    }
 
-        var view: View? = convertView
-        val vh: ViewHolderPreparation
-        if (view == null) {
-            var layoutInflater = LayoutInflater.from(parent?.context)
 
-            view = layoutInflater.inflate(R.layout.item_recipe_preparation_layout_new, parent, false)
-            vh = ViewHolderPreparation(view)
-            if (view != null) {
-                view.tag = vh
-            }
-            vh.tvStep_number.text = items[position].step.toString()
-            vh.tvTitle.text = items[position].step.toString() + " Passo"
-            vh.tvDiscription.text = items[position].description
+    fun cleanList() {
+        this.list = arrayListOf()
+        notifyDataSetChanged()
+    }
 
-            if (position == count-1)
-                vh.vLine.isVisible=false
+    fun removeItem(position: Int) {
+        list.removeAt(position)
+        notifyItemChanged(position)
+    }
 
-            return view
+    override fun getItemCount(): Int {
+        return list.size
+    }
 
-        }else{
-            return view
+
+    inner class MyViewHolder(private val binding: ItemRecipePreparationLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Preparation) {
+
+
+            binding.stepTV.text = item.step.toString()
+            binding.numberStepTv.text = item.step.toString() + " Passo"
+            binding.discriptionTV.text = item.description
+
+            if (position == list.size-1)
+                binding.lineV.isVisible=false
+
+
+
         }
-
-
-
     }
-
 }
-
-
-
-private class ViewHolderPreparation(view: View?) {
-    val tvDiscription: TextView = view?.findViewById<TextView>(R.id.discriptionTV) as TextView
-    val tvStep_number: TextView = view?.findViewById<TextView>(R.id.stepTV) as TextView
-    val tvTitle: TextView = view?.findViewById<TextView>(R.id.numberStepTv) as TextView
-    val vLine: View = view?.findViewById<View>(R.id.lineV) as View
-}
-
-

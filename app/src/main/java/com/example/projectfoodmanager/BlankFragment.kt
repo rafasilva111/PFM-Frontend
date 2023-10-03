@@ -77,6 +77,12 @@ class BlankFragment : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setUI()
+    }
+
+    private fun setUI() {
 
     }
+
+
 }

@@ -39,6 +39,7 @@ data class User(
 ) : Parcelable {
 
 
+
     fun checkIfLiked(recipe: Recipe): Int {
         return if (liked_recipes!=null && liked_recipes!!.isNotEmpty())
             liked_recipes!!.indexOfFirst { it.id == recipe.id }
@@ -54,11 +55,9 @@ data class User(
     }
 
     fun  addLike(recipe: Recipe){
-        if (liked_recipes!=null && liked_recipes!!.isNotEmpty()){
+        if (this.liked_recipes == null)
             this.liked_recipes = mutableListOf()
-            liked_recipes!!.add(recipe)
-        }
-        else if (this.checkIfLiked(recipe) == -1){
+        if (this.checkIfLiked(recipe) == -1){
             liked_recipes!!.add(recipe)
         }
     }
@@ -77,11 +76,9 @@ data class User(
     }
 
     fun addSave(recipe: Recipe){
-        if (saved_recipes!=null && saved_recipes!!.isNotEmpty()){
+        if (this.saved_recipes == null)
             this.saved_recipes = mutableListOf()
-            saved_recipes!!.add(recipe)
-        }
-        else if (checkIfSaved(recipe) == -1){
+        if (checkIfSaved(recipe) == -1){
             saved_recipes!!.add(recipe)
         }
     }

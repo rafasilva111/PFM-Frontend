@@ -22,6 +22,7 @@ class FragmentAdapter(
 
     override fun createFragment(position: Int): Fragment {
 
+
         return if(position==0)
             RecipeTabFragment(recipe)
         else

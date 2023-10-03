@@ -41,7 +41,7 @@ class NutritionTabFragment(recipe: Recipe) : Fragment() {
 
         //Nutrition
         objRecipe?.let { recipe ->
-
+            recipe.nutrition_information?.let {
             binding.energiaDoseTV.text = recipe.nutrition_information.energia
             binding.energiaPercTV.text = recipe.nutrition_information.energia_perc
             binding.energiaPB.progress = recipe.nutrition_information.energia_perc.dropLast(1).toInt()
@@ -69,7 +69,7 @@ class NutritionTabFragment(recipe: Recipe) : Fragment() {
             binding.hidratosAcucaresDoseTV.text = recipe.nutrition_information.hidratos_carbonos_acucares
             binding.hidratosAcucaresPercTV.text = recipe.nutrition_information.hidratos_carbonos_acucares_perc
             binding.hidratosAcucaresPB.progress = recipe.nutrition_information.hidratos_carbonos_acucares_perc.dropLast(1).toInt()
-
+            }
         }
 
 

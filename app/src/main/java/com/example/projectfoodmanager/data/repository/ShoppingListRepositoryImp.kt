@@ -54,13 +54,14 @@ class ShoppingListRepositoryImp @Inject constructor(
                     if (saveSharedPreferences) {
                         if (responseBody is ShoppingList)
                             sharedPreference.saveShoppingList(responseBody)
-
                         if (responseBody is ListOfShoppingLists)
                             sharedPreference.saveMultipleShoppingList(responseBody.result)
                     }
 
                     if (deleteSharedPreferences)
                         if (responseBody is IdResponse)
+                            sharedPreference.deleteShoppingList(responseBody.id)
+                        if (responseBody is ShoppingList)
                             sharedPreference.deleteShoppingList(responseBody.id)
                 } else {
                     // Handle the case where the response body is null

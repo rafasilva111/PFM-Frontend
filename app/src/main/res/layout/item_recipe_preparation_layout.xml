@@ -1,48 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="15dp"
-    android:paddingTop="6dp">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/TV_number"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/fedoka"
-        android:padding="5dp"
-        android:textAlignment="center"
-        android:text="1"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/divider2"
-        android:layout_width="8dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="10dp"
-        android:backgroundTint="#4CAF50"
-        app:layout_constraintBottom_toBottomOf="@+id/TV_number"
-        app:layout_constraintEnd_toStartOf="@+id/TV_Info"
-        app:layout_constraintStart_toEndOf="@+id/TV_number"
-        app:layout_constraintTop_toTopOf="@+id/TV_number" />
+        <TextView
+            android:id="@+id/stepTV"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/layout_item_prept"
+            android:fontFamily="@font/fedoka"
+            android:gravity="center"
+            android:text="1"
+            android:textAlignment="center"
+            android:textColor="#827717"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/TV_Info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/divider2"
-        app:layout_constraintTop_toTopOf="@+id/TV_number" />
+        <View
+            android:id="@+id/lineV"
+            android:layout_width="3dp"
+            android:layout_height="0dp"
+            android:background="#F2FFE5BE"
+            android:layerType="software"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/stepTV"
+            app:layout_constraintStart_toStartOf="@+id/stepTV"
+            app:layout_constraintTop_toBottomOf="@+id/stepTV" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>
+
+        <TextView
+            android:id="@+id/numberStepTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/fedoka"
+            android:text="nº Step"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/stepTV"
+            app:layout_constraintTop_toTopOf="@+id/stepTV" />
+
+        <TextView
+            android:id="@+id/discriptionTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="30dp"
+            android:fontFamily="@font/fredoka_regular"
+            android:justificationMode="inter_word"
+            android:text="@string/ingredients"
+            android:textColor="#546E7A"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/numberStepTv"
+            app:layout_constraintTop_toBottomOf="@+id/numberStepTv"
+            app:layout_constraintVertical_bias="0" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
