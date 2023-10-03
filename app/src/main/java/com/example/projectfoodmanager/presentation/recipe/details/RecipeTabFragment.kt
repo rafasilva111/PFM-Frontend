@@ -193,14 +193,14 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
             val itemsAdapterIngrtedients: IngridientsListingAdapter? =
                 this.context?.let { recipe.ingredientQuantities?.let { it1 -> IngridientsListingAdapter(it, it1) } }
             binding.LVIngridientsInfo.adapter = itemsAdapterIngrtedients
-            setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
+            //setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
 
             binding.numberPreparationTV.text = recipe.preparation.size.toString() + " Passos"
 
             val itemsAdapterPreparation: PreparationListingAdapter? =
                 this.context?.let { PreparationListingAdapter(it, recipe.preparation) }
             binding.LVPreparationInfo.adapter = itemsAdapterPreparation
-            setListViewHeightBasedOnChildrenPREP(binding.LVPreparationInfo)
+            //setListViewHeightBasedOnChildrenPREP(binding.LVPreparationInfo)
 
         }
 
@@ -244,4 +244,5 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
         myListView.setLayoutParams(params)
         myListView.requestLayout()
     }
+
 }

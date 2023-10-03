@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
+import com.example.projectfoodmanager.data.model.modelResponse.ingredients.IngredientQuantity
 import com.example.projectfoodmanager.databinding.FragmentStepDetailBinding
+import com.example.projectfoodmanager.presentation.recipe.create.steps.util.StepUtil.Companion.createRecipe
 import com.google.android.material.chip.Chip
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -96,12 +98,9 @@ class StepDetailFragment : Fragment() {
 
         binding.nextStepBTN.setOnClickListener {
             // Create new fragment and transaction
-            val transaction = parentFragmentManager.beginTransaction()
             getRecipeRequest()
 
-            findNavController().navigate(R.id.action_stepDetailFragment_to_stepIngredientsFragment,Bundle().apply {
-                putParcelable("RECIPE",getRecipeRequest())
-            })
+            findNavController().navigate(R.id.action_stepDetailFragment_to_stepIngredientsFragment)
 
             // Replace whatever is in the fragment_container view with this fragment,
            /* // and add the transaction to the back stack if needed
@@ -174,7 +173,7 @@ class StepDetailFragment : Fragment() {
         picker.dialog?.setCanceledOnTouchOutside(false)
     }
 
-    private fun getRecipeRequest(): RecipeRequest {
+    private fun getRecipeRequest() {
 
 
     /* --------- RECIPE REQUEST ---------
@@ -206,23 +205,29 @@ class StepDetailFragment : Fragment() {
         //TODO: Union first tags and secound tags
         val tags = (mainTags + secondaryTags).toList()
 
-        return RecipeRequest(
+
+        var recipeRequest = RecipeRequest(
             title = binding.titleET.text.toString(),
             description = binding.descriptionET.text.toString(),
             time = binding.timeET.text.toString(),
             difficulty = binding.difficultyET.text.toString(),
             portion = binding.portionET.text.toString(),
-            tags = tags
+            tags = tags,
         )
+
+        if (createRecipe != null){
+            //UPDATE
+            recipeRequest.ingredients= createRecipe!!.ingredients
+        }
+
+        createRecipe = recipeRequest
+
     }
 
 
     override fun onResume() {
-        super.onResume()
 
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<RecipeRequest>(ARG_RECIPE)?.observe(viewLifecycleOwner) { result ->
-            // Do something with the result
-            var test = result
-        }
+        val test = createRecipe
+        super.onResume()
     }
 }

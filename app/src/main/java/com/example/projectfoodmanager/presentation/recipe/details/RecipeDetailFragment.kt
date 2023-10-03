@@ -209,16 +209,18 @@ class RecipeDetailFragment : Fragment() {
             dialog.show()*/
             //findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,bundle)
 
-            findNavController().navigate(R.id.action_receitaDetailFragment_to_profileBottomSheetDialog,Bundle().apply {
+ /*           findNavController().navigate(R.id.action_receitaDetailFragment_to_profileBottomSheetDialog,Bundle().apply {
                 putParcelable("User", recipe.created_by)
-            })
+            })*/
 
-  /*        findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,Bundle().apply {
-                putInt("userID",recipe.created_by.id)
-                putString("userName",recipe.created_by.name)
-                putInt("followType",FollowType.FOLLOWERS)
-            })
-*/
+            findNavController().navigate(R.id.action_receitaDetailFragment_to_newRecipeFragment)
+
+            /*        findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,Bundle().apply {
+                          putInt("userID",recipe.created_by.id)
+                          putString("userName",recipe.created_by.name)
+                          putInt("followType",FollowType.FOLLOWERS)
+                      })
+          */
         }
 
   /*      binding.IVSource.setOnClickListener {

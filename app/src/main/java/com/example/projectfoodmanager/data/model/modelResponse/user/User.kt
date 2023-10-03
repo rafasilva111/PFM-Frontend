@@ -37,7 +37,15 @@ data class User(
 
 
 ) : Parcelable {
-
+    
+    init {
+        if (this.liked_recipes == null)
+            this.liked_recipes = mutableListOf()
+        if (this.saved_recipes == null)
+            this.saved_recipes = mutableListOf()
+        if (this.created_recipes == null)
+            this.created_recipes = mutableListOf()
+    }
 
     fun checkIfLiked(recipe: Recipe): Int {
         return if (liked_recipes!=null && liked_recipes!!.isNotEmpty())

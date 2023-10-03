@@ -154,7 +154,7 @@
             <ListView
                 android:id="@+id/LV_Ingridients_Info"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="1dp"
                 app:layout_constraintEnd_toEndOf="@+id/ingridients_LL"
