@@ -22,46 +22,14 @@ class CalendarAdapter(
 
     private var selected: View? = null
     private var currentDatePainted: View? = null
-
+    private var _days: ArrayList<LocalDate?> = this.days
     //private var currentSelected: TextView
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view: View = inflater.inflate(R.layout.calendar_cell, parent, false)
-        return CalendarViewHolder(parent.context,view,days)
+        return CalendarViewHolder(parent.context,view)
     }
-
-
-    override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
-
-        val date = days[position]
-        val todayDate = LocalDate.now()
-        if (date == null)
-            holder.dayOfMonth.text = ""
-        else{
-            holder.dayOfMonth.text =  date.dayOfMonth.toString()
-
-            if (date == currentDate && date == selectedDate){
-                selected = holder.itemView
-                currentDatePainted = holder.itemView
-                colorSelectedDay(currentDatePainted!!, holder.parentView.context)
-            }
-            else if (date == currentDate && currentDate == todayDate) {
-                currentDatePainted = holder.itemView
-                colorCurrentDay(currentDatePainted!!, holder.parentView.context)
-            }else if (date == selectedDate) {
-                selected = holder.itemView
-                colorSelectedDay(selected!!, holder.parentView.context)
-            }
-            else {
-                colorUnselectedDay(holder.itemView,holder.parentView.context)
-            }
-        }
-
-
-    }
-
-
 
     private fun colorCurrentDay(itemView: View, context: Context) {
         val dayOfMonth = itemView.findViewById<TextView>(R.id.cellDayText)
@@ -122,32 +90,34 @@ class CalendarAdapter(
     }
 
     override fun getItemCount(): Int {
-        return days.size
+        return _days.size
     }
 
     fun updateList(daysInMonthArray: ArrayList<LocalDate?>) {
-        days = daysInMonthArray
+        _days = daysInMonthArray
         notifyDataSetChanged()
     }
 
-    inner class CalendarViewHolder constructor(context: Context, itemView: View,days: ArrayList<LocalDate?>) :
+    inner class CalendarViewHolder constructor(context: Context, itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         val dayOfMonth: TextView
         val parentView: View
 
         init {
+
             dayOfMonth = itemView.findViewById(R.id.cellDayText)
             parentView = itemView.findViewById(R.id.parentView)
 
+
             itemView.setOnClickListener {
 
-                if(days[position] != null){
-                    if (dayOfMonth.text.isNotBlank() ){
+                if (_days[position] != null) {
+                    if (dayOfMonth.text.isNotBlank()) {
                         onItemClicked.invoke(days[position]!!)
                     }
 
                     if (currentDatePainted == selected)
-                        colorCurrentDay(selected!!,context)
+                        colorCurrentDay(selected!!, context)
                     else
                         colorUnselectedDay(selected!!, context)
 
@@ -155,16 +125,44 @@ class CalendarAdapter(
                     selected = itemView
                     selectedDate = days[position]!!
 
-                    colorSelectedDay(selected!!,context)
+                    colorSelectedDay(selected!!, context)
                 }
             }
+
 
         }
 
     }
 
 
+    override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
 
+        val date = _days[position]
+        val todayDate = LocalDate.now()
+        if (date == null)
+            holder.dayOfMonth.text = ""
+        else{
+            holder.dayOfMonth.text =  date.dayOfMonth.toString()
+
+            if (date == currentDate && date == selectedDate){
+                selected = holder.itemView
+                currentDatePainted = holder.itemView
+                colorSelectedDay(currentDatePainted!!, holder.parentView.context)
+            }
+            else if (date == currentDate && currentDate == todayDate) {
+                currentDatePainted = holder.itemView
+                colorCurrentDay(currentDatePainted!!, holder.parentView.context)
+            }else if (date == selectedDate) {
+                selected = holder.itemView
+                colorSelectedDay(selected!!, holder.parentView.context)
+            }
+            else {
+                colorUnselectedDay(holder.itemView,holder.parentView.context)
+            }
+        }
+
+
+    }
 
 
 

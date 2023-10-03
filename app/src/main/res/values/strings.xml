@@ -129,6 +129,7 @@
     <string name="profile_title">Profile</string>
     <string name="fragment_calender_ingredients_back_button">Back button</string>
     <string name="fragment_calender_ingredients_lista_de_compras">Lista de compras</string>
+    <string name="profile_shopping_lists">Shopping Lists</string>
     <string-array name="gender_array">
         <item>Masculino</item>
         <item>Feminino</item>

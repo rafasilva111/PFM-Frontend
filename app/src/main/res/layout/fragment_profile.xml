@@ -289,7 +289,7 @@
                             android:id="@+id/perfilIV"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/item_perfil"
+                            android:background="@drawable/item_badge"
                             android:padding="6dp"
                             android:src="@drawable/ic_user"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -336,19 +336,20 @@
                             android:id="@+id/favoritosIV"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/item_perfil"
+                            android:background="@drawable/item_badge"
                             android:padding="6dp"
-                            android:src="@drawable/ic_like"
+                            android:src="@drawable/ic_shopping_basket_black"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
 
                         <TextView
                             android:id="@+id/favoritosTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="30dp"
-                            android:text="Favoritos"
+                            android:text="@string/profile_shopping_lists"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/favoritosIV"
@@ -360,7 +361,8 @@
                             android:src="@drawable/ic_arrow"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:contentDescription="go shoppingList" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -383,7 +385,7 @@
                             android:id="@+id/objetivosIV"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/item_perfil"
+                            android:background="@drawable/item_badge"
                             android:padding="6dp"
                             android:src="@drawable/ic_goals"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -430,12 +432,13 @@
                             android:id="@+id/GostosIV"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/item_perfil"
+                            android:background="@drawable/item_badge"
                             android:padding="6dp"
                             android:src="@drawable/ic_recipe"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
 
                         <TextView
                             android:id="@+id/GostosTV"
@@ -477,12 +480,13 @@
                             android:id="@+id/SettingsIV"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:background="@drawable/item_perfil"
+                            android:background="@drawable/item_badge"
                             android:padding="6dp"
                             android:src="@drawable/ic_settings"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
 
                         <TextView
                             android:id="@+id/SettingsTV"
