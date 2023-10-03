@@ -318,7 +318,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/favoritesCV"
+                    android:id="@+id/shopping_lists"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -375,7 +375,7 @@
                     android:outlineProvider="none"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/favoritesCV">
+                    app:layout_constraintTop_toBottomOf="@+id/shopping_lists">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -414,7 +414,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/likeCV"
+                    android:id="@+id/my_recipes"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -470,7 +470,7 @@
                     android:outlineProvider="none"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/likeCV">
+                    app:layout_constraintTop_toBottomOf="@+id/my_recipes">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
