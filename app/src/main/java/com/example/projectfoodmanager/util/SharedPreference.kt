@@ -203,7 +203,7 @@ class SharedPreference @Inject constructor(
 
         val typeToken = object : TypeToken<MutableList<ShoppingList>>() {}.type
 
-        return Gson().fromJson(jsonString, typeToken) ?: mutableListOf()
+        return gson.fromJson(jsonString, typeToken) ?: mutableListOf()
     }
 
     fun getShoppingList(){
@@ -216,6 +216,9 @@ class SharedPreference @Inject constructor(
         val allShoppingLists = getAllShoppingList()
         allShoppingLists.add(shoppingList)
         sharedPreferences.edit().putString(SharedPreferencesConstants.USER_SESSION_SHOPPING_LISTS,gson.toJson(allShoppingLists)).apply()
+
+        val teste = getAllShoppingList()
+
     }
 
     fun saveMultipleShoppingList(listOfShoppingLists: MutableList<ShoppingList>){

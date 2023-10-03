@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipeTabParentConstraint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.recipe.details.RecipeTabFragment"
-    android:paddingBottom="80dp">
+    tools:context=".presentation.recipe.details.RecipeTabFragment">
 
 
             <LinearLayout
@@ -151,15 +152,32 @@
 
             </LinearLayout>
 
-            <ListView
-                android:id="@+id/LV_Ingridients_Info"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="1dp"
-                app:layout_constraintEnd_toEndOf="@+id/ingridients_LL"
-                app:layout_constraintStart_toStartOf="@+id/ingridients_LL"
-                app:layout_constraintTop_toBottomOf="@+id/ingridients_LL" />
+        <LinearLayout
+            android:id="@+id/ingredientsLL"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintEnd_toEndOf="@+id/ingridients_LL"
+            app:layout_constraintStart_toStartOf="@+id/ingridients_LL"
+            app:layout_constraintTop_toBottomOf="@+id/ingridients_LL">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recipeIngredientsRV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/headerIngredientsListCatLL"
+                app:layout_constraintVertical_bias="0.0"
+                android:nestedScrollingEnabled="false"/>
+        </LinearLayout>
+
+
 
 
             <LinearLayout
@@ -172,7 +190,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/LV_Ingridients_Info">
+                app:layout_constraintTop_toBottomOf="@+id/ingredientsLL">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -211,16 +229,32 @@
             </LinearLayout>
 
 
-            <ListView
-                android:id="@+id/LV_Preparation_Info"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="2dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintEnd_toEndOf="@+id/preparation_LL"
-                app:layout_constraintStart_toStartOf="@+id/preparation_LL"
-                app:layout_constraintTop_toBottomOf="@+id/preparation_LL" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/preparation_LL"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/preparation_LL"
+        app:layout_constraintTop_toBottomOf="@+id/preparation_LL">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recipePreparationRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerIngredientsListCatLL"
+            app:layout_constraintVertical_bias="0.0"
+            android:nestedScrollingEnabled="false"/>
+    </LinearLayout>
+
             <!--    <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

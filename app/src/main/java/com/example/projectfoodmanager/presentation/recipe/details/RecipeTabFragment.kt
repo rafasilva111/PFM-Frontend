@@ -8,28 +8,55 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListAdapter
 import android.widget.ListView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Tag
 import com.example.projectfoodmanager.databinding.FragmentRecipeTabBinding
+import com.example.projectfoodmanager.presentation.recipe.create.steps.IngredientsAdapter
+import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.RecipeListingFragmentFilters
 import com.google.android.material.chip.Chip
 
 
 class RecipeTabFragment(recipe: Recipe) : Fragment() {
+
+    // binding
     lateinit var binding: FragmentRecipeTabBinding
+
+    // constants
     var objRecipe: Recipe? = recipe
+
+    // adapters
+    private val recipePreparationAdapter by lazy {
+        PreparationListingAdapter(
+            requireContext()
+        )
+    }
+
+    private val recipeIngredientsAdapter by lazy {
+        IngredientListingAdapter(
+            requireContext()
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         if (this::binding.isInitialized){
             return binding.root
         }else {
 
             // Inflate the layout for this fragment
             binding = FragmentRecipeTabBinding.inflate(layoutInflater)
+
+            // Inflate adapters
+            binding.recipePreparationRV.layoutManager = LinearLayoutManager(activity)
+            binding.recipePreparationRV.adapter = recipePreparationAdapter
+
+            binding.recipeIngredientsRV.layoutManager = LinearLayoutManager(activity)
+            binding.recipeIngredientsRV.adapter = recipeIngredientsAdapter
 
             return binding.root
         }
@@ -55,7 +82,6 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
 
             // TODO: Obter a lista ordenada da base de dados
             val mutList: MutableList<Tag> = list.sortedBy { it.title.length }.toMutableList()
-            mutList.removeAt(0)
 
 
 
@@ -189,59 +215,23 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
 //        }
             }
 
-            binding.numberIngridientsTV.text = recipe.ingredientQuantities?.size.toString() + " Ingredientes"
-            val itemsAdapterIngrtedients: IngridientsListingAdapter? =
-                this.context?.let { recipe.ingredientQuantities?.let { it1 -> IngridientsListingAdapter(it, it1) } }
-            binding.LVIngridientsInfo.adapter = itemsAdapterIngrtedients
-            setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
+            binding.numberIngridientsTV.text = recipe.ingredients?.size.toString() + " Ingredientes"
+
+            recipeIngredientsAdapter.updateList(recipe.ingredients)
 
             binding.numberPreparationTV.text = recipe.preparation.size.toString() + " Passos"
 
-            val itemsAdapterPreparation: PreparationListingAdapter? =
-                this.context?.let { PreparationListingAdapter(it, recipe.preparation) }
-            binding.LVPreparationInfo.adapter = itemsAdapterPreparation
-            setListViewHeightBasedOnChildrenPREP(binding.LVPreparationInfo)
+            recipePreparationAdapter.updateList(recipe.preparation)
+
 
         }
 
     }
+    override fun onResume() {
+        super.onResume()
 
-        //al with = resources.getDimension(R.dimen.text_margin).toInt()
-
-        //layoutParams.setMargins(margin, margin, margin, margin)
-
-
-
-
-
-    fun setListViewHeightBasedOnChildren(myListView: ListView) {
-        val adapter: ListAdapter = myListView.adapter
-        var totalHeight = 0
-        val teste = adapter.count
-        val teste2 = adapter.getCount()
-        for (i in 0 until adapter.getCount()) {
-            val item: View = adapter.getView(i, null, myListView)
-            item.measure(0, 0)
-
-            totalHeight += item.measuredHeight
-        }
-        val params: ViewGroup.LayoutParams = myListView.getLayoutParams()
-        params.height = totalHeight + myListView.getDividerHeight() * (adapter.getCount())
-        myListView.setLayoutParams(params)
-        myListView.requestLayout()
+        // Update UI elements for status bar and navigation bar
+        Helper.updateSystemBarsAppearance(requireActivity(), requireContext())
     }
 
-    fun setListViewHeightBasedOnChildrenPREP(myListView: ListView?) {
-        val adapter: ListAdapter = myListView!!.adapter
-        var totalHeight = 0
-        for (i in 0 until adapter.count) {
-            val item: View = adapter.getView(i, null, myListView)
-            item.measure(0, 0)
-            totalHeight  += ((item.measuredHeight/resources.displayMetrics.density) * 0.5).toInt()
-        }
-        val params: ViewGroup.LayoutParams = myListView.layoutParams
-        params.height = totalHeight + 200 + myListView.getDividerHeight() * (adapter.getCount())
-        myListView.setLayoutParams(params)
-        myListView.requestLayout()
-    }
 }

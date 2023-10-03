@@ -3,10 +3,12 @@ package com.example.projectfoodmanager.util
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
 import android.view.View
+import android.view.WindowInsetsController
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
@@ -143,6 +145,33 @@ class Helper {
                 menu!!.visibility = View.VISIBLE
             } else {
                 menu!!.visibility = View.GONE
+            }
+        }
+
+        fun updateSystemBarsAppearance(activity: FragmentActivity,context: Context) {
+            val window = activity.window
+
+            // set bottom bar color
+            window.navigationBarColor = context.getColor(R.color.main_color)
+
+            // Set background color for status and navigation bars
+            window.statusBarColor = context.getColor(R.color.background_1)
+
+            // Set text color for status and navigation bars (for Android R and above)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                window.insetsController?.setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                )
+                window.insetsController?.setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
+                    WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                window.decorView.systemUiVisibility = 0
+                @Suppress("DEPRECATION")
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
         }
 

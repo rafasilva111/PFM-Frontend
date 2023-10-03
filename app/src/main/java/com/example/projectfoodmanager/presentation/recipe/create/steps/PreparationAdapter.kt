@@ -3,12 +3,10 @@ package com.example.projectfoodmanager.presentation.recipe.create.steps
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Preparation
-import com.example.projectfoodmanager.databinding.ItemRecipePreparationLayoutBinding
-import com.example.projectfoodmanager.databinding.ItemRecipePreparationLayoutNewNewBinding
+import com.example.projectfoodmanager.databinding.ItemCreateRecipePreparationLayoutBinding
 
 
 class PreparationAdapter(
@@ -24,7 +22,7 @@ class PreparationAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = ItemRecipePreparationLayoutNewNewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val itemView = ItemCreateRecipePreparationLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return MyViewHolder(itemView)
     }
 
@@ -79,7 +77,7 @@ class PreparationAdapter(
     }
 
 
-    inner class MyViewHolder(private val binding: ItemRecipePreparationLayoutNewNewBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MyViewHolder(private val binding: ItemCreateRecipePreparationLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Preparation) {
 
             binding.stepTV.text= (bindingAdapterPosition + 1).toString()
