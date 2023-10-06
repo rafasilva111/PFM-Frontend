@@ -25,8 +25,7 @@ class ShoppingListFragment : Fragment() {
     private lateinit var binding: FragmentShoppingListDetailBinding
 
     // viewModels
-    private val authViewModel by activityViewModels<AuthViewModel>()
-    private val shoppingListViewModel by activityViewModels<ShoppingListViewModel>()
+
 
     // constants
     private val TAG: String = "ShoppingListFragment"

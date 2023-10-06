@@ -77,6 +77,9 @@
         <action
             android:id="@+id/action_profileFragment_to_followerFragment"
             app:destination="@id/followerFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_shoppingListListingFragment"
+            app:destination="@id/shoppingListListingFragment" />
 
     </fragment>
 

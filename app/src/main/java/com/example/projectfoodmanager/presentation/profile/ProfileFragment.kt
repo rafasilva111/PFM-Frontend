@@ -64,24 +64,33 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
+
+    // binding
+    private lateinit var binding: FragmentProfileBinding
+
+    // viewModels
+    private val authViewModel by activityViewModels<AuthViewModel>()
+
+    // constants
+    private val TAG: String = "ProfileFragment"
     private var fileName: String? = null
     private var selectedAvatar: String? = null
-    lateinit var binding: FragmentProfileBinding
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
-    private val authViewModel by activityViewModels<AuthViewModel>()
-    val TAG: String = "ProfileFragment"
     lateinit var finalUri: Uri
 
+    // injects
     @Inject
     lateinit var tokenManager: TokenManager
     @Inject
     lateinit var sharedPreference: SharedPreference
 
+    // adapters
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
 
-        ): View? {
+        ): View {
         binding = FragmentProfileBinding.inflate(layoutInflater)
 
         activityResultLauncher  =
@@ -131,11 +140,11 @@ class ProfileFragment : Fragment() {
 
         }
 
-        binding.favoritesCV.setOnClickListener {
-            findNavController().navigate(R.id.action_profile_to_favorites)
+        binding.shoppingLists.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_shoppingListListingFragment)
         }
 
-        binding.likeCV.setOnClickListener {
+        binding.myRecipes.setOnClickListener {
             findNavController().navigate(R.id.action_profile_to_favorites,Bundle().apply {
                 putString("aba","gostos")
             })
