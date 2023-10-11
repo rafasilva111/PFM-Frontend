@@ -423,7 +423,7 @@
                         android:padding="3dp">
 
                         <ImageView
-                            android:id="@+id/userComent1"
+                            android:id="@+id/userComent1IV"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:contentDescription="userComent1"
@@ -433,12 +433,12 @@
                             tools:ignore="ImageContrastCheck" />
 
                         <ImageView
-                            android:id="@+id/userComent2"
+                            android:id="@+id/userComent2IV"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_marginStart="-10dp"
                             android:src="@drawable/img_profile"
-                            app:layout_constraintStart_toEndOf="@+id/userComent1"
+                            app:layout_constraintStart_toEndOf="@+id/userComent1IV"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:ignore="ImageContrastCheck,ImageContrastCheck"
                             android:contentDescription="userComent2" />
@@ -454,16 +454,17 @@
                             android:padding="3dp"
                             android:src="@drawable/ic_more"
                             android:contentDescription="more"
-                            app:layout_constraintStart_toEndOf="@+id/userComent2"
+                            app:layout_constraintStart_toEndOf="@+id/userComent2IV"
                             app:layout_constraintTop_toTopOf="parent" />
 
 
                         <TextView
+                            android:id="@+id/commentsTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
                             android:fontFamily="@font/fredoka_regular"
-                            android:text="Nºcomments"
+                            android:text="@string/nr_comments"
                             android:textSize="13sp"
                             app:layout_constraintBottom_toBottomOf="@+id/moreCommentsIV"
                             app:layout_constraintStart_toEndOf="@+id/moreCommentsIV"

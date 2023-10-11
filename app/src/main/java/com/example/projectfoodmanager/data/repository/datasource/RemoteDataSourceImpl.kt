@@ -124,7 +124,12 @@ class RemoteDataSourceImpl @Inject constructor(
 	override suspend fun getCommentsByRecipePaginated(recipeId: Int,page: Int): Response<CommentList> {
 		return apiInterface.getCommentsByRecipe(recipeId = recipeId,page = page)
 	}
-	override suspend fun getCommentsByUser(userId: Int): Response<Comment> {
+
+    override suspend fun getSizedCommentsByRecipePaginated(recipeId: Int, page: Int, pageSize: Int): Response<CommentList> {
+		return apiInterface.getSizedCommentsByRecipePaginated(recipeId = recipeId,page = page,pageSize=pageSize)
+    }
+
+    override suspend fun getCommentsByUser(userId: Int): Response<Comment> {
 		return apiInterface.getCommentsByUser(userId = userId)
 	}
 	override suspend fun updateComment(commentId: Int,comment : Comment): Response<Comment> {

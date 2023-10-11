@@ -19,7 +19,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsetsController
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
@@ -46,6 +45,7 @@ import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FireStorage.user_profile_images
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
+import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_CODE
@@ -141,6 +141,7 @@ class ProfileFragment : Fragment() {
         }
 
         binding.shoppingLists.setOnClickListener {
+            changeMenuVisibility(false,activity)
             findNavController().navigate(R.id.action_profileFragment_to_shoppingListListingFragment)
         }
 
@@ -267,29 +268,13 @@ class ProfileFragment : Fragment() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        val window = requireActivity().window
+    override fun onStart() {
 
-        //BACKGROUND in NAVIGATION BAR
-        window.statusBarColor = requireContext().getColor(R.color.main_color)
-        window.navigationBarColor = requireContext().getColor(R.color.main_color)
-
-        //TextColor in NAVIGATION BAR
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = 0
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-        }
-
+        changeStatusBarColor(true,activity,context)
         changeMenuVisibility(true,activity)
 
+        super.onStart()
     }
-
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

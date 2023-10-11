@@ -91,9 +91,16 @@ class RecipeListingAdapter(
                 binding.verifyUserIV.visibility=View.INVISIBLE
             }
 
-            if (!item.img_source.isEmpty()){
-                //-> Load Recipe img
+            // Load Recipe img
+            if (item.img_source.isNotEmpty()){
+
                 Helper.loadRecipeImage(binding.imageView,item.img_source)
+            }
+
+            // Load Author img
+            if (item.created_by.img_source.isNotEmpty()){
+                //-> Load Recipe img
+                loadUserImage(binding.imgAuthorIV,item.created_by.img_source)
             }
 
 

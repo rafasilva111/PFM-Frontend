@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -228,8 +229,17 @@ class RecipeListingFragment : Fragment() {
                         // importante se não não funciona
                         currentPage = 1
                         newSearch = true
+
+                        // debouncer
+                        val handler = Handler()
+                        handler.postDelayed({
+                            if (stringToSearch == text) {
+                                recipeViewModel.getRecipesByTitleAndTags(text, currentPage)
+                            }
+                        }, 300)
+
                         stringToSearch=text
-                        recipeViewModel.getRecipesByTitleAndTags(text, currentPage)
+
                     } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
                     else if (stringToSearch != null && text == ""){
                         stringToSearch=null

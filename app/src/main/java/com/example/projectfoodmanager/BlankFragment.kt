@@ -39,6 +39,9 @@ class BlankFragment : Fragment() {
     lateinit var sharedPreference: SharedPreference
 
     // adapters
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,

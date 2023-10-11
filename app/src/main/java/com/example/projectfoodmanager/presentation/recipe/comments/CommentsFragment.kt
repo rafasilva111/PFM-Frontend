@@ -14,9 +14,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.databinding.FragmentBlankBinding
 import com.example.projectfoodmanager.databinding.FragmentCommentsBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
@@ -24,33 +26,46 @@ import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.math.ceil
 
 @AndroidEntryPoint
 class CommentsFragment : Fragment() {
 
-    lateinit var binding: FragmentCommentsBinding
-    lateinit var manager: LinearLayoutManager
-    private var snapHelper : SnapHelper = PagerSnapHelper()
+    // binding
+    private lateinit var binding: FragmentCommentsBinding
 
+    // viewModels
     private val recipeViewModel: RecipeViewModel by viewModels()
+
+    // constants
+    private val TAG: String = "CommentsFragment"
+    private lateinit var manager: LinearLayoutManager
+    private var snapHelper : SnapHelper = PagerSnapHelper()
     private var recipeId: Int = -1
 
-    //pagination
+        //pagination
     private var commentsList: MutableList<Comment> = mutableListOf()
     private var nextPage:Boolean = true
     private var refreshPage: Int = 0
     private var currentPage: Int = 0
 
-    private val TAG: String = "CommentsFragment"
-
+    // injects
     @Inject
     lateinit var sharedPreference: SharedPreference
 
-    // adapter
+    // adapters
 
     private val adapter by lazy {
         CommentsListingAdapter(
-            sharedPreference
+            sharedPreference,
+            onLikePressed = {view,commentId ->
+                toast("Not implemented yet like")
+                view.isClickable = true
+            },
+            onProfilePressed = {user->
+                toast("Not implemented yet profile")
+
+            },
         )
     }
 
@@ -59,7 +74,7 @@ class CommentsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         bindObservers()
         if (!this::binding.isInitialized){
 
@@ -100,11 +115,6 @@ class CommentsFragment : Fragment() {
             binding.recyclerView.adapter = adapter
 
 
-            if (refreshPage == 0)
-                recipeViewModel.getCommentsOnRecipePaginated(recipeId,currentPage)
-            else
-                recipeViewModel.getCommentsOnRecipePaginated(recipeId,refreshPage)
-
             // create a comment
             binding.publishIB.setOnClickListener {
 
@@ -119,7 +129,7 @@ class CommentsFragment : Fragment() {
 
         }
         else{
-
+            toast("User não tem internet")
         }
     }
 
@@ -260,4 +270,15 @@ class CommentsFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+
+        // vai buscar os commentarios
+
+        if (refreshPage == 0)
+            recipeViewModel.getCommentsOnRecipePaginated(recipeId,currentPage)
+        else
+            recipeViewModel.getCommentsOnRecipePaginated(recipeId,refreshPage)
+
+        super.onResume()
+    }
 }

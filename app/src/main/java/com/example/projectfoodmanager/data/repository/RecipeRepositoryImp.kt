@@ -12,6 +12,7 @@ import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourc
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 import com.google.gson.Gson
+import retrofit2.Response
 import javax.inject.Inject
 
 class RecipeRepositoryImp @Inject constructor(
@@ -21,102 +22,87 @@ class RecipeRepositoryImp @Inject constructor(
 
     private val TAG:String = "RecipeRepositoryImp"
 
+    // Helper function to make API requests and handle responses
+    private suspend fun <T> handleApiResponse(
+        liveData: MutableLiveData<Event<NetworkResult<T>>>,
+        loadingMessage: String,
+        request: suspend () -> Response<T>
+    ) {
+        // Notify observers that a loading operation is in progress
+        liveData.postValue(Event(NetworkResult.Loading()))
+        Log.d(TAG, loadingMessage)
+
+        try {
+            // Invoke the API request using the provided lambda function
+            val response = request.invoke()
+
+            if (response.isSuccessful && response.body() != null) {
+                // Handle a successful API response
+                Log.d(TAG, "Request was successful.")
+                liveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+            } else if (response.errorBody() != null) {
+                // Handle an error response with an error body
+                val errorObj = response.errorBody()!!.charStream().readText()
+                Log.d(TAG, "Request was not successful. \n$errorObj")
+                liveData.postValue(Event(NetworkResult.Error(errorObj)))
+            } else {
+                // Handle an error response without an error body
+                liveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            }
+        } catch (e: Exception) {
+            // Handle exceptions that may occur during the API request
+            Log.e(TAG, "Error making API request: ${e.message}")
+            liveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+
+    // LiveData for unsorted recipes
     private val _recipeResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeList>>>()
     override val recipeResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
         get() = _recipeResponseLiveData
 
-
-    override suspend fun getRecipesPaginated(page: Int) {
-        _recipeResponseLiveData.postValue(Event(NetworkResult.Loading()))
-        Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: Making request to page $page.")
-        val response =remoteDataSource.getRecipesPaginated(page)
-
-        //handle response RecipeListResponse
-
-        if (response.isSuccessful && response.body() != null) {
-            Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: Request was sucessfull.")
-            Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: Response body -> ${response.body()}.")
-            _recipeResponseLiveData.postValue(Event(NetworkResult.Success(
-             response.body()!!
-            )))
-        }
-        else if(response.errorBody()!=null){
-            try {
-                Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: Request was not sucessfull.")
-                val errorObj = response.errorBody()!!.charStream().readText()
-                Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: $errorObj")
-                _recipeResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
-            } catch (_: Exception) {
-
-            }
-        }
-        else{
-            _recipeResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
-        }
-    }
-
-    // paginated and sorted
-
+    // LiveData for sorted recipes
     private val _recipeSortedResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeList>>>()
     override val recipeSortedResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
         get() = _recipeSortedResponseLiveData
 
-
-    override suspend fun getRecipesPaginatedSorted(page: Int,by:String) {
-        _recipeResponseLiveData.postValue(Event(NetworkResult.Loading()))
-        Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: Making request to page $page.")
-        val response =remoteDataSource.getRecipesPaginatedSorted(page,by)
-
-        //handle response RecipeListResponse
-
-        if (response.isSuccessful && response.body() != null) {
-            Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: Request was sucessfull.")
-            Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: Response body -> ${response.body()}.")
-            _recipeSortedResponseLiveData.postValue(Event(NetworkResult.Success(
-                response.body()!!
-            )))
-        }
-        else if(response.errorBody()!=null){
-            try {
-                Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: Request was not sucessfull.")
-                val errorObj = response.errorBody()!!.charStream().readText()
-                Log.d(TAG, "RecipeRepositoryImp - getRecipesPaginated: $errorObj")
-                _recipeSortedResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
-            } catch (_: Exception) {
-
-            }
-        }
-        else{
-            _recipeSortedResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
-        }
-    }
-
-    private val _recipeSearchByTitleAndTagsResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeList>>>()
+    // LiveData for searched recipes
+    private val _recipeSearchByTitleAndTagsResponseLiveData =
+        MutableLiveData<Event<NetworkResult<RecipeList>>>()
     override val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
         get() = _recipeSearchByTitleAndTagsResponseLiveData
 
+    // Function to get paginated recipes
+    override suspend fun getRecipesPaginated(page: Int) {
+        // Use the helper function to make the API request
+        handleApiResponse(
+            _recipeResponseLiveData,
+            "Requesting paginated recipes for page $page"
+        ) {
+            remoteDataSource.getRecipesPaginated(page)
+        }
+    }
 
+    // Function to get paginated and sorted recipes
+    override suspend fun getRecipesPaginatedSorted(page: Int, by: String) {
+        // Use the helper function to make the API request
+        handleApiResponse(
+            _recipeSortedResponseLiveData,
+            "Requesting paginated and sorted recipes for page $page"
+        ) {
+            remoteDataSource.getRecipesPaginatedSorted(page, by)
+        }
+    }
+
+    // Function to search recipes by title and tags
     override suspend fun getRecipesByTitleAndTags(title: String, searchPage: Int) {
-        _recipeSearchByTitleAndTagsResponseLiveData.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "loginUser: making login request.")
-        val response =remoteDataSource.getRecipesByTitleAndTags(title,searchPage)
-
-        //handle response RecipeListResponse
-
-        if (response.isSuccessful && response.body() != null) {
-            Log.i(TAG, "handleResponse: request made was sucessfull.")
-            Log.i(TAG, "handleResponse: response body -> ${response.body()}")
-            _recipeSearchByTitleAndTagsResponseLiveData.postValue(Event(NetworkResult.Success(
-                response.body()!!
-            )))
-        }
-        else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
-            _recipeSearchByTitleAndTagsResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
-        }
-        else{
-            _recipeSearchByTitleAndTagsResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        // Use the helper function to make the API request
+        handleApiResponse(
+            _recipeSearchByTitleAndTagsResponseLiveData,
+            "Requesting recipes by title and tags"
+        ) {
+            remoteDataSource.getRecipesByTitleAndTags(title, searchPage)
         }
     }
 
@@ -128,7 +114,6 @@ class RecipeRepositoryImp @Inject constructor(
     private val _userLikedRecipesResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeList>>>()
     override val userLikedRecipes: LiveData<Event<NetworkResult<RecipeList>>>
         get() = _userLikedRecipesResponseLiveData
-
 
 
     override suspend fun getUserLikedRecipes() {
@@ -319,5 +304,36 @@ class RecipeRepositoryImp @Inject constructor(
             _functionCreateCommentOnRecipe.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
     }
+
+
+    // LiveData for searched recipes
+    private val _functionGetSizedCommentsOnRecipePaginated = MutableLiveData<Event<NetworkResult<CommentList>>>()
+    override val functionGetSizedCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
+        get() = _functionGetSizedCommentsOnRecipePaginated
+
+
+    override suspend fun getSizedCommentsByRecipePaginated(recipeId: Int, page: Int, pageSize: Int) {
+        _functionGetSizedCommentsOnRecipePaginated.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
+        val response =remoteDataSource.getSizedCommentsByRecipePaginated(recipeId,page,pageSize)
+        if (response.isSuccessful && response.body() != null) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            Log.i(TAG, "handleResponse: response body -> ${response.body()}")
+            _functionGetSizedCommentsOnRecipePaginated.postValue(Event(NetworkResult.Success(
+                response.body()!!
+            )))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
+            _functionGetSizedCommentsOnRecipePaginated.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _functionGetSizedCommentsOnRecipePaginated.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+    // NOT OTIMIZED
+
 
 }

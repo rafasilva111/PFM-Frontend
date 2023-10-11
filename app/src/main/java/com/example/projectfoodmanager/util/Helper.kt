@@ -96,19 +96,20 @@ class Helper {
         }
 
         fun loadUserImage(imgAuthorIV: ImageView, imgSource: String) {
-            if (imgSource.contains("avatar")){
-                val avatar= Avatar.getAvatarByName(imgSource)
-                imgAuthorIV.setImageResource(avatar!!.imgId)
+            if (imgSource.isNotEmpty())
+                if (imgSource.contains("avatar")){
+                    val avatar= Avatar.getAvatarByName(imgSource)
+                    imgAuthorIV.setImageResource(avatar!!.imgId)
 
-            }else{
-                val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${imgSource}")
-                imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                    Glide.with(imgAuthorIV.context).load(Uri.toString()).into(imgAuthorIV)
+                }else{
+                    val imgRef = Firebase.storage.reference.child(imgSource)
+                    imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                        Glide.with(imgAuthorIV.context).load(Uri.toString()).into(imgAuthorIV)
+                    }
+                    .addOnFailureListener {
+                        imgAuthorIV.setImageResource(R.drawable.img_profile)
+                    }
                 }
-                .addOnFailureListener {
-                    imgAuthorIV.setImageResource(R.drawable.img_profile)
-                }
-            }
         }
 
         fun getStartAndEndOfWeek(date: LocalDate): Pair<LocalDate, LocalDate> {
@@ -134,7 +135,52 @@ class Helper {
             }
 
         }
+        fun changeStatusBarColor(mainColor: Boolean, activity: FragmentActivity?, context: Context?){
+            val window = activity?.window
+            if (window != null) {
+                if (mainColor) {
 
+                    //BACKGROUND in NAVIGATION BAR
+
+                    if (context != null) {
+                        window.statusBarColor = context.getColor(R.color.main_color)
+                        window.navigationBarColor = context.getColor(R.color.main_color)
+                    }
+
+                    //TextColor in NAVIGATION BAR
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        window.insetsController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+                        window.insetsController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        window.decorView.systemUiVisibility = 0
+                        @Suppress("DEPRECATION")
+                        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+
+                    }
+                } else {
+
+                    if (context != null) {
+                        //BACKGROUND in NAVIGATION BAR
+                        window.statusBarColor = context.getColor(R.color.background_1)
+                        window.navigationBarColor = context.getColor(R.color.main_color)
+                    }
+                    //TextColor in NAVIGATION BAR
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+                        window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        window.decorView.systemUiVisibility = 0
+                        @Suppress("DEPRECATION")
+                        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+
+                    }
+                    changeMenuVisibility(true,activity)
+                }
+            }
+
+        }
 
 
         fun changeMenuVisibility(state: Boolean, activity: FragmentActivity?) {

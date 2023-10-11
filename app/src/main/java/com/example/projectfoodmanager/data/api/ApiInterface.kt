@@ -111,6 +111,9 @@ interface ApiInterface {
     @GET("$API_V1_BASE_URL/comment/list")
     suspend fun getCommentsByRecipe(@Query("recipe_id") recipeId: Int,@Query("page") page: Int): Response<CommentList>
 
+    @GET("$API_V1_BASE_URL/comment/list")
+    suspend fun getSizedCommentsByRecipePaginated(@Query("recipe_id")recipeId: Int,@Query("recipe_id") page: Int,@Query("recipe_id") pageSize: Int): Response<CommentList>
+
     @GET("$API_V1_BASE_URL/comment")
     suspend fun getCommentsByUser(@Query("userId") userId: Int): Response<Comment>
 
@@ -198,6 +201,9 @@ interface ApiInterface {
 
     @DELETE("$API_V1_BASE_URL/shopping_list")
     suspend fun deleteShoppingList(@Query("id")shoppingListId: Int): Response<IdResponse>
+
+
+
 
 
 }

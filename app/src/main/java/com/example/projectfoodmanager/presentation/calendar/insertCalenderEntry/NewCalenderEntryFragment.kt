@@ -396,9 +396,6 @@ class NewCalenderEntryFragment : Fragment() {
                     recipeRecyclerViewList.add(objRecipe!!)
                     adapter.updateList(recipeRecyclerViewList, user)
                 }
-
-
-
             }
         }
     }

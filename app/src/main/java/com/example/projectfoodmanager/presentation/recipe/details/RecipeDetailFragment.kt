@@ -17,12 +17,14 @@ import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.databinding.FragmentBlankBinding
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
+import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
@@ -41,19 +43,25 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecipeDetailFragment : Fragment() {
-    val TAG: String = "ReceitaDetailFragment"
+
+
+    // binding
     lateinit var binding: FragmentRecipeDetailBinding
-    private var objRecipe: Recipe? = null
+
+    // viewModels
     private val recipeViewModel: RecipeViewModel by viewModels()
-    val authViewModel: AuthViewModel by viewModels()
+
+    // constants
+    val TAG: String = "ReceitaDetailFragment"
+    private var objRecipe: Recipe? = null
     lateinit var manager: LinearLayoutManager
 
-
-
-    private lateinit var adapter: FragmentAdapter
-
+    // injects
     @Inject
     lateinit var sharedPreference: SharedPreference
+
+    // adapters
+    private lateinit var adapter: FragmentAdapter
 
 
     override fun onCreateView(
@@ -73,8 +81,6 @@ class RecipeDetailFragment : Fragment() {
     }
 
 
-
-
     @ExperimentalBadgeUtils
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -84,10 +90,6 @@ class RecipeDetailFragment : Fragment() {
         } else {
             objRecipe = arguments?.getParcelable("Recipe")
         }
-        //requireActivity().window.statusBarColor =  requireContext().getColor(R.color.transparent)
-
-
-        super.onViewCreated(view, savedInstanceState)
 
         binding.calenderIB.setOnClickListener {
             findNavController().navigate(R.id.action_receitaDetailFragment_to_newCalenderEntryFragment,Bundle().apply {
@@ -97,6 +99,10 @@ class RecipeDetailFragment : Fragment() {
 
         if (objRecipe != null) {
             if (isOnline(view.context)) {
+
+                // selecionar as 2/3 primeiras imagens para colocar na zona dos comments
+                recipeViewModel.getSizedCommentsByRecipePaginated(objRecipe!!.id, pageSize = 2)
+
 /*
                 binding.commentsFB.viewTreeObserver.addOnGlobalLayoutListener(object :
                     ViewTreeObserver.OnGlobalLayoutListener {
@@ -124,19 +130,98 @@ class RecipeDetailFragment : Fragment() {
             setUI(objRecipe!!)
         }
 
-
+        super.onViewCreated(view, savedInstanceState)
     }
 
 
     private fun setUI(recipe: Recipe) {
 
+        //--------- GENERAL INFO ---------
+
+        //-> Load Recipe img
+        loadRecipeImage(binding.IVRecipe,recipe.img_source)
+
+        //info
+        binding.TVRef.text = recipe.id.toString()
+        binding.dateTV.text = formatServerTimeToDateString(recipe.created_date)
+        binding.titleTV.text = recipe.title
+        binding.ratingRecipeRB.rating = recipe.source_rating.toFloat()
+        binding.ratingMedTV.text = recipe.source_rating
+        binding.commentsTV.text = recipe.comments.toString() +" "+ getString(R.string.nr_comments)
+        binding.numberLikeTV.text = recipe.likes.toString()
+        binding.timeTV.text = recipe.time
+        binding.dificultyTV.text = recipe.difficulty
+        binding.portionTV.text = recipe.portion
+
+        when(recipe.difficulty){
+            RecipeDifficultyConstants.LOW->{
+                binding.IV2.setImageResource(R.drawable.low_difficulty)
+            }
+            RecipeDifficultyConstants.MEDIUM->{
+                binding.IV2.setImageResource(R.drawable.medium_difficulty)
+            }
+            RecipeDifficultyConstants.HIGH->{
+                binding.IV2.setImageResource(R.drawable.high_difficulty)
+            }
+        }
+
+
+        // check for user likes
+        val user: User = sharedPreference.getUserSession()
+
+        //AUTHOR-> NAME
+        binding.nameAuthorTV.text = formatNameToNameUpper(recipe.created_by.name)
+
+        //AUTHOR-> IMG
+        loadUserImage(binding.imageAuthorIV, recipe.created_by.img_source)
+
+        //AUTHOR-> VERIFIED
+        if(recipe.created_by.verified){
+            binding.verifyUserIV.visibility = View.VISIBLE
+        }else{
+            binding.verifyUserIV.visibility = View.INVISIBLE
+        }
+
+
+        //--------- ROUTES ---------
 
         //Go CommentsFragment
+
         binding.commentsCV.setOnClickListener {
             findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment,Bundle().apply {
                 putInt("recipe_id", recipe.id)
                 putInt("user_id", recipe.id)
             })
+        }
+
+        binding.profileAuthorCV.setOnClickListener {
+            findNavController().navigate(R.id.action_receitaDetailFragment_to_newRecipeFragment)
+
+            /*     val view : View = layoutInflater.inflate(R.layout.modal_bottom_sheet_profile,null)
+                   val dialog = BottomSheetDialog(requireContext())
+                   dialog.behavior.state=BottomSheetBehavior.STATE_COLLAPSED
+                   dialog.behavior.peekHeight=650
+
+                   dialog.setContentView(view)
+                   dialog.show()*/
+            //findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,bundle)
+
+            /*           findNavController().navigate(R.id.action_receitaDetailFragment_to_profileBottomSheetDialog,Bundle().apply {
+                           putParcelable("User", recipe.created_by)
+                       })*/
+
+
+
+            /*        findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,Bundle().apply {
+                          putInt("userID",recipe.created_by.id)
+                          putString("userName",recipe.created_by.name)
+                          putInt("followType",FollowType.FOLLOWERS)
+                      })
+          */
+        }
+
+        binding.backIB.setOnClickListener {
+            findNavController().navigateUp()
         }
 
 /*        //val standardBottomSheet = findViewById<FrameLayout>(R.id.standard_bottom_sheet)
@@ -184,67 +269,12 @@ class RecipeDetailFragment : Fragment() {
             true
         }*/
 
-        //AUTHOR-> NAME
-        binding.nameAuthorTV.text = formatNameToNameUpper(recipe.created_by.name)
-
-        //AUTHOR-> IMG
-        Helper.loadUserImage(binding.imageAuthorIV, recipe.created_by.img_source)
-
-        //AUTHOR-> VERIFIED
-        if(recipe.created_by.verified){
-            binding.verifyUserIV.visibility = View.VISIBLE
-        }else{
-            binding.verifyUserIV.visibility = View.INVISIBLE
-        }
-
-
-        binding.profileAuthorCV.setOnClickListener {
-
-     /*     val view : View = layoutInflater.inflate(R.layout.modal_bottom_sheet_profile,null)
-            val dialog = BottomSheetDialog(requireContext())
-            dialog.behavior.state=BottomSheetBehavior.STATE_COLLAPSED
-            dialog.behavior.peekHeight=650
-
-            dialog.setContentView(view)
-            dialog.show()*/
-            //findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,bundle)
-
- /*           findNavController().navigate(R.id.action_receitaDetailFragment_to_profileBottomSheetDialog,Bundle().apply {
-                putParcelable("User", recipe.created_by)
-            })*/
-
-            findNavController().navigate(R.id.action_receitaDetailFragment_to_newRecipeFragment)
-
-            /*        findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,Bundle().apply {
-                          putInt("userID",recipe.created_by.id)
-                          putString("userName",recipe.created_by.name)
-                          putInt("followType",FollowType.FOLLOWERS)
-                      })
-          */
-        }
-
   /*      binding.IVSource.setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
             startActivity(browserIntent)
         }*/
 
 
-        binding.TVRef.text = recipe.id.toString()
-
-        //-> Load Recipe img
-        Helper.loadRecipeImage(binding.IVRecipe,recipe.img_source)
-
-        //info
-
-        binding.dateTV.text = formatServerTimeToDateString(recipe.created_date)
-        binding.titleTV.text = recipe.title
-        binding.ratingRecipeRB.rating = recipe.source_rating.toFloat()
-        binding.ratingMedTV.text = recipe.source_rating.toString()
-
-        binding.numberLikeTV.text = recipe.likes.toString()
-
-        // check for user likes
-        val user: User = sharedPreference.getUserSession()
 
 
         //--------- LIKES ---------
@@ -277,22 +307,6 @@ class RecipeDetailFragment : Fragment() {
         }
 
 
-        binding.timeTV.text = recipe.time
-        binding.dificultyTV.text = recipe.difficulty
-
-        when(recipe.difficulty){
-            RecipeDifficultyConstants.LOW->{
-                binding.IV2.setImageResource(R.drawable.low_difficulty)
-            }
-            RecipeDifficultyConstants.MEDIUM->{
-                binding.IV2.setImageResource(R.drawable.medium_difficulty)
-            }
-            RecipeDifficultyConstants.HIGH->{
-                binding.IV2.setImageResource(R.drawable.high_difficulty)
-            }
-        }
-
-        binding.portionTV.text = recipe.portion
 
         // tabs
 
@@ -329,9 +343,7 @@ class RecipeDetailFragment : Fragment() {
         })
 
 
-        binding.backIB.setOnClickListener {
-            findNavController().navigateUp()
-        }
+
 
 
     }
@@ -339,39 +351,31 @@ class RecipeDetailFragment : Fragment() {
     private fun updateUI(recipe: Recipe) {
 
         // check for user likes
-        val user: User? = sharedPreference.getUserSession()
+        val user: User = sharedPreference.getUserSession()
 
         binding.numberLikeTV.text = recipe.likes.toString()
 
-        if (user != null) {
-            if (user!!.checkIfLiked(recipe) != -1) {
-                binding.likeIB.setImageResource(R.drawable.ic_like_active)
-            } else
-                binding.likeIB.setImageResource(R.drawable.ic_like_black)
-        }
+        if (user.checkIfLiked(recipe) != -1) {
+            binding.likeIB.setImageResource(R.drawable.ic_like_active)
+        } else
+            binding.likeIB.setImageResource(R.drawable.ic_like_black)
 
         // check for user saves
 
-        if (user != null) {
-            if (user!!.checkIfSaved(recipe) != -1) {
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
-            } else
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
-        }
-
-
-
+        if (user.checkIfSaved(recipe) != -1) {
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
+        } else
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
 
     }
 
     private fun bindObservers() {
 
         // Like function
-        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let {
+        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-                        it
                         toast(getString(R.string.recipe_liked))
 
                         // updates local list
@@ -389,13 +393,12 @@ class RecipeDetailFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
 
-        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let {
+        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-                        it
                         toast(getString(R.string.recipe_removed_liked))
 
                         // updates local list
@@ -413,15 +416,14 @@ class RecipeDetailFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
 
         // save function
 
-        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let {
+        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-                        it
                         toast(getString(R.string.recipe_saved))
 
                         // updates local list
@@ -438,13 +440,12 @@ class RecipeDetailFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
 
-        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let {
+        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-                        it
                         toast(getString(R.string.recipe_removed_saved))
 
                         // updates local list
@@ -461,32 +462,54 @@ class RecipeDetailFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
+
+        // comments function
+
+        recipeViewModel.functionGetSizedCommentsOnRecipePaginated.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        // selecionar as 2/3 primeiras imagens
+                        if (result.data != null){
+                            try {
+                                result.data.result[0].user?.img_source?.let { img ->
+                                    loadUserImage(binding.userComent1IV,img)
+                                }
+                                result.data.result[1].user?.img_source?.let { img ->
+                                    loadUserImage(binding.userComent2IV,img)
+                                }
+                            } catch (_: IndexOutOfBoundsException) {
+
+                            }
+
+                        }
+
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(result.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
     }
 
     private fun showValidationErrors(toString: String) {
         Log.d(TAG, "showValidationErrors: " + toString)
     }
 
+    override fun onStart() {
 
-    override fun onResume() {
-        val window = requireActivity().window
+        Helper.changeStatusBarColor(true, activity, context)
+        Helper.changeMenuVisibility(false, activity)
 
-        //BACKGROUND in NAVIGATION BAR
-        window.statusBarColor = requireContext().getColor(R.color.background_1)
-        window.navigationBarColor = requireContext().getColor(R.color.background_1)
-
-        //TextColor in NAVIGATION BAR
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = 0
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
-        super.onResume()
+        super.onStart()
     }
+
+
+
 
 }

@@ -58,6 +58,7 @@ interface RemoteDataSource {
 	suspend fun createComments(recipeId: Int,comment: CreateCommentRequest): Response<Comment>
 	suspend fun getCommentsByUser(userId: Int): Response<Comment>
 	suspend fun getCommentsByRecipePaginated(recipeId: Int,page: Int): Response<CommentList>
+	suspend fun getSizedCommentsByRecipePaginated(recipeId: Int, page: Int, pageSize: Int): Response<CommentList>
 	suspend fun updateComment(commentId: Int, comment: Comment): Response<Comment>
 	suspend fun deleteComment(commentId: Int): Response<Unit>
 
@@ -92,4 +93,5 @@ interface RemoteDataSource {
 	suspend fun putShoppingList(shoppingListId: Int, shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
 	// delete
 	suspend fun deleteShoppingList(shoppingListId: Int): Response<IdResponse>
+
 }

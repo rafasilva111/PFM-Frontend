@@ -2,15 +2,14 @@ package com.example.projectfoodmanager.presentation.recipe.comments;
 
 import android.content.Context
 import android.os.Handler
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemCommentLayoutBinding
 import com.example.projectfoodmanager.util.FireStorage
@@ -18,6 +17,7 @@ import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.SharedPreference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.security.AccessController.getContext
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -26,10 +26,12 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 
 class CommentsListingAdapter(
-    val sharedPreferences: SharedPreference
+    val sharedPreferences: SharedPreference,
+    val onProfilePressed: (User) -> Unit,
+    val onLikePressed: (View,Int) -> Unit,
 ): RecyclerView.Adapter<CommentsListingAdapter.MyViewHolder>() {
 
-    private var userSession: User? = null
+    private lateinit var  userSession: User
     private var i : Int = 0
     private val TAG: String? = "RecipeListingAdapter"
     private var list: MutableList<Comment> = arrayListOf()
@@ -37,14 +39,14 @@ class CommentsListingAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = ItemCommentLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-
+        userSession  = sharedPreferences.getUserSession()
         return MyViewHolder(itemView,parent.context)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val item = list[position]
 
-        holder.bind(item,sharedPreferences.getUserSession()!!.id== item.user!!.id)
+        holder.bind(item, userSession.id== item.user!!.id)
 
 
     }
@@ -76,90 +78,56 @@ class CommentsListingAdapter(
     }
 
 
-    inner class MyViewHolder(private val binding: ItemCommentLayoutBinding,
-                             private val context: Context
-                             ) : RecyclerView.ViewHolder(binding.root) {
+    inner class MyViewHolder(private val binding: ItemCommentLayoutBinding,private val context: Context) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Comment, owner: Boolean) {
-            if (owner){
-                if (userSession==null)
-                    userSession = sharedPreferences.getUserSession()
+            binding.CLComment.visibility = if (owner) View.GONE else View.VISIBLE
+            binding.CLCommentOwner.visibility = if (owner) View.VISIBLE else View.GONE
 
-                binding.CLComment.visibility = View.GONE
-                binding.CLCommentOwner.visibility = View.VISIBLE
-                binding.TVCAuthorOwner.text = context.getString(R.string.full_name, item.user!!.name)
-                binding.TVCMessageOwner.text = item.text
+            val user = item.user
+            val authorText = context.getString(R.string.full_name, user?.name)
+            val messageText = item.text
 
-                if (item.updated_date !=item.created_date){
-                    // created date
-                    // TODO Rui pôr icon a avisar que mensagem já foi alterada ( tipo um lapis)
-                    binding.TVCDataOwner.text = getRelativeTime(item.updated_date!!)
-                }
-                else{
-                    binding.TVCDataOwner.text = getRelativeTime(item.created_date!!)
+            val dataText = if (item.updated_date != item.created_date) {
+                getRelativeTime(item.updated_date!!)
+            } else {
+                getRelativeTime(item.created_date!!)
+            }
 
-                }
+            if (owner) {
+                binding.TVCAuthorOwner.text = authorText
+                binding.TVCMessageOwner.text = messageText
+                binding.TVCDataOwner.text = dataText
+            } else {
+                binding.TVCAuthor.text = authorText
+                binding.TVCMessage.text = messageText
+                binding.TVCData.text = dataText
+            }
 
-                binding.CVComment.setOnClickListener {
-                    i++
-                    Toast.makeText(context, "Long clicked", Toast.LENGTH_LONG).show()
-                    val handler = Handler()
+            binding.IVAuthor.setOnClickListener {
+                item.user?.let { it1 -> onProfilePressed.invoke(it1) }
+            }
 
-                    handler.post {
-                        if (i == 2) {
-                            //onItemClicked.invoke(adapterPosition, item) }
-                            Toast.makeText(context, "Double clicked", Toast.LENGTH_LONG).show()
-                        }
-                        i = 0
+            binding.CVComment.setOnClickListener {
+                i++
+                val handler = Handler()
+                handler.postDelayed({
+                    if (i == 2) {
+                        binding.CVComment.isClickable = false
+                        onLikePressed.invoke(binding.CVComment,item.id)
                     }
-                }
+                    i = 0
+                }, 500)
+            }
 
 
-                Helper.loadUserImage(binding.IVAuthorOwner, userSession!!.img_source)
 
-//            binding.CVComment.setOnLongClickListener { true
-//                // TODO open profile
-//                Toast.makeText(context, "Long clicked", Toast.LENGTH_LONG).show()
-//            }
 
+            if (owner) {
+                Helper.loadUserImage(binding.IVAuthorOwner, userSession.img_source)
             }
             else{
-                binding.CLComment.visibility = View.VISIBLE
-                binding.CLCommentOwner.visibility = View.GONE
-                binding.TVCAuthor.text = context.getString(R.string.full_name, item.user!!.name)
-                binding.TVCMessage.text = item.text
-                if (item.updated_date !=item.created_date){
-                    // created date
-                    // TODO Rui pôr icon a avisar que mensagem já foi alterada ( tipo um lapis)
-                    binding.TVCData.text = getRelativeTime(item.updated_date!!)
-                }
-                else{
-                    binding.TVCData.text = getRelativeTime(item.created_date!!)
-
-                }
-
-                binding.CVComment.setOnClickListener {
-                    i++
-                    Toast.makeText(context, "Long clicked", Toast.LENGTH_LONG).show()
-                    val handler = Handler()
-
-                    handler.post {
-                        if (i == 2) {
-                            //onItemClicked.invoke(adapterPosition, item) }
-                            Toast.makeText(context, "Double clicked", Toast.LENGTH_LONG).show()
-                        }
-                        i = 0
-                    }
-                }
-
-                //-> Load Author img
-                Helper.loadUserImage(binding.IVAuthor, item.user.img_source)
-
-
-//            binding.CVComment.setOnLongClickListener { true
-//                // TODO open profile
-//                Toast.makeText(context, "Long clicked", Toast.LENGTH_LONG).show()
-//            }
-
+                item.user!!.img_source.let{
+                    Helper.loadUserImage(binding.IVAuthor, it)}
             }
         }
     }

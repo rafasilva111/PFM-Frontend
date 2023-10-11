@@ -30,6 +30,7 @@ import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
+import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfMonth
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfWeek
@@ -281,29 +282,14 @@ class CalendarFragment : Fragment() {
         changeMenuVisibility(false,activity)
     }
 
-    override fun onResume() {
-        super.onResume()
-        val window = requireActivity().window
+    override fun onStart() {
 
-
-        //BACKGROUND in NAVIGATION BAR
-        window.statusBarColor = requireContext().getColor(R.color.background_1)
-        window.navigationBarColor = requireContext().getColor(R.color.main_color)
-
-        //TextColor in NAVIGATION BAR
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = 0
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-
-        }
+        changeStatusBarColor(false, activity, context)
         changeMenuVisibility(true,activity)
 
+        super.onStart()
     }
+
 
     private fun setMonthView() {
         binding.calWeeklyRV.visibility = View.INVISIBLE
@@ -418,8 +404,6 @@ class CalendarFragment : Fragment() {
             }
         }
     }
-
-
 
 
     override fun onPause() {
