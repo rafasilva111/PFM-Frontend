@@ -70,13 +70,14 @@ interface ApiInterface {
     suspend fun getRecipe(@Query("id") recipeId: Int): Response<Recipe>
 
     @GET("$API_V1_BASE_URL/recipe/list")
-    suspend fun getRecipePaginated(@Query("page") page: Int): Response<RecipeList>
+    suspend fun getRecipePaginated(@Query("by")by: String,@Query("searchString") searchString: String,@Query("searchTag") searchTag: String,@Query("page") page: Int): Response<RecipeList>
 
     @GET("$API_V1_BASE_URL/recipe/list")
-    suspend fun getRecipePaginatedSorted(@Query("page") page: Int,@Query("by") by: String): Response<RecipeList>
+    suspend fun getRecipesByClientPaginated(@Query("commented_by") clientId: Int,@Query("page") page: Int): Response<RecipeList>
 
     @GET("$API_V1_BASE_URL/recipe/list")
-    suspend fun getRecipesByTitleAndTags(@Query("string")string: String,@Query("page") page: Int): Response<RecipeList>
+    suspend fun getRecipesByClientSearchPaginated(@Query("commented_by") clientId: Int,@Query("string") string: String,@Query("page") page: Int): Response<RecipeList>
+
 
     @PUT("$API_V1_BASE_URL/recipe")
     suspend fun updateRecipe(@Query("id") recipeId: Int,@Body recipe : RecipeRequest): Response<Recipe>
@@ -115,7 +116,7 @@ interface ApiInterface {
     suspend fun getSizedCommentsByRecipePaginated(@Query("recipe_id")recipeId: Int,@Query("recipe_id") page: Int,@Query("recipe_id") pageSize: Int): Response<CommentList>
 
     @GET("$API_V1_BASE_URL/comment")
-    suspend fun getCommentsByUser(@Query("userId") userId: Int): Response<Comment>
+    suspend fun getCommentsByClientPaginated(@Query("user_id") clientId: Int,@Query("page") page: Int): Response<CommentList>
 
     @PUT("$API_V1_BASE_URL/comment")
     suspend fun updateComments(@Query("commentId") commentId: Int,@Body comment : Comment): Response<Comment>
@@ -201,9 +202,6 @@ interface ApiInterface {
 
     @DELETE("$API_V1_BASE_URL/shopping_list")
     suspend fun deleteShoppingList(@Query("id")shoppingListId: Int): Response<IdResponse>
-
-
-
 
 
 }

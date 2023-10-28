@@ -131,6 +131,16 @@
     <string name="fragment_calender_ingredients_lista_de_compras">Lista de compras</string>
     <string name="profile_shopping_lists">Shopping Lists</string>
     <string name="nr_comments">Nºcomments</string>
+    <string name="no_recipes_comented">No recipes commented...</string>
+    <string name="chip_tag_likes">1</string>
+    <string name="chip_tag_saves">2</string>
+    <string name="chip_tag_created">3</string>
+    <string name="chip_tag_commented">4</string>
+    <string name="chip_tag_last_seem">5</string>
+    <string name="recipes_verified">Verificadas</string>
+    <string name="recipes_all">Todas</string>
+    <string name="fragment_title_about_us">About Us</string>
+    <string name="fragment_faqs_title">FAQs</string>
     <string-array name="gender_array">
         <item>Masculino</item>
         <item>Feminino</item>

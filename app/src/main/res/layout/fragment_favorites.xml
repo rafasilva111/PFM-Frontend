@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <SearchView
+    <android.widget.SearchView
         android:id="@+id/SVsearch"
         android:layout_width="match_parent"
         android:layout_height="30dp"
@@ -77,6 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tab_liked"
+                    android:tag="@string/chip_tag_likes"
                     android:checked="true"
                     android:textSize="15sp"
                     app:chipMinHeight="20dp" />
@@ -87,6 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tab_saved"
+                    android:tag="@string/chip_tag_saves"
                     android:textSize="15sp"
                     app:chipMinHeight="20dp" />
 
@@ -96,6 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tab_created"
+                    android:tag="@string/chip_tag_created"
                     android:textSize="15sp"
                     app:chipMinHeight="20dp" />
 
@@ -105,6 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tab_coment"
+                    android:tag="@string/chip_tag_commented"
                     android:textSize="15sp"
                     app:chipMinHeight="20dp" />
 
@@ -114,6 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tab_last_seen"
+                    android:tag="@string/chip_tag_last_seem"
                     android:textSize="15sp"
                     app:chipMinHeight="20dp" />
 
@@ -164,7 +169,6 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cv_create_recipe">
@@ -238,7 +242,7 @@
                 android:background="@drawable/card_cat"
                 android:backgroundTint="@color/transparent"
                 android:elevation="0dp"
-                android:tag="meatCL">
+                android:tag="carneCL">
 
                 <TextView
                     android:id="@+id/meatTV"
@@ -246,7 +250,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
-                    android:tag="meatTV"
+                    android:tag="carneTV"
                     android:text="Carne"
                     android:textAlignment="center"
                     android:textAllCaps="true"
@@ -268,7 +272,7 @@
                     android:padding="11dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_meat"
-                    android:tag="meat_filt_IB"
+                    android:tag="carne_filt_IB"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/meatTV" />
@@ -291,7 +295,7 @@
                 android:background="@drawable/card_cat"
                 android:backgroundTint="@color/transparent"
                 android:elevation="0dp"
-                android:tag="fishCL">
+                android:tag="peixeCL">
 
                 <TextView
                     android:id="@+id/fishTV"
@@ -299,7 +303,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
-                    android:tag="fishTV"
+                    android:tag="peixeTV"
                     android:text="Peixe"
                     android:textAlignment="center"
                     android:textAllCaps="true"
@@ -321,7 +325,7 @@
                     android:padding="8dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_fish"
-                    android:tag="fish_filt_IB"
+                    android:tag="peixe_filt_IB"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fishTV" />
@@ -343,7 +347,7 @@
                 android:background="@drawable/card_cat"
                 android:backgroundTint="@color/transparent"
                 android:elevation="0dp"
-                android:tag="soupCL">
+                android:tag="sopasCL">
 
                 <TextView
                     android:id="@+id/soupTV"
@@ -351,7 +355,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
-                    android:tag="soupTV"
+                    android:tag="sopasTV"
                     android:text="Sopa"
                     android:textAlignment="center"
                     android:textAllCaps="true"
@@ -373,7 +377,7 @@
                     android:padding="11dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_soup"
-                    android:tag="soup_filt_IB"
+                    android:tag="sopas_filt_IB"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/soupTV" />
@@ -395,7 +399,7 @@
                 android:background="@drawable/card_cat"
                 android:backgroundTint="@color/transparent"
                 android:elevation="0dp"
-                android:tag="vegiCL">
+                android:tag="vegetarianaCL">
 
                 <TextView
                     android:id="@+id/vegiTV"
@@ -403,7 +407,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
-                    android:tag="vegiTV"
+                    android:tag="vegetarianaTV"
                     android:text="Salada"
                     android:textAlignment="center"
                     android:textAllCaps="true"
@@ -425,7 +429,7 @@
                     android:padding="11dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_veget"
-                    android:tag="vegi_filt_IB"
+                    android:tag="vegetariana_filt_IB"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/vegiTV" />
@@ -447,7 +451,7 @@
                 android:background="@drawable/card_cat"
                 android:backgroundTint="@color/transparent"
                 android:elevation="0dp"
-                android:tag="fruitCL">
+                android:tag="frutaCL">
 
                 <TextView
                     android:id="@+id/fruitTV"
@@ -455,7 +459,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
-                    android:tag="fruitTV"
+                    android:tag="frutaTV"
                     android:text="Fruta"
                     android:textAlignment="center"
                     android:textAllCaps="true"
@@ -477,7 +481,7 @@
                     android:padding="11dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_fruit"
-                    android:tag="fruit_filt_IB"
+                    android:tag="fruta_filt_IB"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/fruitTV" />
@@ -499,7 +503,7 @@
                 android:background="@drawable/card_cat"
                 android:backgroundTint="@color/transparent"
                 android:elevation="0dp"
-                android:tag="drinkCL">
+                android:tag="bebidaCL">
 
                 <TextView
                     android:id="@+id/drinkTV"
@@ -507,7 +511,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
-                    android:tag="drinkTV"
+                    android:tag="bebidaTV"
                     android:text="Bebida"
                     android:textAlignment="center"
                     android:textAllCaps="true"
@@ -529,7 +533,7 @@
                     android:padding="11dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_drink"
-                    android:tag="drink_filt_IB"
+                    android:tag="bebida_filt_IB"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/drinkTV" />

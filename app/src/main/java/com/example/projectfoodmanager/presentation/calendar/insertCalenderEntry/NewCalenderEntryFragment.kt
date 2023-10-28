@@ -174,22 +174,9 @@ class NewCalenderEntryFragment : Fragment() {
         }
 
         binding.dateCV.setOnClickListener {
-           val datePicker = showDatePickerDialog()
-
-            datePicker.addOnCancelListener {
-                datePicker.dismiss()
-            }
-
-            datePicker.addOnPositiveButtonClickListener {
-
-                if(datePicker.headerText.length == 9){
-                    binding.dateValTV.text= getString(R.string.date_text, "0" + datePicker.headerText)
-                }else{
-                    binding.dateValTV.text= datePicker.headerText
-                }
+           showDatePickerDialog()
 
 
-            }
 
         }
 
@@ -300,7 +287,7 @@ class NewCalenderEntryFragment : Fragment() {
         builder.show()
     }
 
-    private fun showDatePickerDialog(): MaterialDatePicker<Long> {
+    private fun showDatePickerDialog() {
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Selecione a data")
@@ -310,7 +297,21 @@ class NewCalenderEntryFragment : Fragment() {
 
         datePicker.show(parentFragmentManager, "DatePicker")
 
-        return datePicker
+        datePicker.addOnCancelListener {
+            datePicker.dismiss()
+        }
+
+        datePicker.addOnPositiveButtonClickListener {
+
+            if(datePicker.headerText.length == 9){
+                binding.dateValTV.text= getString(R.string.date_text, "0" + datePicker.headerText)
+            }else{
+                binding.dateValTV.text= datePicker.headerText
+            }
+
+
+        }
+
     }
 
     private fun updateView(currentTabSelected: Int) {

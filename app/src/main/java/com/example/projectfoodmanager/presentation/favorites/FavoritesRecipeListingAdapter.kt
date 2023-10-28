@@ -31,7 +31,7 @@ class FavoritesRecipeListingAdapter(
 
     private var user: User? = null
     private val TAG: String? = "RecipeListingAdapter"
-    private var list: MutableList<Recipe> = arrayListOf()
+    var list: MutableList<Recipe> = arrayListOf()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -52,6 +52,17 @@ class FavoritesRecipeListingAdapter(
     fun updateList(list: MutableList<Recipe>, user: User){
         this.list = list
         this.user = user
+        notifyDataSetChanged()
+    }
+
+    fun updateList(list: MutableList<Recipe>){
+        this.list = list
+        notifyDataSetChanged()
+    }
+
+
+    fun concatList(list: MutableList<Recipe>){
+        this.list += list
         notifyDataSetChanged()
     }
 
@@ -100,7 +111,7 @@ class FavoritesRecipeListingAdapter(
                 binding.imgAuthorIV.setImageResource(avatar!!.imgId)
 
             }else{
-                val imgRef = Firebase.storage.reference.child("${FireStorage.user_profile_images}${item.created_by.img_source}")
+                val imgRef = Firebase.storage.reference.child(item.created_by.img_source)
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
                     Glide.with(binding.imgAuthorIV.context).load(Uri.toString()).into(binding.imgAuthorIV)
                 }

@@ -12,6 +12,7 @@ import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourc
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
+import retrofit2.Response
 import java.net.SocketTimeoutException
 import javax.inject.Inject
 
@@ -21,6 +22,7 @@ class AuthRepositoryImp @Inject constructor(
     private val sharedPreference: SharedPreference
 ) : AuthRepository {
     private val TAG:String = "AuthRepositoryImp"
+
 
     private val _userRegisterLiveData = MutableLiveData<Event<NetworkResult<String>>>()
     override val userRegisterLiveData: LiveData<Event<NetworkResult<String>>>
@@ -113,6 +115,7 @@ class AuthRepositoryImp @Inject constructor(
 
         if (response.isSuccessful && response.code() == 204) {
             Log.i(TAG, "logoutUser: request made was sucessfull.")
+            sharedPreference.deleteUserSession()
             _userLogoutResponseLiveData.postValue(Event(NetworkResult.Success(response.code().toString())))
         }
         else if(response.errorBody()!=null){

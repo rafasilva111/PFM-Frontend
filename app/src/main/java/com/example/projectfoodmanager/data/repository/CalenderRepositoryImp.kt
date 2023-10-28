@@ -60,7 +60,6 @@ class CalenderRepositoryImp @Inject constructor(
         val response =remoteDataSource.getEntryOnCalender(formatLocalTimeToServerTime(date))
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            sharedPreference.saveSingleCalendarDayEntry(date,response.body()!!.result)
             _functionGetEntryOnCalender.postValue(Event(NetworkResult.Success(response.body()!!
             )))
         }
@@ -153,10 +152,12 @@ class CalenderRepositoryImp @Inject constructor(
     override suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest) {
         _functionPatchCalenderEntry.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
+
         val response =remoteDataSource.patchCalenderEntry(calenderEntryId,calenderPatchRequest)
+
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            sharedPreference.saveCalendarEntry(response.body()!!)
+            sharedPreference.updateCalendarEntry(response.body()!!)
 
             _functionPatchCalenderEntry.postValue(Event(NetworkResult.Success(response.body()!!
             )))

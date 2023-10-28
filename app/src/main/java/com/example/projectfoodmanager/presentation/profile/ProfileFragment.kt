@@ -147,7 +147,7 @@ class ProfileFragment : Fragment() {
 
         binding.myRecipes.setOnClickListener {
             findNavController().navigate(R.id.action_profile_to_favorites,Bundle().apply {
-                putString("aba","gostos")
+                putString("chip",getString(R.string.tab_created))
             })
         }
 

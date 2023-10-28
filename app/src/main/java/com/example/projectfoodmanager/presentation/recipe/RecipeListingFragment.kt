@@ -2,14 +2,12 @@ package com.example.projectfoodmanager.presentation.recipe
 
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsetsController
 import android.widget.ImageButton
 import android.widget.SearchView
 import android.widget.TextView
@@ -27,6 +25,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
+import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
@@ -41,38 +40,48 @@ import kotlin.math.ceil
 @AndroidEntryPoint
 class RecipeListingFragment : Fragment() {
 
-    // constantes (cuidado com esta merda)
 
 
+
+    // binding
+    lateinit var binding: FragmentRecipeListingBinding
+
+    // viewModels
+    private val recipeViewModel by activityViewModels<RecipeViewModel>()
+
+    // constants
+    private val TAG: String = "RecipeListingFragment"
 
     private var recipeList: MutableList<Recipe> = mutableListOf()
-
     private var currentPage:Int = 1
     private var nextPage:Boolean = true
 
-    private var stringToSearch: String? = null
+
     private var newSearch: Boolean = false
-    // this needs to happen otherwise we will have a spam of toast
     private var noMoreRecipesMessagePresented = false
 
-    @Inject
-    lateinit var sharedPreference: SharedPreference
-
-    private var isFirstTimeCall = true
     private var snapHelper : SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
-    private var searchMode: Boolean = false
     private var refreshPage: Int = 0
-
-    private val TAG: String = "RecipeListingFragment"
-    private var oldFiltTag: String =""
-    lateinit var binding: FragmentRecipeListingBinding
-    private val recipeViewModel by activityViewModels<RecipeViewModel>()
+    private var oldFilertTag: String =""
 
     // chips filter
-    private var chipSelected: String? = null
+    private lateinit var chipSelected: Chip
 
+    private var sortedBy: String = RecipesSortingType.VERIFIED
+
+    // tags filter ( bottom filters)
+    private var filteredTag: String = ""
+
+    // search filter
+    private var stringToSearch: String = ""
+
+    // injects
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+
+    // adapters
     private val adapter by lazy {
         RecipeListingAdapter(
             onItemClicked = {pos,item ->
@@ -145,55 +154,6 @@ class RecipeListingFragment : Fragment() {
         }
     }
 
-
-    private fun setRecyclerViewScrollListener() {
-        scrollListener = object : RecyclerView.OnScrollListener(){
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    // prevent missed calls to api // needs to be reseted on search so it could be a next page
-
-                    if (nextPage){
-                        binding.recyclerView.removeOnScrollListener(scrollListener)
-
-
-                        //val visibleItemCount: Int = manager.childCount
-                        val pastVisibleItem: Int =
-                            manager.findLastCompletelyVisibleItemPosition()
-                        //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
-
-                        if ((pastVisibleItem + 1) >= recipeList.size){
-
-                            if (chipSelected != null){
-                                recipeViewModel.getRecipesPaginatedSorted(++currentPage,chipSelected!!)
-                            }
-                            else if (stringToSearch.isNullOrEmpty()) {
-                                recipeViewModel.getRecipesPaginated(++currentPage)
-                            } else {
-                                recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!, ++currentPage)
-                            }
-                        }
-                        //Log.d(TAG, pag_index.toString())
-                        //Log.d(TAG, visibleItemCount.toString())
-                        Log.d(TAG, pastVisibleItem.toString())
-                    }
-                    else if (!noMoreRecipesMessagePresented){
-                        noMoreRecipesMessagePresented = true
-                        toast("Sorry cant find more recipes.",ToastType.ALERT)
-                    }
-                    binding.recyclerView.addOnScrollListener(scrollListener)
-                }
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    isFirstTimeCall = true
-                }
-
-                super.onScrollStateChanged(recyclerView, newState)
-
-            }
-        }
-        binding.recyclerView.addOnScrollListener(scrollListener)
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         changeMenuVisibility(true,activity)
@@ -219,6 +179,14 @@ class RecipeListingFragment : Fragment() {
 
         if (isOnline(view.context)) {
             binding.recyclerView.adapter = adapter
+
+            // get recipes for first time
+            recipeViewModel.getRecipes(page = currentPage, by = RecipesSortingType.VERIFIED)
+
+            /**
+             * Search filter
+             */
+
             binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(p0: String?): Boolean {
                     return false
@@ -234,81 +202,94 @@ class RecipeListingFragment : Fragment() {
                         val handler = Handler()
                         handler.postDelayed({
                             if (stringToSearch == text) {
-                                recipeViewModel.getRecipesByTitleAndTags(text, currentPage)
+                                // verifica se tag está a ser usada se não pesquisa a string nas tags da receita
+                                if (filteredTag.isEmpty())
+                                    recipeViewModel.getRecipes(page = currentPage, searchString = stringToSearch,searchTag= stringToSearch, by = sortedBy)
+                                else{
+                                    recipeViewModel.getRecipes(page = currentPage, searchString = stringToSearch,searchTag= filteredTag, by = sortedBy)
+                                }
                             }
-                        }, 300)
+                        }, 400)
 
                         stringToSearch=text
 
                     } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
-                    else if (stringToSearch != null && text == ""){
-                        stringToSearch=null
+                    else if (stringToSearch != "" && text == ""){
+                        stringToSearch=text
                         recipeList = mutableListOf()
                         currentPage = 1
-                        recipeViewModel.getRecipesPaginated(currentPage)
+
+                        recipeViewModel.getRecipes(page = currentPage, searchString = stringToSearch,searchTag= filteredTag, by = sortedBy)
                     }
                     else{
-                        stringToSearch=null
+                        stringToSearch=""
                     }
+
+                    //slowly move to position 0
+                    binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
                     return true
                 }
             })
-            if (stringToSearch.isNullOrEmpty())
-                if (refreshPage == 0)
-                    recipeViewModel.getRecipesPaginated(currentPage)
-                else
-                    recipeViewModel.getRecipesPaginated(refreshPage)
-            else
-                if (refreshPage == 0)
-                    recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!,currentPage)
-                else
-                    recipeViewModel.getRecipesByTitleAndTags(stringToSearch!!,refreshPage)
 
+            /**
+             * Notifications
+             */
 
-
-            //filtros mas com as chipViews
-            val chipGroup: ChipGroup = binding.chipGroup
-            chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
-                if (checkedId.isNotEmpty())
-                    group.findViewById<Chip>(checkedId[0])?.let { updateView(it) }
-            }
-
-
-            //Go to Notifications Fragment
             binding.notificationIV.setOnClickListener {
                 findNavController().navigate(R.id.action_recipeListingFragment_to_notificationFragment)
                 changeMenuVisibility(false,activity)
             }
 
-            //Tag filter
+
+            /**
+             * Chip filters
+             */
+
+            val chipGroup: ChipGroup = binding.chipGroup
+            chipSelected = chipGroup.findViewById(chipGroup.checkedChipId)
+
+
+            chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
+
+                if (checkedId.isNotEmpty()) {
+                    group.findViewById<Chip>(checkedId[0])?.let {
+                        chipSelected.isChecked = false
+                        chipSelected = it
+                        updateView(chipSelected)
+                    }
+                } else {
+                    // If no chip is selected, select the last selected one
+                    chipSelected.isChecked = true
+                }
+            }
+
+            /**
+             * Bottom Tag Filters
+             */
+
             binding.meatFiltIB.setOnClickListener {
                 changeFilterSearch(RecipeListingFragmentFilters.CARNE)
-                filterOnClick("meat")
+                filterOnClick(RecipeListingFragmentFilters.CARNE)
             }
-
             binding.fishFiltIB.setOnClickListener {
                 changeFilterSearch(RecipeListingFragmentFilters.PEIXE)
-                filterOnClick("fish")
+                filterOnClick(RecipeListingFragmentFilters.PEIXE)
             }
-
             binding.soupFiltIB.setOnClickListener {
-                changeFilterSearch(RecipeListingFragmentFilters.SOPA)
-                filterOnClick("soup")
+                changeFilterSearch(RecipeListingFragmentFilters.SOPAS)
+                filterOnClick(RecipeListingFragmentFilters.SOPAS)
             }
-
             binding.vegiFiltIB.setOnClickListener {
                 changeFilterSearch(RecipeListingFragmentFilters.VEGETARIANA)
-                filterOnClick("vegi")
+                filterOnClick(RecipeListingFragmentFilters.VEGETARIANA)
             }
-
             binding.fruitFiltIB.setOnClickListener {
                 changeFilterSearch(RecipeListingFragmentFilters.FRUTA)
-                filterOnClick("fruit")
+                filterOnClick(RecipeListingFragmentFilters.FRUTA)
             }
-
             binding.drinkFiltIB.setOnClickListener {
                 changeFilterSearch(RecipeListingFragmentFilters.BEBIDAS)
-                filterOnClick("drink")
+                filterOnClick(RecipeListingFragmentFilters.BEBIDAS)
             }
 
         } else{
@@ -317,14 +298,58 @@ class RecipeListingFragment : Fragment() {
         }
     }
 
+    private fun setRecyclerViewScrollListener() {
+        scrollListener = object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    // prevent missed calls to api // needs to be reseted on search so it could be a next page
+
+                    if (nextPage){
+                        //val visibleItemCount: Int = manager.childCount
+                        val pastVisibleItem: Int =
+                            manager.findLastCompletelyVisibleItemPosition()
+                        //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
+
+                        if ((pastVisibleItem + 1) >= recipeList.size){
+
+                            // verifica se tag está a ser uusada se não pesquisa a string nas tags da receita
+                            if (filteredTag.isEmpty())
+                                recipeViewModel.getRecipes(page = ++currentPage, searchString = stringToSearch,searchTag= stringToSearch, by = sortedBy)
+                            else{
+                                recipeViewModel.getRecipes(page = ++currentPage, searchString = stringToSearch,searchTag= filteredTag, by = sortedBy)
+                            }
+                        }
+                        //Log.d(TAG, pag_index.toString())
+                        //Log.d(TAG, visibleItemCount.toString())
+                        //Log.d(TAG, pastVisibleItem.toString())
+                    }
+                    else if (!noMoreRecipesMessagePresented){
+                        noMoreRecipesMessagePresented = true
+                        toast("Sorry cant find more recipes.",ToastType.ALERT)
+                    }
+
+
+                }
+
+                super.onScrollStateChanged(recyclerView, newState)
+
+            }
+        }
+        binding.recyclerView.addOnScrollListener(scrollListener)
+
+    }
+
     private fun showValidationErrors(error: String) {
         toast(error, type = ToastType.ERROR)
     }
 
     private fun filterOnClick(tag:String){
-        val clToUpdate: ConstraintLayout? = binding.root.findViewWithTag(oldFiltTag + "CL") as? ConstraintLayout
-        val tvToUpdate: TextView? = binding.root.findViewWithTag(oldFiltTag + "TV") as? TextView
-        val ibToUpdate: ImageButton? = binding.root.findViewWithTag(oldFiltTag + "_filt_IB") as? ImageButton
+
+        binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
+
+        val clToUpdate: ConstraintLayout? = binding.root.findViewWithTag(oldFilertTag + "CL") as? ConstraintLayout
+        val tvToUpdate: TextView? = binding.root.findViewWithTag(oldFilertTag + "TV") as? TextView
+        val ibToUpdate: ImageButton? = binding.root.findViewWithTag(oldFilertTag + "_filt_IB") as? ImageButton
 
         clToUpdate?.apply {
             backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
@@ -335,18 +360,20 @@ class RecipeListingFragment : Fragment() {
 
         ibToUpdate?.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
 
-        if (oldFiltTag == tag) {
-            oldFiltTag = ""
-            recipeViewModel.getRecipesPaginated(1)
+        if (oldFilertTag == tag) {
+            oldFilertTag = ""
             currentPage = 1
+            recipeViewModel.getRecipes(page = currentPage, searchString = stringToSearch, by = sortedBy)
             return
         }
 
-        oldFiltTag = tag
+
+        oldFilertTag = tag
 
         val cl: ConstraintLayout? = binding.root.findViewWithTag(tag + "CL") as? ConstraintLayout
         val tv: TextView? = binding.root.findViewWithTag(tag + "TV") as? TextView
         val ib: ImageButton? = binding.root.findViewWithTag(tag + "_filt_IB") as? ImageButton
+
 
         cl?.apply {
             backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color))
@@ -359,9 +386,11 @@ class RecipeListingFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        recipeViewModel.recipeResponseLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+
+
+        recipeViewModel.recipesResponseLiveData.observe(viewLifecycleOwner
+        ) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
-                searchMode = false
                 when (it) {
                     is NetworkResult.Success -> {
 
@@ -387,161 +416,29 @@ class RecipeListingFragment : Fragment() {
                         }
                         else {
                             binding.progressBar.hide()
-
-                            // check if list empty
-
-                            if(it.data!!.result.isEmpty()){
-                                //TODO: Não funciona com os filtros
-                                binding.offlineTV.text = getString(R.string.no_recipes_found)
-                                binding.offlineTV.visibility=View.VISIBLE
-                                return@let
-                            }else{
-                                binding.offlineTV.visibility=View.GONE
-
-                            }
 
                             // sets page data
 
                             currentPage = it.data!!._metadata.current_page
                             nextPage = it.data._metadata.next != null
 
-                            // checks if new search
-
-                            if (recipeList.isNotEmpty() && currentPage == 1){
-                                recipeList = it.data.result
-                            }
-                            else{
-                                recipeList += it.data.result
-                            }
-
-                            adapter.updateList(recipeList)
-                        }
-
-
-                    }
-                    is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                        binding.progressBar.show()
-
-                    }
-                }
-            }
-        }
-
-        // Search Function
-        recipeViewModel.recipeSearchByTitleAndTagsResponseLiveData.observe(viewLifecycleOwner
-        ) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        // isto é usado para atualizar os likes caso o user vá a detail view
-
-                        if (refreshPage != 0) {
-                            binding.progressBar.hide()
-                            val lastIndex =
-                                if (recipeList.size >= 5) (refreshPage * 5) - 1 else recipeList.size - 1
-                            var firstIndex = if (recipeList.size >= 5) lastIndex - 4 else 0
-
-                            recipeList.subList(firstIndex, lastIndex + 1).clear()
-
-                            if (newSearch)
-                                recipeList = mutableListOf()
-
-                            for (recipe in it.data!!.result) {
-                                recipeList.add(firstIndex, recipe)
-                                firstIndex++
-                            }
-                            adapter.updateList(recipeList)
-
-                            //reset control variables
-                            refreshPage = 0
-                        } else {
-                            binding.progressBar.hide()
-
-                            // numa nova procura resetar a lista de receitas
-                            if (newSearch)
-                                recipeList = mutableListOf()
-
-                            for (recipe in it.data!!.result) {
-                                recipeList.add(recipe)
-                            }
-                            adapter.updateList(recipeList)
-                            newSearch = false
-
-                            // check next page to failed missed calls to api
-                            nextPage = it.data._metadata.next != null
-                            // safe call for debaunce
-                            currentPage = it.data._metadata.current_page
-                            // se houver next page soma se não não faz nada
-                        }
-
-                        binding.progressBar.hide()
-
-                    }
-                    is NetworkResult.Error -> {
-                        binding.progressBar.hide()
-                        showValidationErrors(it.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                        binding.progressBar.show()
-                    }
-                }
-            }
-        }
-
-
-        // chips filter
-
-        recipeViewModel.recipeSortedResponseLiveData.observe(viewLifecycleOwner
-        ) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        // isto é usado para atualizar os likes caso o user vá a detail view
-
-                        if (refreshPage != 0) {
-                            binding.progressBar.hide()
-                            val lastIndex =
-                                if (recipeList.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) - 1 else recipeList.size - 1
-                            var firstIndex = if (recipeList.size >= PaginationNumber.DEFAULT) lastIndex - 4 else 0
-
-                            recipeList.subList(firstIndex, lastIndex + 1).clear()
-
-
-                            for (recipe in it.data!!.result) {
-                                recipeList.add(firstIndex, recipe)
-                                firstIndex++
-                            }
-                            adapter.updateList(recipeList)
-
-                            //reset control variables
-                            refreshPage = 0
-                        }
-                        else {
-                            binding.progressBar.hide()
-
                             // check if list empty
 
-                            if(it.data!!.result.isEmpty()){
+                            if(it.data.result.isEmpty()){
                                 binding.offlineTV.text = getString(R.string.no_recipes_found)
                                 binding.offlineTV.visibility=View.VISIBLE
+                                adapter.updateList(mutableListOf())
                                 return@let
                             }else{
                                 binding.offlineTV.visibility=View.GONE
 
                             }
 
-                            // sets page data
-
-                            currentPage = it.data._metadata.current_page
-                            nextPage = it.data._metadata.next != null
-
                             // checks if new search
 
-                            if (recipeList.isNotEmpty() && currentPage == 1){
+                            if (currentPage == 1){
                                 recipeList = it.data.result
+                                noMoreRecipesMessagePresented = false
                             }
                             else{
                                 recipeList += it.data.result
@@ -670,98 +567,73 @@ class RecipeListingFragment : Fragment() {
 
     }
 
-    private fun changeFilterSearch(string: String){
-        if (stringToSearch == string){
-            newSearch = false
-            stringToSearch=""
-            recipeViewModel.getRecipesPaginated()
+    private fun changeFilterSearch(tag: String){
+        if (filteredTag == tag){
+            filteredTag=""
+            updateView(chipSelected)
         }
         else{
-            newSearch = true
-            stringToSearch=string
-            recipeViewModel.getRecipesByTitleAndTags(string)
+            filteredTag=tag
+            recipeViewModel.getRecipes(searchTag = tag, by = sortedBy)
         }
     }
 
     private fun updateView(currentTabSelected: View) {
 
         when(currentTabSelected){
-            binding.recipeListingFilterRecent -> {
-                // recent
-                if (chipSelected!=null && chipSelected== RecipesSortingType.DATE){
-                    chipSelected = null
-                    recipeViewModel.getRecipesPaginated()
-                }
-                else{
-                    chipSelected = RecipesSortingType.DATE
-                    recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.DATE)
-                }
+            binding.recipeListingFilterVerified -> {
+                sortedBy = RecipesSortingType.VERIFIED
+                recipeViewModel.getRecipes(by = sortedBy)
             }
-            binding.recipeListingFilterSugestions -> {
-                // gostos
-                // todo
+            binding.recipeListingFilterAll-> {
+                sortedBy = RecipesSortingType.ALL
+                recipeViewModel.getRecipes()
             }
-            binding.recipeListingFilterPersonalizedSugestions -> {
-                // gostos
-                // todo
+            binding.recipeListingFilterRecent-> {
+                sortedBy = RecipesSortingType.DATE
+                recipeViewModel.getRecipes(by = sortedBy)
             }
-            binding.random -> {
-                // random
-                if (chipSelected!=null && chipSelected== RecipesSortingType.RANDOM){
-                    chipSelected = null
-                    recipeViewModel.getRecipesPaginated()
-                }
-                else{
-                    chipSelected = RecipesSortingType.RANDOM
-                    recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.RANDOM)
-                }
+            binding.recipeListingFilterSugestions-> {
+                // TODO
+                //sortedBy = RecipesSortingType.VERIFIED
+                //recipeViewModel.getRecipes(by = RecipesSortingType.SUGGESTION)
             }
-            binding.mostLiked -> {
-                // gostos
-
-                if (chipSelected!=null && chipSelected== RecipesSortingType.LIKES){
-                    chipSelected = null
-                    recipeViewModel.getRecipesPaginated()
-                }
-                else{
-                    chipSelected = RecipesSortingType.LIKES
-                    recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.LIKES)
-                }
+            binding.recipeListingFilterPersonalizedSugestions-> {
+                // TODO
+                //sortedBy = RecipesSortingType.VERIFIED
+                //recipeViewModel.getRecipes(by = RecipesSortingType.PERSONALIZED_SUGGESTION)
             }
-            binding.mostSaved -> {
-                // saves
-                if (chipSelected!=null && chipSelected== RecipesSortingType.SAVES){
-                    chipSelected = null
-                    recipeViewModel.getRecipesPaginated()
-                }
-                else{
-                    chipSelected = RecipesSortingType.SAVES
-                    recipeViewModel.getRecipesPaginatedSorted(by = RecipesSortingType.SAVES)
-                }
+            binding.recipeListingFilterRandom-> {
+                sortedBy = RecipesSortingType.RANDOM
+                recipeViewModel.getRecipes(by = sortedBy)
+            }
+            binding.recipeListingFilterMostLiked-> {
+                sortedBy = RecipesSortingType.LIKES
+                recipeViewModel.getRecipes(by = sortedBy)
+            }
+            binding.recipeListingFilterMostSaved-> {
+                sortedBy = RecipesSortingType.SAVES
+                recipeViewModel.getRecipes(by = sortedBy)
             }
         }
+        //slowly move to position 0
+        binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
+    }
+
+    private fun ChipGroup.selectChipByTag(desiredTag: String): Chip? {
+        for (index in 0 until childCount) {
+            val chip = getChildAt(index) as Chip
+            if (chip.text == desiredTag) {
+                chip.isChecked = true
+                return chip
+            }
+        }
+        return null
     }
 
     override fun onResume() {
+        changeStatusBarColor(mainColor = false,requireActivity(),context)
         super.onResume()
-        val window = requireActivity().window
-
-
-        //BACKGROUND in NAVIGATION BAR
-        window.statusBarColor = requireContext().getColor(R.color.background_1)
-        window.navigationBarColor = requireContext().getColor(R.color.main_color)
-
-        //TextColor in NAVIGATION BAR
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = 0
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
     }
-
 
 }

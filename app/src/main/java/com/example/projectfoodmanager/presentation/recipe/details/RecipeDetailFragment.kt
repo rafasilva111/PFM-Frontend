@@ -1,43 +1,29 @@
 package com.example.projectfoodmanager.presentation.recipe.details
 
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.databinding.FragmentBlankBinding
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.*
-import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.badge.ExperimentalBadgeUtils
-import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.tabs.TabLayout
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.*
 import javax.inject.Inject
 
 
@@ -54,6 +40,8 @@ class RecipeDetailFragment : Fragment() {
     // constants
     val TAG: String = "ReceitaDetailFragment"
     private var objRecipe: Recipe? = null
+
+
     lateinit var manager: LinearLayoutManager
 
     // injects
@@ -84,12 +72,22 @@ class RecipeDetailFragment : Fragment() {
     @ExperimentalBadgeUtils
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
+
         if (Build.VERSION.SDK_INT >= 33) {
             // TIRAMISU
             objRecipe = arguments?.getParcelable("Recipe", Recipe::class.java)
+            userPortion = arguments?.getFloat("UserPortion",-1F)!!
         } else {
             objRecipe = arguments?.getParcelable("Recipe")
+            userPortion = arguments?.getFloat("UserPortion",-1F)!!
         }
+
+        recipePortion = if (objRecipe!!.portion.lowercase().contains("pessoas"))
+            objRecipe!!.portion.split(" ")[0].toFloat()
+        else
+            -1F
 
         binding.calenderIB.setOnClickListener {
             findNavController().navigate(R.id.action_receitaDetailFragment_to_newCalenderEntryFragment,Bundle().apply {
@@ -295,8 +293,7 @@ class RecipeDetailFragment : Fragment() {
         //--------- FAVORITES ---------
         if (user.checkIfSaved(recipe) != -1) {
             binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
-        } else
-            binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
+        }
 
         binding.favoritesIB.setOnClickListener {
             if (sharedPreference.getUserSession().checkIfSaved(recipe) == -1) {
@@ -508,6 +505,23 @@ class RecipeDetailFragment : Fragment() {
 
         super.onStart()
     }
+
+    override fun onDestroy() {
+        //destroy variables
+        super.onDestroy()
+        userPortion = -1F
+        recipePortion = -1F
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
+
+
+    }
+
+    companion object{
+        var userPortion: Float = -1F
+        var recipePortion: Float = -1F
+    }
+
 
 
 

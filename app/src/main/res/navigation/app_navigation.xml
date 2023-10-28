@@ -67,13 +67,11 @@
         <action
             android:id="@+id/action_profile_to_favorites"
             app:destination="@id/favoritesFragment"
-            app:popUpTo="@id/profileFragment"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/profileFragment"/>
         <action
             android:id="@+id/action_profileFragment_to_settingsFragment"
             app:destination="@id/settingsFragment"
-            app:popUpTo="@id/profileFragment"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/profileFragment" />
         <action
             android:id="@+id/action_profileFragment_to_followerFragment"
             app:destination="@id/followerFragment" />
@@ -177,7 +175,7 @@
     </fragment>
     <fragment
         android:id="@+id/securityFragment"
-        android:name="com.example.projectfoodmanager.presentation.profile.settings.SecurityFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.settings.security.SecurityFragment"
         android:label="fragment_security"
         tools:layout="@layout/fragment_security" />
     <dialog

@@ -5,10 +5,12 @@ package com.example.projectfoodmanager
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.projectfoodmanager.databinding.ActivityMainBinding
+import com.example.projectfoodmanager.util.NetworkConnectivity
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
@@ -24,8 +26,20 @@ class MainActivity : AppCompatActivity() {
     val TAG: String = "MainActivity"
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val networkConnectivityObserver = NetworkConnectivity(applicationContext)
+        networkConnectivityObserver.observe(this){
+            if (it){
+                println("Connected")
+            }
+            else{
+                println("Not connected")
+            }
+        }
+
 
         FirebaseMessaging.getInstance().subscribeToTopic("/topics/myTopic")
         //window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)

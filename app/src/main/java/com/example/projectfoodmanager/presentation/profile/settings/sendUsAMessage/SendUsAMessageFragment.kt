@@ -1,0 +1,61 @@
+package com.example.projectfoodmanager.presentation.profile.settings.sendUsAMessage
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.example.projectfoodmanager.databinding.FragmentSendUsAMessageBinding
+import com.example.projectfoodmanager.util.SharedPreference
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
+
+@AndroidEntryPoint
+class SendUsAMessageFragment : Fragment() {
+
+
+    // binding
+    private lateinit var binding: FragmentSendUsAMessageBinding
+
+    // viewModels
+
+    // constants
+    private val TAG: String = "AboutUsFragment"
+
+    // injects
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+
+    // adapters
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?,
+
+        ): View {
+        binding = FragmentSendUsAMessageBinding.inflate(layoutInflater)
+
+
+
+        return binding.root
+    }
+
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setUI()
+        bindObservers()
+    }
+
+    private fun setUI() {
+
+    }
+
+    private fun bindObservers() {
+
+    }
+
+
+}

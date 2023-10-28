@@ -59,14 +59,14 @@ class CalendarEntryDetailFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         bindObservers()
-        if (Build.VERSION.SDK_INT >= 33) {
+        objCalEntry = if (Build.VERSION.SDK_INT >= 33) {
             // TIRAMISU
-            objCalEntry = arguments?.getParcelable("CalenderEntry", CalenderEntry::class.java)!!
+            arguments?.getParcelable("CalenderEntry", CalenderEntry::class.java)!!
         } else {
-            objCalEntry = arguments?.getParcelable("CalenderEntry")!!
+            arguments?.getParcelable("CalenderEntry")!!
         }
 
         if (this::binding.isInitialized) {
@@ -135,13 +135,10 @@ class CalendarEntryDetailFragment : Fragment() {
         //--> DESCRIPTION
         binding.recipeDescriptionTV.text = objCalEntry.recipe.description
         binding.recipeCL.setOnClickListener {
-
-            //TODO("GO DETAIL VIEW-> Problema pois o objCalEntry.recipe é simplified e o detail precisa da recipe completo")
-/*            findNavController().navigate(R.id.action_calendarEntryDetailFragment_to_receitaDetailFragment,Bundle().apply {
+            findNavController().navigate(R.id.action_calendarEntryDetailFragment_to_receitaDetailFragment,Bundle().apply {
                 putParcelable("Recipe",objCalEntry.recipe)
-            })*/
-            toast("RECIPE DETAIL por fazer",ToastType.INFO)
-
+                putFloat("UserPortion",sharedPreference.getUserSession().user_portion.toFloat())
+            })
         }
 
         // get user from shared prefrences
@@ -200,6 +197,8 @@ class CalendarEntryDetailFragment : Fragment() {
         //--> SET ON DATE CLICK
         binding.dateCV.setOnClickListener {
             showDatePickerDialog()
+
+
         }
 
         binding.dateCV.setOnTouchListener { _, event ->
@@ -366,9 +365,12 @@ class CalendarEntryDetailFragment : Fragment() {
         }
 
         datePicker.addOnPositiveButtonClickListener {
-
-            if(datePicker.headerText.length == 9)
+            if(datePicker.headerText.length == 9){
                 binding.dateValTV.text= getString(R.string.date_text, "0" + datePicker.headerText)
+            }else{
+                binding.dateValTV.text= datePicker.headerText
+            }
+
 
         }
 

@@ -132,16 +132,6 @@ class CalendarFragment : Fragment() {
         )
     }
 
-  /*  private val recipeCalenderAdapter by lazy {
-        RecipeCalenderAdapter(
-            CalenderUtils.daysInWeekArray(
-                currentDate
-            ),
-            onItemClicked = { text ->
-
-            }
-        )
-    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -163,6 +153,8 @@ class CalendarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //
+        binding.nRegistersTV.text = nrRecipes
 
         binding.addRegisterIB.setOnClickListener {
             findNavController().navigate(R.id.action_calendarFragment_to_newCalenderEntryFragment)
@@ -206,13 +198,13 @@ class CalendarFragment : Fragment() {
 
         binding.addBasketIB.setOnClickListener {
 
-            // checks for user portion
-            if (sharedPreference.getUserSession().user_portion == -1)
-                askUserPortionPreference()
-            else
-                navigateToCalenderShoppingList()
+
+            navigateToCalenderShoppingList()
         }
 
+        // checks for user portion
+        if (sharedPreference.getUserSession().user_portion == -1)
+            askUserPortionPreference()
 
         if (isOnline(view.context)) {
             binding.calEntrysRV.adapter = adapterEntry
@@ -228,6 +220,8 @@ class CalendarFragment : Fragment() {
                 }
                 binding.nRegistersTV.text = adapterEntry.itemCount.toString()
             }
+
+
 
         }
 
@@ -264,7 +258,7 @@ class CalendarFragment : Fragment() {
             navigateToCalenderShoppingList()
         }
         numberPicker.minValue = 1
-        numberPicker.maxValue = 100
+        numberPicker.maxValue = 20
         myDialog.show()
     }
 
@@ -360,11 +354,12 @@ class CalendarFragment : Fragment() {
                         adapterEntry.updateList(it.data!!.result)
 
                         if (it.data.result.size != 0){
-                            binding.nRegistersTV.text= it.data.result.size.toString()
+                            nrRecipes= it.data.result.size.toString()
                         }else{
-                            binding.nRegistersTV.text= "0"
+                            nrRecipes= "0"
                             binding.emptyRegTV.show()
                         }
+                        binding.nRegistersTV.text = nrRecipes
 
                     }
                     is NetworkResult.Error -> {
@@ -411,5 +406,8 @@ class CalendarFragment : Fragment() {
         //Todo: RAFA fazer save das calendersEntrys mediante a sharedpreferences e não diretamente
     }
 
+    companion object{
+        var nrRecipes = "0"
+    }
 
 }

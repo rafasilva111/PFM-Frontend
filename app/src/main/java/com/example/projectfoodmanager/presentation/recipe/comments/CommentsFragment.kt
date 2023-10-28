@@ -14,11 +14,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
-import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.databinding.FragmentBlankBinding
 import com.example.projectfoodmanager.databinding.FragmentCommentsBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
@@ -26,7 +24,6 @@ import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlin.math.ceil
 
 @AndroidEntryPoint
 class CommentsFragment : Fragment() {
@@ -203,7 +200,7 @@ class CommentsFragment : Fragment() {
                         binding.ETcomment.text.clear()
                         commentsList = mutableListOf()
                         adapter.cleanList()
-                        recipeViewModel.getCommentsOnRecipePaginated(recipeId,0)
+                        recipeViewModel.getCommentsByRecipePaginated(recipeId,0)
 
                     }
                     is NetworkResult.Error -> {
@@ -275,9 +272,9 @@ class CommentsFragment : Fragment() {
         // vai buscar os commentarios
 
         if (refreshPage == 0)
-            recipeViewModel.getCommentsOnRecipePaginated(recipeId,currentPage)
+            recipeViewModel.getCommentsByRecipePaginated(recipeId,currentPage)
         else
-            recipeViewModel.getCommentsOnRecipePaginated(recipeId,refreshPage)
+            recipeViewModel.getCommentsByRecipePaginated(recipeId,refreshPage)
 
         super.onResume()
     }

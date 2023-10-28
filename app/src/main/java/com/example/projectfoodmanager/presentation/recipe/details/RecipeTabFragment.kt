@@ -6,14 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListAdapter
-import android.widget.ListView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Tag
 import com.example.projectfoodmanager.databinding.FragmentRecipeTabBinding
-import com.example.projectfoodmanager.presentation.recipe.create.steps.IngredientsAdapter
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.RecipeListingFragmentFilters
 import com.google.android.material.chip.Chip
@@ -103,7 +100,7 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
                             context.resources.getColorStateList(R.color.catg_carne, null)
                         RecipeListingFragmentFilters.PEIXE -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_peixe, null)
-                        RecipeListingFragmentFilters.SOPA -> chipBackgroundColor =
+                        RecipeListingFragmentFilters.SOPAS -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_sopa, null)
                         RecipeListingFragmentFilters.VEGETARIANA -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_vegeteriana, null)

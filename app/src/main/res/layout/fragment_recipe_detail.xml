@@ -39,7 +39,7 @@
                 <ImageView
                     android:id="@+id/IV_Recipe"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="325dp"
                     android:adjustViewBounds="true"
                     android:contentDescription="recipe_image"
                     android:foreground="#56000000"
@@ -55,7 +55,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="30dp"
                     android:background="@drawable/bg_action_btn"
                     android:contentDescription="back"
                     android:elevation="9dp"
@@ -65,7 +65,6 @@
                     android:src="@drawable/ic_arrow"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="#515151"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
 
@@ -90,7 +89,7 @@
                     android:id="@+id/favoritesIB"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="30dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/bg_action_btn"
                     android:contentDescription="favorite"

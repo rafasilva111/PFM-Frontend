@@ -1,24 +1,18 @@
 package com.example.projectfoodmanager.viewmodels
 
 
-import android.os.Handler
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 
 import com.example.projectfoodmanager.data.repository.RecipeRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,62 +21,39 @@ class RecipeViewModel @Inject constructor (
     val repository: RecipeRepository
 ): ViewModel() {
 
-    private val TAG: String = "RecipeViewModel"
+    /**
+     * Recipes
+     */
 
-    private val _recipes = MutableLiveData<UiState<List<Recipe>>>()
-    val recipe: LiveData<UiState<List<Recipe>>>
-            get() = _recipes
+    val recipesResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
+        get() = repository.recipes
 
+    fun getRecipes(page: Int = 1, searchString: String = "", searchTag: String = "", by:String= ""){
 
-    val recipeResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
-        get() = repository.recipeResponseLiveData
-
-
-    fun getRecipesPaginated(page: Int = 1){
         viewModelScope.launch {
-            repository.getRecipesPaginated(page)
+            repository.getRecipes(page,searchString,searchTag,by)
+        }
+
+    }
+
+    val recipesCommentedByUserPaginated: LiveData<Event<NetworkResult<RecipeList>>>
+        get() = repository.recipesCommentedByUser
+
+    val recipesCommentedByUserSearchPaginated: LiveData<Event<NetworkResult<RecipeList>>>
+        get() = repository.recipesCommentedByUser
+
+    fun getRecipesCommentedByUserPaginated(page: Int = 1, clientId: Int, searchString: String? = null){
+        viewModelScope.launch {
+            repository.getRecipesCommentedByUser(page,clientId,searchString)
         }
     }
 
-    val recipeSortedResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
-        get() = repository.recipeSortedResponseLiveData
-
-    var i = 0
-    fun getRecipesPaginatedSorted(page: Int = 1,by:String){
-        val triggerFlow = MutableSharedFlow<Unit>()
-        triggerFlow
-            .debounce(1000) // wait for 300ms of inactivity before emitting the latest value
-            .onEach {
-                viewModelScope.launch {
-                    repository.getRecipesPaginatedSorted(page,by)
-                }
-            }
-            .distinctUntilChanged()
-            .launchIn(viewModelScope)
-        triggerFlow.tryEmit(Unit)
-    }
-
-    val recipeSearchByTitleAndTagsResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
-        get() = repository.recipeSearchByTitleAndTagsResponseLiveData
-
-    var getRecipesByTitleAndTagsJob: Job? = null
-
-    //falta implementar o debouncer
-    fun getRecipesByTitleAndTags(title: String,searchPage:Int) {
-        getRecipesByTitleAndTagsJob = viewModelScope.launch {
-            repository.getRecipesByTitleAndTags(title,searchPage)
-        }
-    }
-
-    fun getRecipesByTitleAndTags(title: String) {
-        getRecipesByTitleAndTags(title,1)
-    }
+    /**
+     * Like Function
+     */
 
     val functionLikeOnRecipe: LiveData<Event<NetworkResult<Int>>>
         get() = repository.functionLikeOnRecipe
-
-
-    // LIKE FUNCTION
 
     val userLikedRecipes: LiveData<Event<NetworkResult<RecipeList>>>
         get() = repository.userLikedRecipes
@@ -108,7 +79,9 @@ class RecipeViewModel @Inject constructor (
         }
     }
 
-    // SAVE FUNCTION
+    /**
+     * Save Function
+     */
 
     val functionAddSaveOnRecipe: LiveData<Event<NetworkResult<Int>>>
         get() = repository.functionAddSaveOnRecipe
@@ -128,15 +101,25 @@ class RecipeViewModel @Inject constructor (
         }
     }
 
-    // COMMENT FUNCTION
+    /**
+     * Comments Function
+     */
 
+    val functionGetCommentsByClientPaginated: LiveData<Event<NetworkResult<CommentList>>>
+        get() = repository.functionGetCommentsOnRecipePaginated
+
+    fun getCommentsByClientPaginated(clientId: Int, page: Int=1) {
+        viewModelScope.launch {
+            repository.getCommentsByClientPaginated(clientId,page)
+        }
+    }
 
     val functionGetCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
         get() = repository.functionGetCommentsOnRecipePaginated
 
-    fun getCommentsOnRecipePaginated(recipeId: Int,page: Int=1) {
+    fun getCommentsByRecipePaginated(recipeId: Int, page: Int=1) {
         viewModelScope.launch {
-            repository.getCommentsOnRecipePaginated(recipeId,page)
+            repository.getCommentsByRecipePaginated(recipeId,page)
         }
     }
 

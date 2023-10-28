@@ -39,28 +39,34 @@ interface RemoteDataSource {
 	suspend fun deleteUser(userId: Int): Response<String>
 	suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
 
-
 	//recipe
 	suspend fun createRecipe(recipe : RecipeRequest): Response<Recipe>
 	suspend fun getRecipe(recipeId: Int): Response<Recipe>
-	suspend fun getRecipesPaginated(page: Int): Response<RecipeList>
-	suspend fun getRecipesPaginatedSorted(page: Int,by:String): Response<RecipeList>
-	suspend fun getRecipesByTitleAndTags(string: String, page: Int): Response<RecipeList>
+
+	suspend fun getRecipes(by: String, searchString: String, searchTag: String, page: Int): Response<RecipeList>
+
 	suspend fun updateRecipe(recipeId: Int,recipe: RecipeRequest): Response<Recipe>
 	suspend fun deleteRecipe(recipeId: Int): Response<String>
+
 	suspend fun getUserLikedRecipes(): Response<RecipeList>
+
 	suspend fun addLike(recipeId: Int): Response<Unit>
 	suspend fun removeLike(recipeId: Int): Response<Unit>
 	suspend fun addSave(recipeId: Int): Response<Unit>
 	suspend fun removeSave(recipeId: Int): Response<Unit>
 
+	suspend fun getRecipesByClientPaginated(clientId: Int, page: Int): Response<RecipeList>
+	suspend fun getRecipesByClientSearchPaginated(clientId: Int, string: String, page: Int): Response<RecipeList>
+
+
 	//comments
 	suspend fun createComments(recipeId: Int,comment: CreateCommentRequest): Response<Comment>
-	suspend fun getCommentsByUser(userId: Int): Response<Comment>
 	suspend fun getCommentsByRecipePaginated(recipeId: Int,page: Int): Response<CommentList>
 	suspend fun getSizedCommentsByRecipePaginated(recipeId: Int, page: Int, pageSize: Int): Response<CommentList>
 	suspend fun updateComment(commentId: Int, comment: Comment): Response<Comment>
 	suspend fun deleteComment(commentId: Int): Response<Unit>
+	suspend fun getCommentsByClientPaginated(clientId: Int, page: Int): Response<CommentList>
+
 
 	//calender
 	suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<CalenderEntry>
@@ -69,7 +75,6 @@ interface RemoteDataSource {
 	suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingListSimplefied>
 	suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Unit>
 	suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
-
 
 	//followers
 	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>
@@ -84,14 +89,12 @@ interface RemoteDataSource {
 	suspend fun sendNotification(notificationModel: PushNotification): Response<ResponseBody>
 
 	// shopping list
-	// get
 	suspend fun getShoppingList() : Response<ListOfShoppingLists>
 	suspend fun getShoppingList(shoppingListId: Int): Response<ShoppingList>
-	// post
 	suspend fun postShoppingList(shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
-	// put
 	suspend fun putShoppingList(shoppingListId: Int, shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
-	// delete
 	suspend fun deleteShoppingList(shoppingListId: Int): Response<IdResponse>
+
+
 
 }

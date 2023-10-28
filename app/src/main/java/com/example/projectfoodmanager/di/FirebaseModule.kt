@@ -14,11 +14,6 @@ import javax.inject.Singleton
 @Module
 object FirebaseModule {
 
-    @Provides
-    @Singleton
-    fun providerFireStoreInstance(): FirebaseFirestore{
-        return FirebaseFirestore.getInstance()
-    }
 
     @Provides
     @Singleton
@@ -26,9 +21,4 @@ object FirebaseModule {
         return FirebaseStorage.getInstance()
     }
 
-    @Provides
-    @Singleton
-    fun providerFirebaseAuthInstance(): FirebaseAuth {
-        return FirebaseAuth.getInstance()
-    }
 }

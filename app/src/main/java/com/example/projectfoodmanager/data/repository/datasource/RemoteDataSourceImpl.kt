@@ -75,19 +75,17 @@ class RemoteDataSourceImpl @Inject constructor(
 	override suspend fun getRecipe(recipeId: Int): Response<Recipe> {
 		return apiInterface.getRecipe(recipeId = recipeId)
 	}
-	override suspend fun getRecipesPaginated(page: Int): Response<RecipeList> {
-		return apiInterface.getRecipePaginated(page = page)
+
+	override suspend fun getRecipesByClientPaginated(clientId: Int, page: Int): Response<RecipeList> {
+		return apiInterface.getRecipesByClientPaginated(clientId = clientId,page = page)
 	}
 
-	override suspend fun getRecipesPaginatedSorted(page: Int,by:String): Response<RecipeList> {
-		return apiInterface.getRecipePaginatedSorted(page = page,by = by)
-	}
+    override suspend fun getRecipesByClientSearchPaginated(clientId: Int, string: String, page: Int): Response<RecipeList> {
+		return apiInterface.getRecipesByClientSearchPaginated(clientId = clientId, string =  string,page = page)
+    }
 
-	override suspend fun getRecipesByTitleAndTags(
-		string: String,
-		page: Int
-	): Response<RecipeList> {
-		return apiInterface.getRecipesByTitleAndTags(string = string,page = page)
+	override suspend fun getRecipes(by: String, searchString: String, searchTag: String, page: Int): Response<RecipeList> {
+		return apiInterface.getRecipePaginated(page = page,searchString = searchString, searchTag=searchTag,by=by)
 	}
 
 	override suspend fun updateRecipe(recipeId: Int, recipe: RecipeRequest): Response<Recipe> {
@@ -129,14 +127,15 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getSizedCommentsByRecipePaginated(recipeId = recipeId,page = page,pageSize=pageSize)
     }
 
-    override suspend fun getCommentsByUser(userId: Int): Response<Comment> {
-		return apiInterface.getCommentsByUser(userId = userId)
-	}
 	override suspend fun updateComment(commentId: Int,comment : Comment): Response<Comment> {
 		return apiInterface.updateComments(commentId=commentId,comment = comment)
 	}
 	override suspend fun deleteComment(commentId: Int): Response<Unit> {
 		return apiInterface.deleteComments(commentId= commentId)
+	}
+
+	override suspend fun getCommentsByClientPaginated(clientId: Int,page: Int): Response<CommentList> {
+		return apiInterface.getCommentsByClientPaginated(clientId = clientId,page = page)
 	}
 
 	//Calender

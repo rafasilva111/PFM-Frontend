@@ -20,13 +20,15 @@ data class UserRequest(
     @SerializedName("img_source")
     var img_source: String? = null,
     @SerializedName("activity_level")
-    val activity_level: Float? = 0.00F,
+    val activity_level: Float? = null,
     @SerializedName("height")
-    val height: Float?=-1F,
+    val height: Float?=null,
     @SerializedName("sex")
     val sex: String?= null,
     @SerializedName("weight")
-    val weight: Float? =-1F,
+    val weight: Float? =null,
     @SerializedName("user_portion")
     val user_portion: Int? = null,
+    @SerializedName("profile_type")
+    val profile_type: String? = null,
 ) : Serializable, Parcelable

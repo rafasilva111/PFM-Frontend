@@ -23,7 +23,7 @@ data class Recipe(
     var comments: Int,
     val views: Int, //Ainda não esta a ser usado
     val description: String,
-    var tags: MutableList<Tag>? = mutableListOf(),
+    var tags: MutableList<Tag> = mutableListOf(),
     val ingredients: MutableList<IngredientQuantity>,
     val preparation: MutableList<Preparation>,
     val nutrition_information: NutritionInformations?,

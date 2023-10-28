@@ -16,6 +16,8 @@ object Constants {
     const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"
     const val PREFS_TOKEN_FILE = "prefs_token_file"
 
+    const val MAX_CALENDER_DAYS =15L
+
 }
 object FIREBASE_NOTIFICATIONS {
     const val BASE_URL = "https://fcm.googleapis.com"
@@ -23,17 +25,18 @@ object FIREBASE_NOTIFICATIONS {
     const val CONTENT_TYPE = "application/json"
 }
 
+object SharedPreferencesMetadata{
+    const val SESSION = "SESSION"
+    const val CALENDER_ENTRYS = "CALENDER_ENTRYS"
+    const val SHOPPING_LIST = "SHOPPING_LIST"
+    const val RECIPES_BACKGROUND = "RECIPES_BACKGROUND"
+}
 
 object SharedPreferencesConstants{
+    const val SHARED_PREFENCES_METADATA = "shared_preferences_metadata"
     const val USER_SESSION = "user_session"
     const val USER_SESSION_CALENDER = "user_session_calender"
     const val USER_SESSION_SHOPPING_LISTS = "user_session_shopping_list"
-}
-
-object ERROR_CODES {
-    const val SESSION_INVALID = 404
-    const val UNAUTORIZED = 403
-    const val BAD_INPUTS = "401"
 }
 
 object CALENDAR_MEALS_TAG {
@@ -53,16 +56,6 @@ object FireStorage{
     const val user_profile_images = "images/users/profile/"
 }
 
-object FireStoreCollection{
-    const val USER = "user"
-    const val RECIPE ="recipe"
-    const val RECIPE_PROD="recipes_test"
-}
-
-object FireStorePaginations{
-    const val RECIPE_LIMIT: Long = 5
-}
-
 object PaginationNumber{
     const val DEFAULT: Int = 5
     const val COMMENTS: Int = 20
@@ -76,7 +69,11 @@ object SharedPrefConstants {
 }
 
 object RecipesSortingType {
+    const val ALL = ""
     const val DATE = "DATE"
+    const val VERIFIED = "VERIFIED"
+    const val SUGGESTION = "SUGESTION"
+    const val PERSONALIZED_SUGGESTION = "SUGESTION"
     const val LIKES = "LIKES"
     const val SAVES = "SAVES"
     const val RANDOM = "RANDOM"
@@ -116,12 +113,12 @@ object RecipeDifficultyConstants{
 }
 
 object RecipeListingFragmentFilters {
-    val CARNE ="carne"
-    val PEIXE ="peixe"
-    val SOPA ="sopa"
-    val VEGETARIANA ="vegetariana"
-    val FRUTA ="fruta"
-    val BEBIDAS ="bebida"
+    const val CARNE ="carne"
+    const val PEIXE ="peixe"
+    const val SOPAS ="sopas"
+    const val VEGETARIANA ="veg"
+    const val FRUTA ="fruta"
+    const val BEBIDAS ="bebida"
     val SALADA ="salada"
     val PIZZA ="pizza"
     val SOBREMESA = "sobremesa"
@@ -133,6 +130,8 @@ object RecipeListingFragmentFilters {
     val PETISCO = "petisco"
 
 }
+
+
 
 object NutritionTable{
     val ENERGIA = "energia"
@@ -153,4 +152,17 @@ object NutritionTable{
     val PROTEINA = "proteina"
     //Falta adicionar este campo na BD
     val PROTEINA_PERC = "proteina_perc"
+}
+
+object FragmentRecipeLikesChipsTag{
+    val LIKED =  1
+    val SAVED =  2
+    val CREATED =  3
+    val COMMENTED =  4
+    val LAST_SEEN =  5
+}
+
+object ProfileType{
+    const val PUBLIC = "PUBLIC"
+    const val PRIVATE = "PRIVATE"
 }
