@@ -1,8 +1,9 @@
-package com.example.projectfoodmanager.data.model.modelResponse.follows
+package com.example.projectfoodmanager.data.model.modelResponse.notifications
+
 import com.example.projectfoodmanager.data.model.modelResponse.metadata.Metadata
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 
-data class FollowList(
+data class NotificationList(
     val _metadata: Metadata,
-    val result: MutableList<User>
+    val result: MutableList<Notification>
 )

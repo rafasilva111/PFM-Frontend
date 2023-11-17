@@ -10,15 +10,18 @@ import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.databinding.FragmentBlankBinding
 import com.example.projectfoodmanager.databinding.FragmentSettingsBinding
+import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
-import com.example.projectfoodmanager.util.ProfileType
-import com.example.projectfoodmanager.util.SharedPreference
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -46,35 +49,17 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSettingsBinding.inflate(layoutInflater)
+        if (!this::binding.isInitialized) {
+            binding = FragmentSettingsBinding.inflate(layoutInflater)
+        }
         return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setUI()
+
         super.onViewCreated(view, savedInstanceState)
-
-        user = sharedPreference.getUserSession()
-
-        /**
-         * Toggle buttons
-         */
-
-        setToggleButtonsInitialState()
-
-        setToggleButtonsFunctions()
-
-
-        binding.CLSecurity.setOnClickListener {
-            findNavController().navigate(R.id.action_settingsFragment_to_securityFragment)
-        }
-        binding.backIB.setOnClickListener {
-            findNavController().navigateUp()
-        }
-        binding.CL6.setOnClickListener {
-            findNavController().navigate(R.id.action_settingsFragment_to_blankFragment)
-        }
-
     }
 
     private fun setToggleButtonsFunctions() {
@@ -152,31 +137,93 @@ class SettingsFragment : Fragment() {
 
     }
 
-    private fun changeVisib_Menu(state : Boolean){
-        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        if(state){
-            menu!!.visibility=View.VISIBLE
-        }else{
-            menu!!.visibility=View.GONE
+    private fun setUI() {
+
+        /**
+         *  General
+         * */
+
+        val activity = requireActivity()
+        changeMenuVisibility(false, activity)
+        Helper.changeStatusBarColor(true, activity, requireContext())
+
+        /** internet connection observer*/
+
+        val networkConnectivityObserver = NetworkConnectivity(requireContext())
+
+        user = sharedPreference.getUserSession()
+
+        /**
+         * Toggle buttons
+         */
+
+        setToggleButtonsInitialState()
+
+        setToggleButtonsFunctions()
+
+
+        /**
+         * Buttons
+         */
+
+        binding.backIB.setOnClickListener {
+            findNavController().navigateUp()
         }
+
+        binding.CLSecurity.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_securityFragment)
+        }
+
+        binding.CLLanguages.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_languagesFragment)
+        }
+
+        binding.CLAboutUs.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_aboutUsFragment)
+        }
+
+        binding.CLFAQs.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_FAQsFragment)
+        }
+
+        binding.CLSendUsAMessage.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_sendUsAMessageFragment)
+        }
+
+        binding.BTNDeleteAccountB.setOnClickListener {
+            if (MainActivity.internetConnection){
+                MaterialAlertDialogBuilder(requireContext())
+                    .setIcon(R.drawable.ic_logout)
+                    .setTitle(getString(R.string.settings_fragment_dialog_title))
+                    .setMessage(getString(R.string.settings_fragment_dialog_desc))
+                    .setPositiveButton(getString(R.string.profile_fragment_logout_dialog_yes)) { _, _ ->
+                        // Adicione aqui o código para apagar o registro
+                        authViewModel.deleteUserAccount()
+                        changeMenuVisibility(false, activity)
+                        findNavController().navigate(R.id.action_settingsFragment_to_login)
+
+                    }
+                    .setNegativeButton(getString(R.string.profile_fragment_logout_dialog_no)) { dialog, _ ->
+                        // Adicione aqui o código para cancelar a exclusão do registro
+                        dialog.dismiss()
+                    }
+                    .show()
+
+            }
+            else{
+                toast("You don't have internet connection...",type = ToastType.ALERT)
+            }
+
+        }
+
     }
 
-    override fun onResume() {
-        requireActivity().window.decorView.systemUiVisibility = 0
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
-        changeVisib_Menu(false)
-
-        super.onResume()
-    }
 
     override fun onStop() {
         super.onStop()
-        requireActivity().window.decorView.systemUiVisibility = 8192
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
-        changeVisib_Menu(true)
 
         // update user
-
-        authViewModel.updateUser(UserRequest(fmc_token = fmcToken,profile_type = profileType))
+        if ( fmcToken != null ||profileType != null)
+            authViewModel.updateUser(UserRequest(fmc_token = fmcToken,profile_type = profileType))
     }
 }

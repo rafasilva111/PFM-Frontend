@@ -11,8 +11,10 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -73,7 +75,7 @@
                     android:id="@+id/titleET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="0dp"/>
+                    android:padding="0dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -86,20 +88,20 @@
                 android:layout_marginTop="20dp"
                 android:hint="Description"
                 android:outlineProvider="none"
+                app:counterEnabled="true"
+                app:counterMaxLength="255"
                 app:layout_constraintEnd_toEndOf="@+id/titleTL"
                 app:layout_constraintStart_toStartOf="@+id/titleTL"
-                app:layout_constraintTop_toBottomOf="@+id/titleTL"
-                app:counterEnabled="true"
-                app:counterMaxLength="255">
+                app:layout_constraintTop_toBottomOf="@+id/titleTL">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descriptionET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
                     android:gravity="top"
+                    android:inputType="textMultiLine"
                     android:minLines="5"
-                    android:padding="10dp"/>
+                    android:padding="10dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,8 +112,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:hint="Time"
-                app:expandedHintEnabled="false"
                 android:outlineProvider="none"
+                app:expandedHintEnabled="false"
                 app:layout_constraintEnd_toEndOf="@+id/titleTL"
                 app:layout_constraintStart_toStartOf="@+id/titleTL"
                 app:layout_constraintTop_toBottomOf="@+id/descriptionTL"
@@ -121,10 +123,10 @@
                     android:id="@+id/timeET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:focusable="false"
                     android:hint="Ex: 2:30"
-                    android:padding="0dp"
-                    android:focusable="false"/>
+                    android:inputType="text"
+                    android:padding="0dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -146,7 +148,7 @@
                     android:layout_weight="1"
                     android:hint="Difficulty"
                     android:inputType="none"
-                    android:padding="0dp"/>
+                    android:padding="0dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -167,9 +169,9 @@
                     android:id="@+id/portionET"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
                     android:hint="Ex: 4 pessoas"
-                    android:padding="0dp"/>
+                    android:inputType="text"
+                    android:padding="0dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -308,8 +310,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                app:boxBackgroundColor="#00FFFFFF"
                 android:hint="Nova Tag"
+                app:boxBackgroundColor="#00FFFFFF"
                 app:expandedHintEnabled="false"
                 app:layout_constraintEnd_toEndOf="@+id/linearLayout21"
                 app:layout_constraintStart_toStartOf="@+id/linearLayout21"
@@ -317,9 +319,9 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tagSecET"
-                    android:backgroundTint="#00FFFFFF"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="#00FFFFFF"
                     android:hint="Digite um nome de uma tag"
                     android:inputType="text" />
 

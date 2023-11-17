@@ -23,6 +23,8 @@ import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFor
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToFormatTime
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
+import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
+import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -93,10 +95,10 @@ class CalendarEntryDetailFragment : Fragment() {
         binding.authorTV.text = objCalEntry.recipe.created_by.name
 
         //-> Load Author img
-        Helper.loadUserImage(binding.authorIV, objCalEntry.recipe.created_by.img_source)
+        loadUserImage(binding.authorIV, objCalEntry.recipe.created_by.img_source)
 
         //-> Load Recipe img
-        Helper.loadRecipeImage(binding.imageView,objCalEntry.recipe.img_source)
+        loadRecipeImage(binding.imageView,objCalEntry.recipe.img_source)
 
 
         //--> AUTHOR NAME

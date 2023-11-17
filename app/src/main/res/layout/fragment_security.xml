@@ -7,7 +7,7 @@
     tools:context=".presentation.profile.settings.security.SecurityFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout6"
+        android:id="@+id/topTab"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:background="@drawable/layout_bg_rounded_2_corners_v1"
@@ -27,7 +27,7 @@
             android:outlineProvider="none"
             android:src="@drawable/ic_back_black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout6" />
+            app:layout_constraintTop_toTopOf="@+id/topTab" />
 
         <TextView
             android:id="@+id/name"
@@ -58,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6">
+        app:layout_constraintTop_toBottomOf="@+id/topTab">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/CL_1"

@@ -20,6 +20,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentGoalsBinding
+import com.example.projectfoodmanager.util.Helper
+import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.LOGIN_TIME
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
@@ -54,9 +57,7 @@ class GoalsFragment : Fragment() {
 
 
             //check for user bio data
-            authViewModel.getUserSession()
-
-
+            //authViewModel.getUserSession()
 
 
         }
@@ -80,24 +81,10 @@ class GoalsFragment : Fragment() {
 
 
 
-    private fun isOnline(context: Context): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val capabilities =
-            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        if (capabilities != null) {
-            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
-                return true
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
-                return true
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
-                return true
-            }
-        }
-        return false
+    override fun onStart() {
+        changeStatusBarColor(false, activity, context)
+
+        super.onStart()
     }
     private fun changeVisibilityMenu(state : Boolean){
         val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)

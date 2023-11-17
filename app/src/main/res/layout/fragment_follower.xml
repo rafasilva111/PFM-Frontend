@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_1"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     tools:context=".presentation.follower.FollowerFragment">
 
     <ImageButton
@@ -52,12 +53,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/selector_tab_button"
+            android:background="@color/transparent"
             android:fontFamily="@font/fredoka_one"
             android:paddingBottom="5dp"
             android:text="@string/followers"
-            android:textSize="16sp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/followedsBTN"
@@ -67,8 +68,20 @@
             android:background="@color/transparent"
             android:fontFamily="@font/fredoka_one"
             android:text="@string/followeds"
-            android:textSize="16sp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/findFollowsBTN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:fontFamily="@font/fredoka_one"
+            android:paddingBottom="5dp"
+            android:text="@string/fragment_followers_find_follows"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
     </LinearLayout>
 
 
@@ -82,6 +95,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout19">
+
+        <android.widget.SearchView
+            android:id="@+id/SVsearch"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:queryBackground="@android:color/transparent"
+            android:background="@drawable/layout_bg_low"
+            android:backgroundTint="#ECECEC"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:padding="5dp"
+            android:iconifiedByDefault="false"
+            android:queryHint="@string/fragment_follower_search_hint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvName"
+            android:visibility="gone"/>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/requestFollowCV"
@@ -130,9 +161,9 @@
                     android:fontFamily="@font/fredoka_regular"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
-                    android:text="100"
+                    android:text="@string/fragment_follower_follower_request_count"
                     android:textColor="@color/white"
-                    android:textSize="10sp"
+                    android:textSize="11sp"
                     app:layout_constraintStart_toEndOf="@+id/imgFirstReqCV"
                     app:layout_constraintTop_toTopOf="@+id/imgFirstReqCV" />
 
@@ -195,15 +226,14 @@
         android:id="@+id/emptyFollowTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
         android:fontFamily="@font/fredoka_regular"
-        android:text="@string/no_followeds"
+        android:text="@string/no_followers"
         android:textSize="15sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchBar" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout19" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

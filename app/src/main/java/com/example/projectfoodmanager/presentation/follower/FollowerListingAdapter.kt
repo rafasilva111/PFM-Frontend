@@ -4,29 +4,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Avatar
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemFollowerLayoutBinding
-import com.example.projectfoodmanager.util.FireStorage
 import com.example.projectfoodmanager.util.FollowType
 import com.example.projectfoodmanager.util.Helper
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 
 
-class FollowerListingAdaptar(
-    followType: Int,
+class FollowerListingAdapter(
+    private var followType: Int,
     val onItemClicked: (Int) -> Unit,
-    val onActionBTNClicked: (Int) -> Unit,
+    val onActionBTNClicked: (Int,Int) -> Unit,
     val onRemoveBTNClicked: (Int,Int) -> Unit,
-) : RecyclerView.Adapter<FollowerListingAdaptar.MyViewHolder>() {
+) : RecyclerView.Adapter<FollowerListingAdapter.MyViewHolder>() {
 
-    private val TAG: String? = "FollowerAdapter"
+    private val TAG: String = "FollowerAdapter"
     private var list: MutableList<User> = arrayListOf()
-    private val followType: Int = followType
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -39,9 +32,15 @@ class FollowerListingAdaptar(
         holder.bind(item)
     }
 
-    fun updateList(list: MutableList<User>){
+    fun updateList(list: MutableList<User>,followType: Int? = null){
+        if (followType != null)
+            this.followType = followType
         this.list = list
         notifyDataSetChanged()
+    }
+
+    fun getList():MutableList<User>{
+        return this.list
     }
 
     fun updateItem(position: Int,item: User){
@@ -81,11 +80,6 @@ class FollowerListingAdaptar(
             }
 
             when(followType){
-                FollowType.NOT_FOLLOWER ->{
-                    binding.removeFollowBTN.visibility=View.VISIBLE
-                    binding.removeFollowBTN.text="Remove"
-                    binding.actionFollowBTN.text="Confirmation"
-                }
                 FollowType.FOLLOWERS -> {
                     binding.removeFollowBTN.visibility=View.VISIBLE
                     binding.removeFollowBTN.text="Remove"
@@ -96,6 +90,10 @@ class FollowerListingAdaptar(
                     binding.removeFollowBTN.text="Followed"
                     binding.actionFollowBTN.visibility=View.GONE
                 }
+                else -> {
+                    binding.removeFollowBTN.visibility=View.GONE
+                    binding.actionFollowBTN.visibility=View.VISIBLE
+                }
             }
 
             binding.itemLayoutCL.setOnClickListener {
@@ -104,15 +102,11 @@ class FollowerListingAdaptar(
 
             binding.actionFollowBTN.setOnClickListener {
 
-                if (binding.removeFollowBTN.visibility==View.VISIBLE)
-                    binding.removeFollowBTN.visibility=View.GONE
-
-                onActionBTNClicked.invoke(user.id)
+                onActionBTNClicked.invoke(bindingAdapterPosition,user.id)
             }
 
             binding.removeFollowBTN.setOnClickListener {
-                binding.removeFollowBTN.visibility=View.GONE
-                binding.actionFollowBTN.text="Follow"
+
                 onRemoveBTNClicked.invoke(bindingAdapterPosition, user.id)
             }
 

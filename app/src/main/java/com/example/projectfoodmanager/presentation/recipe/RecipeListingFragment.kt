@@ -29,6 +29,7 @@ import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -48,11 +49,14 @@ class RecipeListingFragment : Fragment() {
 
     // viewModels
     private val recipeViewModel by activityViewModels<RecipeViewModel>()
+    private val authViewModel by activityViewModels<AuthViewModel>()
 
     // constants
     private val TAG: String = "RecipeListingFragment"
 
     private var recipeList: MutableList<Recipe> = mutableListOf()
+
+    // pagination
     private var currentPage:Int = 1
     private var nextPage:Boolean = true
 
@@ -124,22 +128,7 @@ class RecipeListingFragment : Fragment() {
         return if (this::binding.isInitialized){
             binding.root
         }else {
-           /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val window = requireActivity().window
-                window.decorView.systemUiVisibility = 8192
-                window.setDecorFitsSystemWindows(true)
-                val controller = window.insetsController
-                if (controller != null) {
-                    controller.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                }
-            } else {
-                @Suppress("DEPRECATION")
-                requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                WindowCompat.setDecorFitsSystemWindows(requireActivity().window, true)
-            }
 
-            requireActivity().window.navigationBarColor = requireContext().getColor(R.color.main_color)
-            requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)*/
 
             binding = FragmentRecipeListingBinding.inflate(layoutInflater)
             manager = LinearLayoutManager(activity)
@@ -148,36 +137,52 @@ class RecipeListingFragment : Fragment() {
             binding.recyclerView.layoutManager = manager
             snapHelper.attachToRecyclerView(binding.recyclerView)
 
-
-            setRecyclerViewScrollListener()
             binding.root
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setUI()
         super.onViewCreated(view, savedInstanceState)
-        changeMenuVisibility(true,activity)
+
+    }
+
+    private fun setUI() {
+
+
+        /**
+         * General
+         */
+
+        val activity = requireActivity()
+        changeMenuVisibility(true, activity)
+        changeStatusBarColor(false,activity,requireContext())
+
+
+
+
+        setRecyclerViewScrollListener()
 
         //Get User in SharedPreferences
         val user = sharedPreference.getUserSession()
 
-        binding.tvName.text =  formatNameToNameUpper(getString(R.string.full_name, user.name))
+        binding.tvName.text = formatNameToNameUpper(getString(R.string.full_name, user.name))
 
         //VIP HEADER
-        if(user.user_type != "V"){
-            binding.profileCV.foreground=null
-            binding.vipIV.visibility=View.INVISIBLE
+        if (user.user_type != "V") {
+            binding.profileCV.foreground = null
+            binding.vipIV.visibility = View.INVISIBLE
         }
 
         //VERIFIED HEADER
-        if(user.verified)
-            binding.verifyUserHeaderIV.visibility=View.VISIBLE
+        if (user.verified)
+            binding.verifyUserHeaderIV.visibility = View.VISIBLE
 
         //Set Profile Image
-        loadUserImage(binding.ivProfilePic,user.img_source)
+        loadUserImage(binding.ivProfilePic, user.img_source)
 
 
-        if (isOnline(view.context)) {
+        if (isOnline(requireContext())) {
             binding.recyclerView.adapter = adapter
 
             // get recipes for first time
@@ -204,25 +209,39 @@ class RecipeListingFragment : Fragment() {
                             if (stringToSearch == text) {
                                 // verifica se tag está a ser usada se não pesquisa a string nas tags da receita
                                 if (filteredTag.isEmpty())
-                                    recipeViewModel.getRecipes(page = currentPage, searchString = stringToSearch,searchTag= stringToSearch, by = sortedBy)
-                                else{
-                                    recipeViewModel.getRecipes(page = currentPage, searchString = stringToSearch,searchTag= filteredTag, by = sortedBy)
+                                    recipeViewModel.getRecipes(
+                                        page = currentPage,
+                                        searchString = stringToSearch,
+                                        searchTag = stringToSearch,
+                                        by = sortedBy
+                                    )
+                                else {
+                                    recipeViewModel.getRecipes(
+                                        page = currentPage,
+                                        searchString = stringToSearch,
+                                        searchTag = filteredTag,
+                                        by = sortedBy
+                                    )
                                 }
                             }
                         }, 400)
 
-                        stringToSearch=text
+                        stringToSearch = text
 
                     } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
-                    else if (stringToSearch != "" && text == ""){
-                        stringToSearch=text
+                    else if (stringToSearch != "" && text == "") {
+                        stringToSearch = text
                         recipeList = mutableListOf()
                         currentPage = 1
 
-                        recipeViewModel.getRecipes(page = currentPage, searchString = stringToSearch,searchTag= filteredTag, by = sortedBy)
-                    }
-                    else{
-                        stringToSearch=""
+                        recipeViewModel.getRecipes(
+                            page = currentPage,
+                            searchString = stringToSearch,
+                            searchTag = filteredTag,
+                            by = sortedBy
+                        )
+                    } else {
+                        stringToSearch = ""
                     }
 
                     //slowly move to position 0
@@ -237,7 +256,7 @@ class RecipeListingFragment : Fragment() {
 
             binding.notificationIV.setOnClickListener {
                 findNavController().navigate(R.id.action_recipeListingFragment_to_notificationFragment)
-                changeMenuVisibility(false,activity)
+                changeMenuVisibility(false, activity)
             }
 
 
@@ -262,6 +281,12 @@ class RecipeListingFragment : Fragment() {
                     chipSelected.isChecked = true
                 }
             }
+
+            /**
+             * Notifications
+             */
+
+            authViewModel.getNotifications()
 
             /**
              * Bottom Tag Filters
@@ -292,7 +317,7 @@ class RecipeListingFragment : Fragment() {
                 filterOnClick(RecipeListingFragmentFilters.BEBIDAS)
             }
 
-        } else{
+        } else {
             binding.offlineTV.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.GONE
         }
@@ -387,6 +412,9 @@ class RecipeListingFragment : Fragment() {
 
     private fun bindObservers() {
 
+        /**
+         * Recipes
+         */
 
         recipeViewModel.recipesResponseLiveData.observe(viewLifecycleOwner
         ) { networkResultEvent ->
@@ -461,8 +489,9 @@ class RecipeListingFragment : Fragment() {
             }
         }
 
-
-        // Like function
+        /**
+         * Like function
+         */
 
 
         recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { networkResultEvent ->
@@ -517,7 +546,9 @@ class RecipeListingFragment : Fragment() {
             }
         }
 
-        // save function
+        /**
+         * Save function
+         */
 
         recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
@@ -558,6 +589,36 @@ class RecipeListingFragment : Fragment() {
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(it.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        /**
+         * Notifications
+         */
+
+        authViewModel.getNotificationsResponseLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+
+                        val notificationNumber = it.data!!.result.count { notification ->
+                            !notification.seen
+                        }
+
+                        if (notificationNumber>0 ) {
+                            binding.notificationsBadgeTV.visibility = View.VISIBLE
+                            binding.notificationsBadgeTV.text = notificationNumber.toString()
+                        } else{
+                            binding.notificationsBadgeTV.visibility =View.GONE
+                        }
+
+                    }
+                    is NetworkResult.Error -> {
+
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -631,8 +692,11 @@ class RecipeListingFragment : Fragment() {
         return null
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onResume() {
-        changeStatusBarColor(mainColor = false,requireActivity(),context)
         super.onResume()
     }
 

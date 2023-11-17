@@ -2,13 +2,13 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.api.ApiInterface
-import com.example.projectfoodmanager.data.api.ApiNotificationInterface
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
+import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
@@ -19,22 +19,22 @@ import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.List
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
-import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.PushNotification
+import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
+import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
-import com.example.projectfoodmanager.util.FollowType
-import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
-	private val apiInterface: ApiInterface,
-	private val apiNotificationInterface: ApiNotificationInterface
+	private val apiInterface: ApiInterface
 ) : RemoteDataSource {
 
 	//User
@@ -60,8 +60,8 @@ class RemoteDataSourceImpl @Inject constructor(
 	override suspend fun updateUser(user: UserRequest): Response<User> {
 		return apiInterface.updateUser(user = user )
 	}
-	override suspend fun deleteUser(userId: Int): Response<String> {
-		return apiInterface.deleteUser(userId = userId)
+	override suspend fun deleteUser(): Response<String> {
+		return apiInterface.deleteUser()
 	}
 
 	override suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds> {
@@ -163,49 +163,53 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.patchCalenderEntry(calenderEntryId,calenderPatchRequest)
 	}
 
-	//Followers
+	/** Follows  */
+
 	override suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse> {
 		return apiInterface.createFollower(userSenderId = userSenderId,userReceiverId = userReceiverId)
 	}
 
-	override suspend fun getFollowers(userId: Int): Response<FollowList> {
+	override suspend fun getFollowers(userId: Int): Response<UserList> {
 		if(userId==-1)
 			return apiInterface.getFollowers()
 
 		return apiInterface.getFollowersByUser(userId)
 	}
-	override suspend fun getFolloweds(id_user: Int): Response<FollowList> {
-		if(id_user==-1)
+	override suspend fun getFolloweds(userId: Int): Response<UserList> {
+		if(userId==-1)
 			return apiInterface.getFolloweds()
 
-		return apiInterface.getFollowedsByUser(id_user)
+		return apiInterface.getFollowedsByUser(userId)
 	}
 
-	override suspend fun getFollowRequests(): Response<FollowList> {
-		return apiInterface.getFollowRequests()
+	override suspend fun deleteFollower(userId: Int): Response<Unit> {
+		return apiInterface.deleteFollower(userId)
 	}
 
-	override suspend fun postAcceptFollowRequest(userId: Int): Response<Unit> {
-		return apiInterface.postAcceptFollowRequest(userId)
+	override suspend fun deleteFollow(userId: Int): Response<Unit> {
+		return apiInterface.deleteFollow(userId)
 	}
 
-	override suspend fun deleteFollowRequest(followType:Int, userId: Int): Response<Unit> {
-		when(followType){
-			FollowType.FOLLOWERS -> return apiInterface.deleteFollowerRequest(userId)
-			FollowType.FOLLOWEDS -> return apiInterface.deleteFollowedRequest(userId)
-			else -> return apiInterface.deleteAcceptFollowRequest(userId)
-		}
+	/** Follows Requests */
+
+	override suspend fun getUsersToFollow(searchString:String?,page: Int?,pageSize:Int?): Response<UsersToFollowList> {
+		return apiInterface.getUsersToFollow(searchString,page,pageSize)
+	}
+
+	override suspend fun getFollowRequests(pageSize: Int): Response<UserList> {
+		return apiInterface.getFollowRequests(pageSize)
 	}
 
 	override suspend fun postFollowRequest(userId: Int): Response<Unit> {
 		return apiInterface.postFollowRequest(userId)
 	}
 
+	override suspend fun postAcceptFollowRequest(userId: Int): Response<Unit> {
+		return apiInterface.postAcceptFollowRequest(userId)
+	}
 
-	//notifications
-
-	override suspend fun sendNotification(notificationModel: PushNotification): Response<ResponseBody> {
-		return apiNotificationInterface.sendNotification(notificationModel)
+	override suspend fun deleteFollowRequest(userId: Int): Response<Unit> {
+		return apiInterface.deleteFollowRequest(userId)
 	}
 
 	// shopping list
@@ -233,6 +237,34 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.deleteShoppingList(shoppingListId)
 	}
 
+	/** Notifications */
 
+	override suspend fun getNotifications(page: Int?, pageSize: Int?): Response<NotificationList> {
+		return apiInterface.getNotifications(page,pageSize)
+	}
 
+	override suspend fun getNotification(id: Int?) : Response<Notification>{
+		return apiInterface.getNotification(id)
+	}
+
+	override suspend fun putNotification(id: Int?, notification: Notification): Response<Unit> {
+		return apiInterface.putNotification(id,notification)
+	}
+
+	override suspend fun putNotifications(idListRequest: IdListRequest): Response<Unit> {
+		return apiInterface.putNotifications(idListRequest)
+	}
+
+	override suspend fun deleteNotification(id: Int?):Response<Unit> {
+		return apiInterface.deleteNotification(id)
+	}
+	override suspend fun deleteNotifications(idListRequest: IdListRequest):Response<Unit> {
+		return apiInterface.deleteNotifications(idListRequest)
+	}
+
+	/** Application report */
+
+	override suspend fun postAppReport(applicationReport: ApplicationReport): Response<Unit> {
+		return apiInterface.postAppReport(applicationReport)
+	}
 }

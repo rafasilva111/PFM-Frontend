@@ -7,6 +7,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
+import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
@@ -17,14 +18,16 @@ import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.List
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
-import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.PushNotification
+import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
+import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
-import okhttp3.ResponseBody
 import retrofit2.Response
 
 interface RemoteDataSource {
@@ -36,7 +39,7 @@ interface RemoteDataSource {
 	suspend fun getUserAuth() : Response<User>
 	suspend fun getUserById(userId: Int): Response<UserAuthResponse>
 	suspend fun updateUser(user: UserRequest): Response<User>
-	suspend fun deleteUser(userId: Int): Response<String>
+	suspend fun deleteUser(): Response<String>
 	suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
 
 	//recipe
@@ -78,15 +81,16 @@ interface RemoteDataSource {
 
 	//followers
 	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>
-	suspend fun getFollowers(userId: Int): Response<FollowList>
-	suspend fun getFolloweds(userId: Int): Response<FollowList>
-	suspend fun getFollowRequests(): Response<FollowList>
+	suspend fun getFollowers(userId: Int): Response<UserList>
+	suspend fun getFolloweds(userId: Int): Response<UserList>
+	suspend fun getFollowRequests(pageSize: Int): Response<UserList>
 	suspend fun postAcceptFollowRequest(userId: Int): Response<Unit>
-    suspend fun deleteFollowRequest(followType: Int, userId: Int): Response<Unit>
+    suspend fun deleteFollowRequest( userId: Int): Response<Unit>
+    suspend fun deleteFollower(userId: Int): Response<Unit>
+	suspend fun deleteFollow(userId: Int): Response<Unit>
 	suspend fun postFollowRequest(userId: Int): Response<Unit>
+	suspend fun getUsersToFollow(searchString:String?,page: Int?,pageSize:Int?): Response<UsersToFollowList>
 
-	//notifications
-	suspend fun sendNotification(notificationModel: PushNotification): Response<ResponseBody>
 
 	// shopping list
 	suspend fun getShoppingList() : Response<ListOfShoppingLists>
@@ -94,6 +98,20 @@ interface RemoteDataSource {
 	suspend fun postShoppingList(shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
 	suspend fun putShoppingList(shoppingListId: Int, shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
 	suspend fun deleteShoppingList(shoppingListId: Int): Response<IdResponse>
+
+	/** Notifications */
+
+	suspend fun getNotifications(page: Int?, pageSize: Int?): Response<NotificationList>
+	suspend fun getNotification(id: Int?): Response<Notification>
+	suspend fun putNotification(id: Int?, notification: Notification): Response<Unit>
+	suspend fun putNotifications(idListRequest: IdListRequest): Response<Unit>
+	suspend fun deleteNotification(id: Int?): Response<Unit>
+	suspend fun deleteNotifications(idListRequest: IdListRequest): Response<Unit>
+
+	/** Application report */
+
+	suspend fun postAppReport(applicationReport: ApplicationReport): Response<Unit>
+
 
 
 

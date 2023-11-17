@@ -154,6 +154,8 @@ class FavoritesFragment : Fragment() {
         bindObservers()
         user = sharedPreference.getUserSession()
         //valida shared preferences
+
+
         try {
 
             if (user.liked_recipes.isNullOrEmpty()) {
@@ -303,6 +305,11 @@ class FavoritesFragment : Fragment() {
 
         }
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onStart() {
+        Helper.changeStatusBarColor(false, activity, context)
+        super.onStart()
     }
 
     private fun updateView(currentTabSelected: View) {

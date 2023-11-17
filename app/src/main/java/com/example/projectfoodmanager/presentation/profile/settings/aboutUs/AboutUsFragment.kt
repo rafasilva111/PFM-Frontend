@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.databinding.FragmentAboutUsBinding
+import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.SharedPreference
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -51,6 +53,18 @@ class AboutUsFragment : Fragment() {
 
     private fun setUI() {
 
+        /**
+         * General
+         */
+
+        val activity = requireActivity()
+
+        Helper.changeMenuVisibility(false, activity)
+        Helper.changeStatusBarColor(true, activity, this.context)
+
+        binding.backIB.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun bindObservers() {

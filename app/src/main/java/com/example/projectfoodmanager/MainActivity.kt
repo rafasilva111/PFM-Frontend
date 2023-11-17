@@ -3,6 +3,7 @@ package com.example.projectfoodmanager
 
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.collectAsState
@@ -10,6 +11,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.projectfoodmanager.databinding.ActivityMainBinding
+import com.example.projectfoodmanager.util.Helper.Companion.MENU_VISIBILITY
+import com.example.projectfoodmanager.util.Helper.Companion.STATUS_BAR_COLOR
 import com.example.projectfoodmanager.util.NetworkConnectivity
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -34,11 +37,14 @@ class MainActivity : AppCompatActivity() {
         networkConnectivityObserver.observe(this){
             if (it){
                 println("Connected")
+                internetConnection = true
             }
             else{
                 println("Not connected")
+                internetConnection = false
             }
         }
+
 
 
         FirebaseMessaging.getInstance().subscribeToTopic("/topics/myTopic")
@@ -64,11 +70,14 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-
     override fun onResume() {
+
+        MENU_VISIBILITY = this.findViewById<BottomNavigationView>(R.id.bottomNavigationView).visibility == View.VISIBLE
+
         super.onResume()
-        window.decorView.systemUiVisibility = 8192
-        window.navigationBarColor = this.getColor(R.color.main_color)
-        window.statusBarColor =  this.getColor(R.color.background_1)
+    }
+
+    companion object{
+        var internetConnection = true
     }
 }

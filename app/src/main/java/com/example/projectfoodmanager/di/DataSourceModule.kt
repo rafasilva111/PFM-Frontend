@@ -16,7 +16,7 @@ class DataSourceModule {
 
 	@Provides
 	@Singleton
-	fun provideRemoteDataSource(apiInterface: ApiInterface, apiNotificationInterface: ApiNotificationInterface): RemoteDataSource {
-		return RemoteDataSourceImpl(apiInterface = apiInterface, apiNotificationInterface = apiNotificationInterface)
+	fun provideRemoteDataSource(apiInterface: ApiInterface): RemoteDataSource {
+		return RemoteDataSourceImpl(apiInterface = apiInterface)
 	}
 }

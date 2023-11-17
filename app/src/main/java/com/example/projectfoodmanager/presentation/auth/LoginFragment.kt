@@ -10,10 +10,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.databinding.FragmentBlankBinding
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
+import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -38,36 +43,25 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        binding = FragmentLoginBinding.inflate(layoutInflater)
+        if (!this::binding.isInitialized) {
+            binding = FragmentLoginBinding.inflate(layoutInflater)
+        }
+
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setUI()
+
         super.onViewCreated(view, savedInstanceState)
-        //activity?.theme?.applyStyle(R.style.Teste22,true)
-
-
-        binding.progressBar.hide()
 
         bindObservers()
-        binding.loginBtn.setOnClickListener {
-            if (validation()) {
-                authViewModel.loginUser(binding.emailEt.text.toString().trim(),binding.passEt.text.toString().trim())
-            }
-        }
-
-
-        binding.forgotPassLabel.setOnClickListener {
-
-        }
-        binding.registerLabel.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
-        }
     }
 
-    fun validation(): Boolean {
+    private fun validation(): Boolean {
         var isValid = true
 
         if (binding.emailEt.text.isNullOrEmpty()){
@@ -106,8 +100,6 @@ class LoginFragment : Fragment() {
        // toast(error)
     }
 
-
-
     private fun setButtonVisibility(visibility: Boolean) {
         if (visibility){
             binding.loginBtn.isVisible = true
@@ -116,6 +108,43 @@ class LoginFragment : Fragment() {
         else{
             binding.loginBtn.isVisible = false
             binding.progressBar.isVisible = true
+        }
+
+    }
+
+    private fun setUI() {
+
+        /**
+         *  General
+         * */
+
+        val activity = requireActivity()
+        changeMenuVisibility(false, activity)
+        changeStatusBarColor(true,activity,requireContext())
+
+
+
+
+
+
+
+        /**
+         * Navigation
+         */
+
+        binding.loginBtn.setOnClickListener {
+            if (validation()) {
+                authViewModel.loginUser(binding.emailEt.text.toString().trim(),binding.passEt.text.toString().trim())
+            }
+        }
+
+
+        binding.forgotPassLabel.setOnClickListener {
+
+        }
+
+        binding.registerLabel.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
     }
@@ -142,10 +171,15 @@ class LoginFragment : Fragment() {
             }
         })
 
-        authViewModel.userResponseLiveData.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let {
-                when (it) {
+        authViewModel.userResponseLiveData.observe(viewLifecycleOwner) {response ->
+            response.getContentIfNotHandled()?.let {result ->
+                when (result) {
                     is NetworkResult.Success -> {
+                        if ( result.data!!.fmc_token != "-1")
+                            FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+                                if (result.data.fmc_token != token)
+                                    authViewModel.updateUser(UserRequest(fmc_token = token))
+                            }
 
                         LocalDateTime.now().let { dateNow ->
                             calendarViewModel.getCalendarDatedEntryList(
@@ -163,7 +197,7 @@ class LoginFragment : Fragment() {
                     is NetworkResult.Error -> {
                         binding.loginBtn.isVisible = true
                         binding.progressBar.isVisible = false
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                         setButtonVisibility(visibility = true)
 
                     }
@@ -178,23 +212,6 @@ class LoginFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
-        val window = requireActivity().window
-
-        //BACKGROUND in NAVIGATION BAR
-        window.statusBarColor = requireContext().getColor(R.color.main_color)
-        window.navigationBarColor = requireContext().getColor(R.color.main_color)
-
-        //TextColor in NAVIGATION BAR
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-            window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = 0
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
 
     }
 }

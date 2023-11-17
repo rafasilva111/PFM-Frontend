@@ -118,7 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tab_last_seen"
-                    android:tag="@string/chip_tag_last_seem"
+                    android:tag="@string/chip_tag_last_seen"
                     android:textSize="15sp"
                     app:chipMinHeight="20dp" />
 

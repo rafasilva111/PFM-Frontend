@@ -7,6 +7,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
+import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
@@ -17,7 +18,11 @@ import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.List
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
-import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
+import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
+import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
@@ -39,7 +44,7 @@ interface ApiInterface {
     @POST("$API_V1_BASE_URL/auth/login")
     suspend fun loginUser(@Body user : UserRequest): Response<UserAuthResponse>
 
-    @DELETE("$API_V1_BASE_URL/auth/logout")
+    @DELETE("$API_V1_BASE_URL/auth")
     suspend fun logoutUser(): Response<String>
 
     @GET("$API_V1_BASE_URL/auth")
@@ -55,7 +60,7 @@ interface ApiInterface {
     suspend fun updateUser(@Body user : UserRequest): Response<User>
 
     @DELETE("$API_V1_BASE_URL/user")
-    suspend fun deleteUser(@Query("id") userId: Int): Response<String>
+    suspend fun deleteUser(): Response<String>
 
 
     @GET("$API_V1_BASE_URL/auth/recipes")
@@ -145,48 +150,50 @@ interface ApiInterface {
     suspend fun patchCalenderEntry(@Query("id") calenderEntryId: Int, @Body calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
 
 
-    //followers
+    /** Follows */
+
+    @GET("$API_V1_BASE_URL/follow/list/followers")
+    suspend fun getFollowersByUser(@Query("user_id") userId: Int): Response<UserList>
+
+    @GET("$API_V1_BASE_URL/follow/list/followers")
+    suspend fun getFollowers(): Response<UserList>
+
+    @GET("$API_V1_BASE_URL/follow/list/followeds")
+    suspend fun getFolloweds(): Response<UserList>
+
+    @GET("$API_V1_BASE_URL/follow/list/followeds")
+    suspend fun getFollowedsByUser(@Query("user_id") userId: Int): Response<UserList>
 
     @POST("$API_V1_BASE_URL/followers")
     suspend fun createFollower(@Query("userSenderId") userSenderId: Int,@Query("userReceiverId") userReceiverId: Int): Response<FollowerResponse>
 
-    @GET("$API_V1_BASE_URL/follow/list/followers")
-    suspend fun getFollowersByUser(@Query("user_id") userId: Int): Response<FollowList>
+    @DELETE("$API_V1_BASE_URL/follow")
+    suspend fun deleteFollower(@Query("user_follower_id") userId: Int): Response<Unit>
 
-    @GET("$API_V1_BASE_URL/follow/list/followers")
-    suspend fun getFollowers(): Response<FollowList>
+    @DELETE("$API_V1_BASE_URL/follow")
+    suspend fun deleteFollow(@Query("user_follow_id") userId: Int): Response<Unit>
 
-    @GET("$API_V1_BASE_URL/follow/list/followeds")
-    suspend fun getFolloweds(): Response<FollowList>
 
-    @GET("$API_V1_BASE_URL/follow/list/followeds")
-    suspend fun getFollowedsByUser(@Query("user_id") userId: Int): Response<FollowList>
+    /** Follows Requests */
 
-    //FOLLOW REQUESTS
+
+    @GET("$API_V1_BASE_URL/follow/find")
+    suspend fun getUsersToFollow(@Query("searchString") searchString:String?,@Query("page") page: Int?,@Query("page_size") pageSize: Int?): Response<UsersToFollowList>
+
     @GET("$API_V1_BASE_URL/follow/requests/list")
-    suspend fun getFollowRequests(): Response<FollowList>
+    suspend fun getFollowRequests(@Query("page_size") pageSize: Int): Response<UserList>
 
-    //ACCEPT FOLLOW REQUEST
-    @POST("$API_V1_BASE_URL/follow/requests")
-    suspend fun postAcceptFollowRequest(@Query("user_follower_id") userId: Int): Response<Unit>
-
-    //DELETE FOLLOW REQUEST
-    @DELETE("$API_V1_BASE_URL/follow/requests")
-    suspend fun deleteAcceptFollowRequest(@Query("user_follower_id") userId: Int): Response<Unit>
-
-    //SEND FOLLOW REQUEST
     @POST("$API_V1_BASE_URL/follow")
     suspend fun postFollowRequest(@Query("user_id") userId: Int): Response<Unit>
 
-    //REMOVE FOLLOWER
-    @DELETE("$API_V1_BASE_URL/follow")
-    suspend fun deleteFollowerRequest(@Query("user_follower_id") userId: Int): Response<Unit>
+    @POST("$API_V1_BASE_URL/follow/requests")
+    suspend fun postAcceptFollowRequest(@Query("user_follower_id") userId: Int): Response<Unit>
 
-    //REMOVE FOLLOWED
-    @DELETE("$API_V1_BASE_URL/follow")
-    suspend fun deleteFollowedRequest(@Query("user_followed_id") userId: Int): Response<Unit>
+    @DELETE("$API_V1_BASE_URL/follow/requests")
+    suspend fun deleteFollowRequest(@Query("user_followed_id") userId: Int): Response<Unit>
 
-    // Shopping list
+
+    /** Shopping List */
 
     @POST("$API_V1_BASE_URL/shopping_list")
     suspend fun postShoppingList(@Body shoppingIngredientList: ShoppingListRequest): Response<ShoppingList>
@@ -202,6 +209,32 @@ interface ApiInterface {
 
     @DELETE("$API_V1_BASE_URL/shopping_list")
     suspend fun deleteShoppingList(@Query("id")shoppingListId: Int): Response<IdResponse>
+
+    /** Notifications */
+
+    @GET("$API_V1_BASE_URL/notification/list")
+    suspend fun getNotifications(@Query("page")page: Int?,@Query("page_size") pageSize: Int?): Response<NotificationList>
+
+    @GET("$API_V1_BASE_URL/notification")
+    suspend fun getNotification(@Query("id")id: Int?): Response<Notification>
+
+    @PUT("$API_V1_BASE_URL/notification")
+    suspend fun putNotification(@Query("id")id: Int?, @Body notification: Notification): Response<Unit>
+
+    @POST("$API_V1_BASE_URL/notification/seen")
+    suspend fun putNotifications(@Body idListRequest: IdListRequest): Response<Unit>
+
+    @DELETE("$API_V1_BASE_URL/notification")
+    suspend fun deleteNotification(@Query("id")id: Int?) : Response<Unit>
+
+    @POST("$API_V1_BASE_URL/notification/delete")
+    suspend fun deleteNotifications(@Body idListRequest: IdListRequest): Response<Unit>
+
+    /** Application report */
+
+    @POST("$API_V1_BASE_URL/app/report")
+    suspend fun postAppReport(@Body applicationReport: ApplicationReport): Response<Unit>
+
 
 
 }

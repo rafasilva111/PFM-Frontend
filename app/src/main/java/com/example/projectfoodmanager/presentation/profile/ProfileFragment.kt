@@ -47,6 +47,7 @@ import com.example.projectfoodmanager.util.FireStorage.user_profile_images
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
+import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_CODE
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -77,6 +78,7 @@ class ProfileFragment : Fragment() {
     private var selectedAvatar: String? = null
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     lateinit var finalUri: Uri
+    private lateinit var userSession: User
 
     // injects
     @Inject
@@ -91,7 +93,12 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?,
 
         ): View {
+
         binding = FragmentProfileBinding.inflate(layoutInflater)
+
+        /**
+         * Profile image Selection
+         */
 
         activityResultLauncher  =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -116,23 +123,57 @@ class ProfileFragment : Fragment() {
                     Log.d(TAG, "onCreateView: Something went wrong on registerForActivityResult")
                 }
             }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        userSession = sharedPreference.getUserSession()
+        setUI()
+
         super.onViewCreated(view, savedInstanceState)
         bindObservers()
+    }
+
+    private fun setUI() {
+
+        /**
+         *  General
+         * */
+
+        changeMenuVisibility(true,activity)
+        changeStatusBarColor(true,activity,context)
+
+        /**
+         * Info
+         */
+
+        binding.nameTV.text =  getString(R.string.full_name, userSession.name)
+
+        if(!userSession.verified){
+            binding.profileCV.foreground=null
+            binding.vipIV.visibility=View.INVISIBLE
+        }
+
+        binding.nFollowedsTV.text = userSession.followeds.toString()
+        binding.nFollowersTV.text = userSession.followers.toString()
+
+        /**
+         * Buttons
+         */
+
         binding.logoutIB.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
                 .setIcon(R.drawable.ic_logout)
-                .setTitle("Logout")
+                .setTitle(getString(R.string.profile_fragment_logout_dialog_title))
                 .setMessage(resources.getString(R.string.logout_confirmation_description))
-                .setPositiveButton("Sim") { dialog, which ->
+                .setPositiveButton(getString(R.string.profile_fragment_logout_dialog_yes)) { _, _ ->
                     // Adicione aqui o código para apagar o registro
                     authViewModel.logoutUser()
                 }
-                .setNegativeButton("Não") { dialog, which ->
+                .setNegativeButton(getString(R.string.profile_fragment_logout_dialog_no)) { dialog, _ ->
                     // Adicione aqui o código para cancelar a exclusão do registro
                     dialog.dismiss()
                 }
@@ -155,25 +196,6 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_profileFragment_to_settingsFragment)
         }
 
-
-
-        val userSession: User = sharedPreference.getUserSession()
-
-        // set layout data before internet verification
-
-        binding.nameTV.text =  getString(R.string.full_name, userSession.name)
-
-        if(userSession.user_type != "V"){
-            binding.profileCV.foreground=null
-            binding.vipIV.visibility=View.INVISIBLE
-        }
-
-        binding.nFollowedsTV.text = userSession.followeds.toString()
-        binding.nFollowersTV.text = userSession.followers.toString()
-        //TODO: nRecipe created by user
-        //binding.nRecipesTV.text = userSession.recipes.toString()
-
-
         binding.followedsLL.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_followerFragment,Bundle().apply {
                 putInt("userID",-1)
@@ -191,13 +213,15 @@ class ProfileFragment : Fragment() {
             })
             changeMenuVisibility(false,activity)
         }
-        // load profile image offline
 
-        if (isOnline(view.context)) {
+        /**
+         * Image offline
+         */
+        loadUserImage(binding.profileIV, userSession.img_source)
+
+
+        if (isOnline(requireView().context)) {
             // load profile image online
-
-            //-> Load Author img
-            Helper.loadUserImage(binding.profileIV, userSession.img_source)
 
             binding.uploadImageFB.setOnClickListener {
 
@@ -264,17 +288,13 @@ class ProfileFragment : Fragment() {
                 myDialog.show()
             }
 
+
         }
 
+
+
     }
 
-    override fun onStart() {
-
-        changeStatusBarColor(true,activity,context)
-        changeMenuVisibility(true,activity)
-
-        super.onStart()
-    }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -359,28 +379,28 @@ class ProfileFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        authViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let {
-                when (it) {
+        authViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
                         tokenManager.deleteToken()
                         sharedPreference.deleteUserSession()
                         toast("Logout feito com sucesso!")
                         findNavController().navigate(R.id.action_profile_to_login)
-                        changeMenuVisibility(false,activity)
+                        changeMenuVisibility(false, activity)
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                         //binding.progressBar.isVisible = true
                     }
                 }
             }
-        })
+        }
 
-        authViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner, Observer { userSessionResponse ->
-            userSessionResponse.getContentIfNotHandled()?.let{
+        authViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner) { userSessionResponse ->
+            userSessionResponse.getContentIfNotHandled()?.let {
 
                 when (it) {
                     is NetworkResult.Success -> {
@@ -397,7 +417,7 @@ class ProfileFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
 
 
     }

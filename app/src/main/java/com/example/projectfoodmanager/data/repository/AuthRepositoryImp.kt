@@ -4,7 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
+import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
@@ -21,8 +25,68 @@ class AuthRepositoryImp @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val sharedPreference: SharedPreference
 ) : AuthRepository {
+
     private val TAG:String = "AuthRepositoryImp"
 
+    /**
+     * Generic function to handle API requests and responses.
+     *
+     * @param liveData The LiveData where the result will be posted.
+     * @param saveSharedPreferences Flag to determine if the result should be saved in SharedPreferences.
+     * @param apiCall The API call to be executed.
+     */
+    private suspend fun <T> handleApiResponse(
+        liveData: MutableLiveData<Event<NetworkResult<T>>>,
+        saveSharedPreferences: Boolean = false,
+        deleteSharedPreferences: Boolean = false,
+        apiCall:   suspend () -> Response<T>
+    ) {
+        try {
+            // Post a loading state to indicate the request is in progress
+            liveData.postValue(Event(NetworkResult.Loading()))
+            Log.i(TAG, "Making API request.")
+
+            // Invoke the API call
+            val response = apiCall.invoke()
+
+            if (response.isSuccessful) {
+                // API request was successful
+                val responseBody = response.body()
+                if (responseBody != null) {
+                    // Post a success result with the response body
+                    liveData.postValue(Event(NetworkResult.Success(responseBody)))
+
+                    // Optionally save data to SharedPreferences
+                    if (saveSharedPreferences) {
+                    }
+
+                    if (deleteSharedPreferences) {
+                        sharedPreference.deleteUserSession()
+                    }
+                } else {
+                    // Handle the case where the response body is null
+                    liveData.postValue(Event(NetworkResult.Error("Response body is null")))
+                }
+            } else if (response.errorBody() != null) {
+                // Handle the case where the API request was not successful and has an error body
+                val errorObj = response.errorBody()!!.charStream().readText()
+                Log.i(TAG, "API request was not successful. Error: \n$errorObj")
+                liveData.postValue(Event(NetworkResult.Error(errorObj)))
+            } else {
+                // Handle the case where something went wrong without an error body
+                liveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            }
+        } catch (e: Exception) {
+            // Handle exceptions here if needed
+            Log.e(TAG, "API request failed with exception: ${e.message}")
+            // Post an error result for exceptions
+            liveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+    /**
+     * User
+     *  */
 
     private val _userRegisterLiveData = MutableLiveData<Event<NetworkResult<String>>>()
     override val userRegisterLiveData: LiveData<Event<NetworkResult<String>>>
@@ -39,7 +103,6 @@ class AuthRepositoryImp @Inject constructor(
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()
             Log.i(TAG, "loginUser: request made was not sucessfull: $errorObj")
-
             _userRegisterLiveData.postValue(Event(NetworkResult.Error(errorObj)))
         }
         else{
@@ -178,10 +241,22 @@ class AuthRepositoryImp @Inject constructor(
     }
 
 
+    private val _deleteUserAccount = MutableLiveData<Event<NetworkResult<String>>>()
+    override val deleteUserAccount: LiveData<Event<NetworkResult<String>>>
+        get() = _deleteUserAccount
 
+    override suspend fun deleteUserAccount() {
+        handleApiResponse(_deleteUserAccount, deleteSharedPreferences = true) {
+            remoteDataSource.deleteUser()
+        }
+    }
 
-    private val _userFollowersResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
-    override val getUserFollowers: LiveData<Event<NetworkResult<FollowList>>>
+    /**
+     * Follows
+     * */
+
+    private val _userFollowersResponseLiveData = MutableLiveData<Event<NetworkResult<UserList>>>()
+    override val getUserFollowers: LiveData<Event<NetworkResult<UserList>>>
         get() = _userFollowersResponseLiveData
 
     override suspend fun getUserFollowers(userId: Int) {
@@ -204,11 +279,11 @@ class AuthRepositoryImp @Inject constructor(
     }
 
 
-    private val _userFollowedsResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
-    override val getUserFolloweds: LiveData<Event<NetworkResult<FollowList>>>
+    private val _userFollowedsResponseLiveData = MutableLiveData<Event<NetworkResult<UserList>>>()
+    override val getUserFolloweds: LiveData<Event<NetworkResult<UserList>>>
         get() = _userFollowedsResponseLiveData
 
-    override suspend fun getUserFolloweds(userId: Int) {
+    override suspend fun getUserFollows(userId: Int) {
         _userFollowedsResponseLiveData.postValue(Event(NetworkResult.Loading()))
         val response = remoteDataSource.getFolloweds(userId)
         if (response.isSuccessful && response.code() == 200) {
@@ -227,14 +302,14 @@ class AuthRepositoryImp @Inject constructor(
     }
 
 
-    private val _functionUserFollowRequestsResponseLiveData = MutableLiveData<Event<NetworkResult<FollowList>>>()
-    override val getUserFollowRequests: LiveData<Event<NetworkResult<FollowList>>>
+    private val _functionUserFollowRequestsResponseLiveData = MutableLiveData<Event<NetworkResult<UserList>>>()
+    override val getFollowRequests: LiveData<Event<NetworkResult<UserList>>>
         get() = _functionUserFollowRequestsResponseLiveData
 
 
-    override suspend fun getUserFollowRequests() {
+    override suspend fun getFollowRequests(pageSize: Int) {
         _userFollowedsResponseLiveData.postValue(Event(NetworkResult.Loading()))
-        val response = remoteDataSource.getFollowRequests()
+        val response = remoteDataSource.getFollowRequests(pageSize)
         if (response.isSuccessful) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             _functionUserFollowRequestsResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
@@ -296,28 +371,143 @@ class AuthRepositoryImp @Inject constructor(
         }
     }
 
-    private val _functionDeleteUserFollowRequest = MutableLiveData<Event<NetworkResult<Int>>>()
-    override val deleteUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
-        get() = _functionDeleteUserFollowRequest
+    private val _functionDeleteFollowRequest = MutableLiveData<Event<NetworkResult<Int>>>()
+    override val deleteFollowRequest: LiveData<Event<NetworkResult<Int>>>
+        get() = _functionDeleteFollowRequest
 
-    override suspend fun deleteUserFollowRequest(followType:Int ,userId: Int) {
-        _functionDeleteUserFollowRequest.postValue(Event(NetworkResult.Loading()))
+    override suspend fun deleteFollowRequest(userId: Int) {
+        _functionDeleteFollowRequest.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.deleteFollowRequest(followType,userId)
+        val response =remoteDataSource.deleteFollowRequest(userId)
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            _functionDeleteUserFollowRequest.postValue(Event(NetworkResult.Success(response.code())))
+            _functionDeleteFollowRequest.postValue(Event(NetworkResult.Success(response.code())))
         }
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()
             Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
-            _functionDeleteUserFollowRequest.postValue(Event(NetworkResult.Error(errorObj)))
+            _functionDeleteFollowRequest.postValue(Event(NetworkResult.Error(errorObj)))
         }
         else{
-            _functionDeleteUserFollowRequest.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            _functionDeleteFollowRequest.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+    private val _functionDeleteFollower = MutableLiveData<Event<NetworkResult<Int>>>()
+    override val deleteFollower: LiveData<Event<NetworkResult<Int>>>
+        get() = _functionDeleteFollower
+
+    override suspend fun deleteFollower(userId: Int) {
+        _functionDeleteFollower.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
+        val response =remoteDataSource.deleteFollower(userId)
+        if (response.isSuccessful) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            _functionDeleteFollower.postValue(Event(NetworkResult.Success(response.code())))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
+            _functionDeleteFollower.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _functionDeleteFollower.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
     }
 
 
+    private val _functionDeleteFollow = MutableLiveData<Event<NetworkResult<Int>>>()
+    override val deleteFollow: LiveData<Event<NetworkResult<Int>>>
+        get() = _functionDeleteFollow
 
+    override suspend fun deleteFollow(userId: Int) {
+        _functionDeleteFollow.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
+        val response =remoteDataSource.deleteFollow(userId)
+        if (response.isSuccessful) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            _functionDeleteFollow.postValue(Event(NetworkResult.Success(response.code())))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
+            _functionDeleteFollow.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _functionDeleteFollow.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
+
+    private val _functionGetUsersToFollow = MutableLiveData<Event<NetworkResult<UsersToFollowList>>>()
+    override val getUsersToFollow: LiveData<Event<NetworkResult<UsersToFollowList>>>
+        get() = _functionGetUsersToFollow
+
+
+    override suspend fun getUsersToFollow(searchString:String?,page: Int?,pageSize:Int?) {
+        handleApiResponse(_functionGetUsersToFollow) {
+            remoteDataSource.getUsersToFollow(searchString,page,pageSize)
+        }
+    }
+
+
+    /** Notifications */
+    private val _getNotificationsResponseLiveData = MutableLiveData<Event<NetworkResult<NotificationList>>>()
+    override val getNotificationsResponseLiveData: LiveData<Event<NetworkResult<NotificationList>>>
+        get() = _getNotificationsResponseLiveData
+
+    private val _getNotificationResponseLiveData = MutableLiveData<Event<NetworkResult<Notification>>>()
+    override val getNotificationResponseLiveData: LiveData<Event<NetworkResult<Notification>>>
+        get() = _getNotificationResponseLiveData
+
+    private val _putNotificationResponseLiveData= MutableLiveData<Event<NetworkResult<Unit>>>()
+    override val putNotificationResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
+        get() = _putNotificationResponseLiveData
+
+    private val _putNotificationsResponseLiveData= MutableLiveData<Event<NetworkResult<Unit>>>()
+    override val putNotificationsResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
+        get() = _putNotificationsResponseLiveData
+
+    private val _deleteNotificationResponseLiveData = MutableLiveData<Event<NetworkResult<Unit>>>()
+    override val deleteNotificationResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
+        get() = _deleteNotificationResponseLiveData
+
+    private val _deleteNotificationsResponseLiveData = MutableLiveData<Event<NetworkResult<Unit>>>()
+    override val deleteNotificationsResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
+        get() = _deleteNotificationsResponseLiveData
+
+    override suspend fun getNotifications(page: Int?, pageSize: Int?) {
+        handleApiResponse(_getNotificationsResponseLiveData) {
+            remoteDataSource.getNotifications(page,pageSize)
+        }
+    }
+
+    override suspend fun getNotification(id: Int?) {
+        handleApiResponse(_getNotificationResponseLiveData) {
+            remoteDataSource.getNotification(id)
+        }
+    }
+
+    override suspend fun putNotification(id: Int?, notification: Notification) {
+        handleApiResponse(_putNotificationResponseLiveData) {
+            remoteDataSource.putNotification(id,notification)
+        }
+    }
+
+    override suspend fun putNotifications(idListRequest: IdListRequest) {
+        handleApiResponse(_putNotificationsResponseLiveData) {
+            remoteDataSource.putNotifications(idListRequest)
+        }
+    }
+
+    override suspend fun deleteNotification(id: Int?) {
+        handleApiResponse(_deleteNotificationResponseLiveData) {
+            remoteDataSource.deleteNotification(id)
+        }
+    }
+
+    override suspend fun deleteNotifications(idListRequest: IdListRequest) {
+        handleApiResponse(_deleteNotificationsResponseLiveData) {
+            remoteDataSource.deleteNotifications(idListRequest)
+        }
+    }
 }

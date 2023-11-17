@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.databinding.FragmentFaqsBinding
+import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.SharedPreference
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -21,13 +23,11 @@ class FAQsFragment : Fragment() {
     // viewModels
 
     // constants
-    private val TAG: String = "AboutUsFragment"
+    private val TAG: String = "FAQsFragment"
 
     // injects
-    @Inject
-    lateinit var sharedPreference: SharedPreference
 
-    // adapters
+
 
 
     override fun onCreateView(
@@ -47,9 +47,23 @@ class FAQsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUI()
         bindObservers()
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun setUI() {
+
+        /**
+         * General
+         */
+
+        val activity = requireActivity()
+
+        Helper.changeMenuVisibility(false, activity)
+        Helper.changeStatusBarColor(true, activity, this.context)
+
+        binding.backIB.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
     }
 

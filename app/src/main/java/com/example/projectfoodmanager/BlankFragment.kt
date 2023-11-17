@@ -1,23 +1,14 @@
 package com.example.projectfoodmanager
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationData
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.PushNotification
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.databinding.FragmentBlankBinding
-import com.example.projectfoodmanager.databinding.FragmentShoppingListDetailBinding
+import com.example.projectfoodmanager.databinding.FragmentNotificationBinding
+import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.SharedPreference
-import com.example.projectfoodmanager.util.toast
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.viewmodels.NotificationViewModel
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -47,11 +38,10 @@ class BlankFragment : Fragment() {
         savedInstanceState: Bundle?,
 
         ): View {
-        binding = FragmentBlankBinding.inflate(layoutInflater)
 
-
-
-
+        if (!this::binding.isInitialized) {
+            binding = FragmentBlankBinding.inflate(layoutInflater)
+        }
 
         return binding.root
     }
@@ -64,6 +54,13 @@ class BlankFragment : Fragment() {
     }
 
     private fun setUI() {
+        /**
+         *  General
+         * */
+
+        val activity = requireActivity()
+        Helper.changeMenuVisibility(false, activity)
+        Helper.changeStatusBarColor(true, activity, requireContext())
 
     }
 
@@ -71,5 +68,8 @@ class BlankFragment : Fragment() {
 
     }
 
-
+    override fun onPause() {
+        // usar para atualizar/destruir listas de elementos
+        super.onPause()
+    }
 }

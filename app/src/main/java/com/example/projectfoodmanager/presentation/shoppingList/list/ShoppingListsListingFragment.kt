@@ -30,7 +30,6 @@ class ShoppingListsListingFragment : Fragment() {
     lateinit var binding: FragmentShoppingListListingBinding
 
     // viewModels
-    private val authViewModel by activityViewModels<AuthViewModel>()
     private val shoppingListViewModel by activityViewModels<ShoppingListViewModel>()
 
     // constants

@@ -9,7 +9,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout6"
+        android:id="@+id/topTab"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:background="@drawable/layout_bg_rounded_2_corners_v1"
@@ -29,16 +29,16 @@
             android:outlineProvider="none"
             android:src="@drawable/ic_back_black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout6" />
+            app:layout_constraintTop_toTopOf="@+id/topTab" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/fedoka"
-            android:text="Definições"
+            android:text="@string/fragment_settings_title"
             android:textColor="@color/color_3"
-            android:textSize="22dp"
+            android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="@+id/backIB"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6">
+        app:layout_constraintTop_toBottomOf="@+id/topTab">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/CL_1"
@@ -400,7 +400,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_7"
+            android:id="@+id/CL_Languages"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -462,7 +462,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_8"
+            android:id="@+id/CL_SendUsAMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -509,13 +509,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_9"
+            android:id="@+id/CL_AboutUs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/CL_8"
-            app:layout_constraintStart_toStartOf="@+id/CL_8"
-            app:layout_constraintTop_toBottomOf="@+id/CL_8">
+            app:layout_constraintEnd_toEndOf="@+id/CL_SendUsAMessage"
+            app:layout_constraintStart_toStartOf="@+id/CL_SendUsAMessage"
+            app:layout_constraintTop_toBottomOf="@+id/CL_SendUsAMessage">
 
             <ImageView
                 android:id="@+id/IV_AboutUs"
@@ -554,14 +554,15 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/CL_FAQs"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/CL_9"
-            app:layout_constraintStart_toStartOf="@+id/CL_9"
-            app:layout_constraintTop_toBottomOf="@+id/CL_9">
+            app:layout_constraintEnd_toEndOf="@+id/CL_AboutUs"
+            app:layout_constraintStart_toStartOf="@+id/CL_AboutUs"
+            app:layout_constraintTop_toBottomOf="@+id/CL_AboutUs">
 
             <ImageView
                 android:id="@+id/IV_Faqs"
@@ -603,6 +604,7 @@
 
 
     <Button
+        android:id="@+id/BTN_deleteAccountB"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -611,7 +613,7 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/layout_bg"
         android:fontFamily="@font/fedoka"
-        android:text="Delete Acount"
+        android:text="@string/fragment_settings_delete_account"
         app:backgroundTint="@color/main_color"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"

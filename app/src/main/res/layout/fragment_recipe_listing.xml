@@ -7,16 +7,34 @@
     android:layout_height="match_parent"
     tools:context=".presentation.recipe.RecipeListingFragment">
 
+
     <ImageView
         android:id="@+id/notificationIV"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
         android:src="@drawable/ic_notification"
         app:layout_constraintEnd_toStartOf="@+id/profileCV"
         app:layout_constraintTop_toTopOf="@+id/tvWelcome" />
 
+    <TextView
+        android:id="@+id/notificationsBadgeTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-12dp"
+        android:background="@drawable/bg_default"
+        android:backgroundTint="@color/red"
+        android:elevation="8dp"
+        android:fontFamily="@font/fredoka_regular"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:text="@string/fragment_follower_follower_request_count"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/notificationIV"
+        app:layout_constraintTop_toTopOf="@+id/notificationIV" />
 
     <ImageView
         android:id="@+id/verifyUserHeaderIV"
@@ -236,7 +254,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:elevation="7dp"
-                android:indeterminateTint="#FF6410"
+                android:indeterminateTint="@color/main_color"
                 android:outlineProvider="none"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/recycler_view"

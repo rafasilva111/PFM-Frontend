@@ -4,7 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
+import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
@@ -21,6 +25,7 @@ class AuthViewModel @Inject constructor(
     val repository: AuthRepository,
     val sharedPreference: SharedPreference
 ): ViewModel() {
+
 
     private val TAG:String ="AuthViewModel"
 
@@ -82,10 +87,21 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    //---------- FOLLOW -------------
+    val deleteUserAccount: LiveData<Event<NetworkResult<String>>>
+        get() = repository.deleteUserAccount
+
+    fun deleteUserAccount() {
+        viewModelScope.launch {
+            repository.deleteUserAccount()
+        }
+    }
+
+    /**
+     * Follows
+     */
 
     //GET followers by userID or authenticated user
-    val getUserFollowersLiveData: LiveData<Event<NetworkResult<FollowList>>>
+    val getUserFollowersLiveData: LiveData<Event<NetworkResult<UserList>>>
         get() = repository.getUserFollowers
 
     fun getFollowers(id_user: Int) {
@@ -95,22 +111,22 @@ class AuthViewModel @Inject constructor(
     }
 
     //GET followeds by userID or authenticated user
-    val getUserFollowedsLiveData: LiveData<Event<NetworkResult<FollowList>>>
+    val getUserFollowedsLiveData: LiveData<Event<NetworkResult<UserList>>>
         get() = repository.getUserFolloweds
 
     fun getFolloweds(id_user: Int){
         viewModelScope.launch {
-            repository.getUserFolloweds(id_user)
+            repository.getUserFollows(id_user)
         }
     }
 
     //GET follow requests (authenticated user)
-    val getUserFollowRequestsLiveData: LiveData<Event<NetworkResult<FollowList>>>
-        get() = repository.getUserFollowRequests
+    val getFollowRequestsLiveData: LiveData<Event<NetworkResult<UserList>>>
+        get() = repository.getFollowRequests
 
-    fun getFollowRequests(){
+    fun getFollowRequests(pageSize: Int = 10){
         viewModelScope.launch {
-            repository.getUserFollowRequests()
+            repository.getFollowRequests(pageSize)
         }
     }
 
@@ -136,15 +152,112 @@ class AuthViewModel @Inject constructor(
     }
 
 
-    //DELETE follow requests by userID
-    val deleteUserFollowRequestLiveData: LiveData<Event<NetworkResult<Int>>>
-        get() = repository.deleteUserFollowRequest
+    // delete follow request
+
+    val deleteFollowRequestLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.deleteFollowRequest
 
 
-    fun deleteFollowRequest(followType:Int, userId: Int) {
+    fun deleteFollowRequest(userId: Int) {
         viewModelScope.launch {
-            repository.deleteUserFollowRequest(followType,userId)
+            repository.deleteFollowRequest(userId)
         }
     }
+
+
+    // delete follower
+
+    val deleteFollowerLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.deleteFollower
+
+
+    fun deleteFollower(userId: Int) {
+        viewModelScope.launch {
+            repository.deleteFollower(userId)
+        }
+    }
+
+    val deleteFollowLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.deleteFollow
+
+
+    fun deleteFollow(userId: Int) {
+        viewModelScope.launch {
+            repository.deleteFollow(userId)
+        }
+    }
+
+    // GET users to follow
+    val getUsersToFollow: LiveData<Event<NetworkResult<UsersToFollowList>>>
+        get() = repository.getUsersToFollow
+
+
+    fun getUsersToFollow(searchString:String? = null,page: Int? = null,pageSize:Int? = null) {
+        viewModelScope.launch {
+            repository.getUsersToFollow(searchString,page,pageSize)
+        }
+    }
+
+
+
+    /**
+     * Notifications
+     */
+
+
+    val getNotificationsResponseLiveData: LiveData<Event<NetworkResult<NotificationList>>>
+        get() = repository.getNotificationsResponseLiveData
+
+    fun getNotifications(page: Int? = null,pageSize: Int? = null){
+        viewModelScope.launch {
+            repository.getNotifications(page = page ,pageSize = pageSize)
+        }
+    }
+
+    val getNotificationResponseLiveData: LiveData<Event<NetworkResult<Notification>>>
+        get() = repository.getNotificationResponseLiveData
+
+    fun getNotification(id: Int){
+        viewModelScope.launch {
+            repository.getNotification(id)
+        }
+    }
+
+    val putNotificationResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
+        get() = repository.putNotificationResponseLiveData
+
+    fun putNotification(id: Int, notification: Notification){
+        viewModelScope.launch {
+            repository.putNotification(id,notification)
+        }
+    }
+
+    val putNotificationsResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
+        get() = repository.putNotificationsResponseLiveData
+
+    fun putNotifications(idListRequest: IdListRequest){
+        viewModelScope.launch {
+            repository.putNotifications(idListRequest)
+        }
+    }
+
+    val deleteNotificationResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
+        get() = repository.deleteNotificationResponseLiveData
+
+    fun deleteNotification(id: Int){
+        viewModelScope.launch {
+            repository.deleteNotification(id)
+        }
+    }
+
+    val deleteNotificationsResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
+        get() = repository.deleteNotificationsResponseLiveData
+
+    fun deleteNotifications(idListRequest: IdListRequest) {
+        viewModelScope.launch {
+            repository.deleteNotifications(idListRequest)
+        }
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.example.projectfoodmanager.util
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.opengl.Visibility
 import android.os.Build
 import android.text.TextUtils
 import android.util.Log
@@ -26,6 +27,10 @@ import java.util.*
 
 class Helper {
     companion object {
+
+
+
+
         fun isValidEmail(email: String): Boolean {
             return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches()
         }
@@ -96,6 +101,9 @@ class Helper {
         }
 
         fun loadUserImage(imgAuthorIV: ImageView, imgSource: String) {
+            imgAuthorIV.setImageResource(R.drawable.img_profile)
+
+
             if (imgSource.isNotEmpty())
                 if (imgSource.contains("avatar")){
                     val avatar= Avatar.getAvatarByName(imgSource)
@@ -110,7 +118,10 @@ class Helper {
                         imgAuthorIV.setImageResource(R.drawable.img_profile)
                     }
                 }
+
         }
+
+
 
         fun getStartAndEndOfWeek(date: LocalDate): Pair<LocalDate, LocalDate> {
             val startOfWeek = date.with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY))
@@ -135,62 +146,55 @@ class Helper {
             }
 
         }
+
+        var STATUS_BAR_COLOR: Boolean? = null // true for mainColor (red), false for secondary (white)
+        var MENU_VISIBILITY: Boolean? = null // true for visible, false for gone
+
         fun changeStatusBarColor(mainColor: Boolean, activity: FragmentActivity?, context: Context?){
             val window = activity?.window
-            if (window != null) {
+            if (window != null && context != null) {
                 if (mainColor) {
+                    if (STATUS_BAR_COLOR != true){
+                        //BACKGROUND in NAVIGATION BAR
 
-                    //BACKGROUND in NAVIGATION BAR
-
-                    if (context != null) {
                         window.statusBarColor = context.getColor(R.color.main_color)
                         window.navigationBarColor = context.getColor(R.color.main_color)
-                    }
 
-                    //TextColor in NAVIGATION BAR
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        window.insetsController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-                        window.insetsController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-                    } else {
-                        @Suppress("DEPRECATION")
-                        window.decorView.systemUiVisibility = 0
-                        @Suppress("DEPRECATION")
-                        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-
+                        window.decorView.systemUiVisibility = window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()  //set status text  light
+                        STATUS_BAR_COLOR = true
                     }
                 } else {
-
-                    if (context != null) {
+                    if (STATUS_BAR_COLOR != false) {
                         //BACKGROUND in NAVIGATION BAR
                         window.statusBarColor = context.getColor(R.color.background_1)
-                        window.navigationBarColor = context.getColor(R.color.main_color)
-                    }
-                    //TextColor in NAVIGATION BAR
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-                        window.insetsController?.setSystemBarsAppearance( 0, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-                    } else {
-                        @Suppress("DEPRECATION")
-                        window.decorView.systemUiVisibility = 0
-                        @Suppress("DEPRECATION")
-                        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 
+                        //TextColor in NAVIGATION BAR
+
+
+                        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR //set status text dark
+
+                        STATUS_BAR_COLOR = false
                     }
-                    changeMenuVisibility(true,activity)
                 }
             }
 
         }
 
-
-        fun changeMenuVisibility(state: Boolean, activity: FragmentActivity?) {
+        fun changeMenuVisibility(visibility: Boolean, activity: FragmentActivity?) {
 
             val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
-            if (state) {
-                menu!!.visibility = View.VISIBLE
+            if (visibility ) {
+                if((MENU_VISIBILITY != true)){
+                    menu!!.visibility = View.VISIBLE
+                    MENU_VISIBILITY = true
+                }
+
             } else {
-                menu!!.visibility = View.GONE
+                if((MENU_VISIBILITY != false)){
+                    menu!!.visibility = View.GONE
+                    MENU_VISIBILITY = false
+                }
             }
         }
 

@@ -2,7 +2,11 @@ package com.example.projectfoodmanager.data.repository
 
 import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowList
+import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
+import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
@@ -12,30 +16,67 @@ import com.example.projectfoodmanager.util.NetworkResult
 interface AuthRepository {
 
 
+    /** User */
+
     val userRegisterLiveData: LiveData<Event<NetworkResult<String>>>
     val userAuthLiveData: LiveData<Event<NetworkResult<UserAuthResponse>>>
     val userLogoutLiveData: LiveData<Event<NetworkResult<String>>>
     val userLiveData: LiveData<Event<NetworkResult<User>>>
-    val getUserFollowers: LiveData<Event<NetworkResult<FollowList>>>
-    val getUserFolloweds: LiveData<Event<NetworkResult<FollowList>>>
-    val userUpdateLiveData: LiveData<Event<NetworkResult<User>>>
-    val getUserFollowRequests: LiveData<Event<NetworkResult<FollowList>>>
-    val postUserAcceptFollowRequest: LiveData<Event<NetworkResult<Int>>>
-    val postUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
-    val deleteUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
     val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
+    val userUpdateLiveData: LiveData<Event<NetworkResult<User>>>
+    val deleteUserAccount: LiveData<Event<NetworkResult<String>>>
 
-    //User
     suspend fun registerUser(user : UserRequest)
     suspend fun loginUser(email: String, password: String)
     suspend fun getUserSession()
     suspend fun logoutUser()
     suspend fun updateUser(userRequest: UserRequest)
-    suspend fun getUserFollowers(idUser: Int)
-    suspend fun getUserFolloweds(idUser: Int)
-    suspend fun getUserFollowRequests()
-    suspend fun postUserAcceptFollowRequest(idUser: Int)
-    suspend fun deleteUserFollowRequest(followType: Int, userId: Int)
-    suspend fun postUserFollowRequest(userId: Int)
     suspend fun getUserRecipesBackground()
+    suspend fun deleteUserAccount()
+
+    /** Follows */
+
+    val getUserFollowers: LiveData<Event<NetworkResult<UserList>>>
+    val getUserFolloweds: LiveData<Event<NetworkResult<UserList>>>
+    val deleteFollower: LiveData<Event<NetworkResult<Int>>>
+    val deleteFollow: LiveData<Event<NetworkResult<Int>>>
+
+
+    suspend fun getUserFollowers(idUser: Int)
+    suspend fun getUserFollows(idUser: Int)
+    suspend fun deleteFollower(userId: Int)
+    suspend fun deleteFollow(userId: Int)
+
+    /** Follows Request */
+
+    val getUsersToFollow: LiveData<Event<NetworkResult<UsersToFollowList>>>
+    val getFollowRequests: LiveData<Event<NetworkResult<UserList>>>
+    val postUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
+    val postUserAcceptFollowRequest: LiveData<Event<NetworkResult<Int>>>
+    val deleteFollowRequest: LiveData<Event<NetworkResult<Int>>>
+
+    suspend fun getUsersToFollow(searchString:String?,page: Int?,pageSize:Int?)
+    suspend fun getFollowRequests(pageSize:Int)
+    suspend fun postUserFollowRequest(userId: Int)
+    suspend fun postUserAcceptFollowRequest(idUser: Int)
+    suspend fun deleteFollowRequest(userId: Int)
+
+    /** Notifications */
+
+    val getNotificationsResponseLiveData: LiveData<Event<NetworkResult<NotificationList>>>
+    val getNotificationResponseLiveData: LiveData<Event<NetworkResult<Notification>>>
+    val putNotificationResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
+    val putNotificationsResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
+    val deleteNotificationResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
+    val deleteNotificationsResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
+
+    suspend fun getNotifications(page:Int?,pageSize:Int?)
+    suspend fun getNotification(id:Int?)
+    suspend fun putNotification(id:Int?, notification: Notification)
+    suspend fun putNotifications(idListRequest: IdListRequest)
+    suspend fun deleteNotification(id:Int?)
+    suspend fun deleteNotifications(idListRequest: IdListRequest)
+
+
+
 }

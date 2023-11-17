@@ -1,21 +1,21 @@
-package com.example.projectfoodmanager.presentation.follower
+package com.example.projectfoodmanager.presentation.follower.followRequests
 
-import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsetsController
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFollowRequestBinding
-import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.NetworkResult
+import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.ToastType
+import com.example.projectfoodmanager.util.toast
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.viewmodels.NotificationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -27,7 +27,6 @@ class FollowRequestFragment : Fragment() {
 
     // viewModels
     private val authViewModel by activityViewModels<AuthViewModel>()
-    private val notificationViewModel by activityViewModels<NotificationViewModel>()
 
     // constants
     private lateinit var currentUser: User
@@ -38,20 +37,15 @@ class FollowRequestFragment : Fragment() {
     lateinit var sharedPreference: SharedPreference
 
     private val adapter by lazy {
-        FollowerListingAdaptar(
-
-            FollowType.NOT_FOLLOWER,
+        FollowRequestListingAdapter(
             onItemClicked = { userID ->
                 findNavController().navigate(R.id.action_followerFragment_to_profileBottomSheetDialog,Bundle().apply {
                     putInt("userID",userID)
                 })
             },
-            onActionBTNClicked = { userId ->
+            onActionBTNClicked = { position,userId ->
+                itemPosition = position
                 authViewModel.postAcceptFollowRequest(userId)
-            },
-            onRemoveBTNClicked = { _, userId ->
-                authViewModel.deleteFollowRequest(FollowType.NOT_FOLLOWER,userId)
-
             }
         )
     }
@@ -66,7 +60,6 @@ class FollowRequestFragment : Fragment() {
             binding.followerRV.layoutManager = LinearLayoutManager(activity)
             binding.followerRV.adapter = adapter
 
-            bindObservers()
         }
 
         return binding.root
@@ -74,22 +67,34 @@ class FollowRequestFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindObservers()
+    }
 
-        // user data
+    private fun setUI() {
+
+        /**
+         * General
+         */
+
         currentUser = sharedPreference.getUserSession()
 
-        //Get FollowRequests
         authViewModel.getFollowRequests()
+
+        /**
+         * Navigation
+         */
 
         binding.backRegIB.setOnClickListener {
             findNavController().navigateUp()
         }
 
+
     }
+
 
     private fun bindObservers() {
 
-        authViewModel.getUserFollowRequestsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        authViewModel.getFollowRequestsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -119,9 +124,12 @@ class FollowRequestFragment : Fragment() {
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
+                        adapter.removeItem(itemPosition)
+
                         toast("Confirmação com sucesso")
-                        //Get FollowRequests
-                        //authViewModel.getFollowRequests()
+                        if (adapter.getList().isEmpty())
+                            findNavController().navigateUp()
+
                     }
                     is NetworkResult.Error -> {
                         toast(it.message.toString(), type = ToastType.ERROR)
@@ -135,7 +143,7 @@ class FollowRequestFragment : Fragment() {
             }
         }
 
-        authViewModel.deleteUserFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        authViewModel.deleteFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -158,23 +166,9 @@ class FollowRequestFragment : Fragment() {
 
     }
 
-    override fun onResume() {
-        val window = requireActivity().window
 
-        //BACKGROUND in NAVIGATION BAR
-        window.statusBarColor = requireContext().getColor(R.color.background_1)
-        window.navigationBarColor = requireContext().getColor(R.color.background_1)
-
-        //TextColor in NAVIGATION BAR
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = 0
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
-        super.onResume()
+    override fun onStart() {
+        setUI()
+        super.onStart()
     }
 }

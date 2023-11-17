@@ -80,20 +80,5 @@ class NetworkModule {
 		return retrofit.create(ApiInterface::class.java)
 	}
 
-	// Second set of code
-	@SecondRetrofit
-	@Provides
-	@Singleton
-	fun provideRetrofit(): Retrofit =
-		Retrofit.Builder()
-			.baseUrl(FIREBASE_NOTIFICATIONS.BASE_URL)
-			.addConverterFactory(GsonConverterFactory.create())
-			.build()
-
-
-	@Provides
-	@Singleton
-	fun provideApi(@SecondRetrofit retrofit: Retrofit): ApiNotificationInterface =
-		retrofit.create(ApiNotificationInterface::class.java)
 
 }

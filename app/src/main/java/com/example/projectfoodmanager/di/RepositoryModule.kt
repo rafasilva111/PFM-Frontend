@@ -50,16 +50,17 @@ object RepositoryModule {
         )
     }
 
-
     @Provides
     @Singleton
-    fun providesNotificationRepository(
+    fun providesMiscellaneousRepository(
         remoteDataSource: RemoteDataSourceImpl
-    ): NotificationRepository {
-        return NotificationRepositoryImp(
+    ): MiscellaneousRepository {
+        return MiscellaneousRepositoryImp(
             remoteDataSource = remoteDataSource
         )
     }
+
+
 
     @Provides
     @Singleton

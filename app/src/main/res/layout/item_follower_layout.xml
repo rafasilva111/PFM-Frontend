@@ -35,7 +35,7 @@
             android:id="@+id/imgAuthorIV"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@drawable/img_pingo_doce" />
+            android:src="@drawable/img_profile" />
 
     </androidx.cardview.widget.CardView>
 
@@ -82,6 +82,8 @@
             android:text="@string/follow"
             android:textSize="13sp" />
 
+
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/removeFollowBTN"
             android:layout_width="wrap_content"
@@ -91,6 +93,21 @@
             android:padding="0dp"
             android:backgroundTint="@color/grey"
             android:text="@string/follow_remove"
+            android:fontFamily="@font/fredoka_regular"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:textColor="@color/black"
+            android:visibility="gone"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/removeFollowRequestBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginStart="10dp"
+            android:padding="0dp"
+            android:backgroundTint="@color/grey"
+            android:text="@string/item_follower_request_sent"
             android:fontFamily="@font/fredoka_regular"
             android:textStyle="bold"
             android:textSize="13sp"

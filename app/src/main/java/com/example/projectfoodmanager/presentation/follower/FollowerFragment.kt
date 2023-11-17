@@ -1,20 +1,25 @@
 package com.example.projectfoodmanager.presentation.follower
 
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.*
-import android.widget.Toast
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelResponse.follows.UserToFollow
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFollowerBinding
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.FollowType.FOLLOWEDS
+import com.example.projectfoodmanager.util.FollowType.FOLLOWERS
+import com.example.projectfoodmanager.util.FollowType.NOT_FOLLOWER
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
+import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,17 +32,43 @@ class FollowerFragment : Fragment() {
 
     // binding
     lateinit var binding: FragmentFollowerBinding
-    private var itemPosition: Int = -1
+
+    // viewModels
     private val authViewModel by activityViewModels<AuthViewModel>()
+
+    // constants
+    private var itemPosition: Int = -1
+
+    private var userToFollowList: MutableList<UserToFollow> = mutableListOf()
+    private var followList: MutableList<User> = mutableListOf()
+
     private var userId: Int = -1
     private var userName: String? = null
     private var followType: Int = -1
     private lateinit var currentUser: User
+    private var selectedTab: View? = null
 
+    // pagination and search
+    private var currentPage:Int = 1
+    private var nextPage:Boolean = true
+    private var newSearch: Boolean = false
+    private var stringToSearch: String = ""
+    private var noMoreRecipesMessagePresented = false
+    private lateinit var scrollListener: RecyclerView.OnScrollListener
+    lateinit var manager: LinearLayoutManager
+
+    // to update items on FindFollowsListingAdapter
+    private var followersListingUpdatePosition = -1
+    // to update items on FindFollowsListingAdapter
+    private var findFollowsListingUpdatePosition = -1
+
+    // injects
     @Inject
     lateinit var sharedPreference: SharedPreference
-    private val adapter by lazy {
-        FollowerListingAdaptar(
+
+    // adapters
+    private val adapterFollowers by lazy {
+        FollowerListingAdapter(
             followType,
             onItemClicked = {user_id ->
                 val bundle=Bundle()
@@ -50,33 +81,83 @@ class FollowerFragment : Fragment() {
                 findNavController().navigate(R.id.action_followerFragment_to_profileBottomSheetDialog,bundle)
 
             },
-            onActionBTNClicked = { user_Id ->
-                authViewModel.postFollowRequest(userId)
+            onActionBTNClicked = { position, user_Id ->
+                authViewModel.postFollowRequest(user_Id)
+                followersListingUpdatePosition = position
             },
-            onRemoveBTNClicked = { postion,user_Id ->
+            onRemoveBTNClicked = { position,user_Id ->
 
-                itemPosition = postion
+                itemPosition = position
                 val title:String
                 val message:String
 
-                if (followType==FollowType.FOLLOWERS) {
+
+                if (followType== FOLLOWERS) {
                     title = "Remover seguidor?"
                     message = "Tem a certeza que pretende remover este seguidor?"
                 }else{
                     title = "Deixar de seguir?"
                     message = "Tem a certeza que pretende deixar de seguir?"
+
                 }
 
                 MaterialAlertDialogBuilder(requireContext())
                     .setIcon(R.drawable.ic_follower_remove)
                     .setTitle(title)
                     .setMessage(message)
-                    .setPositiveButton("Sim") { dialog, which ->
+                    .setPositiveButton("Sim") { _, _ ->
                         // Remove Follower or Followed
-                        authViewModel.deleteFollowRequest(followType,user_Id)
+
+                        if(followType== FOLLOWERS){
+                            authViewModel.deleteFollower(user_Id)
+                        }
+                        else{
+                            authViewModel.deleteFollow(user_Id)
+                        }
+
+                        followersListingUpdatePosition = position
 
                     }
-                    .setNegativeButton("Não") { dialog, which ->
+                    .setNegativeButton("Não") { dialog, _ ->
+                        // Close Dialog
+                        dialog.dismiss()
+                    }
+                    .show()
+
+            }
+        )
+    }
+
+    private val adapterFindFollows by lazy {
+        FindFollowsListingAdapter(
+            onItemClicked = {user_id ->
+                val bundle=Bundle()
+                if (currentUser.id==user_id){
+                    bundle.putInt("userID",-1)
+                }else{
+                    bundle.putInt("userID",user_id)
+                }
+
+                findNavController().navigate(R.id.action_followerFragment_to_profileBottomSheetDialog,bundle)
+
+            },
+            onActionBTNClicked = { position, user_Id ->
+                authViewModel.postFollowRequest(user_Id)
+                findFollowsListingUpdatePosition = position
+
+            },
+            onRemoveFollowRequestBTN = { position,user_Id ->
+                MaterialAlertDialogBuilder(requireContext())
+                    .setIcon(R.drawable.ic_follower_remove)
+                    .setTitle(getString(R.string.fragment_follower_remove_follow_request_title))
+                    .setMessage(getString(R.string.fragment_follower_remove_follow_request_message))
+                    .setPositiveButton("Sim") { _, _ ->
+                        // Remove Follow request
+                        authViewModel.deleteFollowRequest(user_Id)
+                        findFollowsListingUpdatePosition = position
+
+                    }
+                    .setNegativeButton("Não") { dialog, _ ->
                         // Close Dialog
                         dialog.dismiss()
                     }
@@ -96,14 +177,15 @@ class FollowerFragment : Fragment() {
             followType = it.getInt("followType")
         }
 
+
         // Inflate the layout for this fragment
         if (!this::binding.isInitialized) {
             binding = FragmentFollowerBinding.inflate(layoutInflater)
+            manager = LinearLayoutManager(activity)
+            binding.followerRV.layoutManager = manager
+            binding.followerRV.adapter = adapterFollowers
 
-            binding.followerRV.layoutManager = LinearLayoutManager(activity)
-            binding.followerRV.adapter = adapter
 
-            bindObservers()
         }
 
         return binding.root
@@ -111,28 +193,122 @@ class FollowerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // user data
+        bindObservers()
+    }
+
+    private fun setUI() {
+
+        /**
+         * General
+         */
 
         currentUser = sharedPreference.getUserSession()
+
+        /**
+         * Info
+         */
 
         binding.nameProfileTV.text= formatNameToNameUpper(userName!!)
 
         eventClick()
 
-        //authViewModel.getFollowers(id_user = userId)
+        /**
+         * Pagination
+         */
+        binding.followerRV.setOnScrollListener (object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (nextPage){
+
+                        if (followType == NOT_FOLLOWER){
+                            val pastVisibleItem: Int =  manager.findLastCompletelyVisibleItemPosition()
+
+                            if ((pastVisibleItem + 1) >= adapterFindFollows.getList().size){
+
+
+                                authViewModel.getUsersToFollow(page = ++currentPage,searchString =stringToSearch)
+                            }
+                        }
+
+                        //Log.d(TAG, pag_index.toString())
+                        //Log.d(TAG, visibleItemCount.toString())
+                        //Log.d(TAG, pastVisibleItem.toString())
+                    }
+                    else if (!noMoreRecipesMessagePresented){
+                        noMoreRecipesMessagePresented = true
+                        toast("Sorry cant find more users...",ToastType.ALERT)
+                    }
+
+
+                }
+
+                super.onScrollStateChanged(recyclerView, newState)
+
+            }
+        })
+
+        /**
+         * Search filter
+         */
+
+        binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(text: String?): Boolean {
+                if (text != null && text != "") {
+                    // importante se não não funciona
+                    currentPage = 1
+                    newSearch = true
+
+                    // debouncer
+                    val handler = Handler()
+                    handler.postDelayed({
+                        if (stringToSearch == text) {
+                            // verifica se tag está a ser usada se não pesquisa a string nas tags da receita
+                            authViewModel.getUsersToFollow(searchString =stringToSearch)
+                        }
+                    }, 400)
+
+                    stringToSearch = text
+
+                } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
+                else if (stringToSearch != "" && text == "") {
+                    stringToSearch = ""
+                    authViewModel.getUsersToFollow()
+                } else {
+                    stringToSearch = ""
+                }
+
+                //slowly move to position 0
+                binding.followerRV.layoutManager?.smoothScrollToPosition(binding.followerRV, null, 0)
+                return true
+            }
+        })
+
+        /**
+         * Navigation
+         */
+
         binding.backRegIB.setOnClickListener {
             findNavController().navigateUp()
         }
 
 
         binding.followersBTN.setOnClickListener {
-            followType=FollowType.FOLLOWERS
+            followType= FOLLOWERS
             eventClick()
 
         }
 
         binding.followedsBTN.setOnClickListener {
-            followType=FollowType.FOLLOWEDS
+            followType= FOLLOWEDS
+            eventClick()
+        }
+
+        binding.findFollowsBTN.setOnClickListener {
+            followType = NOT_FOLLOWER
             eventClick()
         }
 
@@ -140,41 +316,79 @@ class FollowerFragment : Fragment() {
 
             findNavController().navigate(R.id.action_followerFragment_to_followRequestFragment)
         }
-
     }
 
     private fun eventClick() {
+        when (followType) {
+            FOLLOWERS -> {
+                binding.SVsearch.visibility = View.GONE
 
-        if (followType==FollowType.FOLLOWERS){
-            if(currentUser.id==userId || userId==-1) {
-                binding.requestFollowCV.visibility = View.VISIBLE
-            }else{
-                binding.requestFollowCV.visibility=View.GONE
+                /**
+                 * Search filter
+                 */
+
+
+
+                authViewModel.getFollowRequests(pageSize = 1)
+
+
+                selectedTab?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
+                selectedTab = binding.followersBTN
+                selectedTab!!.setBackgroundResource(R.drawable.selector_tab_button)
+
+                authViewModel.getFollowers(id_user = userId)
             }
-            binding.followersBTN.setBackgroundResource(R.drawable.selector_tab_button)
-            binding.followedsBTN.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
-            authViewModel.getFollowers(id_user = userId)
-        }else{
-            binding.requestFollowCV.visibility=View.GONE
-            binding.followedsBTN.setBackgroundResource(R.drawable.selector_tab_button)
-            binding.followersBTN.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
-            authViewModel.getFolloweds(id_user = userId)
+            FOLLOWEDS -> {
+
+                binding.requestFollowCV.visibility = View.GONE
+                binding.SVsearch.visibility = View.GONE
+
+                selectedTab?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
+                selectedTab = binding.followedsBTN
+                selectedTab!!.setBackgroundResource(R.drawable.selector_tab_button)
+                authViewModel.getFolloweds(id_user = userId)
+            }
+            else -> {
+
+                binding.requestFollowCV.visibility = View.GONE
+
+                binding.SVsearch.visibility = View.VISIBLE
+
+
+                selectedTab?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
+                selectedTab = binding.findFollowsBTN
+                selectedTab!!.setBackgroundResource(R.drawable.selector_tab_button)
+                authViewModel.getUsersToFollow()
+            }
         }
 
     }
 
     private fun bindObservers() {
+
+        /**
+         * Followers Tab
+         * */
+
+        /** Get followers */
+
         authViewModel.getUserFollowersLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
 
-                        adapter.updateList(it.data!!.result)
+                        // atualiza adapter list
+                        adapterFollowers.updateList(it.data!!.result, FOLLOWERS)
+                        // sets the adapter
+                        binding.followerRV.adapter = adapterFollowers
 
-                        if (it.data.result.size != 0){
-                            binding.emptyFollowTV.visibility=View.INVISIBLE
-                        }else{
+                        if (it.data.result.size == 0){
+                            binding.emptyFollowTV.text = getString(R.string.no_followers)
                             binding.emptyFollowTV.visibility=View.VISIBLE
+
+
+                        }else{
+                            binding.emptyFollowTV.visibility=View.INVISIBLE
                         }
 
                     }
@@ -189,19 +403,98 @@ class FollowerFragment : Fragment() {
                 }
             }
         }
+
+        /** Follow requests */
+
+        authViewModel.getFollowRequestsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+
+
+                        if(it.data!!.result.isEmpty()) {
+                            binding.requestFollowCV.visibility = View.GONE
+                        }else{
+                            // set number
+                            binding.nRequestBadgeTV.text = it.data._metadata.total_items.toString()
+                            // set image
+                            loadUserImage(binding.imgFirstReqIV,it.data.result[0].img_source)
+
+                            binding.requestFollowCV.visibility=View.VISIBLE
+                        }
+
+                    }
+                    is NetworkResult.Error -> {
+                        toast(it.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        //todo rui falta progress bar
+                        //binding.progressBar.show()
+
+                    }
+                }
+            }
+        }
+
+        /** Delete follower */
+
+        authViewModel.deleteFollowerLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        adapterFollowers.removeItem(followersListingUpdatePosition)
+
+                        if (adapterFollowers.getList().size == 0){
+                            binding.emptyFollowTV.text = getString(R.string.no_followers)
+                            binding.emptyFollowTV.visibility=View.VISIBLE
+
+
+                        }else{
+                            binding.emptyFollowTV.visibility=View.INVISIBLE
+                        }
+
+
+                    }
+                    is NetworkResult.Error -> {
+                        toast(it.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        //todo rui falta progress bar
+                        //binding.progressBar.show()
+
+                    }
+                }
+            }
+        }
+
+        /**
+         * Follows Tab
+         * */
+
+        /** Get follows */
 
         authViewModel.getUserFollowedsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
+                        // atualiza adapter list
+                        adapterFollowers.updateList(it.data!!.result, FOLLOWEDS)
 
-                        adapter.updateList(it.data!!.result)
+                        // sets the adapter
+                        binding.followerRV.adapter = adapterFollowers
 
-                        if (it.data.result.size != 0){
-                            binding.emptyFollowTV.visibility=View.INVISIBLE
-                        }else{
+                        if (it.data.result.size == 0){
+                            binding.emptyFollowTV.text = getString(R.string.no_follows)
                             binding.emptyFollowTV.visibility=View.VISIBLE
+
+
+                        }else{
+                            binding.emptyFollowTV.visibility=View.INVISIBLE
+
+
+
                         }
+
 
                     }
                     is NetworkResult.Error -> {
@@ -215,12 +508,137 @@ class FollowerFragment : Fragment() {
                 }
             }
         }
+
+        authViewModel.deleteFollowLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        adapterFollowers.removeItem(followersListingUpdatePosition)
+                        if (adapterFollowers.getList().size == 0){
+                            binding.emptyFollowTV.text = getString(R.string.no_followers)
+                            binding.emptyFollowTV.visibility=View.VISIBLE
+
+
+                        }else{
+                            binding.emptyFollowTV.visibility=View.INVISIBLE
+                        }
+
+
+                    }
+                    is NetworkResult.Error -> {
+                        toast(it.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        //todo rui falta progress bar
+                        //binding.progressBar.show()
+
+                    }
+                }
+            }
+        }
+
+        /** Delete follower */
+
+        authViewModel.deleteFollowLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        adapterFollowers.removeItem(followersListingUpdatePosition)
+
+                        if (adapterFollowers.getList().size == 0){
+                            binding.emptyFollowTV.text = getString(R.string.no_follows)
+                            binding.emptyFollowTV.visibility=View.VISIBLE
+
+
+                        }else{
+                            binding.emptyFollowTV.visibility=View.INVISIBLE
+                        }
+
+
+                    }
+                    is NetworkResult.Error -> {
+                        toast(it.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        //todo rui falta progress bar
+                        //binding.progressBar.show()
+
+                    }
+                }
+            }
+        }
+
+
+        /**
+         * Find Tab
+         * */
+
+        /** Find follows */
+
+        authViewModel.getUsersToFollow.observe(viewLifecycleOwner) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+
+                        // sets page data
+
+                        currentPage = it.data!!._metadata.current_page
+                        nextPage = it.data._metadata.next != null
+
+                        // sets the adapter
+                        binding.followerRV.adapter = adapterFindFollows
+
+                        // check if list empty
+
+                        if (it.data.result.isEmpty()){
+                            binding.emptyFollowTV.text = getString(R.string.follower_fragment_no_more_people_to_follow)
+                            binding.emptyFollowTV.visibility=View.VISIBLE
+                            adapterFindFollows.updateList(it.data.result)
+                            return@let
+                        }else{
+                            binding.emptyFollowTV.visibility=View.GONE
+                        }
+
+
+                        // checks if new search
+
+                        if (currentPage == 1){
+                            userToFollowList = it.data.result
+                            noMoreRecipesMessagePresented = false
+                        }
+                        else{
+                            userToFollowList += it.data.result
+                        }
+
+                        adapterFindFollows.updateList(userToFollowList)
+
+
+
+
+                    }
+                    is NetworkResult.Error -> {
+                        toast(it.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        //todo rui falta progress bar
+                        //binding.progressBar.show()
+
+                    }
+                }
+            }
+        }
+
+        /** Send Follow requests */
 
         authViewModel.postUserFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-                        toast("Pedido enviado com sucesso")
+                        if (it.data == 201)
+                            adapterFindFollows.removeItem(findFollowsListingUpdatePosition)
+                        else
+                            adapterFindFollows.updateItem(findFollowsListingUpdatePosition,true)
+
                     }
                     is NetworkResult.Error -> {
                         toast(it.message.toString(), type = ToastType.ERROR)
@@ -234,12 +652,14 @@ class FollowerFragment : Fragment() {
             }
         }
 
-        authViewModel.deleteUserFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        /** Delete follow requests */
+
+        authViewModel.deleteFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-                        toast("Removido com sucesso")
-                        adapter.removeItem(itemPosition)
+                        adapterFindFollows.updateItem(findFollowsListingUpdatePosition,false)
+
                     }
                     is NetworkResult.Error -> {
                         toast(it.message.toString(), type = ToastType.ERROR)
@@ -252,26 +672,15 @@ class FollowerFragment : Fragment() {
                 }
             }
         }
+
+
+
+
+
     }
 
-    override fun onResume() {
-        val window = requireActivity().window
-
-        //BACKGROUND in NAVIGATION BAR
-        window.statusBarColor = requireContext().getColor(R.color.background_1)
-        window.navigationBarColor = requireContext().getColor(R.color.background_1)
-
-        //TextColor in NAVIGATION BAR
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = 0
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
-        super.onResume()
+    override fun onStart() {
+        setUI()
+        super.onStart()
     }
-
 }

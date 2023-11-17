@@ -105,13 +105,32 @@
         android:name="com.example.projectfoodmanager.presentation.profile.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
+
+        <action
+            android:id="@+id/action_settingsFragment_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_settingsFragment_to_blankFragment"
             app:destination="@id/blankFragment" />
         <action
             android:id="@+id/action_settingsFragment_to_securityFragment"
             app:destination="@id/securityFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_FAQsFragment"
+            app:destination="@id/FAQsFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_languagesFragment"
+            app:destination="@id/languagesFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_aboutUsFragment"
+            app:destination="@id/aboutUsFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_sendUsAMessageFragment"
+            app:destination="@id/sendUsAMessageFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/updateBiodata"
         android:name="com.example.projectfoodmanager.presentation.goals.UpdateBiodata"
@@ -157,7 +176,7 @@
     </fragment>
     <fragment
         android:id="@+id/followRequestFragment"
-        android:name="com.example.projectfoodmanager.presentation.follower.FollowRequestFragment"
+        android:name="com.example.projectfoodmanager.presentation.follower.followRequests.FollowRequestFragment"
         android:label="fragment_follow_request"
         tools:layout="@layout/fragment_follow_request" >
         <action
@@ -225,5 +244,22 @@
         android:name="com.example.projectfoodmanager.presentation.recipe.create.NewRecipeFragment"
         android:label="fragment_new_recipe"
         tools:layout="@layout/fragment_new_recipe" />
+    <fragment
+        android:id="@+id/FAQsFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.settings.faqs.FAQsFragment"
+        android:label="FAQsFragment" />
+    <fragment
+        android:id="@+id/languagesFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.settings.languages.LanguagesFragment"
+        android:label="LanguagesFragment" />
+    <fragment
+        android:id="@+id/aboutUsFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.settings.aboutUs.AboutUsFragment"
+        android:label="fragment_about_us"
+        tools:layout="@layout/fragment_about_us" />
+    <fragment
+        android:id="@+id/sendUsAMessageFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.settings.sendUsAMessage.SendUsAMessageFragment"
+        android:label="SendUsAMessageFragment" />
 
 </navigation>

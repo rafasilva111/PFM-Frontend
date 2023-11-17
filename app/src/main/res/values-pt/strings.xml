@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GoodBites</string>
+    <string name="hello_blank_fragment">Olá fragmento em branco</string>
+    <string name="error_description">Descrição ausente</string>
+    <string name="error_title">Título ausente</string>
+    <string name="error_tag_text">Insira texto</string>
+    <string name="enter_first_name">Insira o primeiro nome</string>
+    <string name="enter_last_name">Insira o sobrenome</string>
+    <string name="enter_job_title">Insira o título do trabalho</string>
+    <string name="enter_email">Insira o endereço de e-mail</string>
+    <string name="enter_password">Insira a senha</string>
+    <string name="enter_birthdate">Insira a data de nascimento</string>
+    <string name="enter_height">Insira a altura</string>
+    <string name="enter_weight">Insira o peso</string>
+    <string name="enter_activity_level">Insira o nível de atividade</string>
+    <string name="invalid_email">E-mail inválido inserido</string>
+    <string name="invalid_email_2">Este e-mail já está registrado</string>
+    <string name="invalid_email_3">Este e-mail não possui uma conta</string>
+    <string name="invalid_birthdate">Data de nascimento inválida inserida, por favor, use o formato dd/mm/aaaa</string>
+    <string name="invalid_birthdate_2">Data de nascimento inválida inserida, você ainda não nasceu?</string>
+    <string name="invalid_password">Sua senha deve ter pelo menos 8 caracteres</string>
+    <string name="invalid_password_1">Senha do usuário incorreta</string>
+    <string name="invalid_conf_password">Sua senha e confirmação de senha devem ser iguais</string>
+    <string name="invalid_session">Sessão inválida, fazendo logout...</string>
+    <string name="to_many_attemps_to_login_failed">O acesso a esta conta foi temporariamente bloqueado devido a várias tentativas de login malsucedidas. Tente novamente mais tarde.</string>
+    <string name="ingredients">Ingredientes</string>
+    <string name="receitas">Receitas</string>
+    <string name="perfile">Perfil</string>
+    <string name="_0_gostos">0 Gostos</string>
+    <string name="goals">Objetivos</string>
+    <string name="calender">Calendário</string>
+    <string name="favorites">Favoritos</string>
+    <string name="offline_text">O usuário está offline...</string>
+    <string name="offline_desc">O usuário precisa estar online para acessar esta guia.</string>
+    <string name="continuar">OK, entendi.</string>
+    <string name="gender">Género</string>
+    <string name="logout_completed">Logout concluído com sucesso.</string>
+    <string name="welcome">Está de volta, certo?</string>
+    <string name="invalid_password_2">As senhas são diferentes</string>
+    <string name="weightEt_problem_1">Insira um peso válido</string>
+    <string name="weightEt_problem_2">Cuidado, esses são números estranhos</string>
+    <string name="heightEt_problem">Altura inválida</string>
+    <string name="invalid_sex">Selecione um gênero válido</string>
+    <string name="txt_error_message">%1$S*</string>
+    <string name="no_recipes_found">Nenhuma receita encontrada</string>
+    <string name="user_logout_successfully">Usuário desconectado com sucesso</string>
+    <string name="user_had_no_shared_preferences">Sessão do usuário inválida</string>
+    <string name="get_saved_recipes">Receitas salvas</string>
+    <string name="get_liked_recipes">Receitas curtidas</string>
+    <string name="recipe_liked">Receita curtida</string>
+    <string name="recipe_removed_liked">Curtida removida</string>
+    <string name="user_registered_successfully">Usuário registrado com sucesso</string>
+    <string name="logout_confirmation_description">Tem certeza de que deseja sair?</string>
+    <string name="tab_coment">Comentadas</string>
+    <string name="tab_created">Criadas</string>
+    <string name="tab_saved">Salvas</string>
+    <string name="tab_liked">Curtidas</string>
+    <string name="tab_last_seen">Últimas receitas vistas</string>
+    <string name="recipe_listing_filter_sugestions">Sugestões</string>
+    <string name="recipe_listing_filter_best">Melhor avaliadas</string>
+    <string name="recipe_listing_filter_recent">Mais recentes</string>
+    <string name="recipe_listing_filter_personalized_sugestions">Sugestões personalizadas</string>
+    <string name="recipe_listing_welcome">Bem-vindo</string>
+    <string name="recipe_listing_name">Nome próprio</string>
+    <string name="goodbites">GoodBites</string>
+    <string name="register_string">Registrar</string>
+    <string name="login_string">Entrar</string>
+    <string name="recipe_removed_from_saves">Removida dos favoritos</string>
+    <string name="recipe_saved">Receita salva</string>
+    <string name="full_name">%1$s</string>
+    <string name="goals_biodata_confirmation">Você não inseriu seus dados pessoais e isso é necessário para continuar, deseja inseri-los?</string>
+    <string name="biodata_update">Atualização</string>
+    <string name="warning">Aviso</string>
+    <string name="title">Título</string>
+    <string name="description">Descrição</string>
+    <string name="Update">Atualizar</string>
+    <string name="recipe_removed_saved">Removida dos favoritos</string>
+    <string name="username">%1$s</string>
+    <string name="Camera">Câmera</string>
+    <string name="Gallery">Galeria</string>
+    <string name="escolhe_uma_forma">Escolha um método:</string>
+    <string name="back"><![CDATA[<-]]></string>
+    <string name="forward"><![CDATA[->]]></string>
+    <string name="Birth_Date">Data de Nascimento</string>
+    <string name="email">Email</string>
+    <string name="last_name">Sobrenome</string>
+    <string name="first_name">Nome</string>
+    <string name="cancel">Cancelar</string>
+    <string name="calender_formated_date">%1$s:%2$s</string>
+    <string name="no_recipes_saved">Nenhuma receita salva…</string>
+    <string name="none">Nenhum</string>
+    <string name="no_recipes_liked">Nenhuma receita curtida…</string>
+    <string name="no_recipes_created">Nenhuma receita criada…</string>
+    <string name="not_implemented">Ainda não implementado…</string>
+    <string name="most_saved">Mais salvas</string>
+    <string name="random">Aleatório</string>
+    <string name="most_liked">Mais gostadas</string>
+    <string name="date_text">%1$s</string>
+    <string name="followers">Seguidores</string>
+    <string name="followeds">Seguidos</string>
+    <string name="no_followers">Sem seguidores</string>
+    <string name="no_follows">Sem seguidos</string>
+    <string name="name">Nome</string>
+    <string name="follow">Seguir</string>
+    <string name="follow_remove">Remover</string>
+    <string name="no_follow_requests">Sem solicitações de seguimento</string>
+    <string name="notifications">Notificações</string>
+    <string name="follow_requests">Solicitações de seguimento</string>
+    <string name="quantity_placeholder">"%1$.2f %2$s "</string>
+    <string name="lista_de_ingredientes">Lista de ingredientes</string>
+    <string name="save_shopping_cart">Salvar carrinho de compras</string>
+    <string name="NOT_IMPLEMENT_YET">Ainda não implementado</string>
+    <string name="portion_preferenced_by_user_secondary_description">Esta opção é usada para ajustar a quantidade de uma receita de acordo com as preferências do usuário, facilitando o cálculo dos itens necessários para a lista de compras.</string>
+    <string name="portion_preferenced_by_user_description">O usuário não indicou um tamanho de porção preferido, então selecione um para ele.</string>
+    <string name="portion_preferenced_by_user_use_recipes_portion">Usar a porção da receita</string>
+    <string name="user_portion_preference">Preferência de porção do usuário</string>
+    <string name="select">Selecionar</string>
+    <string name="tv_first_recipes_portion">Escolha o número desejado de pessoas para calcular o tamanho da porção da receita</string>
+    <string name="shopping_list_date">Lista de compras %1$d/%2$d %3$d/%4$d</string>
+    <string name="listas_de_compras">Listas de compras</string>
+    <string name="lista_de_compras">Lista de compras</string>
+    <string name="no_shopping_lists">Você não possui nenhuma lista de compras...</string>
+    <string name="sem_registos">Sem registros</string>
+    <string name="recipes_title">Receitas</string>
+    <string name="calender_title">Calendário</string>
+    <string name="favorites_title">Favoritos</string>
+    <string name="goal_title">Objetivo</string>
+    <string name="profile_title">Perfil</string>
+    <string name="fragment_calender_ingredients_back_button">Botão de retorno</string>
+    <string name="fragment_calender_ingredients_lista_de_compras">Lista de compras</string>
+    <string name="profile_shopping_lists">Listas de compras</string>
+    <string name="nr_comments">Nº comentários</string>
+    <string name="no_recipes_comented">Nenhuma receita comentada...</string>
+    <string name="chip_tag_likes">1</string>
+    <string name="chip_tag_saves">2</string>
+    <string name="chip_tag_created">3</string>
+    <string name="chip_tag_commented">4</string>
+    <string name="chip_tag_last_seen">5</string>
+    <string name="recipes_verified">Verificadas</string>
+    <string name="recipes_all">Todas</string>
+    <string name="fragment_title_about_us">Sobre Nós</string>
+    <string name="fragment_faqs_title">Perguntas Frequentes</string>
+    <string name="fragment_languages_title">Idiomas</string>
+    <string name="fragment_settings_title">Configuração</string>
+    <string name="fragment_about_us_title">Sobre Nós</string>
+    <string name="fragment_FAQs_title">Perguntas Frequentes</string>
+    <string name="fragment_send_us_a_message_title">Envie-nos uma mensagem</string>
+    <string name="fragment_follower_follower_request_count">0</string>
+    <string name="follower_fragment_no_more_people_to_follow">Sem mais pessoas para seguir...</string>
+    <string name="fragment_follower_remove_follow_request_title">Cancelar request?</string>
+    <string name="fragment_notifications_no_notification">Sem notificações</string>
+    <string name="accept">aceitar</string>
+    <string-array name="gender_array">
+        <item>Masculino</item>
+        <item>Feminino</item>
+        <item>Não responder</item>
+    </string-array>
+
+    <string-array name="tagEntryCalender_array">
+        <item>Pequeno Almoço</item>
+        <item>Lanche da manhã</item>
+        <item>Almoço</item>
+        <item>Lanche da tarde</item>
+        <item>Jantar</item>
+        <item>Ceia</item>
+    </string-array>
+
+    <string-array name="recipeTags_array">
+        <item>Carne</item>
+        <item>Peixe</item>
+        <item>Sopa</item>
+        <item>Salada</item>
+        <item>Fruta</item>
+        <item>Pizza</item>
+        <item>Bebida</item>
+    </string-array>
+
+    <string-array name="recipeDifficulty_array">
+        <item>Fácil</item>
+        <item>Médio</item>
+        <item>Difícil</item>
+    </string-array>
+</resources>
