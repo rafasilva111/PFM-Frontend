@@ -193,7 +193,7 @@ class RecipeDetailFragment : Fragment() {
         }
 
         binding.profileAuthorCV.setOnClickListener {
-            findNavController().navigate(R.id.action_receitaDetailFragment_to_newRecipeFragment)
+
 
             /*     val view : View = layoutInflater.inflate(R.layout.modal_bottom_sheet_profile,null)
                    val dialog = BottomSheetDialog(requireContext())
@@ -304,20 +304,21 @@ class RecipeDetailFragment : Fragment() {
         }
 
 
+        /*
+            Tabs
+        */
 
-        // tabs
+        binding.recipeDetailTabLayout.removeAllTabs()
 
-        binding.recipeDetailTab.removeAllTabs()
-
-        binding.recipeDetailTab.addTab(binding.recipeDetailTab.newTab().setText("Recipe"))
-        binding.recipeDetailTab.addTab(binding.recipeDetailTab.newTab().setText("Nutrition"))
+        binding.recipeDetailTabLayout.addTab(binding.recipeDetailTabLayout.newTab().setText("Recipe"))
+        binding.recipeDetailTabLayout.addTab(binding.recipeDetailTabLayout.newTab().setText("Nutrition"))
 
 
-        binding.recipeInfoViewPager.adapter = FragmentAdapter(requireActivity().supportFragmentManager, lifecycle, recipe)
+        binding.recipeInfoViewPager.adapter = RecipeDetailTabAdapter(requireActivity().supportFragmentManager, lifecycle, recipe)
         // enables back from comments
         binding.recipeInfoViewPager.isSaveEnabled = false
 
-        binding.recipeDetailTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.recipeDetailTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab != null)
                     binding.recipeInfoViewPager.currentItem = tab.position
@@ -335,7 +336,7 @@ class RecipeDetailFragment : Fragment() {
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                binding.recipeDetailTab.selectTab(binding.recipeDetailTab.getTabAt(position))
+                binding.recipeDetailTabLayout.selectTab(binding.recipeDetailTabLayout.getTabAt(position))
             }
         })
 

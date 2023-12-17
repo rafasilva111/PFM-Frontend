@@ -5,6 +5,7 @@ import com.example.projectfoodmanager.data.api.ApiInterface
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
@@ -161,6 +162,10 @@ class RemoteDataSourceImpl @Inject constructor(
 
 	override suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry> {
 		return apiInterface.patchCalenderEntry(calenderEntryId,calenderPatchRequest)
+	}
+
+	override suspend fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate): Response<Unit> {
+		return apiInterface.checkCalenderEntries(calenderEntryListUpdate)
 	}
 
 	/** Follows  */

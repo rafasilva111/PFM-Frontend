@@ -50,6 +50,7 @@ class BlankFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUI()
+        super.onViewCreated(view, savedInstanceState)
         bindObservers()
     }
 

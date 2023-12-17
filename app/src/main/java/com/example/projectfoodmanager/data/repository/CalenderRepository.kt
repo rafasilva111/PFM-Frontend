@@ -1,6 +1,7 @@
 package com.example.projectfoodmanager.data.repository
 
 import androidx.lifecycle.LiveData
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
@@ -21,6 +22,7 @@ interface CalenderRepository {
     val getCalendarIngredients: LiveData<Event<NetworkResult<ShoppingListSimplefied>>>
     val deleteCalendarEntry: LiveData<Event<NetworkResult<Int>>>
     val patchCalendarEntry: LiveData<Event<NetworkResult<CalenderEntry>>>
+    val checkCalenderEntries: LiveData<Event<NetworkResult<Boolean>>>
 
 
     suspend fun createEntryOnCalender(recipeId: Int,comment: CalenderEntryRequest)
@@ -29,5 +31,6 @@ interface CalenderRepository {
     suspend fun getCalendarIngredients(fromDate: LocalDateTime, toDate: LocalDateTime)
     suspend fun deleteCalenderEntry(calenderEntryId: CalenderEntry)
     suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest)
+    suspend fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate)
 
 }

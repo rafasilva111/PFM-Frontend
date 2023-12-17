@@ -147,11 +147,33 @@
     <string name="fragment_FAQs_title">FAQs</string>
     <string name="fragment_send_us_a_message_title">Send us a message</string>
     <string name="settings_fragment_dialog_desc">Are you sure you want to delete this account?</string>
-    <string name="settings_fragment_dialog_title">Deleting account...</string>
+    <string name="settings_fragment_dialog_title">Deleting account…</string>
     <string name="fragment_followers_find_follows">Find</string>
     <string name="fragment_follower_follower_request_count">0</string>
     <string name="item_follower_request_sent">Request Sent</string>
     <string name="fragment_notification_notification_deleted">Notification deleted</string>
+    <string name="fragment_settings_delete_account">Delete Account</string>
+    <string name="profile_fragment_logout_dialog_title">Logout</string>
+    <string name="profile_fragment_logout_dialog_yes">Yes</string>
+    <string name="profile_fragment_logout_dialog_no">No</string>
+    <string name="follower_fragment_no_more_people_to_follow">No more people to follow…</string>
+    <string name="fragment_follower_remove_follow_request_title">Cancel request?</string>
+    <string name="fragment_follower_remove_follow_request_message">Are you sure you want to cancel the follow request?</string>
+    <string name="fragment_follower_search_hint">Search Recipe</string>
+    <string name="fragment_send_us_a_message_message_title">Title</string>
+    <string name="fragment_send_us_a_message_message">Message</string>
+    <string name="fragment_send_us_a_message_send">Send</string>
+    <string name="fragment_go_back">Go back</string>
+    <string name="fragment_send_us_a_message_description">Some text describing this fragment, and warning the user about its abuse con.</string>
+    <string name="fragment_send_us_a_message_success">Sent App report successfully</string>
+    <string name="enter_title">Title can\'t be empty</string>
+    <string name="enter_message">Message can\'t be empty</string>
+    <string name="fragment_notification_entry">Notification</string>
+    <string name="fragment_notifications_no_notification">No notifications</string>
+    <string name="accept">Accept</string>
+    <string name="new_recipe_fragment_tabTitles_Ingredients">Ingredients</string>
+
+    <string name="new_recipe_fragment_tabTitles_Details">Details</string>
     <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>

@@ -4,6 +4,7 @@ package com.example.projectfoodmanager.data.repository.datasource
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
@@ -78,6 +79,7 @@ interface RemoteDataSource {
 	suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingListSimplefied>
 	suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Unit>
 	suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
+	suspend fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate): Response<Unit>
 
 	//followers
 	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>
@@ -91,8 +93,7 @@ interface RemoteDataSource {
 	suspend fun postFollowRequest(userId: Int): Response<Unit>
 	suspend fun getUsersToFollow(searchString:String?,page: Int?,pageSize:Int?): Response<UsersToFollowList>
 
-
-	// shopping list
+	/** Shopping list */
 	suspend fun getShoppingList() : Response<ListOfShoppingLists>
 	suspend fun getShoppingList(shoppingListId: Int): Response<ShoppingList>
 	suspend fun postShoppingList(shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
@@ -100,7 +101,6 @@ interface RemoteDataSource {
 	suspend fun deleteShoppingList(shoppingListId: Int): Response<IdResponse>
 
 	/** Notifications */
-
 	suspend fun getNotifications(page: Int?, pageSize: Int?): Response<NotificationList>
 	suspend fun getNotification(id: Int?): Response<Notification>
 	suspend fun putNotification(id: Int?, notification: Notification): Response<Unit>
@@ -109,9 +109,7 @@ interface RemoteDataSource {
 	suspend fun deleteNotifications(idListRequest: IdListRequest): Response<Unit>
 
 	/** Application report */
-
 	suspend fun postAppReport(applicationReport: ApplicationReport): Response<Unit>
-
 
 
 

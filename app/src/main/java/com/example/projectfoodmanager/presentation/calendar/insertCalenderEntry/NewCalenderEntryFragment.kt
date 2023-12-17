@@ -18,6 +18,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.databinding.FragmentBlankBinding
 import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBinding
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
 import com.example.projectfoodmanager.util.*
@@ -68,7 +69,7 @@ class NewCalenderEntryFragment : Fragment() {
 
     //adapters
     private val adapter by lazy {
-        RecipeCalenderEntryListingAdapter(
+        NewCalenderEntryFragmentListingAdapter(
             onItemClicked = { _, item ->
                 findNavController().navigate(R.id.action_newCalenderEntryFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("Recipe",item)
@@ -81,16 +82,11 @@ class NewCalenderEntryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        requireActivity().window.decorView.systemUiVisibility = 8192
-        requireActivity().window.navigationBarColor = requireContext().getColor(R.color.background_1)
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
 
-        if (this::binding.isInitialized) {
-            return binding.root
-        } else {
-            requireActivity().window.navigationBarColor = Color.TRANSPARENT
-            requireActivity().window.statusBarColor = Color.TRANSPARENT
 
+            if (!this::binding.isInitialized) {
+                binding = FragmentNewCalenderEntryBinding.inflate(layoutInflater)
+            }
 
             // when objRecipe is supplied from recipeDetail
             objRecipe = if (Build.VERSION.SDK_INT >= 33) {
@@ -100,25 +96,29 @@ class NewCalenderEntryFragment : Fragment() {
                 arguments?.getParcelable("Recipe")
             }
 
-
-            binding = FragmentNewCalenderEntryBinding.inflate(layoutInflater)
-
-            bindObservers()
-            manager = LinearLayoutManager(activity)
-            manager.orientation = LinearLayoutManager.HORIZONTAL
-            manager.reverseLayout = false
-            binding.favoritesRV.layoutManager = manager
-            snapHelper.attachToRecyclerView(binding.favoritesRV)
-
-            //setRecyclerViewScrollListener()
-
             return binding.root
         }
-    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setUI()
         super.onViewCreated(view, savedInstanceState)
-        //bindObservers()
+        bindObservers()
+    }
+
+    private fun setUI() {
+
+
+        requireActivity().window.decorView.systemUiVisibility = 8192
+        requireActivity().window.navigationBarColor = Color.TRANSPARENT
+        requireActivity().window.statusBarColor = Color.TRANSPARENT
+
+        manager = LinearLayoutManager(activity)
+        manager.orientation = LinearLayoutManager.HORIZONTAL
+        manager.reverseLayout = false
+        binding.favoritesRV.layoutManager = manager
+        snapHelper.attachToRecyclerView(binding.favoritesRV)
+
 
         binding.favoritesRV.adapter = adapter
 
@@ -174,7 +174,7 @@ class NewCalenderEntryFragment : Fragment() {
         }
 
         binding.dateCV.setOnClickListener {
-           showDatePickerDialog()
+            showDatePickerDialog()
 
 
 
@@ -469,24 +469,11 @@ class NewCalenderEntryFragment : Fragment() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onDestroy() {
 
-        val window = requireActivity().window
+        /** Reset navigation back color */
+        requireActivity().window.navigationBarColor = requireContext().getColor(R.color.main_color)
 
-        //BACKGROUND in NAVIGATION BAR
-        window.statusBarColor = requireContext().getColor(R.color.background_1)
-        window.navigationBarColor = requireContext().getColor(R.color.background_1)
-
-        //TextColor in NAVIGATION BAR
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
-            window.insetsController?.setSystemBarsAppearance( WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS, WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS)
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = 0
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        }
+        super.onDestroy()
     }
 }

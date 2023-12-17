@@ -14,9 +14,9 @@ import com.example.projectfoodmanager.util.SharedPreference
 import javax.inject.Inject
 
 
-class RecipeCalenderEntryListingAdapter(
+class NewCalenderEntryFragmentListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit
-) : RecyclerView.Adapter<RecipeCalenderEntryListingAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<NewCalenderEntryFragmentListingAdapter.MyViewHolder>() {
 
     @Inject
     lateinit var sharedPreference: SharedPreference

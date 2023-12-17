@@ -229,6 +229,7 @@ class FavoritesFragment : Fragment() {
         if (firstSelectedChip != null){
             chipSelected.isChecked =false
             chipSelected = chipGroup.selectChipByTag(getString(R.string.tab_created))!!
+
             chipSelected.isChecked = true
         }
 
@@ -245,6 +246,15 @@ class FavoritesFragment : Fragment() {
                 // If no chip is selected, select the last selected one
                 chipSelected.isChecked = true
             }
+        }
+
+        /**
+         * Bottom Add Recipe
+         */
+
+        // todo
+        binding.addRecipeBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_favoritesFragment_to_newRecipeFragment)
         }
 
         /**
@@ -315,6 +325,9 @@ class FavoritesFragment : Fragment() {
     private fun updateView(currentTabSelected: View) {
         changeRecyclerViewScrollListener(false)
         val recipes = getChipList(currentTabSelected)
+
+        binding.addRecipeBtn.visibility = View.GONE
+
         when(currentTabSelected){
             binding.chipCurtidas -> {
 
@@ -348,6 +361,8 @@ class FavoritesFragment : Fragment() {
             binding.chipCriadas ->{
 
                 onlineChipFilter = false
+
+                binding.addRecipeBtn.visibility = View.VISIBLE
 
                 //list
                 if (recipes.isEmpty()){

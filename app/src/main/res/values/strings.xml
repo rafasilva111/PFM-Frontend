@@ -154,7 +154,8 @@
     <string name="settings_fragment_dialog_title">Deleting account…</string>
     <string name="fragment_followers_find_follows">Find</string>
     <string name="fragment_follower_follower_request_count">0</string>
-    <string name="follower_fragment_no_more_people_to_follow">Sem mais pessoas para seguir...</string>
+    <string name="follower_fragment_no_more_people_to_follow">Sem mais pessoas para seguir…</string>
+    <string name="new_recipe_fragment_tabTitles_Preparation">Preparação</string>
     <string name="item_follower_request_sent">Request Sent</string>
     <string name="fragment_follower_remove_follow_request_title">Cancelar request?</string>
     <string name="fragment_follower_remove_follow_request_message">Tem a certeza que pretende cancelar o pedido de seguir?</string>
@@ -171,6 +172,8 @@
     <string name="fragment_notifications_no_notification">Sem notificações</string>
     <string name="fragment_notification_notification_deleted">Notification deleted</string>
     <string name="accept">aceitar</string>
+    <string name="new_recipe_fragment_tabTitles_Ingredients">Ingredientes</string>
+    <string name="new_recipe_fragment_tabTitles_Details">Detalhes</string>
     <string-array name="gender_array">
         <item>Masculino</item>
         <item>Feminino</item>

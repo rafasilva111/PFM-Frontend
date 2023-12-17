@@ -1,6 +1,7 @@
 package com.example.projectfoodmanager.util
 
 import android.content.SharedPreferences
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
@@ -232,13 +233,26 @@ class SharedPreference @Inject constructor(
             }
         }
 
-
-
         if (dateString !in fullCalenderEntryList)
             fullCalenderEntryList[dateString] = mutableListOf()
 
         fullCalenderEntryList[dateString]!!.add(calenderEntry)
         fullCalenderEntryList.comparator()
+
+
+        sharedPreferences.edit().putString(SharedPreferencesConstants.USER_SESSION_CALENDER,gson.toJson(fullCalenderEntryList)).apply()
+    }
+
+    fun updateCalenderEntriesState(calenderEntryListUpdate: CalenderEntryListUpdate) {
+        val fullCalenderEntryList = getAllCalendarEntrys()
+
+        val calenderEntryList =calenderEntryListUpdate.calenderEntryStateList.map { it.id }
+
+
+        for (list in fullCalenderEntryList.values)
+            for (item in list)
+                if (item.id in calenderEntryList )
+                    item.checked_done  =calenderEntryListUpdate.calenderEntryStateList[calenderEntryList.indexOf(item.id)].state
 
 
         sharedPreferences.edit().putString(SharedPreferencesConstants.USER_SESSION_CALENDER,gson.toJson(fullCalenderEntryList)).apply()
@@ -304,6 +318,7 @@ class SharedPreference @Inject constructor(
         allShoppingLists.removeIf { it.id == shoppingListId }
         sharedPreferences.edit().putString(SharedPreferencesConstants.USER_SESSION_SHOPPING_LISTS,gson.toJson(allShoppingLists)).apply()
     }
+
 
 
 

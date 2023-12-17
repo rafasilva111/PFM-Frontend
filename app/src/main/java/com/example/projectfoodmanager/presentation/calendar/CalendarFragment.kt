@@ -4,12 +4,10 @@ import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsetsController
 import android.widget.Button
 import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
@@ -21,7 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryState
 import com.example.projectfoodmanager.databinding.FragmentCalendarBinding
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.currentDate
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.daysInMonthArray
@@ -34,7 +33,6 @@ import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfMonth
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfWeek
-import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 
@@ -54,6 +52,8 @@ class CalendarFragment : Fragment() {
 
     // constants
     val TAG: String = "CalenderFragment"
+
+    private val calenderEntriesToBeChecked: MutableList<CalenderEntryState> = mutableListOf()
 
     // injects
 
@@ -127,7 +127,10 @@ class CalendarFragment : Fragment() {
                 changeMenuVisibility(false,activity)
             },
             onDoneClicked = { checkDone, item->
-                calenderViewModel.patchCalendarEntry(item.id, CalenderEntryPatchRequest(checked_done = checkDone))
+                if (CalenderEntryState(item.id,!checkDone) !in calenderEntriesToBeChecked)
+                    calenderEntriesToBeChecked.add(CalenderEntryState(item.id,checkDone))
+                else
+                    calenderEntriesToBeChecked.remove(CalenderEntryState(item.id,!checkDone))
             }
         )
     }
@@ -151,9 +154,20 @@ class CalendarFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        setUI()
+        bindObservers()
 
-        //
+    }
+
+    private fun setUI() {
+        /**
+         *  General
+         * */
+
+        changeStatusBarColor(false, activity, context)
+        changeMenuVisibility(true,activity)
+
+
         binding.nRegistersTV.text = nrRecipes
 
         binding.addRegisterIB.setOnClickListener {
@@ -206,25 +220,26 @@ class CalendarFragment : Fragment() {
         if (sharedPreference.getUserSession().user_portion == -1)
             askUserPortionPreference()
 
-        if (isOnline(view.context)) {
-            binding.calEntrysRV.adapter = adapterEntry
 
-            val targetDate = if (selectedDate != currentDate) selectedDate else currentDate
-            val calendarEntry = sharedPreference.getEntryOnCalendar(targetDate.atStartOfDay())
-            calendarEntry?.let {
-                adapterEntry.updateList(it)
-                if (calendarEntry.isEmpty()) {
-                    binding.emptyRegTV.show()
-                } else {
-                    binding.emptyRegTV.hide()
-                }
-                binding.nRegistersTV.text = adapterEntry.itemCount.toString()
+        binding.calEntrysRV.adapter = adapterEntry
+
+
+
+    }
+
+    private fun loadUI() {
+
+        val targetDate = if (selectedDate != currentDate) selectedDate else currentDate
+        val calendarEntry = sharedPreference.getEntryOnCalendar(targetDate.atStartOfDay())
+        calendarEntry?.let {
+            adapterEntry.updateList(it)
+            if (calendarEntry.isEmpty()) {
+                binding.emptyRegTV.show()
+            } else {
+                binding.emptyRegTV.hide()
             }
-
-
-
+            binding.nRegistersTV.text = adapterEntry.itemCount.toString()
         }
-
     }
 
     private fun askUserPortionPreference() {
@@ -278,11 +293,14 @@ class CalendarFragment : Fragment() {
 
     override fun onStart() {
 
-        changeStatusBarColor(false, activity, context)
-        changeMenuVisibility(true,activity)
+
+
+        loadUI()
 
         super.onStart()
     }
+
+
 
 
     private fun setMonthView() {
@@ -298,14 +316,6 @@ class CalendarFragment : Fragment() {
         binding.calMonthRV.layoutManager = layoutManager
         binding.calMonthRV.adapter = adapterCalMonth
     }
-
-/*    private fun updateMonthView() {
-
-        binding.monthYearTV.text = formatDateMonthYear(currentDate)
-        adapter.updateList(daysInMonthArray(
-            currentDate
-        ))
-    }*/
 
     private fun setWeeklyView() {
 
@@ -403,7 +413,10 @@ class CalendarFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        //Todo: RAFA fazer save das calendersEntrys mediante a sharedpreferences e não diretamente
+        // delete notifications
+        if (calenderEntriesToBeChecked.isNotEmpty())
+            calenderViewModel.checkCalenderEntries(CalenderEntryListUpdate(calenderEntryStateList=calenderEntriesToBeChecked))
+
     }
 
     companion object{

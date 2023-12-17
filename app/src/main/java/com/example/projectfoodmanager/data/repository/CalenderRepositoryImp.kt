@@ -3,6 +3,7 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
@@ -15,6 +16,7 @@ import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
+import retrofit2.Response
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -24,6 +26,54 @@ class CalenderRepositoryImp @Inject constructor(
 ) : CalenderRepository {
 
     private val TAG:String = "AuthRepositoryImp"
+
+    /**
+     * Generic function to handle API requests and responses.
+     *
+     * @param liveData The LiveData where the result will be posted.
+     * @param saveSharedPreferences Flag to determine if the result should be saved in SharedPreferences.
+     * @param apiCall The API call to be executed.
+     */
+    private suspend fun <T> handleApiResponse(
+        liveData: MutableLiveData<Event<NetworkResult<T>>>,
+        apiCall: suspend () -> Response<T>
+    ) {
+        try {
+            // Post a loading state to indicate the request is in progress
+            liveData.postValue(Event(NetworkResult.Loading()))
+            Log.i(TAG, "Making API request.")
+
+            // Invoke the API call
+            val response = apiCall.invoke()
+
+            if (response.isSuccessful) {
+                // API request was successful
+                val responseBody = response.body()
+                if (responseBody != null) {
+
+                    // Post a success result with the response body
+                    liveData.postValue(Event(NetworkResult.Success(responseBody)))
+
+                } else {
+                    // Handle the case where the response body is null
+                    liveData.postValue(Event(NetworkResult.Error("Response body is null")))
+                }
+            } else if (response.errorBody() != null) {
+                // Handle the case where the API request was not successful and has an error body
+                val errorObj = response.errorBody()!!.charStream().readText()
+                Log.i(TAG, "API request was not successful. Error: \n$errorObj")
+                liveData.postValue(Event(NetworkResult.Error(errorObj)))
+            } else {
+                // Handle the case where something went wrong without an error body
+                liveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            }
+        } catch (e: Exception) {
+            // Handle exceptions here if needed
+            Log.e(TAG, "API request failed with exception: ${e.message}")
+            // Post an error result for exceptions
+            liveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
 
     private val _functionCreateEntryOnCalender = MutableLiveData<Event<NetworkResult<CalenderEntry>>>()
     override val createEntryOnCalender: LiveData<Event<NetworkResult<CalenderEntry>>>
@@ -171,6 +221,32 @@ class CalenderRepositoryImp @Inject constructor(
             _functionPatchCalenderEntry.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
     }
+    private val _checkCalenderEntries = MutableLiveData<Event<NetworkResult<Boolean>>>()
+    override val checkCalenderEntries: LiveData<Event<NetworkResult<Boolean>>>
+        get() = _checkCalenderEntries
 
 
+
+    override suspend fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate) {
+        _checkCalenderEntries.postValue(Event(NetworkResult.Loading()))
+        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
+
+        val response =remoteDataSource.checkCalenderEntries(calenderEntryListUpdate)
+
+        if (response.isSuccessful) {
+            Log.i(TAG, "handleResponse: request made was sucessfull.")
+            // todo update shared preferences
+            sharedPreference.updateCalenderEntriesState(calenderEntryListUpdate)
+            _checkCalenderEntries.postValue(Event(NetworkResult.Success(response.isSuccessful
+            )))
+        }
+        else if(response.errorBody()!=null){
+            val errorObj = response.errorBody()!!.charStream().readText()
+            Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
+            _checkCalenderEntries.postValue(Event(NetworkResult.Error(errorObj)))
+        }
+        else{
+            _checkCalenderEntries.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+    }
 }

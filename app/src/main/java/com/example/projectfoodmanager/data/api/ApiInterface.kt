@@ -4,6 +4,7 @@ package com.example.projectfoodmanager.data.api
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
@@ -149,6 +150,8 @@ interface ApiInterface {
     @PATCH("$API_V1_BASE_URL/calendar")
     suspend fun patchCalenderEntry(@Query("id") calenderEntryId: Int, @Body calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
 
+    @POST("$API_V1_BASE_URL/calendar/list/check")
+    suspend fun checkCalenderEntries(@Body calenderEntryListUpdate: CalenderEntryListUpdate): Response<Unit>
 
     /** Follows */
 
@@ -221,13 +224,13 @@ interface ApiInterface {
     @PUT("$API_V1_BASE_URL/notification")
     suspend fun putNotification(@Query("id")id: Int?, @Body notification: Notification): Response<Unit>
 
-    @POST("$API_V1_BASE_URL/notification/seen")
+    @POST("$API_V1_BASE_URL/notification/list/seen")
     suspend fun putNotifications(@Body idListRequest: IdListRequest): Response<Unit>
 
     @DELETE("$API_V1_BASE_URL/notification")
     suspend fun deleteNotification(@Query("id")id: Int?) : Response<Unit>
 
-    @POST("$API_V1_BASE_URL/notification/delete")
+    @POST("$API_V1_BASE_URL/notification/list/delete")
     suspend fun deleteNotifications(@Body idListRequest: IdListRequest): Response<Unit>
 
     /** Application report */

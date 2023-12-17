@@ -3,6 +3,7 @@ package com.example.projectfoodmanager.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
@@ -72,9 +73,9 @@ class CalendarViewModel @Inject constructor(
         get() = repository.deleteCalendarEntry
 
 
-    fun deleteCalendarEntry(calenderEntry: CalenderEntry) {
+    fun deleteCalendarEntry(calenderEntryId: CalenderEntry) {
         viewModelScope.launch {
-            repository.deleteCalenderEntry(calenderEntry)
+            repository.deleteCalenderEntry(calenderEntryId)
         }
     }
 
@@ -88,6 +89,15 @@ class CalendarViewModel @Inject constructor(
         }
     }
 
+    val checkCalenderEntriesLiveData: LiveData<Event<NetworkResult<Boolean>>>
+        get() = repository.checkCalenderEntries
+
+    fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate) {
+
+        viewModelScope.launch {
+            repository.checkCalenderEntries(calenderEntryListUpdate)
+        }
+    }
 
 
 }

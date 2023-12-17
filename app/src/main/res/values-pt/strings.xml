@@ -147,10 +147,33 @@
     <string name="fragment_FAQs_title">Perguntas Frequentes</string>
     <string name="fragment_send_us_a_message_title">Envie-nos uma mensagem</string>
     <string name="fragment_follower_follower_request_count">0</string>
-    <string name="follower_fragment_no_more_people_to_follow">Sem mais pessoas para seguir...</string>
-    <string name="fragment_follower_remove_follow_request_title">Cancelar request?</string>
+    <string name="follower_fragment_no_more_people_to_follow">Sem mais pessoas para seguir…</string>
+    <string name="new_recipe_fragment_tabTitles_Preparation">Preparação</string>
+    <string name="fragment_settings_delete_account">Excluir Conta</string>
+    <string name="profile_fragment_logout_dialog_title">Sair</string>
+    <string name="profile_fragment_logout_dialog_yes">Sim</string>
+    <string name="profile_fragment_logout_dialog_no">Não</string>
+    <string name="settings_fragment_dialog_desc">Tem certeza de que deseja excluir esta conta e todo o seu conteúdo?</string>
+    <string name="settings_fragment_dialog_title">Excluindo conta…</string>
+    <string name="fragment_followers_find_follows">Encontrar</string>
+    <string name="item_follower_request_sent">Pedido enviado</string>
+    <string name="fragment_follower_remove_follow_request_title">Cancelar pedido?</string>
+    <string name="fragment_follower_remove_follow_request_message">Tem certeza de que deseja cancelar o pedido de seguir?</string>
+    <string name="fragment_follower_search_hint">Buscar Receita</string>
+    <string name="fragment_send_us_a_message_message_title">Título</string>
+    <string name="fragment_send_us_a_message_message">Mensagem</string>
+    <string name="fragment_send_us_a_message_send">Enviar</string>
+    <string name="fragment_go_back">Voltar</string>
+    <string name="fragment_send_us_a_message_description">Algum texto descrevendo este fragmento e alertando o usuário sobre seu uso inadequado.</string>
+    <string name="fragment_send_us_a_message_success">Relatório do aplicativo enviado com sucesso</string>
+    <string name="enter_title">O título não pode estar vazio</string>
+    <string name="enter_message">A mensagem não pode estar vazia</string>
+    <string name="fragment_notification_entry">Notificação</string>
     <string name="fragment_notifications_no_notification">Sem notificações</string>
-    <string name="accept">aceitar</string>
+    <string name="fragment_notification_notification_deleted">Notificação excluída</string>
+    <string name="accept">Aceitar</string>
+    <string name="new_recipe_fragment_tabTitles_Ingredients">Ingredientes</string>
+    <string name="new_recipe_fragment_tabTitles_Details">Detalhes</string>
     <string-array name="gender_array">
         <item>Masculino</item>
         <item>Feminino</item>

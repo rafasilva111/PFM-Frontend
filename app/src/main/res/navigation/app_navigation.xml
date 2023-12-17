@@ -41,9 +41,7 @@
         <action
             android:id="@+id/action_receitaDetailFragment_to_profileBottomSheetDialog"
             app:destination="@id/profileBottomSheetDialog" />
-        <action
-            android:id="@+id/action_receitaDetailFragment_to_newRecipeFragment"
-            app:destination="@id/newRecipeFragment" />
+
 
     </fragment>
 
@@ -89,7 +87,11 @@
         <action
             android:id="@+id/action_favoritesFragment_to_receitaDetailFragment"
             app:destination="@id/receitaDetailFragment"/>
+        <action
+            android:id="@+id/action_favoritesFragment_to_newRecipeFragment"
+            app:destination="@id/createRecipeFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/goalsFragment"
         android:name="com.example.projectfoodmanager.presentation.goals.GoalsFragment"
@@ -240,7 +242,7 @@
             app:destination="@id/calenderIngredientsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/newRecipeFragment"
+        android:id="@+id/createRecipeFragment"
         android:name="com.example.projectfoodmanager.presentation.recipe.create.NewRecipeFragment"
         android:label="fragment_new_recipe"
         tools:layout="@layout/fragment_new_recipe" />
@@ -261,5 +263,10 @@
         android:id="@+id/sendUsAMessageFragment"
         android:name="com.example.projectfoodmanager.presentation.profile.settings.sendUsAMessage.SendUsAMessageFragment"
         android:label="SendUsAMessageFragment" />
+
+    <action
+        android:id="@+id/action_navigate_to_favoritesFragment"
+        app:destination="@id/favoritesFragment"
+        />
 
 </navigation>
