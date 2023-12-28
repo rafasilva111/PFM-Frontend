@@ -45,8 +45,8 @@ import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FireStorage.user_profile_images
-import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_CODE
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.util.ActionResultCodes.GALLERY_REQUEST_CODE
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.ktx.Firebase
@@ -69,7 +69,7 @@ class RegisterFragment : Fragment() {
     private var fileName: String? = null
     lateinit var finalUri: Uri
     private var selectedAvatar: String? = null
-    val authViewModel: AuthViewModel by viewModels()
+    val userViewModel: UserViewModel by viewModels()
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
 
@@ -132,7 +132,7 @@ class RegisterFragment : Fragment() {
                     refStorage.putFile(file_uri!!)
                         .addOnSuccessListener {
                             Log.d(TAG, "uploadImageToFirebase: success")
-                            authViewModel.registerUser(createUserRequest())
+                            userViewModel.registerUser(createUserRequest())
                         }
 
                         .addOnFailureListener { e ->
@@ -141,7 +141,7 @@ class RegisterFragment : Fragment() {
                 }
                 else
 
-                    authViewModel.registerUser(createUserRequest())
+                    userViewModel.registerUser(createUserRequest())
 
             }else{
                 Toast(context).showCustomToast ("Por favor preencha os campos em falta", requireActivity(),ToastType.ERROR)
@@ -549,7 +549,7 @@ class RegisterFragment : Fragment() {
             if (fileName == null)
                 fileName = UUID.randomUUID().toString() + ".png"
 
-            authViewModel.updateUser(UserRequest(img_source = fileName))
+            userViewModel.updateUser(UserRequest(img_source = fileName))
             val storageRef = Firebase.storage.reference.child("$user_profile_images$fileName")
 
             storageRef.putFile(resultUri)
@@ -584,7 +584,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        authViewModel.userRegisterLiveData.observe(viewLifecycleOwner) { it ->
+        userViewModel.userRegisterLiveData.observe(viewLifecycleOwner) { it ->
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {

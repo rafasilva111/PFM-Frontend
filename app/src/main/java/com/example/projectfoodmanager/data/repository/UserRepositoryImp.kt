@@ -21,10 +21,10 @@ import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 
-class AuthRepositoryImp @Inject constructor(
+class UserRepositoryImp @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val sharedPreference: SharedPreference
-) : AuthRepository {
+) : UserRepository {
 
     private val TAG:String = "AuthRepositoryImp"
 
@@ -248,6 +248,17 @@ class AuthRepositoryImp @Inject constructor(
     override suspend fun deleteUserAccount() {
         handleApiResponse(_deleteUserAccount, deleteSharedPreferences = true) {
             remoteDataSource.deleteUser()
+        }
+    }
+
+
+    private val _getUserAccount = MutableLiveData<Event<NetworkResult<User>>>()
+    override val getUserAccount: LiveData<Event<NetworkResult<User>>>
+        get() = _getUserAccount
+
+    override suspend fun getUserAccount(userId: Int) {
+        handleApiResponse(_getUserAccount) {
+            remoteDataSource.getUserById(userId)
         }
     }
 

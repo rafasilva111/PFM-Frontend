@@ -44,7 +44,7 @@
                     android:contentDescription="recipe_image"
                     android:foreground="#56000000"
                     android:scaleType="fitXY"
-                    android:src="@drawable/default_image_display"
+                    android:src="@drawable/default_image_recipe"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -661,7 +661,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/recipe_detail_tab"
+                android:id="@+id/recipe_detail_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -682,7 +682,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:background="@color/transparent"
-                app:layout_constraintTop_toBottomOf="@+id/recipe_detail_tab"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_detail_tab_layout"
                 />
 
 

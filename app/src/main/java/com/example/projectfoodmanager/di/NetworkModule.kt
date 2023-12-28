@@ -7,10 +7,8 @@ import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import com.example.projectfoodmanager.data.api.ApiInterface
-import com.example.projectfoodmanager.data.api.ApiNotificationInterface
 import com.example.projectfoodmanager.data.api.AuthInterceptor
 import com.example.projectfoodmanager.util.Constants
-import com.example.projectfoodmanager.util.FIREBASE_NOTIFICATIONS
 import okhttp3.OkHttpClient
 import dagger.Module
 import dagger.Provides

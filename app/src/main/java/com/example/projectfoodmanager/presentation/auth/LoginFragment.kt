@@ -1,6 +1,5 @@
 package com.example.projectfoodmanager.presentation.auth
 
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -11,12 +10,11 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.databinding.FragmentBlankBinding
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +29,7 @@ class LoginFragment : Fragment() {
     lateinit var binding: FragmentLoginBinding
 
 
-    private val authViewModel by activityViewModels<AuthViewModel>()
+    private val userViewModel by activityViewModels<UserViewModel>()
     private val calendarViewModel by activityViewModels<CalendarViewModel>()
 
     @Inject
@@ -134,7 +132,7 @@ class LoginFragment : Fragment() {
 
         binding.loginBtn.setOnClickListener {
             if (validation()) {
-                authViewModel.loginUser(binding.emailEt.text.toString().trim(),binding.passEt.text.toString().trim())
+                userViewModel.loginUser(binding.emailEt.text.toString().trim(),binding.passEt.text.toString().trim())
             }
         }
 
@@ -150,13 +148,13 @@ class LoginFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        authViewModel.userAuthResponseLiveData.observe(viewLifecycleOwner, Observer {
+        userViewModel.userAuthResponseLiveData.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let{
 
                 when (it) {
                     is NetworkResult.Success -> {
                         tokenManager.saveToken(it.data!!.token)
-                        authViewModel.getUserSession()
+                        userViewModel.getUserSession()
                     }
                     is NetworkResult.Error -> {
                         binding.loginBtn.isVisible = true
@@ -171,14 +169,14 @@ class LoginFragment : Fragment() {
             }
         })
 
-        authViewModel.userResponseLiveData.observe(viewLifecycleOwner) {response ->
+        userViewModel.userResponseLiveData.observe(viewLifecycleOwner) { response ->
             response.getContentIfNotHandled()?.let {result ->
                 when (result) {
                     is NetworkResult.Success -> {
                         if ( result.data!!.fmc_token != "-1")
                             FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
                                 if (result.data.fmc_token != token)
-                                    authViewModel.updateUser(UserRequest(fmc_token = token))
+                                    userViewModel.updateUser(UserRequest(fmc_token = token))
                             }
 
                         LocalDateTime.now().let { dateNow ->
@@ -189,7 +187,7 @@ class LoginFragment : Fragment() {
                             )
                         }
 
-                        authViewModel.getUserRecipesBackground()
+                        userViewModel.getUserRecipesBackground()
 
                         setButtonVisibility(visibility = true)
                         findNavController().navigate(R.id.action_loginFragment_to_home_navigation)

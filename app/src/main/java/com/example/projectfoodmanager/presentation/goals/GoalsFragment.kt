@@ -1,14 +1,9 @@
 package com.example.projectfoodmanager.presentation.goals
 
 import android.app.Dialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,12 +15,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentGoalsBinding
-import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
-import com.example.projectfoodmanager.util.LOGIN_TIME
 import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class GoalsFragment : Fragment() {
     lateinit var binding: FragmentGoalsBinding
-    val authViewModel: AuthViewModel by viewModels()
+    val userViewModel: UserViewModel by viewModels()
     val TAG: String = "ProfileFragment"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,7 +92,7 @@ class GoalsFragment : Fragment() {
     private fun bindObservers() {
 
 
-        authViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer { userSessionResponse ->
+        userViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer { userSessionResponse ->
             userSessionResponse.getContentIfNotHandled()?.let{
 
                 when (it) {

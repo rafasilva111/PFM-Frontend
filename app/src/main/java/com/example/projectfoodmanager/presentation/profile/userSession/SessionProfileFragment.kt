@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.profile
+package com.example.projectfoodmanager.presentation.profile.userSession
 
 import android.Manifest
 import android.app.Activity
@@ -32,7 +32,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.AvatarGVAdapter
@@ -41,15 +40,15 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.databinding.FragmentProfileBinding
+import com.example.projectfoodmanager.databinding.FragmentSessionProfileBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FireStorage.user_profile_images
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
-import com.example.projectfoodmanager.util.actionResultCodes.GALLERY_REQUEST_CODE
+import com.example.projectfoodmanager.viewmodels.UserViewModel
+import com.example.projectfoodmanager.util.ActionResultCodes.GALLERY_REQUEST_CODE
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -63,22 +62,44 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment() {
+class SessionProfileFragment : Fragment() {
 
 
     // binding
-    private lateinit var binding: FragmentProfileBinding
+    private lateinit var binding: FragmentSessionProfileBinding
 
     // viewModels
-    private val authViewModel by activityViewModels<AuthViewModel>()
+    private val userViewModel by activityViewModels<UserViewModel>()
 
     // constants
-    private val TAG: String = "ProfileFragment"
+    private val TAG: String = "SessionProfileFragment"
     private var fileName: String? = null
     private var selectedAvatar: String? = null
-    lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    private var activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode== AppCompatActivity.RESULT_OK) {
+            val extras: Bundle? = result.data?.extras
+            val imageUri: Uri
+            val imageBitmap = extras?.get("data") as Bitmap
+            val imageResult: WeakReference<Bitmap> = WeakReference(
+                Bitmap.createScaledBitmap(
+                    imageBitmap, imageBitmap.width, imageBitmap.height, false
+                ).copy(
+                    Bitmap.Config.RGB_565, true
+                )
+            )
+            val bm = imageResult.get()
+
+            // todo look into this
+            imageUri = saveImage(bm, requireContext())
+            launchImageCrop(imageUri)
+        }
+        else{
+            Log.d(TAG, "onCreateView: Something went wrong on registerForActivityResult")
+        }
+    }
+
     lateinit var finalUri: Uri
-    private lateinit var userSession: User
+    private lateinit var user: User
 
     // injects
     @Inject
@@ -94,54 +115,55 @@ class ProfileFragment : Fragment() {
 
         ): View {
 
-        binding = FragmentProfileBinding.inflate(layoutInflater)
-
-        /**
-         * Profile image Selection
-         */
-
-        activityResultLauncher  =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                if (result.resultCode== AppCompatActivity.RESULT_OK) {
-                    val extras: Bundle? = result.data?.extras
-                    val imageUri: Uri
-                    val imageBitmap = extras?.get("data") as Bitmap
-                    val imageResult: WeakReference<Bitmap> = WeakReference(
-                        Bitmap.createScaledBitmap(
-                            imageBitmap, imageBitmap.width, imageBitmap.height, false
-                        ).copy(
-                            Bitmap.Config.RGB_565, true
-                        )
-                    )
-                    val bm = imageResult.get()
-
-                    // todo look into this
-                    imageUri = saveImage(bm, requireContext())
-                    launchImageCrop(imageUri)
-                }
-                else{
-                    Log.d(TAG, "onCreateView: Something went wrong on registerForActivityResult")
-                }
-            }
+        if (!this::binding.isInitialized) {
+            binding = FragmentSessionProfileBinding.inflate(layoutInflater)
+        }
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        userSession = sharedPreference.getUserSession()
+        user = sharedPreference.getUserSession()
         setUI()
+        loadUI()
+
+
+
 
         super.onViewCreated(view, savedInstanceState)
         bindObservers()
     }
 
+
+    private fun loadUI(){
+        /**
+         * Info
+         */
+
+        binding.nameTV.text =  getString(R.string.full_name, user.name)
+
+        if(!user.verified){
+            binding.profileCV.foreground=null
+            binding.vipIV.visibility=View.INVISIBLE
+        }
+
+        binding.nFollowedsTV.text = user.followeds.toString()
+        binding.nFollowersTV.text = user.followers.toString()
+
+        /**
+         * Image offline
+         */
+
+        loadUserImage(binding.profileIV, user.img_source)
+
+    }
     private fun setUI() {
 
         /**
          *  General
          * */
-
+        val activity = requireActivity()
         changeMenuVisibility(true,activity)
         changeStatusBarColor(true,activity,context)
 
@@ -149,15 +171,15 @@ class ProfileFragment : Fragment() {
          * Info
          */
 
-        binding.nameTV.text =  getString(R.string.full_name, userSession.name)
+        binding.nameTV.text =  getString(R.string.full_name, user.name)
 
-        if(!userSession.verified){
+        if(!user.verified){
             binding.profileCV.foreground=null
             binding.vipIV.visibility=View.INVISIBLE
         }
 
-        binding.nFollowedsTV.text = userSession.followeds.toString()
-        binding.nFollowersTV.text = userSession.followers.toString()
+        binding.nFollowedsTV.text = user.followeds.toString()
+        binding.nFollowersTV.text = user.followers.toString()
 
         /**
          * Buttons
@@ -171,7 +193,7 @@ class ProfileFragment : Fragment() {
                 .setMessage(resources.getString(R.string.logout_confirmation_description))
                 .setPositiveButton(getString(R.string.profile_fragment_logout_dialog_yes)) { _, _ ->
                     // Adicione aqui o código para apagar o registro
-                    authViewModel.logoutUser()
+                    userViewModel.logoutUser()
                 }
                 .setNegativeButton(getString(R.string.profile_fragment_logout_dialog_no)) { dialog, _ ->
                     // Adicione aqui o código para cancelar a exclusão do registro
@@ -200,7 +222,7 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_profileFragment_to_followerFragment,Bundle().apply {
                 putInt("userID",-1)
                 putInt("followType",FollowType.FOLLOWEDS)
-                putString("userName",userSession.name)
+                putString("userName",user.name)
             })
             changeMenuVisibility(false,activity)
         }
@@ -209,7 +231,7 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_profileFragment_to_followerFragment,Bundle().apply {
                 putInt("userID",-1)
                 putInt("followType",FollowType.FOLLOWERS)
-                putString("userName",userSession.name)
+                putString("userName",user.name)
             })
             changeMenuVisibility(false,activity)
         }
@@ -217,7 +239,7 @@ class ProfileFragment : Fragment() {
         /**
          * Image offline
          */
-        loadUserImage(binding.profileIV, userSession.img_source)
+        loadUserImage(binding.profileIV, user.img_source)
 
 
         if (isOnline(requireView().context)) {
@@ -273,7 +295,7 @@ class ProfileFragment : Fragment() {
 
                     // Handle the item selection here
                     selectedAvatar = avatar!!.getName()
-                    authViewModel.updateUser(UserRequest(img_source = selectedAvatar))
+                    userViewModel.updateUser(UserRequest(img_source = selectedAvatar))
 
                     binding.profileIV.setImageResource(avatar.imgId)
 
@@ -294,6 +316,8 @@ class ProfileFragment : Fragment() {
 
 
     }
+
+
 
 
     @Deprecated("Deprecated in Java")
@@ -318,7 +342,7 @@ class ProfileFragment : Fragment() {
                 fileName = UUID.randomUUID().toString() + ".png"
 
 
-            authViewModel.updateUser(UserRequest(img_source = fileName))
+            userViewModel.updateUser(UserRequest(img_source = fileName))
             val storageRef = Firebase.storage.reference.child("$user_profile_images$fileName")
 
             storageRef.putFile(resultUri)
@@ -359,8 +383,8 @@ class ProfileFragment : Fragment() {
     private fun launchImageCrop(uri: Uri) {
 
 
-        var destination:String=StringBuilder(UUID.randomUUID().toString()).toString()
-        var options: UCrop.Options=UCrop.Options()
+        val destination:String=StringBuilder(UUID.randomUUID().toString()).toString()
+        val options: UCrop.Options=UCrop.Options()
         options.setCropGridColor(Color.TRANSPARENT)
         options.setStatusBarColor(resources.getColor(R.color.main_color))
 
@@ -379,7 +403,25 @@ class ProfileFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        authViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) { event ->
+        userViewModel.getUserAccountLiveData.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        user = result.data!!
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(result.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        //binding.progressBar.isVisible = true
+                    }
+                }
+            }
+        }
+
+
+        userViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
@@ -399,7 +441,7 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        authViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner) { userSessionResponse ->
+        userViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner) { userSessionResponse ->
             userSessionResponse.getContentIfNotHandled()?.let {
 
                 when (it) {

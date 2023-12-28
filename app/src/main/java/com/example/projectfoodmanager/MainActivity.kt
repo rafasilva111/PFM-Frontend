@@ -6,15 +6,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.projectfoodmanager.databinding.ActivityMainBinding
 import com.example.projectfoodmanager.util.Helper.Companion.MENU_VISIBILITY
-import com.example.projectfoodmanager.util.Helper.Companion.STATUS_BAR_COLOR
 import com.example.projectfoodmanager.util.NetworkConnectivity
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
     lateinit var navController: NavController
-    val authViewModel: AuthViewModel by viewModels()
+    val userViewModel: UserViewModel by viewModels()
     val TAG: String = "MainActivity"
 
 

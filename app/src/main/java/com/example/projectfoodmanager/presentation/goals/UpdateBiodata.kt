@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,13 +20,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.databinding.FragmentGoalsBinding
 import com.example.projectfoodmanager.databinding.FragmentUpdateBiodataBinding
-import com.example.projectfoodmanager.util.LOGIN_TIME
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.toast
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class UpdateBiodata : Fragment() {
     lateinit var binding: FragmentUpdateBiodataBinding
-    val authViewModel: AuthViewModel by viewModels()
+    val userViewModel: UserViewModel by viewModels()
     val TAG: String = "ProfileFragment"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,7 +78,7 @@ class UpdateBiodata : Fragment() {
         if (isOnline(requireContext())){
             binding.registerBtn.setOnClickListener {
                 if(validation()){
-                    authViewModel.updateUser(getUserRequest())
+                    userViewModel.updateUser(getUserRequest())
                 }
             }
         }
@@ -238,7 +234,7 @@ class UpdateBiodata : Fragment() {
 
     private fun bindObservers() {
 
-        authViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner, Observer { userSessionResponse ->
+        userViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner, Observer { userSessionResponse ->
             userSessionResponse.getContentIfNotHandled()?.let{
 
                 when (it) {

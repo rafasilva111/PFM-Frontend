@@ -3,7 +3,6 @@ package com.example.projectfoodmanager.util
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.opengl.Visibility
 import android.os.Build
 import android.text.TextUtils
 import android.util.Log
@@ -142,7 +141,7 @@ class Helper {
                 Glide.with(recipeIV.context).load(imageURL).into(recipeIV)
             }
             .addOnFailureListener {
-                recipeIV.setImageResource(R.drawable.default_image_display)
+                recipeIV.setImageResource(R.drawable.default_image_recipe)
             }
 
         }

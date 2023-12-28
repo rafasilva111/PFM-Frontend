@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +12,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentProfileBottomSheetDialogBinding
-import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.*
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -28,7 +25,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ProfileBottomSheetDialog : BottomSheetDialogFragment() {
 
-    private val authViewModel by activityViewModels<AuthViewModel>()
+    private val userViewModel by activityViewModels<UserViewModel>()
     private lateinit var objUser: User
     lateinit var binding: FragmentProfileBottomSheetDialogBinding
 
@@ -173,7 +170,7 @@ class ProfileBottomSheetDialog : BottomSheetDialogFragment() {
         binding.followBTN.setOnClickListener {
 
             //TODO: Verificar se o utilizador é ou não seguidor
-            authViewModel.postFollowRequest(objUser.id)
+            userViewModel.postFollowRequest(objUser.id)
 
             if (objUser.profile_type=="PRIVATE"){
                 binding.followBTN.text = "Aguardar confirmação"
@@ -188,7 +185,7 @@ class ProfileBottomSheetDialog : BottomSheetDialogFragment() {
     }
 
     private fun bindObservers() {
-        authViewModel.postUserFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.postUserFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {

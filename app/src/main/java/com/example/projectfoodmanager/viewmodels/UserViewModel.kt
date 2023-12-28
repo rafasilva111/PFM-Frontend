@@ -12,7 +12,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
-import com.example.projectfoodmanager.data.repository.AuthRepository
+import com.example.projectfoodmanager.data.repository.UserRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
@@ -21,8 +21,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(
-    val repository: AuthRepository,
+class UserViewModel @Inject constructor(
+    val repository: UserRepository,
     val sharedPreference: SharedPreference
 ): ViewModel() {
 
@@ -78,7 +78,7 @@ class AuthViewModel @Inject constructor(
     }
 
 
-    val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
+    val getUserRecipesBackgroundLiveData: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
         get() = repository.getUserRecipesBackground
 
     fun getUserRecipesBackground() {
@@ -87,12 +87,21 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    val deleteUserAccount: LiveData<Event<NetworkResult<String>>>
+    val deleteUserAccountLiveData: LiveData<Event<NetworkResult<String>>>
         get() = repository.deleteUserAccount
 
     fun deleteUserAccount() {
         viewModelScope.launch {
             repository.deleteUserAccount()
+        }
+    }
+
+    val getUserAccountLiveData: LiveData<Event<NetworkResult<User>>>
+        get() = repository.getUserAccount
+
+    fun getUserAccount(userId: Int) {
+        viewModelScope.launch {
+            repository.getUserAccount(userId)
         }
     }
 

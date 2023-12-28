@@ -1,12 +1,10 @@
 package com.example.projectfoodmanager.presentation.shoppingList.create
 
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsetsController
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -19,7 +17,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingL
 import com.example.projectfoodmanager.databinding.FragmentCalenderIngredientsBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.updateSystemBarsAppearance
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.example.projectfoodmanager.viewmodels.ShoppingListViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -37,7 +35,7 @@ class CalenderShoppingListFragment : Fragment() {
     lateinit var binding: FragmentCalenderIngredientsBinding
 
     // viewModels
-    private val authViewModel by activityViewModels<AuthViewModel>()
+    private val userViewModel by activityViewModels<UserViewModel>()
     private val calendarViewModel by activityViewModels<CalendarViewModel>()
     private val shoppingListViewModel by activityViewModels<ShoppingListViewModel>()
 
@@ -223,7 +221,7 @@ class CalenderShoppingListFragment : Fragment() {
             }
         }
 
-        authViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner) { event ->
+        userViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {

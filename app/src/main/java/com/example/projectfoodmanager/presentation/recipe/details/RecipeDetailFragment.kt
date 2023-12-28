@@ -15,6 +15,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
+import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
@@ -48,8 +50,6 @@ class RecipeDetailFragment : Fragment() {
     @Inject
     lateinit var sharedPreference: SharedPreference
 
-    // adapters
-    private lateinit var adapter: FragmentAdapter
 
 
     override fun onCreateView(
@@ -72,17 +72,17 @@ class RecipeDetailFragment : Fragment() {
     @ExperimentalBadgeUtils
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
 
-        if (Build.VERSION.SDK_INT >= 33) {
+
+        objRecipe = if (Build.VERSION.SDK_INT >= 33) {
             // TIRAMISU
-            objRecipe = arguments?.getParcelable("Recipe", Recipe::class.java)
-            userPortion = arguments?.getFloat("UserPortion",-1F)!!
+            arguments?.getParcelable("Recipe", Recipe::class.java)
         } else {
-            objRecipe = arguments?.getParcelable("Recipe")
-            userPortion = arguments?.getFloat("UserPortion",-1F)!!
+            arguments?.getParcelable("Recipe")
         }
+
+        userPortion = arguments?.getFloat("UserPortion",-1F)!!
 
         recipePortion = if (objRecipe!!.portion.lowercase().contains("pessoas"))
             objRecipe!!.portion.split(" ")[0].toFloat()
@@ -135,6 +135,13 @@ class RecipeDetailFragment : Fragment() {
     private fun setUI(recipe: Recipe) {
 
         //--------- GENERAL INFO ---------
+
+        val activity  = requireActivity()
+        changeMenuVisibility(false,activity)
+        changeStatusBarColor(false, activity,requireContext())
+
+        // no status bar limits
+        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
         //-> Load Recipe img
         loadRecipeImage(binding.IVRecipe,recipe.img_source)
@@ -192,35 +199,42 @@ class RecipeDetailFragment : Fragment() {
             })
         }
 
-        binding.profileAuthorCV.setOnClickListener {
+        binding.profileAuthorCV.setOnClickListener{
+            findNavController().navigate(R.id.action_receitaDetailFragment_to_profileFragment,Bundle().apply {
+                putInt("user_id",recipe.created_by.id)
+            })
+        }
 
 
-            /*     val view : View = layoutInflater.inflate(R.layout.modal_bottom_sheet_profile,null)
+        binding.backIB.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        /* binding.profileAuthorCV.setOnClickListener {
+
+
+            *//*     val view : View = layoutInflater.inflate(R.layout.modal_bottom_sheet_profile,null)
                    val dialog = BottomSheetDialog(requireContext())
                    dialog.behavior.state=BottomSheetBehavior.STATE_COLLAPSED
                    dialog.behavior.peekHeight=650
 
                    dialog.setContentView(view)
-                   dialog.show()*/
+                   dialog.show()*//*
             //findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,bundle)
 
-            /*           findNavController().navigate(R.id.action_receitaDetailFragment_to_profileBottomSheetDialog,Bundle().apply {
+            *//*           findNavController().navigate(R.id.action_receitaDetailFragment_to_profileBottomSheetDialog,Bundle().apply {
                            putParcelable("User", recipe.created_by)
-                       })*/
+                       })*//*
 
 
 
-            /*        findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,Bundle().apply {
+            *//*        findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,Bundle().apply {
                           putInt("userID",recipe.created_by.id)
                           putString("userName",recipe.created_by.name)
                           putInt("followType",FollowType.FOLLOWERS)
                       })
-          */
-        }
-
-        binding.backIB.setOnClickListener {
-            findNavController().navigateUp()
-        }
+          *//*
+        }*/
 
 /*        //val standardBottomSheet = findViewById<FrameLayout>(R.id.standard_bottom_sheet)
         val adaptiveViewBS = BottomSheetBehavior.from(binding.adaptiveViewBS!!)
@@ -499,17 +513,10 @@ class RecipeDetailFragment : Fragment() {
         Log.d(TAG, "showValidationErrors: " + toString)
     }
 
-    override fun onStart() {
 
-        Helper.changeStatusBarColor(true, activity, context)
-        Helper.changeMenuVisibility(false, activity)
-
-        super.onStart()
-    }
-
-    override fun onDestroy() {
+    override fun onPause() {
+        super.onPause()
         //destroy variables
-        super.onDestroy()
         userPortion = -1F
         recipePortion = -1F
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)

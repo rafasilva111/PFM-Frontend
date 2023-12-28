@@ -1,7 +1,5 @@
 package com.example.projectfoodmanager
 
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -9,14 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsetsController
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.databinding.FragmentBlankBinding
-import com.example.projectfoodmanager.databinding.FragmentHomeNewBinding
 import com.example.projectfoodmanager.databinding.FragmentSplashBinding
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Constants.MAX_CALENDER_DAYS
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
@@ -39,7 +34,7 @@ class SplashFragment : Fragment() {
     lateinit var binding: FragmentSplashBinding
 
     // viewModels
-    private val authViewModel by activityViewModels<AuthViewModel>()
+    private val userViewModel by activityViewModels<UserViewModel>()
     private val calendarViewModel by activityViewModels<CalendarViewModel>()
     private val shoppingListViewModel by activityViewModels<ShoppingListViewModel>()
 
@@ -116,7 +111,7 @@ class SplashFragment : Fragment() {
         val sharedPreferencesMetadata = sharedPreference.getSharedPreferencesMetadata()
         updateSharedPreferenceTracker.clear()
 
-        authViewModel.getUserSession()
+        userViewModel.getUserSession()
 
         // Calender entrys
         val calenderEntrys = sharedPreferencesMetadata[SharedPreferencesMetadata.CALENDER_ENTRYS]
@@ -153,7 +148,7 @@ class SplashFragment : Fragment() {
         // se session estiver a null ou se session estiver a true vai buscar a info
         if (recipesBackground == null || recipesBackground == true) {
             updateSharedPreferenceTracker.add(2,false)
-            authViewModel.getUserRecipesBackground()
+            userViewModel.getUserRecipesBackground()
         }
         else if (recipesBackground == false)
             TODO("update recipesBackground on db")
@@ -162,14 +157,14 @@ class SplashFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        authViewModel.userResponseLiveData.observe(viewLifecycleOwner) { response ->
+        userViewModel.userResponseLiveData.observe(viewLifecycleOwner) { response ->
             response.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
                         if ( result.data!!.fmc_token != "-1")
                             FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
                                 if (result.data.fmc_token != token)
-                                    authViewModel.updateUser(UserRequest(fmc_token = token))
+                                    userViewModel.updateUser(UserRequest(fmc_token = token))
                             }
                     }
                     is NetworkResult.Error -> {
@@ -218,7 +213,7 @@ class SplashFragment : Fragment() {
             }
         }
 
-        authViewModel.getUserRecipesBackground.observe(viewLifecycleOwner) { response ->
+        userViewModel.getUserRecipesBackgroundLiveData.observe(viewLifecycleOwner) { response ->
             response.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {

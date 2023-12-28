@@ -30,10 +30,12 @@ data class User(
     val created_date: String?,
     val updated_date: String?,
 
+    val followed_state: String? = null,
     val followers: Int = 0,
     val followeds: Int = 0,
     val followers_request: Int = 0,
     val followeds_request: Int = 0
+
 
 
 ) : Parcelable {

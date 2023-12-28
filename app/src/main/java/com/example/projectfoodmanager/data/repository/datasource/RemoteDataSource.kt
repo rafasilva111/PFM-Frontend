@@ -38,7 +38,7 @@ interface RemoteDataSource {
 	suspend fun loginUser(email: String, password: String) : Response<UserAuthResponse>
 	suspend fun logoutUser() : Response<String>
 	suspend fun getUserAuth() : Response<User>
-	suspend fun getUserById(userId: Int): Response<UserAuthResponse>
+	suspend fun getUserById(userId: Int): Response<User>
 	suspend fun updateUser(user: UserRequest): Response<User>
 	suspend fun deleteUser(): Response<String>
 	suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
@@ -47,7 +47,7 @@ interface RemoteDataSource {
 	suspend fun createRecipe(recipe : RecipeRequest): Response<Recipe>
 	suspend fun getRecipe(recipeId: Int): Response<Recipe>
 
-	suspend fun getRecipes(by: String, searchString: String, searchTag: String, page: Int): Response<RecipeList>
+	suspend fun getRecipes(userId: Int,by: String, searchString: String, searchTag: String, page: Int,pageSize: Int): Response<RecipeList>
 
 	suspend fun updateRecipe(recipeId: Int,recipe: RecipeRequest): Response<Recipe>
 	suspend fun deleteRecipe(recipeId: Int): Response<String>

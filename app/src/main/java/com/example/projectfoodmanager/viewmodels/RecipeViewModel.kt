@@ -28,10 +28,10 @@ class RecipeViewModel @Inject constructor (
     val recipesResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
         get() = repository.recipes
 
-    fun getRecipes(page: Int = 1, searchString: String = "", searchTag: String = "", by:String= ""){
+    fun getRecipes(page: Int = 1,pageSize: Int = 10,userId: Int =-1,searchString: String = "", searchTag: String = "", by:String= ""){
 
         viewModelScope.launch {
-            repository.getRecipes(page,searchString,searchTag,by)
+            repository.getRecipes(page,pageSize,userId,searchString,searchTag,by)
         }
 
     }

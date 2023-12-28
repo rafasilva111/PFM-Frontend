@@ -3,9 +3,8 @@ package com.example.projectfoodmanager.di
 
 import com.example.projectfoodmanager.data.repository.*
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourceImpl
-import com.example.projectfoodmanager.data.repository.AuthRepository
+import com.example.projectfoodmanager.data.repository.UserRepository
 import com.example.projectfoodmanager.util.SharedPreference
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -31,8 +30,8 @@ object RepositoryModule {
     fun providesAuthRepository(
         remoteDataSource: RemoteDataSourceImpl,
         sharedPreference: SharedPreference
-    ): AuthRepository {
-        return AuthRepositoryImp(
+    ): UserRepository {
+        return UserRepositoryImp(
             remoteDataSource = remoteDataSource,
             sharedPreference = sharedPreference
         )

@@ -9,7 +9,7 @@ object Constants {
     // TODO: Primeira coisa a fazer quando testar
     //rui const val BASE_URL = "http://192.168.1.104:5000/"
 
-    const val BASE_URL = "http://192.168.1.110:5000"
+    const val BASE_URL = "http://172.162.241.84"
     //const val BASE_URL = "http://172.162.241.84" // prod
     const val USER_TOKEN = "user_token"
 
@@ -19,7 +19,7 @@ object Constants {
     const val MAX_CALENDER_DAYS =15L
 
 }
-object FIREBASE_NOTIFICATIONS {
+object FirebaseNotifications {
     const val BASE_URL = "https://fcm.googleapis.com"
     const val SERVER_KEY = "AAAA9vy8Bpg:APA91bHyfumwp_y_Gnv3qVb5h19WTpM2EfZ_a6Un6CoIhJ6KCSO3nyx10ip2eg9i4lM0_K79krSoVp6PoiKk3SWUQP1LxnYZ9KYQcEM9Q_ofCxsfhf-ragQiC9U3fPBOaALxAKcZ5VLR"
     const val CONTENT_TYPE = "application/json"
@@ -48,7 +48,7 @@ object CALENDAR_MEALS_TAG {
     const val CEIA = "CEIA"
 }
 
-object actionResultCodes{
+object ActionResultCodes{
     const val GALLERY_REQUEST_CODE = 1
 }
 
@@ -69,7 +69,7 @@ object SharedPrefConstants {
 }
 
 object RecipesSortingType {
-    const val ALL = ""
+    const val ALL = "ALL"
     const val DATE = "DATE"
     const val VERIFIED = "VERIFIED"
     const val SUGGESTION = "SUGESTION"
@@ -77,6 +77,14 @@ object RecipesSortingType {
     const val LIKES = "LIKES"
     const val SAVES = "SAVES"
     const val RANDOM = "RANDOM"
+}
+
+object UserType{
+    const val NORMAL = "N"
+    const val COMPANY = "C"
+    const val VIP = "V"
+    const val ADMIN = "A"
+
 }
 
 object SexConstants{

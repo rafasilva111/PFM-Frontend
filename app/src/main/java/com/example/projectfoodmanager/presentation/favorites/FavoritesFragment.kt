@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
@@ -31,13 +30,12 @@ import com.example.projectfoodmanager.util.FragmentRecipeLikesChipsTag.COMMENTED
 import com.example.projectfoodmanager.util.FragmentRecipeLikesChipsTag.LAST_SEEN
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlin.math.floor
 
 
 @AndroidEntryPoint
@@ -47,7 +45,7 @@ class FavoritesFragment : Fragment() {
     lateinit var binding: FragmentFavoritesBinding
 
     // viewModels
-    private val authViewModel: AuthViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
     private val recipeViewModel: RecipeViewModel by viewModels()
 
     // constants
@@ -114,7 +112,7 @@ class FavoritesFragment : Fragment() {
                 }
 
             },
-            authViewModel,
+            userViewModel,
             recipeViewModel
         )
     }
@@ -173,7 +171,7 @@ class FavoritesFragment : Fragment() {
             Log.d(TAG, "onViewCreated: User had no shared prefences...")
             // se não tiver shared preferences o user não tem sessão válida
             //tera um comportamento diferente offilne
-            authViewModel.logoutUser()
+            userViewModel.logoutUser()
         }
 
 
@@ -564,7 +562,7 @@ class FavoritesFragment : Fragment() {
             }
         }
 
-        authViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) {
+        userViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {

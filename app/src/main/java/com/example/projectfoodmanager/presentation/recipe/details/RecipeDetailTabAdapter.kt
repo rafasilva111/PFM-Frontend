@@ -7,7 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 
-class FragmentAdapter(
+class RecipeDetailTabAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
     recipe: Recipe

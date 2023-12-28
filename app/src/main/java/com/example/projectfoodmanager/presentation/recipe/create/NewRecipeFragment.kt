@@ -59,15 +59,6 @@ class NewRecipeFragment : Fragment() {
 
         setUI()
 
-
-        binding.nextBTN.setOnClickListener {
-            nextStep()
-        }
-
-        binding.previousBTN.setOnClickListener {
-            previousStep()
-        }
-
     }
 
     private fun setUI() {

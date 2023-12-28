@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_receitaDetailFragment_to_profileBottomSheetDialog"
             app:destination="@id/profileBottomSheetDialog" />
+        <action
+            android:id="@+id/action_receitaDetailFragment_to_profileFragment"
+            app:destination="@id/profileFragment2" />
 
 
     </fragment>
@@ -54,7 +57,7 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.projectfoodmanager.presentation.profile.ProfileFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.userSession.SessionProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile">
         <action
@@ -268,5 +271,9 @@
         android:id="@+id/action_navigate_to_favoritesFragment"
         app:destination="@id/favoritesFragment"
         />
+    <fragment
+        android:id="@+id/profileFragment2"
+        android:name="com.example.projectfoodmanager.presentation.profile.user.ProfileFragment"
+        android:label="ProfileFragment" />
 
 </navigation>

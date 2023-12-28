@@ -55,7 +55,7 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getUserSession()
 	}
 
-	override suspend fun getUserById(userId: Int): Response<UserAuthResponse> {
+	override suspend fun getUserById(userId: Int): Response<User> {
 		return apiInterface.getUser(userId = userId)
 	}
 	override suspend fun updateUser(user: UserRequest): Response<User> {
@@ -85,8 +85,8 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getRecipesByClientSearchPaginated(clientId = clientId, string =  string,page = page)
     }
 
-	override suspend fun getRecipes(by: String, searchString: String, searchTag: String, page: Int): Response<RecipeList> {
-		return apiInterface.getRecipePaginated(page = page,searchString = searchString, searchTag=searchTag,by=by)
+	override suspend fun getRecipes(userId: Int,by: String, searchString: String, searchTag: String, page: Int,pageSize: Int): Response<RecipeList> {
+		return apiInterface.getRecipePaginated(userId = userId,page = page,searchString = searchString, searchTag=searchTag,by=by,pageSize = pageSize)
 	}
 
 	override suspend fun updateRecipe(recipeId: Int, recipe: RecipeRequest): Response<Recipe> {

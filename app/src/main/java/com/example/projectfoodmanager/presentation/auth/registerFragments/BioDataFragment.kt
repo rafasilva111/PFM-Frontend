@@ -18,7 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.databinding.FragmentRegisterBiodataBinding
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
 import com.example.projectfoodmanager.util.TokenManager
@@ -44,7 +44,7 @@ class BioDataFragment : Fragment() {
 
     val TAG: String = "BioDataFragment"
     lateinit var binding: FragmentRegisterBiodataBinding
-    val authViewModel: AuthViewModel by viewModels()
+    val userViewModel: UserViewModel by viewModels()
     var objUser: UserRequest? = null
     private var fileUri: String? = null
     private var activityLevel : Float = 0.0f
@@ -174,21 +174,21 @@ class BioDataFragment : Fragment() {
                             Log.d(TAG, "uploadImageToFirebase: success")
                             val user = getUserRequest()
                             user.img_source = path
-                            authViewModel.registerUser(user)
+                            userViewModel.registerUser(user)
                         }
                         .addOnFailureListener(OnFailureListener { e ->
                             Log.d(TAG, "uploadImageToFirebase: "+e)
                         })
                 }
                 else
-                    authViewModel.registerUser(getUserRequest())
+                    userViewModel.registerUser(getUserRequest())
             }
         }
     }
 
 
     private fun bindObservers() {
-        authViewModel.userRegisterLiveData.observe(viewLifecycleOwner) {
+        userViewModel.userRegisterLiveData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {

@@ -167,6 +167,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/recipes_verified"
+                        android:tag="VERIFIED"
                         android:checked="true"
                         android:textSize="15sp"
                         app:chipMinHeight="20dp" />
@@ -177,6 +178,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/recipes_all"
+                        android:tag="ALL"
                         android:textSize="15sp"
                         app:chipMinHeight="20dp" />
 
@@ -195,6 +197,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/most_saved"
+                        android:tag="@string/teste"
                         android:textSize="15sp"
                         app:chipMinHeight="20dp" />
 

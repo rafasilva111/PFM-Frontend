@@ -15,7 +15,7 @@ import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
 import com.example.projectfoodmanager.util.ToastType
 import com.example.projectfoodmanager.util.toast
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ class FollowRequestFragment : Fragment() {
     lateinit var binding: FragmentFollowRequestBinding
 
     // viewModels
-    private val authViewModel by activityViewModels<AuthViewModel>()
+    private val userViewModel by activityViewModels<UserViewModel>()
 
     // constants
     private lateinit var currentUser: User
@@ -45,7 +45,7 @@ class FollowRequestFragment : Fragment() {
             },
             onActionBTNClicked = { position,userId ->
                 itemPosition = position
-                authViewModel.postAcceptFollowRequest(userId)
+                userViewModel.postAcceptFollowRequest(userId)
             }
         )
     }
@@ -78,7 +78,7 @@ class FollowRequestFragment : Fragment() {
 
         currentUser = sharedPreference.getUserSession()
 
-        authViewModel.getFollowRequests()
+        userViewModel.getFollowRequests()
 
         /**
          * Navigation
@@ -94,7 +94,7 @@ class FollowRequestFragment : Fragment() {
 
     private fun bindObservers() {
 
-        authViewModel.getFollowRequestsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.getFollowRequestsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -120,7 +120,7 @@ class FollowRequestFragment : Fragment() {
             }
         }
 
-        authViewModel.postUserAcceptFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.postUserAcceptFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -143,7 +143,7 @@ class FollowRequestFragment : Fragment() {
             }
         }
 
-        authViewModel.deleteFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.deleteFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {

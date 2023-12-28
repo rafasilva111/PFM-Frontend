@@ -1,7 +1,7 @@
 package com.example.projectfoodmanager.data.api
 
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.PushNotification
-import com.example.projectfoodmanager.util.FIREBASE_NOTIFICATIONS.SERVER_KEY
+import com.example.projectfoodmanager.util.FirebaseNotifications.SERVER_KEY
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body

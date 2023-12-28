@@ -2,9 +2,6 @@ package com.example.projectfoodmanager.notification
 
 
 import android.util.Log
-import androidx.fragment.app.activityViewModels
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint

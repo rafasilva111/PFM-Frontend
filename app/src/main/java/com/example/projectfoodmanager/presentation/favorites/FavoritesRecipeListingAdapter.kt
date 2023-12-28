@@ -10,21 +10,18 @@ import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
-import com.example.projectfoodmanager.util.FireStorage
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class FavoritesRecipeListingAdapter(
     val onItemClicked: (Int, Recipe) -> Unit,
     val onLikeClicked: (Recipe, Boolean) -> Unit,
     val onSaveClicked: (Recipe, Boolean) -> Unit,
-    val authViewModel: AuthViewModel,
+    val userViewModel: UserViewModel,
     val recipeViewModel: RecipeViewModel
 ) : RecyclerView.Adapter<FavoritesRecipeListingAdapter.MyViewHolder>() {
 

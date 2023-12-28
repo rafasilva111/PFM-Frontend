@@ -133,7 +133,7 @@
                             android:layout_height="match_parent"
                             android:foreground="#2D000000"
                             android:scaleType="fitXY"
-                            android:src="@drawable/default_image_display"
+                            android:src="@drawable/default_image_recipe"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />

@@ -16,7 +16,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.notifications.Not
 import com.example.projectfoodmanager.databinding.FragmentNotificationBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 
 
 class NotificationFragment : Fragment() {
@@ -25,7 +25,7 @@ class NotificationFragment : Fragment() {
     lateinit var binding: FragmentNotificationBinding
 
     // viewModel
-    private val authViewModel by activityViewModels<AuthViewModel>()
+    private val userViewModel by activityViewModels<UserViewModel>()
 
     // constants
 
@@ -99,13 +99,13 @@ class NotificationFragment : Fragment() {
          *  Notifications
          * */
 
-        authViewModel.getNotifications()
+        userViewModel.getNotifications()
 
         /**
          *  Follow Requests
          * */
 
-        authViewModel.getFollowRequests(pageSize = 1)
+        userViewModel.getFollowRequests(pageSize = 1)
     }
 
 
@@ -142,7 +142,7 @@ class NotificationFragment : Fragment() {
          *  Notifications
          * */
 
-        authViewModel.getNotificationsResponseLiveData.observe(viewLifecycleOwner
+        userViewModel.getNotificationsResponseLiveData.observe(viewLifecycleOwner
         ) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
@@ -202,7 +202,7 @@ class NotificationFragment : Fragment() {
          *  Follow Requests
          * */
 
-        authViewModel.getFollowRequestsLiveData.observe(viewLifecycleOwner
+        userViewModel.getFollowRequestsLiveData.observe(viewLifecycleOwner
         ) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {result ->
                 when (result) {
@@ -246,11 +246,11 @@ class NotificationFragment : Fragment() {
         super.onPause()
         // delete notifications
         if (notificationToBeDeleted.isNotEmpty())
-            authViewModel.deleteNotifications(IdListRequest(idList=notificationToBeDeleted))
+            userViewModel.deleteNotifications(IdListRequest(idList=notificationToBeDeleted))
 
         // update as seem notifications
         if (notificationToBeSeen.isNotEmpty())
-            authViewModel.putNotifications(IdListRequest(idList=notificationToBeSeen))
+            userViewModel.putNotifications(IdListRequest(idList=notificationToBeSeen))
 
 
     }

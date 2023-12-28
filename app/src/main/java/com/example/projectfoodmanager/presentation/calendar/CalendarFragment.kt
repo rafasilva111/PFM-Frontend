@@ -33,7 +33,7 @@ import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfMonth
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfWeek
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,7 +47,7 @@ class CalendarFragment : Fragment() {
     lateinit var binding: FragmentCalendarBinding
 
     // viewModels
-    private val authViewModel by activityViewModels<AuthViewModel>()
+    private val userViewModel by activityViewModels<UserViewModel>()
     private val calenderViewModel by activityViewModels<CalendarViewModel>()
 
     // constants
@@ -262,13 +262,13 @@ class CalendarFragment : Fragment() {
         val numberPicker = dialogBinding.findViewById<NumberPicker>(R.id.number_picker)
 
         btnPortion.setOnClickListener {
-            authViewModel.updateUser(UserRequest(user_portion = numberPicker.value))
+            userViewModel.updateUser(UserRequest(user_portion = numberPicker.value))
             myDialog.dismiss()
             navigateToCalenderShoppingList()
         }
 
         btnIgnorePortion.setOnClickListener {
-            authViewModel.updateUser(UserRequest(user_portion = 0))
+            userViewModel.updateUser(UserRequest(user_portion = 0))
             myDialog.dismiss()
             navigateToCalenderShoppingList()
         }
@@ -325,8 +325,7 @@ class CalendarFragment : Fragment() {
 
         currentDate = LocalDate.now()
         binding.monthYearTV.text = formatDateMonthYear(currentDate)!!.replaceFirstChar { it.uppercase() }
-        val layoutManager: RecyclerView.LayoutManager =
-            GridLayoutManager(activity?.applicationContext, 7)
+        val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(activity?.applicationContext, 7)
         binding.calWeeklyRV.layoutManager = layoutManager
         binding.calWeeklyRV.adapter = adapterCalWeekly
 

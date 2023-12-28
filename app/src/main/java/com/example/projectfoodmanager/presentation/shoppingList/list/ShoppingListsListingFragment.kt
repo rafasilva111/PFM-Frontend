@@ -16,7 +16,6 @@ import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
 import com.example.projectfoodmanager.util.ToastType
 import com.example.projectfoodmanager.util.toast
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
 import com.example.projectfoodmanager.viewmodels.ShoppingListViewModel
 
 import dagger.hilt.android.AndroidEntryPoint

@@ -21,13 +21,12 @@ class CalendarEntryAdapter(
     val onDoneClicked: (Boolean, CalenderEntry) -> Unit,
 ) : RecyclerView.Adapter<CalendarEntryAdapter.MyViewHolder>() {
 
-    private val TAG: String? = "CalenderEntryAdapter"
+    private val TAG: String = "CalenderEntryAdapter"
     private var list: MutableList<CalenderEntry> = arrayListOf()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = ItemCalenderEntryBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return MyViewHolder(itemView)
+        return MyViewHolder(ItemCalenderEntryBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {

@@ -13,7 +13,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBa
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 
-interface AuthRepository {
+interface UserRepository {
 
 
     /** User */
@@ -26,6 +26,8 @@ interface AuthRepository {
     val userUpdateLiveData: LiveData<Event<NetworkResult<User>>>
     val deleteUserAccount: LiveData<Event<NetworkResult<String>>>
 
+    val getUserAccount: LiveData<Event<NetworkResult<User>>>
+
     suspend fun registerUser(user : UserRequest)
     suspend fun loginUser(email: String, password: String)
     suspend fun getUserSession()
@@ -33,6 +35,8 @@ interface AuthRepository {
     suspend fun updateUser(userRequest: UserRequest)
     suspend fun getUserRecipesBackground()
     suspend fun deleteUserAccount()
+
+    suspend fun getUserAccount(userId: Int)
 
     /** Follows */
 

@@ -67,14 +67,14 @@ class RecipeRepositoryImp @Inject constructor(
 
 
     // Function to get paginated and sorted recipes
-    override suspend fun getRecipes(page: Int,searchString:String,searchTag: String, by:String) {
+    override suspend fun getRecipes(page: Int,pageSize: Int,userId: Int,searchString:String,searchTag: String, by:String) {
 
 
         handleApiResponse(
             _recipesResponseLiveData,
             "Requesting paginated and sorted recipes for page $page"
         ) {
-            remoteDataSource.getRecipes(by,searchString,searchTag, page)
+            remoteDataSource.getRecipes(userId,by,searchString,searchTag, page,pageSize)
         }
     }
 

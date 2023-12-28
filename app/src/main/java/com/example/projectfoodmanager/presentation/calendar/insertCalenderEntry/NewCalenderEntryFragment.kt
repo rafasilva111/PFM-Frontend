@@ -18,12 +18,11 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.databinding.FragmentBlankBinding
 import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBinding
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -44,7 +43,7 @@ class NewCalenderEntryFragment : Fragment() {
     lateinit var binding: FragmentNewCalenderEntryBinding
 
     // viewModels
-    private val authViewModel by activityViewModels<AuthViewModel>()
+    private val userViewModel by activityViewModels<UserViewModel>()
     private val calendarViewModel by activityViewModels<CalendarViewModel>()
 
     // constants
@@ -133,7 +132,7 @@ class NewCalenderEntryFragment : Fragment() {
             Log.d(TAG, "onViewCreated: User had no shared prefences...")
             // se não tiver shared preferences o user não tem sessão válida
             //tera um comportamento diferente offilne
-            authViewModel.logoutUser()
+            userViewModel.logoutUser()
         }
 
         // se viewer recipe
@@ -448,7 +447,7 @@ class NewCalenderEntryFragment : Fragment() {
         }
 
 
-        authViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) {
+        userViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {

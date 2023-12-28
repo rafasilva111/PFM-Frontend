@@ -55,7 +55,7 @@ interface ApiInterface {
     suspend fun patchUser(@Body user : UserRequest): Response<Unit>
 
     @GET("$API_V1_BASE_URL/user")
-    suspend fun getUser(@Query("id") userId: Int): Response<UserAuthResponse>
+    suspend fun getUser(@Query("id") userId: Int): Response<User>
 
     @PATCH("$API_V1_BASE_URL/user")
     suspend fun updateUser(@Body user : UserRequest): Response<User>
@@ -76,7 +76,8 @@ interface ApiInterface {
     suspend fun getRecipe(@Query("id") recipeId: Int): Response<Recipe>
 
     @GET("$API_V1_BASE_URL/recipe/list")
-    suspend fun getRecipePaginated(@Query("by")by: String,@Query("searchString") searchString: String,@Query("searchTag") searchTag: String,@Query("page") page: Int): Response<RecipeList>
+    suspend fun getRecipePaginated(@Query("user_id")userId: Int,@Query("by")by: String,@Query("searchString") searchString: String,
+                                   @Query("searchTag") searchTag: String,@Query("page") page: Int,@Query("page_size") pageSize: Int): Response<RecipeList>
 
     @GET("$API_V1_BASE_URL/recipe/list")
     suspend fun getRecipesByClientPaginated(@Query("commented_by") clientId: Int,@Query("page") page: Int): Response<RecipeList>

@@ -6,9 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentAddIngredientBinding
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,7 +17,7 @@ class AddIngredientFragment : Fragment() {
     lateinit var binding: FragmentAddIngredientBinding
 
     // viewModels
-    val authViewModel: AuthViewModel by viewModels()
+    val userViewModel: UserViewModel by viewModels()
 
     // constants
     val TAG: String = "AddIngredientFragment"

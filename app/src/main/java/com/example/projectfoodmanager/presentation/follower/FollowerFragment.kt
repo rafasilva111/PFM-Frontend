@@ -20,7 +20,7 @@ import com.example.projectfoodmanager.util.FollowType.FOLLOWERS
 import com.example.projectfoodmanager.util.FollowType.NOT_FOLLOWER
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
-import com.example.projectfoodmanager.viewmodels.AuthViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -34,7 +34,7 @@ class FollowerFragment : Fragment() {
     lateinit var binding: FragmentFollowerBinding
 
     // viewModels
-    private val authViewModel by activityViewModels<AuthViewModel>()
+    private val userViewModel by activityViewModels<UserViewModel>()
 
     // constants
     private var itemPosition: Int = -1
@@ -82,7 +82,7 @@ class FollowerFragment : Fragment() {
 
             },
             onActionBTNClicked = { position, user_Id ->
-                authViewModel.postFollowRequest(user_Id)
+                userViewModel.postFollowRequest(user_Id)
                 followersListingUpdatePosition = position
             },
             onRemoveBTNClicked = { position,user_Id ->
@@ -109,10 +109,10 @@ class FollowerFragment : Fragment() {
                         // Remove Follower or Followed
 
                         if(followType== FOLLOWERS){
-                            authViewModel.deleteFollower(user_Id)
+                            userViewModel.deleteFollower(user_Id)
                         }
                         else{
-                            authViewModel.deleteFollow(user_Id)
+                            userViewModel.deleteFollow(user_Id)
                         }
 
                         followersListingUpdatePosition = position
@@ -142,7 +142,7 @@ class FollowerFragment : Fragment() {
 
             },
             onActionBTNClicked = { position, user_Id ->
-                authViewModel.postFollowRequest(user_Id)
+                userViewModel.postFollowRequest(user_Id)
                 findFollowsListingUpdatePosition = position
 
             },
@@ -153,7 +153,7 @@ class FollowerFragment : Fragment() {
                     .setMessage(getString(R.string.fragment_follower_remove_follow_request_message))
                     .setPositiveButton("Sim") { _, _ ->
                         // Remove Follow request
-                        authViewModel.deleteFollowRequest(user_Id)
+                        userViewModel.deleteFollowRequest(user_Id)
                         findFollowsListingUpdatePosition = position
 
                     }
@@ -226,7 +226,7 @@ class FollowerFragment : Fragment() {
                             if ((pastVisibleItem + 1) >= adapterFindFollows.getList().size){
 
 
-                                authViewModel.getUsersToFollow(page = ++currentPage,searchString =stringToSearch)
+                                userViewModel.getUsersToFollow(page = ++currentPage,searchString =stringToSearch)
                             }
                         }
 
@@ -267,7 +267,7 @@ class FollowerFragment : Fragment() {
                     handler.postDelayed({
                         if (stringToSearch == text) {
                             // verifica se tag está a ser usada se não pesquisa a string nas tags da receita
-                            authViewModel.getUsersToFollow(searchString =stringToSearch)
+                            userViewModel.getUsersToFollow(searchString =stringToSearch)
                         }
                     }, 400)
 
@@ -276,7 +276,7 @@ class FollowerFragment : Fragment() {
                 } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
                 else if (stringToSearch != "" && text == "") {
                     stringToSearch = ""
-                    authViewModel.getUsersToFollow()
+                    userViewModel.getUsersToFollow()
                 } else {
                     stringToSearch = ""
                 }
@@ -329,14 +329,14 @@ class FollowerFragment : Fragment() {
 
 
 
-                authViewModel.getFollowRequests(pageSize = 1)
+                userViewModel.getFollowRequests(pageSize = 1)
 
 
                 selectedTab?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
                 selectedTab = binding.followersBTN
                 selectedTab!!.setBackgroundResource(R.drawable.selector_tab_button)
 
-                authViewModel.getFollowers(id_user = userId)
+                userViewModel.getFollowers(id_user = userId)
             }
             FOLLOWEDS -> {
 
@@ -346,7 +346,7 @@ class FollowerFragment : Fragment() {
                 selectedTab?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
                 selectedTab = binding.followedsBTN
                 selectedTab!!.setBackgroundResource(R.drawable.selector_tab_button)
-                authViewModel.getFolloweds(id_user = userId)
+                userViewModel.getFolloweds(id_user = userId)
             }
             else -> {
 
@@ -358,7 +358,7 @@ class FollowerFragment : Fragment() {
                 selectedTab?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
                 selectedTab = binding.findFollowsBTN
                 selectedTab!!.setBackgroundResource(R.drawable.selector_tab_button)
-                authViewModel.getUsersToFollow()
+                userViewModel.getUsersToFollow()
             }
         }
 
@@ -372,7 +372,7 @@ class FollowerFragment : Fragment() {
 
         /** Get followers */
 
-        authViewModel.getUserFollowersLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.getUserFollowersLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -406,7 +406,7 @@ class FollowerFragment : Fragment() {
 
         /** Follow requests */
 
-        authViewModel.getFollowRequestsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.getFollowRequestsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -438,7 +438,7 @@ class FollowerFragment : Fragment() {
 
         /** Delete follower */
 
-        authViewModel.deleteFollowerLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.deleteFollowerLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -473,7 +473,7 @@ class FollowerFragment : Fragment() {
 
         /** Get follows */
 
-        authViewModel.getUserFollowedsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.getUserFollowedsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -509,7 +509,7 @@ class FollowerFragment : Fragment() {
             }
         }
 
-        authViewModel.deleteFollowLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.deleteFollowLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -539,7 +539,7 @@ class FollowerFragment : Fragment() {
 
         /** Delete follower */
 
-        authViewModel.deleteFollowLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.deleteFollowLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -575,7 +575,7 @@ class FollowerFragment : Fragment() {
 
         /** Find follows */
 
-        authViewModel.getUsersToFollow.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.getUsersToFollow.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -630,7 +630,7 @@ class FollowerFragment : Fragment() {
 
         /** Send Follow requests */
 
-        authViewModel.postUserFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.postUserFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -654,7 +654,7 @@ class FollowerFragment : Fragment() {
 
         /** Delete follow requests */
 
-        authViewModel.deleteFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.deleteFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
