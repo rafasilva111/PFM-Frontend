@@ -19,7 +19,7 @@
     <string name="invalid_birthdate">Invalid birthdate entered, please use the format dd/mm/yyyy</string>
     <string name="invalid_birthdate_2">Invalid birthdate entered, you\'re yet to be born?</string>
     <string name="invalid_password">Your password must be at least 8 characters</string>
-    <string name="invalid_password_1">User\'s password is incorrect</string>
+    <string name="invalid_password_1">User\'s password is too short</string>
     <string name="invalid_conf_password">Your password and confirm password must be the same</string>
     <string name="invalid_session">Session is invalid, logging out…</string>
     <string name="to_many_attemps_to_login_failed">Access to this account has been temporarily put on a cool-down due to many failed login attempts. Try again later.</string>
@@ -38,8 +38,8 @@
     <string name="welcome">Tás cá outra vez porca?</string>
     <string name="invalid_password_2">The passwords are differents</string>
     <string name="weightEt_problem_1">Please insert a valid weight</string>
-    <string name="weightEt_problem_2">Be careful, those are some weird numbers</string>
-    <string name="heightEt_problem">Invalid height</string>
+    <string name="weight_problem_2">Be careful, those are some weird numbers</string>
+    <string name="height_problem">Enter height</string>
     <string name="invalid_sex">Please selected valid gender.</string>
     <string name="txt_error_message">%1$S*</string>
     <string name="no_recipes_found">No recipes found.</string>
@@ -148,8 +148,8 @@
     <string name="fragment_send_us_a_message_title">Send us a message</string>
     <string name="fragment_settings_delete_account">Delete Acount</string>
     <string name="profile_fragment_logout_dialog_title">Logout</string>
-    <string name="profile_fragment_logout_dialog_yes">Sim</string>
-    <string name="profile_fragment_logout_dialog_no">Não</string>
+    <string name="dialog_yes">Sim</string>
+    <string name="dialog_no">Não</string>
     <string name="settings_fragment_dialog_desc">Are you sure you want to delete this account, and all its content?</string>
     <string name="settings_fragment_dialog_title">Deleting account…</string>
     <string name="fragment_followers_find_follows">Find</string>
@@ -175,6 +175,25 @@
     <string name="new_recipe_fragment_tabTitles_Ingredients">Ingredientes</string>
     <string name="new_recipe_fragment_tabTitles_Details">Detalhes</string>
     <string name="teste">teste</string>
+    <string name="fragment_register_title">Registo</string>
+    <string name="fragment_register_tab_details_title">Detalhes</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="three">3</string>
+    <string name="fragment_register_tab_profile_title">Perfil</string>
+    <string name="fragment_register_tab_biodata_title">Bio Data</string>
+    <string name="fragment_register_profile">Continuar</string>
+    <string name="fragment_register_finish">Finalizar</string>
+    <string name="user_name">Nome de Utilizador</string>
+    <string name="fragment_register_account_biodata">Terminar</string>
+    <string name="fragment_register_cancel">Cancelar Registro</string>
+    <string name="fragment_register_cancel_description">Tens a certeza que queres sair?</string>
+    <string name="enter_weight_2">Formato de numero inválido</string>
+    <string name="height_problem_2">Altura entre 1.0m and 3.00m</string>
+    <string name="weight_problem_1">Insira um peso entre 30 a 200 kg</string>
+    <string name="fragment_login_register_now">New user? Register Now?</string>
+    <string name="enter_username">Enter the UserName.</string>
+    <string name="enter_birthdate_error">You must be atleast 12 years old.</string>
     <string-array name="gender_array">
         <item>Masculino</item>
         <item>Feminino</item>

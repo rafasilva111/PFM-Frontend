@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
@@ -25,8 +25,11 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
-    val TAG: String = "LoginFragment"
+
     lateinit var binding: FragmentLoginBinding
+
+    val TAG: String = "LoginFragment"
+
 
 
     private val userViewModel by activityViewModels<UserViewModel>()
@@ -46,6 +49,7 @@ class LoginFragment : Fragment() {
         if (!this::binding.isInitialized) {
             binding = FragmentLoginBinding.inflate(layoutInflater)
         }
+
 
 
         return binding.root
@@ -120,12 +124,9 @@ class LoginFragment : Fragment() {
         changeMenuVisibility(false, activity)
         changeStatusBarColor(true,activity,requireContext())
 
-
-
-
-
-
-
+        binding.fragmentLoginBody.setOnTouchListener(HorizontalSwipeListener(requireContext()) {
+            println()
+        })
         /**
          * Navigation
          */
@@ -141,7 +142,8 @@ class LoginFragment : Fragment() {
 
         }
 
-        binding.registerLabel.setOnClickListener {
+        binding.registerBtn.setOnClickListener {
+
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
@@ -176,7 +178,7 @@ class LoginFragment : Fragment() {
                         if ( result.data!!.fmc_token != "-1")
                             FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
                                 if (result.data.fmc_token != token)
-                                    userViewModel.updateUser(UserRequest(fmc_token = token))
+                                    userViewModel.updateUser(UserDTO(fmc_token = token))
                             }
 
                         LocalDateTime.now().let { dateNow ->
@@ -208,8 +210,4 @@ class LoginFragment : Fragment() {
     }
 
 
-    override fun onResume() {
-        super.onResume()
-
-    }
 }

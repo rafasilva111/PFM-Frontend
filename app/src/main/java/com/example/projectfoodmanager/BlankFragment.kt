@@ -17,19 +17,21 @@ import javax.inject.Inject
 class BlankFragment : Fragment() {
 
 
-    // binding
+    /** binding */
     private lateinit var binding: FragmentBlankBinding
 
-    // viewModels
+    /** viewModels */
 
-    // constants
+    /** variables */
     private val TAG: String = "BlankFragment"
 
-    // injects
+
+    /** injects */
     @Inject
     lateinit var sharedPreference: SharedPreference
 
-    // adapters
+    /** adapters */
+
 
 
 

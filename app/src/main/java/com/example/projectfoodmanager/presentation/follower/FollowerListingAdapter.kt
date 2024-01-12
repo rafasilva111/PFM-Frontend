@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.ItemFollowerLayoutBinding
 import com.example.projectfoodmanager.util.FollowType
 import com.example.projectfoodmanager.util.Helper
@@ -32,7 +32,7 @@ class FollowerListingAdapter(
         holder.bind(item)
     }
 
-    fun updateList(list: MutableList<User>,followType: Int? = null){
+    fun updateList(list: MutableList<User>, followType: Int? = null){
         if (followType != null)
             this.followType = followType
         this.list = list

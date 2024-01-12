@@ -1,15 +1,16 @@
 package com.example.projectfoodmanager.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.user.UserList
+import com.example.projectfoodmanager.data.model.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 
@@ -28,11 +29,11 @@ interface UserRepository {
 
     val getUserAccount: LiveData<Event<NetworkResult<User>>>
 
-    suspend fun registerUser(user : UserRequest)
+    suspend fun registerUser(user : UserDTO)
     suspend fun loginUser(email: String, password: String)
     suspend fun getUserSession()
     suspend fun logoutUser()
-    suspend fun updateUser(userRequest: UserRequest)
+    suspend fun updateUser(userDTO: UserDTO)
     suspend fun getUserRecipesBackground()
     suspend fun deleteUserAccount()
 

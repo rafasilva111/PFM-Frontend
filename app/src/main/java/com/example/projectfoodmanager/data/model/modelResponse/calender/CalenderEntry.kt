@@ -3,7 +3,7 @@ package com.example.projectfoodmanager.data.model.modelResponse.calender
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplefied
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.user.User
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

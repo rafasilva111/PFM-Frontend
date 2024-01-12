@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryState
 import com.example.projectfoodmanager.databinding.FragmentCalendarBinding
@@ -33,9 +33,8 @@ import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfMonth
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfWeek
-import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
-
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import javax.inject.Inject
@@ -262,13 +261,13 @@ class CalendarFragment : Fragment() {
         val numberPicker = dialogBinding.findViewById<NumberPicker>(R.id.number_picker)
 
         btnPortion.setOnClickListener {
-            userViewModel.updateUser(UserRequest(user_portion = numberPicker.value))
+            userViewModel.updateUser(UserDTO(user_portion = numberPicker.value))
             myDialog.dismiss()
             navigateToCalenderShoppingList()
         }
 
         btnIgnorePortion.setOnClickListener {
-            userViewModel.updateUser(UserRequest(user_portion = 0))
+            userViewModel.updateUser(UserDTO(user_portion = 0))
             myDialog.dismiss()
             navigateToCalenderShoppingList()
         }

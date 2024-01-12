@@ -16,7 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentCalendarEntryDetailBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate

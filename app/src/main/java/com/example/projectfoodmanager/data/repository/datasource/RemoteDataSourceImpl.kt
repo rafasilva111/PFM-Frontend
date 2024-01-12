@@ -2,9 +2,9 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.api.ApiInterface
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
@@ -24,13 +24,13 @@ import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFo
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
+import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -39,12 +39,12 @@ class RemoteDataSourceImpl @Inject constructor(
 ) : RemoteDataSource {
 
 	//User
-	override suspend fun registerUser(user: UserRequest): Response<Unit> {
+	override suspend fun registerUser(user: UserDTO): Response<Unit> {
 		return apiInterface.createUser(user = user)
 	}
 
 	override suspend fun loginUser(email: String, password: String): Response<UserAuthResponse> {
-		return apiInterface.loginUser(UserRequest(email = email, password = password))
+		return apiInterface.loginUser(UserDTO(email = email, password = password))
 	}
 
 	override suspend fun logoutUser(): Response<String> {
@@ -58,7 +58,7 @@ class RemoteDataSourceImpl @Inject constructor(
 	override suspend fun getUserById(userId: Int): Response<User> {
 		return apiInterface.getUser(userId = userId)
 	}
-	override suspend fun updateUser(user: UserRequest): Response<User> {
+	override suspend fun updateUser(user: UserDTO): Response<User> {
 		return apiInterface.updateUser(user = user )
 	}
 	override suspend fun deleteUser(): Response<String> {

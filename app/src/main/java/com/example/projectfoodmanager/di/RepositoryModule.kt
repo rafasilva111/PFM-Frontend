@@ -29,11 +29,13 @@ object RepositoryModule {
     @Singleton
     fun providesAuthRepository(
         remoteDataSource: RemoteDataSourceImpl,
-        sharedPreference: SharedPreference
+        sharedPreference: SharedPreference,
+        gson: Gson
     ): UserRepository {
         return UserRepositoryImp(
             remoteDataSource = remoteDataSource,
-            sharedPreference = sharedPreference
+            sharedPreference = sharedPreference,
+            gson = gson
         )
     }
 

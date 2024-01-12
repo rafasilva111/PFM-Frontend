@@ -3,15 +3,16 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.user.UserList
+import com.example.projectfoodmanager.data.model.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -19,12 +20,15 @@ import com.example.projectfoodmanager.util.SharedPreference
 import retrofit2.Response
 import java.net.SocketTimeoutException
 import javax.inject.Inject
-
+import com.google.gson.Gson
 
 class UserRepositoryImp @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val sharedPreference: SharedPreference
+    private val sharedPreference: SharedPreference,
+    private val gson: Gson
 ) : UserRepository {
+
+
 
     private val TAG:String = "AuthRepositoryImp"
 
@@ -84,6 +88,9 @@ class UserRepositoryImp @Inject constructor(
         }
     }
 
+
+
+
     /**
      * User
      *  */
@@ -93,7 +100,7 @@ class UserRepositoryImp @Inject constructor(
         get() = _userRegisterLiveData
 
 
-    override suspend fun registerUser(user: UserRequest) {
+    override suspend fun registerUser(user: UserDTO) {
         _userRegisterLiveData.postValue(Event(NetworkResult.Loading()))
         val response = remoteDataSource.registerUser(user)
         if (response.isSuccessful && response.code() == 201) {
@@ -101,12 +108,14 @@ class UserRepositoryImp @Inject constructor(
             _userRegisterLiveData.postValue(Event(NetworkResult.Success(response.code().toString())))
         }
         else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
+            val teste = response.errorBody()?.string()
+            Log.i(TAG, "loginUser: request made was not sucessfull: $teste")
+            val errorObj = gson.fromJson(teste, ValidationError::class.java)
             Log.i(TAG, "loginUser: request made was not sucessfull: $errorObj")
-            _userRegisterLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+            _userRegisterLiveData.postValue(Event(NetworkResult.Error(error = errorObj)))
         }
         else{
-            _userRegisterLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            _userRegisterLiveData.postValue(Event(NetworkResult.Error(message ="Something Went Wrong")))
         }
 
     }
@@ -195,9 +204,9 @@ class UserRepositoryImp @Inject constructor(
     override val userUpdateLiveData: LiveData<Event<NetworkResult<User>>>
         get() = _userUpdateResponseLiveData
 
-    override suspend fun updateUser(userRequest: UserRequest) {
+    override suspend fun updateUser(userDTO: UserDTO) {
         _userUpdateResponseLiveData.postValue(Event(NetworkResult.Loading()))
-        val response = remoteDataSource.updateUser(userRequest)
+        val response = remoteDataSource.updateUser(userDTO)
         if (response.isSuccessful) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             sharedPreference.updateUserSession(response.body()!!)

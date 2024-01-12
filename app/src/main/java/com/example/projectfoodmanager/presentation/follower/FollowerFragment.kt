@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UserToFollow
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentFollowerBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FollowType.FOLLOWEDS

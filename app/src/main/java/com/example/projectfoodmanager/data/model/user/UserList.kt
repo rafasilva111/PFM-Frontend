@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.model.modelResponse.user
+package com.example.projectfoodmanager.data.model.user
 import com.example.projectfoodmanager.data.model.modelResponse.metadata.Metadata
 
 data class UserList(

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.ItemFollowerRequestLayoutBinding
 import com.example.projectfoodmanager.util.Helper
 

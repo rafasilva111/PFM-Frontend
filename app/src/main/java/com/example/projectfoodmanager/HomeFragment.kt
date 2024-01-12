@@ -3,14 +3,14 @@ package com.example.projectfoodmanager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowInsetsController
 import androidx.core.view.WindowCompat
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.databinding.FragmentHomeNewBinding
+import com.example.projectfoodmanager.presentation.recipe.details.RecipeDetailFragment
+import com.example.projectfoodmanager.util.Helper
+import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 
 class HomeFragment : Fragment() {
 
@@ -29,7 +29,27 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setUI()
         super.onViewCreated(view, savedInstanceState)
+
+    }
+
+    private fun setUI() {
+
+        /**
+         *  General
+         * */
+
+        
+        changeStatusBarColor(true, requireActivity(), requireContext())
+
+        /** no status bar limits */
+
+        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
+        /**
+         *  Navigation
+         * */
 
         binding.loginBTN.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
@@ -38,12 +58,13 @@ class HomeFragment : Fragment() {
         binding.registerBTN.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
         }
-
     }
 
     override fun onPause() {
-
         super.onPause()
+
+        @Suppress("DEPRECATION")
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
 

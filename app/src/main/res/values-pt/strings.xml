@@ -39,8 +39,8 @@
     <string name="welcome">Está de volta, certo?</string>
     <string name="invalid_password_2">As senhas são diferentes</string>
     <string name="weightEt_problem_1">Insira um peso válido</string>
-    <string name="weightEt_problem_2">Cuidado, esses são números estranhos</string>
-    <string name="heightEt_problem">Altura inválida</string>
+    <string name="weight_problem_2">Cuidado, esses são números estranhos</string>
+    <string name="height_problem">Altura inválida</string>
     <string name="invalid_sex">Selecione um gênero válido</string>
     <string name="txt_error_message">%1$S*</string>
     <string name="no_recipes_found">Nenhuma receita encontrada</string>
@@ -151,8 +151,8 @@
     <string name="new_recipe_fragment_tabTitles_Preparation">Preparação</string>
     <string name="fragment_settings_delete_account">Excluir Conta</string>
     <string name="profile_fragment_logout_dialog_title">Sair</string>
-    <string name="profile_fragment_logout_dialog_yes">Sim</string>
-    <string name="profile_fragment_logout_dialog_no">Não</string>
+    <string name="dialog_yes">Sim</string>
+    <string name="dialog_no">Não</string>
     <string name="settings_fragment_dialog_desc">Tem certeza de que deseja excluir esta conta e todo o seu conteúdo?</string>
     <string name="settings_fragment_dialog_title">Excluindo conta…</string>
     <string name="fragment_followers_find_follows">Encontrar</string>
@@ -174,6 +174,20 @@
     <string name="accept">Aceitar</string>
     <string name="new_recipe_fragment_tabTitles_Ingredients">Ingredientes</string>
     <string name="new_recipe_fragment_tabTitles_Details">Detalhes</string>
+    <string name="fragment_register_tab_details_title">Detalhes</string>
+    <string name="two">2</string>
+    <string name="one">1</string>
+    <string name="three">3</string>
+    <string name="fragment_register_tab_profile_title">Perfil</string>
+    <string name="fragment_register_tab_biodata_title">Bio Data</string>
+    <string name="fragment_register_profile">Continuar</string>
+    <string name="fragment_register_finish">Finalizar</string>
+    <string name="user_name">Nome de Utilizador</string>
+    <string name="fragment_register_account_biodata">Terminar</string>
+    <string name="enter_weight_2">Formato de numero inválido</string>
+    <string name="height_problem_2">Altura entre 1.20m and 3.00m</string>
+    <string name="height_problem_1">Peso entre 40 a 150kg</string>
+    <string name="weight_problem_1">Insira um peso entre 50 a 150 kg</string>
     <string-array name="gender_array">
         <item>Masculino</item>
         <item>Feminino</item>

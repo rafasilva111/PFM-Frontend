@@ -4,7 +4,7 @@
         <item android:gravity="top|center_horizontal">
             <shape android:shape="rectangle">
                 <size android:width="30dp" android:height="5dp"  />
-                <solid android:color="@color/tabMenu_color"/>
+                <solid android:color="@color/secondary_title"/>
                 <corners android:bottomLeftRadius="3dp" android:bottomRightRadius="3dp" android:topLeftRadius="3dp" android:topRightRadius="3dp" />
             </shape>
         </item>

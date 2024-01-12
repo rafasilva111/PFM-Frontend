@@ -12,8 +12,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentSettingsBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
@@ -194,14 +194,14 @@ class SettingsFragment : Fragment() {
                     .setIcon(R.drawable.ic_logout)
                     .setTitle(getString(R.string.settings_fragment_dialog_title))
                     .setMessage(getString(R.string.settings_fragment_dialog_desc))
-                    .setPositiveButton(getString(R.string.profile_fragment_logout_dialog_yes)) { _, _ ->
+                    .setPositiveButton(getString(R.string.dialog_yes)) { _, _ ->
                         // Adicione aqui o código para apagar o registro
                         userViewModel.deleteUserAccount()
                         changeMenuVisibility(false, activity)
                         findNavController().navigate(R.id.action_settingsFragment_to_login)
 
                     }
-                    .setNegativeButton(getString(R.string.profile_fragment_logout_dialog_no)) { dialog, _ ->
+                    .setNegativeButton(getString(R.string.dialog_no)) { dialog, _ ->
                         // Adicione aqui o código para cancelar a exclusão do registro
                         dialog.dismiss()
                     }
@@ -222,6 +222,6 @@ class SettingsFragment : Fragment() {
 
         // update user
         if ( fmcToken != null ||profileType != null)
-            userViewModel.updateUser(UserRequest(fmc_token = fmcToken,profile_type = profileType))
+            userViewModel.updateUser(UserDTO(fmc_token = fmcToken,profile_type = profileType))
     }
 }

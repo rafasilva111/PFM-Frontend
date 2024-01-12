@@ -1,9 +1,9 @@
 package com.example.projectfoodmanager.data.repository.datasource
 
 
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
@@ -23,23 +23,23 @@ import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFo
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
+import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
 import retrofit2.Response
 
 interface RemoteDataSource {
 
 	//user
-	suspend fun registerUser(user: UserRequest) : Response<Unit>
+	suspend fun registerUser(user: UserDTO) : Response<Unit>
 	suspend fun loginUser(email: String, password: String) : Response<UserAuthResponse>
 	suspend fun logoutUser() : Response<String>
 	suspend fun getUserAuth() : Response<User>
 	suspend fun getUserById(userId: Int): Response<User>
-	suspend fun updateUser(user: UserRequest): Response<User>
+	suspend fun updateUser(user: UserDTO): Response<User>
 	suspend fun deleteUser(): Response<String>
 	suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
 

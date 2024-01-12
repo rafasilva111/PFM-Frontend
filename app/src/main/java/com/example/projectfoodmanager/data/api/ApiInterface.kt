@@ -1,9 +1,9 @@
 package com.example.projectfoodmanager.data.api
 
 
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
@@ -23,12 +23,12 @@ import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFo
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.user.UserList
+import com.example.projectfoodmanager.data.model.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -40,10 +40,10 @@ interface ApiInterface {
 
     //user
     @POST("$API_V1_BASE_URL/auth")
-    suspend fun createUser(@Body user : UserRequest): Response<Unit>
+    suspend fun createUser(@Body user : UserDTO): Response<Unit>
 
     @POST("$API_V1_BASE_URL/auth/login")
-    suspend fun loginUser(@Body user : UserRequest): Response<UserAuthResponse>
+    suspend fun loginUser(@Body user : UserDTO): Response<UserAuthResponse>
 
     @DELETE("$API_V1_BASE_URL/auth")
     suspend fun logoutUser(): Response<String>
@@ -52,13 +52,13 @@ interface ApiInterface {
     suspend fun getUserSession(): Response<User>
 
     @POST("$API_V1_BASE_URL/user")
-    suspend fun patchUser(@Body user : UserRequest): Response<Unit>
+    suspend fun patchUser(@Body user : UserDTO): Response<Unit>
 
     @GET("$API_V1_BASE_URL/user")
     suspend fun getUser(@Query("id") userId: Int): Response<User>
 
     @PATCH("$API_V1_BASE_URL/user")
-    suspend fun updateUser(@Body user : UserRequest): Response<User>
+    suspend fun updateUser(@Body user : UserDTO): Response<User>
 
     @DELETE("$API_V1_BASE_URL/user")
     suspend fun deleteUser(): Response<String>

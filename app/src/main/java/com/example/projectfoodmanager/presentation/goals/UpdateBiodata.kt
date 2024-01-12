@@ -8,24 +8,23 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.databinding.FragmentUpdateBiodataBinding
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.toast
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -122,7 +121,7 @@ class UpdateBiodata : Fragment() {
         }
     }
 
-    fun getUserRequest(): UserRequest {
+    fun getUserRequest(): UserDTO {
         var activityLevel = 0.0F
         when(binding.activityLevelRg.checkedRadioButtonId){
             R.id.op1_RB-> activityLevel= 1.2F
@@ -132,7 +131,7 @@ class UpdateBiodata : Fragment() {
             R.id.op5_RB-> activityLevel= 1.725F
             R.id.op6_RB-> activityLevel= 1.9F
         }
-        return UserRequest(
+        return UserDTO(
             height = binding.heightEt.text.toString().toFloat(),
             weight = binding.weightEt.text.toString().toFloat(),
             activity_level = activityLevel,
@@ -146,13 +145,13 @@ class UpdateBiodata : Fragment() {
         if (heightTxt.isNullOrEmpty()) {
             isValid = false
             binding.heightTL.isErrorEnabled=true
-            binding.heightTL.error=getString(R.string.heightEt_problem)
+            binding.heightTL.error=getString(R.string.height_problem)
             //toast(getString(R.string.heightEt_problem))
         } else if (heightTxt.toIntOrNull() != null) {
             if (heightTxt.toIntOrNull()  !in 120..300){
                 isValid = false
                 binding.heightTL.isErrorEnabled=true
-                binding.heightTL.error=getString(R.string.heightEt_problem)
+                binding.heightTL.error=getString(R.string.height_problem)
                 //toast(getString(R.string.heightEt_problem))
             }
         } else if (heightTxt.toFloatOrNull() != null){
@@ -160,14 +159,14 @@ class UpdateBiodata : Fragment() {
             if (heightFloat!! !in 1.20..3.0) {
                 isValid = false
                 binding.heightTL.isErrorEnabled=true
-                binding.heightTL.error=getString(R.string.heightEt_problem)
+                binding.heightTL.error=getString(R.string.height_problem)
                 //toast(getString(R.string.heightEt_problem))
             } else {
                 binding.heightEt.setText((heightFloat * 100).toString())
                 if ((heightFloat * 100) !in 120.0..300.0){
                     isValid = false
                     binding.heightTL.isErrorEnabled=true
-                    binding.heightTL.error=getString(R.string.heightEt_problem)
+                    binding.heightTL.error=getString(R.string.height_problem)
                     //toast(getString(R.string.heightEt_problem))
                 }
             }
@@ -188,7 +187,7 @@ class UpdateBiodata : Fragment() {
         }else if (binding.weightEt.text.toString().toFloatOrNull()!! !in 30.0..200.0) {
             isValid = false
             binding.weightTL.isErrorEnabled=true
-            binding.weightTL.error=getString(R.string.weightEt_problem_2)
+            binding.weightTL.error=getString(R.string.weight_problem_2)
             //toast(getString(R.string.weightEt_problem_2))
         }else{
             binding.weightTL.isErrorEnabled=false

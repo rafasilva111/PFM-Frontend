@@ -1,14 +1,11 @@
+package com.example.projectfoodmanager.presentation.auth.register.tabs
 
-package com.example.projectfoodmanager.ui.auth.registerFragments
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -23,29 +20,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.AvatarGVAdapter
 import com.example.projectfoodmanager.BuildConfig
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.Avatar.Companion.avatarArrayList
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.databinding.FragmentRegisterAccountProfileBinding
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
+import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment
+import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment.Companion.imgURI
+import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment.Companion.selectedAvatar
 import com.example.projectfoodmanager.util.*
-import com.example.projectfoodmanager.util.FireStorage.user_profile_images
 import com.example.projectfoodmanager.util.ActionResultCodes.GALLERY_REQUEST_CODE
+import com.example.projectfoodmanager.util.FireStorage.user_profile_images
+import com.example.projectfoodmanager.util.Helper.Companion.checkPermission
+import com.example.projectfoodmanager.util.Helper.Companion.requestPermission
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -61,33 +59,93 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class RegisterFragment : Fragment() {
+class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding) : Fragment() {
 
-    private var fileName: String? = null
-    lateinit var finalUri: Uri
-    private var selectedAvatar: String? = null
+
+    /** binding */
+    private lateinit var binding: FragmentRegisterAccountProfileBinding
+
+    /** viewModels */
     val userViewModel: UserViewModel by viewModels()
-    lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+
+    /** variables */
+
+    private val TAG: String = "RegisterFragment"
 
 
-    private var file_uri: Uri? = null
-    val TAG: String = "RegisterFragment"
-    lateinit var binding: FragmentRegisterBinding
+    private lateinit var imagePickingActivityResultLauncher: ActivityResultLauncher<Intent>
+
+    /** injects */
+
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+
+    /** adapters */
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentRegisterBinding.inflate(layoutInflater)
+        savedInstanceState: Bundle?,
+
+        ): View {
+
+        if (!this::binding.isInitialized) {
+            binding = FragmentRegisterAccountProfileBinding.inflate(layoutInflater)
+
+        }
+
+        return binding.root
+    }
+
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        setUI()
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun setUI() {
+
+        /**
+         *  General
+         * */
+
         val genders = resources.getStringArray(R.array.gender_array)
         val arrayAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_register_gender,genders)
 
         binding.sexEt.setAdapter(arrayAdapter)
 
-        activityResultLauncher  =
+        binding.continueBtn.visibility = View.VISIBLE
+
+
+        /**
+         *  Navigation
+         * */
+
+        binding.continueBtn.setOnClickListener {
+            if (validation()){
+                patchUser()
+                val currentTab = parentBinding.fragmentRegisterTabLayout.selectedTabPosition
+                val nextTab = currentTab + 1
+                parentBinding.fragmentRegisterViewPager.currentItem= nextTab
+
+            }
+        }
+
+
+        /**
+         *  Pick Image
+         * */
+
+        /** Activity Result */
+
+        imagePickingActivityResultLauncher  =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                 if (result.resultCode== AppCompatActivity.RESULT_OK) {
                     val extras: Bundle? = result.data?.extras
@@ -111,45 +169,7 @@ class RegisterFragment : Fragment() {
                 }
             }
 
-        return binding.root
-    }
-
-    @SuppressLint("MissingInflatedId")
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        bindObservers()
-
-        Locale.setDefault(Locale("pt"));
-
-        binding.skipBiodata.setOnClickListener {
-            // todo melhorar a estétitica
-            if (validation()) {
-                if (file_uri != null){
-                    val fileName = UUID.randomUUID().toString() +".jpg"
-
-                    val refStorage = Firebase.storage.reference.child("$user_profile_images$fileName")
-                    refStorage.putFile(file_uri!!)
-                        .addOnSuccessListener {
-                            Log.d(TAG, "uploadImageToFirebase: success")
-                            userViewModel.registerUser(createUserRequest())
-                        }
-
-                        .addOnFailureListener { e ->
-                            Log.d(TAG, "uploadImageToFirebase: $e")
-                        }
-                }
-                else
-
-                    userViewModel.registerUser(createUserRequest())
-
-            }else{
-                Toast(context).showCustomToast ("Por favor preencha os campos em falta", requireActivity(),ToastType.ERROR)
-            }
-        }
-        binding.backIB.setOnClickListener {
-            findNavController().navigateUp()
-        }
+        /** Select image button  */
 
         binding.uploadImageFB.setOnClickListener {
 
@@ -169,22 +189,22 @@ class RegisterFragment : Fragment() {
             val cancelBtn = dialogBinding.findViewById<Button>(R.id.btnConfCancel)
 
             cameraIV.setOnClickListener{
-                if (checkPermission()) {
+                if (checkPermission(requireContext())) {
                     pickFromCamera()
                 }else{
                     toast( "Allow all permissions")
-                    requestPermission()
+                    requestPermission(requireActivity())
                 }
 
                 myDialog.dismiss()
             }
 
             galleryIV.setOnClickListener {
-                if (checkPermission()) {
+                if (checkPermission(requireContext())) {
                     pickFromGallery()
                 }else{
                     toast( "Allow all permissions")
-                    requestPermission()
+                    requestPermission(requireActivity())
                 }
                 myDialog.dismiss()
             }
@@ -222,10 +242,7 @@ class RegisterFragment : Fragment() {
         }
 
         binding.dateEt.setOnClickListener {
-
-            if (binding.emailEt.isFocusable)
-                binding.emailEt.clearFocus()
-
+            binding.dateEt.isEnabled = false
             val calendar = Calendar.getInstance()
 
             Locale.setDefault(Locale("pt"));
@@ -255,20 +272,24 @@ class RegisterFragment : Fragment() {
                 val formattedDate = formatter.format(selectedDate)
 
                 binding.dateEt.setText(formattedDate)
+                binding.dateEt.isEnabled = true
             }
+            mtDatePicker.addOnCancelListener {  binding.dateEt.isEnabled = true}
 
             mtDatePicker.show(parentFragmentManager,"DatePicker")
         }
 
 
-        //-------------- VALIDATIONS --------------
+        /**
+         *  Validations
+         * */
+
 
         binding.firstNameEt.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus){
                 if (binding.firstNameEt.text.isNullOrEmpty()){
                     binding.firstNameTL.isErrorEnabled=true
                     binding.firstNameTL.error=getString(R.string.enter_first_name)
-                    //toast(getString(R.string.enter_first_name))
                 }else{
                     binding.firstNameTL.isErrorEnabled=false
                 }
@@ -280,26 +301,12 @@ class RegisterFragment : Fragment() {
                 if (binding.lastNameEt.text.isNullOrEmpty()){
                     binding.lastNameTL.isErrorEnabled=true
                     binding.lastNameTL.error=getString(R.string.enter_last_name)
-                    // toast(getString(R.string.enter_last_name))
                 }else{
                     binding.lastNameTL.isErrorEnabled=false
                 }
             }
         }
 
-        binding.emailEt.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus){
-                if (binding.emailEt.text.isNullOrEmpty()){
-                    binding.emailTL.isErrorEnabled=true
-                    binding.emailTL.error=getString(R.string.enter_email)
-                }else if (!binding.emailEt.text.toString().isValidEmail()){
-                    binding.emailTL.isErrorEnabled=true
-                    binding.emailTL.error=getString(R.string.invalid_email)
-                }else{
-                    binding.emailTL.isErrorEnabled=false
-                }
-            }
-        }
 
         binding.dateEt.setOnFocusChangeListener { view, hasFocus ->
             if (!hasFocus){
@@ -353,179 +360,127 @@ class RegisterFragment : Fragment() {
             }
         }
 
-        binding.passEt.setOnFocusChangeListener { _, hasFocus ->
-
-            if (!hasFocus){
-                if (binding.passEt.text.isNullOrEmpty()){
-                    binding.passwordTL.isErrorEnabled=true
-                    binding.passwordTL.error=getString(R.string.enter_password)
-                    //toast(getString(R.string.enter_password))
-                }else if (binding.passEt.text.toString().length < 8){
-                    binding.passwordTL.isErrorEnabled=true
-                    binding.passwordTL.error=getString(R.string.invalid_password_1)
-                } else{
-                    binding.passwordTL.isErrorEnabled=false
-                }
-            }
-        }
 
 
-        binding.registerBtn.setOnClickListener {
-            if (validation()){
-                findNavController().navigate(R.id.action_registerFragment_to_biodataFragment_navigation,Bundle().apply {
-                    putParcelable("user",createUserRequest())
-                    if (file_uri != null){
-                        putString("uri",file_uri.toString())
-                    }
-
-                })
-            }
-        }
-    }
-
-
-
-    private fun createUserRequest(): UserRequest {
-
-        val sex: String = when (binding.sexEt.text.toString()) {
-            "Masculino" -> SexConstants.M
-            "Feminino" -> SexConstants.F
-            else -> SexConstants.NA
-        }
-
-        var img = ""
-        if (selectedAvatar != null){
-            img = selectedAvatar!!
-        }else if (fileName!=null){
-            img= fileName!!
-        }
-
-        return UserRequest(
-            name =  binding.firstNameEt.text.toString() + " "+ binding.lastNameEt.text.toString(),
-            email = binding.emailEt.text.toString(),
-            birth_date = binding.dateEt.text.toString(),
-            password = binding.passEt.text.toString(),
-            sex = sex,
-            img_source=img
-        )
-    }
-
-    private fun randomAvatarImg(sex: String): Avatar {
-
-        when(sex) {
-            "Masculino" -> return avatarArrayList[(0 until 5).random()]
-            "Feminino" -> return avatarArrayList[(6 until 10).random()]
-            else -> return avatarArrayList[(0 until 10).random()]
-        }
     }
 
     private fun validation(): Boolean {
 
         var isValid = true
-        //first_name
+
+        /** First Name  */
+
         if (binding.firstNameEt.text.isNullOrEmpty()){
-            isValid = false
             binding.firstNameTL.isErrorEnabled=true
             binding.firstNameTL.error=getString(R.string.enter_first_name)
-            //toast(getString(R.string.enter_first_name))
-        }else{
-            binding.firstNameTL.isErrorEnabled=false
-        }
-
-        //last_name
-        if (binding.lastNameEt.text.isNullOrEmpty()){
             isValid = false
+        }
+        else
+            binding.firstNameTL.isErrorEnabled=false
+
+        /** Last Name  */
+        if (binding.lastNameEt.text.isNullOrEmpty()){
             binding.lastNameTL.isErrorEnabled=true
             binding.lastNameTL.error=getString(R.string.enter_last_name)
-           // toast(getString(R.string.enter_last_name))
-        }else{
+            isValid = false
+        }
+        else
             binding.lastNameTL.isErrorEnabled=false
-        }
 
-        //email
-        if (binding.emailEt.text.isNullOrEmpty()){
+        /** Birth Date  */
+        if(binding.dateEt.text.isNullOrEmpty()) {
+            errorOnBirthdate(getString(R.string.enter_birthdate))
             isValid = false
-            binding.emailTL.isErrorEnabled=true
-            binding.emailTL.error=getString(R.string.enter_email)
-            //toast(getString(R.string.enter_email))
-        }else if (!binding.emailEt.text.toString().isValidEmail()){
-            isValid = false
-            binding.emailTL.isErrorEnabled=true
-            binding.emailTL.error=getString(R.string.invalid_email)
-            //toast(getString(R.string.invalid_email))
-        }else{
-            binding.emailTL.isErrorEnabled=false
         }
-
-        //aniversário
-       if (binding.dateEt.text.isNullOrEmpty()){
-           isValid = false
-           binding.dateTL.isErrorEnabled=true
-           binding.dateTL.error=getString(R.string.enter_birthdate)
-            //toast(getString(R.string.enter_birthdate))
-        }else{
-            val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/M/yyyy")
-            try {
-                val dateTime: LocalDate = LocalDate.parse(binding.dateEt.text.toString(), formatter)
-                if (dateTime >= LocalDate.now()){
-                    //toast(getString(R.string.invalid_birthdate_2))
-                    isValid = false
-                    binding.dateTL.isErrorEnabled=true
-                    binding.dateTL.error=getString(R.string.invalid_birthdate_2)
-                }else{
-                    binding.dateTL.isErrorEnabled=false
-                }
-            }
-            catch (e: DateTimeException){
-                isValid = false
-                binding.dateTL.isErrorEnabled=true
-                binding.dateTL.error=getString(R.string.invalid_birthdate)
-            }
-
-        }
-        //genero
-        if (binding.sexEt.text.isNullOrEmpty()){
+        else if (userIsNot12Old(binding.dateEt.text.toString())) {
+            errorOnBirthdate(getString(R.string.enter_birthdate_error))
             isValid = false
+        }
+        else
+            binding.dateTL.isErrorEnabled=false
+
+        /** Sex  */
+        if(binding.sexEt.text.isNullOrEmpty()) {
             binding.sexTL.isErrorEnabled=true
             binding.sexTL.error=getString(R.string.invalid_sex)
-        }
-
-        //password
-        if(binding.passwordTL.isErrorEnabled)
-            binding.passwordTL.isErrorEnabled=false
-
-        if (binding.passEt.text.isNullOrEmpty()){
             isValid = false
-            binding.passwordTL.isErrorEnabled=true
-            binding.passwordTL.error=getString(R.string.enter_password)
-            //toast(getString(R.string.enter_password))
-        }else if (binding.passEt.text.toString().length < 8){
-            isValid = false
-            binding.passwordTL.isErrorEnabled=true
-            binding.passwordTL.error=getString(R.string.invalid_password_1)
-
-        }else if(binding.passEt.text.toString().compareTo(binding.passEtConf.text.toString()) != 0 ){
-                isValid = false
-                binding.passwordConfTL.isErrorEnabled=true
-                binding.passwordConfTL.error=getString(R.string.invalid_password_2)
-        }else{
-            binding.passwordConfTL.isErrorEnabled=false
         }
+        else
+            binding.sexTL.isErrorEnabled=false
+
+
 
         return isValid
     }
 
-    private fun selectImageFromGallery() {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(
-            Intent.createChooser(
-                intent,
-                "Please select..."
-            ),
-            GALLERY_REQUEST_CODE
-        )
+    private fun errorOnBirthdate(error: String){
+        binding.dateTL.isErrorEnabled=true
+        binding.dateTL.error=error
+    }
+
+    private fun patchUser() {
+
+        /** First Name  */
+        RegisterFragment.user.name = binding.firstNameEt.text.toString().trim() + " " + binding.firstNameEt.text.toString().trim()
+
+        /** Birth Date  */
+        RegisterFragment.user.birth_date = binding.dateEt.text.toString()
+
+        /** Sex  */
+        val genders = resources.getStringArray(R.array.gender_array)
+        when(binding.sexEt.text.toString()){
+            genders[0] -> RegisterFragment.user.sex = SexConstants.M
+            genders[1] -> RegisterFragment.user.sex = SexConstants.F
+            else -> RegisterFragment.user.sex = SexConstants.NA
+        }
+
+        /** Img Source  */
+        RegisterFragment.user.img_source = selectedAvatar
+
+    }
+
+
+    private fun userIsNot12Old(dateString: String): Boolean {
+        // Define the date format
+        val dateFormat = SimpleDateFormat("dd/M/yyyy", Locale.getDefault())
+
+        try {
+            // Parse the date string to a Date object
+            val dateOfBirth = dateFormat.parse(dateString)
+
+            // Calculate the age
+            val currentDate = Calendar.getInstance().time
+            val age = calculateAge(dateOfBirth, currentDate)
+
+            // Check if the age is 12 or more
+            return age <= 12
+        } catch (e: Exception) {
+            // Handle parsing exceptions
+            e.printStackTrace()
+        }
+
+        // Return false in case of errors
+        return true
+    }
+
+    private fun calculateAge(birthDate: Date?, currentDate: Date): Int {
+        val cal = Calendar.getInstance()
+        cal.time = birthDate ?: currentDate
+        val birthYear = cal.get(Calendar.YEAR)
+
+        cal.time = currentDate
+        val currentYear = cal.get(Calendar.YEAR)
+
+        return currentYear - birthYear
+    }
+
+    private fun randomAvatarImg(sex: String): Avatar {
+
+        return when(sex) {
+            "Masculino" -> avatarArrayList[(0 until 5).random()]
+            "Feminino" -> avatarArrayList[(6 until 10).random()]
+            else -> avatarArrayList[(0 until 10).random()]
+        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -542,66 +497,28 @@ class RegisterFragment : Fragment() {
         }
 
         if (resultCode == AppCompatActivity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            val resultUri :Uri ?= UCrop.getOutput(data!!)
+            imgURI = UCrop.getOutput(data!!)
 
-            setImage(resultUri!!)
+            setImage(imgURI!!)
 
-            if (fileName == null)
-                fileName = UUID.randomUUID().toString() + ".png"
-
-            userViewModel.updateUser(UserRequest(img_source = fileName))
-            val storageRef = Firebase.storage.reference.child("$user_profile_images$fileName")
-
-            storageRef.putFile(resultUri)
-                .addOnSuccessListener {
-                    // Image upload success
-                    // You can perform additional operations here if needed
-
-                    // Get the download URL of the uploaded image
-                    storageRef.downloadUrl.addOnSuccessListener { downloadUri ->
-                        val imageURL = downloadUri.toString()
-                        // Do something with the imageURL (e.g., save it in your userSession)
-
-                        // Update the ImageView with the uploaded image
-                        Glide.with(binding.imageView.context)
-                            .load(imageURL)
-                            .into(binding.imageView)
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    // Image upload failed
-                    // Handle the failure gracefully
-                }
-            finalUri=resultUri
-
-            saveEditedImage()
+            /** Save edited image */
+            saveMediaToStorage(MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imgURI))
         }
     }
+    private fun launchImageCrop(uri: Uri) {
 
-    private fun saveEditedImage() {
-        val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, finalUri)
-        saveMediaToStorage(bitmap)
-    }
 
-    private fun bindObservers() {
-        userViewModel.userRegisterLiveData.observe(viewLifecycleOwner) { it ->
-            it.getContentIfNotHandled()?.let {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-                        Toast(context).showCustomToast (getString(R.string.user_registered_successfully), requireActivity(),ToastType.SUCCESS)
-                        //toast(getString(R.string.user_registered_successfully))
-                    }
-                    is NetworkResult.Error -> {
-                        Toast(context).showCustomToast (it.message.toString(), requireActivity(),ToastType.ERROR)
-                        //toast(it.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                        // todo falta aqui um loading bar
-                    }
-                }
-            }
-        }
+        val destination:String=StringBuilder(UUID.randomUUID().toString()).toString()
+        val options: UCrop.Options= UCrop.Options()
+        options.setCropGridColor(Color.TRANSPARENT)
+        options.setStatusBarColor(resources.getColor(R.color.main_color))
+
+        startActivityForResult(
+            UCrop.of(Uri.parse(uri.toString()), Uri.fromFile(File(requireContext().cacheDir,destination)))
+                .withOptions(options)
+                .withAspectRatio(3F, 4F)
+                .useSourceImageAspectRatio()
+                .withMaxResultSize(2000, 2000).getIntent(requireContext()), UCrop.REQUEST_CROP);
     }
 
     private fun saveImage(image: Bitmap?, context: Context): Uri {
@@ -630,22 +547,6 @@ class RegisterFragment : Fragment() {
 
     }
 
-    private fun launchImageCrop(uri: Uri) {
-
-
-        var destination:String=StringBuilder(UUID.randomUUID().toString()).toString()
-        var options: UCrop.Options= UCrop.Options()
-        options.setCropGridColor(Color.TRANSPARENT)
-        options.setStatusBarColor(resources.getColor(R.color.main_color))
-
-        startActivityForResult(
-            UCrop.of(Uri.parse(uri.toString()), Uri.fromFile(File(requireContext().cacheDir,destination)))
-            .withOptions(options)
-            .withAspectRatio(3F, 4F)
-            .useSourceImageAspectRatio()
-            .withMaxResultSize(2000, 2000).getIntent(requireContext()), UCrop.REQUEST_CROP);
-    }
-
     private fun pickFromGallery() {
 
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -656,35 +557,9 @@ class RegisterFragment : Fragment() {
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
-
     private fun pickFromCamera(){
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        activityResultLauncher.launch(intent)
-    }
-
-    private fun checkPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            100
-        )
+        imagePickingActivityResultLauncher.launch(intent)
     }
 
     private fun saveMediaToStorage(bitmap: Bitmap) {
@@ -723,16 +598,6 @@ class RegisterFragment : Fragment() {
     }
 
 
-    override fun onResume() {
-        requireActivity().window.decorView.systemUiVisibility = 0
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.main_color)
-        super.onResume()
-    }
 
-    override fun onPause() {
-        requireActivity().window.decorView.systemUiVisibility = 8192
-        requireActivity().window.statusBarColor =  requireContext().getColor(R.color.background_1)
 
-        super.onPause()
-    }
 }

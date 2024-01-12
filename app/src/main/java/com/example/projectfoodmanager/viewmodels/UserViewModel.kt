@@ -3,15 +3,15 @@ package com.example.projectfoodmanager.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.user.UserList
+import com.example.projectfoodmanager.data.model.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.repository.UserRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -33,7 +33,7 @@ class UserViewModel @Inject constructor(
     val userRegisterLiveData: LiveData<Event<NetworkResult<String>>>
         get() = repository.userRegisterLiveData
 
-    fun registerUser(userRequest: UserRequest){
+    fun registerUser(userRequest: UserDTO){
         viewModelScope.launch {
             repository.registerUser(userRequest)
         }
@@ -61,7 +61,7 @@ class UserViewModel @Inject constructor(
     val userUpdateResponseLiveData: LiveData<Event<NetworkResult<User>>>
         get() = repository.userUpdateLiveData
 
-    fun updateUser(userRequest: UserRequest){
+    fun updateUser(userRequest: UserDTO){
         viewModelScope.launch {
             repository.updateUser(userRequest)
         }

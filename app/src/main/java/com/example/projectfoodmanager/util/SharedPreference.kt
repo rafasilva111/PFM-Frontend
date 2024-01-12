@@ -7,8 +7,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -82,7 +82,7 @@ class SharedPreference @Inject constructor(
     }
 
     fun saveUserRecipesSession(userRecipeBackgrounds: UserRecipeBackgrounds) {
-        val user:User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
+        val user: User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
         user.liked_recipes = userRecipeBackgrounds.result.recipes_liked
         user.saved_recipes = userRecipeBackgrounds.result.recipes_saved
         user.created_recipes = userRecipeBackgrounds.result.recipes_created
@@ -101,29 +101,29 @@ class SharedPreference @Inject constructor(
         sharedPreferences.edit().remove(SharedPreferencesConstants.USER_SESSION_SHOPPING_LISTS).apply()
     }
 
-    fun addLikeToUserSession(recipe : Recipe): User{
-        val user:User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
+    fun addLikeToUserSession(recipe : Recipe): User {
+        val user: User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
         user.addLike(recipe)
         saveUserSession(user)
         return user
     }
 
-    fun removeLikeFromUserSession(recipe : Recipe): User{
-        val user:User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
+    fun removeLikeFromUserSession(recipe : Recipe): User {
+        val user: User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
         user.removeLike(recipe)
         saveUserSession(user)
         return user
     }
 
     fun addSaveToUserSession(recipe: Recipe): User {
-        val user:User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
+        val user: User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
         user.addSave(recipe)
         saveUserSession(user)
         return user
     }
 
     fun removeSaveFromUserSession(recipe: Recipe): User {
-        val user:User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
+        val user: User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
         user.removeSave(recipe)
         saveUserSession(user)
         return user

@@ -7,7 +7,6 @@ import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.App
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.SharedPreference
 import retrofit2.Response
 import javax.inject.Inject
 

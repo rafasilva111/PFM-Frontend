@@ -38,8 +38,8 @@ import com.example.projectfoodmanager.AvatarGVAdapter
 import com.example.projectfoodmanager.BuildConfig
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentSessionProfileBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FireStorage.user_profile_images
@@ -191,11 +191,11 @@ class SessionProfileFragment : Fragment() {
                 .setIcon(R.drawable.ic_logout)
                 .setTitle(getString(R.string.profile_fragment_logout_dialog_title))
                 .setMessage(resources.getString(R.string.logout_confirmation_description))
-                .setPositiveButton(getString(R.string.profile_fragment_logout_dialog_yes)) { _, _ ->
+                .setPositiveButton(getString(R.string.dialog_yes)) { _, _ ->
                     // Adicione aqui o código para apagar o registro
                     userViewModel.logoutUser()
                 }
-                .setNegativeButton(getString(R.string.profile_fragment_logout_dialog_no)) { dialog, _ ->
+                .setNegativeButton(getString(R.string.dialog_no)) { dialog, _ ->
                     // Adicione aqui o código para cancelar a exclusão do registro
                     dialog.dismiss()
                 }
@@ -295,7 +295,7 @@ class SessionProfileFragment : Fragment() {
 
                     // Handle the item selection here
                     selectedAvatar = avatar!!.getName()
-                    userViewModel.updateUser(UserRequest(img_source = selectedAvatar))
+                    userViewModel.updateUser(UserDTO(img_source = selectedAvatar))
 
                     binding.profileIV.setImageResource(avatar.imgId)
 
@@ -342,7 +342,7 @@ class SessionProfileFragment : Fragment() {
                 fileName = UUID.randomUUID().toString() + ".png"
 
 
-            userViewModel.updateUser(UserRequest(img_source = fileName))
+            userViewModel.updateUser(UserDTO(img_source = fileName))
             val storageRef = Firebase.storage.reference.child("$user_profile_images$fileName")
 
             storageRef.putFile(resultUri)

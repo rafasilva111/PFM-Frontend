@@ -661,7 +661,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/recipe_detail_tab_layout"
+                android:id="@+id/fragment_recipe_detail_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -678,11 +678,11 @@
 
 
             <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/recipeInfo_ViewPager"
+                android:id="@+id/fragment_recipe_detail_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:background="@color/transparent"
-                app:layout_constraintTop_toBottomOf="@+id/recipe_detail_tab_layout"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_recipe_detail_tab_layout"
                 />
 
 

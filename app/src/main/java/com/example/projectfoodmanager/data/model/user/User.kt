@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.model.modelResponse.user
+package com.example.projectfoodmanager.data.model.user
 
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
@@ -9,6 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class User(
     val id: Int,
     val name: String,
+    val username: String,
     val birth_date: String?,
     val email: String,
     val description: String,

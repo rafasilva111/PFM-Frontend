@@ -1,6 +1,8 @@
 package com.example.projectfoodmanager.util
 
+import android.Manifest.permission.*
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -11,6 +13,8 @@ import android.view.View
 import android.view.WindowInsetsController
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
@@ -23,6 +27,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import java.util.*
+import android.Manifest
 
 class Helper {
     companion object {
@@ -158,7 +163,7 @@ class Helper {
 
                         window.statusBarColor = context.getColor(R.color.main_color)
                         window.navigationBarColor = context.getColor(R.color.main_color)
-
+                        @Suppress("DEPRECATION")
                         window.decorView.systemUiVisibility = window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()  //set status text  light
                         STATUS_BAR_COLOR = true
                     }
@@ -166,8 +171,6 @@ class Helper {
                     if (STATUS_BAR_COLOR != false) {
                         //BACKGROUND in NAVIGATION BAR
                         window.statusBarColor = context.getColor(R.color.background_1)
-
-                        //TextColor in NAVIGATION BAR
 
 
                         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR //set status text dark
@@ -222,6 +225,32 @@ class Helper {
                 @Suppress("DEPRECATION")
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
+        }
+
+
+        fun checkPermission(context: Context): Boolean {
+            return ContextCompat.checkSelfPermission(
+                context,
+                READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                context,
+                WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                context,
+                CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+
+        fun requestPermission(activity: FragmentActivity) {
+            ActivityCompat.requestPermissions(
+                activity,
+                arrayOf(
+                    READ_EXTERNAL_STORAGE,
+                    WRITE_EXTERNAL_STORAGE,
+                    CAMERA
+                ),
+                100
+            )
         }
 
 

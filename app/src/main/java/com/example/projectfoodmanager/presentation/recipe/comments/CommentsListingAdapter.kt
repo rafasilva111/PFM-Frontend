@@ -10,7 +10,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.ItemCommentLayoutBinding
 import com.example.projectfoodmanager.util.FireStorage
 import com.example.projectfoodmanager.util.Helper

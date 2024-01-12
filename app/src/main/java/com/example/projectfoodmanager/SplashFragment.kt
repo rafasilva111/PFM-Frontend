@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.projectfoodmanager.data.model.modelRequest.UserRequest
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.databinding.FragmentSplashBinding
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.util.*
@@ -64,10 +64,10 @@ class SplashFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        bindObservers()
+
         setUI()
         super.onViewCreated(view, savedInstanceState)
-
+        bindObservers()
 
     }
 
@@ -164,7 +164,7 @@ class SplashFragment : Fragment() {
                         if ( result.data!!.fmc_token != "-1")
                             FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
                                 if (result.data.fmc_token != token)
-                                    userViewModel.updateUser(UserRequest(fmc_token = token))
+                                    userViewModel.updateUser(UserDTO(fmc_token = token))
                             }
                     }
                     is NetworkResult.Error -> {

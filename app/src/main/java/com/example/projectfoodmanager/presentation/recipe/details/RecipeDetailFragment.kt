@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
@@ -134,7 +134,9 @@ class RecipeDetailFragment : Fragment() {
 
     private fun setUI(recipe: Recipe) {
 
-        //--------- GENERAL INFO ---------
+        /**
+         *  General
+         * */
 
         val activity  = requireActivity()
         changeMenuVisibility(false,activity)
@@ -188,7 +190,9 @@ class RecipeDetailFragment : Fragment() {
         }
 
 
-        //--------- ROUTES ---------
+        /**
+         *  Navigation
+         * */
 
         //Go CommentsFragment
 
@@ -322,20 +326,20 @@ class RecipeDetailFragment : Fragment() {
             Tabs
         */
 
-        binding.recipeDetailTabLayout.removeAllTabs()
+        binding.fragmentRecipeDetailTabLayout.removeAllTabs()
 
-        binding.recipeDetailTabLayout.addTab(binding.recipeDetailTabLayout.newTab().setText("Recipe"))
-        binding.recipeDetailTabLayout.addTab(binding.recipeDetailTabLayout.newTab().setText("Nutrition"))
+        binding.fragmentRecipeDetailTabLayout.addTab(binding.fragmentRecipeDetailTabLayout.newTab().setText("Recipe"))
+        binding.fragmentRecipeDetailTabLayout.addTab(binding.fragmentRecipeDetailTabLayout.newTab().setText("Nutrition"))
 
 
-        binding.recipeInfoViewPager.adapter = RecipeDetailTabAdapter(requireActivity().supportFragmentManager, lifecycle, recipe)
+        binding.fragmentRecipeDetailViewPager.adapter = RecipeDetailTabAdapter(requireActivity().supportFragmentManager, lifecycle, recipe)
         // enables back from comments
-        binding.recipeInfoViewPager.isSaveEnabled = false
+        binding.fragmentRecipeDetailViewPager.isSaveEnabled = false
 
-        binding.recipeDetailTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.fragmentRecipeDetailTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab != null)
-                    binding.recipeInfoViewPager.currentItem = tab.position
+                    binding.fragmentRecipeDetailViewPager.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -346,15 +350,13 @@ class RecipeDetailFragment : Fragment() {
 
         })
 
-        binding.recipeInfoViewPager.registerOnPageChangeCallback(object :
+        binding.fragmentRecipeDetailViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                binding.recipeDetailTabLayout.selectTab(binding.recipeDetailTabLayout.getTabAt(position))
+                binding.fragmentRecipeDetailTabLayout.selectTab(binding.fragmentRecipeDetailTabLayout.getTabAt(position))
             }
         })
-
-
 
 
 
@@ -520,9 +522,6 @@ class RecipeDetailFragment : Fragment() {
         userPortion = -1F
         recipePortion = -1F
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-
-
-
     }
 
     companion object{

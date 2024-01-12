@@ -28,23 +28,12 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.projectfoodmanager.ui.auth.registerFragments.RegisterFragment"
+        android:name="com.example.projectfoodmanager.presentation.auth.register.RegisterFragment"
         android:label="RegisterFragment">
-        <action
-            android:id="@+id/action_registerFragment_to_biodataFragment_navigation"
-            app:destination="@id/bioDataFragment" />
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
-    </fragment>
 
-    <fragment
-        android:id="@+id/bioDataFragment"
-        android:name="com.example.projectfoodmanager.ui.auth.registerFragments.BioDataFragment"
-        android:label="BioDataFragment">
-        <action
-            android:id="@+id/action_registerFragment_to_home_navigation"
-            app:destination="@id/loginFragment" />
     </fragment>
 
     <include app:graph="@navigation/app_navigation" />
@@ -101,9 +90,7 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true" />
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_homeFragment_to_testeFragment"
             app:destination="@id/testeFragment" />
