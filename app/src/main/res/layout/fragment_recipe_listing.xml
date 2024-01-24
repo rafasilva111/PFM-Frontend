@@ -292,6 +292,7 @@
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
                 android:elevation="8dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
@@ -300,7 +301,6 @@
                 app:flow_horizontalAlign="center"
                 app:flow_verticalAlign="center"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/cardView8" />

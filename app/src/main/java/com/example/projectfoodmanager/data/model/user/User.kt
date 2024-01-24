@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class User(
     val id: Int,
     val name: String,
-    val username: String,
+    val username: String?,
     val birth_date: String?,
     val email: String,
     val description: String,

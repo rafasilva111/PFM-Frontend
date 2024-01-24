@@ -60,7 +60,7 @@ class SecurityFragment : Fragment() {
         Helper.changeMenuVisibility(false, activity)
         Helper.changeStatusBarColor(true, activity, this.context)
 
-        binding.backIB.setOnClickListener {
+        binding.defaultHeader.backIB.setOnClickListener {
             findNavController().navigateUp()
         }
 
