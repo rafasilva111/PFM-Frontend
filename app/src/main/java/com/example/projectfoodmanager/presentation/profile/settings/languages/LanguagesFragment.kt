@@ -66,7 +66,7 @@ class LanguagesFragment : Fragment() {
         val activity = requireActivity()
 
         changeMenuVisibility(false,activity)
-        changeStatusBarColor(true,activity,this.context)
+        changeStatusBarColor(false,activity,requireContext())
 
         binding.backIB.setOnClickListener {
             findNavController().navigateUp()

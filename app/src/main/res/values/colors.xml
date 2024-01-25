@@ -52,6 +52,10 @@
 
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true" >#ff69b4</color>
 
+
+    <color name="pressedColor">#EFEFEF</color>
+    <color name="focusedColor">#818181</color>
+
 <!--    <color name="">#1e90ff</color>
     <color name="">#ffd700</color>
     <color name="">#87ceeb</color>

@@ -194,6 +194,7 @@
     <string name="fragment_login_register_now">New user? Register Now?</string>
     <string name="enter_username">Enter the UserName.</string>
     <string name="enter_birthdate_error">You must be atleast 12 years old.</string>
+    <string name="fragment_session_profile_alarms">Os meus alarmes</string>
     <string-array name="gender_array">
         <item>Masculino</item>
         <item>Feminino</item>

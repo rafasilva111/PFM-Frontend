@@ -467,12 +467,11 @@ class RecipeListingFragment : Fragment() {
                             // check if list empty
 
                             if(it.data.result.isEmpty()){
-                                binding.offlineTV.text = getString(R.string.no_recipes_found)
-                                binding.offlineTV.visibility=View.VISIBLE
+                                binding.noRecipesTV.visibility=View.VISIBLE
                                 adapter.updateList(mutableListOf())
                                 return@let
                             }else{
-                                binding.offlineTV.visibility=View.GONE
+                                binding.noRecipesTV.visibility=View.GONE
 
                             }
 
@@ -497,6 +496,8 @@ class RecipeListingFragment : Fragment() {
                         showValidationErrors(it.message.toString())
                     }
                     is NetworkResult.Loading -> {
+                        binding.noRecipesTV.visibility = View.GONE
+                        binding.offlineTV.visibility = View.GONE
                         binding.progressBar.show()
                     }
                 }

@@ -79,19 +79,19 @@ class NewCalenderEntryFragmentListingAdapter(
             //Load Recipe img
             Helper.loadRecipeImage(binding.imageView,item.img_source)
 
+            //Load Recipe user img
+            Helper.loadUserImage(binding.imgAuthorIV,item.created_by.img_source)
+
             binding.idTV.text = item.id.toString()
+            binding.nameAuthorTV.text = item.created_by.name
             binding.recipeTitleTV.text = item.title
-            binding.recipeDescriptionTV.text = item.description.toString()
+            binding.recipeDescriptionTV.text = item.description
             binding.itemLayout.setOnClickListener {
                 onItemClicked.invoke(adapterPosition, item)
             }
             binding.nLikeTV.text = item.likes.toString()
             binding.ratingRecipeRB.rating = item.source_rating.toFloat()
-            binding.ratingMedTV.text = item.source_rating.toString()
-
-        /*    binding.timeTV.text = item.time
-            binding.difficultyTV.text = item.difficulty
-            binding.portionTV.text = item.portion*/
+            binding.ratingMedTV.text = item.source_rating
 
             binding.favoritesIB.visibility=View.INVISIBLE
             //--------- LIKES ---------

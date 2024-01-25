@@ -128,7 +128,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:src="@drawable/img_pingo_doce"
-                            android:contentDescription="autor"/>
+                            android:scaleType="fitXY"/>
 
                     </androidx.cardview.widget.CardView>
 

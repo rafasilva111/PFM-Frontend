@@ -1,5 +1,6 @@
 package com.example.projectfoodmanager.presentation.calendar.insertCalenderEntry
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -30,10 +31,13 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_KEYBOARD
 import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -58,6 +62,7 @@ class NewCalenderEntryFragment : Fragment() {
     private var objRecipe: Recipe? = null
     private var recipeRecyclerViewList: MutableList<Recipe> = mutableListOf()
 
+    private var chosenDate: Long?=null
     // injects
 
     @Inject
@@ -105,6 +110,7 @@ class NewCalenderEntryFragment : Fragment() {
         bindObservers()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setUI() {
 
 
@@ -126,14 +132,9 @@ class NewCalenderEntryFragment : Fragment() {
         }
 
         // default list
-        try {
-            user = sharedPreference.getUserSession()
-        } catch (e: Exception) {
-            Log.d(TAG, "onViewCreated: User had no shared prefences...")
-            // se não tiver shared preferences o user não tem sessão válida
-            //tera um comportamento diferente offilne
-            userViewModel.logoutUser()
-        }
+
+        user = sharedPreference.getUserSession()
+
 
         // se viewer recipe
         if (objRecipe == null){
@@ -290,7 +291,10 @@ class NewCalenderEntryFragment : Fragment() {
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Selecione a data")
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setSelection(if (chosenDate == null )
+                    selectedDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+                else
+                    chosenDate)
                 .build()
         datePicker.dialog?.setCanceledOnTouchOutside(false)
 
@@ -300,14 +304,13 @@ class NewCalenderEntryFragment : Fragment() {
             datePicker.dismiss()
         }
 
-        datePicker.addOnPositiveButtonClickListener {
+        datePicker.addOnPositiveButtonClickListener {selection->
+            chosenDate = selection
+            val selectedDate = Date(selection)
+            val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val formattedDate = formatter.format(selectedDate)
 
-            if(datePicker.headerText.length == 9){
-                binding.dateValTV.text= getString(R.string.date_text, "0" + datePicker.headerText)
-            }else{
-                binding.dateValTV.text= datePicker.headerText
-            }
-
+            binding.dateValTV.setText(formattedDate)
 
         }
 
@@ -441,26 +444,6 @@ class NewCalenderEntryFragment : Fragment() {
                         binding.detailsPanel.hide()
                         binding.progressBar.show()
 
-                    }
-                }
-            }
-        }
-
-
-        userViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        tokenManager.deleteToken()
-                        sharedPreference.deleteUserSession()
-                        toast(getString(R.string.user_had_no_shared_preferences))
-                        findNavController().navigate(R.id.action_profile_to_login)
-                    }
-                    is NetworkResult.Error -> {
-                        Log.d(TAG, "bindObservers: ${it.message}.")
-                    }
-                    is NetworkResult.Loading -> {
-                        //binding.progressBar.isVisible = true
                     }
                 }
             }

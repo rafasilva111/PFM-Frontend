@@ -143,7 +143,7 @@ class SettingsFragment : Fragment() {
 
         val activity = requireActivity()
         changeMenuVisibility(false, activity)
-        Helper.changeStatusBarColor(true, activity, requireContext())
+        Helper.changeStatusBarColor(false, activity, requireContext())
 
         /** internet connection observer*/
 
@@ -168,23 +168,23 @@ class SettingsFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.CLSecurity.setOnClickListener {
+        binding.securityCV.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_securityFragment)
         }
 
-        binding.CLLanguages.setOnClickListener {
+        binding.languagesCV.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_languagesFragment)
         }
 
-        binding.CLAboutUs.setOnClickListener {
+        binding.aboutUsCV.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_aboutUsFragment)
         }
 
-        binding.CLFAQs.setOnClickListener {
+        binding.faqsCV.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_FAQsFragment)
         }
 
-        binding.CLSendUsAMessage.setOnClickListener {
+        binding.sendUsAMessageCV.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_sendUsAMessageFragment)
         }
 

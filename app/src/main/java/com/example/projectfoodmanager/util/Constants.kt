@@ -9,8 +9,8 @@ object Constants {
     // TODO: Primeira coisa a fazer quando testar
     //rui const val BASE_URL = "http://192.168.1.104:5000/"
 
-    const val BASE_URL = "http://192.168.1.110:5000" // dev rafa
-    //const val BASE_URL = "http://172.162.241.84" // prod
+    //const val BASE_URL = "http://192.168.1.110:5000" // dev rafa
+    const val BASE_URL = "http://172.162.241.84" // prod
     const val USER_TOKEN = "user_token"
 
     const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"

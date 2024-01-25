@@ -10,10 +10,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/layout_main"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".presentation.recipe.RecipeListingFragment">
+        tools:context=".presentation.recipe.RecipeListingFragment"
+        android:background="@drawable/layout_main">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host"
@@ -25,7 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/app_login_navigation" />
+            app:navGraph="@navigation/app_login_navigation"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -44,7 +44,9 @@
         app:itemIconTint="#FFFFFF"
         app:itemTextColor="#FFFFFF"
         app:menu="@menu/bottom_nav_menu"
-        android:visibility="gone"/>
+        app:barrierMargin="0dp"
+        android:visibility="gone"
+        app:labelVisibilityMode="unlabeled"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

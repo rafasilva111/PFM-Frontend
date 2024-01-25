@@ -6,222 +6,245 @@
     android:layout_height="match_parent"
     tools:context=".presentation.profile.settings.security.SecurityFragment">
 
-    <include
-        android:id="@+id/header"
-        layout="@layout/default_sub_menu_header"
+    <ImageButton
+        android:id="@+id/backIB"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_action_btn"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_back_black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
 
     <TextView
-        android:id="@+id/overriddenTextView"
+        android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text in Child Layout"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/fredoka_bold"
+        android:text="Security"
+        android:textColor="@color/black"
+        android:textSize="@dimen/subTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/backIB"
+        app:layout_constraintStart_toEndOf="@+id/backIB"
+        app:layout_constraintTop_toTopOf="@+id/backIB" />
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/CL_M_1"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/generalCV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/layout_bg"
-        android:backgroundTint="#B4D1D1D1"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        app:cardBackgroundColor="@drawable/selector_cv"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="5dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header">
+        app:layout_constraintTop_toBottomOf="@+id/backIB">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent">
 
-            <ImageView
-                android:id="@+id/IV_dark_mode"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#353FFB"
-                android:padding="5dp"
-                android:src="@drawable/ic_baseline_dark_mode_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/TV_darkMode"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/CL_1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Permissão de armazenamento"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_dark_mode"
-                app:layout_constraintStart_toEndOf="@+id/IV_dark_mode"
-                app:layout_constraintTop_toTopOf="@+id/IV_dark_mode" />
-
-            <Switch
-                android:id="@+id/SW_darkMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/TV_darkMode"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/TV_darkMode"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/IV_dark_mode"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/layout_bg"
+                    android:backgroundTint="#353FFB"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_baseline_dark_mode_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/TV_darkMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/fredoka_semibold"
+                    android:text="Permissão de armazenamento"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/IV_dark_mode"
+                    app:layout_constraintStart_toEndOf="@+id/IV_dark_mode"
+                    app:layout_constraintTop_toTopOf="@+id/IV_dark_mode" />
+
+                <Switch
+                    android:id="@+id/SW_darkMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/TV_darkMode"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/TV_darkMode"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/CL_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/CL_1"
+                app:layout_constraintStart_toStartOf="@+id/CL_1"
+                app:layout_constraintTop_toBottomOf="@+id/CL_1">
+
+                <ImageView
+                    android:id="@+id/IV_offlineMode"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/layout_bg"
+                    android:backgroundTint="#434343"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_wifi"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/TV_offlineMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/fredoka_semibold"
+                    android:text="Permissão de acesso á camera"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/IV_offlineMode"
+                    app:layout_constraintStart_toEndOf="@+id/IV_offlineMode"
+                    app:layout_constraintTop_toTopOf="@+id/IV_offlineMode" />
+
+                <Switch
+                    android:id="@+id/SW_offlineMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/TV_offlineMode"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/TV_offlineMode"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/CL_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="@+id/CL_2"
+                app:layout_constraintStart_toStartOf="@+id/CL_2"
+                app:layout_constraintTop_toBottomOf="@+id/CL_2">
+
+                <ImageView
+                    android:id="@+id/IV_Notify"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/layout_bg"
+                    android:backgroundTint="#2196F3"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_notifications"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/TV_Notify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/fredoka_semibold"
+                    android:text="Permissão se acesso ás fotos"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/IV_Notify"
+                    app:layout_constraintStart_toEndOf="@+id/IV_Notify"
+                    app:layout_constraintTop_toTopOf="@+id/IV_Notify" />
+
+                <Switch
+                    android:id="@+id/SW_Notify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/TV_Notify"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/TV_Notify"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/CL_4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/CL_3"
+                app:layout_constraintStart_toStartOf="@+id/CL_3"
+                app:layout_constraintTop_toBottomOf="@+id/CL_3">
+
+                <ImageView
+                    android:id="@+id/IV_Privacy"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/layout_bg"
+                    android:backgroundTint="#DAA403"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_baseline_security_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/TV_Privacy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/fredoka_semibold"
+                    android:text="Permissão de acesso á internet"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/IV_Privacy"
+                    app:layout_constraintStart_toEndOf="@+id/IV_Privacy"
+                    app:layout_constraintTop_toTopOf="@+id/IV_Privacy" />
+
+                <Switch
+                    android:id="@+id/SW_Privacy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/TV_Privacy"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/TV_Privacy"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/CL_1"
-            app:layout_constraintStart_toStartOf="@+id/CL_1"
-            app:layout_constraintTop_toBottomOf="@+id/CL_1">
 
-            <ImageView
-                android:id="@+id/IV_offlineMode"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#434343"
-                android:padding="5dp"
-                android:src="@drawable/ic_wifi"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
+    </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/TV_offlineMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Permissão de acesso á camera"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_offlineMode"
-                app:layout_constraintStart_toEndOf="@+id/IV_offlineMode"
-                app:layout_constraintTop_toTopOf="@+id/IV_offlineMode" />
-
-            <Switch
-                android:id="@+id/SW_offlineMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/TV_offlineMode"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/TV_offlineMode"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/CL_2"
-            app:layout_constraintStart_toStartOf="@+id/CL_2"
-            app:layout_constraintTop_toBottomOf="@+id/CL_2">
-
-            <ImageView
-                android:id="@+id/IV_Notify"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#2196F3"
-                android:padding="5dp"
-                android:src="@drawable/ic_notifications"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/TV_Notify"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Permissão se acesso ás fotos"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_Notify"
-                app:layout_constraintStart_toEndOf="@+id/IV_Notify"
-                app:layout_constraintTop_toTopOf="@+id/IV_Notify" />
-
-            <Switch
-                android:id="@+id/SW_Notify"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/TV_Notify"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/TV_Notify"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/CL_3"
-            app:layout_constraintStart_toStartOf="@+id/CL_3"
-            app:layout_constraintTop_toBottomOf="@+id/CL_3">
-
-            <ImageView
-                android:id="@+id/IV_Privacy"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#DAA403"
-                android:padding="5dp"
-                android:src="@drawable/ic_baseline_security_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/TV_Privacy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Permissão de acesso á internet"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_Privacy"
-                app:layout_constraintStart_toEndOf="@+id/IV_Privacy"
-                app:layout_constraintTop_toTopOf="@+id/IV_Privacy" />
-
-            <Switch
-                android:id="@+id/SW_Privacy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/TV_Privacy"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/TV_Privacy"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

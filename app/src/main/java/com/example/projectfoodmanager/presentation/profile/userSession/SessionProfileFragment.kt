@@ -145,7 +145,7 @@ class SessionProfileFragment : Fragment() {
 
         if(!user.verified){
             binding.profileCV.foreground=null
-            binding.vipIV.visibility=View.INVISIBLE
+            //binding.vipIV.visibility=View.INVISIBLE
         }
 
         binding.nFollowedsTV.text = user.followeds.toString()
@@ -165,7 +165,7 @@ class SessionProfileFragment : Fragment() {
          * */
         val activity = requireActivity()
         changeMenuVisibility(true,activity)
-        changeStatusBarColor(true,activity,context)
+        changeStatusBarColor(false, activity, context)
 
         /**
          * Info
@@ -175,7 +175,7 @@ class SessionProfileFragment : Fragment() {
 
         if(!user.verified){
             binding.profileCV.foreground=null
-            binding.vipIV.visibility=View.INVISIBLE
+            //binding.vipIV.visibility=View.INVISIBLE
         }
 
         binding.nFollowedsTV.text = user.followeds.toString()
@@ -185,7 +185,7 @@ class SessionProfileFragment : Fragment() {
          * Buttons
          */
 
-        binding.logoutIB.setOnClickListener {
+        binding.logoutCV.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
                 .setIcon(R.drawable.ic_logout)
@@ -245,7 +245,7 @@ class SessionProfileFragment : Fragment() {
         if (isOnline(requireView().context)) {
             // load profile image online
 
-            binding.uploadImageFB.setOnClickListener {
+            /*binding.uploadImageFB.setOnClickListener {
 
 
                 //USER CONFIRMATION DIALOG
@@ -310,7 +310,7 @@ class SessionProfileFragment : Fragment() {
                 myDialog.show()
             }
 
-
+*/
         }
 
 

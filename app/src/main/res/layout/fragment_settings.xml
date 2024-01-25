@@ -4,621 +4,607 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.profile.settings.SettingsFragment"
-    android:background="@color/color_3">
+    tools:context=".presentation.profile.settings.SettingsFragment">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/topTab"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@drawable/layout_bg_rounded_2_corners_v1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-        <ImageButton
-            android:id="@+id/backIB"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="35dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="#00000000"
-            android:elevation="1dp"
-            android:outlineProvider="none"
-            android:src="@drawable/ic_back_white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/topTab" />
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/fedoka"
-            android:text="@string/fragment_settings_title"
-            android:textColor="@color/color_3"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="@+id/backIB"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/backIB" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/CL_M_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/layout_bg"
-        android:backgroundTint="#B4D1D1D1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topTab">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/IV_dark_mode"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#353FFB"
-                android:padding="5dp"
-                android:src="@drawable/ic_baseline_dark_mode_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/TV_darkMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Dark Mode"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_dark_mode"
-                app:layout_constraintStart_toEndOf="@+id/IV_dark_mode"
-                app:layout_constraintTop_toTopOf="@+id/IV_dark_mode" />
-
-            <Switch
-                android:id="@+id/SW_darkMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/TV_darkMode"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/TV_darkMode"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/CL_1"
-            app:layout_constraintStart_toStartOf="@+id/CL_1"
-            app:layout_constraintTop_toBottomOf="@+id/CL_1">
-
-            <ImageView
-                android:id="@+id/IV_offlineMode"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#434343"
-                android:padding="5dp"
-                android:src="@drawable/ic_wifi"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/TV_offlineMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Offline Mode"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_offlineMode"
-                app:layout_constraintStart_toEndOf="@+id/IV_offlineMode"
-                app:layout_constraintTop_toTopOf="@+id/IV_offlineMode" />
-
-            <Switch
-                android:id="@+id/SW_offlineMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/TV_offlineMode"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/TV_offlineMode"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/CL_2"
-            app:layout_constraintStart_toStartOf="@+id/CL_2"
-            app:layout_constraintTop_toBottomOf="@+id/CL_2">
-
-            <ImageView
-                android:id="@+id/IV_Notify"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#2196F3"
-                android:padding="5dp"
-                android:src="@drawable/ic_notifications"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/TV_Notify"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Notifications"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_Notify"
-                app:layout_constraintStart_toEndOf="@+id/IV_Notify"
-                app:layout_constraintTop_toTopOf="@+id/IV_Notify" />
-
-            <Switch
-                android:id="@+id/SW_Notify"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/TV_Notify"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/TV_Notify"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_Teste"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/CL_4"
-            app:layout_constraintStart_toStartOf="@+id/CL_4"
-            app:layout_constraintTop_toBottomOf="@+id/CL_4">
-
-            <ImageView
-                android:id="@+id/IV_CarinhosMode"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#E91E63"
-                android:padding="5dp"
-                android:src="@drawable/ic_baseline_transgender"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/TV_CarinhosMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Carinhos Mode"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_CarinhosMode"
-                app:layout_constraintStart_toEndOf="@+id/IV_CarinhosMode"
-                app:layout_constraintTop_toTopOf="@+id/IV_CarinhosMode" />
-
-            <Switch
-                android:id="@+id/SW_CarinhosMode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/TV_CarinhosMode"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/TV_CarinhosMode"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/CL_3"
-            app:layout_constraintStart_toStartOf="@+id/CL_3"
-            app:layout_constraintTop_toBottomOf="@+id/CL_3">
-
-            <ImageView
-                android:id="@+id/IV_Privacy"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#DAA403"
-                android:padding="5dp"
-                android:src="@drawable/ic_baseline_security_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/TV_Privacy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Private Acount"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_Privacy"
-                app:layout_constraintStart_toEndOf="@+id/IV_Privacy"
-                app:layout_constraintTop_toTopOf="@+id/IV_Privacy" />
-
-            <Switch
-                android:id="@+id/SW_Privacy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/TV_Privacy"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/TV_Privacy"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/CL_M_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <ImageButton
+        android:id="@+id/backIB"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/layout_bg"
-        android:backgroundTint="#DFDFDF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:background="@drawable/bg_action_btn"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_back_black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CL_M_1">
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_Security"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/IV_Security"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#AE453D"
-                android:padding="5dp"
-                android:src="@drawable/ic_lock"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Security and Privacy"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_Security"
-                app:layout_constraintStart_toEndOf="@+id/IV_Security"
-                app:layout_constraintTop_toTopOf="@+id/IV_Security" />
-
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@drawable/ic_arrow"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="#5A5A5A" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_6"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/CL_Security"
-            app:layout_constraintStart_toStartOf="@+id/CL_Security"
-            app:layout_constraintTop_toBottomOf="@+id/CL_Security">
-
-            <ImageView
-                android:id="@+id/IV_none"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#2196F3"
-                android:padding="5dp"
-                android:src="@drawable/ic_notifications"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/TV_none"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="-------"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_none"
-                app:layout_constraintStart_toEndOf="@+id/IV_none"
-                app:layout_constraintTop_toTopOf="@+id/IV_none" />
-
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@drawable/ic_arrow"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="#5A5A5A" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_Languages"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/CL_6"
-            app:layout_constraintStart_toStartOf="@+id/CL_6"
-            app:layout_constraintTop_toBottomOf="@+id/CL_6">
-
-            <ImageView
-                android:id="@+id/IV_language"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#384488"
-                android:padding="5dp"
-                android:src="@drawable/ic_language"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Languages"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_language"
-                app:layout_constraintStart_toEndOf="@+id/IV_language"
-                app:layout_constraintTop_toTopOf="@+id/IV_language" />
-
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@drawable/ic_arrow"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="#5A5A5A" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/CL_M_3"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/layout_bg"
-        android:backgroundTint="#DFDFDF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CL_M_2">
+        android:fontFamily="@font/fredoka_bold"
+        android:text="Settings"
+        android:textColor="@color/black"
+        android:textSize="@dimen/subTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/backIB"
+        app:layout_constraintStart_toEndOf="@+id/backIB"
+        app:layout_constraintTop_toTopOf="@+id/backIB" />
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_SendUsAMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/IV_sendMessage"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#288179"
-                android:padding="5dp"
-                android:src="@drawable/ic_post"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="Send us a message"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_sendMessage"
-                app:layout_constraintStart_toEndOf="@+id/IV_sendMessage"
-                app:layout_constraintTop_toTopOf="@+id/IV_sendMessage" />
-
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@drawable/ic_arrow"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="#5A5A5A" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_AboutUs"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="@+id/CL_SendUsAMessage"
-            app:layout_constraintStart_toStartOf="@+id/CL_SendUsAMessage"
-            app:layout_constraintTop_toBottomOf="@+id/CL_SendUsAMessage">
-
-            <ImageView
-                android:id="@+id/IV_AboutUs"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#597D9A"
-                android:padding="5dp"
-                android:src="@drawable/ic_info"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/TV_AboutUs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="About us"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_AboutUs"
-                app:layout_constraintStart_toEndOf="@+id/IV_AboutUs"
-                app:layout_constraintTop_toTopOf="@+id/IV_AboutUs" />
-
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@drawable/ic_arrow"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="#5A5A5A" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/CL_FAQs"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/CL_AboutUs"
-            app:layout_constraintStart_toStartOf="@+id/CL_AboutUs"
-            app:layout_constraintTop_toBottomOf="@+id/CL_AboutUs">
-
-            <ImageView
-                android:id="@+id/IV_Faqs"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/layout_bg"
-                android:backgroundTint="#695C80"
-                android:padding="5dp"
-                android:src="@drawable/ic_question_answer"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-
-            <TextView
-                android:id="@+id/TV_s_dark_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:fontFamily="@font/fedoka"
-                android:text="FAQs"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_Faqs"
-                app:layout_constraintStart_toEndOf="@+id/IV_Faqs"
-                app:layout_constraintTop_toTopOf="@+id/IV_Faqs" />
-
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:src="@drawable/ic_arrow"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="#5A5A5A" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <Button
-        android:id="@+id/BTN_deleteAccountB"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/layout_bg"
-        android:fontFamily="@font/fedoka"
-        android:text="@string/fragment_settings_delete_account"
-        app:backgroundTint="@color/main_color"
-        android:textAllCaps="false"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CL_M_3" />
+        app:layout_constraintTop_toBottomOf="@+id/backIB"
+        android:layout_marginTop="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/generalCV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                app:cardBackgroundColor="@drawable/selector_cv"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView11">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/CL_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/IV_dark_mode"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/layout_bg"
+                            android:backgroundTint="#353FFB"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_baseline_dark_mode_24"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/TV_darkMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/fredoka_semibold"
+                            android:text="Dark Mode"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/IV_dark_mode"
+                            app:layout_constraintStart_toEndOf="@+id/IV_dark_mode"
+                            app:layout_constraintTop_toTopOf="@+id/IV_dark_mode" />
+
+                        <Switch
+                            android:id="@+id/SW_darkMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="@+id/TV_darkMode"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/TV_darkMode"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/CL_2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="@+id/CL_1"
+                        app:layout_constraintStart_toStartOf="@+id/CL_1"
+                        app:layout_constraintTop_toBottomOf="@+id/CL_1">
+
+                        <ImageView
+                            android:id="@+id/IV_offlineMode"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/layout_bg"
+                            android:backgroundTint="#434343"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_wifi"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/TV_offlineMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/fredoka_semibold"
+                            android:text="Offline Mode"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/IV_offlineMode"
+                            app:layout_constraintStart_toEndOf="@+id/IV_offlineMode"
+                            app:layout_constraintTop_toTopOf="@+id/IV_offlineMode" />
+
+                        <Switch
+                            android:id="@+id/SW_offlineMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="@+id/TV_offlineMode"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/TV_offlineMode"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/CL_3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="@+id/CL_2"
+                        app:layout_constraintStart_toStartOf="@+id/CL_2"
+                        app:layout_constraintTop_toBottomOf="@+id/CL_2">
+
+                        <ImageView
+                            android:id="@+id/IV_Notify"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/layout_bg"
+                            android:backgroundTint="#2196F3"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_notifications"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/TV_Notify"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/fredoka_semibold"
+                            android:text="Notifications"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/IV_Notify"
+                            app:layout_constraintStart_toEndOf="@+id/IV_Notify"
+                            app:layout_constraintTop_toTopOf="@+id/IV_Notify" />
+
+                        <Switch
+                            android:id="@+id/SW_Notify"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="@+id/TV_Notify"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/TV_Notify"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/CL_Teste"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/CL_4"
+                        app:layout_constraintStart_toStartOf="@+id/CL_4"
+                        app:layout_constraintTop_toBottomOf="@+id/CL_4">
+
+                        <ImageView
+                            android:id="@+id/IV_CarinhosMode"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/layout_bg"
+                            android:backgroundTint="#E91E63"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_baseline_transgender"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/TV_CarinhosMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/fredoka_semibold"
+                            android:text="Carinhos Mode"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/IV_CarinhosMode"
+                            app:layout_constraintStart_toEndOf="@+id/IV_CarinhosMode"
+                            app:layout_constraintTop_toTopOf="@+id/IV_CarinhosMode" />
+
+                        <Switch
+                            android:id="@+id/SW_CarinhosMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="@+id/TV_CarinhosMode"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/TV_CarinhosMode"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/CL_4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="@+id/CL_3"
+                        app:layout_constraintStart_toStartOf="@+id/CL_3"
+                        app:layout_constraintTop_toBottomOf="@+id/CL_3">
+
+                        <ImageView
+                            android:id="@+id/IV_Privacy"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/layout_bg"
+                            android:backgroundTint="#DAA403"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_baseline_security_24"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/TV_Privacy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="@font/fredoka_semibold"
+                            android:text="Private Acount"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/IV_Privacy"
+                            app:layout_constraintStart_toEndOf="@+id/IV_Privacy"
+                            app:layout_constraintTop_toTopOf="@+id/IV_Privacy" />
+
+                        <Switch
+                            android:id="@+id/SW_Privacy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="@+id/TV_Privacy"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/TV_Privacy"
+                            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/securityCV"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@drawable/selector_cv"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="5dp"
+                app:layout_constraintEnd_toEndOf="@+id/generalCV"
+                app:layout_constraintStart_toStartOf="@+id/generalCV"
+                app:layout_constraintTop_toBottomOf="@+id/generalCV">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/securityIV"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/layout_bg"
+                        android:backgroundTint="#AE453D"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_lock"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/fredoka_semibold"
+                        android:text="Security and Privacy"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/securityIV"
+                        app:layout_constraintStart_toEndOf="@+id/securityIV"
+                        app:layout_constraintTop_toTopOf="@+id/securityIV" />
+
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_arrow"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/languagesCV"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@drawable/selector_cv"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="5dp"
+                app:layout_constraintEnd_toEndOf="@+id/securityCV"
+                app:layout_constraintStart_toStartOf="@+id/securityCV"
+                app:layout_constraintTop_toBottomOf="@+id/securityCV">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/languageIV"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/layout_bg"
+                        android:backgroundTint="#384488"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_language"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/fredoka_semibold"
+                        android:text="Languages"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/languageIV"
+                        app:layout_constraintStart_toEndOf="@+id/languageIV"
+                        app:layout_constraintTop_toTopOf="@+id/languageIV" />
+
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_arrow"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/sendUsAMessageCV"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@drawable/selector_cv"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="5dp"
+                app:layout_constraintEnd_toEndOf="@+id/languagesCV"
+                app:layout_constraintStart_toStartOf="@+id/languagesCV"
+                app:layout_constraintTop_toBottomOf="@+id/languagesCV">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/sendUsAMessageIV"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/layout_bg"
+                        android:backgroundTint="#288179"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_post"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/fredoka_semibold"
+                        android:text="Send us a message"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/sendUsAMessageIV"
+                        app:layout_constraintStart_toEndOf="@+id/sendUsAMessageIV"
+                        app:layout_constraintTop_toTopOf="@+id/sendUsAMessageIV" />
+
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_arrow"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/aboutUsCV"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@drawable/selector_cv"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="5dp"
+                app:layout_constraintEnd_toEndOf="@+id/sendUsAMessageCV"
+                app:layout_constraintStart_toStartOf="@+id/sendUsAMessageCV"
+                app:layout_constraintTop_toBottomOf="@+id/sendUsAMessageCV">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/aboutUsIV"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/layout_bg"
+                        android:backgroundTint="#597D9A"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_info"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/fredoka_semibold"
+                        android:text="About us"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/aboutUsIV"
+                        app:layout_constraintStart_toEndOf="@+id/aboutUsIV"
+                        app:layout_constraintTop_toTopOf="@+id/aboutUsIV" />
+
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_arrow"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/faqsCV"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                app:cardBackgroundColor="@drawable/selector_cv"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="5dp"
+                app:layout_constraintEnd_toEndOf="@+id/aboutUsCV"
+                app:layout_constraintStart_toStartOf="@+id/aboutUsCV"
+                app:layout_constraintTop_toBottomOf="@+id/aboutUsCV">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/faqsIV"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/layout_bg"
+                        android:backgroundTint="#695C80"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_question_answer"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="@font/fredoka_semibold"
+                        android:text="FAQs"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/faqsIV"
+                        app:layout_constraintStart_toEndOf="@+id/faqsIV"
+                        app:layout_constraintTop_toTopOf="@+id/faqsIV" />
+
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_arrow"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/BTN_deleteAccountB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/layout_bg"
+                android:fontFamily="@font/fedoka"
+                android:text="@string/fragment_settings_delete_account"
+                android:textAllCaps="false"
+                app:backgroundTint="@color/main_color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/faqsCV"
+                app:layout_constraintVertical_bias="0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
