@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.profile.settings.languages.LanguagesFragment">
+    tools:context=".presentation.profile.userSession.settings.languages.LanguagesFragment">
 
     <ImageButton
         android:id="@+id/backIB"

@@ -331,7 +331,7 @@
         app:layout_constraintTop_toBottomOf="@+id/fragment_new_recipe_nav"
         app:layout_constraintVertical_bias="0.0"
         android:layout_marginBottom="20dp"
-        app:navGraph="@navigation/app_recipe_create_navigation" />
+         />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/backIB"

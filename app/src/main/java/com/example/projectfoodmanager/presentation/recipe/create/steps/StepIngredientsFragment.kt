@@ -99,7 +99,7 @@ class StepIngredientsFragment : Fragment() {
         binding.nextStepBTN.setOnClickListener {
             // Create new fragment and transaction
             //val transaction = parentFragmentManager.beginTransaction()
-            findNavController().navigate(R.id.action_stepIngredientsFragment_to_stepPreparationFragment)
+            //findNavController().navigate(R.id.action_stepIngredientsFragment_to_stepPreparationFragment)
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack if needed
          /*   transaction.replace(com.example.projectfoodmanager.R.id.frameRecipeFL, StepPreparationFragment())

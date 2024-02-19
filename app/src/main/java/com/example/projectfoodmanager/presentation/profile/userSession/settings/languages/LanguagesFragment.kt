@@ -1,24 +1,26 @@
-package com.example.projectfoodmanager.presentation.profile.settings.aboutUs
+package com.example.projectfoodmanager.presentation.profile.userSession.settings.languages
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.example.projectfoodmanager.databinding.FragmentAboutUsBinding
-import com.example.projectfoodmanager.util.Helper
+import com.example.projectfoodmanager.databinding.FragmentLanguagesBinding
+import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
+import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.SharedPreference
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class AboutUsFragment : Fragment() {
+class LanguagesFragment : Fragment() {
 
 
     // binding
-    private lateinit var binding: FragmentAboutUsBinding
+    private lateinit var binding: FragmentLanguagesBinding
 
     // viewModels
 
@@ -37,7 +39,7 @@ class AboutUsFragment : Fragment() {
         savedInstanceState: Bundle?,
 
         ): View {
-        binding = FragmentAboutUsBinding.inflate(layoutInflater)
+        binding = FragmentLanguagesBinding.inflate(layoutInflater)
 
 
 
@@ -49,9 +51,13 @@ class AboutUsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUI()
         bindObservers()
+
+        // todo rui fazer recycler view para selecionar a data
     }
 
     private fun setUI() {
+
+
 
         /**
          * General
@@ -59,12 +65,16 @@ class AboutUsFragment : Fragment() {
 
         val activity = requireActivity()
 
-        Helper.changeMenuVisibility(false, activity)
-        Helper.changeStatusBarColor(false, activity, requireContext())
+        changeMenuVisibility(false,activity)
+        changeStatusBarColor(false,activity,requireContext())
 
         binding.backIB.setOnClickListener {
             findNavController().navigateUp()
         }
+
+
+
+
     }
 
     private fun bindObservers() {

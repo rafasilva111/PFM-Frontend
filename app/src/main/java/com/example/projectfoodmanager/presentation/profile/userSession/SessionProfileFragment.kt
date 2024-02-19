@@ -186,7 +186,6 @@ class SessionProfileFragment : Fragment() {
          */
 
         binding.logoutCV.setOnClickListener {
-
             MaterialAlertDialogBuilder(requireContext())
                 .setIcon(R.drawable.ic_logout)
                 .setTitle(getString(R.string.profile_fragment_logout_dialog_title))

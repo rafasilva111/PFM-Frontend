@@ -59,7 +59,7 @@
         android:id="@+id/profileFragment"
         android:name="com.example.projectfoodmanager.presentation.profile.userSession.SessionProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile">
+        tools:layout="@layout/fragment_session_profile">
         <action
             android:id="@+id/action_profile_to_login"
             app:destination="@id/loginFragment"
@@ -102,12 +102,11 @@
         tools:layout="@layout/fragment_goals">
         <action
             android:id="@+id/action_goalsFragment_to_updateBiodata"
-            app:destination="@id/updateBiodata"
-            />
+            app:destination="@id/updateBiodata" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.projectfoodmanager.presentation.profile.settings.SettingsFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.userSession.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
 
@@ -136,10 +135,6 @@
             app:destination="@id/sendUsAMessageFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/updateBiodata"
-        android:name="com.example.projectfoodmanager.presentation.goals.UpdateBiodata"
-        android:label="UpdateBiodata" />
     <fragment
         android:id="@+id/newCalenderEntryFragment"
         android:name="com.example.projectfoodmanager.presentation.calendar.insertCalenderEntry.NewCalenderEntryFragment"
@@ -199,7 +194,7 @@
     </fragment>
     <fragment
         android:id="@+id/securityFragment"
-        android:name="com.example.projectfoodmanager.presentation.profile.settings.security.SecurityFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.userSession.settings.security.SecurityFragment"
         android:label="fragment_security"
         tools:layout="@layout/fragment_security" />
     <dialog
@@ -251,20 +246,20 @@
         tools:layout="@layout/fragment_new_recipe" />
     <fragment
         android:id="@+id/FAQsFragment"
-        android:name="com.example.projectfoodmanager.presentation.profile.settings.faqs.FAQsFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.userSession.settings.faqs.FAQsFragment"
         android:label="FAQsFragment" />
     <fragment
         android:id="@+id/languagesFragment"
-        android:name="com.example.projectfoodmanager.presentation.profile.settings.languages.LanguagesFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.userSession.settings.languages.LanguagesFragment"
         android:label="LanguagesFragment" />
     <fragment
         android:id="@+id/aboutUsFragment"
-        android:name="com.example.projectfoodmanager.presentation.profile.settings.aboutUs.AboutUsFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.userSession.settings.aboutUs.AboutUsFragment"
         android:label="fragment_about_us"
         tools:layout="@layout/fragment_about_us" />
     <fragment
         android:id="@+id/sendUsAMessageFragment"
-        android:name="com.example.projectfoodmanager.presentation.profile.settings.sendUsAMessage.SendUsAMessageFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.userSession.settings.sendUsAMessage.SendUsAMessageFragment"
         android:label="SendUsAMessageFragment" />
 
     <action
@@ -275,5 +270,9 @@
         android:id="@+id/profileFragment2"
         android:name="com.example.projectfoodmanager.presentation.profile.user.ProfileFragment"
         android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/updateBiodata"
+        android:name="com.example.projectfoodmanager.presentation.goals.create.UpdateBiodata"
+        android:label="UpdateBiodata" />
 
 </navigation>

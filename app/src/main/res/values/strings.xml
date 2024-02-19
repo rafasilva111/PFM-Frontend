@@ -195,6 +195,13 @@
     <string name="enter_username">Enter the UserName.</string>
     <string name="enter_birthdate_error">You must be atleast 12 years old.</string>
     <string name="fragment_session_profile_alarms">Os meus alarmes</string>
+    <string name="onBackWarning">Tens a certeza que queres recuar?</string>
+    <string name="biodata_update_successfully">Dados atualizados com sucesso.</string>
+    <string name="biodata_update_unsuccessfully">Dados não atualizados, alguma coisa se passou.</string>
+    <string name="biodata_dialog_title">Bio-data</string>
+    <string name="biodata_diolog_desc">\"Please provide your biodata to access this feature. Would you like to supply it now? \"</string>
+    <string name="goal_dialog_title">Objectivo</string>
+    <string name="goal_dialog_desc">\"Parece que ainda não defeniste nenhum objectivo, vamos mudar isso? \"</string>
     <string-array name="gender_array">
         <item>Masculino</item>
         <item>Feminino</item>

@@ -4,33 +4,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.profile.settings.aboutUs.AboutUsFragment">
+    tools:context=".presentation.profile.userSession.settings.aboutUs.AboutUsFragment">
 
-    <ImageButton
-        android:id="@+id/backIB"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/bg_action_btn"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_back_black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black" />
-
-    <TextView
-        android:id="@+id/textView11"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header_CL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:fontFamily="@font/fredoka_bold"
-        android:text="About us"
-        android:textColor="@color/black"
-        android:textSize="@dimen/subTitle"
-        app:layout_constraintBottom_toBottomOf="@+id/backIB"
-        app:layout_constraintStart_toEndOf="@+id/backIB"
-        app:layout_constraintTop_toTopOf="@+id/backIB" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/backIB"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_action_btn"
+            android:padding="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_back_black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/fredoka_bold"
+            android:text="About us"
+            android:textColor="@color/black"
+            android:textSize="@dimen/subTitle"
+            app:layout_constraintBottom_toBottomOf="@+id/backIB"
+            app:layout_constraintStart_toEndOf="@+id/backIB"
+            app:layout_constraintTop_toTopOf="@+id/backIB" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

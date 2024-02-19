@@ -275,8 +275,9 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
             event.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
-                        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
                         toast(getString(R.string.user_registered_successfully))
+                        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+
                     }
                     is NetworkResult.Error -> {
                         result.error?.let { it->

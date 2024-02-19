@@ -1,51 +1,52 @@
-package com.example.projectfoodmanager.presentation.profile.settings.security
+package com.example.projectfoodmanager.presentation.profile.userSession.settings.faqs
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.databinding.FragmentFaqsBinding
-import com.example.projectfoodmanager.databinding.FragmentSecurityBinding
 import com.example.projectfoodmanager.util.Helper
+import com.example.projectfoodmanager.util.SharedPreference
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
 
 @AndroidEntryPoint
-class SecurityFragment : Fragment() {
+class FAQsFragment : Fragment() {
+
 
     // binding
-    private lateinit var binding: FragmentSecurityBinding
+    private lateinit var binding: FragmentFaqsBinding
 
     // viewModels
 
     // constants
-    private val TAG: String = "SecurityFragment"
+    private val TAG: String = "FAQsFragment"
 
     // injects
 
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        bindObservers()
+        savedInstanceState: Bundle?,
 
-        return if (this::binding.isInitialized) {
-            binding.root
-        } else {
-            // Inflate the layout for this fragment
-            binding = FragmentSecurityBinding.inflate(layoutInflater)
+        ): View {
+        binding = FragmentFaqsBinding.inflate(layoutInflater)
 
-            binding.root
-        }
+
+
+        return binding.root
     }
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUI()
         bindObservers()
-
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -69,5 +70,6 @@ class SecurityFragment : Fragment() {
     private fun bindObservers() {
 
     }
+
 
 }

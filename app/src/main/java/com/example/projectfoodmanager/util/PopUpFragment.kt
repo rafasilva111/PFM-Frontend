@@ -1,5 +1,3 @@
-package com.example.projectfoodmanager.presentation.goals
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +16,7 @@ class PopUpFragment : DialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentGoalsPopUpBinding.inflate(layoutInflater)
         return binding.root

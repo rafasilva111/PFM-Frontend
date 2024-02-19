@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.auth.register
+package com.example.projectfoodmanager.presentation.auth.register.tabs
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

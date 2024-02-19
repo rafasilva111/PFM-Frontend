@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.profile.settings.sendUsAMessage
+package com.example.projectfoodmanager.presentation.profile.userSession.settings.sendUsAMessage
 
 import android.os.Bundle
 import android.view.LayoutInflater

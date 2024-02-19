@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.profile.settings
+package com.example.projectfoodmanager.presentation.profile.userSession.settings
 
 import android.content.res.Configuration
 import android.os.Bundle

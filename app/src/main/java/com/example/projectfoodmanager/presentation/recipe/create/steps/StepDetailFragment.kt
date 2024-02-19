@@ -100,7 +100,7 @@ class StepDetailFragment : Fragment() {
             // Create new fragment and transaction
             getRecipeRequest()
 
-            findNavController().navigate(R.id.action_stepDetailFragment_to_stepIngredientsFragment)
+            //findNavController().navigate(R.id.action_stepDetailFragment_to_stepIngredientsFragment)
 
             // Replace whatever is in the fragment_container view with this fragment,
            /* // and add the transaction to the back stack if needed

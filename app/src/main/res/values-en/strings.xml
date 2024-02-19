@@ -178,6 +178,10 @@
     <string name="one">1</string>
     <string name="three">3</string>
     <string name="enter_birthdate_error">You must be atleast 12 years old.</string>
+    <string name="onBackWarning">Tens a certeza que queres recuar?</string>
+    <string name="biodata_update_successfully">Dados atualizados com sucesso.</string>
+    <string name="biodata_dialog_title">Bio-data</string>
+    <string name="goal_dialog_desc">\"Parece que ainda não defeniste nenhum objectivo, vamos mudar isso? \"</string>
     <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>

@@ -13,6 +13,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
+import com.example.projectfoodmanager.presentation.auth.register.tabs.RegisterTabAdapter
 import com.example.projectfoodmanager.util.Helper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout

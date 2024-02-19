@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager
+package com.example.projectfoodmanager.presentation.goals.create
 
 import PopUpFragment
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.projectfoodmanager.databinding.FragmentBlankBinding
+import com.example.projectfoodmanager.databinding.FragmentCreateGoalBinding
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.SharedPreference
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,16 +16,16 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class BlankFragment : Fragment() {
+class CreateGoalFragment : Fragment() {
 
 
     /** binding */
-    private lateinit var binding: FragmentBlankBinding
+    private lateinit var binding: FragmentCreateGoalBinding
 
     /** viewModels */
 
     /** variables */
-    private val TAG: String = "BlankFragment"
+    private val TAG: String = "CreateGoalFragment"
 
 
     /** injects */
@@ -43,7 +44,7 @@ class BlankFragment : Fragment() {
         ): View {
 
         if (!this::binding.isInitialized) {
-            binding = FragmentBlankBinding.inflate(layoutInflater)
+            binding = FragmentCreateGoalBinding.inflate(layoutInflater)
         }
 
         return binding.root
@@ -66,15 +67,6 @@ class BlankFragment : Fragment() {
         Helper.changeMenuVisibility(false, activity)
         Helper.changeStatusBarColor(true, activity, requireContext())
 
-        if (Helper.isOnline(requireContext())){
-
-        }
-        else{
-            //está offline
-            val popUpShow = PopUpFragment()
-            popUpShow.show((activity as AppCompatActivity).supportFragmentManager,"showUpFrgament")
-            //binding.offlineText.visibility = View.VISIBLE
-        }
 
     }
 
