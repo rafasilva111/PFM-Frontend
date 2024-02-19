@@ -64,27 +64,28 @@
 
 
                     <LinearLayout
+                        android:id="@+id/premiumLL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center|start"
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/vipIV"
+                            android:id="@+id/premiumIV"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:src="@drawable/vip"
                             android:visibility="visible" />
 
                         <TextView
-                            android:id="@+id/PremiumTV"
+                            android:id="@+id/premiumTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
                             android:fontFamily="@font/fredoka_light"
                             android:text="Premium"
                             android:textColor="#7E7E7E"
-                            android:textSize="13sp"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
 
 
@@ -252,13 +253,12 @@
                     android:layout_height="wrap_content"
                     android:alpha="0.5"
                     android:fontFamily="@font/fredoka_regular"
-                    android:text="Options"
+                    android:text="Opções"
                     android:textAlignment="center"
                     android:textColor="#4A4A4A"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:layout_marginStart="15dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/premiumCV"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.cardview.widget.CardView
@@ -321,7 +321,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/perfilCV"
+                    android:id="@+id/my_profileCV"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
@@ -353,7 +353,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
                             android:fontFamily="@font/fredoka_regular"
-                            android:text="Dados Pessoais"
+                            android:text="Meu Perfil"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/perfilIV"
@@ -372,7 +372,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/shopping_lists"
+                    android:id="@+id/shopping_listsCV"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
@@ -380,9 +380,9 @@
                     app:cardCornerRadius="15dp"
                     app:cardElevation="5dp"
                     app:cardBackgroundColor="@drawable/selector_cv"
-                    app:layout_constraintEnd_toEndOf="@+id/perfilCV"
-                    app:layout_constraintStart_toStartOf="@+id/perfilCV"
-                    app:layout_constraintTop_toBottomOf="@+id/perfilCV">
+                    app:layout_constraintEnd_toEndOf="@+id/my_profileCV"
+                    app:layout_constraintStart_toStartOf="@+id/my_profileCV"
+                    app:layout_constraintTop_toBottomOf="@+id/my_profileCV">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -431,9 +431,9 @@
                     app:cardCornerRadius="15dp"
                     app:cardElevation="5dp"
                     app:cardBackgroundColor="@drawable/selector_cv"
-                    app:layout_constraintEnd_toEndOf="@+id/shopping_lists"
-                    app:layout_constraintStart_toStartOf="@+id/shopping_lists"
-                    app:layout_constraintTop_toBottomOf="@+id/shopping_lists">
+                    app:layout_constraintEnd_toEndOf="@+id/shopping_listsCV"
+                    app:layout_constraintStart_toStartOf="@+id/shopping_listsCV"
+                    app:layout_constraintTop_toBottomOf="@+id/shopping_listsCV">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -455,6 +455,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
+                            android:fontFamily="@font/fredoka_regular"
                             android:text="Objetivos"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -504,6 +505,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
+                            android:fontFamily="@font/fredoka_regular"
                             android:text="@string/fragment_session_profile_alarms"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -521,7 +523,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/my_recipes"
+                    android:id="@+id/my_recipesCV"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
@@ -553,6 +555,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
+                            android:fontFamily="@font/fredoka_regular"
                             android:text="As minhas receitas"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -578,9 +581,9 @@
                     app:cardCornerRadius="15dp"
                     app:cardElevation="5dp"
                     app:cardBackgroundColor="@drawable/selector_cv"
-                    app:layout_constraintEnd_toEndOf="@+id/my_recipes"
-                    app:layout_constraintStart_toStartOf="@+id/my_recipes"
-                    app:layout_constraintTop_toBottomOf="@+id/my_recipes">
+                    app:layout_constraintEnd_toEndOf="@+id/my_recipesCV"
+                    app:layout_constraintStart_toStartOf="@+id/my_recipesCV"
+                    app:layout_constraintTop_toBottomOf="@+id/my_recipesCV">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -602,6 +605,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
+                            android:fontFamily="@font/fredoka_regular"
                             android:text="Definições"
                             android:textSize="16sp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -657,6 +661,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
+                            android:fontFamily="@font/fredoka_regular"
                             android:text="Logout"
                             android:textColor="@color/white"
                             android:textSize="16sp"

@@ -144,6 +144,7 @@ class SettingsFragment : Fragment() {
         val activity = requireActivity()
         changeMenuVisibility(false, activity)
         Helper.changeStatusBarColor(false, activity, requireContext())
+        binding.header.titleTV.text = "Definições"
 
         /** internet connection observer*/
 
@@ -164,7 +165,7 @@ class SettingsFragment : Fragment() {
          * Buttons
          */
 
-        binding.backIB.setOnClickListener {
+        binding.header.backIB.setOnClickListener {
             findNavController().navigateUp()
         }
 

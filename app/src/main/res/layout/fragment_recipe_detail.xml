@@ -42,7 +42,7 @@
                     android:layout_height="325dp"
                     android:adjustViewBounds="true"
                     android:contentDescription="recipe_image"
-                    android:foreground="#56000000"
+                    android:foreground="#77000000"
                     android:scaleType="fitXY"
                     android:src="@drawable/default_image_recipe"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +55,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="45dp"
                     android:background="@drawable/bg_action_btn"
                     android:contentDescription="back"
                     android:elevation="9dp"
@@ -74,14 +74,14 @@
                     android:layout_height="48dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/bg_action_btn"
+                    android:contentDescription="calender"
                     android:elevation="9dp"
                     android:padding="9dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_calendar"
-                    android:contentDescription="calender"
-                    app:layout_constraintBottom_toBottomOf="@+id/favoritesIB"
+                    app:layout_constraintBottom_toBottomOf="@+id/backIB"
                     app:layout_constraintEnd_toStartOf="@+id/favoritesIB"
-                    app:layout_constraintTop_toTopOf="@+id/favoritesIB"
+                    app:layout_constraintTop_toTopOf="@+id/backIB"
                     tools:ignore="SpeakableTextPresentCheck" />
 
 
@@ -89,7 +89,6 @@
                     android:id="@+id/favoritesIB"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:layout_marginTop="30dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/bg_action_btn"
                     android:contentDescription="favorite"
@@ -97,14 +96,15 @@
                     android:padding="5dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_favorite"
+                    app:layout_constraintBottom_toBottomOf="@+id/calenderIB"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/calenderIB" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="170dp"
-                    android:layout_marginBottom="-30dp"
+                    android:layout_marginBottom="-50dp"
                     android:background="@drawable/layout_rounded_topleft_topright"
                     android:backgroundTint="#D3000000"
                     app:cardCornerRadius="10dp"
@@ -125,8 +125,8 @@
 
                         <ImageView
                             android:id="@+id/imageAuthorIV"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:src="@drawable/img_pingo_doce"
                             android:scaleType="fitXY"/>
 
@@ -134,10 +134,10 @@
 
                     <ImageView
                         android:id="@+id/verifyUserIV"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="-15dp"
-                        android:layout_marginStart="-15dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="-20dp"
+                        android:layout_marginStart="-20dp"
                         android:elevation="8dp"
                         android:src="@drawable/verified"
                         android:visibility="visible"
@@ -150,7 +150,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:fontFamily="@font/fedoka"
+                        android:fontFamily="@font/fredoka_semibold"
                         android:text="Autor"
                         android:textAlignment="gravity"
                         android:textColor="@color/white"
@@ -180,7 +180,6 @@
                         android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="16sp"
-                        android:textStyle="bold"
                         app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
                         app:layout_constraintTop_toBottomOf="@+id/AutorLB" />
 
@@ -188,8 +187,8 @@
                         android:id="@+id/profileAuthorCV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="70dp"
-                        app:cardBackgroundColor="#5EFFFFFF"
+                        android:layout_marginEnd="50dp"
+                        app:cardBackgroundColor="#90FFFFFF"
                         app:cardCornerRadius="25dp"
                         app:layout_constraintBottom_toBottomOf="@+id/img_autor_CV"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -238,12 +237,12 @@
                     android:background="@drawable/layout_bg_rounded_1"
                     android:backgroundTint="#FFEBB0"
                     android:elevation="-1dp"
-                    android:fontFamily="@font/fedoka"
+                    android:fontFamily="@font/fredoka_semibold"
                     android:gravity="center"
                     android:padding="3dp"
                     android:text="Verificada"
                     android:textColor="@color/black"
-                    android:textSize="13sp"
+                    android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView2"
                     app:layout_constraintStart_toEndOf="@+id/imageView2"
                     app:layout_constraintTop_toTopOf="@+id/imageView2" />
@@ -288,7 +287,7 @@
                 android:id="@+id/constraintLayout13"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-70dp"
+                android:layout_marginTop="-50dp"
                 android:background="@drawable/layout_rounded_topleft_topright"
                 android:backgroundTint="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -322,7 +321,7 @@
                         android:padding="2dp"
                         android:text="02/03/2022"
                         android:textAlignment="center"
-                        android:textSize="12sp" />
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 

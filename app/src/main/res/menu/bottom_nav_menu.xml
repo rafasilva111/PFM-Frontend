@@ -23,7 +23,7 @@
         android:icon="@drawable/ic_baseline_celebration_24"
         app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/profileFragment"
+        android:id="@+id/fragment_session_profile"
         android:title="@string/profile_title"
         android:icon="@drawable/ic_more"
         app:showAsAction="ifRoom"/>

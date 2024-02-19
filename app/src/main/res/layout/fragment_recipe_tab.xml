@@ -25,8 +25,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/fedoka"
                     android:text="Descrição"
+                    android:fontFamily="@font/fredoka_semibold"
+                    android:textSize="16sp"
                     android:textColor="@color/black" />
 
                 <View
@@ -35,7 +36,7 @@
                     android:layout_weight="1"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="#63AAAAAA" />
                 <TextView
                     android:id="@+id/descriptionTV"
                     android:layout_width="match_parent"
@@ -68,8 +69,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:layout_weight="1"
-                        android:fontFamily="@font/fedoka"
                         android:text="Categorias"
+                        android:fontFamily="@font/fredoka_semibold"
+                        android:textSize="16sp"
                         android:textColor="@color/black" />
 
                     <TextView
@@ -79,9 +81,9 @@
                         android:layout_weight="1"
                         android:text="nº Categorias"
                         android:textAlignment="textEnd"
+                        android:fontFamily="@font/fredoka_medium"
                         android:textColor="@color/grey_2"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
+                        android:textSize="13sp" />
                 </LinearLayout>
 
 
@@ -91,7 +93,7 @@
                     android:layout_weight="1"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="#63AAAAAA" />
 
             </LinearLayout>
 
@@ -125,8 +127,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:layout_weight="1"
-                        android:fontFamily="@font/fedoka"
                         android:text="Ingridientes"
+                        android:fontFamily="@font/fredoka_semibold"
+                        android:textSize="16sp"
                         android:textColor="@color/black" />
 
                     <TextView
@@ -136,9 +139,9 @@
                         android:layout_weight="1"
                         android:text="nº Ingredients"
                         android:textAlignment="textEnd"
-                        android:textColor="@color/grey_2"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
+                        android:fontFamily="@font/fredoka_medium"
+                        android:textSize="13sp"
+                        android:textColor="@color/grey_2" />
                 </LinearLayout>
 
 
@@ -148,7 +151,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_weight="1"
-                    android:background="@android:color/darker_gray" />
+                    android:background="#63AAAAAA" />
 
             </LinearLayout>
 
@@ -201,8 +204,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:layout_weight="1"
-                        android:fontFamily="@font/fedoka"
                         android:text="Preparação"
+                        android:fontFamily="@font/fredoka_semibold"
+                        android:textSize="16sp"
                         android:textColor="@color/black" />
 
                     <TextView
@@ -212,9 +216,9 @@
                         android:layout_weight="1"
                         android:text="nº Passos"
                         android:textAlignment="textEnd"
-                        android:textColor="@color/grey_2"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
+                        android:fontFamily="@font/fredoka_medium"
+                        android:textSize="13sp"
+                        android:textColor="@color/grey_2" />
                 </LinearLayout>
 
 
@@ -224,7 +228,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_weight="1"
-                    android:background="@android:color/darker_gray" />
+                    android:background="#63AAAAAA" />
 
             </LinearLayout>
 

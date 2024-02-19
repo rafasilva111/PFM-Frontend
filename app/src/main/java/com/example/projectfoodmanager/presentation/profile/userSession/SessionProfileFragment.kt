@@ -73,32 +73,6 @@ class SessionProfileFragment : Fragment() {
 
     // constants
     private val TAG: String = "SessionProfileFragment"
-    private var fileName: String? = null
-    private var selectedAvatar: String? = null
-    private var activityResultLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode== AppCompatActivity.RESULT_OK) {
-            val extras: Bundle? = result.data?.extras
-            val imageUri: Uri
-            val imageBitmap = extras?.get("data") as Bitmap
-            val imageResult: WeakReference<Bitmap> = WeakReference(
-                Bitmap.createScaledBitmap(
-                    imageBitmap, imageBitmap.width, imageBitmap.height, false
-                ).copy(
-                    Bitmap.Config.RGB_565, true
-                )
-            )
-            val bm = imageResult.get()
-
-            // todo look into this
-            imageUri = saveImage(bm, requireContext())
-            launchImageCrop(imageUri)
-        }
-        else{
-            Log.d(TAG, "onCreateView: Something went wrong on registerForActivityResult")
-        }
-    }
-
-    lateinit var finalUri: Uri
     private lateinit var user: User
 
     // injects
@@ -115,6 +89,7 @@ class SessionProfileFragment : Fragment() {
 
         ): View {
 
+        // Inflate the layout for this fragment
         if (!this::binding.isInitialized) {
             binding = FragmentSessionProfileBinding.inflate(layoutInflater)
         }
@@ -124,11 +99,14 @@ class SessionProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        user = sharedPreference.getUserSession()
+        if (isOnline(requireView().context)) {
+            userViewModel.getUserSession()
+        }else{
+            user = sharedPreference.getUserSession()
+            loadUI()
+        }
+
         setUI()
-        loadUI()
-
-
 
 
         super.onViewCreated(view, savedInstanceState)
@@ -140,13 +118,17 @@ class SessionProfileFragment : Fragment() {
         /**
          * Info
          */
+        //Set Profile Image
+        loadUserImage(binding.profileIV, user.img_source)
 
         binding.nameTV.text =  getString(R.string.full_name, user.name)
 
-        if(!user.verified){
-            binding.profileCV.foreground=null
-            //binding.vipIV.visibility=View.INVISIBLE
-        }
+        if (user.user_type!=UserType.VIP)
+            binding.premiumLL.visibility = View.GONE
+
+        if (!user.verified)
+            binding.verifyUserIV.visibility = View.INVISIBLE
+
 
         binding.nFollowedsTV.text = user.followeds.toString()
         binding.nFollowersTV.text = user.followers.toString()
@@ -166,20 +148,6 @@ class SessionProfileFragment : Fragment() {
         val activity = requireActivity()
         changeMenuVisibility(true,activity)
         changeStatusBarColor(false, activity, context)
-
-        /**
-         * Info
-         */
-
-        binding.nameTV.text =  getString(R.string.full_name, user.name)
-
-        if(!user.verified){
-            binding.profileCV.foreground=null
-            //binding.vipIV.visibility=View.INVISIBLE
-        }
-
-        binding.nFollowedsTV.text = user.followeds.toString()
-        binding.nFollowersTV.text = user.followers.toString()
 
         /**
          * Buttons
@@ -203,12 +171,16 @@ class SessionProfileFragment : Fragment() {
 
         }
 
-        binding.shoppingLists.setOnClickListener {
+        binding.myProfileCV.setOnClickListener {
+            findNavController().navigate(R.id.action_fragment_session_profile_to_sessionAccountProfileFragment)
+        }
+
+        binding.shoppingListsCV.setOnClickListener {
             changeMenuVisibility(false,activity)
             findNavController().navigate(R.id.action_profileFragment_to_shoppingListListingFragment)
         }
 
-        binding.myRecipes.setOnClickListener {
+        binding.myRecipesCV.setOnClickListener {
             findNavController().navigate(R.id.action_profile_to_favorites,Bundle().apply {
                 putString("chip",getString(R.string.tab_created))
             })
@@ -235,180 +207,20 @@ class SessionProfileFragment : Fragment() {
             })
             changeMenuVisibility(false,activity)
         }
-
-        /**
-         * Image offline
-         */
-        loadUserImage(binding.profileIV, user.img_source)
-
-
-        if (isOnline(requireView().context)) {
-            // load profile image online
-
-            /*binding.uploadImageFB.setOnClickListener {
-
-
-                //USER CONFIRMATION DIALOG
-                // set the custom layout
-                val dialogBinding : View = layoutInflater.inflate(R.layout.dialog_confirmation_camera_gallery, null);
-
-                val myDialog = Dialog(requireContext())
-                myDialog.setContentView(dialogBinding)
-
-                // create alert dialog
-                myDialog.setCancelable(true)
-                myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-                val cameraIV = dialogBinding.findViewById<ImageView>(R.id.cameraIV)
-                val galleryIV = dialogBinding.findViewById<ImageView>(R.id.galletyIV)
-                val cancelBtn = dialogBinding.findViewById<Button>(R.id.btnConfCancel)
-
-                cameraIV.setOnClickListener{
-                    if (checkPermission()) {
-                        pickFromCamera()
-                    }else{
-                        toast( "Allow all permissions")
-                        requestPermission()
-                    }
-
-                    myDialog.dismiss()
-                }
-
-                galleryIV.setOnClickListener {
-                    if (checkPermission()) {
-                        pickFromGallery()
-                    }else{
-                        toast( "Allow all permissions")
-                        requestPermission()
-                    }
-                    myDialog.dismiss()
-                }
-
-                val avatarGV= dialogBinding.findViewById<GridView>(R.id.gvAvatar)
-
-                val adapter = AvatarGVAdapter(requireContext(), Avatar.avatarArrayList)
-                avatarGV.adapter = adapter
-
-                avatarGV.onItemClickListener = AdapterView.OnItemClickListener{ parent, view, position, id ->
-
-                    val avatar= adapter.getItem(position)
-
-                    // Handle the item selection here
-                    selectedAvatar = avatar!!.getName()
-                    userViewModel.updateUser(UserDTO(img_source = selectedAvatar))
-
-                    binding.profileIV.setImageResource(avatar.imgId)
-
-                    myDialog.dismiss()
-
-                }
-
-                cancelBtn.setOnClickListener {
-                    myDialog.dismiss()
-                }
-
-                myDialog.show()
-            }
-
-*/
-        }
-
-
-
     }
 
-
-
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            GALLERY_REQUEST_CODE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    data?.data?.let { uri ->
-                        launchImageCrop(uri)
-                    }
-                }
-            }
-        }
-
-        if (resultCode == AppCompatActivity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            val resultUri :Uri ?= UCrop.getOutput(data!!)
-
-            setImage(resultUri!!)
-
-            if (fileName == null)
-                fileName = UUID.randomUUID().toString() + ".png"
-
-
-            userViewModel.updateUser(UserDTO(img_source = fileName))
-            val storageRef = Firebase.storage.reference.child("$user_profile_images$fileName")
-
-            storageRef.putFile(resultUri)
-                .addOnSuccessListener {
-                    // Image upload success
-                    // You can perform additional operations here if needed
-
-                    // Get the download URL of the uploaded image
-                    storageRef.downloadUrl.addOnSuccessListener { downloadUri ->
-                        val imageURL = downloadUri.toString()
-                        // Do something with the imageURL (e.g., save it in your userSession)
-
-                        // Update the ImageView with the uploaded image
-                        Glide.with(binding.profileIV.context)
-                            .load(imageURL)
-                            .into(binding.profileIV)
-                    }
-                }
-                .addOnFailureListener {
-                    // Image upload failed
-                    // Handle the failure gracefully
-                }
-            finalUri=resultUri
-
-            // todo
-            saveEditedImage()
-
-
-        }
-
-    }
-
-    private fun saveEditedImage() {
-        val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, finalUri)
-        saveMediaToStorage(bitmap)
-    }
-
-    private fun launchImageCrop(uri: Uri) {
-
-
-        val destination:String=StringBuilder(UUID.randomUUID().toString()).toString()
-        val options: UCrop.Options=UCrop.Options()
-        options.setCropGridColor(Color.TRANSPARENT)
-        options.setStatusBarColor(resources.getColor(R.color.main_color))
-
-        startActivityForResult(UCrop.of(Uri.parse(uri.toString()), Uri.fromFile(File(requireContext().cacheDir,destination)))
-            .withOptions(options)
-            .withAspectRatio(3F, 4F)
-            .useSourceImageAspectRatio()
-            .withMaxResultSize(2000, 2000).getIntent(requireContext()),UCrop.REQUEST_CROP);
-
-
-
-    }
 
     private fun showValidationErrors(error: String) {
         toast(String.format(resources.getString(R.string.txt_error_message, error)))
     }
 
     private fun bindObservers() {
-        userViewModel.getUserAccountLiveData.observe(viewLifecycleOwner) { event ->
+        userViewModel.userResponseLiveData.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
-
                         user = result.data!!
+                        loadUI()
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(result.message.toString())
@@ -450,7 +262,7 @@ class SessionProfileFragment : Fragment() {
 
                     }
                     is NetworkResult.Error -> {
-                        toast("Dados não atualizados, alguma coisa se passou.")
+                        toast("Dados não atualizados, alguma coisa se passou.",ToastType.ERROR)
                     }
                     is NetworkResult.Loading -> {
                         // show loading bar
@@ -464,105 +276,6 @@ class SessionProfileFragment : Fragment() {
 
     }
 
-    // todo look into this
-    private fun saveImage(image: Bitmap?, context: Context): Uri {
-        val imageFolder= File(context.cacheDir,"images")
-        var uri: Uri? = null
 
-        try {
-
-            imageFolder.mkdirs()
-            val file = File(imageFolder,"captured_image.png")
-            val stream = FileOutputStream(file)
-            image?.compress(Bitmap.CompressFormat.JPEG,100,stream)
-            stream.flush()
-            stream.close()
-            uri= FileProvider.getUriForFile(Objects.requireNonNull(requireActivity().applicationContext),
-                BuildConfig.APPLICATION_ID + ".provider", file);
-
-
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }catch (e: IOException){
-            e.printStackTrace()
-        }
-
-        return uri!!
-
-    }
-
-    private fun pickFromGallery() {
-
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.type = "image/*"
-        val mimeTypes = arrayOf("image/jpeg", "image/png", "image/jpg")
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-        startActivityForResult(intent, GALLERY_REQUEST_CODE)
-    }
-
-    private fun pickFromCamera(){
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        activityResultLauncher.launch(intent)
-    }
-
-    private fun checkPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA
-            ),
-            100
-        )
-    }
-
-    private fun saveMediaToStorage(bitmap: Bitmap) {
-        val filename = "${System.currentTimeMillis()}.jpg"
-        var fos: OutputStream? = null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            requireActivity().contentResolver?.also { resolver ->
-                val contentValues = ContentValues().apply {
-                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
-                    put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
-                }
-                val imageUri: Uri? =
-                    resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-                fos = imageUri?.let { resolver.openOutputStream(it) }
-            }
-        } else {
-            val imagesDir =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-            val image = File(imagesDir, filename)
-            fos = FileOutputStream(image)
-        }
-        fos?.use {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
-            toast("Saved to Photos")
-        }
-    }
-
-    private fun setImage(uri: Uri){
-        selectedAvatar=null
-
-        Glide.with(this)
-            .load(uri)
-            .into(binding.profileIV)
-    }
 
 }

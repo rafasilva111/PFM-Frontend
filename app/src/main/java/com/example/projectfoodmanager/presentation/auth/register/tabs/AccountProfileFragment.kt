@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.AvatarGVAdapter
@@ -43,7 +44,9 @@ import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.ActionResultCodes.GALLERY_REQUEST_CODE
 import com.example.projectfoodmanager.util.FireStorage.user_profile_images
 import com.example.projectfoodmanager.util.Helper.Companion.checkPermission
+import com.example.projectfoodmanager.util.Helper.Companion.randomAvatarImg
 import com.example.projectfoodmanager.util.Helper.Companion.requestPermission
+import com.example.projectfoodmanager.util.Helper.Companion.userIsNot12Old
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -70,7 +73,6 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
     private lateinit var binding: FragmentRegisterAccountProfileBinding
 
     /** viewModels */
-    val userViewModel: UserViewModel by viewModels()
 
     /** variables */
 
@@ -440,49 +442,6 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
     }
 
 
-    private fun userIsNot12Old(dateString: String): Boolean {
-        // Define the date format
-        val dateFormat = SimpleDateFormat("dd/M/yyyy", Locale.getDefault())
-
-        try {
-            // Parse the date string to a Date object
-            val dateOfBirth = dateFormat.parse(dateString)
-
-            // Calculate the age
-            val currentDate = Calendar.getInstance().time
-            val age = calculateAge(dateOfBirth, currentDate)
-
-            // Check if the age is 12 or more
-            return age <= 12
-        } catch (e: Exception) {
-            // Handle parsing exceptions
-            e.printStackTrace()
-        }
-
-        // Return false in case of errors
-        return true
-    }
-
-    private fun calculateAge(birthDate: Date?, currentDate: Date): Int {
-        val cal = Calendar.getInstance()
-        cal.time = birthDate ?: currentDate
-        val birthYear = cal.get(Calendar.YEAR)
-
-        cal.time = currentDate
-        val currentYear = cal.get(Calendar.YEAR)
-
-        return currentYear - birthYear
-    }
-
-    private fun randomAvatarImg(sex: String): Avatar {
-
-        return when(sex) {
-            "Masculino" -> avatarArrayList[(0 until 5).random()]
-            "Feminino" -> avatarArrayList[(6 until 10).random()]
-            else -> avatarArrayList[(0 until 10).random()]
-        }
-    }
-
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -505,8 +464,8 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
             saveMediaToStorage(MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imgURI))
         }
     }
-    private fun launchImageCrop(uri: Uri) {
 
+    private fun launchImageCrop(uri: Uri) {
 
         val destination:String=StringBuilder(UUID.randomUUID().toString()).toString()
         val options: UCrop.Options= UCrop.Options()

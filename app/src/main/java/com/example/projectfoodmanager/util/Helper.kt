@@ -28,6 +28,17 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import java.util.*
 import android.Manifest
+import android.app.Activity
+import android.content.ContentValues
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
+import androidx.core.content.FileProvider
+import com.example.projectfoodmanager.BuildConfig
+import java.io.*
+import java.text.SimpleDateFormat
 
 class Helper {
     companion object {
@@ -253,7 +264,52 @@ class Helper {
             )
         }
 
+        /**
+         *  Images
+         * */
+        fun randomAvatarImg(sex: String): Avatar {
 
+            return when(sex) {
+                "Masculino" -> Avatar.avatarArrayList[(0 until 5).random()]
+                "Feminino" -> Avatar.avatarArrayList[(6 until 10).random()]
+                else -> Avatar.avatarArrayList[(0 until 10).random()]
+            }
+        }
+
+
+
+        /**
+         *  Validation
+         * */
+        fun userIsNot12Old(dateString: String): Boolean {
+            // Define the date format
+            val dateFormat = SimpleDateFormat("dd/M/yyyy", Locale.getDefault())
+
+            try {
+                // Parse the date string to a Date object
+                val dateOfBirth = dateFormat.parse(dateString)
+
+                // Calculate the age
+                val currentDate = Calendar.getInstance().time
+
+                val cal = Calendar.getInstance()
+                cal.time = dateOfBirth ?: currentDate
+                val birthYear = cal.get(Calendar.YEAR)
+
+                cal.time = currentDate
+                val currentYear = cal.get(Calendar.YEAR)
+
+                val age = currentYear - birthYear
+
+                // Check if the age is 12 or more
+                return age <= 12
+            } catch (e: Exception) {
+                // Handle parsing exceptions
+                e.printStackTrace()
+            }
+
+            // Return false in case of errors
+            return true
+        }
     }
-
 }

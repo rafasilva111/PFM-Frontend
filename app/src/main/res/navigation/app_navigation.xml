@@ -56,10 +56,10 @@
         tools:layout="@layout/fragment_comments" />
 
     <fragment
-        android:id="@+id/profileFragment"
+        android:id="@+id/fragment_session_profile"
         android:name="com.example.projectfoodmanager.presentation.profile.userSession.SessionProfileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile">
+        android:label="fragment_session_profile"
+        tools:layout="@layout/fragment_session_profile">
         <action
             android:id="@+id/action_profile_to_login"
             app:destination="@id/loginFragment"
@@ -68,17 +68,20 @@
         <action
             android:id="@+id/action_profile_to_favorites"
             app:destination="@id/favoritesFragment"
-            app:popUpTo="@id/profileFragment"/>
+            app:popUpTo="@id/fragment_session_profile"/>
         <action
             android:id="@+id/action_profileFragment_to_settingsFragment"
             app:destination="@id/settingsFragment"
-            app:popUpTo="@id/profileFragment" />
+            app:popUpTo="@id/fragment_session_profile" />
         <action
             android:id="@+id/action_profileFragment_to_followerFragment"
             app:destination="@id/followerFragment" />
         <action
             android:id="@+id/action_profileFragment_to_shoppingListListingFragment"
             app:destination="@id/shoppingListListingFragment" />
+        <action
+            android:id="@+id/action_fragment_session_profile_to_sessionAccountProfileFragment"
+            app:destination="@id/sessionAccountProfileFragment" />
 
     </fragment>
 
@@ -275,5 +278,10 @@
         android:id="@+id/profileFragment2"
         android:name="com.example.projectfoodmanager.presentation.profile.user.ProfileFragment"
         android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/sessionAccountProfileFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.userSession.SessionAccountProfileFragment"
+        android:label="fragment_session_account_profile"
+        tools:layout="@layout/fragment_session_account_profile" />
 
 </navigation>
