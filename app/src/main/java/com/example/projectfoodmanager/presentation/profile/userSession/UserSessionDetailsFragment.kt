@@ -24,7 +24,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -35,19 +34,13 @@ import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentSessionAccountProfileBinding
-import com.example.projectfoodmanager.databinding.FragmentSessionProfileBinding
 import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment
 import com.example.projectfoodmanager.util.*
-import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
-import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToLocalDateTime
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
-import com.example.projectfoodmanager.util.Helper.Companion.randomAvatarImg
 import com.example.projectfoodmanager.util.Helper.Companion.userIsNot12Old
 import com.example.projectfoodmanager.viewmodels.UserViewModel
-import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import java.io.*
 import java.lang.ref.WeakReference
@@ -59,7 +52,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
-class SessionAccountProfileFragment : Fragment() {
+class UserSessionDetailsFragment : Fragment() {
 
     /** binding */
     private lateinit var binding: FragmentSessionAccountProfileBinding
@@ -474,14 +467,25 @@ class SessionAccountProfileFragment : Fragment() {
 
         /** Update PersonalData  */
         binding.savePersonalData.setOnClickListener {
+
+            binding.firstNameEt.clearFocus()
+            binding.lastNameEt.clearFocus()
+            binding.dateEt.clearFocus()
+            binding.sexEt.clearFocus()
+
             if (validation(PATCH_PERSONAL_DATA))
                 userViewModel.updateUser(patchUser(PATCH_PERSONAL_DATA))
         }
 
         /** Update BiometricData  */
         binding.saveBiometricData.setOnClickListener {
+
+            binding.weightEt.clearFocus()
+            binding.heightEt.clearFocus()
+
             if (validation(PATCH_BIOMETRIC_DATA))
                 userViewModel.updateUser(patchUser(PATCH_BIOMETRIC_DATA))
+
         }
 
         /** Update AuthData  */
@@ -764,7 +768,7 @@ class SessionAccountProfileFragment : Fragment() {
         when(type){
             PATCH_PERSONAL_DATA -> {
                 /** First Name  */
-                userDTO.name = binding.firstNameEt.text.toString().trim() + " " + binding.firstNameEt.text.toString().trim()
+                userDTO.name = binding.firstNameEt.text.toString().trim() + " " + binding.lastNameEt.text.toString().trim()
 
                 /** Birth Date  */
                 userDTO.birth_date = binding.dateEt.text.toString()
@@ -782,7 +786,15 @@ class SessionAccountProfileFragment : Fragment() {
 
             }
             PATCH_BIOMETRIC_DATA -> {
-                //TODO
+
+                /** Activity Level  */
+                userDTO.activity_level = activityLevel
+
+                /** Weight  */
+                userDTO.weight =  binding.weightEt.text.toString().toFloat()
+
+                /** Height  */
+                userDTO.height = binding.heightEt.text.toString().toFloat()
             }
             PATCH_AUTH_DATA -> {
                 //TODO

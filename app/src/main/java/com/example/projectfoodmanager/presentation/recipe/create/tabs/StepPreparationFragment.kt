@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.recipe.create.steps
+package com.example.projectfoodmanager.presentation.recipe.create.tabs
 
 import android.os.Bundle
 import android.view.LayoutInflater

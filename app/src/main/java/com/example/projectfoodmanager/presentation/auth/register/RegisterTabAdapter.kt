@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
-import com.example.projectfoodmanager.presentation.auth.register.tabs.AccountDetailsFragment
+import com.example.projectfoodmanager.presentation.auth.register.tabs.AccountAuthFragment
 import com.example.projectfoodmanager.presentation.auth.register.tabs.AccountProfileFragment
 import com.example.projectfoodmanager.presentation.auth.register.tabs.AccountBioDataFragment
 
@@ -25,7 +25,7 @@ class RegisterTabAdapter(
 
         return when(position){
             0-> AccountProfileFragment(parentBinding)
-            1-> AccountDetailsFragment(parentBinding)
+            1-> AccountAuthFragment(parentBinding)
             else-> AccountBioDataFragment(parentBinding)
         }
     }

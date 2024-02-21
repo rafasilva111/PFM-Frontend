@@ -39,11 +39,8 @@
             android:id="@+id/action_receitaDetailFragment_to_newCalenderEntryFragment"
             app:destination="@id/newCalenderEntryFragment" />
         <action
-            android:id="@+id/action_receitaDetailFragment_to_profileBottomSheetDialog"
-            app:destination="@id/profileBottomSheetDialog" />
-        <action
             android:id="@+id/action_receitaDetailFragment_to_profileFragment"
-            app:destination="@id/profileFragment2" />
+            app:destination="@id/profileFragment" />
 
 
     </fragment>
@@ -57,7 +54,7 @@
 
     <fragment
         android:id="@+id/fragment_session_profile"
-        android:name="com.example.projectfoodmanager.presentation.profile.userSession.SessionProfileFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.userSession.UserSessionFragment"
         android:label="fragment_session_profile"
         tools:layout="@layout/fragment_session_profile">
         <action
@@ -179,8 +176,8 @@
             android:id="@+id/action_followerFragment_to_followRequestFragment"
             app:destination="@id/followRequestFragment" />
         <action
-            android:id="@+id/action_followerFragment_to_profileBottomSheetDialog"
-            app:destination="@id/profileBottomSheetDialog" />
+            android:id="@+id/action_followerFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/followRequestFragment"
@@ -188,8 +185,8 @@
         android:label="fragment_follow_request"
         tools:layout="@layout/fragment_follow_request" >
         <action
-            android:id="@+id/action_followRequestFragment_to_profileBottomSheetDialog"
-            app:destination="@id/profileBottomSheetDialog" />
+            android:id="@+id/action_followRequestFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/notificationFragment"
@@ -205,15 +202,6 @@
         android:name="com.example.projectfoodmanager.presentation.profile.settings.security.SecurityFragment"
         android:label="fragment_security"
         tools:layout="@layout/fragment_security" />
-    <dialog
-        android:id="@+id/profileBottomSheetDialog"
-        android:name="com.example.projectfoodmanager.presentation.profile.ProfileBottomSheetDialog"
-        android:label="fragment_profile_bottom_sheet_dialog"
-        tools:layout="@layout/fragment_profile_bottom_sheet_dialog" >
-        <action
-            android:id="@+id/action_profileBottomSheetDialog_to_followerFragment"
-            app:destination="@id/followerFragment" />
-    </dialog>
     <fragment
         android:id="@+id/blankFragment"
         android:name="com.example.projectfoodmanager.BlankFragment"
@@ -275,12 +263,13 @@
         app:destination="@id/favoritesFragment"
         />
     <fragment
-        android:id="@+id/profileFragment2"
+        android:id="@+id/profileFragment"
         android:name="com.example.projectfoodmanager.presentation.profile.user.ProfileFragment"
-        android:label="ProfileFragment" />
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile"/>
     <fragment
         android:id="@+id/sessionAccountProfileFragment"
-        android:name="com.example.projectfoodmanager.presentation.profile.userSession.SessionAccountProfileFragment"
+        android:name="com.example.projectfoodmanager.presentation.profile.userSession.UserSessionDetailsFragment"
         android:label="fragment_session_account_profile"
         tools:layout="@layout/fragment_session_account_profile" />
 

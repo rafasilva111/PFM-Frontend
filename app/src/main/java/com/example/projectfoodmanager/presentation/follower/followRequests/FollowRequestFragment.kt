@@ -39,8 +39,8 @@ class FollowRequestFragment : Fragment() {
     private val adapter by lazy {
         FollowRequestListingAdapter(
             onItemClicked = { userID ->
-                findNavController().navigate(R.id.action_followerFragment_to_profileBottomSheetDialog,Bundle().apply {
-                    putInt("userID",userID)
+                findNavController().navigate(R.id.action_followRequestFragment_to_profileFragment,Bundle().apply {
+                    putInt("userId",userID)
                 })
             },
             onActionBTNClicked = { position,userId ->

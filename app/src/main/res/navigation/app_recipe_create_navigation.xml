@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/stepDetailFragment"
-        android:name="com.example.projectfoodmanager.presentation.recipe.create.steps.StepDetailFragment"
+        android:name="com.example.projectfoodmanager.presentation.recipe.create.tabs.StepDetailFragment"
         android:label="fragment_step_detail"
         tools:layout="@layout/fragment_step_detail" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/stepIngredientsFragment"
-        android:name="com.example.projectfoodmanager.presentation.recipe.create.steps.StepIngredientsFragment"
+        android:name="com.example.projectfoodmanager.presentation.recipe.create.tabs.StepIngredientsFragment"
         android:label="fragment_step_ingredients"
         tools:layout="@layout/fragment_step_ingredients" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/stepPreparationFragment"
-        android:name="com.example.projectfoodmanager.presentation.recipe.create.steps.StepPreparationFragment"
+        android:name="com.example.projectfoodmanager.presentation.recipe.create.tabs.StepPreparationFragment"
         android:label="fragment_step_preparation"
         tools:layout="@layout/fragment_step_preparation" />
 

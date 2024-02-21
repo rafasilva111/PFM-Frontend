@@ -1,6 +1,5 @@
-package com.example.projectfoodmanager.presentation.recipe.create.steps
+package com.example.projectfoodmanager.presentation.recipe.create.tabs
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelResponse.ingredients.Ingredient
 import com.example.projectfoodmanager.data.model.modelResponse.ingredients.IngredientQuantity
 import com.example.projectfoodmanager.databinding.FragmentStepIngredientsBinding
-import com.example.projectfoodmanager.presentation.recipe.create.steps.util.StepUtil.Companion.createRecipe
+import com.example.projectfoodmanager.presentation.recipe.create.tabs.util.StepUtil.Companion.createRecipe
 
 
 // TODO: Rename parameter arguments, choose names that match

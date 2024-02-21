@@ -106,7 +106,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val userId = arguments?.getInt("user_id",-1)!!
+        val userId = arguments?.getInt("userId",-1)!!
 
 
         userViewModel.getUserAccount(userId)

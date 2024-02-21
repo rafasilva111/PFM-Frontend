@@ -142,19 +142,19 @@ class ProfileBottomSheetDialog : BottomSheetDialogFragment() {
 
 
         binding.nFollowersLL.setOnClickListener {
-            findNavController().navigate(R.id.action_profileBottomSheetDialog_to_followerFragment,Bundle().apply {
+           /* findNavController().navigate(R.id.action_profileBottomSheetDialog_to_followerFragment,Bundle().apply {
               putInt("userID",objUser.id)
               putString("userName",objUser.name)
               putInt("followType", FollowType.FOLLOWERS)
-            })
+            })*/
         }
 
         binding.nFollowedsLL.setOnClickListener {
-            findNavController().navigate(R.id.action_profileBottomSheetDialog_to_followerFragment,Bundle().apply {
+            /*findNavController().navigate(R.id.action_profileBottomSheetDialog_to_followerFragment,Bundle().apply {
                 putInt("userID",objUser.id)
                 putString("userName",objUser.name)
                 putInt("followType", FollowType.FOLLOWEDS)
-            })
+            })*/
         }
 
         //Get User in SharedPreferences

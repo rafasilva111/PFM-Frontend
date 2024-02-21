@@ -423,7 +423,7 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
     private fun patchUser() {
 
         /** First Name  */
-        RegisterFragment.user.name = binding.firstNameEt.text.toString().trim() + " " + binding.firstNameEt.text.toString().trim()
+        RegisterFragment.user.name = binding.firstNameEt.text.toString().trim() + " " + binding.lastNameEt.text.toString().trim()
 
         /** Birth Date  */
         RegisterFragment.user.birth_date = binding.dateEt.text.toString()

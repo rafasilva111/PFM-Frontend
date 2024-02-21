@@ -1,10 +1,9 @@
-package com.example.projectfoodmanager.presentation.recipe.create.steps
+package com.example.projectfoodmanager.presentation.recipe.create.tabs
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectfoodmanager.data.model.modelResponse.ingredients.Ingredient
 import com.example.projectfoodmanager.data.model.modelResponse.ingredients.IngredientQuantity
 import com.example.projectfoodmanager.databinding.ItemRecipeIngredientsLayoutNewBinding
 

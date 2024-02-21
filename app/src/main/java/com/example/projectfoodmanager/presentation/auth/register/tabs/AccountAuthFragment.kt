@@ -13,7 +13,6 @@ import com.example.projectfoodmanager.databinding.FragmentRegisterAccountDetails
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
 import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment
 import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment.Companion.imgURI
-import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment.Companion.validate
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.firebase.ktx.Firebase
@@ -24,7 +23,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class AccountDetailsFragment(private var parentBinding: FragmentRegisterBinding) : Fragment() {
+class AccountAuthFragment(private var parentBinding: FragmentRegisterBinding) : Fragment() {
 
 
     /** binding */
@@ -159,17 +158,16 @@ class AccountDetailsFragment(private var parentBinding: FragmentRegisterBinding)
 
             if (validation()) {
                 patchUser()
-                if (validate())
-                    if (imgURI != null){
-                        val path = "${FireStorage.user_profile_images}${UUID.randomUUID().toString() +".jpg"}"
-                        Firebase.storage.reference.child(path).putFile(imgURI!!)
-                            .addOnSuccessListener {
-                                RegisterFragment.user.img_source = path
-                                userViewModel.registerUser(RegisterFragment.user)
-                            }
-                            .addOnFailureListener { e ->
-                                Log.d(TAG, "uploadImageToFirebase: " + e)
-                            }
+                if (imgURI != null) {
+                    val path = "${FireStorage.user_profile_images}${UUID.randomUUID().toString() + ".jpg"}"
+                    Firebase.storage.reference.child(path).putFile(imgURI!!)
+                        .addOnSuccessListener {
+                            RegisterFragment.user.img_source = path
+                            userViewModel.registerUser(RegisterFragment.user)
+                        }
+                        .addOnFailureListener { e ->
+                            Log.d(TAG, "uploadImageToFirebase: " + e)
+                        }
                 }
                 else
                     userViewModel.registerUser(RegisterFragment.user)
@@ -277,11 +275,6 @@ class AccountDetailsFragment(private var parentBinding: FragmentRegisterBinding)
 
 
         return isValid
-    }
-
-
-    override fun onPause() {
-        super.onPause()
     }
 
     private fun errorOnEmail(error: String){

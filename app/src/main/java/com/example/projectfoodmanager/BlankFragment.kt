@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.projectfoodmanager.databinding.FragmentBlankBinding
 import com.example.projectfoodmanager.databinding.FragmentNotificationBinding
+import com.example.projectfoodmanager.presentation.follower.FollowerFragment
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.SharedPreference
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +35,18 @@ class BlankFragment : Fragment() {
 
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+
+        //Para obter os argumentos passados pelo bundle é boa pratica ser feito no onCreate, pois só carrega uma vez
+/*        arguments?.let {
+            userId = it.getInt("userId")
+            userName = it.getString("userName")
+            FollowerFragment.followType = it.getInt("followType")
+        }*/
+
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

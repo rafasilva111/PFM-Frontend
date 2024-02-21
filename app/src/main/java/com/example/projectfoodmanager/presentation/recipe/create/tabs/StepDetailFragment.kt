@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.recipe.create.steps
+package com.example.projectfoodmanager.presentation.recipe.create.tabs
 
 import android.os.Bundle
 import android.text.format.DateFormat
@@ -11,9 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
-import com.example.projectfoodmanager.data.model.modelResponse.ingredients.IngredientQuantity
 import com.example.projectfoodmanager.databinding.FragmentStepDetailBinding
-import com.example.projectfoodmanager.presentation.recipe.create.steps.util.StepUtil.Companion.createRecipe
+import com.example.projectfoodmanager.presentation.recipe.create.tabs.util.StepUtil.Companion.createRecipe
 import com.google.android.material.chip.Chip
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat

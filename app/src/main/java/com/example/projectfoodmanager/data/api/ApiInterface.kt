@@ -194,7 +194,7 @@ interface ApiInterface {
     suspend fun postAcceptFollowRequest(@Query("user_follower_id") userId: Int): Response<Unit>
 
     @DELETE("$API_V1_BASE_URL/follow/requests")
-    suspend fun deleteFollowRequest(@Query("user_followed_id") userId: Int): Response<Unit>
+    suspend fun deleteFollowRequest(@Query("user_follow_id") userId: Int): Response<Unit>
 
 
     /** Shopping List */

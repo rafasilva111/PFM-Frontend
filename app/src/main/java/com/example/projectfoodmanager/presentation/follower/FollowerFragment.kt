@@ -44,7 +44,6 @@ class FollowerFragment : Fragment() {
 
     private var userId: Int = -1
     private var userName: String? = null
-    private var followType: Int = -1
     private lateinit var currentUser: User
     private var selectedTab: View? = null
 
@@ -73,12 +72,12 @@ class FollowerFragment : Fragment() {
             onItemClicked = {user_id ->
                 val bundle=Bundle()
                 if (currentUser.id==user_id){
-                    bundle.putInt("userID",-1)
+                    bundle.putInt("userId",-1)
                 }else{
-                    bundle.putInt("userID",user_id)
+                    bundle.putInt("userId",user_id)
                 }
 
-                findNavController().navigate(R.id.action_followerFragment_to_profileBottomSheetDialog,bundle)
+                findNavController().navigate(R.id.action_followerFragment_to_profileFragment,bundle)
 
             },
             onActionBTNClicked = { position, user_Id ->
@@ -133,12 +132,12 @@ class FollowerFragment : Fragment() {
             onItemClicked = {user_id ->
                 val bundle=Bundle()
                 if (currentUser.id==user_id){
-                    bundle.putInt("userID",-1)
+                    bundle.putInt("userId",-1)
                 }else{
-                    bundle.putInt("userID",user_id)
+                    bundle.putInt("userId",user_id)
                 }
 
-                findNavController().navigate(R.id.action_followerFragment_to_profileBottomSheetDialog,bundle)
+                findNavController().navigate(R.id.action_followerFragment_to_profileFragment,bundle)
 
             },
             onActionBTNClicked = { position, user_Id ->
@@ -167,16 +166,22 @@ class FollowerFragment : Fragment() {
         )
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
         arguments?.let {
-            userId = it.getInt("userID")
+            userId = it.getInt("userId")
             userName = it.getString("userName")
             followType = it.getInt("followType")
         }
 
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
         // Inflate the layout for this fragment
         if (!this::binding.isInitialized) {
@@ -199,8 +204,12 @@ class FollowerFragment : Fragment() {
     private fun setUI() {
 
         /**
-         * General
-         */
+         *  General
+         * */
+
+        val activity = requireActivity()
+        Helper.changeMenuVisibility(false, activity)
+        Helper.changeStatusBarColor(false, activity, requireContext())
 
         currentUser = sharedPreference.getUserSession()
 
@@ -677,6 +686,11 @@ class FollowerFragment : Fragment() {
 
 
 
+    }
+
+
+    companion object {
+        var followType:Int=-1
     }
 
     override fun onStart() {

@@ -153,46 +153,5 @@ class RegisterFragment : Fragment() {
 
         var errors: ValidationError? = null
 
-        fun validate(): Boolean {
-
-            var isValid = true
-
-
-            /** Account name  */
-            if (user.name.isNullOrEmpty())
-                isValid = false
-
-
-            /** Birth Date  */
-            if (user.birth_date.isNullOrEmpty())
-                isValid = false
-
-            if (user.birth_date.isNullOrEmpty())
-                isValid = false
-
-            /** Sex  */
-            if(user.sex.isNullOrEmpty())
-                isValid = false
-
-            /** Account name  */
-            if (user.name.isNullOrEmpty())
-                isValid = false
-
-
-            /** Birth Date  */
-            if (user.birth_date.isNullOrEmpty())
-                isValid = false
-
-            if (user.birth_date.isNullOrEmpty())
-                isValid = false
-
-            /** Sex  */
-            if(user.sex.isNullOrEmpty())
-                isValid = false
-
-
-
-            return isValid
-        }
     }
 }
