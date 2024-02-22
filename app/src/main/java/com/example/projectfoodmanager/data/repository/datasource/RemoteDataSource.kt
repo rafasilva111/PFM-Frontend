@@ -77,7 +77,7 @@ interface RemoteDataSource {
 	suspend fun getEntryOnCalender(date: String):  Response<CalenderEntryList>
 	suspend fun getEntryOnCalender(fromDate: String, toDate: String):  Response<CalenderDatedEntryList>
 	suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingListSimplefied>
-	suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Unit>
+	suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Int>
 	suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
 	suspend fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate): Response<Unit>
 

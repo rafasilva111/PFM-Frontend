@@ -37,13 +37,13 @@ class UserRepositoryImp @Inject constructor(
      *
      * @param liveData The LiveData where the result will be posted.
      * @param saveSharedPreferences Flag to determine if the result should be saved in SharedPreferences.
-     * @param apiCall The API call to be executed.
+     * @param request The API call to be executed.
      */
     private suspend fun <T> handleApiResponse(
         liveData: MutableLiveData<Event<NetworkResult<T>>>,
         saveSharedPreferences: Boolean = false,
         deleteSharedPreferences: Boolean = false,
-        apiCall:   suspend () -> Response<T>
+        request:   suspend () -> Response<T>
     ) {
         try {
             // Post a loading state to indicate the request is in progress
@@ -51,7 +51,7 @@ class UserRepositoryImp @Inject constructor(
             Log.i(TAG, "Making API request.")
 
             // Invoke the API call
-            val response = apiCall.invoke()
+            val response = request.invoke()
 
             if (response.isSuccessful) {
                 // API request was successful
@@ -60,9 +60,7 @@ class UserRepositoryImp @Inject constructor(
                     // Post a success result with the response body
                     liveData.postValue(Event(NetworkResult.Success(responseBody)))
 
-                    // Optionally save data to SharedPreferences
-                    if (saveSharedPreferences) {
-                    }
+
 
                     if (deleteSharedPreferences) {
                         sharedPreference.deleteUserSession()

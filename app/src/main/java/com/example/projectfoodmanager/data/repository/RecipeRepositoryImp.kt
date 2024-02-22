@@ -25,12 +25,11 @@ class RecipeRepositoryImp @Inject constructor(
     // Helper function to make API requests and handle responses
     private suspend fun <T> handleApiResponse(
         liveData: MutableLiveData<Event<NetworkResult<T>>>,
-        loadingMessage: String,
         request: suspend () -> Response<T>
     ) {
         // Notify observers that a loading operation is in progress
         liveData.postValue(Event(NetworkResult.Loading()))
-        Log.d(TAG, loadingMessage)
+        Log.i(TAG, "Making API request.")
 
         try {
             // Invoke the API request using the provided lambda function
@@ -71,8 +70,7 @@ class RecipeRepositoryImp @Inject constructor(
 
 
         handleApiResponse(
-            _recipesResponseLiveData,
-            "Requesting paginated and sorted recipes for page $page"
+            _recipesResponseLiveData
         ) {
             remoteDataSource.getRecipes(userId,by,searchString,searchTag, page,pageSize)
         }
@@ -91,16 +89,14 @@ class RecipeRepositoryImp @Inject constructor(
         // Use the helper function to make the API request
         searchString?.let {
             handleApiResponse(
-                _recipesCommentedByUserSearchPaginated,
-                "Requesting recipes by title and tags"
+                _recipesCommentedByUserSearchPaginated
             ) {
                 remoteDataSource.getRecipesByClientSearchPaginated(clientId, searchString, page)
             }
         }?: run {
             // Code to execute when `nullableValue` is null
             handleApiResponse(
-                _recipesCommentedByUserSearchPaginated,
-                "Requesting recipes by title and tags"
+                _recipesCommentedByUserSearchPaginated
             ) {
                 remoteDataSource.getRecipesByClientPaginated(clientId,page)
             }
@@ -158,6 +154,7 @@ class RecipeRepositoryImp @Inject constructor(
 
 
     override suspend fun addLikeOnRecipe(recipeId: Int) {
+
         _functionLikeOnRecipe.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
         val response =remoteDataSource.addLike(recipeId)

@@ -69,6 +69,8 @@ class MiscellaneousRepositoryImp@Inject constructor(
         get() = _miscellaneousLiveData
 
     override suspend fun postAppReport(applicationReport: ApplicationReport) {
+
+        
         _miscellaneousLiveData.postValue(Event(NetworkResult.Loading()))
         val response = remoteDataSource.postAppReport(applicationReport)
         if (response.isSuccessful && response.code() == 201) {

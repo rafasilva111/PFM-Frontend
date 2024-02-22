@@ -73,9 +73,9 @@ class CalendarViewModel @Inject constructor(
         get() = repository.deleteCalendarEntry
 
 
-    fun deleteCalendarEntry(calenderEntryId: CalenderEntry) {
+    fun deleteCalendarEntry(calenderEntry: CalenderEntry) {
         viewModelScope.launch {
-            repository.deleteCalenderEntry(calenderEntryId)
+            repository.deleteCalenderEntry(calenderEntry)
         }
     }
 

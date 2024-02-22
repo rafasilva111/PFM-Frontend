@@ -156,7 +156,7 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getCalenderIngredients(fromDate = fromDate,toDate = toDate)
 	}
 
-	override suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Unit> {
+	override suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Int> {
 		return apiInterface.deleteCalenderEntry(calenderEntryId)
 	}
 

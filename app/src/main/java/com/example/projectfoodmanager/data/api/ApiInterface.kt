@@ -146,7 +146,7 @@ interface ApiInterface {
     suspend fun getCalenderIngredients(@Query("from_date") fromDate: String,@Query("to_date") toDate: String): Response<ShoppingListSimplefied>
 
     @DELETE("$API_V1_BASE_URL/calendar")
-    suspend fun deleteCalenderEntry(@Query("id") calenderEntryId: Int): Response<Unit>
+    suspend fun deleteCalenderEntry(@Query("id") calenderEntryId: Int): Response<Int>
 
     @PATCH("$API_V1_BASE_URL/calendar")
     suspend fun patchCalenderEntry(@Query("id") calenderEntryId: Int, @Body calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
@@ -178,6 +178,7 @@ interface ApiInterface {
     suspend fun deleteFollow(@Query("user_follow_id") userId: Int): Response<Unit>
 
 
+
     /** Follows Requests */
 
 
@@ -190,11 +191,18 @@ interface ApiInterface {
     @POST("$API_V1_BASE_URL/follow")
     suspend fun postFollowRequest(@Query("user_id") userId: Int): Response<Unit>
 
+    // accept follow request
     @POST("$API_V1_BASE_URL/follow/requests")
     suspend fun postAcceptFollowRequest(@Query("user_follower_id") userId: Int): Response<Unit>
 
+    // decline follow request
+    @DELETE("$API_V1_BASE_URL/follow/requests")
+    suspend fun deleteFollowerRequest(@Query("user_follower_id") userId: Int): Response<Unit>
+
+    // decline follower request
     @DELETE("$API_V1_BASE_URL/follow/requests")
     suspend fun deleteFollowRequest(@Query("user_follow_id") userId: Int): Response<Unit>
+
 
 
     /** Shopping List */

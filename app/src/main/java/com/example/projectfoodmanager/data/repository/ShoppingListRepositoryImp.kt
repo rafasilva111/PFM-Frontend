@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 
@@ -51,19 +53,23 @@ class ShoppingListRepositoryImp @Inject constructor(
                     liveData.postValue(Event(NetworkResult.Success(responseBody)))
 
                     // Optionally save data to SharedPreferences
-                    if (saveSharedPreferences) {
-                        if (responseBody is ShoppingList)
-                            sharedPreference.saveShoppingList(responseBody)
-                        if (responseBody is ListOfShoppingLists)
-                            sharedPreference.saveMultipleShoppingList(responseBody.result)
+
+                    if (saveSharedPreferences ) {
+                        when (responseBody) {
+                            is ShoppingList -> sharedPreference.saveShoppingList(responseBody)
+                            is ListOfShoppingLists -> sharedPreference.saveMultipleShoppingList(responseBody.result)
+                            else -> Log.e(TAG, "Unable to save this type into shared preferences...")
+                        }
                     }
 
                     if (deleteSharedPreferences) {
-                        if (responseBody is IdResponse)
-                            sharedPreference.deleteShoppingList(responseBody.id)
-                        if (responseBody is ShoppingList)
-                            sharedPreference.deleteShoppingList(responseBody.id)
+                        when (responseBody) {
+                            is  IdResponse -> sharedPreference.deleteShoppingList(responseBody.id)
+                            is ShoppingList -> sharedPreference.deleteShoppingList(responseBody.id)
+                            else -> Log.e(TAG, "Unable to save this type into shared preferences...")
+                        }
                     }
+
                 } else {
                     // Handle the case where the response body is null
                     liveData.postValue(Event(NetworkResult.Error("Response body is null")))

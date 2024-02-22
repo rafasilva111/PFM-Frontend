@@ -9,6 +9,8 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
@@ -36,6 +38,9 @@ class CalenderRepositoryImp @Inject constructor(
      */
     private suspend fun <T> handleApiResponse(
         liveData: MutableLiveData<Event<NetworkResult<T>>>,
+        saveSharedPreferences: Boolean = false,
+        deleteSharedPreferences: Boolean = false,
+        cleanseOldRegistry:Boolean =false,
         apiCall: suspend () -> Response<T>
     ) {
         try {
@@ -53,6 +58,22 @@ class CalenderRepositoryImp @Inject constructor(
 
                     // Post a success result with the response body
                     liveData.postValue(Event(NetworkResult.Success(responseBody)))
+                    // Optionally save data to SharedPreferences
+
+                    if (saveSharedPreferences) {
+                        when (responseBody) {
+                            is CalenderEntry -> sharedPreference.saveCalendarEntry(responseBody)
+                            is CalenderDatedEntryList -> sharedPreference.saveMultipleCalendarEntrys(responseBody,cleanseOldRegistry)
+                            else -> Log.e(TAG, "Unable to save this type into shared preferences...")
+                        }
+                    }
+
+                    if (deleteSharedPreferences) {
+                        when (responseBody) {
+                            is CalenderEntry -> sharedPreference.saveCalendarEntry(responseBody)
+                            else -> Log.e(TAG, "Unable to save this type into shared preferences...")
+                        }
+                    }
 
                 } else {
                     // Handle the case where the response body is null
@@ -61,7 +82,7 @@ class CalenderRepositoryImp @Inject constructor(
             } else if (response.errorBody() != null) {
                 // Handle the case where the API request was not successful and has an error body
                 val errorObj = response.errorBody()!!.charStream().readText()
-                Log.i(TAG, "API request was not successful. Error: \n$errorObj")
+                Log.e(TAG, "API request was not successful. Error: \n$errorObj")
                 liveData.postValue(Event(NetworkResult.Error(errorObj)))
             } else {
                 // Handle the case where something went wrong without an error body
@@ -80,21 +101,11 @@ class CalenderRepositoryImp @Inject constructor(
         get() = _functionCreateEntryOnCalender
 
     override suspend fun createEntryOnCalender(recipeId: Int,comment: CalenderEntryRequest) {
-        _functionCreateEntryOnCalender.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.createCalenderEntry(recipeId,comment)
-        if (response.isSuccessful) {
-            Log.i(TAG, "handleResponse: request made was sucessfull.")
-            sharedPreference.saveCalendarEntry(response.body()!!)
-            _functionCreateEntryOnCalender.postValue(Event(NetworkResult.Success(response.body()!!)))
-        }
-        else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
-            _functionCreateEntryOnCalender.postValue(Event(NetworkResult.Error(errorObj)))
-        }
-        else{
-            _functionCreateEntryOnCalender.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        handleApiResponse(
+            _functionCreateEntryOnCalender,
+            saveSharedPreferences = true
+        ) {
+            remoteDataSource.createCalenderEntry(recipeId,comment)
         }
     }
 
@@ -103,23 +114,11 @@ class CalenderRepositoryImp @Inject constructor(
         get() = _functionGetEntryOnCalender
 
     override suspend fun getEntryOnCalender(date: LocalDateTime) {
-        _functionGetEntryOnCalender.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
 
-
-        val response =remoteDataSource.getEntryOnCalender(formatLocalTimeToServerTime(date))
-        if (response.isSuccessful) {
-            Log.i(TAG, "handleResponse: request made was sucessfull.")
-            _functionGetEntryOnCalender.postValue(Event(NetworkResult.Success(response.body()!!
-            )))
-        }
-        else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
-            _functionGetEntryOnCalender.postValue(Event(NetworkResult.Error(errorObj)))
-        }
-        else{
-            _functionGetEntryOnCalender.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        handleApiResponse(
+            _functionGetEntryOnCalender
+        ) {
+            remoteDataSource.getEntryOnCalender(formatLocalTimeToServerTime(date))
         }
     }
 
@@ -128,23 +127,15 @@ class CalenderRepositoryImp @Inject constructor(
         get() = _functionGetCalenderDatedEntryList
 
     override suspend fun getCalenderDatedEntryList(fromDate: LocalDateTime, toDate: LocalDateTime,cleanseOldRegistry:Boolean) {
-        _functionGetCalenderDatedEntryList.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.getEntryOnCalender(formatLocalTimeToServerTime(fromDate),formatLocalTimeToServerTime(toDate))
-        if (response.isSuccessful) {
-            Log.i(TAG, "handleResponse: request made was sucessfull.")
-            sharedPreference.saveMultipleCalendarEntrys(response.body()!!,cleanseOldRegistry)
-            _functionGetCalenderDatedEntryList.postValue(Event(NetworkResult.Success(response.body()!!
-            )))
+
+        handleApiResponse(
+            _functionGetCalenderDatedEntryList,
+            saveSharedPreferences = true,
+            cleanseOldRegistry = cleanseOldRegistry
+        ) {
+            remoteDataSource.getEntryOnCalender(formatLocalTimeToServerTime(fromDate),formatLocalTimeToServerTime(toDate))
         }
-        else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
-            _functionGetCalenderDatedEntryList.postValue(Event(NetworkResult.Error(errorObj)))
-        }
-        else{
-            _functionGetCalenderDatedEntryList.postValue(Event(NetworkResult.Error("Something Went Wrong")))
-        }
+
     }
 
 
@@ -153,21 +144,11 @@ class CalenderRepositoryImp @Inject constructor(
         get() = _functionGetCalenderIngredients
 
     override suspend fun getCalendarIngredients(fromDate: LocalDateTime, toDate: LocalDateTime) {
-        _functionGetCalenderIngredients.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.getCalenderIngredients(formatLocalTimeToServerTime(fromDate),formatLocalTimeToServerTime(toDate))
-        if (response.isSuccessful) {
-            Log.i(TAG, "handleResponse: request made was sucessfull.")
-            _functionGetCalenderIngredients.postValue(Event(NetworkResult.Success(response.body()!!
-            )))
-        }
-        else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
-            _functionGetCalenderIngredients.postValue(Event(NetworkResult.Error(errorObj)))
-        }
-        else{
-            _functionGetCalenderIngredients.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+
+        handleApiResponse(
+            _functionGetCalenderIngredients
+        ) {
+            remoteDataSource.getCalenderIngredients(formatLocalTimeToServerTime(fromDate),formatLocalTimeToServerTime(toDate))
         }
     }
 
@@ -176,21 +157,12 @@ class CalenderRepositoryImp @Inject constructor(
         get() = _functionDeleteCalenderEntry
 
     override suspend fun deleteCalenderEntry(calenderEntry: CalenderEntry) {
-        _functionDeleteCalenderEntry.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.deleteCalenderEntry(calenderEntry.id)
-        if (response.isSuccessful) {
-            Log.i(TAG, "handleResponse: request made was sucessfull.")
-            sharedPreference.deleteCalendarEntry(calenderEntry)
-            _functionDeleteCalenderEntry.postValue(Event(NetworkResult.Success(response.code())))
-        }
-        else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "handleResponse: request made was sucessfull. \n$errorObj")
-            _functionDeleteCalenderEntry.postValue(Event(NetworkResult.Error(errorObj)))
-        }
-        else{
-            _functionDeleteCalenderEntry.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+
+        handleApiResponse(
+            _functionDeleteCalenderEntry,
+            deleteSharedPreferences = true
+        ) {
+            remoteDataSource.deleteCalenderEntry(calenderEntry.id)
         }
     }
 

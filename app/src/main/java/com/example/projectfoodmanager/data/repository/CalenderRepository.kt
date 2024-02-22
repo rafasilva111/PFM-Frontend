@@ -29,7 +29,7 @@ interface CalenderRepository {
     suspend fun getEntryOnCalender(date: LocalDateTime)
     suspend fun getCalenderDatedEntryList(fromDate: LocalDateTime,toDate:LocalDateTime,cleanseOldRegistry: Boolean)
     suspend fun getCalendarIngredients(fromDate: LocalDateTime, toDate: LocalDateTime)
-    suspend fun deleteCalenderEntry(calenderEntryId: CalenderEntry)
+    suspend fun deleteCalenderEntry(calenderEntry: CalenderEntry)
     suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest)
     suspend fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate)
 
