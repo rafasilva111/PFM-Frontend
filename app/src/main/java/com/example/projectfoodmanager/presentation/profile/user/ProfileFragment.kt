@@ -112,6 +112,7 @@ class ProfileFragment : Fragment() {
         userViewModel.getUserAccount(userId)
         recipeViewModel.getRecipes(userId=userId, pageSize = 15)
 
+
         setUI()
 
 
