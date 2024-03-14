@@ -31,6 +31,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -271,5 +272,11 @@ class RemoteDataSourceImpl @Inject constructor(
 
 	override suspend fun postAppReport(applicationReport: ApplicationReport): Response<Unit> {
 		return apiInterface.postAppReport(applicationReport)
+	}
+
+	/** Goal */
+
+	override suspend fun getIdealWeight(): Response<FitnessReport> {
+		return apiInterface.getFitnessReport()
 	}
 }

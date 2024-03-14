@@ -124,9 +124,7 @@ class LoginFragment : Fragment() {
         changeMenuVisibility(false, activity)
         changeStatusBarColor(true,activity,requireContext())
 
-        binding.fragmentLoginBody.setOnTouchListener(HorizontalSwipeListener(requireContext()) {
-            println()
-        })
+
         /**
          * Navigation
          */

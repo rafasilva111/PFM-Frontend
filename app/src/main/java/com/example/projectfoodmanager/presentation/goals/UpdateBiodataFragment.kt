@@ -1,21 +1,31 @@
+package com.example.projectfoodmanager.presentation.goals
 
-package com.example.projectfoodmanager.presentation.auth.register.tabs
-
+import android.app.Dialog
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
-import com.example.projectfoodmanager.databinding.FragmentRegisterBiodataBinding
+import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.databinding.FragmentUpdateBiodataBinding
 import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment
-import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment.Companion.imgURI
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
+import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.viewmodels.UserViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,95 +34,131 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding) : Fragment() {
+class UpdateBiodataFragment : Fragment() {
+
+
 
     /** binding */
-    lateinit var binding: FragmentRegisterBiodataBinding
+    lateinit var binding: FragmentUpdateBiodataBinding
 
     /** viewModels */
     val userViewModel: UserViewModel by viewModels()
 
-    /** constants */
-    val TAG: String = "BioDataFragment"
+    /** variables */
+    val TAG: String = "UpdateBiodata"
+    private lateinit var user : User
     private var activityLevel : Float = 0.0f
 
+    private lateinit var onBackDialog: MaterialAlertDialogBuilder
+
     /** injects */
-
-    @Inject
-    lateinit var tokenManager: TokenManager
-
     @Inject
     lateinit var sharedPreference: SharedPreference
-    /** adapters */
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentRegisterBiodataBinding.inflate(layoutInflater)
+        savedInstanceState: Bundle?,
+
+        ): View {
+        if (!this::binding.isInitialized) {
+            binding = FragmentUpdateBiodataBinding.inflate(layoutInflater)
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         setUI()
         super.onViewCreated(view, savedInstanceState)
         bindObservers()
     }
 
-    private fun setUI(){
+    override fun onStart() {
+        loadUI()
+        super.onStart()
+    }
+
+
+    private fun setUI() {
+
+
+        /**
+         *  General
+         * */
+
+
+
+        /** Sex Dropdown choices */
+        binding.sexEt.setAdapter(ArrayAdapter(requireContext(),R.layout.dropdown_register_gender,resources.getStringArray(R.array.gender_array)))
 
         /**
          *  Navigation
          * */
 
-        binding.backBtn.setOnClickListener {
+        /** onBack */
 
-            val currentTab = parentBinding.fragmentRegisterTabLayout.selectedTabPosition
-            val nextTab = currentTab - 1
+        onBackDialog = MaterialAlertDialogBuilder(requireContext())
+            .setIcon(R.drawable.ic_logout)
+            .setTitle(getString(R.string.profile_fragment_logout_dialog_title))
+            .setMessage(resources.getString(R.string.logout_confirmation_description))
+            .setPositiveButton(getString(R.string.dialog_yes)) { dialog, _ ->
+                findNavController().navigateUp()
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.dialog_no)) { dialog, _ ->
+                dialog.dismiss()
+            }
 
-            parentBinding.fragmentRegisterViewPager.currentItem= nextTab
-
+        binding.backIB.setOnClickListener {
+            onBackDialog.show()
         }
 
-        binding.finishBtn.setOnClickListener {
+        /** Update */
+
+
+        binding.updateBtn.setOnClickListener {
             if (validation()) {
-                patchUser()
-                if (imgURI != null){
-                    val path = "${FireStorage.user_profile_images}${UUID.randomUUID().toString() +".jpg"}"
-                    Firebase.storage.reference.child(path).putFile(imgURI!!)
-                        .addOnSuccessListener {
-                            RegisterFragment.user.img_source = path
-                            userViewModel.registerUser(RegisterFragment.user)
-                        }
-                        .addOnFailureListener { e ->
-                            Log.d(TAG, "uploadImageToFirebase: " + e)
-                        }
-                }
-                else
-                    userViewModel.registerUser(RegisterFragment.user)
+                userViewModel.updateUser(patchUser())
             }
         }
-
-
 
         /**
          *  Validations
          * */
 
+        /** Sex  */
+        binding.sexEt.setOnFocusChangeListener { view, hasFocus ->
+            if (!hasFocus){
+                if (binding.sexEt.text.isNullOrEmpty()){
+                    binding.sexTL.isErrorEnabled=true
+                    binding.sexTL.error=getString(R.string.invalid_sex)
+                }else{
+                    binding.sexTL.isErrorEnabled=false
+                }
 
-        binding.activityLevelRg.setOnCheckedChangeListener { _, checkedId ->
-            validateActivityLevel()
-            when(checkedId){
-                R.id.op1_RB-> activityLevel= 1.2F
-                R.id.op2_RB-> activityLevel= 1.375F
-                R.id.op3_RB-> activityLevel= 1.465F
-                R.id.op4_RB-> activityLevel= 1.55F
-                R.id.op5_RB-> activityLevel= 1.725F
-                R.id.op6_RB-> activityLevel= 1.9F
+            }else{
+                val imm = binding.sexTL.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view.windowToken, 0)
             }
         }
 
+        /** Activity Level  */
+        binding.activityLevelRg.setOnCheckedChangeListener { _, checkedId ->
+            validateActivityLevel()
+            when (checkedId) {
+                R.id.op1_RB -> activityLevel = 1.2F
+                R.id.op2_RB -> activityLevel = 1.375F
+                R.id.op3_RB -> activityLevel = 1.465F
+                R.id.op4_RB -> activityLevel = 1.55F
+                R.id.op5_RB -> activityLevel = 1.725F
+                R.id.op6_RB -> activityLevel = 1.9F
+            }
+
+        }
+
+        /** Weight  */
         binding.weightEt.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val weightString = binding.weightEt.text.toString()
@@ -135,12 +181,13 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
             }
         }
 
+        /** Height  */
         binding.heightEt.setOnFocusChangeListener { _, hasFocus ->
 
-            if (!hasFocus){
+            if (!hasFocus) {
                 val heightString = binding.heightEt.text.toString()
                 var height = heightString.toFloatOrNull()
-                if (height != null && height in 1.0..3.0){
+                if (height != null && height in 1.0..3.0) {
                     height *= 100F
                     binding.heightEt.setText(height.toString())
                 }
@@ -160,27 +207,99 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
                     }
                 }
             }
+
+
+        }
+    }
+
+
+
+    private fun loadUI() {
+
+        /**
+         *  Load Variables
+         *
+         *  Note:
+         *      This Should be loaded as soon as possible in loadUI
+         *
+         * */
+
+
+        user = sharedPreference.getUserSession()
+
+
+
+        /**
+         *  General
+         * */
+
+        val activity = requireActivity()
+        changeMenuVisibility(false, activity)
+        changeStatusBarColor(true, activity, requireContext())
+
+
+
+        /** Biometric Data  */
+
+        val genders = resources.getStringArray(R.array.gender_array)
+        when(user.sex){
+            SEX.M -> binding.sexEt.setText(genders[0], false)
+            SEX.F-> binding.sexEt.setText(genders[1], false)
+            else -> binding.sexEt.setText(genders[2], false)
         }
 
+        binding.heightEt.setText(user.height.toInt().toString())
+        binding.weightEt.setText(user.weight.toInt().toString())
 
+        when(user.activity_level.toFloat()){
+            1.2F -> binding.activityLevelRg.check(R.id.op1_RB)
+            1.375F -> binding.activityLevelRg.check(R.id.op2_RB)
+            1.465F -> binding.activityLevelRg.check(R.id.op3_RB)
+            1.55F -> binding.activityLevelRg.check(R.id.op4_RB)
+            1.725F -> binding.activityLevelRg.check(R.id.op5_RB)
+            1.9F -> binding.activityLevelRg.check(R.id.op6_RB)
+        }
 
     }
 
-    private fun patchUser() {
+    private fun patchUser(): UserDTO {
+        val userPatchData = UserDTO()
+
+        /** Sex  */
+        val genders = resources.getStringArray(R.array.gender_array)
+        when(binding.sexEt.text.toString()){
+            genders[0] -> userPatchData.sex = SEX.M
+            genders[1] -> userPatchData.sex = SEX.F
+            else -> userPatchData.sex = SEX.NA
+        }
 
         /** Activity Level  */
-        RegisterFragment.user.activity_level = activityLevel
+        userPatchData.activity_level = activityLevel
 
         /** Weight  */
-        RegisterFragment.user.weight =  binding.weightEt.text.toString().toFloat()
+        userPatchData.weight =  binding.weightEt.text.toString().toFloat()
 
         /** Height  */
-        RegisterFragment.user.height = binding.heightEt.text.toString().toFloat()
+        userPatchData.height = binding.heightEt.text.toString().toFloat()
+
+        return userPatchData
     }
 
-    private fun validation(): Boolean {
+
+    fun validation(): Boolean {
         var isValid = true
 
+        /** Sex  */
+        val sexString = binding.heightEt.text.toString()
+        if(sexString.isEmpty()) {
+            binding.sexTL.isErrorEnabled=true
+            binding.sexTL.error=getString(R.string.invalid_sex)
+            isValid = false
+        }
+        else
+            binding.sexTL.isErrorEnabled=false
+
+        /** Height  */
         val heightString = binding.heightEt.text.toString()
         val height = heightString.toFloatOrNull()
 
@@ -204,6 +323,7 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
         val weightString = binding.weightEt.text.toString()
         val weight = weightString.toFloatOrNull()
 
+        /** Weight  */
         when {
             weightString.isBlank() -> {
                 binding.weightTL.isErrorEnabled = true
@@ -264,34 +384,25 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
         return isValid
     }
 
-    private fun goBack() {
-        parentBinding.fragmentRegisterViewPager.currentItem = parentBinding.fragmentRegisterTabLayout.selectedTabPosition - 1
-    }
-
 
     private fun bindObservers() {
-        userViewModel.userRegisterLiveData.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let { result ->
-                when (result) {
+
+        userViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner) { userSessionResponse ->
+            userSessionResponse.getContentIfNotHandled()?.let {
+
+                when (it) {
                     is NetworkResult.Success -> {
-                        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
-                        toast(getString(R.string.user_registered_successfully))
+                        toast("Dados atualizados com sucesso")
+                        findNavController().navigateUp()
+
                     }
                     is NetworkResult.Error -> {
-                        result.error?.let { it->
-
-                            RegisterFragment.errors = it
-                            for (item in it.errors)
-                                when(item.key){
-                                    "username" -> {
-                                        goBack()
-                                    }
-                                    "email" -> goBack()
-                                }
-                        }
+                        toast("Dados não atualizados, alguma coisa se passou.")
                     }
                     is NetworkResult.Loading -> {
-                        // todo falta aqui um loading bar
+                        // show loading bar
+                        //todo falta aqui uma loading bar
+
                     }
                 }
             }

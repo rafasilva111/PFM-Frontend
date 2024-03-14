@@ -3,6 +3,7 @@ package com.example.projectfoodmanager.data.model.user
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplefied
+import com.example.projectfoodmanager.data.model.user.goal.Goal
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -35,7 +36,9 @@ data class User(
     val followers: Int = 0,
     val followeds: Int = 0,
     val followers_request: Int = 0,
-    val followeds_request: Int = 0
+    val followeds_request: Int = 0,
+
+    val goal: Goal? = null
 
 
 

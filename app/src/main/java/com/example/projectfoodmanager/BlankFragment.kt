@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.projectfoodmanager.databinding.FragmentBlankBinding
-import com.example.projectfoodmanager.databinding.FragmentNotificationBinding
-import com.example.projectfoodmanager.presentation.follower.FollowerFragment
 import com.example.projectfoodmanager.util.Helper
+import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
+import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.SharedPreference
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -64,19 +64,15 @@ class BlankFragment : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Notas : setUi deverá ocorrer aqui pois não precisamos de estar sempre a inicializar todas as componentes do fragment ( buttons,
+        // recyclerviews, adapters, etc...), apenas o deveremos fazer quando o fragment é inicializado
         setUI()
-        super.onViewCreated(view, savedInstanceState)
         bindObservers()
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun setUI() {
-        /**
-         *  General
-         * */
 
-        val activity = requireActivity()
-        Helper.changeMenuVisibility(false, activity)
-        Helper.changeStatusBarColor(true, activity, requireContext())
 
     }
 
@@ -84,8 +80,21 @@ class BlankFragment : Fragment() {
 
     }
 
-    override fun onPause() {
-        // usar para atualizar/destruir listas de elementos
-        super.onPause()
+    override fun onStart() {
+        // Notas : loadUI tem que ser carregada sempre que o fragment começa, porque temos de ter sempre a copia dos dados mais frescos sempre
+        // que entramos na view, esta depois poderá ser um load offline ou um load online
+        loadUI()
+        super.onStart()
+    }
+
+    private fun loadUI() {
+        /**
+         *  General
+         * */
+
+        val activity = requireActivity()
+        changeMenuVisibility(false, activity)
+        changeStatusBarColor(false, activity, requireContext())
+
     }
 }

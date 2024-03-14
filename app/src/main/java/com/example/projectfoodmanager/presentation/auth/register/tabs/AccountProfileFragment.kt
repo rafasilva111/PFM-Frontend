@@ -27,13 +27,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.AvatarGVAdapter
 import com.example.projectfoodmanager.BuildConfig
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.Avatar.Companion.avatarArrayList
 import com.example.projectfoodmanager.databinding.FragmentRegisterAccountProfileBinding
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
@@ -42,16 +39,12 @@ import com.example.projectfoodmanager.presentation.auth.register.RegisterFragmen
 import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment.Companion.selectedAvatar
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.ActionResultCodes.GALLERY_REQUEST_CODE
-import com.example.projectfoodmanager.util.FireStorage.user_profile_images
 import com.example.projectfoodmanager.util.Helper.Companion.checkPermission
 import com.example.projectfoodmanager.util.Helper.Companion.randomAvatarImg
 import com.example.projectfoodmanager.util.Helper.Companion.requestPermission
 import com.example.projectfoodmanager.util.Helper.Companion.userIsNot12Old
-import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import com.yalantis.ucrop.UCrop
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.*
@@ -75,7 +68,6 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
     /** viewModels */
 
     /** variables */
-
     private val TAG: String = "RegisterFragment"
 
 
@@ -98,7 +90,6 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
 
         if (!this::binding.isInitialized) {
             binding = FragmentRegisterAccountProfileBinding.inflate(layoutInflater)
-
         }
 
         return binding.root
@@ -118,12 +109,12 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
          *  General
          * */
 
-        val genders = resources.getStringArray(R.array.gender_array)
-        val arrayAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_register_gender,genders)
-
-        binding.sexEt.setAdapter(arrayAdapter)
-
         binding.continueBtn.visibility = View.VISIBLE
+
+        /** Sex Dropdown choices */
+        binding.sexEt.setAdapter(ArrayAdapter(requireContext(),R.layout.dropdown_register_gender,resources.getStringArray(R.array.gender_array)))
+
+
 
 
         /**
@@ -431,9 +422,9 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
         /** Sex  */
         val genders = resources.getStringArray(R.array.gender_array)
         when(binding.sexEt.text.toString()){
-            genders[0] -> RegisterFragment.user.sex = SexConstants.M
-            genders[1] -> RegisterFragment.user.sex = SexConstants.F
-            else -> RegisterFragment.user.sex = SexConstants.NA
+            genders[0] -> RegisterFragment.user.sex = SEX.M
+            genders[1] -> RegisterFragment.user.sex = SEX.F
+            else -> RegisterFragment.user.sex = SEX.NA
         }
 
         /** Img Source  */

@@ -131,8 +131,8 @@ class UserSessionDetailsFragment : Fragment() {
 
         val genders = resources.getStringArray(R.array.gender_array)
         when(user.sex){
-            SexConstants.M -> binding.sexEt.setText(genders[0], false)
-            SexConstants.F-> binding.sexEt.setText(genders[1], false)
+            SEX.M -> binding.sexEt.setText(genders[0], false)
+            SEX.F-> binding.sexEt.setText(genders[1], false)
             else -> binding.sexEt.setText(genders[2], false)
         }
 
@@ -776,9 +776,9 @@ class UserSessionDetailsFragment : Fragment() {
                 /** Sex  */
                 val genders = resources.getStringArray(R.array.gender_array)
                 when(binding.sexEt.text.toString()){
-                    genders[0] -> userDTO.sex = SexConstants.M
-                    genders[1] -> userDTO.sex = SexConstants.F
-                    else -> userDTO.sex = SexConstants.NA
+                    genders[0] -> userDTO.sex = SEX.M
+                    genders[1] -> userDTO.sex = SEX.F
+                    else -> userDTO.sex = SEX.NA
                 }
 
                 /** Img Source  */
