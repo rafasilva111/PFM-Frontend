@@ -3,6 +3,7 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
@@ -13,6 +14,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.List
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
+import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.example.projectfoodmanager.data.model.user.goal.IdealWeight
 
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
@@ -87,7 +89,20 @@ class GoalRepositoryImp @Inject constructor(
         handleApiResponse(
             _functionGetIdealWeightLiveData
         ) {
-            remoteDataSource.getIdealWeight()
+            remoteDataSource.getFitnessReport()
+        }
+    }
+
+
+    private val _createFitnessGoalLiveData = MutableLiveData<Event<NetworkResult<Goal>>>()
+    override val createFitnessGoalLiveData: LiveData<Event<NetworkResult<Goal>>>
+        get() = _createFitnessGoalLiveData
+
+    override suspend fun createFitnessGoal(goalDTO: GoalDTO) {
+        handleApiResponse(
+            _createFitnessGoalLiveData
+        ) {
+            remoteDataSource.createFitnessGoal(goalDTO)
         }
     }
 

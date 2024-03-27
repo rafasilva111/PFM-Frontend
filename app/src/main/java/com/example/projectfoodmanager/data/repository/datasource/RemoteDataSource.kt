@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
@@ -30,6 +31,7 @@ import com.example.projectfoodmanager.data.model.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
+import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.example.projectfoodmanager.data.model.user.goal.IdealWeight
 import retrofit2.Response
 
@@ -114,7 +116,8 @@ interface RemoteDataSource {
 	suspend fun postAppReport(applicationReport: ApplicationReport): Response<Unit>
 
 	/** Goal */
-	suspend fun getIdealWeight(): Response<FitnessReport>
+	suspend fun getFitnessReport(): Response<FitnessReport>
+	suspend fun createFitnessGoal(goalDTO: GoalDTO): Response<Goal>
 
 
 }

@@ -65,7 +65,7 @@
 
 
             <LinearLayout
-                android:id="@+id/linearLayout10"
+                android:id="@+id/stepsTab"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
@@ -73,6 +73,7 @@
                 android:layout_marginBottom="5dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                tools:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
@@ -177,7 +178,7 @@
                     android:layout_marginStart="5dp"
                     android:fontFamily="@font/fredoka_regular"
                     android:gravity="center"
-                    android:text="@string/fragment_register_tab_details_title"
+                    android:text="Hidratos de Carbono"
                     android:textColor="@color/secondary_title"
                     android:textStyle="bold"
                     android:visibility="gone" />
@@ -236,7 +237,7 @@
                     android:layout_marginStart="5dp"
                     android:fontFamily="@font/fredoka_regular"
                     android:gravity="center"
-                    android:text="@string/fragment_register_tab_biodata_title"
+                    android:text="Gordura"
                     android:textColor="@color/secondary_title"
                     android:textStyle="bold"
                     android:visibility="gone" />
@@ -274,6 +275,23 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/fragment_goal_steps_tab_overview"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Visão geral"
+                android:layout_marginBottom="5dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/stepsTab"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:fontFamily="@font/fredoka_regular"
+                android:gravity="center"
+                android:textColor="@color/secondary_title"
+                android:textStyle="bold"
+                android:textSize="20sp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

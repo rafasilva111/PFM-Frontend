@@ -8,20 +8,21 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Goal(
-    @SerializedName("energia")
-    val energy: Float,
-    @SerializedName("proteina_upper_limit")
-    val proteinUpperLimit: Float,
-    @SerializedName("proteina_lower_limit")
-    val proteinLowerLimit: Float,
+    @SerializedName("goal")
     val goal: Float,
-    @SerializedName("gordura_lower_limit")
+    @SerializedName("calories")
+    val energy: Float,
+    @SerializedName("proteins_upper_limit")
+    val proteinUpperLimit: Float,
+    @SerializedName("proteins_lower_limit")
+    val proteinLowerLimit: Float,
+    @SerializedName("fat_lower_limit")
     val fatLowerLimit: Float,
-    @SerializedName("gordura_upper_limit")
+    @SerializedName("fat_upper_limit")
     var fatUpperLimit: Float,
-    @SerializedName("gordura_saturada")
+    @SerializedName("saturated_fat")
     var saturatedFat: Float,
-    @SerializedName("hidratos_carbonos")
+    @SerializedName("carbohydrates")
     var carbohydrates: Float,
 
 ) : Parcelable

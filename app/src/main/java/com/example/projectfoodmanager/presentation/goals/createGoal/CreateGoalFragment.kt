@@ -6,13 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
+import com.example.projectfoodmanager.data.model.user.goal.fitnessReport.GenericReport
 import com.example.projectfoodmanager.databinding.FragmentCreateGoalBinding
 import com.example.projectfoodmanager.util.Helper
+import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
+import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.SharedPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -26,7 +31,7 @@ class CreateGoalFragment : Fragment() {
     /** viewModels */
 
     /** variables */
-    private val TAG: String = "BlankFragment"
+    private val TAG: String = "CreateGoalFragment"
 
 
     /** injects */
@@ -53,7 +58,6 @@ class CreateGoalFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUI()
-        bindObservers()
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -63,8 +67,8 @@ class CreateGoalFragment : Fragment() {
          *  General
          * */
 
-        /** Refresh Goal */
-        userGoal =GoalDTO()
+        binding.fragmentRegisterViewPager.adapter = GoalTabAdapter(requireActivity().supportFragmentManager, lifecycle,binding)
+        binding.fragmentRegisterViewPager.isUserInputEnabled =false
 
         /**
          *  Navigation
@@ -88,14 +92,74 @@ class CreateGoalFragment : Fragment() {
 
         /** Goal  */
 
-        binding.fragmentRegisterViewPager.adapter = GoalTabAdapter(requireActivity().supportFragmentManager, lifecycle,binding)
-        binding.fragmentRegisterViewPager.isUserInputEnabled =false
 
 
 
-    }
+        /**
+         *  Tab Layout
+         * */
 
-    private fun bindObservers() {
+
+        binding.fragmentRegisterTabLayout.removeAllTabs()
+
+        binding.fragmentRegisterTabLayout.addTab(binding.fragmentRegisterTabLayout.newTab().setText("CALORIES"))
+        binding.fragmentRegisterTabLayout.addTab(binding.fragmentRegisterTabLayout.newTab().setText("CARBOHYDRATES"))
+        binding.fragmentRegisterTabLayout.addTab(binding.fragmentRegisterTabLayout.newTab().setText("FAT"))
+        binding.fragmentRegisterTabLayout.addTab(binding.fragmentRegisterTabLayout.newTab().setText("OVERVIEW"))
+
+
+        // enables back from comments
+        binding.fragmentRegisterViewPager.isSaveEnabled = false
+
+        binding.fragmentRegisterTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab != null)
+                    binding.fragmentRegisterViewPager.currentItem = tab.position
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+
+        })
+
+        binding.fragmentRegisterViewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                val selectedTab: TabLayout.Tab? = binding.fragmentRegisterTabLayout.getTabAt(position)
+                when(selectedTab!!.text) {
+                    "CALORIES" -> {
+                        binding.descStep1TV.visibility = View.VISIBLE
+                        binding.descStep2TV.visibility = View.GONE
+                    }
+                    "CARBOHYDRATES" -> {
+                        binding.descStep1TV.visibility = View.GONE
+                        binding.descStep2TV.visibility = View.VISIBLE
+                        binding.descStep3TV.visibility = View.GONE
+                    }
+                    "FAT" -> {
+                        binding.descStep2TV.visibility = View.GONE
+                        binding.descStep3TV.visibility = View.VISIBLE
+
+                        binding.stepsTab.visibility = View.VISIBLE
+                        binding.fragmentGoalStepsTabOverview.visibility = View.GONE
+                    }
+                    "OVERVIEW" -> {
+                        binding.stepsTab.visibility = View.GONE
+                        binding.fragmentGoalStepsTabOverview.visibility = View.VISIBLE
+                    }
+                }
+
+                binding.fragmentRegisterTabLayout.selectTab(selectedTab)
+            }
+        })
+
+
 
     }
 
@@ -113,13 +177,14 @@ class CreateGoalFragment : Fragment() {
          * */
 
         val activity = requireActivity()
-        Helper.changeMenuVisibility(false, activity)
-        Helper.changeStatusBarColor(false, activity, requireContext())
+        changeMenuVisibility(false, activity)
+        changeStatusBarColor(false, activity, requireContext())
 
     }
 
     companion object{
         lateinit var fitnessReport: FitnessReport
+        lateinit var goalGenericReport: GenericReport
         var userGoal: GoalDTO = GoalDTO()
     }
 }

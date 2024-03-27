@@ -5,11 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.databinding.FragmentBlankBinding
+import com.example.projectfoodmanager.presentation.goals.createGoal.CreateGoalFragment
+import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.viewmodels.GoalsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -22,6 +29,7 @@ class BlankFragment : Fragment() {
     private lateinit var binding: FragmentBlankBinding
 
     /** viewModels */
+    private val goalsViewModel: GoalsViewModel by viewModels()
 
     /** variables */
     private val TAG: String = "BlankFragment"
@@ -32,6 +40,23 @@ class BlankFragment : Fragment() {
     lateinit var sharedPreference: SharedPreference
 
     /** adapters */
+
+    /** observers */
+    private val fitnessObserver = Observer<Event<NetworkResult<FitnessReport>>> { networkResultEvent ->
+        networkResultEvent.getContentIfNotHandled()?.let {
+            when (it) {
+                is NetworkResult.Success -> {
+                }
+                is NetworkResult.Error -> {
+                    // Handle error if needed
+                }
+                is NetworkResult.Loading -> {
+                    // Handle loading state if needed
+                }
+            }
+        }
+    }
+
 
 
 
@@ -76,10 +101,6 @@ class BlankFragment : Fragment() {
 
     }
 
-    private fun bindObservers() {
-
-    }
-
     override fun onStart() {
         // Notas : loadUI tem que ser carregada sempre que o fragment começa, porque temos de ter sempre a copia dos dados mais frescos sempre
         // que entramos na view, esta depois poderá ser um load offline ou um load online
@@ -97,4 +118,17 @@ class BlankFragment : Fragment() {
         changeStatusBarColor(false, activity, requireContext())
 
     }
+
+    private fun bindObservers() {
+
+        // bind the observer
+        goalsViewModel.getFitnessModelLiveData.observe(viewLifecycleOwner, fitnessObserver)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // unbind the observer
+        goalsViewModel.getFitnessModelLiveData.removeObserver(fitnessObserver)
+    }
+
 }
