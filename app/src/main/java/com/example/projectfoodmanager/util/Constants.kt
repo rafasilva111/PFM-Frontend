@@ -176,3 +176,16 @@ object ProfileType{
     const val PUBLIC = "PUBLIC"
     const val PRIVATE = "PRIVATE"
 }
+
+
+object Constraints{
+    const val USER_MIN_WEIGHT = 50F
+    const val USER_MAX_WEIGHT = 200F
+    const val USER_MIN_HEIGHT = 120F
+    const val USER_MAX_HEIGHT = 200F
+}
+
+object Error{
+    const val ON_WEIGHT = "weight"
+    const val ON_HEIGHT = "height"
+}

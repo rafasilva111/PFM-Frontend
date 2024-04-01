@@ -122,7 +122,7 @@ class CommentsFragment : Fragment() {
             }
 
             //-> Load Author img
-            loadUserImage(binding.IVcommentBottonImage,userSession.img_source)
+            loadUserImage(binding.IVcommentBottonImage,userSession.imgSource)
 
         }
         else{

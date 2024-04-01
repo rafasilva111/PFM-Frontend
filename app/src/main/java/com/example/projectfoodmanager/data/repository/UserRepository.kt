@@ -83,5 +83,4 @@ interface UserRepository {
     suspend fun deleteNotifications(idListRequest: IdListRequest)
 
 
-
 }

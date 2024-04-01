@@ -1,4 +1,21 @@
 <resources>
+    <!-- Toast Api Responses -->
+    <string name="DATA_NOT_UPDATED">Dados não atualizados, alguma coisa se passou.</string>
+    <string name="DATA_UPDATED">Dados atualizados com sucesso.</string>
+
+
+    <!-- User Model Response -->
+    <string name="USER_ERROR_GENDER_INVALID">Insira um sexo válido.</string>
+
+    <string name="USER_ERROR_HEIGHT_INVALID">Insira uma altura.</string>
+    <string name="USER_ERROR_HEIGHT_INVALID_2">Insira uma entre %1$.1f m and %2$.1f m.</string>
+
+    <string name="USER_ERROR_WEIGHT_INVALID">Insira um peso.</string>
+    <string name="USER_ERROR_WEIGHT_INVALID_2">Insira um peso entre %1$.1f kg a %2$.1f kg.</string>
+
+    <string name="USER_ERROR_ACTIVITY_LEVEL_INVALID">Insira um nivel de atividade.</string>
+
+    <!-- Not Treated -->
     <string name="app_name">GoodBites</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="error_description">Description missing</string>
@@ -10,9 +27,8 @@
     <string name="enter_email">Enter email address</string>
     <string name="enter_password">Enter password</string>
     <string name="enter_birthdate">Enter birthdate address</string>
-    <string name="enter_height">Enter height</string>
-    <string name="enter_weight">Enter weight</string>
-    <string name="enter_activity_level">Enter activity level</string>
+
+
     <string name="invalid_email">Invalid email entered</string>
     <string name="invalid_email_2">This email is already registered</string>
     <string name="invalid_email_3">This email does not have an account</string>
@@ -40,7 +56,7 @@
     <string name="weightEt_problem_1">Please insert a valid weight</string>
     <string name="weight_problem_2">Be careful, those are some weird numbers</string>
     <string name="height_problem">Enter height</string>
-    <string name="invalid_sex">Please selected valid gender.</string>
+
     <string name="txt_error_message">%1$S*</string>
     <string name="no_recipes_found">No recipes found.</string>
     <string name="user_logout_successfully">User logout successfully.</string>
@@ -189,8 +205,7 @@
     <string name="fragment_register_cancel">Cancelar Registro</string>
     <string name="fragment_register_cancel_description">Tens a certeza que queres sair?</string>
     <string name="enter_weight_2">Formato de numero inválido</string>
-    <string name="height_problem_2">Altura entre 1.0m and 3.00m</string>
-    <string name="weight_problem_1">Insira um peso entre 30 a 200 kg</string>
+
     <string name="fragment_login_register_now">New user? Register Now?</string>
     <string name="enter_username">Enter the UserName.</string>
     <string name="enter_birthdate_error">You must be atleast 12 years old.</string>
@@ -201,10 +216,17 @@
     <string name="fragment_update_biodata">Todos estes dados são necessários para aceder a esta aba.</string>
     <string name="fragment_goal_title">Objectivos</string>
     <string name="fragment_goal_create_goal_tab_ideal_weight_title">Peso Ideal</string>
-    <string-array name="gender_array">
+
+
+    <string-array name="default_gender_array">
         <item>Masculino</item>
         <item>Feminino</item>
         <item>Nao responder</item>
+    </string-array>
+
+    <string-array name="gender_array">
+        <item>Masculino</item>
+        <item>Feminino</item>
     </string-array>
 
     <string-array name="tagEntryCalender_array">

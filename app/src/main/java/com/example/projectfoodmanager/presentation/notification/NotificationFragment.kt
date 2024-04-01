@@ -218,7 +218,7 @@ class NotificationFragment : Fragment() {
                             binding.nRequestBadgeTV.text = result.data._metadata.total_items.toString()
 
 
-                            loadUserImage(binding.imgFirstReqIV, result.data.result[0].img_source)
+                            loadUserImage(binding.imgFirstReqIV, result.data.result[0].imgSource)
 
                         }
 

@@ -1,18 +1,12 @@
 package com.example.projectfoodmanager.presentation.goals
 
-import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,16 +14,16 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentUpdateBiodataBinding
-import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Constraints.USER_MAX_HEIGHT
+import com.example.projectfoodmanager.util.Constraints.USER_MAX_WEIGHT
+import com.example.projectfoodmanager.util.Constraints.USER_MIN_HEIGHT
+import com.example.projectfoodmanager.util.Constraints.USER_MIN_WEIGHT
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 import javax.inject.Inject
 
 
@@ -79,7 +73,6 @@ class UpdateBiodataFragment : Fragment() {
         loadUI()
         super.onStart()
     }
-
 
     private fun setUI() {
 
@@ -131,12 +124,7 @@ class UpdateBiodataFragment : Fragment() {
         /** Sex  */
         binding.sexEt.setOnFocusChangeListener { view, hasFocus ->
             if (!hasFocus){
-                if (binding.sexEt.text.isNullOrEmpty()){
-                    binding.sexTL.isErrorEnabled=true
-                    binding.sexTL.error=getString(R.string.invalid_sex)
-                }else{
-                    binding.sexTL.isErrorEnabled=false
-                }
+                validateSex(sexString = binding.sexEt.text.toString())
 
             }else{
                 val imm = binding.sexTL.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -163,21 +151,7 @@ class UpdateBiodataFragment : Fragment() {
             if (!hasFocus) {
                 val weightString = binding.weightEt.text.toString()
                 val weight = weightString.toFloatOrNull()
-
-                when {
-                    weightString.isBlank() -> {
-                        binding.weightTL.isErrorEnabled = true
-                        binding.weightTL.error = getString(R.string.enter_weight)
-                    }
-                    weight == null || weight !in 30F..200F -> {
-                        binding.weightTL.isErrorEnabled = true
-                        binding.weightTL.error = getString(R.string.weight_problem_1)
-                    }
-                    else -> {
-                        binding.weightTL.isErrorEnabled = false
-                    }
-                }
-
+                validateWeight(weightString,weight)
             }
         }
 
@@ -186,33 +160,14 @@ class UpdateBiodataFragment : Fragment() {
 
             if (!hasFocus) {
                 val heightString = binding.heightEt.text.toString()
-                var height = heightString.toFloatOrNull()
-                if (height != null && height in 1.0..3.0) {
-                    height *= 100F
-                    binding.heightEt.setText(height.toString())
-                }
+                val height = heightString.toFloatOrNull()
 
-
-                when {
-                    heightString.isBlank() -> {
-                        binding.heightTL.isErrorEnabled = true
-                        binding.heightTL.error = getString(R.string.enter_height)
-                    }
-                    height == null || height !in 100.0..300.0 -> {
-                        binding.heightTL.isErrorEnabled = true
-                        binding.heightTL.error = getString(R.string.height_problem_2)
-                    }
-                    else -> {
-                        binding.heightTL.isErrorEnabled = false
-                    }
-                }
+                validateHeight(heightString,height)
             }
 
 
         }
     }
-
-
 
     private fun loadUI() {
 
@@ -245,13 +200,12 @@ class UpdateBiodataFragment : Fragment() {
         when(user.sex){
             SEX.M -> binding.sexEt.setText(genders[0], false)
             SEX.F-> binding.sexEt.setText(genders[1], false)
-            else -> binding.sexEt.setText(genders[2], false)
         }
 
         binding.heightEt.setText(user.height.toInt().toString())
         binding.weightEt.setText(user.weight.toInt().toString())
 
-        when(user.activity_level.toFloat()){
+        when(user.activityLevel.toFloat()){
             1.2F -> binding.activityLevelRg.check(R.id.op1_RB)
             1.375F -> binding.activityLevelRg.check(R.id.op2_RB)
             1.465F -> binding.activityLevelRg.check(R.id.op3_RB)
@@ -270,7 +224,6 @@ class UpdateBiodataFragment : Fragment() {
         when(binding.sexEt.text.toString()){
             genders[0] -> userPatchData.sex = SEX.M
             genders[1] -> userPatchData.sex = SEX.F
-            else -> userPatchData.sex = SEX.NA
         }
 
         /** Activity Level  */
@@ -285,64 +238,82 @@ class UpdateBiodataFragment : Fragment() {
         return userPatchData
     }
 
-
     fun validation(): Boolean {
+
         var isValid = true
 
         /** Sex  */
-        val sexString = binding.heightEt.text.toString()
-        if(sexString.isEmpty()) {
-            binding.sexTL.isErrorEnabled=true
-            binding.sexTL.error=getString(R.string.invalid_sex)
-            isValid = false
-        }
-        else
-            binding.sexTL.isErrorEnabled=false
+
+        isValid = isValid and validateSex(sexString = binding.sexEt.text.toString())
+
 
         /** Height  */
         val heightString = binding.heightEt.text.toString()
         val height = heightString.toFloatOrNull()
 
-        when {
-            heightString.isBlank() -> {
-                binding.heightTL.isErrorEnabled = true
-                binding.heightTL.error = getString(R.string.enter_height)
-            }
-            height == null || (height !in 120.0..300.0 && height !in 1.20..3.0) -> {
-                binding.heightTL.isErrorEnabled = true
-                binding.heightTL.error = getString(R.string.height_problem_2)
-            }
-            else -> {
-                if (height in 1.20..3.0)
-                    binding.heightEt.setText((height * 100).toString())
+        isValid = isValid and validateHeight(heightString,height)
 
-                binding.heightTL.isErrorEnabled = false
-            }
-        }
 
+        /** Weight  */
         val weightString = binding.weightEt.text.toString()
         val weight = weightString.toFloatOrNull()
 
-        /** Weight  */
-        when {
-            weightString.isBlank() -> {
-                binding.weightTL.isErrorEnabled = true
-                binding.weightTL.error = getString(R.string.enter_weight)
-                isValid = false
+        isValid = isValid and validateWeight(weightString,weight)
+
+
+        /** Activity Level  */
+        isValid = isValid and validateActivityLevel()
+
+        return isValid
+    }
+
+    private fun validateSex(sexString: String): Boolean {
+        return if(sexString.isEmpty()) {
+            binding.sexTL.isErrorEnabled=true
+            binding.sexTL.error=getString(R.string.USER_ERROR_GENDER_INVALID)
+            false
+        }
+        else{
+            binding.sexTL.isErrorEnabled=false
+            true
+        }
+
+    }
+
+    private fun validateHeight(heightString: String, height: Float?):Boolean {
+        return when {
+            heightString.isBlank() -> {
+                errorOnHeight(getString(R.string.USER_ERROR_HEIGHT_INVALID))
+                false
             }
-            weight == null || weight !in 40F..150F -> {
-                binding.weightTL.isErrorEnabled = true
-                binding.weightTL.error = getString(R.string.weight_problem_1)
-                isValid = false
+            height == null || (height !in USER_MIN_HEIGHT..USER_MAX_HEIGHT && height !in ((USER_MIN_HEIGHT/100))..((USER_MAX_HEIGHT/100))) -> {
+                errorOnHeight(getString(R.string.USER_ERROR_HEIGHT_INVALID_2,USER_MIN_HEIGHT,USER_MAX_HEIGHT))
+                false
+            }
+            else -> {
+                if (height in ((USER_MIN_HEIGHT/100))..((USER_MAX_HEIGHT/100)))
+                    binding.heightEt.setText((height * 100).toString())
+                binding.heightTL.isErrorEnabled = false
+                true
+            }
+        }
+    }
+
+    private fun validateWeight(weightString: String, weight: Float?):Boolean {
+        return when {
+            weightString.isBlank() -> {
+                errorOnWeight(getString(R.string.USER_ERROR_WEIGHT_INVALID))
+                false
+            }
+            weight == null || weight !in USER_MIN_WEIGHT..USER_MAX_WEIGHT -> {
+                errorOnWeight(getString(R.string.USER_ERROR_HEIGHT_INVALID_2,USER_MIN_WEIGHT,USER_MAX_WEIGHT))
+                false
             }
             else -> {
                 binding.weightTL.isErrorEnabled = false
+                true
             }
         }
-
-        isValid = validateActivityLevel() and isValid
-
-        return isValid
     }
 
     private fun validateActivityLevel():Boolean{
@@ -365,7 +336,7 @@ class UpdateBiodataFragment : Fragment() {
             binding.op6RB.setTextColor(resources.getColor(R.color.red,null))
 
             binding.errorActivityLevelTV.visibility=View.VISIBLE
-            binding.errorActivityLevelTV.text=getString(R.string.enter_activity_level)
+            binding.errorActivityLevelTV.text=getString(R.string.USER_ERROR_ACTIVITY_LEVEL_INVALID)
         }else{
             binding.op1RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
             binding.op1RB.setTextColor(resources.getColor(R.color.black,null))
@@ -388,25 +359,46 @@ class UpdateBiodataFragment : Fragment() {
     private fun bindObservers() {
 
         userViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner) { userSessionResponse ->
-            userSessionResponse.getContentIfNotHandled()?.let {
-
-                when (it) {
+            userSessionResponse.getContentIfNotHandled()?.let {result->
+                when (result) {
                     is NetworkResult.Success -> {
-                        toast("Dados atualizados com sucesso")
+                        toast(getString(R.string.DATA_UPDATED))
                         findNavController().navigateUp()
 
                     }
                     is NetworkResult.Error -> {
-                        toast("Dados não atualizados, alguma coisa se passou.")
+                        toast(getString(R.string.DATA_NOT_UPDATED),ToastType.ALERT)
+
+                        result.error?.let{ it->
+                            for (item in it.errors)
+                                when(item.key){
+                                    Error.ON_WEIGHT -> {
+                                        errorOnWeight(item.value[0])
+                                    }
+                                    Error.ON_HEIGHT -> {
+                                        errorOnHeight(item.value[0])
+                                    }
+                                }
+                        }
+
                     }
                     is NetworkResult.Loading -> {
-                        // show loading bar
-                        //todo falta aqui uma loading bar
-
+                        //todo Rui falta aqui uma loading bar
+                        //unshow button/show loading bar
                     }
                 }
             }
         }
+    }
+
+    private fun errorOnWeight(s: String) {
+        binding.weightTL.isErrorEnabled=true
+        binding.weightTL.error=s
+    }
+
+    private fun errorOnHeight(s: String) {
+        binding.heightTL.isErrorEnabled=true
+        binding.heightTL.error=s
     }
 
 }

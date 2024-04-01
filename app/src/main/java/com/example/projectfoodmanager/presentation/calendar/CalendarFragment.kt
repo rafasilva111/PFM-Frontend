@@ -216,7 +216,7 @@ class CalendarFragment : Fragment() {
         }
 
         // checks for user portion
-        if (sharedPreference.getUserSession().user_portion == -1)
+        if (sharedPreference.getUserSession().userPortion == -1)
             askUserPortionPreference()
 
 

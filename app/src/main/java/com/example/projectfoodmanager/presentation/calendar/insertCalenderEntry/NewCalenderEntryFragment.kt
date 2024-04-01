@@ -327,7 +327,7 @@ class NewCalenderEntryFragment : Fragment() {
                 binding.previousBtn.visibility = View.GONE
 
                 //list
-                val recipes = user.getSavedRecipes()
+                val recipes = user.savedRecipes
                 if (recipes.isEmpty()){
                     binding.tvNoRecipes.visibility = View.VISIBLE
                     binding.tvNoRecipes.text = getString(R.string.no_recipes_saved)
@@ -348,7 +348,7 @@ class NewCalenderEntryFragment : Fragment() {
                 binding.nextBtn.visibility = View.VISIBLE
 
                 //list
-                val recipes = user.getLikedRecipes()
+                val recipes = user.likedRecipes
                 if (recipes.isEmpty()){
                     binding.tvNoRecipes.visibility = View.VISIBLE
                     binding.tvNoRecipes.text = getString(R.string.no_recipes_liked)
@@ -368,7 +368,7 @@ class NewCalenderEntryFragment : Fragment() {
 
 
                 //list
-                val recipes = user.getCreateRecipes()
+                val recipes = user.createdRecipes
                 if (recipes.isEmpty()){
                     binding.tvNoRecipes.visibility = View.VISIBLE
                     binding.tvNoRecipes.text = getString(R.string.no_recipes_created)

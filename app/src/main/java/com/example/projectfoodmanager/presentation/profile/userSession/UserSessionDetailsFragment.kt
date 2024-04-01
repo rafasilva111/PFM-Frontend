@@ -119,7 +119,7 @@ class UserSessionDetailsFragment : Fragment() {
 
         /** PERSONAL DATA  */
         //Set Profile Image
-        loadUserImage(binding.profileIV, user.img_source)
+        loadUserImage(binding.profileIV, user.imgSource)
 
 
         val name = user.name.split(" ")
@@ -129,7 +129,7 @@ class UserSessionDetailsFragment : Fragment() {
         savedDate = user.birth_date.toString()
         binding.dateEt.setText(savedDate)
 
-        val genders = resources.getStringArray(R.array.gender_array)
+        val genders = resources.getStringArray(R.array.default_gender_array)
         when(user.sex){
             SEX.M -> binding.sexEt.setText(genders[0], false)
             SEX.F-> binding.sexEt.setText(genders[1], false)
@@ -141,7 +141,7 @@ class UserSessionDetailsFragment : Fragment() {
         binding.heightEt.setText(user.height.toInt().toString())
         binding.weightEt.setText(user.weight.toInt().toString())
 
-        when(user.activity_level.toFloat()){
+        when(user.activityLevel.toFloat()){
             1.2F -> binding.activityLevelRg.check(R.id.op1_RB)
             1.375F -> binding.activityLevelRg.check(R.id.op2_RB)
             1.465F -> binding.activityLevelRg.check(R.id.op3_RB)
@@ -383,7 +383,7 @@ class UserSessionDetailsFragment : Fragment() {
             if (!hasFocus){
                 if (binding.sexEt.text.isNullOrEmpty()){
                     binding.sexTL.isErrorEnabled=true
-                    binding.sexTL.error=getString(R.string.invalid_sex)
+                    binding.sexTL.error=getString(R.string.USER_ERROR_GENDER_INVALID)
                 }else{
                     binding.sexTL.isErrorEnabled=false
                 }
@@ -415,11 +415,11 @@ class UserSessionDetailsFragment : Fragment() {
                 when {
                     weightString.isBlank() -> {
                         binding.weightTL.isErrorEnabled = true
-                        binding.weightTL.error = getString(R.string.enter_weight)
+                        binding.weightTL.error = getString(R.string.USER_ERROR_WEIGHT_INVALID)
                     }
                     weight == null || weight !in 30F..200F -> {
                         binding.weightTL.isErrorEnabled = true
-                        binding.weightTL.error = getString(R.string.weight_problem_1)
+                        binding.weightTL.error = getString(R.string.USER_ERROR_WEIGHT_INVALID_2)
                     }
                     else -> {
                         binding.weightTL.isErrorEnabled = false
@@ -443,11 +443,11 @@ class UserSessionDetailsFragment : Fragment() {
                 when {
                     heightString.isBlank() -> {
                         binding.heightTL.isErrorEnabled = true
-                        binding.heightTL.error = getString(R.string.enter_height)
+                        binding.heightTL.error = getString(R.string.USER_ERROR_HEIGHT_INVALID)
                     }
                     height == null || height !in 100.0..300.0 -> {
                         binding.heightTL.isErrorEnabled = true
-                        binding.heightTL.error = getString(R.string.height_problem_2)
+                        binding.heightTL.error = getString(R.string.USER_ERROR_HEIGHT_INVALID_2)
                     }
                     else -> {
                         binding.heightTL.isErrorEnabled = false
@@ -555,7 +555,7 @@ class UserSessionDetailsFragment : Fragment() {
                 /** Sex  */
                 if(binding.sexEt.text.isNullOrEmpty()) {
                     binding.sexTL.isErrorEnabled=true
-                    binding.sexTL.error=getString(R.string.invalid_sex)
+                    binding.sexTL.error=getString(R.string.USER_ERROR_GENDER_INVALID)
                     isValid = false
                 }
                 else
@@ -571,11 +571,11 @@ class UserSessionDetailsFragment : Fragment() {
                 when {
                     heightString.isBlank() -> {
                         binding.heightTL.isErrorEnabled = true
-                        binding.heightTL.error = getString(R.string.enter_height)
+                        binding.heightTL.error = getString(R.string.USER_ERROR_HEIGHT_INVALID)
                     }
                     height == null || (height !in 120.0..300.0 && height !in 1.20..3.0) -> {
                         binding.heightTL.isErrorEnabled = true
-                        binding.heightTL.error = getString(R.string.height_problem_2)
+                        binding.heightTL.error = getString(R.string.USER_ERROR_HEIGHT_INVALID_2)
                     }
                     else -> {
                         if (height in 1.20..3.0)
@@ -591,12 +591,12 @@ class UserSessionDetailsFragment : Fragment() {
                 when {
                     weightString.isBlank() -> {
                         binding.weightTL.isErrorEnabled = true
-                        binding.weightTL.error = getString(R.string.enter_weight)
+                        binding.weightTL.error = getString(R.string.USER_ERROR_WEIGHT_INVALID)
                         isValid = false
                     }
                     weight == null || weight !in 40F..150F -> {
                         binding.weightTL.isErrorEnabled = true
-                        binding.weightTL.error = getString(R.string.weight_problem_1)
+                        binding.weightTL.error = getString(R.string.USER_ERROR_WEIGHT_INVALID_2)
                         isValid = false
                     }
                     else -> {
@@ -634,7 +634,7 @@ class UserSessionDetailsFragment : Fragment() {
             binding.op6RB.setTextColor(resources.getColor(R.color.red,null))
 
             binding.errorActivityLevelTV.visibility=View.VISIBLE
-            binding.errorActivityLevelTV.text=getString(R.string.enter_activity_level)
+            binding.errorActivityLevelTV.text=getString(R.string.USER_ERROR_ACTIVITY_LEVEL_INVALID)
         }else{
             binding.op1RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
             binding.op1RB.setTextColor(resources.getColor(R.color.black,null))
@@ -774,11 +774,11 @@ class UserSessionDetailsFragment : Fragment() {
                 userDTO.birth_date = binding.dateEt.text.toString()
 
                 /** Sex  */
-                val genders = resources.getStringArray(R.array.gender_array)
+                val genders = resources.getStringArray(R.array.default_gender_array)
                 when(binding.sexEt.text.toString()){
                     genders[0] -> userDTO.sex = SEX.M
                     genders[1] -> userDTO.sex = SEX.F
-                    else -> userDTO.sex = SEX.NA
+                    else -> userDTO.sex = null
                 }
 
                 /** Img Source  */

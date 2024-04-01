@@ -112,7 +112,7 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
         binding.continueBtn.visibility = View.VISIBLE
 
         /** Sex Dropdown choices */
-        binding.sexEt.setAdapter(ArrayAdapter(requireContext(),R.layout.dropdown_register_gender,resources.getStringArray(R.array.gender_array)))
+        binding.sexEt.setAdapter(ArrayAdapter(requireContext(),R.layout.dropdown_register_gender,resources.getStringArray(R.array.default_gender_array)))
 
 
 
@@ -332,7 +332,7 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
             if (!hasFocus){
                 if (binding.sexEt.text.isNullOrEmpty()){
                     binding.sexTL.isErrorEnabled=true
-                    binding.sexTL.error=getString(R.string.invalid_sex)
+                    binding.sexTL.error=getString(R.string.USER_ERROR_GENDER_INVALID)
                 }else{
                     binding.sexTL.isErrorEnabled=false
                 }
@@ -395,7 +395,7 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
         /** Sex  */
         if(binding.sexEt.text.isNullOrEmpty()) {
             binding.sexTL.isErrorEnabled=true
-            binding.sexTL.error=getString(R.string.invalid_sex)
+            binding.sexTL.error=getString(R.string.USER_ERROR_GENDER_INVALID)
             isValid = false
         }
         else
@@ -420,7 +420,7 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
         RegisterFragment.user.birth_date = binding.dateEt.text.toString()
 
         /** Sex  */
-        val genders = resources.getStringArray(R.array.gender_array)
+        val genders = resources.getStringArray(R.array.default_gender_array)
         when(binding.sexEt.text.toString()){
             genders[0] -> RegisterFragment.user.sex = SEX.M
             genders[1] -> RegisterFragment.user.sex = SEX.F

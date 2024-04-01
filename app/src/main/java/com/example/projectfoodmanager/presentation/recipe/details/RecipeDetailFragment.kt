@@ -180,7 +180,7 @@ class RecipeDetailFragment : Fragment() {
         binding.nameAuthorTV.text = formatNameToNameUpper(recipe.created_by.name)
 
         //AUTHOR-> IMG
-        loadUserImage(binding.imageAuthorIV, recipe.created_by.img_source)
+        loadUserImage(binding.imageAuthorIV, recipe.created_by.imgSource)
 
         //AUTHOR-> VERIFIED
         if(recipe.created_by.verified){
@@ -488,10 +488,10 @@ class RecipeDetailFragment : Fragment() {
                         // selecionar as 2/3 primeiras imagens
                         if (result.data != null){
                             try {
-                                result.data.result[0].user?.img_source?.let { img ->
+                                result.data.result[0].user?.imgSource?.let { img ->
                                     loadUserImage(binding.userComent1IV,img)
                                 }
-                                result.data.result[1].user?.img_source?.let { img ->
+                                result.data.result[1].user?.imgSource?.let { img ->
                                     loadUserImage(binding.userComent2IV,img)
                                 }
                             } catch (_: IndexOutOfBoundsException) {

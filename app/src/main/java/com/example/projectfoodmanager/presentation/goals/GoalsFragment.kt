@@ -11,7 +11,6 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentGoalsBinding
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
-import com.example.projectfoodmanager.util.SEX
 import com.example.projectfoodmanager.util.SharedPreference
 import com.example.projectfoodmanager.viewmodels.GoalsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -85,19 +84,15 @@ class GoalsFragment : Fragment() {
         changeMenuVisibility(true, activity)
         changeStatusBarColor(false, activity, requireContext())
 
-        /** Check for Biodata */
 
-        if (user.sex == SEX.NA || user.weight < 0.0 && user.height < 0.0 && user.activity_level < 1.0){
+        /** Check for Bio-data */
+        if (user.sex == null || user.weight < 0.0 && user.height < 0.0 && user.activityLevel < 1.0)
             checkForBiodataDialog.show()
-        }
-
-
 
         /** Check for Goals */
-
-        if (user.goal == null){
+        else if (user.fitnessGoal == null)
             checkForGoalsDialog.show()
-        }
+
 
     }
 

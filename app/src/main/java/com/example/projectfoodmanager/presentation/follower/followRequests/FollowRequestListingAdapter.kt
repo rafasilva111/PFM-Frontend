@@ -63,7 +63,7 @@ class FollowRequestListingAdapter(
         fun bind(user: User) {
 
             //Load Author img
-            Helper.loadUserImage(binding.imgAuthorIV, user.img_source)
+            Helper.loadUserImage(binding.imgAuthorIV, user.imgSource)
 
             binding.nameTV.text= Helper.formatNameToNameUpper(user.name)
 

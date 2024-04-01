@@ -3,21 +3,13 @@ package com.example.projectfoodmanager.presentation.recipe.comments;
 import android.content.Context
 import android.os.Handler
 import android.view.*
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.ItemCommentLayoutBinding
-import com.example.projectfoodmanager.util.FireStorage
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.SharedPreference
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import java.security.AccessController.getContext
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -123,10 +115,10 @@ class CommentsListingAdapter(
 
 
             if (owner) {
-                Helper.loadUserImage(binding.IVAuthorOwner, userSession.img_source)
+                Helper.loadUserImage(binding.IVAuthorOwner, userSession.imgSource)
             }
             else{
-                item.user!!.img_source.let{
+                item.user!!.imgSource.let{
                     Helper.loadUserImage(binding.IVAuthor, it)}
             }
         }

@@ -126,7 +126,7 @@ class SettingsFragment : Fragment() {
 
         binding.SWOfflineMode.isChecked = !isOnline(requireContext())
 
-        binding.SWNotify.isChecked = user.fmc_token == "-1"
+        binding.SWNotify.isChecked = user.fmcToken == "-1"
 
         binding.SWPrivacy.isChecked = user.profile_type== "PRIVATE"
 

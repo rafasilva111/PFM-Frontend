@@ -5,10 +5,10 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -17,7 +17,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 class SharedPreference @Inject constructor(
     private val sharedPreferences : SharedPreferences,
@@ -36,7 +35,9 @@ class SharedPreference @Inject constructor(
     }
 
 
-    // Updating metadata
+    /**
+     *  Metadata
+     * */
 
     // Get
     // Multiple
@@ -72,7 +73,9 @@ class SharedPreference @Inject constructor(
         sharedPreferences.edit().putString(SharedPreferencesConstants.SHARED_PREFENCES_METADATA,gson.toJson(allSharedPreferencesMetadata)).apply()
     }
 
-        // Session
+    /**
+     *  User
+     * */
 
     fun getUserSession(): User {
         return gson.fromJson(
@@ -83,9 +86,9 @@ class SharedPreference @Inject constructor(
 
     fun saveUserRecipesSession(userRecipeBackgrounds: UserRecipeBackgrounds) {
         val user: User = gson.fromJson(sharedPreferences.getString(SharedPreferencesConstants.USER_SESSION,""), User::class.java)
-        user.liked_recipes = userRecipeBackgrounds.result.recipes_liked
-        user.saved_recipes = userRecipeBackgrounds.result.recipes_saved
-        user.created_recipes = userRecipeBackgrounds.result.recipes_created
+        user.likedRecipes = userRecipeBackgrounds.result.recipes_liked
+        user.savedRecipes = userRecipeBackgrounds.result.recipes_saved
+        user.createdRecipes = userRecipeBackgrounds.result.recipes_created
         saveSingleSharedPreferencesMetadata(SharedPreferencesMetadata.RECIPES_BACKGROUND,true)
         saveUserSession(user)
     }
@@ -133,7 +136,9 @@ class SharedPreference @Inject constructor(
         saveUserSession(user)
     }
 
-            // calender entrys
+    /**
+     *  Calender Entrys
+     * */
 
     // Get
 
@@ -281,7 +286,9 @@ class SharedPreference @Inject constructor(
         }
     }
 
-            // Shopping List
+    /**
+     *  Shopping List
+     * */
 
     // Get
 
@@ -320,6 +327,14 @@ class SharedPreference @Inject constructor(
     }
 
 
+    /**
+     *  Fitness Goal
+     * */
 
+    fun saveFitnessGoal(goal: Goal) {
+        val user = getUserSession()
+        user.fitnessGoal = goal
+        saveUserSession(user)
+    }
 
 }

@@ -4,30 +4,20 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
-import com.example.projectfoodmanager.data.model.user.goal.IdealWeight
-
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
-import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
 import retrofit2.Response
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 class GoalRepositoryImp @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
+    private val sharedPreference: SharedPreference,
 ) : GoalRepository {
 
     private val TAG:String = "AuthRepositoryImp"
@@ -41,6 +31,7 @@ class GoalRepositoryImp @Inject constructor(
      */
     private suspend fun <T> handleApiResponse(
         liveData: MutableLiveData<Event<NetworkResult<T>>>,
+        saveSharedPreferences: Boolean = false,
         apiCall: suspend () -> Response<T>
     ) {
         try {
@@ -58,6 +49,12 @@ class GoalRepositoryImp @Inject constructor(
 
                     // Post a success result with the response body
                     liveData.postValue(Event(NetworkResult.Success(responseBody)))
+
+                    if (saveSharedPreferences) {
+                        when (responseBody) {
+                            is Goal -> sharedPreference.saveFitnessGoal(responseBody)
+                        }
+                    }
 
 
                 } else {
@@ -100,7 +97,8 @@ class GoalRepositoryImp @Inject constructor(
 
     override suspend fun createFitnessGoal(goalDTO: GoalDTO) {
         handleApiResponse(
-            _createFitnessGoalLiveData
+            _createFitnessGoalLiveData,
+            saveSharedPreferences = true
         ) {
             remoteDataSource.createFitnessGoal(goalDTO)
         }

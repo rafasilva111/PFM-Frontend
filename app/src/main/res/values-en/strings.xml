@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Toast Api Responses -->
+    <string name="DATA_NOT_UPDATED">Dados não atualizados, alguma coisa se passou.</string>
+    <string name="DATA_UPDATED">Dados atualizados com sucesso.</string>
+
+
+    <!-- User Model Response -->
+    <string name="USER_ERROR_GENDER_INVALID">Insira um sexo válido.</string>
+
+    <string name="USER_ERROR_HEIGHT_INVALID">Insira uma altura.</string>
+    <string name="USER_ERROR_HEIGHT_INVALID_2">Insira uma entre %1$.1f m and %2$.1f m.</string>
+
+    <string name="USER_ERROR_WEIGHT_INVALID">Insira um peso.</string>
+    <string name="USER_ERROR_WEIGHT_INVALID_2">Insira um peso entre %1$.1f kg a %2$.1f kg.</string>
+
+    <string name="USER_ERROR_ACTIVITY_LEVEL_INVALID">Insira um nivel de atividade.</string>
+
+
+    <!-- Not Treated -->
     <string name="app_name">GoodBites</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="error_description">Description missing</string>
@@ -11,9 +29,6 @@
     <string name="enter_email">Enter email address</string>
     <string name="enter_password">Enter password</string>
     <string name="enter_birthdate">Enter birthdate</string>
-    <string name="enter_height">Enter height</string>
-    <string name="enter_weight">Enter weight</string>
-    <string name="enter_activity_level">Enter activity level</string>
     <string name="invalid_email">Invalid email entered</string>
     <string name="invalid_email_2">This email is already registered</string>
     <string name="invalid_email_3">This email does not have an account</string>
@@ -41,7 +56,6 @@
     <string name="weightEt_problem_1">Please insert a valid weight</string>
     <string name="weight_problem_2">Be careful, those are some weird numbers</string>
     <string name="height_problem">Invalid height</string>
-    <string name="invalid_sex">Please select a valid gender.</string>
     <string name="txt_error_message">%1$S*</string>
     <string name="no_recipes_found">No recipes found.</string>
     <string name="user_logout_successfully">User logged out successfully.</string>
@@ -179,9 +193,8 @@
     <string name="three">3</string>
     <string name="enter_birthdate_error">You must be atleast 12 years old.</string>
     <string-array name="gender_array">
-        <item>Male</item>
-        <item>Female</item>
-        <item>Prefer not to answer</item>
+        <item>Masculino</item>
+        <item>Feminino</item>
     </string-array>
 
     <string-array name="tagEntryCalender_array">
