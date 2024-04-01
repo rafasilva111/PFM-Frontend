@@ -104,6 +104,9 @@
             android:id="@+id/action_goalsFragment_to_updateBiodata"
             app:destination="@id/updateBiodata"
             />
+        <action
+            android:id="@+id/action_goalsFragment_to_createGoalFragment"
+            app:destination="@id/createGoalFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -138,7 +141,7 @@
 
     <fragment
         android:id="@+id/updateBiodata"
-        android:name="com.example.projectfoodmanager.presentation.goals.UpdateBiodata"
+        android:name="com.example.projectfoodmanager.presentation.goals.UpdateBiodataFragment"
         android:label="UpdateBiodata" />
     <fragment
         android:id="@+id/newCalenderEntryFragment"
@@ -272,5 +275,9 @@
         android:name="com.example.projectfoodmanager.presentation.profile.userSession.UserSessionDetailsFragment"
         android:label="fragment_session_account_profile"
         tools:layout="@layout/fragment_session_account_profile" />
+    <fragment
+        android:id="@+id/createGoalFragment"
+        android:name="com.example.projectfoodmanager.presentation.goals.createGoal.CreateGoalFragment"
+        android:label="CreateGoalFragment" />
 
 </navigation>

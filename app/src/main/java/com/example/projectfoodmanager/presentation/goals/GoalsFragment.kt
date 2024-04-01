@@ -1,138 +1,153 @@
 package com.example.projectfoodmanager.presentation.goals
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentGoalsBinding
+import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
-import com.example.projectfoodmanager.util.Helper.Companion.isOnline
-import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.viewmodels.UserViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.viewmodels.GoalsViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class GoalsFragment : Fragment() {
-    lateinit var binding: FragmentGoalsBinding
-    val userViewModel: UserViewModel by viewModels()
-    val TAG: String = "ProfileFragment"
+
+    /** binding */
+    private lateinit var binding: FragmentGoalsBinding
+
+    /** viewModels */
+    private val goalsViewModel: GoalsViewModel by viewModels()
+
+    /** variables */
+    private val TAG: String = "GoalsFragment"
+
+    private lateinit  var  checkForBiodataDialog: MaterialAlertDialogBuilder
+    private lateinit var checkForGoalsDialog: MaterialAlertDialogBuilder
+
+    /** injects */
+    @Inject
+    lateinit var sharedPreference: SharedPreference
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
 
-        ): View? {
-        binding = FragmentGoalsBinding.inflate(layoutInflater)
-        changeVisibilityMenu(state = true)
+        ): View {
 
-
-        bindObservers()
+        if (!this::binding.isInitialized) {
+            binding = FragmentGoalsBinding.inflate(layoutInflater)
+        }
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        if (isOnline(requireContext())){
-            //está online
-
-
-            //check for user bio data
-            //authViewModel.getUserSession()
-
-
-        }
-        else{
-            setOfflineText(state = true)
-            //está offline
-            val popUpShow = PopUpFragment()
-            popUpShow.show((activity as AppCompatActivity).supportFragmentManager,"showUpFrgament")
-            //binding.offlineText.visibility = View.VISIBLE
-        }
+        setUI()
         super.onViewCreated(view, savedInstanceState)
+        bindObservers()
     }
-
-    private fun setOfflineText(state: Boolean) {
-        if (state)
-            binding.offlineText.visibility = View.VISIBLE
-        else
-            binding.offlineText.visibility = View.GONE
-    }
-
-
-
 
     override fun onStart() {
-        changeStatusBarColor(false, activity, context)
-
+        loadUI()
         super.onStart()
     }
-    private fun changeVisibilityMenu(state : Boolean){
-        val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
-        if(state){
-            menu!!.visibility=View.VISIBLE
-        }else{
-            menu!!.visibility=View.GONE
-        }
+    private fun loadUI() {
+
+        /**
+         *  Load Variables
+         *
+         *  Note:
+         *      This Should be loaded as soon as possible in loadUI
+         *
+         * */
+
+        val user = sharedPreference.getUserSession()
+
+        /**
+         *  General
+         * */
+
+        val activity = requireActivity()
+        changeMenuVisibility(true, activity)
+        changeStatusBarColor(false, activity, requireContext())
+
+
+        /** Check for Bio-data */
+        if (user.sex == null || user.weight < 0.0 && user.height < 0.0 && user.activityLevel < 1.0)
+            checkForBiodataDialog.show()
+
+        /** Check for Goals */
+        else if (user.fitnessGoal == null)
+            checkForGoalsDialog.show()
+
+
     }
 
-    private fun bindObservers() {
+    private fun setUI() {
 
 
-        userViewModel.userResponseLiveData.observe(viewLifecycleOwner, Observer { userSessionResponse ->
-            userSessionResponse.getContentIfNotHandled()?.let{
 
-                when (it) {
-                    is NetworkResult.Success -> {
-                        if (!(it.data!!.weight != 0.0 && it.data.height != 0.0 && it.data.activity_level != 1.0)){
-                            val dialogBinding : View = layoutInflater.inflate(R.layout.dialog_goals_biodata_confirmation_from_user, null);
+        /**
+         *  General
+         * */
 
-                            val myDialog = Dialog(requireContext())
-                            myDialog.setContentView(dialogBinding)
+        val activity = requireActivity()
+        changeMenuVisibility(true, activity)
+        changeStatusBarColor(true, activity, requireContext())
 
-                            // create alert dialog
-                            myDialog.setCancelable(false)
-                            myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-                            val yesBtn = dialogBinding.findViewById<Button>(R.id.btn_conf_Yes)
-                            val cancelBtn = dialogBinding.findViewById<Button>(R.id.btn_conf_cancel)
+        /** Check for Biodata Dialog */
 
-                            yesBtn.setOnClickListener {
-                                findNavController().navigate(R.id.action_goalsFragment_to_updateBiodata)
-                                myDialog.dismiss()
-                            }
+        checkForBiodataDialog = MaterialAlertDialogBuilder(requireContext())
+            .setIcon(R.drawable.ic_logout) // TODO RUI escolher um icon para aqui
+            .setCancelable(false)
+            .setTitle(getString(R.string.goals_biodata_check_dialog_title))
+            .setMessage(getString(R.string.goals_biodata_check_dialog_desc))
+            .setPositiveButton(getString(R.string.dialog_yes)) { dialog, _ ->
+                findNavController().navigate(R.id.action_goalsFragment_to_updateBiodata)
 
-                            cancelBtn.setOnClickListener {
-                                findNavController().navigateUp()
-                                myDialog.dismiss()
-
-                            }
-
-                            myDialog.show()
-                        }
-                    }
-                    is NetworkResult.Error -> {
-
-                    }
-                    is NetworkResult.Loading -> {
-                        // show loading bar
-
-                    }
-                }
+                dialog.dismiss()
             }
-        })
+            .setNegativeButton(getString(R.string.dialog_no)) { dialog, _ ->
+                findNavController().navigateUp()
+                dialog.dismiss()
+            }
+
+
+
+        /** Check for Goals Dialog */
+
+        checkForGoalsDialog = MaterialAlertDialogBuilder(requireContext())
+            .setIcon(R.drawable.ic_logout) // TODO RUI escolher um icon para aqui
+            .setCancelable(false)
+            .setTitle(getString(R.string.goals_check_dialog_title))
+            .setMessage(getString(R.string.goals_check_dialog_desc))
+            .setPositiveButton(getString(R.string.dialog_yes)) { dialog, _ ->
+                findNavController().navigate(R.id.action_goalsFragment_to_createGoalFragment)
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.dialog_no)) { dialog, _ ->
+                findNavController().navigateUp()
+                dialog.dismiss()
+            }
+
+
+    }
+
+
+    private fun bindObservers() {
     }
 }

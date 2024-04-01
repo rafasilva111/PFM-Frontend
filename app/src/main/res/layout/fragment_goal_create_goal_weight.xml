@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/white"
+    android:fillViewport="true"
+    android:paddingTop="20dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fragment_goal_create_goal_weight_parent_cl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/headline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/fedoka"
+            android:text="Este é o seu peso ideal.\nAgora, escolha o seu objetivo a ser alcançado:"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:helperText="Required"
+            app:helperTextTextColor="@color/main_color"
+            app:layout_constraintEnd_toEndOf="parent"
+
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout19"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headline">
+
+
+            <TextView
+                android:id="@+id/minWeightRecommendedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:fontFamily="@font/fedoka"
+                android:text="Peso Minimo\nRecomendado"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/minWeightRecommendedValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/fedoka"
+                android:text="Value"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/minWeightRecommendedTitle"
+                app:layout_constraintStart_toStartOf="@+id/minWeightRecommendedTitle"
+                app:layout_constraintTop_toBottomOf="@+id/minWeightRecommendedTitle" />
+
+            <TextView
+                android:id="@+id/maxWeightRecommendedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="50dp"
+                android:fontFamily="@font/fedoka"
+                android:text="Peso Maximo\nRecomendado"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/maxWeightRecommendedValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/fedoka"
+                android:text="Value"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/maxWeightRecommendedTitle"
+                app:layout_constraintStart_toStartOf="@+id/maxWeightRecommendedTitle"
+                app:layout_constraintTop_toBottomOf="@+id/maxWeightRecommendedTitle" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/spinner3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/fedoka"
+            android:text="Calorias:"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/goal_rg"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout19" />
+
+        <RadioGroup
+            android:id="@+id/goal_rg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <RadioButton
+                android:id="@+id/maintain_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+
+                android:text="Manter o peso" />
+
+            <TextView
+                android:id="@+id/maintain_weight_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:text=""
+                android:textSize="11sp" />
+
+            <RadioButton
+                android:id="@+id/gain_1"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="15dp"
+                android:text="Ganhar 1 Kg" />
+
+            <TextView
+                android:id="@+id/gain_1_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:text=""
+                android:textSize="11sp" />
+
+
+            <RadioButton
+                android:id="@+id/gain_0_5"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="15dp"
+                android:text="Ganhar 0.5 Kg" />
+
+            <TextView
+                android:id="@+id/gain_05_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:text=""
+                android:textSize="11sp" />
+
+            <RadioButton
+                android:id="@+id/lose_0_5"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="15dp"
+                android:text="Perder  0.5 Kg" />
+
+            <TextView
+                android:id="@+id/lose_0_5_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:text=""
+                android:textSize="11sp" />
+
+
+            <RadioButton
+                android:id="@+id/lose_1"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="15dp"
+                android:text="Perder  1 Kg" />
+
+            <TextView
+                android:id="@+id/lose_1_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:text=""
+                android:textSize="11sp" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/error_activity_level_TV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingStart="10dp"
+            android:text="Error"
+            android:textColor="@color/red"
+            android:textSize="13sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/goal_rg"
+            app:layout_constraintStart_toStartOf="@+id/goal_rg"
+            app:layout_constraintTop_toBottomOf="@+id/goal_rg" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="450dp"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headline"
+            app:layout_constraintVertical_bias="1.0">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/continue_btn"
+                android:layout_width="300dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="50dp"
+                android:background="@drawable/bg_default"
+                android:text="@string/fragment_register_profile"
+                android:textAllCaps="false"
+                android:textAppearance="@style/SubTitleStyle"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/main_color"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/headline2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/titillium_web_regular"
+                android:text="Podes saltar os restantes passos, mas poderás preenche-los mais tarde..."
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:visibility="invisible"
+                app:helperText="Required"
+                app:helperTextTextColor="@color/main_color"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout24"
+                tools:layout_editor_absoluteX="10dp" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout24"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/back_btn"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_default"
+                    android:text="@string/fragment_go_back"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/SubTitleStyle"
+                    android:textColor="@color/white"
+                    android:visibility="invisible"
+                    app:backgroundTint="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/continue_btn"
+                    tools:ignore="MissingConstraints" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/skip_biodata"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/bg_default"
+                    android:text="Finalizar"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/SubTitleStyle"
+                    android:textColor="@color/black"
+                    android:visibility="invisible"
+                    app:backgroundTint="@color/grey"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/back_btn"
+                    app:layout_constraintTop_toBottomOf="@+id/back_btn"
+                    app:layout_constraintVertical_bias="1.0" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/register_progress"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                android:elevation="10dp"
+                android:indeterminateTint="@color/white"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/continue_btn"
+                app:layout_constraintEnd_toEndOf="@+id/continue_btn"
+                app:layout_constraintStart_toStartOf="@+id/continue_btn"
+                app:layout_constraintTop_toTopOf="@+id/continue_btn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/fragment_goal_create_goal_weight_pb"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="250dp"
+        tools:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragment_goal_create_goal_weight_parent_cl">
+
+    </ProgressBar>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

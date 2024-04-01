@@ -14,6 +14,7 @@ import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
 import com.example.projectfoodmanager.util.Helper
+import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,9 +48,6 @@ class RegisterFragment : Fragment() {
 
         }
 
-        binding.fragmentRegisterViewPager.adapter = RegisterTabAdapter(requireActivity().supportFragmentManager, lifecycle,binding)
-        binding.fragmentRegisterViewPager.isUserInputEnabled =false
-
         return binding.root
     }
 
@@ -66,7 +64,14 @@ class RegisterFragment : Fragment() {
          *  General
          * */
 
-        Helper.changeStatusBarColor(false, requireActivity(), requireContext())
+        changeStatusBarColor(false, requireActivity(), requireContext())
+
+        binding.fragmentRegisterViewPager.adapter = RegisterTabAdapter(requireActivity().supportFragmentManager, lifecycle,binding)
+        binding.fragmentRegisterViewPager.isUserInputEnabled =false
+
+        /**
+         *  Navigation
+         * */
 
         binding.backIB.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
@@ -83,6 +88,7 @@ class RegisterFragment : Fragment() {
                 }
                 .show()
         }
+
         /**
          *  Tab Layout
          * */

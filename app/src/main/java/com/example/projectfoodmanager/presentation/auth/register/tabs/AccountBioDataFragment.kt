@@ -111,7 +111,6 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
                 R.id.op5_RB-> activityLevel= 1.725F
                 R.id.op6_RB-> activityLevel= 1.9F
             }
-
         }
 
         binding.weightEt.setOnFocusChangeListener { _, hasFocus ->
@@ -122,11 +121,11 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
                 when {
                     weightString.isBlank() -> {
                         binding.weightTL.isErrorEnabled = true
-                        binding.weightTL.error = getString(R.string.enter_weight)
+                        binding.weightTL.error = getString(R.string.USER_ERROR_WEIGHT_INVALID)
                     }
                     weight == null || weight !in 30F..200F -> {
                         binding.weightTL.isErrorEnabled = true
-                        binding.weightTL.error = getString(R.string.weight_problem_1)
+                        binding.weightTL.error = getString(R.string.USER_ERROR_WEIGHT_INVALID_2)
                     }
                     else -> {
                         binding.weightTL.isErrorEnabled = false
@@ -150,11 +149,11 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
                 when {
                     heightString.isBlank() -> {
                         binding.heightTL.isErrorEnabled = true
-                        binding.heightTL.error = getString(R.string.enter_height)
+                        binding.heightTL.error = getString(R.string.USER_ERROR_HEIGHT_INVALID)
                     }
                     height == null || height !in 100.0..300.0 -> {
                         binding.heightTL.isErrorEnabled = true
-                        binding.heightTL.error = getString(R.string.height_problem_2)
+                        binding.heightTL.error = getString(R.string.USER_ERROR_HEIGHT_INVALID_2)
                     }
                     else -> {
                         binding.heightTL.isErrorEnabled = false
@@ -188,11 +187,11 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
         when {
             heightString.isBlank() -> {
                 binding.heightTL.isErrorEnabled = true
-                binding.heightTL.error = getString(R.string.enter_height)
+                binding.heightTL.error = getString(R.string.USER_ERROR_HEIGHT_INVALID)
             }
             height == null || (height !in 120.0..300.0 && height !in 1.20..3.0) -> {
                 binding.heightTL.isErrorEnabled = true
-                binding.heightTL.error = getString(R.string.height_problem_2)
+                binding.heightTL.error = getString(R.string.USER_ERROR_HEIGHT_INVALID_2)
             }
             else -> {
                 if (height in 1.20..3.0)
@@ -208,12 +207,12 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
         when {
             weightString.isBlank() -> {
                 binding.weightTL.isErrorEnabled = true
-                binding.weightTL.error = getString(R.string.enter_weight)
+                binding.weightTL.error = getString(R.string.USER_ERROR_WEIGHT_INVALID)
                 isValid = false
             }
             weight == null || weight !in 40F..150F -> {
                 binding.weightTL.isErrorEnabled = true
-                binding.weightTL.error = getString(R.string.weight_problem_1)
+                binding.weightTL.error = getString(R.string.USER_ERROR_WEIGHT_INVALID_2)
                 isValid = false
             }
             else -> {
@@ -246,7 +245,7 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
             binding.op6RB.setTextColor(resources.getColor(R.color.red,null))
 
             binding.errorActivityLevelTV.visibility=View.VISIBLE
-            binding.errorActivityLevelTV.text=getString(R.string.enter_activity_level)
+            binding.errorActivityLevelTV.text=getString(R.string.USER_ERROR_ACTIVITY_LEVEL_INVALID)
         }else{
             binding.op1RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
             binding.op1RB.setTextColor(resources.getColor(R.color.black,null))

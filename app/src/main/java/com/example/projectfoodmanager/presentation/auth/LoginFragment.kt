@@ -124,9 +124,7 @@ class LoginFragment : Fragment() {
         changeMenuVisibility(false, activity)
         changeStatusBarColor(true,activity,requireContext())
 
-        binding.fragmentLoginBody.setOnTouchListener(HorizontalSwipeListener(requireContext()) {
-            println()
-        })
+
         /**
          * Navigation
          */
@@ -175,9 +173,9 @@ class LoginFragment : Fragment() {
             response.getContentIfNotHandled()?.let {result ->
                 when (result) {
                     is NetworkResult.Success -> {
-                        if ( result.data!!.fmc_token != "-1")
+                        if ( result.data!!.fmcToken != "-1")
                             FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
-                                if (result.data.fmc_token != token)
+                                if (result.data.fmcToken != token)
                                     userViewModel.updateUser(UserDTO(fmc_token = token))
                             }
 

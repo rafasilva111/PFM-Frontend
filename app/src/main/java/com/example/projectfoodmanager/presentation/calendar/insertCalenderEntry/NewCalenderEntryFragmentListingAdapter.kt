@@ -80,7 +80,7 @@ class NewCalenderEntryFragmentListingAdapter(
             Helper.loadRecipeImage(binding.imageView,item.img_source)
 
             //Load Recipe user img
-            Helper.loadUserImage(binding.imgAuthorIV,item.created_by.img_source)
+            Helper.loadUserImage(binding.imgAuthorIV,item.created_by.imgSource)
 
             binding.idTV.text = item.id.toString()
             binding.nameAuthorTV.text = item.created_by.name

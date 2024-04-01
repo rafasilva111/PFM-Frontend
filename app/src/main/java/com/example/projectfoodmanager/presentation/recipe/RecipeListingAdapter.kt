@@ -4,25 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
-import com.example.projectfoodmanager.util.FireStorage
 import com.example.projectfoodmanager.util.Helper
-import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
-import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToLocalDateTime
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.util.SharedPreference
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 class RecipeListingAdapter(
@@ -79,7 +68,7 @@ class RecipeListingAdapter(
         fun bind(item: Recipe) {
 
             //Load Author img
-            loadUserImage(binding.imgAuthorIV,item.created_by.img_source)
+            loadUserImage(binding.imgAuthorIV,item.created_by.imgSource)
 
             //Load Author name
             binding.nameAuthorTV.text = formatNameToNameUpper(item.created_by.name)
@@ -98,9 +87,9 @@ class RecipeListingAdapter(
             }
 
             // Load Author img
-            if (item.created_by.img_source.isNotEmpty()){
+            if (item.created_by.imgSource.isNotEmpty()){
                 //-> Load Recipe img
-                loadUserImage(binding.imgAuthorIV,item.created_by.img_source)
+                loadUserImage(binding.imgAuthorIV,item.created_by.imgSource)
             }
 
 

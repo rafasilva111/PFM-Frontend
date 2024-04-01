@@ -427,7 +427,7 @@ class FollowerFragment : Fragment() {
                             // set number
                             binding.nRequestBadgeTV.text = it.data._metadata.total_items.toString()
                             // set image
-                            loadUserImage(binding.imgFirstReqIV,it.data.result[0].img_source)
+                            loadUserImage(binding.imgFirstReqIV,it.data.result[0].imgSource)
 
                             binding.requestFollowCV.visibility=View.VISIBLE
                         }

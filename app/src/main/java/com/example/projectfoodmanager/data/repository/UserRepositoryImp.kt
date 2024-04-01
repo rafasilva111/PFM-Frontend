@@ -106,9 +106,9 @@ class UserRepositoryImp @Inject constructor(
             _userRegisterLiveData.postValue(Event(NetworkResult.Success(response.code().toString())))
         }
         else if(response.errorBody()!=null){
-            val teste = response.errorBody()?.string()
-            Log.i(TAG, "loginUser: request made was not sucessfull: $teste")
-            val errorObj = gson.fromJson(teste, ValidationError::class.java)
+            val errorTxt = response.errorBody()?.string()
+            Log.i(TAG, "loginUser: request made was not sucessfull: $errorTxt")
+            val errorObj = gson.fromJson(errorTxt, ValidationError::class.java)
             Log.i(TAG, "loginUser: request made was not sucessfull: $errorObj")
             _userRegisterLiveData.postValue(Event(NetworkResult.Error(error = errorObj)))
         }
@@ -157,6 +157,7 @@ class UserRepositoryImp @Inject constructor(
             val response =remoteDataSource.getUserAuth()
             if (response.isSuccessful && response.body() != null) {
                 Log.i(TAG, "getUserSession: request made was sucessfull.")
+                response.body()!!.initLists()
                 sharedPreference.saveUserSession(response.body()!!)
                 _userLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
             }
@@ -173,6 +174,7 @@ class UserRepositoryImp @Inject constructor(
             return
         }
     }
+
 
     private val _userLogoutResponseLiveData = MutableLiveData<Event<NetworkResult<String>>>()
     override val userLogoutLiveData: LiveData<Event<NetworkResult<String>>>
@@ -212,10 +214,10 @@ class UserRepositoryImp @Inject constructor(
 
         }
         else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "updateUser: request made was not sucessfull: $errorObj")
-
-            _userUpdateResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+            val errorTxt = response.errorBody()?.string()
+            Log.i(TAG, "updateUser: request made was not sucessfull: $errorTxt")
+            val errorObj = gson.fromJson(errorTxt, ValidationError::class.java)
+            _userUpdateResponseLiveData.postValue(Event(NetworkResult.Error(error = errorObj)))
         }
         else{
             _userUpdateResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))

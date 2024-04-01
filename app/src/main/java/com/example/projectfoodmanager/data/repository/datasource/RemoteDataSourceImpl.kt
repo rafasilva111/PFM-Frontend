@@ -3,6 +3,7 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 import com.example.projectfoodmanager.data.api.ApiInterface
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
@@ -31,6 +32,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
+import com.example.projectfoodmanager.data.model.user.goal.Goal
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -271,5 +274,15 @@ class RemoteDataSourceImpl @Inject constructor(
 
 	override suspend fun postAppReport(applicationReport: ApplicationReport): Response<Unit> {
 		return apiInterface.postAppReport(applicationReport)
+	}
+
+	/** Goal */
+
+	override suspend fun getFitnessReport(): Response<FitnessReport> {
+		return apiInterface.getFitnessReport()
+	}
+
+	override suspend fun createFitnessGoal(goalDTO: GoalDTO): Response<Goal> {
+		return apiInterface.createFitnessGoal(goalDTO)
 	}
 }

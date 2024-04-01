@@ -19,8 +19,6 @@ import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.*
-import java.util.*
 import javax.inject.Inject
 
 
@@ -82,11 +80,11 @@ class UserSessionFragment : Fragment() {
          * Info
          */
         //Set Profile Image
-        loadUserImage(binding.profileIV, user.img_source)
+        loadUserImage(binding.profileIV, user.imgSource)
 
         binding.nameTV.text =  getString(R.string.full_name, user.name)
 
-        if (user.user_type!=UserType.VIP)
+        if (user.userType!=UserType.VIP)
             binding.premiumLL.visibility = View.GONE
 
         if (!user.verified)
@@ -100,7 +98,7 @@ class UserSessionFragment : Fragment() {
          * Image offline
          */
 
-        loadUserImage(binding.profileIV, user.img_source)
+        loadUserImage(binding.profileIV, user.imgSource)
 
     }
     private fun setUI() {

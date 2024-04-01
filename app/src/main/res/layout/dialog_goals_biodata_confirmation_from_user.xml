@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="@string/goals_biodata_confirmation"
+        android:text="@string/goals_biodata_check_dialog_desc"
         android:textColor="@color/grey_2"
         android:textSize="16sp"
         android:textAlignment="center"

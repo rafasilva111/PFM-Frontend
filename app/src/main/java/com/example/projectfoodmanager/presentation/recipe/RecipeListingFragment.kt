@@ -148,7 +148,7 @@ class RecipeListingFragment : Fragment() {
         binding.tvName.text = formatNameToNameUpper(getString(R.string.full_name, user.name))
 
         //VIP HEADER
-        if (user.user_type != "V") {
+        if (user.userType != "V") {
             binding.profileCV.foreground = null
             binding.vipIV.visibility = View.INVISIBLE
         }
@@ -158,7 +158,7 @@ class RecipeListingFragment : Fragment() {
             binding.verifyUserHeaderIV.visibility = View.VISIBLE
 
         //Set Profile Image
-        loadUserImage(binding.ivProfilePic, user.img_source)
+        loadUserImage(binding.ivProfilePic, user.imgSource)
 
 
         if (isOnline(requireContext())) {

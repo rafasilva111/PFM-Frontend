@@ -3,6 +3,12 @@ package com.example.projectfoodmanager.data.model.user
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplefied
+import com.example.projectfoodmanager.data.model.user.goal.Goal
+import com.google.gson.Gson
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonObject
+import com.google.gson.annotations.JsonAdapter
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -13,111 +19,109 @@ data class User(
     val birth_date: String?,
     val email: String,
     val description: String,
-    var fmc_token: String?,
+    @SerializedName("fmc_token")
+    var fmcToken: String?,
     val profile_type: String,
     val verified: Boolean,
-    var user_type: String,
-    val user_portion: Int,
-    val img_source: String="",
-    val activity_level: Double = 0.0,
+    @SerializedName("user_type")
+    var userType: String,
+    @SerializedName("user_portion")
+    val userPortion: Int,
+    @SerializedName("img_source")
+    val imgSource: String="",
+    @SerializedName("activity_level")
+    val activityLevel: Double = 0.0,
     val height: Double = 0.0,
     val sex: String?,
     val weight: Double = 0.0,
     val age: Int? = 0,
     val rating: Double = 0.0,
-    var liked_recipes: MutableList<Recipe>? = mutableListOf(),
-    var saved_recipes: MutableList<Recipe>? = mutableListOf(),
-    var created_recipes: MutableList<Recipe>? = mutableListOf(),
-    val created_date: String?,
-    val updated_date: String?,
-
-    val followed_state: String? = null,
+    @SerializedName("liked_recipes")
+    @JvmField
+    var likedRecipes: MutableList<Recipe> = mutableListOf(),
+    @SerializedName("saved_recipes")
+    @JvmField
+    var savedRecipes: MutableList<Recipe> = mutableListOf(),
+    @SerializedName("created_recipes")
+    @JvmField
+    var createdRecipes: MutableList<Recipe> = mutableListOf(),
+    @SerializedName("created_date")
+    val createdDate: String?,
+    @SerializedName("updated_date")
+    val updatedDate: String?,
+    @SerializedName("followed_state")
+    val followedState: String? = null,
     val followers: Int = 0,
     val followeds: Int = 0,
-    val followers_request: Int = 0,
-    val followeds_request: Int = 0
+    @SerializedName("followers_request")
+    val followersRequest: Int = 0,
+    @SerializedName("followeds_request")
+    val followedsRequest: Int = 0,
+    @SerializedName("fitness_goal")
+    var fitnessGoal: Goal? = null
 
 
 
 ) : Parcelable {
-    
-    init {
-        if (this.liked_recipes == null)
-            this.liked_recipes = mutableListOf()
-        if (this.saved_recipes == null)
-            this.saved_recipes = mutableListOf()
-        if (this.created_recipes == null)
-            this.created_recipes = mutableListOf()
+
+    // this is needed
+    fun initLists() {
+        if (likedRecipes == null){
+            likedRecipes = mutableListOf()
+        }
+        if (savedRecipes == null){
+            savedRecipes = mutableListOf()
+        }
+        if (createdRecipes == null){
+            createdRecipes = mutableListOf()
+        }
     }
 
 
     fun checkIfLiked(recipe: Recipe): Int {
-        return if (liked_recipes!=null && liked_recipes!!.isNotEmpty())
-            liked_recipes!!.indexOfFirst { it.id == recipe.id }
+        return if (likedRecipes.isNotEmpty())
+            likedRecipes.indexOfFirst { it.id == recipe.id }
         else
             -1
     }
 
     fun checkIfLiked(recipe: RecipeSimplefied): Int {
-        return if (liked_recipes!=null && liked_recipes!!.isNotEmpty())
-            liked_recipes!!.indexOfFirst { it.id == recipe.id }
+        return if (likedRecipes.isNotEmpty())
+            likedRecipes.indexOfFirst { it.id == recipe.id }
         else
             -1
     }
 
     fun  addLike(recipe: Recipe){
-        if (this.liked_recipes == null)
-            this.liked_recipes = mutableListOf()
         if (this.checkIfLiked(recipe) == -1){
-            liked_recipes!!.add(recipe)
+            likedRecipes.add(recipe)
         }
     }
 
     fun removeLike(recipe: Recipe){
         val index = checkIfLiked(recipe)
         if (index != -1)
-            liked_recipes!!.removeAt(index)
+            likedRecipes.removeAt(index)
     }
 
     fun checkIfSaved(recipe: Recipe): Int {
-        return if (saved_recipes!=null && saved_recipes!!.isNotEmpty())
-            saved_recipes!!.indexOfFirst { it.id == recipe.id }
+        return if (savedRecipes.isNotEmpty())
+            savedRecipes.indexOfFirst { it.id == recipe.id }
         else
             -1
     }
 
     fun addSave(recipe: Recipe){
-        if (this.saved_recipes == null)
-            this.saved_recipes = mutableListOf()
         if (checkIfSaved(recipe) == -1){
-            saved_recipes!!.add(recipe)
+            savedRecipes.add(recipe)
         }
     }
 
     fun removeSave(recipe: Recipe){
         val index = checkIfSaved(recipe)
         if (index != -1)
-            saved_recipes!!.removeAt(index)
+            savedRecipes.removeAt(index)
     }
 
-    fun getLikedRecipes(): MutableList<Recipe>{
-        return if (liked_recipes!=null && liked_recipes!!.isNotEmpty())
-            liked_recipes!!
-        else
-            mutableListOf()
-    }
 
-    fun getSavedRecipes(): MutableList<Recipe>{
-        return if (saved_recipes!=null && saved_recipes!!.isNotEmpty())
-            saved_recipes!!
-        else
-            mutableListOf()
-    }
-
-    fun getCreateRecipes(): MutableList<Recipe>{
-        return if (created_recipes!=null && created_recipes!!.isNotEmpty())
-            created_recipes!!
-        else
-            mutableListOf()
-    }
 }

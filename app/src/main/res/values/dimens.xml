@@ -7,7 +7,7 @@
 
 
     <dimen name="low_1">10dp</dimen>
-    <dimen name="textBTN">16dp</dimen>
+    <dimen name="textBTN">16sp</dimen>
     <dimen name="cardRadius">20dp</dimen>
     <dimen name="title">25sp</dimen>
     <dimen name="title_1">40sp</dimen>

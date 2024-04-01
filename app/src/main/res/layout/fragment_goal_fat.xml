@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.goals.createGoal.tabs.GoalFatFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fragment_goal_create_goal_weight_parent_cl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/headline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/fedoka"
+            android:text="Escolha a percentagem de carbohidratos que quer na sua refeição."
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:helperText="Required"
+            app:helperTextTextColor="@color/main_color"
+            app:layout_constraintEnd_toEndOf="parent"
+
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/spinner3"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/fedoka"
+            android:text="Gordura Saturada"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headline" />
+
+        <RadioGroup
+            android:id="@+id/goal_rg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner3">
+
+            <RadioButton
+                android:id="@+id/seven_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+
+                android:text="7 %" />
+
+            <TextView
+                android:id="@+id/seven_perc_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:text=""
+                android:textSize="11sp" />
+
+            <RadioButton
+                android:id="@+id/ten_perc"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="15dp"
+                android:text="10 %" />
+
+            <TextView
+                android:id="@+id/ten_perc_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="35dp"
+                android:text=""
+                android:textSize="11sp" />
+
+
+
+
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/error_fat_TV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingStart="10dp"
+            android:text="Error"
+            android:textColor="@color/red"
+            android:textSize="13sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/goal_rg"
+            app:layout_constraintStart_toStartOf="@+id/goal_rg"
+            app:layout_constraintTop_toBottomOf="@+id/goal_rg" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="450dp"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headline"
+            app:layout_constraintVertical_bias="1.0">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/continue_btn"
+                android:layout_width="300dp"
+                android:layout_height="48dp"
+                android:layout_marginBottom="50dp"
+                android:background="@drawable/bg_default"
+                android:text="@string/fragment_register_profile"
+                android:textAllCaps="false"
+                android:textAppearance="@style/SubTitleStyle"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/main_color"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/headline2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/titillium_web_regular"
+                android:text="Podes saltar os restantes passos, mas poderás preenche-los mais tarde..."
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:visibility="invisible"
+                app:helperText="Required"
+                app:helperTextTextColor="@color/main_color"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout24" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout24"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/back_btn"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_default"
+                    android:text="@string/fragment_go_back"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/SubTitleStyle"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/continue_btn" />
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/register_progress"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                android:elevation="10dp"
+                android:indeterminateTint="@color/white"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/continue_btn"
+                app:layout_constraintEnd_toEndOf="@+id/continue_btn"
+                app:layout_constraintStart_toStartOf="@+id/continue_btn"
+                app:layout_constraintTop_toTopOf="@+id/continue_btn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

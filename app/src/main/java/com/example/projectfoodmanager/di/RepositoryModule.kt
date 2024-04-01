@@ -74,4 +74,17 @@ object RepositoryModule {
             sharedPreference = sharedPreference
         )
     }
+
+
+    @Provides
+    @Singleton
+    fun providesGoalRepository(
+        remoteDataSource: RemoteDataSourceImpl,
+        sharedPreference: SharedPreference
+    ): GoalRepository {
+        return GoalRepositoryImp(
+            remoteDataSource = remoteDataSource,
+            sharedPreference = sharedPreference
+        )
+    }
 }

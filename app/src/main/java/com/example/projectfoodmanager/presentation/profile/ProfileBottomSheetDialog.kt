@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.view.WindowInsetsController
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentProfileBottomSheetDialogBinding
@@ -100,7 +99,7 @@ class ProfileBottomSheetDialog : BottomSheetDialogFragment() {
 
     private fun setUI() {
 
-        Helper.loadUserImage(binding.imageAuthorIV,objUser.img_source)
+        Helper.loadUserImage(binding.imageAuthorIV,objUser.imgSource)
 
 
         binding.nameAuthorTV.text= Helper.formatNameToNameUpper(objUser.name)

@@ -156,7 +156,7 @@ class FavoritesFragment : Fragment() {
 
         try {
 
-            if (user.liked_recipes.isNullOrEmpty()) {
+            if (user.likedRecipes.isNullOrEmpty()) {
                 Log.d(TAG, "onViewCreated: user.saved_recipes is empty")
                 //Mensagem sem receitas
                 binding.tvNoRecipes.visibility = View.VISIBLE
@@ -165,7 +165,7 @@ class FavoritesFragment : Fragment() {
                 //Mensagem com receitas
                 binding.tvNoRecipes.visibility = View.GONE
 
-                adapter.updateList(user.getLikedRecipes(), user)
+                adapter.updateList(user.likedRecipes, user)
             }
         } catch (e: Exception) {
             Log.d(TAG, "onViewCreated: User had no shared prefences...")
@@ -445,13 +445,13 @@ class FavoritesFragment : Fragment() {
     private fun getChipList(currentTabSelected: View): MutableList<Recipe> {
         when(currentTabSelected){
             binding.chipCurtidas -> {
-                return user.getLikedRecipes()
+                return user.likedRecipes
             }
             binding.chipGuardados ->{
-                return user.getSavedRecipes()
+                return user.savedRecipes
             }
             binding.chipCriadas ->{
-                return user.getCreateRecipes()
+                return user.createdRecipes
             }
             binding.chipCommented ->{
                 recipeViewModel.getRecipesCommentedByUserPaginated(clientId = user.id)

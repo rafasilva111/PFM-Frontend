@@ -9,13 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
-import com.example.projectfoodmanager.presentation.recipe.RecipeListingFragment
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
@@ -155,7 +153,7 @@ class ProfileFragment : Fragment() {
          * Image
          */
 
-        loadUserImage(binding.profileIV, user.img_source)
+        loadUserImage(binding.profileIV, user.imgSource)
 
         /**
          * Info
@@ -163,7 +161,7 @@ class ProfileFragment : Fragment() {
 
         binding.nameTV.text =  getString(R.string.full_name, user.name)
 
-        if(user.user_type == UserType.VIP){
+        if(user.userType == UserType.VIP){
             binding.profileCV.foreground = ContextCompat.getDrawable(requireContext(), R.drawable.border_vip);
             binding.vipIV.visibility=View.VISIBLE
         }

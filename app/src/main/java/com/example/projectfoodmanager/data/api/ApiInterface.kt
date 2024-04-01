@@ -2,6 +2,7 @@ package com.example.projectfoodmanager.data.api
 
 
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
@@ -29,6 +30,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
+import com.example.projectfoodmanager.data.model.user.goal.Goal
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -247,6 +250,13 @@ interface ApiInterface {
     @POST("$API_V1_BASE_URL/app/report")
     suspend fun postAppReport(@Body applicationReport: ApplicationReport): Response<Unit>
 
+    /** Goal */
+
+    @GET("$API_V1_BASE_URL/goals/full_model")
+    suspend fun getFitnessReport(): Response<FitnessReport>
+
+    @POST("$API_V1_BASE_URL/goals")
+    suspend fun createFitnessGoal(@Body goalDTO: GoalDTO): Response<Goal>
 
 
 }

@@ -103,12 +103,12 @@ class FavoritesRecipeListingAdapter(
             }
 
             //AUTHOR-> IMG
-            if (item.created_by.img_source.contains("avatar")){
-                val avatar= Avatar.getAvatarByName(item.created_by.img_source)
+            if (item.created_by.imgSource.contains("avatar")){
+                val avatar= Avatar.getAvatarByName(item.created_by.imgSource)
                 binding.imgAuthorIV.setImageResource(avatar!!.imgId)
 
             }else{
-                val imgRef = Firebase.storage.reference.child(item.created_by.img_source)
+                val imgRef = Firebase.storage.reference.child(item.created_by.imgSource)
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
                     Glide.with(binding.imgAuthorIV.context).load(Uri.toString()).into(binding.imgAuthorIV)
                 }

@@ -95,7 +95,7 @@ class CalendarEntryDetailFragment : Fragment() {
         binding.authorTV.text = objCalEntry.recipe.created_by.name
 
         //-> Load Author img
-        loadUserImage(binding.authorIV, objCalEntry.recipe.created_by.img_source)
+        loadUserImage(binding.authorIV, objCalEntry.recipe.created_by.imgSource)
 
         //-> Load Recipe img
         loadRecipeImage(binding.imageView,objCalEntry.recipe.img_source)
@@ -139,7 +139,7 @@ class CalendarEntryDetailFragment : Fragment() {
         binding.recipeCL.setOnClickListener {
             findNavController().navigate(R.id.action_calendarEntryDetailFragment_to_receitaDetailFragment,Bundle().apply {
                 putParcelable("Recipe",objCalEntry.recipe)
-                putFloat("UserPortion",sharedPreference.getUserSession().user_portion.toFloat())
+                putFloat("UserPortion",sharedPreference.getUserSession().userPortion.toFloat())
             })
         }
 

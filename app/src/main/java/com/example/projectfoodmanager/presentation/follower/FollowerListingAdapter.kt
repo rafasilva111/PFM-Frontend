@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.ItemFollowerLayoutBinding
 import com.example.projectfoodmanager.util.FollowType
@@ -69,7 +68,7 @@ class FollowerListingAdapter(
         fun bind(user: User) {
 
             //Load Author img
-            Helper.loadUserImage(binding.imgAuthorIV, user.img_source)
+            Helper.loadUserImage(binding.imgAuthorIV, user.imgSource)
 
             binding.nameTV.text= Helper.formatNameToNameUpper(user.name)
 
