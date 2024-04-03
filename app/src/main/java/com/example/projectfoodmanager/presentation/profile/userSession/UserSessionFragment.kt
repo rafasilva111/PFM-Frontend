@@ -193,7 +193,6 @@ class UserSessionFragment : Fragment() {
             }
         }
 
-
         userViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { result ->
                 when (result) {

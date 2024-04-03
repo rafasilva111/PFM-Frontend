@@ -6,7 +6,7 @@
     android:id="@+id/recipeTabParentConstraint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".presentation.recipe.details.RecipeTabFragment">
+    tools:context=".presentation.recipe.details.tabs.RecipeTabFragment">
 
 
             <LinearLayout

@@ -74,7 +74,6 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
     private lateinit var imagePickingActivityResultLauncher: ActivityResultLauncher<Intent>
 
     /** injects */
-
     @Inject
     lateinit var sharedPreference: SharedPreference
 

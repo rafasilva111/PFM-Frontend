@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.ActivityResult
@@ -24,6 +26,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -69,6 +72,7 @@ class UserSessionDetailsFragment : Fragment() {
     private val PATCH_AUTH_DATA = 2;
     private lateinit var savedDate:String
     private var activityLevel : Float = 0.0f
+
 
     /** Image */
     var imgURI: Uri? = null
@@ -279,9 +283,11 @@ class UserSessionDetailsFragment : Fragment() {
                     Toast(context).showCustomToast ("Este avatar apenas esta disponivel para VIP!\n Registe-se e depois pode adquirir o VIP", requireActivity(),ToastType.VIP)
                 }else{
                     // Handle the item selection here
-                    RegisterFragment.selectedAvatar = avatar.getName()
+                    selectedAvatar = avatar.getName()
 
-                    binding.profileIV.setImageResource(avatar.imgId)
+                    Glide.with(this)
+                        .load(avatar.imgId)
+                        .into(binding.profileIV)
 
                     binding.profileIV.tag=ImageTagsConstants.SELECTED_AVATAR
                     myDialog.dismiss()
@@ -478,6 +484,11 @@ class UserSessionDetailsFragment : Fragment() {
         }
 
         /** Update BiometricData  */
+        // toggle card visibility
+        binding.biometricTV.setOnClickListener {
+            slideUpDown(binding.biometricDataCL)
+        }
+
         binding.saveBiometricData.setOnClickListener {
 
             binding.weightEt.clearFocus()
@@ -489,7 +500,19 @@ class UserSessionDetailsFragment : Fragment() {
         }
 
         /** Update AuthData  */
+        // toggle card visibility
+        binding.authDataTV.setOnClickListener {
+            binding.userNameET.clearFocus()
+            binding.passEt.clearFocus()
+            binding.passEtConf.clearFocus()
+            slideUpDown(binding.authDataCL)
+        }
+
+
         binding.saveAuthData.setOnClickListener {
+            binding.userNameET.clearFocus()
+            binding.passEt.clearFocus()
+            binding.passEtConf.clearFocus()
             if (validation(PATCH_AUTH_DATA))
                 userViewModel.updateUser(patchUser(PATCH_AUTH_DATA))
         }
@@ -511,7 +534,20 @@ class UserSessionDetailsFragment : Fragment() {
 
 
     }
+    private fun hideKeyboard() {
+        (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view?.windowToken, 0)
+    }
 
+    private fun slideUpDown(view: View) {
+        hideKeyboard()
+        if (!view.isVisible) {
+            // Show Card
+            view.visibility = View.VISIBLE
+        } else {
+            // Hide Card
+            view.visibility = View.GONE
+        }
+    }
 
     private fun validation(type:Int): Boolean {
 
@@ -653,11 +689,6 @@ class UserSessionDetailsFragment : Fragment() {
         return isValid
     }
 
-
-
-
-
-
     /**
      *  Images
      * */
@@ -753,13 +784,10 @@ class UserSessionDetailsFragment : Fragment() {
             .into(binding.profileIV)
     }
 
-
-
     private fun errorOnBirthdate(error: String){
         binding.dateTL.isErrorEnabled=true
         binding.dateTL.error=error
     }
-
 
     private fun patchUser(type:Int):UserDTO{
 
@@ -803,8 +831,6 @@ class UserSessionDetailsFragment : Fragment() {
 
         return userDTO
     }
-
-
 
     private fun showValidationErrors(error: String) {
         toast(String.format(resources.getString(R.string.txt_error_message, error)))

@@ -29,15 +29,16 @@ import javax.inject.Inject
 class ProfileFragment : Fragment() {
 
 
-    // binding
+    /** binding */
     private lateinit var binding: FragmentProfileBinding
 
-    // viewModels
+    /** viewModels */
     private val userViewModel by activityViewModels<UserViewModel>()
     private val recipeViewModel by activityViewModels<RecipeViewModel>()
 
-    // constants
+    /** variables */
     private val TAG: String = "ProfileFragment"
+    private var userId: Int = -1
     private lateinit var user: User
     private lateinit var recipeListed: MutableList<Recipe>
 
@@ -45,7 +46,6 @@ class ProfileFragment : Fragment() {
 
 
     // Pagination
-
     private var nextPage:Boolean = true
     private var currentPage:Int = 1
     private var noMoreRecipesMessagePresented:Boolean = true
@@ -74,13 +74,13 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    // injects
+    /** injects */
     @Inject
     lateinit var tokenManager: TokenManager
     @Inject
     lateinit var sharedPreference: SharedPreference
 
-    // adapters
+    /** adapters */
     private val profileRecipesAdapter by lazy {
         ProfileRecipesAdapter(
             onItemClicked = { selectedDate ->
@@ -102,31 +102,27 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        userId = arguments?.getInt("user_id",-1)!!
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val userId = arguments?.getInt("userId",-1)!!
-
-
-        userViewModel.getUserAccount(userId)
-        recipeViewModel.getRecipes(userId=userId, pageSize = 15)
-
-
         setUI()
-
-
         super.onViewCreated(view, savedInstanceState)
         bindObservers()
     }
 
+    override fun onStart() {
+        loadUI()
+        super.onStart()
+    }
+
     private fun setUI() {
 
-        /**
-         *  General
-         * */
 
-        val activity = requireActivity()
-        changeMenuVisibility(false,activity)
-        changeStatusBarColor(true,activity,requireContext())
 
 
 
@@ -149,27 +145,19 @@ class ProfileFragment : Fragment() {
 
     private fun loadUI(){
 
-        /**
-         * Image
-         */
-
-        loadUserImage(binding.profileIV, user.imgSource)
+        userViewModel.getUserAccount(userId)
+        recipeViewModel.getRecipes(userId=userId, pageSize = 15)
 
         /**
-         * Info
-         */
+         *  General
+         * */
 
-        binding.nameTV.text =  getString(R.string.full_name, user.name)
+        val activity = requireActivity()
+        changeMenuVisibility(false,activity)
+        changeStatusBarColor(true,activity,requireContext())
 
-        if(user.userType == UserType.VIP){
-            binding.profileCV.foreground = ContextCompat.getDrawable(requireContext(), R.drawable.border_vip);
-            binding.vipIV.visibility=View.VISIBLE
-        }
-
-        binding.descTV.text = user.description
-
-        binding.nFollowedsTV.text = user.followeds.toString()
-        binding.nFollowersTV.text = user.followers.toString()
+        if (::user.isInitialized)
+            loadUserUI()
 
         /**
          * Profile Recipes Recycler ScrollView
@@ -184,8 +172,30 @@ class ProfileFragment : Fragment() {
 
     }
 
+    private fun loadUserUI() {
 
+        /**
+         * Image
+         */
 
+        loadUserImage(binding.profileIV, user.imgSource)
+
+        /**
+         * Info
+         */
+
+        binding.nameTV.text = getString(R.string.full_name, user.name)
+
+        if (user.userType == UserType.VIP) {
+            binding.profileCV.foreground = ContextCompat.getDrawable(requireContext(), R.drawable.border_vip);
+            binding.vipIV.visibility = View.VISIBLE
+        }
+
+        binding.descTV.text = user.description
+
+        binding.nFollowedsTV.text = user.followeds.toString()
+        binding.nFollowersTV.text = user.followers.toString()
+    }
 
     private fun showValidationErrors(error: String) {
         toast(String.format(resources.getString(R.string.txt_error_message, error)))
@@ -198,7 +208,7 @@ class ProfileFragment : Fragment() {
                     is NetworkResult.Success -> {
 
                         user = result.data!!
-                        loadUI()
+                        loadUserUI()
                     }
                     is NetworkResult.Error -> {
                         showValidationErrors(result.message.toString())

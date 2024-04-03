@@ -4,32 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.profile.userSession.UserSessionDetailsFragment">
+    tools:context=".presentation.profile.userSession.UserSessionDetailsFragment"
+    >
 
     <include
         android:id="@+id/header"
         layout="@layout/default_header"/>
 
     <ScrollView
+
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/header">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/fragment_session_profile_CL"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/personalDataCL"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/personalDataCV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -37,615 +44,681 @@
                 <TextView
                     android:id="@+id/personalDataTV"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="40dp"
                     android:fontFamily="@font/fredoka_semibold"
+                    android:gravity="center"
                     android:text="Dados Pessoais"
+                    android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:id="@+id/personalDataV"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintEnd_toEndOf="@+id/personalDataTV"
-                    app:layout_constraintStart_toStartOf="@+id/personalDataTV"
-                    app:layout_constraintTop_toBottomOf="@+id/personalDataTV" />
-
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/profileCV"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/personalDataCL"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    app:cardCornerRadius="70dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/personalDataV">
-
-                    <ImageView
-                        android:id="@+id/profileIV"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/img_profile"
-                        android:tag="default_img" />
-                </androidx.cardview.widget.CardView>
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/uploadImageFB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/ellipse_65_color"
-                    android:src="@drawable/upload_image"
-                    android:visibility="visible"
-                    app:borderWidth="0dp"
-                    app:fabCustomSize="50dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/profileCV"
-                    app:layout_constraintEnd_toEndOf="@+id/profileCV"
-                    app:tint="@null" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/first_name_TL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="10dp"
-                    android:hint="@string/first_name"
-                    android:outlineProvider="none"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profileCV"
-                    app:startIconDrawable="@drawable/ic_person">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/first_name_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textCapSentences" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/last_name_TL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:hint="@string/last_name"
-                    app:layout_constraintEnd_toEndOf="@+id/first_name_TL"
-                    app:layout_constraintStart_toStartOf="@+id/first_name_TL"
-                    app:layout_constraintTop_toBottomOf="@+id/first_name_TL"
-                    app:startIconDrawable="@drawable/ic_person">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/last_name_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textCapSentences" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/date_TL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:hint="@string/Birth_Date"
-                    app:layout_constraintEnd_toEndOf="@+id/last_name_TL"
-                    app:layout_constraintStart_toStartOf="@+id/last_name_TL"
-                    app:layout_constraintTop_toBottomOf="@+id/last_name_TL"
-                    app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/date_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:inputType="date" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/sex_TL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    app:layout_constraintEnd_toEndOf="@+id/date_TL"
-                    app:layout_constraintStart_toStartOf="@+id/date_TL"
-                    app:layout_constraintTop_toBottomOf="@+id/date_TL"
-                    app:startIconDrawable="@drawable/gender">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/sex_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:hint="@string/gender"
-                        android:inputType="none" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:id="@+id/actions1LL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="50dp"
-                android:gravity="center"
-                android:layout_marginTop="40dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/personalDataCL" >
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/cancelPersonalData"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_default"
-                    android:text="Cancel"
-                    android:textAllCaps="false"
-                    android:textAppearance="@style/SubTitleStyle"
-                    android:textColor="@color/black"
-                    android:visibility="visible"
-                    app:backgroundTint="@color/grey"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/continue_btn"
-                    tools:ignore="MissingConstraints" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/savePersonalData"
-                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:background="@drawable/bg_default"
-                    android:text="Guardar"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textAppearance="@style/SubTitleStyle"
-                    android:textColor="@color/white"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="-1"
                     android:visibility="visible"
-                    app:backgroundTint="@color/main_color"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/back_btn"
-                    app:layout_constraintTop_toBottomOf="@+id/back_btn"
-                    app:layout_constraintVertical_bias="1.0" />
-            </LinearLayout>
+                    app:layout_constraintEnd_toEndOf="@+id/personalDataTV"
+                    app:layout_constraintStart_toStartOf="@+id/personalDataTV"
+                    app:layout_constraintTop_toTopOf="@+id/personalDataTV">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/biometricDataCL"
+
+                    <View
+                        android:id="@+id/personalDataV"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/profileCV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        app:cardCornerRadius="70dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/personalDataV">
+
+                        <ImageView
+                            android:id="@+id/profileIV"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            android:adjustViewBounds="true"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_profile"
+                            android:tag="default_img" />
+                    </androidx.cardview.widget.CardView>
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/uploadImageFB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/ellipse_65_color"
+                        android:src="@drawable/upload_image"
+                        android:visibility="visible"
+                        app:borderWidth="0dp"
+                        app:fabCustomSize="50dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/profileCV"
+                        app:layout_constraintEnd_toEndOf="@+id/profileCV"
+                        app:tint="@null" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/first_name_TL"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:hint="@string/first_name"
+                        android:outlineProvider="none"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/profileCV"
+                        app:startIconDrawable="@drawable/ic_person">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/first_name_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapSentences" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/last_name_TL"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:hint="@string/last_name"
+                        app:layout_constraintEnd_toEndOf="@+id/first_name_TL"
+                        app:layout_constraintStart_toStartOf="@+id/first_name_TL"
+                        app:layout_constraintTop_toBottomOf="@+id/first_name_TL"
+                        app:startIconDrawable="@drawable/ic_person">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/last_name_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapSentences" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/date_TL"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:hint="@string/Birth_Date"
+                        app:layout_constraintEnd_toEndOf="@+id/last_name_TL"
+                        app:layout_constraintStart_toStartOf="@+id/last_name_TL"
+                        app:layout_constraintTop_toBottomOf="@+id/last_name_TL"
+                        app:startIconDrawable="@drawable/ic_baseline_calendar_month_24">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/date_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:inputType="date" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/sex_TL"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintEnd_toEndOf="@+id/date_TL"
+                        app:layout_constraintStart_toStartOf="@+id/date_TL"
+                        app:layout_constraintTop_toBottomOf="@+id/date_TL"
+                        app:startIconDrawable="@drawable/gender">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/sex_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:hint="@string/gender"
+                            android:inputType="none" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/sex_TL">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/cancelPersonalData"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_default"
+                            android:text="@string/COMMON_RESET"
+                            android:textAllCaps="false"
+                            android:textAppearance="@style/SubTitleStyle"
+                            android:textColor="@color/black"
+                            app:backgroundTint="@color/grey"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/continue_btn" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/savePersonalData"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:background="@drawable/bg_default"
+                            android:text="@string/COMMON_SAVE"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textAppearance="@style/SubTitleStyle"
+                            android:textColor="@color/white"
+                            app:backgroundTint="@color/main_color"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toEndOf="@+id/back_btn"
+                            app:layout_constraintTop_toBottomOf="@+id/back_btn"
+                            app:layout_constraintVertical_bias="1.0" />
+
+                    </LinearLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/biometricDataCV"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="20dp"
+                android:layout_height="wrap_content"
+
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/actions1LL">
+                app:layout_constraintTop_toBottomOf="@+id/personalDataCV">
 
                 <TextView
                     android:id="@+id/biometricTV"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="40dp"
                     android:fontFamily="@font/fredoka_semibold"
+                    android:gravity="center"
                     android:text="Dados Biométricos"
+                    android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:id="@+id/biometricV"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintEnd_toEndOf="@+id/biometricTV"
-                    app:layout_constraintStart_toStartOf="@+id/biometricTV"
-                    app:layout_constraintTop_toBottomOf="@+id/biometricTV" />
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/height_TL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="170dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:hint="Altura"
-                    android:outlineProvider="none"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/biometricV"
-                    app:startIconDrawable="@drawable/ic_height_size">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/height_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/weight_TL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="170dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:hint="Peso"
-                    android:outlineProvider="none"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/height_TL"
-                    app:startIconDrawable="@drawable/ic_weight_size">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/weight_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/spinner2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:fontFamily="@font/fredoka_semibold"
-                    android:text="Atividade:"
-                    android:textColor="#323232"
-                    android:textSize="15sp"
-                    app:layout_constraintEnd_toEndOf="@+id/weight_TL"
-                    app:layout_constraintStart_toStartOf="@+id/height_TL"
-                    app:layout_constraintTop_toBottomOf="@+id/height_TL" />
-
-                <RadioGroup
-                    android:id="@+id/activity_level_rg"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintEnd_toEndOf="@+id/spinner2"
-                    app:layout_constraintStart_toStartOf="@+id/spinner2"
-                    app:layout_constraintTop_toBottomOf="@+id/spinner2">
-
-                    <RadioButton
-                        android:id="@+id/op1_RB"
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:text="Sedentário" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="35dp"
-                        android:text="Pouco ou nenhum exercício"
-                        android:textSize="10sp" />
-
-                    <RadioButton
-                        android:id="@+id/op2_RB"
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="15dp"
-                        android:text="Leve" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="35dp"
-                        android:text="Execício de 1 a 3 vezes"
-                        android:textSize="10sp" />
-
-                    <RadioButton
-                        android:id="@+id/op3_RB"
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="15dp"
-                        android:text="Moderado" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="35dp"
-                        android:text="Execício 4-5 vezes/semana"
-                        android:textSize="10sp" />
-
-                    <RadioButton
-                        android:id="@+id/op4_RB"
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="15dp"
-                        android:text="Ativo" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="35dp"
-                        android:text="Execício diario ou exercícios intensos 3-4 vezes/semana"
-                        android:textSize="10sp" />
-
-                    <RadioButton
-                        android:id="@+id/op5_RB"
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="15dp"
-                        android:text="Muito Ativo" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="35dp"
-                        android:text="Exercícios intensos 6-7 vezes/semana"
-                        android:textSize="10sp" />
-
-                    <RadioButton
-                        android:id="@+id/op6_RB"
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="15dp"
-                        android:text="Extra Ativo" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="35dp"
-                        android:text="Execício intesso diário, ou te um trabalho muito fisico"
-                        android:textSize="10sp" />
-
-                </RadioGroup>
-
-                <TextView
-                    android:id="@+id/error_activity_level_TV"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingStart="10dp"
-                    android:text="Error"
-                    android:textColor="@color/red"
-                    android:textSize="13sp"
-                    android:visibility="invisible"
-                    app:layout_constraintEnd_toEndOf="@+id/activity_level_rg"
-                    app:layout_constraintStart_toStartOf="@+id/activity_level_rg"
-                    app:layout_constraintTop_toBottomOf="@+id/activity_level_rg" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <LinearLayout
-                android:id="@+id/actions2LL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="50dp"
-                android:gravity="center"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/biometricDataCL" >
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/cancelBiometricData"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_default"
-                    android:text="Cancel"
-                    android:textAllCaps="false"
-                    android:textAppearance="@style/SubTitleStyle"
-                    android:textColor="@color/black"
-                    android:visibility="visible"
-                    app:backgroundTint="@color/grey"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/continue_btn"
-                    tools:ignore="MissingConstraints" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/saveBiometricData"
-                    android:layout_width="150dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/biometricDataCL"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:background="@drawable/bg_default"
-                    android:text="Guardar"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textAppearance="@style/SubTitleStyle"
-                    android:textColor="@color/white"
-                    android:visibility="visible"
-                    app:backgroundTint="@color/main_color"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/back_btn"
-                    app:layout_constraintTop_toBottomOf="@+id/back_btn"
-                    app:layout_constraintVertical_bias="1.0" />
-            </LinearLayout>
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="-1"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@+id/biometricTV"
+                    app:layout_constraintStart_toStartOf="@+id/biometricTV"
+                    app:layout_constraintTop_toTopOf="@+id/biometricTV">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/authDataCL"
+
+                    <View
+                        android:id="@+id/biometricV"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/height_TL"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:hint="Altura"
+                        android:outlineProvider="none"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/biometricV"
+                        app:startIconDrawable="@drawable/ic_height_size">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/height_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/weight_TL"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:hint="Peso"
+                        android:outlineProvider="none"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/height_TL"
+                        app:startIconDrawable="@drawable/ic_weight_size">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/weight_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/spinner2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/fredoka_semibold"
+                        android:text="Atividade:"
+                        android:textColor="#323232"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/weight_TL"
+                        app:layout_constraintStart_toStartOf="@+id/height_TL"
+                        app:layout_constraintTop_toBottomOf="@+id/height_TL" />
+
+                    <RadioGroup
+                        android:id="@+id/activity_level_rg"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="@+id/spinner2"
+                        app:layout_constraintStart_toStartOf="@+id/spinner2"
+                        app:layout_constraintTop_toBottomOf="@+id/spinner2">
+
+                        <RadioButton
+                            android:id="@+id/op1_RB"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:text="Sedentário" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="35dp"
+                            android:text="Pouco ou nenhum exercício"
+                            android:textSize="10sp" />
+
+                        <RadioButton
+                            android:id="@+id/op2_RB"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="15dp"
+                            android:text="Leve" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="35dp"
+                            android:text="Execício de 1 a 3 vezes"
+                            android:textSize="10sp" />
+
+                        <RadioButton
+                            android:id="@+id/op3_RB"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="15dp"
+                            android:text="Moderado" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="35dp"
+                            android:text="Execício 4-5 vezes/semana"
+                            android:textSize="10sp" />
+
+                        <RadioButton
+                            android:id="@+id/op4_RB"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="15dp"
+                            android:text="Ativo" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="35dp"
+                            android:text="Execício diario ou exercícios intensos 3-4 vezes/semana"
+                            android:textSize="10sp" />
+
+                        <RadioButton
+                            android:id="@+id/op5_RB"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="15dp"
+                            android:text="Muito Ativo" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="35dp"
+                            android:text="Exercícios intensos 6-7 vezes/semana"
+                            android:textSize="10sp" />
+
+                        <RadioButton
+                            android:id="@+id/op6_RB"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="15dp"
+                            android:text="Extra Ativo" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="35dp"
+                            android:text="Execício intesso diário, ou te um trabalho muito fisico"
+                            android:textSize="10sp" />
+
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/error_activity_level_TV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp"
+                        android:text="Error"
+                        android:textColor="@color/red"
+                        android:textSize="13sp"
+                        android:visibility="invisible"
+                        app:layout_constraintEnd_toEndOf="@+id/activity_level_rg"
+                        app:layout_constraintStart_toStartOf="@+id/activity_level_rg"
+                        app:layout_constraintTop_toBottomOf="@+id/activity_level_rg" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/error_activity_level_TV">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/cancelBiometricData"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_default"
+                            android:text="Reiniciar"
+                            android:textAllCaps="false"
+                            android:textAppearance="@style/SubTitleStyle"
+                            android:textColor="@color/black"
+                            app:backgroundTint="@color/grey"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/continue_btn" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/saveBiometricData"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:background="@drawable/bg_default"
+                            android:text="Guardar"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textAppearance="@style/SubTitleStyle"
+                            android:textColor="@color/white"
+                            app:backgroundTint="@color/main_color"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toEndOf="@+id/back_btn"
+                            app:layout_constraintTop_toBottomOf="@+id/back_btn"
+                            app:layout_constraintVertical_bias="1.0" />
+
+                    </LinearLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/authDataCV"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="20dp"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/actions2LL">
+                app:layout_constraintTop_toBottomOf="@+id/biometricDataCV">
 
                 <TextView
                     android:id="@+id/authDataTV"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="40dp"
                     android:fontFamily="@font/fredoka_semibold"
+                    android:gravity="center"
                     android:text="Dados Autenticação"
+                    android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:id="@+id/authDataV"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintEnd_toEndOf="@+id/authDataTV"
-                    app:layout_constraintStart_toStartOf="@+id/authDataTV"
-                    app:layout_constraintTop_toBottomOf="@+id/authDataTV" />
 
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/user_name_TL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="10dp"
-                    android:hint="@string/user_name"
-                    android:outlineProvider="none"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/authDataV"
-                    app:startIconDrawable="@drawable/ic_person">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/user_name_ET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textCapSentences" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/email_TL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:hint="@string/email"
-                    app:layout_constraintEnd_toEndOf="@+id/user_name_TL"
-                    app:layout_constraintStart_toStartOf="@+id/user_name_TL"
-                    app:layout_constraintTop_toBottomOf="@+id/user_name_TL"
-                    app:startIconDrawable="@drawable/ic_email">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/email_ET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textCapSentences" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/password_TL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:hint="Password"
-                    app:endIconMode="password_toggle"
-                    app:errorIconDrawable="@null"
-                    app:layout_constraintEnd_toEndOf="@+id/email_TL"
-                    app:layout_constraintStart_toStartOf="@+id/email_TL"
-                    app:layout_constraintTop_toBottomOf="@+id/email_TL"
-                    app:startIconDrawable="@drawable/ic_lock">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/pass_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/password_conf_TL"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:hint="Confirmar Password"
-                    app:endIconMode="password_toggle"
-                    app:errorIconDrawable="@null"
-                    app:layout_constraintEnd_toEndOf="@+id/password_TL"
-                    app:layout_constraintStart_toStartOf="@+id/password_TL"
-                    app:layout_constraintTop_toBottomOf="@+id/password_TL"
-                    app:startIconDrawable="@drawable/ic_lock">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/pass_et_conf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:id="@+id/actions3LL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="50dp"
-                android:gravity="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/authDataCL">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/cancelAuthData"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_default"
-                    android:text="Cancel"
-                    android:textAllCaps="false"
-                    android:textAppearance="@style/SubTitleStyle"
-                    android:textColor="@color/black"
-                    android:visibility="visible"
-                    app:backgroundTint="@color/grey"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/continue_btn"
-                    tools:ignore="MissingConstraints" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/saveAuthData"
-                    android:layout_width="150dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/authDataCL"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:background="@drawable/bg_default"
-                    android:text="Guardar"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textAppearance="@style/SubTitleStyle"
-                    android:textColor="@color/white"
-                    android:visibility="visible"
-                    app:backgroundTint="@color/main_color"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="20dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/back_btn"
-                    app:layout_constraintTop_toBottomOf="@+id/back_btn"
-                    app:layout_constraintVertical_bias="1.0" />
-            </LinearLayout>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/biometricDataCV">
+
+
+                    <View
+                        android:id="@+id/authDataV"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/user_name_TL"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:hint="@string/user_name"
+                        android:outlineProvider="none"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/authDataV"
+                        app:startIconDrawable="@drawable/ic_person">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/user_name_ET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textNoSuggestions" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/email_TL"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:hint="@string/email"
+                        app:layout_constraintEnd_toEndOf="@+id/user_name_TL"
+                        app:layout_constraintStart_toStartOf="@+id/user_name_TL"
+                        app:layout_constraintTop_toBottomOf="@+id/user_name_TL"
+                        app:startIconDrawable="@drawable/ic_email">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/email_ET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapSentences" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/password_TL"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:hint="Password"
+                        app:endIconMode="password_toggle"
+                        app:errorIconDrawable="@null"
+                        app:layout_constraintEnd_toEndOf="@+id/email_TL"
+                        app:layout_constraintStart_toStartOf="@+id/email_TL"
+                        app:layout_constraintTop_toBottomOf="@+id/email_TL"
+                        app:startIconDrawable="@drawable/ic_lock">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/pass_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/password_conf_TL"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:hint="Confirmar Password"
+                        app:endIconMode="password_toggle"
+                        app:errorIconDrawable="@null"
+                        app:layout_constraintEnd_toEndOf="@+id/password_TL"
+                        app:layout_constraintStart_toStartOf="@+id/password_TL"
+                        app:layout_constraintTop_toBottomOf="@+id/password_TL"
+                        app:startIconDrawable="@drawable/ic_lock">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/pass_et_conf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/error_data_auth_TV"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp"
+                        android:text="Error"
+                        android:textColor="@color/red"
+                        android:textSize="13sp"
+                        android:visibility="invisible"
+                        app:layout_constraintEnd_toEndOf="@+id/password_conf_TL"
+                        app:layout_constraintStart_toStartOf="@+id/password_conf_TL"
+                        app:layout_constraintTop_toBottomOf="@+id/password_conf_TL" />
+
+                    <LinearLayout
+                        android:id="@+id/actions3LL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:gravity="center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/error_data_auth_TV">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/cancelAuthData"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_default"
+                            android:text="Cancel"
+                            android:textAllCaps="false"
+                            android:textAppearance="@style/SubTitleStyle"
+                            android:textColor="@color/black"
+                            android:visibility="visible"
+                            app:backgroundTint="@color/grey"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/continue_btn"
+                            tools:ignore="MissingConstraints" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/saveAuthData"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:background="@drawable/bg_default"
+                            android:text="Guardar"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textAppearance="@style/SubTitleStyle"
+                            android:textColor="@color/white"
+                            android:visibility="visible"
+                            app:backgroundTint="@color/main_color"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toEndOf="@+id/back_btn"
+                            app:layout_constraintTop_toBottomOf="@+id/back_btn"
+                            app:layout_constraintVertical_bias="1.0" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

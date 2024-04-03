@@ -5,6 +5,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.presentation.recipe.details.tabs.NutritionTabFragment
+import com.example.projectfoodmanager.presentation.recipe.details.tabs.RecipeTabFragment
 
 class RecipeDetailTabAdapter(
     fragmentManager: FragmentManager,
@@ -18,13 +20,10 @@ class RecipeDetailTabAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-
-
         return if(position==0)
             RecipeTabFragment(recipe)
         else
             NutritionTabFragment(recipe)
-
     }
 
 

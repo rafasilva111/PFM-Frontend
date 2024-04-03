@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
     lateinit var navController: NavController
-    val userViewModel: UserViewModel by viewModels()
     val TAG: String = "MainActivity"
 
 
@@ -57,8 +56,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startUI() {
         bottomNav = findViewById(R.id.bottomNavigationView)
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
-        navController = navHostFragment.navController
+        navController = (supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment).navController
         bottomNav.setupWithNavController(navController)
 
     }

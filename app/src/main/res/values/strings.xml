@@ -1,4 +1,9 @@
 <resources>
+
+    <!-- Common -->
+    <string name="COMMON_SAVE">Guardar</string>
+    <string name="COMMON_RESET">Reiniciar</string>
+
     <!-- Toast Api Responses -->
     <string name="DATA_NOT_UPDATED">Dados não atualizados, alguma coisa se passou.</string>
     <string name="DATA_UPDATED">Dados atualizados com sucesso.</string>
@@ -216,6 +221,7 @@
     <string name="fragment_update_biodata">Todos estes dados são necessários para aceder a esta aba.</string>
     <string name="fragment_goal_title">Objectivos</string>
     <string name="fragment_goal_create_goal_tab_ideal_weight_title">Peso Ideal</string>
+
 
 
     <string-array name="default_gender_array">

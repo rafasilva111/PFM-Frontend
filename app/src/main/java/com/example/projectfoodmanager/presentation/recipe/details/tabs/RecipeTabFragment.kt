@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.recipe.details
+package com.example.projectfoodmanager.presentation.recipe.details.tabs
 
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +11,8 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Tag
 import com.example.projectfoodmanager.databinding.FragmentRecipeTabBinding
+import com.example.projectfoodmanager.presentation.recipe.details.IngredientListingAdapter
+import com.example.projectfoodmanager.presentation.recipe.details.PreparationListingAdapter
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.RecipeListingFragmentFilters
 import com.google.android.material.chip.Chip

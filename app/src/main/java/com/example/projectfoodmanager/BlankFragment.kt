@@ -98,7 +98,6 @@ class BlankFragment : Fragment() {
 
     private fun setUI() {
 
-
     }
 
     override fun onStart() {

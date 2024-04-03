@@ -194,8 +194,7 @@ class RecipeDetailFragment : Fragment() {
          *  Navigation
          * */
 
-        //Go CommentsFragment
-
+        // go to Comments
         binding.commentsCV.setOnClickListener {
             findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment,Bundle().apply {
                 putInt("recipe_id", recipe.id)
@@ -203,92 +202,18 @@ class RecipeDetailFragment : Fragment() {
             })
         }
 
+        // go to creater profile
         binding.profileAuthorCV.setOnClickListener{
             findNavController().navigate(R.id.action_receitaDetailFragment_to_profileFragment,Bundle().apply {
                 putInt("user_id",recipe.created_by.id)
             })
         }
 
-
+        // go back
         binding.backIB.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        /* binding.profileAuthorCV.setOnClickListener {
-
-
-            *//*     val view : View = layoutInflater.inflate(R.layout.modal_bottom_sheet_profile,null)
-                   val dialog = BottomSheetDialog(requireContext())
-                   dialog.behavior.state=BottomSheetBehavior.STATE_COLLAPSED
-                   dialog.behavior.peekHeight=650
-
-                   dialog.setContentView(view)
-                   dialog.show()*//*
-            //findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,bundle)
-
-            *//*           findNavController().navigate(R.id.action_receitaDetailFragment_to_profileBottomSheetDialog,Bundle().apply {
-                           putParcelable("User", recipe.created_by)
-                       })*//*
-
-
-
-            *//*        findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,Bundle().apply {
-                          putInt("userID",recipe.created_by.id)
-                          putString("userName",recipe.created_by.name)
-                          putInt("followType",FollowType.FOLLOWERS)
-                      })
-          *//*
-        }*/
-
-/*        //val standardBottomSheet = findViewById<FrameLayout>(R.id.standard_bottom_sheet)
-        val adaptiveViewBS = BottomSheetBehavior.from(binding.adaptiveViewBS!!)
-        // Use this to programmatically apply behavior attributes; eg.
-        adaptiveViewBS.saveFlags = BottomSheetBehavior.SAVE_ALL
-        adaptiveViewBS.setState(STATE_HIDDEN);*/
-
-/*        binding.commentsCV.setOnClickListener {
-
-            //adaptiveViewBS.setState(STATE_COLLAPSED);
-
-            val modalBottomSheet = ModalBottomSheet()
-            modalBottomSheet.show(parentFragmentManager, ModalBottomSheet.TAG)
-
-            //standardBottomSheetBehavior.isDraggable=false
-*//*            val newFragment = CommentsFragment()
-            newFragment.arguments = bundle
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragmentFL, newFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()*//*
-        }*/
-
-    /*   adaptiveViewBS.addBottomSheetCallback(object : BottomSheetCallback() {
-
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                // Handle state change
-                val bottomSheet = BottomSheetBehavior.from(bottomSheet)
-                if (bottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                    // Bottom sheet is in full-screen mode
-                    //toast("FULL-MODE")
-                  //  bottomSheet.isDraggable=false
-                }
-            }
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                // Handle slide offset change
-            }
-        })
-
-        binding.dragHandle!!.setOnTouchListener { view, motionEvent ->
-            if(motionEvent.action == MotionEvent.ACTION_DOWN) {
-              //     adaptiveViewBS.isDraggable=true
-            }
-            true
-        }*/
-
-  /*      binding.IVSource.setOnClickListener {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
-            startActivity(browserIntent)
-        }*/
 
 
 
@@ -322,20 +247,21 @@ class RecipeDetailFragment : Fragment() {
         }
 
 
-        /*
-            Tabs
-        */
+        /**
+         *  Tab Layout
+         * */
 
-        binding.fragmentRecipeDetailTabLayout.removeAllTabs()
-
-        binding.fragmentRecipeDetailTabLayout.addTab(binding.fragmentRecipeDetailTabLayout.newTab().setText("Recipe"))
-        binding.fragmentRecipeDetailTabLayout.addTab(binding.fragmentRecipeDetailTabLayout.newTab().setText("Nutrition"))
+        if (binding.fragmentRecipeDetailTabLayout.tabCount != 2){
+            binding.fragmentRecipeDetailTabLayout.addTab(binding.fragmentRecipeDetailTabLayout.newTab().setText("Recipe"))
+            binding.fragmentRecipeDetailTabLayout.addTab(binding.fragmentRecipeDetailTabLayout.newTab().setText("Nutrition"))
+        }
 
 
         binding.fragmentRecipeDetailViewPager.adapter = RecipeDetailTabAdapter(requireActivity().supportFragmentManager, lifecycle, recipe)
         // enables back from comments
         binding.fragmentRecipeDetailViewPager.isSaveEnabled = false
 
+        
         binding.fragmentRecipeDetailTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab != null)
@@ -534,3 +460,79 @@ class RecipeDetailFragment : Fragment() {
 
 
 }
+
+/* binding.profileAuthorCV.setOnClickListener {
+
+
+           *//*     val view : View = layoutInflater.inflate(R.layout.modal_bottom_sheet_profile,null)
+                   val dialog = BottomSheetDialog(requireContext())
+                   dialog.behavior.state=BottomSheetBehavior.STATE_COLLAPSED
+                   dialog.behavior.peekHeight=650
+
+                   dialog.setContentView(view)
+                   dialog.show()*//*
+            //findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,bundle)
+
+            *//*           findNavController().navigate(R.id.action_receitaDetailFragment_to_profileBottomSheetDialog,Bundle().apply {
+                           putParcelable("User", recipe.created_by)
+                       })*//*
+
+
+
+            *//*        findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,Bundle().apply {
+                          putInt("userID",recipe.created_by.id)
+                          putString("userName",recipe.created_by.name)
+                          putInt("followType",FollowType.FOLLOWERS)
+                      })
+          *//*
+        }*/
+
+/*        //val standardBottomSheet = findViewById<FrameLayout>(R.id.standard_bottom_sheet)
+        val adaptiveViewBS = BottomSheetBehavior.from(binding.adaptiveViewBS!!)
+        // Use this to programmatically apply behavior attributes; eg.
+        adaptiveViewBS.saveFlags = BottomSheetBehavior.SAVE_ALL
+        adaptiveViewBS.setState(STATE_HIDDEN);*/
+
+/*        binding.commentsCV.setOnClickListener {
+
+            //adaptiveViewBS.setState(STATE_COLLAPSED);
+
+            val modalBottomSheet = ModalBottomSheet()
+            modalBottomSheet.show(parentFragmentManager, ModalBottomSheet.TAG)
+
+            //standardBottomSheetBehavior.isDraggable=false
+*//*            val newFragment = CommentsFragment()
+            newFragment.arguments = bundle
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragmentFL, newFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()*//*
+        }*/
+
+/*   adaptiveViewBS.addBottomSheetCallback(object : BottomSheetCallback() {
+
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            // Handle state change
+            val bottomSheet = BottomSheetBehavior.from(bottomSheet)
+            if (bottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                // Bottom sheet is in full-screen mode
+                //toast("FULL-MODE")
+              //  bottomSheet.isDraggable=false
+            }
+        }
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            // Handle slide offset change
+        }
+    })
+
+    binding.dragHandle!!.setOnTouchListener { view, motionEvent ->
+        if(motionEvent.action == MotionEvent.ACTION_DOWN) {
+          //     adaptiveViewBS.isDraggable=true
+        }
+        true
+    }*/
+
+/*      binding.IVSource.setOnClickListener {
+          val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
+          startActivity(browserIntent)
+      }*/
