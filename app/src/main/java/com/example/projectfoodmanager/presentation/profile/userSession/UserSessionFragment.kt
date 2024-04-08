@@ -61,7 +61,7 @@ class UserSessionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         if (isOnline(requireView().context)) {
-            userViewModel.getUserSession()
+            userViewModel.getUserSession(preventDeleteRecipesBackgrounds = true)
         }else{
             user = sharedPreference.getUserSession()
             loadUI()
@@ -198,7 +198,7 @@ class UserSessionFragment : Fragment() {
                 when (result) {
                     is NetworkResult.Success -> {
                         tokenManager.deleteToken()
-                        sharedPreference.deleteUserSession()
+                        sharedPreference.deleteSession()
                         toast("Logout feito com sucesso!")
                         findNavController().navigate(R.id.action_profile_to_login)
                         changeMenuVisibility(false, activity)

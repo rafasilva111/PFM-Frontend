@@ -51,9 +51,9 @@ class UserViewModel @Inject constructor(
     val userResponseLiveData: LiveData<Event<NetworkResult<User>>>
         get() = repository.userLiveData
 
-    fun getUserSession(){
+    fun getUserSession(preventDeleteRecipesBackgrounds: Boolean = false){
         viewModelScope.launch {
-            repository.getUserSession()
+            repository.getUserSession(preventDeleteRecipesBackgrounds = preventDeleteRecipesBackgrounds)
         }
     }
 

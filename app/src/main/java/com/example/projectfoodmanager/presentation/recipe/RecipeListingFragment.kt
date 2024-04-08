@@ -1,9 +1,14 @@
 package com.example.projectfoodmanager.presentation.recipe
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +27,7 @@ import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
+import com.example.projectfoodmanager.notification.MyFirebaseMessagingService
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
@@ -61,7 +67,18 @@ class RecipeListingFragment : Fragment() {
     private var refreshPage: Int = 0
     private var oldFilerTag: String =""
 
-
+    private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            Log.d(TAG, "onReceive: ")
+            intent?.let {
+                if (it.action == MyFirebaseMessagingService.ACTION_NOTIFICATION_RECEIVED) {
+                    val notificationData = it.getStringExtra(MyFirebaseMessagingService.EXTRA_NOTIFICATION_DATA)
+                    // Handle your notification data here
+                    // For example, update UI, show a dialog, etc.
+                }
+            }
+        }
+    }
 
     // injects
     @Inject
@@ -127,6 +144,11 @@ class RecipeListingFragment : Fragment() {
         setUI()
         super.onViewCreated(view, savedInstanceState)
 
+    }
+
+    override fun onStart() {
+        loadUI()
+        super.onStart()
     }
 
     private fun setUI() {
@@ -254,7 +276,7 @@ class RecipeListingFragment : Fragment() {
 
 
             if (sortedBy.isNotEmpty())
-                activateSerchChip(chipGroup)
+                activateSearchChip(chipGroup)
             else{
                 chipSelected = chipGroup.findViewById(chipGroup.checkedChipId)
                 sortedBy = RecipesSortingType.VERIFIED
@@ -318,7 +340,34 @@ class RecipeListingFragment : Fragment() {
         }
     }
 
-    private fun activateSerchChip(chipGroup: ChipGroup) {
+    private fun loadUI() {
+
+        /**
+         *  General
+         * */
+
+        val activity = requireActivity()
+        changeMenuVisibility(true, activity)
+        changeStatusBarColor(false, activity, requireContext())
+
+
+
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        // Register the broadcast receiver
+        context?.registerReceiver(notificationReceiver, IntentFilter(MyFirebaseMessagingService.ACTION_NOTIFICATION_RECEIVED))
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Unregister the broadcast receiver to avoid memory leaks
+        context?.unregisterReceiver(notificationReceiver)
+    }
+
+    private fun activateSearchChip(chipGroup: ChipGroup) {
         for (i in 0 until chipGroup.childCount) {
             val chip: Chip = chipGroup.getChildAt(i) as Chip
 
@@ -520,7 +569,7 @@ class RecipeListingFragment : Fragment() {
                         for (item in recipeListed.toMutableList()) {
                             if (item.id == it.data) {
                                 item.likes++
-                                sharedPreference.addLikeToUserSession(item)
+                                sharedPreference.addRecipeToLikedList(item)
                                 adapter.updateItem(recipeListed.indexOf(item), item)
                                 break
                             }
@@ -546,7 +595,7 @@ class RecipeListingFragment : Fragment() {
                         for (item in recipeListed.toMutableList()) {
                             if (item.id == it.data) {
                                 item.likes--
-                                sharedPreference.removeLikeFromUserSession(item)
+                                sharedPreference.removeRecipeFromLikedList(item)
                                 adapter.updateItem(recipeListed.indexOf(item), item)
                                 break
                             }
@@ -653,6 +702,7 @@ class RecipeListingFragment : Fragment() {
             recipeViewModel.getRecipes(searchTag = tag, by = sortedBy)
         }
     }
+
 
     private fun updateView(currentTabSelected: View) {
 

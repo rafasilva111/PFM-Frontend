@@ -1,9 +1,7 @@
 package com.example.projectfoodmanager.presentation.profile.userSession
 
 import android.app.Dialog
-import android.content.ContentValues
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -44,6 +42,9 @@ import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.util.Helper.Companion.userIsNot12Old
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
 import com.yalantis.ucrop.UCrop
 import java.io.*
 import java.lang.ref.WeakReference
@@ -74,6 +75,7 @@ class UserSessionDetailsFragment : Fragment() {
     private var activityLevel : Float = 0.0f
 
 
+
     /** Image */
     var imgURI: Uri? = null
     var selectedAvatar: String? = null
@@ -83,6 +85,8 @@ class UserSessionDetailsFragment : Fragment() {
     lateinit var tokenManager: TokenManager
     @Inject
     lateinit var sharedPreference: SharedPreference
+    @Inject
+    lateinit var firebaseMessaging: FirebaseMessaging
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -105,7 +109,7 @@ class UserSessionDetailsFragment : Fragment() {
         setUI()
 
         if (isOnline(requireView().context)) {
-            userViewModel.getUserSession()
+            userViewModel.getUserSession(preventDeleteRecipesBackgrounds = true)
         }else{
             user = sharedPreference.getUserSession()
             loadUI()
@@ -197,6 +201,13 @@ class UserSessionDetailsFragment : Fragment() {
         val arrayAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_register_gender,genders)
 
         binding.sexEt.setAdapter(arrayAdapter)
+
+
+        /**
+         *  Notifications
+         * */
+
+
 
 
         /**
@@ -534,6 +545,8 @@ class UserSessionDetailsFragment : Fragment() {
 
 
     }
+
+
     private fun hideKeyboard() {
         (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view?.windowToken, 0)
     }

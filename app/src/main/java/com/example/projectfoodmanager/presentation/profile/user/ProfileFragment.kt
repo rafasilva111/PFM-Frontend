@@ -123,9 +123,6 @@ class ProfileFragment : Fragment() {
     private fun setUI() {
 
 
-
-
-
         /**
          * Buttons
          */

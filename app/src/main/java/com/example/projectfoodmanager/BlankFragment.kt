@@ -34,6 +34,7 @@ class BlankFragment : Fragment() {
     /** variables */
     private val TAG: String = "BlankFragment"
 
+        // Example
 
     /** injects */
     @Inject
@@ -62,7 +63,9 @@ class BlankFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-
+        /**
+         *  Arguments
+         * */
         //Para obter os argumentos passados pelo bundle é boa pratica ser feito no onCreate, pois só carrega uma vez
 /*        arguments?.let {
             userId = it.getInt("userId")

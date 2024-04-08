@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
 import com.example.projectfoodmanager.data.model.user.User
@@ -28,30 +29,29 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CommentsFragment : Fragment() {
 
-    // binding
+    /** binding */
     private lateinit var binding: FragmentCommentsBinding
 
-    // viewModels
+    /** viewModels */
     private val recipeViewModel: RecipeViewModel by viewModels()
 
-    // constants
+    /** variables */
     private val TAG: String = "CommentsFragment"
     private lateinit var manager: LinearLayoutManager
     private var snapHelper : SnapHelper = PagerSnapHelper()
     private var recipeId: Int = -1
 
-        //pagination
+        // Pagination
     private var commentsList: MutableList<Comment> = mutableListOf()
     private var nextPage:Boolean = true
     private var refreshPage: Int = 0
     private var currentPage: Int = 0
 
-    // injects
+    /** injects */
     @Inject
     lateinit var sharedPreference: SharedPreference
 
-    // adapters
-
+    /** adapters */
     private val adapter by lazy {
         CommentsListingAdapter(
             sharedPreference,
@@ -82,8 +82,8 @@ class CommentsFragment : Fragment() {
 
             manager = LinearLayoutManager(activity)
             manager.reverseLayout=false
-            binding.recyclerView.layoutManager = manager
-            snapHelper.attachToRecyclerView(binding.recyclerView)
+            //binding.recyclerView.layoutManager = manager
+            //snapHelper.attachToRecyclerView(binding.recyclerView)
             binding.root
         }
 
@@ -99,7 +99,10 @@ class CommentsFragment : Fragment() {
 
 
     private fun setUI(view:View){
-        binding.backIB.setOnClickListener {
+
+        binding.header.titleTV.text = getString(R.string.FRAGMENT_COMMENTS_TITLE)
+
+        binding.header.titleTV.setOnClickListener {
             findNavController().navigateUp()
         }
 
@@ -121,7 +124,7 @@ class CommentsFragment : Fragment() {
                 )
             }
 
-            //-> Load Author img
+           //-> Load Author img
             loadUserImage(binding.IVcommentBottonImage,userSession.imgSource)
 
         }
@@ -176,7 +179,7 @@ class CommentsFragment : Fragment() {
                                 commentsList.add(recipe)
                             }
                             adapter.updateList(commentsList)
-                            binding.recyclerView.adapter = adapter
+                            //binding.recyclerView.adapter = adapter
                         }
 
 
@@ -193,14 +196,14 @@ class CommentsFragment : Fragment() {
         })
 
 
-        recipeViewModel.functionPostCommentOnRecipe.observe(viewLifecycleOwner, Observer {
+        recipeViewModel.functionPostCommentOnRecipe.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-                        binding.ETcomment.text.clear()
+                        //binding.ETcomment.text.clear()
                         commentsList = mutableListOf()
                         adapter.cleanList()
-                        recipeViewModel.getCommentsByRecipePaginated(recipeId,0)
+                        recipeViewModel.getCommentsByRecipePaginated(recipeId, 0)
 
                     }
                     is NetworkResult.Error -> {
@@ -211,58 +214,58 @@ class CommentsFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
 
-       /* // Like function
+        /* // Like function
 
 
-        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        it
-                        toast(getString(R.string.recipe_liked))
+         recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner, Observer {
+             it.getContentIfNotHandled()?.let {
+                 when (it) {
+                     is NetworkResult.Success -> {
+                         it
+                         toast(getString(R.string.recipe_liked))
 
-                        // updates local list
-                        if (objRecipe!!.id == it.data) {
-                            objRecipe!!.likes++
-                            sharedPreference.addLikeToUserSession(objRecipe!!)
-                            updateUI(objRecipe!!)
-                        }
+                         // updates local list
+                         if (objRecipe!!.id == it.data) {
+                             objRecipe!!.likes++
+                             sharedPreference.addLikeToUserSession(objRecipe!!)
+                             updateUI(objRecipe!!)
+                         }
 
-                    }
-                    is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        })
+                     }
+                     is NetworkResult.Error -> {
+                         showValidationErrors(it.message.toString())
+                     }
+                     is NetworkResult.Loading -> {
+                     }
+                 }
+             }
+         })
 
-        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        it
-                        toast(getString(R.string.recipe_removed_liked))
+         recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner, Observer {
+             it.getContentIfNotHandled()?.let {
+                 when (it) {
+                     is NetworkResult.Success -> {
+                         it
+                         toast(getString(R.string.recipe_removed_liked))
 
-                        // updates local list
-                        if (objRecipe!!.id == it.data) {
-                            objRecipe!!.likes--
-                            sharedPreference.removeLikeFromUserSession(objRecipe!!)
-                            updateUI(objRecipe!!)
-                        }
+                         // updates local list
+                         if (objRecipe!!.id == it.data) {
+                             objRecipe!!.likes--
+                             sharedPreference.removeLikeFromUserSession(objRecipe!!)
+                             updateUI(objRecipe!!)
+                         }
 
-                    }
-                    is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        })*/
+                     }
+                     is NetworkResult.Error -> {
+                         showValidationErrors(it.message.toString())
+                     }
+                     is NetworkResult.Loading -> {
+                     }
+                 }
+             }
+         })*/
 
 
     }

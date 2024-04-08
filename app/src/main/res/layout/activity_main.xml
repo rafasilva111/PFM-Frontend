@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:background="@color/main_color"
-    android:elevation="8dp">
+    android:elevation="8dp"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/parentLayout"
@@ -14,7 +15,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".presentation.recipe.RecipeListingFragment"
+
         android:background="@drawable/layout_main">
 
         <androidx.fragment.app.FragmentContainerView
@@ -27,7 +28,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:navGraph="@navigation/app_login_navigation"
-            app:defaultNavHost="true" />
+            app:defaultNavHost="true"
+            android:background="@drawable/layout_main" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

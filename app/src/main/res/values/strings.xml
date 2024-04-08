@@ -20,6 +20,11 @@
 
     <string name="USER_ERROR_ACTIVITY_LEVEL_INVALID">Insira um nivel de atividade.</string>
 
+    <!-- Fragments String's -->
+
+    <!-- Comments Fragment -->
+    <string name="FRAGMENT_COMMENTS_TITLE">Comentários</string>
+
     <!-- Not Treated -->
     <string name="app_name">GoodBites</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>

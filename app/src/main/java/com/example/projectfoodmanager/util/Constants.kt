@@ -15,7 +15,7 @@ object Constants {
     //const val BASE_URL = "http://172.162.241.84" // prod
     const val USER_TOKEN = "user_token"
 
-    const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"
+
     const val PREFS_TOKEN_FILE = "prefs_token_file"
 
     const val MAX_CALENDER_DAYS =15L
@@ -35,8 +35,12 @@ object SharedPreferencesMetadata{
 }
 
 object SharedPreferencesConstants{
-    const val SHARED_PREFENCES_METADATA = "shared_preferences_metadata"
+
+    const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"
+
+    const val METADATA = "shared_preferences_metadata"
     const val USER_SESSION = "user_session"
+    const val USER_SESSION_BACKGROUND_RECIPES="shared_preferences_background_recipes"
     const val USER_SESSION_CALENDER = "user_session_calender"
     const val USER_SESSION_SHOPPING_LISTS = "user_session_shopping_list"
 }
@@ -65,9 +69,6 @@ object PaginationNumber{
 
 object SharedPrefConstants {
     const val LOCAL_SHARED_PREF = "local_shared_pref"
-    const val USER_SESSION = "user_session"
-    const val FAVORITE_RECIPES_SESSION = "favorite_recipes_session"
-    var METADATA = "metadata"
 }
 
 object RecipesSortingType {
@@ -188,4 +189,8 @@ object Constraints{
 object Error{
     const val ON_WEIGHT = "weight"
     const val ON_HEIGHT = "height"
+}
+
+object FirebaseMessagingTopics{
+    const val NOTIFICATION_USER_TOPIC_BASE = "User"
 }

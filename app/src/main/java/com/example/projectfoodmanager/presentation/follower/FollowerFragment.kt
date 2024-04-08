@@ -643,10 +643,15 @@ class FollowerFragment : Fragment() {
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-                        if (it.data == 201)
+                        if (it.data == 201) {
+                            // Followed
                             adapterFindFollows.removeItem(findFollowsListingUpdatePosition)
-                        else
-                            adapterFindFollows.updateItem(findFollowsListingUpdatePosition,true)
+
+                        }
+                        else {
+                            // Request was sent
+                            adapterFindFollows.updateItem(findFollowsListingUpdatePosition, true)
+                        }
 
                     }
                     is NetworkResult.Error -> {

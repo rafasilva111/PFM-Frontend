@@ -31,7 +31,7 @@ interface UserRepository {
 
     suspend fun registerUser(user : UserDTO)
     suspend fun loginUser(email: String, password: String)
-    suspend fun getUserSession()
+    suspend fun getUserSession(preventDeleteRecipesBackgrounds: Boolean)
     suspend fun logoutUser()
     suspend fun updateUser(userDTO: UserDTO)
     suspend fun getUserRecipesBackground()
