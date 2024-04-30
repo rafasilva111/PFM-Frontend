@@ -3,7 +3,7 @@ package com.example.projectfoodmanager.notification
 
 import android.content.Intent
 import android.util.Log
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.util.FirebaseNotificationCode
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -12,47 +12,41 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    private  val TAG = "MyFirebaseMessagingService"
+    private val TAG = "MyFirebaseMessagingServ"
 
     @Inject
-    lateinit var mNotificationManager:MyNotificationManager
-
+    lateinit var mNotificationManager: MyNotificationManager
 
     companion object {
         const val ACTION_NOTIFICATION_RECEIVED = "com.example.projectfoodmanager.ACTION_NOTIFICATION_RECEIVED"
         const val EXTRA_NOTIFICATION_DATA = "extra_notification_data"
     }
 
+    override fun onNewToken(s: String) {
+        super.onNewToken(s)
+
+    }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        super.onMessageReceived(remoteMessage)
 
-        Log.d(TAG, "From: ${remoteMessage.from}")
+        if (remoteMessage.data.isNotEmpty()) {
+            Log.d(TAG, "Data Payload: " + remoteMessage.data)
+            try {
 
-        // Check if the message contains data
-        remoteMessage.data.isNotEmpty().let {
-            Log.d(TAG, "Message data payload: " + remoteMessage.data)
+                val notificationData = HashMap<String, String>()
+                notificationData["title"] = remoteMessage.data["title"] ?: ""
+                notificationData["message"] = remoteMessage.data["message"] ?: ""
+                notificationData["type"] = remoteMessage.data["type"] ?: ""
 
-            // Handle your data message here
-        }
-        val teste = remoteMessage.notification
+                mNotificationManager.textNotification(notificationData["title"], notificationData["message"])
 
-        // Check if the message contains a notification
-        remoteMessage.notification?.let {
-            Log.d(TAG, "Message Notification Body: ${it.body}")
+                val intent = Intent(ACTION_NOTIFICATION_RECEIVED)
+                intent.putExtra(EXTRA_NOTIFICATION_DATA, notificationData) // You can put more data if needed
+                sendBroadcast(intent)
 
-            // Handle your notification message here
-
-            // Broadcast the notification data
-            val intent = Intent(ACTION_NOTIFICATION_RECEIVED)
-            intent.putExtra(EXTRA_NOTIFICATION_DATA, it.body) // You can put more data if needed
-            sendBroadcast(intent)
+            } catch (e: Exception) {
+                Log.d(TAG, "Exception: " + e.message)
+            }
         }
     }
-
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-    }
-
-
-
 }

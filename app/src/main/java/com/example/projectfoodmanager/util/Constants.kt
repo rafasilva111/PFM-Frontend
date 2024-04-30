@@ -17,14 +17,8 @@ object Constants {
 
 
     const val PREFS_TOKEN_FILE = "prefs_token_file"
-
     const val MAX_CALENDER_DAYS =15L
 
-}
-object FirebaseNotifications {
-    const val BASE_URL = "https://fcm.googleapis.com"
-    const val SERVER_KEY = "AAAA9vy8Bpg:APA91bHyfumwp_y_Gnv3qVb5h19WTpM2EfZ_a6Un6CoIhJ6KCSO3nyx10ip2eg9i4lM0_K79krSoVp6PoiKk3SWUQP1LxnYZ9KYQcEM9Q_ofCxsfhf-ragQiC9U3fPBOaALxAKcZ5VLR"
-    const val CONTENT_TYPE = "application/json"
 }
 
 object SharedPreferencesMetadata{
@@ -37,6 +31,7 @@ object SharedPreferencesMetadata{
 object SharedPreferencesConstants{
 
     const val IS_FIRST_APP_LAUNCH = "IS_FIRST_APP_LAUNCH"
+    const val IS_FIRST_PORTION_ASK = "IS_FIRST_PORTION_ASK"
 
     const val METADATA = "shared_preferences_metadata"
     const val USER_SESSION = "user_session"
@@ -193,4 +188,15 @@ object Error{
 
 object FirebaseMessagingTopics{
     const val NOTIFICATION_USER_TOPIC_BASE = "User"
+}
+
+object FirebaseNotificationCode{
+    const val FOLLOWED_USER = 1
+    const val FOLLOW_REQUEST = 2
+    const val FOLLOW_CREATED_RECIPE = 3
+    const val HEALTH = 4
+    const val COMMENT = 5
+    const val SECURITY = 6
+    const val SYSTEM = 7
+    const val LIKE = 8
 }

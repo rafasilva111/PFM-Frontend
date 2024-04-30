@@ -15,32 +15,39 @@ import javax.inject.Inject
 
 
 class MyNotificationManager @Inject constructor(private val mCtx: Application) {
+    private val rand = Random()
+
+
+    private val notificationChannel = NotificationChannel(
+        "Channel_id_default", "Channel_name_default", NotificationManager.IMPORTANCE_HIGH
+    )
+
+    private val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
 
     fun textNotification(title: String?, message: String?) {
-        val rand = Random()
+
         val idNotification = rand.nextInt(1000000000)
 
-        val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationManager =  mCtx.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val notificationChannel = NotificationChannel(
-            "Channel_id_default", "Channel_name_default", NotificationManager.IMPORTANCE_HIGH
-        )
         val attributes = AudioAttributes.Builder()
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .setUsage(AudioAttributes.USAGE_NOTIFICATION)
             .build()
+
+        val notificationManager =  mCtx.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         notificationChannel.description = "Channel_description_default"
         notificationChannel.enableLights(true)
         notificationChannel.enableVibration(true)
         notificationChannel.setSound(soundUri, attributes)
         notificationManager.createNotificationChannel(notificationChannel)
+
         val notificationBuilder = NotificationCompat.Builder(mCtx, "Channel_id_default")
 
 
         notificationBuilder.setAutoCancel(true)
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_logo)
             .setTicker(mCtx.resources.getString(R.string.app_name))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSound(soundUri)

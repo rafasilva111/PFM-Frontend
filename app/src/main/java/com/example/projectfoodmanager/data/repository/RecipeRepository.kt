@@ -1,11 +1,10 @@
 package com.example.projectfoodmanager.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
-import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
-import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
+import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
+import com.example.projectfoodmanager.data.model.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
-
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 
@@ -38,15 +37,31 @@ interface RecipeRepository {
     suspend fun addSaveOnRecipe(recipeId: Int)
 
     // comment
-    val functionPostCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
     val functionGetCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
     val functionGetSizedCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
     val functionGetCommentsByClientPaginated: LiveData<Event<NetworkResult<CommentList>>>
 
-    suspend fun createCommentOnRecipe(recipeId: Int,comment: CreateCommentRequest)
+    val functionPostCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
+    val functionPatchComment: LiveData<Event<NetworkResult<Comment>>>
+    val functionDeleteComment: LiveData<Event<NetworkResult<Comment>>>
+
     suspend fun getCommentsByRecipePaginated(recipeId: Int, page: Int)
     suspend fun getSizedCommentsByRecipePaginated(recipeId: Int,page: Int,pageSize:Int)
     suspend fun getCommentsByClientPaginated(clientId: Int, page: Int)
+
+    suspend fun postComment(recipeId: Int, comment: CommentDTO)
+    suspend fun patchComment(commentId: Int,comment: CommentDTO)
+    suspend fun deleteComment(commentId: Int)
+
+    val functionPostLikeOnComment: LiveData<Event<NetworkResult<Comment>>>
+    val functionDeleteLikeOnComment: LiveData<Event<NetworkResult<Comment>>>
+
+    suspend fun postLikeOnComment(commentId: Int)
+    suspend fun deleteLikeOnComment(commentId: Int)
+
+
+
+
 
 
 }

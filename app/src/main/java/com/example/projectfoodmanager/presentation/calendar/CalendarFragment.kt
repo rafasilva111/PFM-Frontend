@@ -18,9 +18,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryState
 import com.example.projectfoodmanager.databinding.FragmentCalendarBinding
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.currentDate
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.daysInMonthArray
@@ -52,7 +52,7 @@ class CalendarFragment : Fragment() {
     // constants
     val TAG: String = "CalenderFragment"
 
-    private val calenderEntriesToBeChecked: MutableList<CalenderEntryState> = mutableListOf()
+    private val calenderEntriesToBeChecked: MutableList<CalenderEntryDTO> = mutableListOf()
 
     // injects
 
@@ -126,10 +126,10 @@ class CalendarFragment : Fragment() {
                 changeMenuVisibility(false,activity)
             },
             onDoneClicked = { checkDone, item->
-                if (CalenderEntryState(item.id,!checkDone) !in calenderEntriesToBeChecked)
-                    calenderEntriesToBeChecked.add(CalenderEntryState(item.id,checkDone))
+                if (CalenderEntryDTO(id = item.id,checkedDone = !checkDone) !in calenderEntriesToBeChecked)
+                    calenderEntriesToBeChecked.add(CalenderEntryDTO(id = item.id, checkedDone = checkDone))
                 else
-                    calenderEntriesToBeChecked.remove(CalenderEntryState(item.id,!checkDone))
+                    calenderEntriesToBeChecked.remove(CalenderEntryDTO(id = item.id, checkedDone = !checkDone))
             }
         )
     }
@@ -140,13 +140,14 @@ class CalendarFragment : Fragment() {
         savedInstanceState: Bundle?,
 
         ): View {
-        binding = FragmentCalendarBinding.inflate(layoutInflater)
-        setMonthView()
-        binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
 
-        val manager = LinearLayoutManager(activity)
+        if (!this::binding.isInitialized) {
+            binding = FragmentCalendarBinding.inflate(layoutInflater)
+        }
 
-        binding.calEntrysRV.layoutManager = manager
+
+
+
 
         bindObservers()
         return binding.root
@@ -163,11 +164,25 @@ class CalendarFragment : Fragment() {
          *  General
          * */
 
-        changeStatusBarColor(false, activity, context)
-        changeMenuVisibility(true,activity)
-
-
+        binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
         binding.nRegistersTV.text = nrRecipes
+
+        binding.calEntrysRV.layoutManager = LinearLayoutManager(activity)
+        binding.calEntrysRV.adapter = adapterEntry
+
+
+        /** Check for user portion */
+        if( sharedPreference.isFirstPortionAsk()) {
+            sharedPreference.saveFirstPortionAsk()
+            askUserPortionPreference()
+        }
+
+
+
+
+        /**
+         *  Navigation
+         * */
 
         binding.addRegisterIB.setOnClickListener {
             findNavController().navigate(R.id.action_calendarFragment_to_newCalenderEntryFragment)
@@ -210,23 +225,26 @@ class CalendarFragment : Fragment() {
         }
 
         binding.addBasketIB.setOnClickListener {
-
-
             navigateToCalenderShoppingList()
         }
 
-        // checks for user portion
-        if (sharedPreference.getUserSession().userPortion == -1)
-            askUserPortionPreference()
 
-
-        binding.calEntrysRV.adapter = adapterEntry
 
 
 
     }
 
     private fun loadUI() {
+
+        /**
+         *  General
+         * */
+        val activity = requireActivity()
+
+        changeStatusBarColor(false, activity, requireContext())
+        changeMenuVisibility(true,activity)
+
+        setMonthView()
 
         val targetDate = if (selectedDate != currentDate) selectedDate else currentDate
         val calendarEntry = sharedPreference.getEntryOnCalendar(targetDate.atStartOfDay())
@@ -242,37 +260,30 @@ class CalendarFragment : Fragment() {
     }
 
     private fun askUserPortionPreference() {
-        // ask for user portion preference
-        // set the custom layout
-        val dialogBinding: View =
-            layoutInflater.inflate(R.layout.dialog_portion_preferenced_by_user, null);
 
         val myDialog = Dialog(requireContext())
-        myDialog.setContentView(dialogBinding)
+        myDialog.setContentView(layoutInflater.inflate(R.layout.dialog_portion_preferenced_by_user, null))
 
         // create alert dialog
         myDialog.setCancelable(false)
         myDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-
-        val btnPortion = dialogBinding.findViewById<Button>(R.id.use_seconds_recipes_portion)
-        val btnIgnorePortion =
-            dialogBinding.findViewById<Button>(R.id.use_first_recipes_portion)
-        val numberPicker = dialogBinding.findViewById<NumberPicker>(R.id.number_picker)
-
-        btnPortion.setOnClickListener {
-            userViewModel.updateUser(UserDTO(user_portion = numberPicker.value))
-            myDialog.dismiss()
-            navigateToCalenderShoppingList()
-        }
-
-        btnIgnorePortion.setOnClickListener {
-            userViewModel.updateUser(UserDTO(user_portion = 0))
-            myDialog.dismiss()
-            navigateToCalenderShoppingList()
-        }
+        val numberPicker = myDialog.findViewById<NumberPicker>(R.id.number_picker)
         numberPicker.minValue = 1
         numberPicker.maxValue = 20
+
+        /** Select button  */
+        myDialog.findViewById<Button>(R.id.use_first_recipes_portion).setOnClickListener {
+            userViewModel.updateUser(UserDTO(user_portion = numberPicker.value))
+            myDialog.dismiss()
+        }
+
+        /** Ignore button  */
+        myDialog.findViewById<Button>(R.id.use_seconds_recipes_portion).setOnClickListener {
+            userViewModel.updateUser(UserDTO(user_portion = 0))
+            myDialog.dismiss()
+        }
+
         myDialog.show()
     }
 
@@ -292,15 +303,9 @@ class CalendarFragment : Fragment() {
 
     override fun onStart() {
 
-
-
         loadUI()
-
         super.onStart()
     }
-
-
-
 
     private fun setMonthView() {
         binding.calWeeklyRV.visibility = View.INVISIBLE
@@ -333,7 +338,7 @@ class CalendarFragment : Fragment() {
 
     private fun updateCalenderView() {
 
-        binding.monthYearTV.text = formatDateMonthYear(currentDate)!!.capitalize()
+        binding.monthYearTV.text = formatDateMonthYear(currentDate)!!
 
         if (binding.calMonthRV.visibility == View.VISIBLE) {
             adapterCalMonth.updateList(
@@ -406,15 +411,32 @@ class CalendarFragment : Fragment() {
                 }
             }
         }
+
+        userViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        toast(getString(R.string.DATA_UPDATED))
+                        result.data?.let { sharedPreference.saveUserSession(it) }
+                    }
+                    is NetworkResult.Error -> {
+
+                    }
+                    is NetworkResult.Loading -> {
+
+                    }
+                }
+            }
+        }
     }
 
 
     override fun onPause() {
-        super.onPause()
+
         // delete notifications
         if (calenderEntriesToBeChecked.isNotEmpty())
             calenderViewModel.checkCalenderEntries(CalenderEntryListUpdate(calenderEntryStateList=calenderEntriesToBeChecked))
-
+        super.onPause()
     }
 
     companion object{

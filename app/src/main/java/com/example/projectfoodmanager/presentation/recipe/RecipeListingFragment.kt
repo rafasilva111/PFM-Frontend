@@ -47,6 +47,7 @@ import kotlin.math.ceil
 class RecipeListingFragment : Fragment() {
 
 
+
     // binding
     lateinit var binding: FragmentRecipeListingBinding
 
@@ -66,17 +67,15 @@ class RecipeListingFragment : Fragment() {
     private lateinit var scrollListener: RecyclerView.OnScrollListener
     private var refreshPage: Int = 0
     private var oldFilerTag: String =""
+    private var numberOfNotifications: Int = 0
+
+
 
     private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             Log.d(TAG, "onReceive: ")
-            intent?.let {
-                if (it.action == MyFirebaseMessagingService.ACTION_NOTIFICATION_RECEIVED) {
-                    val notificationData = it.getStringExtra(MyFirebaseMessagingService.EXTRA_NOTIFICATION_DATA)
-                    // Handle your notification data here
-                    // For example, update UI, show a dialog, etc.
-                }
-            }
+            numberOfNotifications += 1
+            changeNotificationNumber()
         }
     }
 
@@ -669,16 +668,11 @@ class RecipeListingFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
 
-                        val notificationNumber = it.data!!.result.count { notification ->
+                        numberOfNotifications = it.data!!.result.count { notification ->
                             !notification.seen
                         }
+                        changeNotificationNumber()
 
-                        if (notificationNumber>0 ) {
-                            binding.notificationsBadgeTV.visibility = View.VISIBLE
-                            binding.notificationsBadgeTV.text = notificationNumber.toString()
-                        } else{
-                            binding.notificationsBadgeTV.visibility =View.GONE
-                        }
 
                     }
                     is NetworkResult.Error -> {
@@ -691,6 +685,15 @@ class RecipeListingFragment : Fragment() {
         }
 
     }
+    private fun changeNotificationNumber(){
+        if (numberOfNotifications>0 ) {
+            binding.notificationsBadgeTV.visibility = View.VISIBLE
+            binding.notificationsBadgeTV.text = numberOfNotifications.toString()
+        } else{
+            binding.notificationsBadgeTV.visibility =View.GONE
+        }
+    }
+
 
     private fun changeFilterSearch(tag: String){
         if (searchTag == tag){

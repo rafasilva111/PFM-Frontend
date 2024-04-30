@@ -195,14 +195,14 @@ class SettingsFragment : Fragment() {
                     .setIcon(R.drawable.ic_logout)
                     .setTitle(getString(R.string.settings_fragment_dialog_title))
                     .setMessage(getString(R.string.settings_fragment_dialog_desc))
-                    .setPositiveButton(getString(R.string.dialog_yes)) { _, _ ->
+                    .setPositiveButton(getString(R.string.COMMON_DIALOG_YES)) { _, _ ->
                         // Adicione aqui o código para apagar o registro
                         userViewModel.deleteUserAccount()
                         changeMenuVisibility(false, activity)
                         findNavController().navigate(R.id.action_settingsFragment_to_login)
 
                     }
-                    .setNegativeButton(getString(R.string.dialog_no)) { dialog, _ ->
+                    .setNegativeButton(getString(R.string.COMMON_DIALOG_NO)) { dialog, _ ->
                         // Adicione aqui o código para cancelar a exclusão do registro
                         dialog.dismiss()
                     }

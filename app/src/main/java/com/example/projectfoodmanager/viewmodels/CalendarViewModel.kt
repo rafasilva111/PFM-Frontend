@@ -3,9 +3,9 @@ package com.example.projectfoodmanager.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
@@ -31,7 +31,7 @@ class CalendarViewModel @Inject constructor(
     val createEntryOnCalendarLiveData: LiveData<Event<NetworkResult<CalenderEntry>>>
         get() = repository.createEntryOnCalender
 
-    fun createEntryOnCalendar(recipeId: Int, calenderEntryRequest: CalenderEntryRequest){
+    fun createEntryOnCalendar(recipeId: Int, calenderEntryRequest: CalenderEntryDTO){
         viewModelScope.launch {
             repository.createEntryOnCalender(recipeId,calenderEntryRequest)
         }

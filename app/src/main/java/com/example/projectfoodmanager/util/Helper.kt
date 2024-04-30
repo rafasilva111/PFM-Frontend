@@ -162,6 +162,10 @@ class Helper {
 
         }
 
+        fun closeKeyboard(activity: FragmentActivity,view: View) {
+            (activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
         var STATUS_BAR_COLOR: Boolean? = null // true for mainColor (red), false for secondary (white)
         var MENU_VISIBILITY: Boolean? = null // true for visible, false for gone
 

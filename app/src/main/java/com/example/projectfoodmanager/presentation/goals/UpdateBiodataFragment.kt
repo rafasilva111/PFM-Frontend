@@ -96,11 +96,11 @@ class UpdateBiodataFragment : Fragment() {
             .setIcon(R.drawable.ic_logout)
             .setTitle(getString(R.string.profile_fragment_logout_dialog_title))
             .setMessage(resources.getString(R.string.logout_confirmation_description))
-            .setPositiveButton(getString(R.string.dialog_yes)) { dialog, _ ->
+            .setPositiveButton(getString(R.string.COMMON_DIALOG_YES)) { dialog, _ ->
                 findNavController().navigateUp()
                 dialog.dismiss()
             }
-            .setNegativeButton(getString(R.string.dialog_no)) { dialog, _ ->
+            .setNegativeButton(getString(R.string.COMMON_DIALOG_NO)) { dialog, _ ->
                 dialog.dismiss()
             }
 

@@ -3,16 +3,13 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
-
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
@@ -100,7 +97,7 @@ class CalenderRepositoryImp @Inject constructor(
     override val createEntryOnCalender: LiveData<Event<NetworkResult<CalenderEntry>>>
         get() = _functionCreateEntryOnCalender
 
-    override suspend fun createEntryOnCalender(recipeId: Int,comment: CalenderEntryRequest) {
+    override suspend fun createEntryOnCalender(recipeId: Int,comment: CalenderEntryDTO) {
         handleApiResponse(
             _functionCreateEntryOnCalender,
             saveSharedPreferences = true

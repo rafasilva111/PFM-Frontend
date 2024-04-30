@@ -50,7 +50,11 @@
         android:id="@+id/receitaCommentsFragment"
         android:name="com.example.projectfoodmanager.presentation.recipe.comments.CommentsFragment"
         android:label="fragment_recipe_comments"
-        tools:layout="@layout/fragment_comments" />
+        tools:layout="@layout/fragment_comments" >
+        <action
+            android:id="@+id/action_receitaCommentsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_session_profile"
@@ -145,7 +149,7 @@
         android:label="UpdateBiodata" />
     <fragment
         android:id="@+id/newCalenderEntryFragment"
-        android:name="com.example.projectfoodmanager.presentation.calendar.insertCalenderEntry.NewCalenderEntryFragment"
+        android:name="com.example.projectfoodmanager.presentation.calendar.calenderEntry.create.NewCalenderEntryFragment"
         android:label="fragment_new_calender_entry"
         tools:layout="@layout/fragment_new_calender_entry" >
         <action
@@ -163,7 +167,7 @@
     </fragment>
     <fragment
         android:id="@+id/calendarEntryDetailFragment"
-        android:name="com.example.projectfoodmanager.presentation.calendar.CalendarEntryDetailFragment"
+        android:name="com.example.projectfoodmanager.presentation.calendar.calenderEntry.detail.CalendarEntryDetailFragment"
         android:label="fragment_calendar_entry_detail"
         tools:layout="@layout/fragment_calendar_entry_detail" >
         <action

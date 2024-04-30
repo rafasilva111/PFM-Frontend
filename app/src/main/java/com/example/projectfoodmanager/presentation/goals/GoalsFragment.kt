@@ -116,12 +116,12 @@ class GoalsFragment : Fragment() {
             .setCancelable(false)
             .setTitle(getString(R.string.goals_biodata_check_dialog_title))
             .setMessage(getString(R.string.goals_biodata_check_dialog_desc))
-            .setPositiveButton(getString(R.string.dialog_yes)) { dialog, _ ->
+            .setPositiveButton(getString(R.string.COMMON_DIALOG_YES)) { dialog, _ ->
                 findNavController().navigate(R.id.action_goalsFragment_to_updateBiodata)
 
                 dialog.dismiss()
             }
-            .setNegativeButton(getString(R.string.dialog_no)) { dialog, _ ->
+            .setNegativeButton(getString(R.string.COMMON_DIALOG_NO)) { dialog, _ ->
                 findNavController().navigateUp()
                 dialog.dismiss()
             }
@@ -135,11 +135,11 @@ class GoalsFragment : Fragment() {
             .setCancelable(false)
             .setTitle(getString(R.string.goals_check_dialog_title))
             .setMessage(getString(R.string.goals_check_dialog_desc))
-            .setPositiveButton(getString(R.string.dialog_yes)) { dialog, _ ->
+            .setPositiveButton(getString(R.string.COMMON_DIALOG_YES)) { dialog, _ ->
                 findNavController().navigate(R.id.action_goalsFragment_to_createGoalFragment)
                 dialog.dismiss()
             }
-            .setNegativeButton(getString(R.string.dialog_no)) { dialog, _ ->
+            .setNegativeButton(getString(R.string.COMMON_DIALOG_NO)) { dialog, _ ->
                 findNavController().navigateUp()
                 dialog.dismiss()
             }

@@ -28,8 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:navGraph="@navigation/app_login_navigation"
-            app:defaultNavHost="true"
-            android:background="@drawable/layout_main" />
+            app:defaultNavHost="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

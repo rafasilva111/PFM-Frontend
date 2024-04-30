@@ -3,11 +3,10 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
-import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
-import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
+import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
+import com.example.projectfoodmanager.data.model.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
-
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -103,6 +102,69 @@ class RecipeRepositoryImp @Inject constructor(
         }
 
     }
+
+    private val _functionCreateCommentOnRecipe = MutableLiveData<Event<NetworkResult<Comment>>>()
+    override val functionPostCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
+        get() = _functionCreateCommentOnRecipe
+
+    private val _functionPatchComment = MutableLiveData<Event<NetworkResult<Comment>>>()
+    override val functionPatchComment:  LiveData<Event<NetworkResult<Comment>>>
+        get() = _functionPatchComment
+
+
+    private val _functionDeleteComment = MutableLiveData<Event<NetworkResult<Comment>>>()
+    override val functionDeleteComment:  LiveData<Event<NetworkResult<Comment>>>
+        get() = _functionDeleteComment
+
+
+    override suspend fun postComment(recipeId: Int, comment: CommentDTO) {
+        handleApiResponse(
+            _functionCreateCommentOnRecipe
+        ) {
+            remoteDataSource.createComments(recipeId,comment)
+        }
+    }
+
+    override suspend fun patchComment(commentId: Int,comment: CommentDTO) {
+        handleApiResponse(
+            _functionPatchComment
+        ) {
+            remoteDataSource.patchComment(commentId,comment)
+        }
+    }
+
+    override suspend fun deleteComment(commentId: Int) {
+        handleApiResponse(
+            _functionDeleteComment
+        ) {
+            remoteDataSource.deleteComment(commentId)
+        }
+    }
+
+    private val _functionPostLikeOnComment = MutableLiveData<Event<NetworkResult<Comment>>>()
+    override val functionPostLikeOnComment:  LiveData<Event<NetworkResult<Comment>>>
+        get() = _functionPostLikeOnComment
+
+    private val _functionDeleteLikeOnComment = MutableLiveData<Event<NetworkResult<Comment>>>()
+    override val functionDeleteLikeOnComment:  LiveData<Event<NetworkResult<Comment>>>
+        get() = _functionDeleteLikeOnComment
+
+    override suspend fun postLikeOnComment(commentId: Int) {
+        handleApiResponse(
+            _functionPostLikeOnComment
+        ) {
+            remoteDataSource.postLikeOnComment(commentId)
+        }
+    }
+
+    override suspend fun deleteLikeOnComment(commentId: Int) {
+        handleApiResponse(
+            _functionDeleteLikeOnComment
+        ) {
+            remoteDataSource.deleteLikeOnComment(commentId)
+        }
+    }
+    // NOT OTIMIZED
 
     /**
      * Like Function
@@ -278,30 +340,7 @@ class RecipeRepositoryImp @Inject constructor(
         }
     }
 
-    private val _functionCreateCommentOnRecipe = MutableLiveData<Event<NetworkResult<Comment>>>()
-    override val functionPostCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
-        get() = _functionCreateCommentOnRecipe
 
-    override suspend fun createCommentOnRecipe(recipeId: Int,comment: CreateCommentRequest) {
-        _functionCreateCommentOnRecipe.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.createComments(recipeId,comment)
-        if (response.isSuccessful && response.body() != null) {
-            Log.i(TAG, "handleResponse: request made was sucessfull.")
-            Log.i(TAG, "handleResponse: response body -> ${response.body()}")
-            _functionCreateCommentOnRecipe.postValue(Event(NetworkResult.Success(
-                response.body()!!
-            )))
-        }
-        else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
-            _functionCreateCommentOnRecipe.postValue(Event(NetworkResult.Error(errorObj)))
-        }
-        else{
-            _functionCreateCommentOnRecipe.postValue(Event(NetworkResult.Error("Something Went Wrong")))
-        }
-    }
 
 
     // LiveData for searched recipes
@@ -361,7 +400,7 @@ class RecipeRepositoryImp @Inject constructor(
 
 
 
-    // NOT OTIMIZED
+
 
 
 }

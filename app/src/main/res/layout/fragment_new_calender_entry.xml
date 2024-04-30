@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     android:background="@color/background_1"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.calendar.insertCalenderEntry.NewCalenderEntryFragment">
+    tools:context=".presentation.calendar.calenderEntry.create.NewCalenderEntryFragment">
 
 
     <ImageButton
-        android:id="@+id/CloseRegIB"
+        android:id="@+id/backBT"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="20dp"
@@ -31,9 +31,9 @@
         android:text="Novo registo"
         android:textColor="@color/black"
         android:textSize="@dimen/subTitle"
-        app:layout_constraintBottom_toBottomOf="@+id/CloseRegIB"
-        app:layout_constraintStart_toEndOf="@+id/CloseRegIB"
-        app:layout_constraintTop_toTopOf="@+id/CloseRegIB" />
+        app:layout_constraintBottom_toBottomOf="@+id/backBT"
+        app:layout_constraintStart_toEndOf="@+id/backBT"
+        app:layout_constraintTop_toTopOf="@+id/backBT" />
 
 
     <ImageButton
@@ -58,7 +58,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CloseRegIB">
+        app:layout_constraintTop_toBottomOf="@+id/backBT">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/headerRecipeSelectCatLL"
@@ -428,6 +428,79 @@
                     android:text="00:00"
                     android:textAlignment="textEnd"
                     android:alpha="0.8"
+                    android:textSize="13sp"
+                    tools:ignore="RtlCompat" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:alpha="0.4"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_arrow" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:id="@+id/view5"
+            android:layout_width="340dp"
+            android:layout_height="1dp"
+            android:background="#E3E3E4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timeCV" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/portionCV"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:cardElevation="0dp"
+            app:contentPadding="5dp"
+            app:cardBackgroundColor="@color/transparent"
+            android:clickable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view5">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:alpha="0.4"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/ic_time" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="3"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:gravity="center_vertical"
+                    android:text="Porção"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/portion_val_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="4"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:gravity="center_vertical"
+                    android:text="@string/none"
+                    android:alpha="0.8"
+                    android:textAlignment="textEnd"
                     android:textSize="13sp"
                     tools:ignore="RtlCompat" />
 

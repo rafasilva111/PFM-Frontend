@@ -11,6 +11,7 @@ import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.SharedPreferencesConstants.IS_FIRST_APP_LAUNCH
+import com.example.projectfoodmanager.util.SharedPreferencesConstants.IS_FIRST_PORTION_ASK
 import com.example.projectfoodmanager.util.SharedPreferencesConstants.METADATA
 import com.example.projectfoodmanager.util.SharedPreferencesConstants.USER_SESSION
 import com.example.projectfoodmanager.util.SharedPreferencesConstants.USER_SESSION_BACKGROUND_RECIPES
@@ -35,6 +36,20 @@ class SharedPreference @Inject constructor(
 
     fun isFirstAppLaunch(): Boolean {
         return sharedPreferences.getBoolean(IS_FIRST_APP_LAUNCH, true)
+    }
+
+    fun saveFirstAppLaunch() {
+        sharedPreferences.edit().putBoolean(IS_FIRST_APP_LAUNCH,false).apply()
+    }
+
+
+    fun isFirstPortionAsk(): Boolean {
+        return sharedPreferences.getBoolean(IS_FIRST_PORTION_ASK, true)
+    }
+
+    fun saveFirstPortionAsk() {
+        sharedPreferences.edit().putBoolean(IS_FIRST_PORTION_ASK,false).apply()
+
     }
 
 
@@ -299,7 +314,7 @@ class SharedPreference @Inject constructor(
         for (list in fullCalenderEntryList.values)
             for (item in list)
                 if (item.id in calenderEntryList )
-                    item.checked_done  =calenderEntryListUpdate.calenderEntryStateList[calenderEntryList.indexOf(item.id)].state
+                    item.checked_done  = calenderEntryListUpdate.calenderEntryStateList[calenderEntryList.indexOf(item.id)].checkedDone!!
 
 
         sharedPreferences.edit().putString(USER_SESSION_CALENDER,gson.toJson(fullCalenderEntryList)).apply()

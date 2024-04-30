@@ -1,34 +1,34 @@
 package com.example.projectfoodmanager.data.api
 
 
+import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
+import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
-import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
-import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
-import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
-import com.example.projectfoodmanager.data.model.user.UserList
-import com.example.projectfoodmanager.data.model.user.UserAuthResponse
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
+import com.example.projectfoodmanager.data.model.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
@@ -112,9 +112,11 @@ interface ApiInterface {
 
 
 
-    //comments
-    @POST("$API_V1_BASE_URL/comment")
-    suspend fun createComments(@Query("recipe_id") recipeId: Int,@Body comment : CreateCommentRequest): Response<Comment>
+    /**
+     * Comments
+     * */
+
+    /** Gets */
 
     @GET("$API_V1_BASE_URL/comment")
     suspend fun getComment(@Query("userId") commentId: Int): Response<Comment>
@@ -128,16 +130,29 @@ interface ApiInterface {
     @GET("$API_V1_BASE_URL/comment")
     suspend fun getCommentsByClientPaginated(@Query("user_id") clientId: Int,@Query("page") page: Int): Response<CommentList>
 
-    @PUT("$API_V1_BASE_URL/comment")
-    suspend fun updateComments(@Query("commentId") commentId: Int,@Body comment : Comment): Response<Comment>
+    /** General */
+
+    @POST("$API_V1_BASE_URL/comment")
+    suspend fun createComments(@Query("recipe_id") recipeId: Int,@Body comment : CommentDTO): Response<Comment>
+
+    @PATCH("$API_V1_BASE_URL/comment")
+    suspend fun patchComment(@Query("id") commentId: Int, @Body comment : CommentDTO): Response<Comment>
 
     @DELETE("$API_V1_BASE_URL/comment")
-    suspend fun deleteComments(@Query("commentId") commentId: Int): Response<Unit>
+    suspend fun deleteComment(@Query("id") commentId: Int): Response<Comment>
+
+    /** Like Function */
+
+    @POST("$API_V1_BASE_URL/comment/like")
+    suspend fun postLikeOnComment(@Query("id") commentId: Int): Response<Comment>
+
+    @DELETE("$API_V1_BASE_URL/comment/like")
+    suspend fun deleteLikeOnComment(@Query("id") commentId: Int): Response<Comment>
 
     // calender
 
     @POST("$API_V1_BASE_URL/calendar")
-    suspend fun createCalenderEntry(@Query("recipe_id") recipeId: Int,@Body calenderEntryRequest : CalenderEntryRequest): Response<CalenderEntry>
+    suspend fun createCalenderEntry(@Query("recipe_id") recipeId: Int,@Body calenderEntryRequest : CalenderEntryDTO): Response<CalenderEntry>
 
     @GET("$API_V1_BASE_URL/calendar/list")
     suspend fun getEntryOnCalender(@Query("date")date: String): Response<CalenderEntryList>
@@ -257,6 +272,7 @@ interface ApiInterface {
 
     @POST("$API_V1_BASE_URL/goals")
     suspend fun createFitnessGoal(@Body goalDTO: GoalDTO): Response<Goal>
+
 
 
 }

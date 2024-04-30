@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -20,13 +19,19 @@
         <include
             android:id="@+id/header"
             layout="@layout/default_header"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <ScrollView
             android:id="@+id/SRL_details"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
+            android:isScrollContainer="false"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toTopOf="@+id/progress_bar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/header">
@@ -40,13 +45,25 @@
 
         </ScrollView>
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout11"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/SRL_details"
+            android:visibility="gone"/>
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout11"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:paddingBottom="20dp"
             android:background="@drawable/message_bar_shape"
+            android:paddingBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -102,8 +119,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-

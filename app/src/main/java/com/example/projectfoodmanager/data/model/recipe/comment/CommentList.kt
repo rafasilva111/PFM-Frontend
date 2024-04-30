@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.model.modelResponse.comment
+package com.example.projectfoodmanager.data.model.recipe.comment
 import com.example.projectfoodmanager.data.model.modelResponse.metadata.Metadata
 
 data class CommentList(
