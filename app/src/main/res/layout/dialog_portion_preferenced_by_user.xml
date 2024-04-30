@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/fedoka"
-        android:text="@string/user_portion_preference"
+        android:text="@string/CALENDER_PORTION_DIALOG_TITLE"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="30dp"
-        android:text="@string/portion_preferenced_by_user_description"
+        android:text="@string/CALENDER_PORTION_DIALOG_MAIN_DESCRIPTION"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="16sp"
@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/portion_preferenced_by_user_secondary_description"
+        android:text="@string/CALENDER_PORTION_DIALOG_FOOTER_DESCRIPTION"
         android:textAlignment="center"
         android:textColor="@color/grey_2"
         android:textSize="10sp"
@@ -81,7 +81,7 @@
             android:layout_weight="1"
             android:backgroundTint="#4CAF50"
             android:padding="8dp"
-            android:text="@string/tv_first_recipes_portion"
+            android:text="@string/CALENDER_PORTION_DIALOG_PRIMARY_DESCRIPTION"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/black" />
@@ -94,12 +94,12 @@
 
         <Button
             android:id="@+id/use_first_recipes_portion"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="#4CAF50"
+            android:backgroundTint="@color/main_color"
             android:padding="8dp"
-            android:text="@string/select"
+            android:text="@string/COMMON_DIALOG_SELECT"
             android:textAllCaps="false"
             android:textColor="@color/white" />
 
@@ -110,9 +110,9 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:backgroundTint="#4CAF50"
+            android:backgroundTint="@color/black"
             android:padding="8dp"
-            android:text="@string/portion_preferenced_by_user_use_recipes_portion"
+            android:text="@string/COMMON_DIALOG_SKIP"
             android:textAllCaps="false"
             android:textColor="@color/white" />
 

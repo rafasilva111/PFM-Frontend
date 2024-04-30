@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.calendar.insertCalenderEntry
+package com.example.projectfoodmanager.presentation.calendar.calenderEntry.create
 
 import android.view.LayoutInflater
 import android.view.View

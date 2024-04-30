@@ -2,35 +2,34 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.api.ApiInterface
+import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
+import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
+import com.example.projectfoodmanager.data.model.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
-import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
-import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
-import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
 import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
-import com.example.projectfoodmanager.data.model.user.UserList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-
-import com.example.projectfoodmanager.data.model.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
@@ -119,10 +118,11 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.removeSave(recipeId = recipeId)
 	}
 
-	//Comments
-	override suspend fun createComments(recipeId: Int,comment : CreateCommentRequest): Response<Comment> {
-		return apiInterface.createComments(recipeId= recipeId,comment = comment)
-	}
+	/**
+	 * Comments
+	 * */
+
+	/** Gets */
 	override suspend fun getCommentsByRecipePaginated(recipeId: Int,page: Int): Response<CommentList> {
 		return apiInterface.getCommentsByRecipe(recipeId = recipeId,page = page)
 	}
@@ -131,19 +131,37 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getSizedCommentsByRecipePaginated(recipeId = recipeId,page = page,pageSize=pageSize)
     }
 
-	override suspend fun updateComment(commentId: Int,comment : Comment): Response<Comment> {
-		return apiInterface.updateComments(commentId=commentId,comment = comment)
-	}
-	override suspend fun deleteComment(commentId: Int): Response<Unit> {
-		return apiInterface.deleteComments(commentId= commentId)
-	}
-
-	override suspend fun getCommentsByClientPaginated(clientId: Int,page: Int): Response<CommentList> {
+	override suspend fun getCommentsByClientPaginated(clientId: Int, page: Int): Response<CommentList> {
 		return apiInterface.getCommentsByClientPaginated(clientId = clientId,page = page)
 	}
 
+	/** General */
+	override suspend fun createComments(recipeId: Int,comment : CommentDTO): Response<Comment> {
+		return apiInterface.createComments(recipeId= recipeId,comment = comment)
+	}
+
+	override suspend fun patchComment(commentId: Int,comment : CommentDTO): Response<Comment> {
+		return apiInterface.patchComment(commentId=commentId,comment = comment)
+	}
+	override suspend fun deleteComment(commentId: Int): Response<Comment> {
+		return apiInterface.deleteComment(commentId= commentId)
+	}
+
+	/** Like Function */
+	override suspend fun postLikeOnComment(commentId: Int): Response<Comment> {
+		return apiInterface.postLikeOnComment(commentId= commentId)
+	}
+
+	override suspend fun deleteLikeOnComment(commentId: Int): Response<Comment> {
+		return apiInterface.deleteLikeOnComment(commentId= commentId)
+	}
+
+
+
+
+
 	//Calender
-	override suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryRequest): Response<CalenderEntry> {
+	override suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryDTO): Response<CalenderEntry> {
 		return apiInterface.createCalenderEntry(recipeId= recipeId,calenderEntryRequest = comment)
 	}
 

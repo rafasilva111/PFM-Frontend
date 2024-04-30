@@ -567,7 +567,7 @@ class FavoritesFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
                         tokenManager.deleteToken()
-                        sharedPreference.deleteUserSession()
+                        sharedPreference.deleteSession()
                         toast(getString(R.string.user_had_no_shared_preferences))
                         findNavController().navigate(R.id.action_profile_to_login)
                     }
@@ -597,7 +597,7 @@ class FavoritesFragment : Fragment() {
                                 adapter.updateItem(
                                     listOnAdapter.indexOf(item),
                                     item,
-                                    sharedPreference.addLikeToUserSession(item)
+                                    sharedPreference.addRecipeToLikedList(item)
                                 )
                                 break
                             }
@@ -632,7 +632,7 @@ class FavoritesFragment : Fragment() {
                                 adapter.updateItem(
                                     listOnAdapter.indexOf(item),
                                     item,
-                                    sharedPreference.removeLikeFromUserSession(item)
+                                    sharedPreference.removeRecipeFromLikedList(item)
                                 )
                                 break
                             }

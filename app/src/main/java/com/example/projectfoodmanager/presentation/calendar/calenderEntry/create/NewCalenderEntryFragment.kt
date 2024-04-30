@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.calendar.insertCalenderEntry
+package com.example.projectfoodmanager.presentation.calendar.calenderEntry.create
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -7,28 +7,27 @@ import android.os.Bundle
 import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.NumberPicker
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
+import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBinding
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
-import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
-import com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_KEYBOARD
 import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
@@ -47,14 +46,13 @@ class NewCalenderEntryFragment : Fragment() {
     lateinit var binding: FragmentNewCalenderEntryBinding
 
     // viewModels
-    private val userViewModel by activityViewModels<UserViewModel>()
     private val calendarViewModel by activityViewModels<CalendarViewModel>()
 
     // constants
     private val TAG: String = "NewCalenderEntryFragment"
     private var snapHelper: SnapHelper = PagerSnapHelper()
     lateinit var manager: LinearLayoutManager
-    private var checkedTag: Int= 0
+
 
     lateinit var user: User
     private var currentTabSelected :Int = 0
@@ -63,6 +61,18 @@ class NewCalenderEntryFragment : Fragment() {
     private var recipeRecyclerViewList: MutableList<Recipe> = mutableListOf()
 
     private var chosenDate: Long?=null
+
+    private lateinit var tags : List<String>
+    private lateinit var portions : List<String>
+
+    private var checkedTag: Int= -1
+    private var checkedPortion: Int= -1
+
+    private lateinit var tagDialog: AlertDialog
+    private lateinit var dateDialog: MaterialDatePicker<Long>
+    private lateinit var timeDialog: MaterialTimePicker
+    private lateinit var portionDialog: AlertDialog
+    private lateinit var costumPortionNumberDialog: AlertDialog
     // injects
 
     @Inject
@@ -92,16 +102,23 @@ class NewCalenderEntryFragment : Fragment() {
                 binding = FragmentNewCalenderEntryBinding.inflate(layoutInflater)
             }
 
-            // when objRecipe is supplied from recipeDetail
-            objRecipe = if (Build.VERSION.SDK_INT >= 33) {
-                // TIRAMISU
-                arguments?.getParcelable("Recipe", Recipe::class.java)
-            } else {
-                arguments?.getParcelable("Recipe")
-            }
-
             return binding.root
         }
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+
+        tags =  resources.getStringArray(R.array.tagEntryCalender_array).toList()
+        portions = resources.getStringArray(R.array.portionEntryCalender_array).toList()
+
+        objRecipe = if (Build.VERSION.SDK_INT >= 33) {
+            // TIRAMISU
+            arguments?.getParcelable("Recipe", Recipe::class.java)
+        } else {
+            arguments?.getParcelable("Recipe")
+        }
+
+        super.onCreate(savedInstanceState)
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -113,6 +130,9 @@ class NewCalenderEntryFragment : Fragment() {
     @SuppressLint("ClickableViewAccessibility")
     private fun setUI() {
 
+        /**
+         * General
+         */
 
         requireActivity().window.decorView.systemUiVisibility = 8192
         requireActivity().window.navigationBarColor = Color.TRANSPARENT
@@ -127,16 +147,14 @@ class NewCalenderEntryFragment : Fragment() {
 
         binding.favoritesRV.adapter = adapter
 
-        binding.CloseRegIB.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
-        // default list
-
         user = sharedPreference.getUserSession()
 
 
-        // se viewer recipe
+        binding.dateValTV.text = selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        binding.timeValTV.text = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
+
+        /** If we receive recipe as argument*/
+
         if (objRecipe == null){
             updateView(currentTabSelected)
         }
@@ -144,7 +162,140 @@ class NewCalenderEntryFragment : Fragment() {
             updateView(3)
         }
 
-        // change listing items
+        /** Create Dialogs*/
+
+        /** Tag Dialog */
+        tagDialog = MaterialAlertDialogBuilder(requireActivity())
+            .setTitle(getString(R.string.COMMON_DIALOG_CATEGORY_TITLE))
+            .setSingleChoiceItems(ArrayAdapter(requireContext(), R.layout.item_checked_text_view, tags), checkedTag) { dialog, which ->
+                // Handle the item selection here
+                checkedTag = which
+                binding.tagValTV.text = tags[checkedTag]
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.COMMON_DIALOG_CANCEL)) { dialog, _ ->
+                dialog.dismiss()
+            }.create()
+
+        /** Date Dialog */
+        dateDialog =MaterialDatePicker.Builder.datePicker()
+                .setTitleText(getString(R.string.COMMON_DIALOG_DATE_TITLE))
+                .setSelection(
+                    if (chosenDate == null )
+                        selectedDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+                    else
+                        chosenDate
+                )
+                .build()
+
+
+        dateDialog.addOnCancelListener {
+            dateDialog.dismiss()
+        }
+
+        dateDialog.addOnPositiveButtonClickListener {selection->
+            chosenDate = selection
+            val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+            binding.dateValTV.text = formatter.format(Date(selection)).toString()
+
+        }
+
+
+        /** Time Dialog */
+        val timeNow = LocalTime.now()
+
+        timeDialog =MaterialTimePicker.Builder()
+                    .setTimeFormat(if (is24HourFormat(context)) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H)
+                    .setHour(timeNow.hour)
+                    .setMinute(timeNow.minute)
+                    .setTitleText(getString(R.string.COMMON_DIALOG_TIME_TITLE))
+
+                    .build()
+
+        timeDialog.addOnPositiveButtonClickListener {
+            binding.timeValTV.text = getString(
+                R.string.calender_formated_date,
+                String.format("%02d", timeDialog.hour),
+                String.format("%02d", timeDialog.minute)
+            )
+        }
+
+        timeDialog.addOnCancelListener {
+            timeDialog.dismiss()
+        }
+
+        /** Portion Dialog */
+
+        portionDialog = MaterialAlertDialogBuilder(requireActivity())
+            .setTitle(getString(R.string.COMMON_DIALOG_PORTION_TITLE))
+            .setSingleChoiceItems(ArrayAdapter(requireContext(), R.layout.item_checked_text_view, portions), checkedTag) { dialog, which ->
+
+                when (which){
+                    0 -> {
+                        checkedPortion = user.userPortion
+                        binding.portionValTv.text = getString(R.string.FRAGMENT_NEW_CALENDER_ENTRY,checkedPortion)
+                    }
+                    1 -> {
+                        checkedPortion = 1
+                        binding.portionValTv.text = getString(R.string.FRAGMENT_NEW_CALENDER_ENTRY,checkedPortion)
+                    }
+                    2 ->{
+                        costumPortionNumberDialog.show()
+                    }
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.COMMON_DIALOG_CANCEL)) { dialog, _ ->
+                dialog.dismiss()
+            }.create()
+
+
+        val numberPicker = NumberPicker(requireContext())
+        numberPicker.minValue = 1
+        numberPicker.maxValue = 16
+
+        costumPortionNumberDialog = MaterialAlertDialogBuilder(requireActivity())
+            .setTitle(getString(R.string.CALENDER_PORTION_DIALOG_NUMBER_TITLE))
+            .setView(numberPicker)
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.COMMON_DIALOG_SELECT)) { dialog, _ ->
+                checkedPortion = numberPicker.value
+                binding.portionValTv.text = getString(R.string.FRAGMENT_NEW_CALENDER_ENTRY,checkedPortion)
+
+                dialog.dismiss()
+            }
+            .create()
+
+        /**
+         * Functions
+         */
+
+        binding.tagCV.setOnClickListener {
+            tagDialog.show()
+        }
+
+        binding.dateCV.setOnClickListener {
+            dateDialog.show(parentFragmentManager, "DatePicker")
+
+        }
+
+        binding.timeCV.setOnClickListener {
+            timeDialog.show(parentFragmentManager, "TimePicker")
+        }
+
+        binding.portionCV.setOnClickListener {
+            portionDialog.show()
+        }
+
+
+        /**
+         * Navigation
+         */
+
+        binding.backBT.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         binding.nextBtn.setOnClickListener {
             updateView(++currentTabSelected)
@@ -152,69 +303,6 @@ class NewCalenderEntryFragment : Fragment() {
 
         binding.previousBtn.setOnClickListener {
             updateView(--currentTabSelected)
-        }
-
-        // form body
-        binding.tagCV.setOnClickListener {
-            showTagDialog()
-        }
-
-        binding.tagCV.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    // Apply visual feedback when the card is touched (e.g., change background color, apply elevation effect)
-                    binding.tagCV.setCardBackgroundColor(Color.parseColor("#E3E3E4"))
-                }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    // Remove visual feedback when the touch is released or cancelled
-                    binding.tagCV.setCardBackgroundColor(Color.WHITE)
-                }
-            }
-            false
-        }
-
-        binding.dateCV.setOnClickListener {
-            showDatePickerDialog()
-
-
-
-        }
-
-        binding.dateValTV.text = selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-
-        binding.dateCV.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    // Apply visual feedback when the card is touched (e.g., change background color, apply elevation effect)
-                    binding.dateCV.setCardBackgroundColor(Color.parseColor("#E3E3E4"))
-                }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    // Remove visual feedback when the touch is released or cancelled
-                    binding.dateCV.setCardBackgroundColor(Color.WHITE)
-                }
-            }
-            false
-        }
-
-        binding.timeValTV.text = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
-        binding.timeCV.setOnClickListener {
-
-            showTimePickerDialog()
-
-        }
-
-        binding.timeCV.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    // Apply visual feedback when the card is touched (e.g., change background color, apply elevation effect)
-                    binding.timeCV.setCardBackgroundColor(Color.parseColor("#E3E3E4"))
-                }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    // Remove visual feedback when the touch is released or cancelled
-                    binding.timeCV.setCardBackgroundColor(Color.WHITE)
-                }
-            }
-            false
         }
 
         binding.completeRegIB.setOnClickListener {
@@ -225,96 +313,11 @@ class NewCalenderEntryFragment : Fragment() {
                 calendarViewModel.createEntryOnCalendar(recipe_id,calenderEntryRequest)
             }
             else{
-                Toast(context).showCustomToast (message, requireActivity(),ToastType.ALERT)
+                toast(message, ToastType.ALERT)
             }
-
-
         }
     }
 
-    private fun showTimePickerDialog() {
-        val clockFormat =
-            if (is24HourFormat(context)) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
-        val timeNow = LocalTime.now()
-
-        val picker =
-            MaterialTimePicker.Builder()
-                .setTimeFormat(clockFormat)
-                .setHour(timeNow.hour)
-                .setMinute(timeNow.minute)
-                .setTitleText("Digite a que horário pretende")
-                .build()
-
-        picker.addOnPositiveButtonClickListener {
-            binding.timeValTV.text = getString(
-                R.string.calender_formated_date,
-                String.format("%02d", picker.hour),
-                String.format("%02d", picker.minute)
-            )
-        }
-
-        picker.addOnCancelListener {
-            picker.dismiss()
-        }
-
-
-
-        MaterialTimePicker.Builder().setInputMode(INPUT_MODE_KEYBOARD)
-
-        picker.show(parentFragmentManager, "TimePicker");
-        picker.dialog?.setCanceledOnTouchOutside(false)
-    }
-
-    private fun showTagDialog() {
-        val tags = resources.getStringArray(R.array.tagEntryCalender_array).toList()
-        val adapter = ArrayAdapter(requireContext(), R.layout.item_checked_text_view, tags)
-
-       // val builder = MaterialAlertDialogBuilder(requireActivity(), R.style.MaterialAlertDialog)
-        val builder = MaterialAlertDialogBuilder(requireActivity())
-            .setTitle("Selecione a categoria")
-            .setPositiveButton("ok") { _, _ ->
-                binding.tagValTV.text = tags[checkedTag]
-            }
-            .setSingleChoiceItems(adapter, checkedTag) { _, which ->
-                // Handle the item selection here
-                checkedTag = which
-            }
-            .setNeutralButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-
-        builder.create()
-        builder.show()
-    }
-
-    private fun showDatePickerDialog() {
-        val datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Selecione a data")
-                .setSelection(if (chosenDate == null )
-                    selectedDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
-                else
-                    chosenDate)
-                .build()
-        datePicker.dialog?.setCanceledOnTouchOutside(false)
-
-        datePicker.show(parentFragmentManager, "DatePicker")
-
-        datePicker.addOnCancelListener {
-            datePicker.dismiss()
-        }
-
-        datePicker.addOnPositiveButtonClickListener {selection->
-            chosenDate = selection
-            val selectedDate = Date(selection)
-            val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            val formattedDate = formatter.format(selectedDate)
-
-            binding.dateValTV.setText(formattedDate)
-
-        }
-
-    }
 
     private fun updateView(currentTabSelected: Int) {
 
@@ -420,9 +423,13 @@ class NewCalenderEntryFragment : Fragment() {
 
     }
 
-    private fun getCalenderEntryRequest(): Pair<Int, CalenderEntryRequest> {
+    private fun getCalenderEntryRequest(): Pair<Int, CalenderEntryDTO> {
         val localDateTime  = LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))
-        return recipeRecyclerViewList[manager.findFirstCompletelyVisibleItemPosition()].id to CalenderEntryRequest(tag = binding.tagValTV.text.toString().uppercase(),formatLocalTimeToServerTime(localDateTime))
+        return recipeRecyclerViewList[manager.findFirstCompletelyVisibleItemPosition()].id to CalenderEntryDTO(
+            tag = binding.tagValTV.text.toString().uppercase(),
+            portion=checkedPortion,
+            realizationDate = formatLocalTimeToServerTime(localDateTime)
+        )
     }
 
     private fun bindObservers() {

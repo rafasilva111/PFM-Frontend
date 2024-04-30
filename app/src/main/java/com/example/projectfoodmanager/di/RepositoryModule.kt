@@ -5,6 +5,7 @@ import com.example.projectfoodmanager.data.repository.*
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourceImpl
 import com.example.projectfoodmanager.data.repository.UserRepository
 import com.example.projectfoodmanager.util.SharedPreference
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -29,11 +30,13 @@ object RepositoryModule {
     @Singleton
     fun providesAuthRepository(
         remoteDataSource: RemoteDataSourceImpl,
+        firebaseMessaging: FirebaseMessaging,
         sharedPreference: SharedPreference,
         gson: Gson
     ): UserRepository {
         return UserRepositoryImp(
             remoteDataSource = remoteDataSource,
+            firebaseMessaging= firebaseMessaging,
             sharedPreference = sharedPreference,
             gson = gson
         )

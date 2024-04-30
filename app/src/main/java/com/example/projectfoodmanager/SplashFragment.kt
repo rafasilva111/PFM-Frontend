@@ -48,6 +48,8 @@ class SplashFragment : Fragment() {
 
     @Inject
     lateinit var sharedPreference: SharedPreference
+    @Inject
+    lateinit var firebaseMessaging: FirebaseMessaging
 
 
 
@@ -162,10 +164,11 @@ class SplashFragment : Fragment() {
                 when (result) {
                     is NetworkResult.Success -> {
                         if ( result.data!!.fmcToken != "-1")
-                            FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+                            firebaseMessaging.token.addOnSuccessListener { token ->
                                 if (result.data.fmcToken != token)
                                     userViewModel.updateUser(UserDTO(fmc_token = token))
                             }
+
                     }
                     is NetworkResult.Error -> {
                         findNavController().navigate(R.id.action_splashFragment_to_homeFragment)

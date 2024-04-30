@@ -4,11 +4,10 @@ package com.example.projectfoodmanager.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.projectfoodmanager.data.model.modelRequest.comment.CreateCommentRequest
-import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
-import com.example.projectfoodmanager.data.model.modelResponse.comment.CommentList
+import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
+import com.example.projectfoodmanager.data.model.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
-
 import com.example.projectfoodmanager.data.repository.RecipeRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -135,13 +134,49 @@ class RecipeViewModel @Inject constructor (
     val functionPostCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
         get() = repository.functionPostCommentOnRecipe
 
-    fun postCommentOnRecipe(recipeId: Int, comment: CreateCommentRequest) {
+    fun postCommentOnRecipe(recipeId: Int, comment: CommentDTO) {
         viewModelScope.launch {
-            repository.createCommentOnRecipe(recipeId,comment)
+            repository.postComment(recipeId,comment)
         }
     }
 
+    val functionDeleteComment: LiveData<Event<NetworkResult<Comment>>>
+        get() = repository.functionDeleteComment
 
+    fun deleteComment(commentId: Int) {
+        viewModelScope.launch {
+            repository.deleteComment(commentId)
+        }
+    }
+
+    val functionPatchComment: LiveData<Event<NetworkResult<Comment>>>
+        get() = repository.functionPatchComment
+
+    fun patchComment(commentId:Int,comment: CommentDTO) {
+        viewModelScope.launch {
+            repository.patchComment(commentId,comment)
+        }
+    }
+
+    /** Like Function */
+
+    val functionPostLikeOnComment: LiveData<Event<NetworkResult<Comment>>>
+        get() = repository.functionPostLikeOnComment
+
+    fun postLikeOnComment(commentId: Int) {
+        viewModelScope.launch {
+            repository.postLikeOnComment(commentId)
+        }
+    }
+
+    val functionDeleteLikeOnComment: LiveData<Event<NetworkResult<Comment>>>
+        get() = repository.functionDeleteLikeOnComment
+
+    fun deleteLikeOnComment(commentId: Int) {
+        viewModelScope.launch {
+            repository.deleteLikeOnComment(commentId)
+        }
+    }
 
 
 }

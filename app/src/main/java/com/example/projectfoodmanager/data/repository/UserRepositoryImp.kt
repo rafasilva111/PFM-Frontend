@@ -15,8 +15,10 @@ import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
+import com.example.projectfoodmanager.util.FirebaseMessagingTopics.NOTIFICATION_USER_TOPIC_BASE
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
+import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Response
 import java.net.SocketTimeoutException
 import javax.inject.Inject
@@ -24,6 +26,7 @@ import com.google.gson.Gson
 
 class UserRepositoryImp @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
+    private val firebaseMessaging: FirebaseMessaging,
     private val sharedPreference: SharedPreference,
     private val gson: Gson
 ) : UserRepository {
@@ -63,7 +66,7 @@ class UserRepositoryImp @Inject constructor(
 
 
                     if (deleteSharedPreferences) {
-                        sharedPreference.deleteUserSession()
+                        sharedPreference.deleteSession()
                     }
                 } else {
                     // Handle the case where the response body is null
@@ -149,7 +152,7 @@ class UserRepositoryImp @Inject constructor(
     override val userLiveData: LiveData<Event<NetworkResult<User>>>
         get() = _userLiveData
 
-    override suspend fun getUserSession() {
+    override suspend fun getUserSession(preventDeleteRecipesBackgrounds: Boolean) {
         _userLiveData.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "getUserSession: making login request.")
 
@@ -157,8 +160,7 @@ class UserRepositoryImp @Inject constructor(
             val response =remoteDataSource.getUserAuth()
             if (response.isSuccessful && response.body() != null) {
                 Log.i(TAG, "getUserSession: request made was sucessfull.")
-                response.body()!!.initLists()
-                sharedPreference.saveUserSession(response.body()!!)
+                sharedPreference.saveUserSession(response.body()!!, preventDeleteRecipesBackgrounds )
                 _userLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
             }
             else if(response.errorBody()!=null){
@@ -187,7 +189,7 @@ class UserRepositoryImp @Inject constructor(
 
         if (response.isSuccessful && response.code() == 204) {
             Log.i(TAG, "logoutUser: request made was sucessfull.")
-            sharedPreference.deleteUserSession()
+            sharedPreference.deleteSession()
             _userLogoutResponseLiveData.postValue(Event(NetworkResult.Success(response.code().toString())))
         }
         else if(response.errorBody()!=null){
@@ -378,6 +380,13 @@ class UserRepositoryImp @Inject constructor(
         Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
         val response =remoteDataSource.postFollowRequest(userId)
         if (response.isSuccessful) {
+
+            val code = response.code()
+
+            if (code == 201) {
+                // Followed
+                firebaseMessaging.subscribeToTopic("$NOTIFICATION_USER_TOPIC_BASE/$userId")
+            }
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             _functionPostUserFollowRequest.postValue(Event(NetworkResult.Success(response.code())))
         }
@@ -446,6 +455,10 @@ class UserRepositoryImp @Inject constructor(
         val response =remoteDataSource.deleteFollow(userId)
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
+
+
+            firebaseMessaging.unsubscribeFromTopic("$NOTIFICATION_USER_TOPIC_BASE/$userId")
+
             _functionDeleteFollow.postValue(Event(NetworkResult.Success(response.code())))
         }
         else if(response.errorBody()!=null){

@@ -108,6 +108,7 @@ dependencies {
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
 
     //animated activity
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
 
     //retrofit

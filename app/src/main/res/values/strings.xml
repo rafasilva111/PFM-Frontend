@@ -1,8 +1,22 @@
 <resources>
 
     <!-- Common -->
+    <string name="app_name">GoodBites</string>
     <string name="COMMON_SAVE">Guardar</string>
     <string name="COMMON_RESET">Reiniciar</string>
+
+    <!-- Dialogs -->
+    <string name="COMMON_DIALOG_YES">Sim</string>
+    <string name="COMMON_DIALOG_NO">Não</string>
+    <string name="COMMON_DIALOG_CANCEL">Cancelar</string>
+    <string name="COMMON_DIALOG_SELECT">Selecionar</string>
+    <string name="COMMON_DIALOG_SKIP">Ignorar</string>
+    <string name="COMMON_DIALOG_CATEGORY_TITLE">Seleciona uma categoria</string>
+    <string name="COMMON_DIALOG_DATE_TITLE">Seleciona uma data</string>
+    <string name="COMMON_DIALOG_TIME_TITLE">Seleciona um horário</string>
+    <string name="COMMON_DIALOG_PORTION_TITLE">Seleciona uma porção</string>
+
+
 
     <!-- Toast Api Responses -->
     <string name="DATA_NOT_UPDATED">Dados não atualizados, alguma coisa se passou.</string>
@@ -20,8 +34,44 @@
 
     <string name="USER_ERROR_ACTIVITY_LEVEL_INVALID">Insira um nivel de atividade.</string>
 
+    <!-- Place holder -->
+
+
+    <string name="NAME">Nome</string>
+    <string name="DATE">Data</string>
+
+
+    <!-- Fragments String's -->
+
+    <!-- Comments Fragment -->
+    <string name="FRAGMENT_COMMENTS_TITLE">Comentários</string>
+
+    <!-- Comment Item Layout -->
+    <string name="COMMENT_ITEM_LAYOUT_COMMENT_TEXT">Comentário...</string>
+    <string name="COMMENT_ITEM_LAYOUT_COMMENT">Comentar</string>
+    <string name="COMMENT_ITEM_LAYOUT_EDIT">Editar</string>
+    <string name="COMMENT_ITEM_LAYOUT_DELETE">Apagar</string>
+    <string name="COMMENT_ITEM_LAYOUT_DELETE_DIALOG_TITLE">Apagar Comentário</string>
+    <string name="COMMENT_ITEM_LAYOUT_DELETE_DIALOG_MESSAGE">Tens a certeza que queres apagar este comentário?</string>
+    <string name="COMMENT_ITEM_LAYOUT_LIKES_DEFAULT">0 Gostos</string>
+    <string name="COMMENT_ITEM_LAYOUT_LIKES">%1$d Gostos</string>
+
+    <!-- Calender Fragment -->
+
+    <!-- Calender Portion Dialog -->
+    <string name="CALENDER_PORTION_DIALOG_TITLE">Preferencias de porção</string>
+    <string name="CALENDER_PORTION_DIALOG_MAIN_DESCRIPTION">Notamos que és um novo membro, e ainda não tens uma porção pré-definida.Queres Adicionar?</string>
+    <string name="CALENDER_PORTION_DIALOG_PRIMARY_DESCRIPTION">Escolhe o numero de pessoas para a porção pré-defenida:</string>
+    <string name="CALENDER_PORTION_DIALOG_FOOTER_DESCRIPTION">Esta opção é usada para ajustar a quantidade de uma receita de acordo com as preferências do usuário, facilitando o cálculo dos ingredientes necessários. Mesmo que não definas agora podereas sempre alterar através do perfil, ou ao adicionar uma receita ao calendário.</string>
+
+    <!-- New Calender Entry Fragment -->
+    <string name="FRAGMENT_NEW_CALENDER_ENTRY">%1$d Pessoas</string>
+
+    <!-- Calender Portion Dialog -->
+    <string name="CALENDER_PORTION_DIALOG_NUMBER_TITLE">Seleciona o numero de pessoas</string>
+
     <!-- Not Treated -->
-    <string name="app_name">GoodBites</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="error_description">Description missing</string>
     <string name="error_title">Title missing</string>
@@ -132,12 +182,6 @@
     <string name="lista_de_ingredientes">Lista de ingredientes</string>
     <string name="save_shopping_cart">Save shopping cart</string>
     <string name="NOT_IMPLEMENT_YET">Not implemented yet</string>
-    <string name="portion_preferenced_by_user_secondary_description">This option is used to adjust the quantity of a recipe to match the user\'s preferences, making it easier to calculate the necessary items for the shopping list.</string>
-    <string name="portion_preferenced_by_user_description">The user has not indicated a preferred portion size, so please select one for them.</string>
-    <string name="portion_preferenced_by_user_use_recipes_portion">Use recipes portion\'s</string>
-    <string name="user_portion_preference">User\'s portion preference</string>
-    <string name="select">Select</string>
-    <string name="tv_first_recipes_portion">Choose the desired number of people for whom you\'d like to calculate the portion size of the recipe</string>
     <string name="shopping_list_date">Shopping list %1$d/%2$d %3$d/%4$d</string>
     <string name="listas_de_compras">Listas de compras</string>
     <string name="lista_de_compras">Lista de compras</string>
@@ -169,8 +213,7 @@
     <string name="fragment_send_us_a_message_title">Send us a message</string>
     <string name="fragment_settings_delete_account">Delete Acount</string>
     <string name="profile_fragment_logout_dialog_title">Logout</string>
-    <string name="dialog_yes">Sim</string>
-    <string name="dialog_no">Não</string>
+
     <string name="settings_fragment_dialog_desc">Are you sure you want to delete this account, and all its content?</string>
     <string name="settings_fragment_dialog_title">Deleting account…</string>
     <string name="fragment_followers_find_follows">Find</string>
@@ -242,6 +285,12 @@
         <item>Lanche da tarde</item>
         <item>Jantar</item>
         <item>Ceia</item>
+    </string-array>
+
+    <string-array name="portionEntryCalender_array">
+        <item>Utilizar porção definida pelo usuário.</item>
+        <item>Utilizar porção da receita.</item>
+        <item>Escolher uma porção para esta receita.</item>
     </string-array>
 
     <string-array name="recipeTags_array">

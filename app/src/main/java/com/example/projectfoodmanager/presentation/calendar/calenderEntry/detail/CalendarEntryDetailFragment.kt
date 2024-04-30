@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.presentation.calendar
+package com.example.projectfoodmanager.presentation.calendar.calenderEntry.detail
 
 import android.graphics.Color
 import android.os.Build

@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        FirebaseMessaging.getInstance().subscribeToTopic("/topics/myTopic")
+
         //window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

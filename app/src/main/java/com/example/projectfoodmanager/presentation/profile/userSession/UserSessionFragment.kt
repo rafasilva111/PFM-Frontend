@@ -61,7 +61,7 @@ class UserSessionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         if (isOnline(requireView().context)) {
-            userViewModel.getUserSession()
+            userViewModel.getUserSession(preventDeleteRecipesBackgrounds = true)
         }else{
             user = sharedPreference.getUserSession()
             loadUI()
@@ -120,11 +120,11 @@ class UserSessionFragment : Fragment() {
                 .setIcon(R.drawable.ic_logout)
                 .setTitle(getString(R.string.profile_fragment_logout_dialog_title))
                 .setMessage(resources.getString(R.string.logout_confirmation_description))
-                .setPositiveButton(getString(R.string.dialog_yes)) { _, _ ->
+                .setPositiveButton(getString(R.string.COMMON_DIALOG_YES)) { _, _ ->
                     // Adicione aqui o código para apagar o registro
                     userViewModel.logoutUser()
                 }
-                .setNegativeButton(getString(R.string.dialog_no)) { dialog, _ ->
+                .setNegativeButton(getString(R.string.COMMON_DIALOG_NO)) { dialog, _ ->
                     // Adicione aqui o código para cancelar a exclusão do registro
                     dialog.dismiss()
                 }
@@ -198,7 +198,7 @@ class UserSessionFragment : Fragment() {
                 when (result) {
                     is NetworkResult.Success -> {
                         tokenManager.deleteToken()
-                        sharedPreference.deleteUserSession()
+                        sharedPreference.deleteSession()
                         toast("Logout feito com sucesso!")
                         findNavController().navigate(R.id.action_profile_to_login)
                         changeMenuVisibility(false, activity)

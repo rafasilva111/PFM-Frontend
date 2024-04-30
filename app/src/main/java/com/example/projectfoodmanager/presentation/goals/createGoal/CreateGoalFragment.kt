@@ -12,7 +12,6 @@ import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.fitnessReport.GenericReport
 import com.example.projectfoodmanager.databinding.FragmentCreateGoalBinding
-import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
 import com.example.projectfoodmanager.util.SharedPreference
@@ -79,11 +78,11 @@ class CreateGoalFragment : Fragment() {
                 .setIcon(R.drawable.ic_logout)
                 .setTitle(getString(R.string.fragment_register_cancel))
                 .setMessage(resources.getString(R.string.fragment_register_cancel_description))
-                .setPositiveButton(getString(R.string.dialog_yes)) { _, _ ->
+                .setPositiveButton(getString(R.string.COMMON_DIALOG_YES)) { _, _ ->
                     // Adicione aqui o código para apagar o registro
                     findNavController().navigateUp()
                 }
-                .setNegativeButton(getString(R.string.dialog_no)) { dialog, _ ->
+                .setNegativeButton(getString(R.string.COMMON_DIALOG_NO)) { dialog, _ ->
                     // Adicione aqui o código para cancelar a exclusão do registro
                     dialog.dismiss()
                 }

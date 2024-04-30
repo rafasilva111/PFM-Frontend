@@ -3,9 +3,10 @@ package com.example.projectfoodmanager.presentation.recipe.comments;
 import android.content.Context
 import android.os.Handler
 import android.view.*
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.comment.Comment
+import com.example.projectfoodmanager.data.model.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.ItemCommentLayoutBinding
 import com.example.projectfoodmanager.util.Helper
@@ -20,12 +21,15 @@ import java.time.format.DateTimeParseException
 class CommentsListingAdapter(
     val sharedPreferences: SharedPreference,
     val onProfilePressed: (User) -> Unit,
-    val onLikePressed: (View,Int) -> Unit,
+    val onLikePressed: (Int, Boolean) -> Unit,
+    val onDeletePressed: (Int) -> Unit,
+    val onEditPressed: (Int) -> Unit,
+    val onCommentPressed: (Int) -> Unit,
 ): RecyclerView.Adapter<CommentsListingAdapter.MyViewHolder>() {
 
     private lateinit var  userSession: User
     private var i : Int = 0
-    private val TAG: String? = "RecipeListingAdapter"
+    private val TAG: String = "RecipeListingAdapter"
     private var list: MutableList<Comment> = arrayListOf()
 
 
@@ -43,9 +47,45 @@ class CommentsListingAdapter(
 
     }
 
+
+
     fun updateList(list: MutableList<Comment>){
         this.list = list
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0,this.list.size)
+    }
+    fun cleanList(){
+        list= arrayListOf()
+        notifyItemRangeChanged(0,this.list.size)
+    }
+
+    fun addItem(item: Comment){
+        list.add(0,item)
+        notifyItemInserted(0)
+    }
+
+    fun removeItemById(id: Int){
+        val index = list.indexOfFirst { it.id == id }
+
+        if (index>-1){
+            list.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
+
+    fun removeItem(position: Int){
+        list.removeAt(position)
+        notifyItemChanged(position)
+    }
+
+    fun updateItem(item: Comment){
+        val index = list.indexOfFirst { it.id == item.id }
+
+        if (index>-1){
+            list.removeAt(index)
+            list.add(index,item)
+            notifyItemChanged(index)
+        }
+
     }
 
     fun updateItem(position: Int,item: Comment){
@@ -55,72 +95,65 @@ class CommentsListingAdapter(
     }
 
 
-    fun cleanList(){
-        this.list= arrayListOf()
-        notifyDataSetChanged()
-    }
-
-    fun removeItem(position: Int){
-        list.removeAt(position)
-        notifyItemChanged(position)
-    }
-
     override fun getItemCount(): Int {
         return list.size
     }
 
 
+
+
     inner class MyViewHolder(private val binding: ItemCommentLayoutBinding,private val context: Context) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Comment, owner: Boolean) {
-            binding.CLComment.visibility = if (owner) View.GONE else View.VISIBLE
-            binding.CLCommentOwner.visibility = if (owner) View.VISIBLE else View.GONE
 
-            val user = item.user
-            val authorText = context.getString(R.string.full_name, user?.name)
-            val messageText = item.text
-
-            val dataText = if (item.updated_date != item.created_date) {
+            binding.TVCAuthor.text = context.getString(R.string.full_name,  item.user?.name)
+            binding.TVCMessage.text = item.text
+            binding.TVCData.text = if (item.updated_date != item.created_date) {
                 getRelativeTime(item.updated_date!!)
             } else {
                 getRelativeTime(item.created_date!!)
             }
 
-            if (owner) {
-                binding.TVCAuthorOwner.text = authorText
-                binding.TVCMessageOwner.text = messageText
-                binding.TVCDataOwner.text = dataText
-            } else {
-                binding.TVCAuthor.text = authorText
-                binding.TVCMessage.text = messageText
-                binding.TVCData.text = dataText
-            }
+            binding.TVCNLikes.text = context.getString(R.string.COMMENT_ITEM_LAYOUT_LIKES,  item.likes)
+            if (item.liked)
+                binding.imageView8.setBackgroundResource(R.drawable.ic_like_active)
+            else
+                binding.imageView8.setBackgroundResource(R.drawable.ic_like)
 
             binding.IVAuthor.setOnClickListener {
                 item.user?.let { it1 -> onProfilePressed.invoke(it1) }
             }
 
+            binding.CVComment.isClickable = true
             binding.CVComment.setOnClickListener {
                 i++
-                val handler = Handler()
-                handler.postDelayed({
+                Handler().postDelayed({
                     if (i == 2) {
                         binding.CVComment.isClickable = false
-                        onLikePressed.invoke(binding.CVComment,item.id)
+                        onLikePressed.invoke(item.id,item.liked)
                     }
                     i = 0
                 }, 500)
             }
 
-
-
-
-            if (owner) {
-                Helper.loadUserImage(binding.IVAuthorOwner, userSession.imgSource)
+            binding.TVCEdit.isVisible = true
+            binding.TVCComment.setOnClickListener {
+                onCommentPressed.invoke(item.id)
             }
-            else{
-                item.user!!.imgSource.let{
-                    Helper.loadUserImage(binding.IVAuthor, it)}
+
+            if (owner){
+                binding.TVCDelete.isVisible = true
+                binding.TVCDelete.setOnClickListener {
+                    onDeletePressed.invoke(item.id)
+                }
+                binding.TVCEdit.isVisible = true
+                binding.TVCEdit.setOnClickListener {
+                    onEditPressed.invoke(item.id)
+                }
+
             }
+
+            item.user!!.imgSource.let{
+                Helper.loadUserImage(binding.IVAuthor, it)}
         }
     }
 
@@ -146,7 +179,7 @@ class CommentsListingAdapter(
 
     private fun getRelativeTime(timeString: String): String? {
         return try {
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss")
             val currentDateTime = LocalDateTime.now().atZone(ZoneId.of("Europe/Lisbon"))
             val messageDateTime = LocalDateTime.parse(timeString, formatter)
             val duration = Duration.between(messageDateTime, currentDateTime)
