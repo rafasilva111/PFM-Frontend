@@ -8,9 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.databinding.FragmentFaqsBinding
 import com.example.projectfoodmanager.util.Helper
-import com.example.projectfoodmanager.util.SharedPreference
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -59,7 +57,7 @@ class FAQsFragment : Fragment() {
         val activity = requireActivity()
 
         Helper.changeMenuVisibility(false, activity)
-        Helper.changeStatusBarColor(false, activity, requireContext())
+        Helper.changeTheme(false, activity, requireContext())
 
         binding.backIB.setOnClickListener {
             findNavController().navigateUp()

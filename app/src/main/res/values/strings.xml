@@ -264,7 +264,7 @@
     <string name="fragment_update_biodata">Todos estes dados são necessários para aceder a esta aba.</string>
     <string name="fragment_goal_title">Objectivos</string>
     <string name="fragment_goal_create_goal_tab_ideal_weight_title">Peso Ideal</string>
-
+    <string name="FRAGMENT_NOTIFICATION_TITLE">Notificações</string>
 
 
     <string-array name="default_gender_array">

@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentGoalsBinding
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.SharedPreference
 import com.example.projectfoodmanager.viewmodels.GoalsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -82,7 +82,7 @@ class GoalsFragment : Fragment() {
 
         val activity = requireActivity()
         changeMenuVisibility(true, activity)
-        changeStatusBarColor(false, activity, requireContext())
+        changeTheme(false, activity, requireContext())
 
 
         /** Check for Bio-data */
@@ -106,7 +106,7 @@ class GoalsFragment : Fragment() {
 
         val activity = requireActivity()
         changeMenuVisibility(true, activity)
-        changeStatusBarColor(true, activity, requireContext())
+        changeTheme(true, activity, requireContext())
 
 
         /** Check for Biodata Dialog */

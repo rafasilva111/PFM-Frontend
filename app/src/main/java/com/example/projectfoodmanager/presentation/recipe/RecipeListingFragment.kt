@@ -8,7 +8,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,12 +24,13 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.notification.Notification
+import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
-import com.example.projectfoodmanager.notification.MyFirebaseMessagingService
+import com.example.projectfoodmanager.di.notification.MyFirebaseMessagingService
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
@@ -73,7 +73,6 @@ class RecipeListingFragment : Fragment() {
 
     private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            Log.d(TAG, "onReceive: ")
             numberOfNotifications += 1
             changeNotificationNumber()
         }
@@ -145,7 +144,36 @@ class RecipeListingFragment : Fragment() {
 
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        /**
+         *
+         * Notification Navigation
+         *
+         */
+
+        val activity = requireActivity()
+        if (activity.intent.hasExtra("fragmentToOpen")) {
+
+            val notification: Notification? = activity.intent.getParcelableExtra("object")
+            when (activity.intent.getIntExtra("fragmentToOpen",-1)) {
+                FragmentsToOpen.FRAGMENT_COMMENTS -> {
+                    // Handle notification for recipe created
+                    findNavController().navigate(R.id.action_recipeListingFragment_to_receitaCommentsFragment,Bundle().apply {
+                        notification?.let {
+                            putInt("recipe_id",notification.recipe!!.id)
+                            putInt("comment_id",notification.comment!!.id)
+                        }
+                    })
+                }
+                // Add more cases if you have other fragments to navigate to
+            }
+        }
+
+        super.onCreate(savedInstanceState)
+    }
     override fun onStart() {
+
+
         loadUI()
         super.onStart()
     }
@@ -159,7 +187,7 @@ class RecipeListingFragment : Fragment() {
 
         val activity = requireActivity()
         changeMenuVisibility(true, activity)
-        changeStatusBarColor(false,activity,requireContext())
+        changeTheme(false,activity,requireContext())
 
         setRecyclerViewScrollListener()
 
@@ -299,7 +327,7 @@ class RecipeListingFragment : Fragment() {
              * Notifications
              */
 
-            userViewModel.getNotifications()
+            userViewModel.getNotifications(pageSize = 1)
 
             /**
              * Bottom Tag Filters
@@ -347,7 +375,7 @@ class RecipeListingFragment : Fragment() {
 
         val activity = requireActivity()
         changeMenuVisibility(true, activity)
-        changeStatusBarColor(false, activity, requireContext())
+        changeTheme(false, activity, requireContext())
 
 
 
@@ -668,10 +696,10 @@ class RecipeListingFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
 
-                        numberOfNotifications = it.data!!.result.count { notification ->
-                            !notification.seen
-                        }
+                        numberOfNotifications = it.data!!.notSeen
+
                         changeNotificationNumber()
+
 
 
                     }
@@ -685,6 +713,7 @@ class RecipeListingFragment : Fragment() {
         }
 
     }
+
     private fun changeNotificationNumber(){
         if (numberOfNotifications>0 ) {
             binding.notificationsBadgeTV.visibility = View.VISIBLE
@@ -693,7 +722,6 @@ class RecipeListingFragment : Fragment() {
             binding.notificationsBadgeTV.visibility =View.GONE
         }
     }
-
 
     private fun changeFilterSearch(tag: String){
         if (searchTag == tag){
@@ -705,7 +733,6 @@ class RecipeListingFragment : Fragment() {
             recipeViewModel.getRecipes(searchTag = tag, by = sortedBy)
         }
     }
-
 
     private fun updateView(currentTabSelected: View) {
 

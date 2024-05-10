@@ -17,8 +17,8 @@ import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
 import com.example.projectfoodmanager.data.model.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentCommentsBinding
-import com.example.projectfoodmanager.presentation.recipe.RecipeListingFragment
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.closeKeyboard
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
@@ -31,6 +31,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CommentsFragment : Fragment() {
 
+
+
     /** binding */
     private lateinit var binding: FragmentCommentsBinding
 
@@ -42,6 +44,10 @@ class CommentsFragment : Fragment() {
     private lateinit var manager: LinearLayoutManager
     private var snapHelper : SnapHelper = PagerSnapHelper()
     private var recipeId: Int = -1
+    private var commentId: Int = -1
+    private var pos: Int = 0
+
+    private var alreadyLoaded: Boolean = false
 
         // Pagination
     private var commentsList: MutableList<Comment> = mutableListOf()
@@ -130,8 +136,24 @@ class CommentsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
 
+        /**
+         *  Arguments
+         * */
+
+       arguments?.let {
+            recipeId = it.getInt("recipe_id")
+            commentId = it.getInt("comment_id")
+            if(commentId != -1){
+                pos = 1
+           }
+        }
+
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUI()
         super.onViewCreated(view, savedInstanceState)
     }
@@ -142,9 +164,6 @@ class CommentsFragment : Fragment() {
     }
 
     private fun setUI(){
-
-
-
 
         /**
          *  General
@@ -173,19 +192,26 @@ class CommentsFragment : Fragment() {
          * */
 
         val activity = requireActivity()
-        Helper.changeMenuVisibility(false, activity)
-        Helper.changeStatusBarColor(false, activity, requireContext())
+        changeMenuVisibility(false, activity)
+        activity.window.navigationBarColor = requireContext().getColor(R.color.main_color)
 
         val userSession: User = sharedPreference.getUserSession()
 
         if (isOnline(requireView().context)) {
 
-            // list comments
-            this.recipeId = arguments?.getInt("recipe_id")!!
+
             binding.recyclerView.adapter = adapter
 
-            if (currentPage == 0)
-                recipeViewModel.getCommentsByRecipePaginated(recipeId,currentPage)
+            if (!alreadyLoaded){
+                if (commentId!= -1)
+                    recipeViewModel.getComment(commentId)
+
+                recipeViewModel.getCommentsByRecipe(recipeId,currentPage)
+                alreadyLoaded = true
+            }
+
+
+
 
             // create a comment
             binding.publishIB.setOnClickListener {
@@ -221,7 +247,7 @@ class CommentsFragment : Fragment() {
                             // prevent more scroll
                             binding.recyclerView.removeOnScrollListener(scrollListener)
 
-                            recipeViewModel.getCommentsByRecipePaginated(recipeId = recipeId, page = ++currentPage)
+                            recipeViewModel.getCommentsByRecipe(recipeId = recipeId, page = ++currentPage)
                         }
 
 
@@ -248,7 +274,29 @@ class CommentsFragment : Fragment() {
 
     private fun bindObservers() {
 
-        recipeViewModel.functionGetCommentsOnRecipePaginated.observe(viewLifecycleOwner) {
+        recipeViewModel.functionGetComment.observe(viewLifecycleOwner){ event ->
+            event.getContentIfNotHandled()?.let {result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        /** Update adapter list */
+                        result.data?.let { it ->
+                            adapter.addFocusedItem(it)
+                        }
+
+
+                    }
+                    is NetworkResult.Error -> {
+                        Log.d(TAG, "observer: " + result.message.toString())
+
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        recipeViewModel.functionGetCommentsByRecipe.observe(viewLifecycleOwner) { it ->
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -266,14 +314,11 @@ class CommentsFragment : Fragment() {
                         nextPage = it.data._metadata.next != null
 
 
-                        for (recipe in it.data.result) {
-                            commentsList.add(recipe)
+
+                        for (comment in it.data.result) {
+                            if (commentId !=comment.id)
+                                adapter.addItemAtBottom( item = comment)
                         }
-                        adapter.updateList(commentsList)
-
-
-
-
 
                     }
                     is NetworkResult.Error -> {
@@ -289,14 +334,18 @@ class CommentsFragment : Fragment() {
             }
         }
 
+        /**
+         *  Create Comment
+         * */
+
         recipeViewModel.functionPostCommentOnRecipe.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {result ->
                 when (result) {
                     is NetworkResult.Success -> {
 
                         /** Update adapter list */
-                        result.data?.let { it ->
-                            adapter.addItem(it)
+                        result.data?.let { comment ->
+                            adapter.addItemAtTop(item = comment)
                         }
 
                         /** Update clean textBox */

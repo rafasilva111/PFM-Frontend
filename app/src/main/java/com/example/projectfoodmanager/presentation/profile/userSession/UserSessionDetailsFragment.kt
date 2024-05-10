@@ -15,8 +15,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.ActivityResult
@@ -42,9 +40,6 @@ import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.util.Helper.Companion.userIsNot12Old
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.FirebaseMessagingService
-import com.google.firebase.messaging.RemoteMessage
 import com.yalantis.ucrop.UCrop
 import java.io.*
 import java.lang.ref.WeakReference
@@ -85,8 +80,6 @@ class UserSessionDetailsFragment : Fragment() {
     lateinit var tokenManager: TokenManager
     @Inject
     lateinit var sharedPreference: SharedPreference
-    @Inject
-    lateinit var firebaseMessaging: FirebaseMessaging
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -193,7 +186,7 @@ class UserSessionDetailsFragment : Fragment() {
          * */
         val activity = requireActivity()
         Helper.changeMenuVisibility(false, activity)
-        Helper.changeStatusBarColor(false, activity, context)
+        Helper.changeTheme(false, activity, context)
 
         binding.header.titleTV.text = "Meu Perfil"
 

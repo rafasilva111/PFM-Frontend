@@ -11,12 +11,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
@@ -106,7 +106,7 @@ class RecipeDetailFragment : Fragment() {
             if (isOnline(view.context)) {
 
                 // selecionar as 2/3 primeiras imagens para colocar na zona dos comments
-                recipeViewModel.getSizedCommentsByRecipePaginated(objRecipe!!.id, pageSize = 2)
+                recipeViewModel.getCommentsByRecipe(objRecipe!!.id, pageSize = 2)
 
 /*
                 binding.commentsFB.viewTreeObserver.addOnGlobalLayoutListener(object :
@@ -156,13 +156,13 @@ class RecipeDetailFragment : Fragment() {
 
         /** Recipe Info */
 
-        loadRecipeImage(binding.IVRecipe,recipe.img_source)
+        loadRecipeImage(binding.IVRecipe,recipe.imgSource)
 
         binding.TVRef.text = recipe.id.toString()
-        binding.dateTV.text = formatServerTimeToDateString(recipe.created_date)
+        binding.dateTV.text = formatServerTimeToDateString(recipe.createdDate)
         binding.titleTV.text = recipe.title
-        binding.ratingRecipeRB.rating = recipe.source_rating.toFloat()
-        binding.ratingMedTV.text = recipe.source_rating
+        binding.ratingRecipeRB.rating = recipe.sourceRating.toFloat()
+        binding.ratingMedTV.text = recipe.sourceRating
         binding.commentsTV.text = recipe.comments.toString() +" "+ getString(R.string.nr_comments)
         binding.numberLikeTV.text = recipe.likes.toString()
         binding.timeTV.text = recipe.time
@@ -183,11 +183,11 @@ class RecipeDetailFragment : Fragment() {
 
         /** User Info */
 
-        loadUserImage(binding.imageAuthorIV, recipe.created_by.imgSource)
+        loadUserImage(binding.imageAuthorIV, recipe.createdBy.imgSource)
 
-        binding.nameAuthorTV.text = formatNameToNameUpper(recipe.created_by.name)
+        binding.nameAuthorTV.text = formatNameToNameUpper(recipe.createdBy.name)
 
-        if(recipe.created_by.verified){
+        if(recipe.createdBy.verified){
             binding.verifyUserIV.visibility = View.VISIBLE
         }else{
             binding.verifyUserIV.visibility = View.INVISIBLE
@@ -234,7 +234,7 @@ class RecipeDetailFragment : Fragment() {
         // go to creater profile
         binding.profileAuthorCV.setOnClickListener{
             findNavController().navigate(R.id.action_receitaDetailFragment_to_profileFragment,Bundle().apply {
-                putInt("user_id",recipe.created_by.id)
+                putInt("user_id",recipe.createdBy.id)
             })
         }
 
@@ -299,7 +299,7 @@ class RecipeDetailFragment : Fragment() {
 
         val activity = requireActivity()
         changeMenuVisibility(false, activity)
-        changeStatusBarColor(false, activity, requireContext())
+        changeTheme(false, activity, requireContext())
 
     }
 
@@ -410,7 +410,7 @@ class RecipeDetailFragment : Fragment() {
 
         // comments function
 
-        recipeViewModel.functionGetSizedCommentsOnRecipePaginated.observe(viewLifecycleOwner) { event ->
+        recipeViewModel.functionGetCommentsByRecipe.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {

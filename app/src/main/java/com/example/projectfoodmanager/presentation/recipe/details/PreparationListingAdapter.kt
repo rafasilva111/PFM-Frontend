@@ -2,16 +2,10 @@ package com.example.projectfoodmanager.presentation.recipe.details;
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingIngredientRequest
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Preparation
-import com.example.projectfoodmanager.databinding.ItemCreateRecipePreparationLayoutBinding
+import com.example.projectfoodmanager.data.model.recipe.Preparation
 import com.example.projectfoodmanager.databinding.ItemRecipePreparationLayoutBinding
 
 

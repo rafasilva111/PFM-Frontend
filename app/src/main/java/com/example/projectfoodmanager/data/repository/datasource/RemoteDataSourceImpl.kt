@@ -20,10 +20,10 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.notification.Notification
+import com.example.projectfoodmanager.data.model.notification.NotificationList
+import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
@@ -122,20 +122,12 @@ class RemoteDataSourceImpl @Inject constructor(
 	 * Comments
 	 * */
 
-	/** Gets */
-	override suspend fun getCommentsByRecipePaginated(recipeId: Int,page: Int): Response<CommentList> {
-		return apiInterface.getCommentsByRecipe(recipeId = recipeId,page = page)
-	}
-
-    override suspend fun getSizedCommentsByRecipePaginated(recipeId: Int, page: Int, pageSize: Int): Response<CommentList> {
-		return apiInterface.getSizedCommentsByRecipePaginated(recipeId = recipeId,page = page,pageSize=pageSize)
-    }
-
-	override suspend fun getCommentsByClientPaginated(clientId: Int, page: Int): Response<CommentList> {
-		return apiInterface.getCommentsByClientPaginated(clientId = clientId,page = page)
-	}
-
 	/** General */
+
+	override suspend fun getComment(commentId: Int): Response<Comment> {
+		return apiInterface.getComment(commentId= commentId)
+	}
+
 	override suspend fun createComments(recipeId: Int,comment : CommentDTO): Response<Comment> {
 		return apiInterface.createComments(recipeId= recipeId,comment = comment)
 	}
@@ -145,6 +137,16 @@ class RemoteDataSourceImpl @Inject constructor(
 	}
 	override suspend fun deleteComment(commentId: Int): Response<Comment> {
 		return apiInterface.deleteComment(commentId= commentId)
+	}
+
+	/** Special Gets */
+	override suspend fun getCommentsByRecipe(recipeId: Int,page: Int,pageSize: Int): Response<CommentList> {
+		return apiInterface.getCommentsByRecipe(recipeId = recipeId,page = page,pageSize = pageSize)
+	}
+
+
+	override suspend fun getCommentsByClient(clientId: Int, page: Int): Response<CommentList> {
+		return apiInterface.getCommentsByClient(clientId = clientId,page = page)
 	}
 
 	/** Like Function */
@@ -265,8 +267,8 @@ class RemoteDataSourceImpl @Inject constructor(
 
 	/** Notifications */
 
-	override suspend fun getNotifications(page: Int?, pageSize: Int?): Response<NotificationList> {
-		return apiInterface.getNotifications(page,pageSize)
+	override suspend fun getNotifications(page: Int?, pageSize: Int?, lastId: Int?): Response<NotificationList> {
+		return apiInterface.getNotifications(page,pageSize,lastId)
 	}
 
 	override suspend fun getNotification(id: Int?) : Response<Notification>{

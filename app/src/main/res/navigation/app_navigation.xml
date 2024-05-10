@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_recipeListingFragment_to_notificationFragment"
             app:destination="@id/notificationFragment" />
+        <action
+            android:id="@+id/action_recipeListingFragment_to_receitaCommentsFragment"
+            app:destination="@id/receitaCommentsFragment" />
     </fragment>
 
 
@@ -203,6 +206,15 @@
         <action
             android:id="@+id/action_notificationFragment_to_followRequestFragment"
             app:destination="@id/followRequestFragment" />
+        <action
+            android:id="@+id/action_notificationFragment_to_receitaDetailFragment"
+            app:destination="@id/receitaDetailFragment" />
+        <action
+            android:id="@+id/action_notificationFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_notificationFragment_to_receitaCommentsFragment"
+            app:destination="@id/receitaCommentsFragment" />
     </fragment>
     <fragment
         android:id="@+id/securityFragment"

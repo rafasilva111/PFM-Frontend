@@ -6,21 +6,17 @@ import android.view.*
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.user.UserSimplified
 import com.example.projectfoodmanager.databinding.ItemCommentLayoutBinding
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.SharedPreference
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
-
+import com.example.projectfoodmanager.util.Helper.Companion.getRelativeTime
 class CommentsListingAdapter(
     val sharedPreferences: SharedPreference,
-    val onProfilePressed: (User) -> Unit,
+    val onProfilePressed: (UserSimplified) -> Unit,
     val onLikePressed: (Int, Boolean) -> Unit,
     val onDeletePressed: (Int) -> Unit,
     val onEditPressed: (Int) -> Unit,
@@ -31,6 +27,8 @@ class CommentsListingAdapter(
     private var i : Int = 0
     private val TAG: String = "RecipeListingAdapter"
     private var list: MutableList<Comment> = arrayListOf()
+    // this variable is important to keep notification comment on top
+    private var pos: Int = 0
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -47,20 +45,32 @@ class CommentsListingAdapter(
 
     }
 
-
-
     fun updateList(list: MutableList<Comment>){
         this.list = list
-        notifyItemRangeChanged(0,this.list.size)
+        notifyItemRangeChanged(pos,this.list.size)
     }
     fun cleanList(){
+        val listSize = list.size
         list= arrayListOf()
-        notifyItemRangeChanged(0,this.list.size)
+        notifyItemRangeChanged(0,listSize)
     }
 
-    fun addItem(item: Comment){
-        list.add(0,item)
-        notifyItemInserted(0)
+    private var offset = 0
+
+    fun addFocusedItem(item: Comment) {
+        addItemAtTop(item) // Add focused item at the top with current offset
+        offset++ // Increment the offset
+
+    }
+
+    fun addItemAtTop(item: Comment) {
+        list.add(offset, item)
+        notifyItemInserted(offset)
+    }
+
+    fun addItemAtBottom(item: Comment) {
+        list.add(item)
+        notifyItemInserted(list.size)
     }
 
     fun removeItemById(id: Int){
@@ -158,48 +168,9 @@ class CommentsListingAdapter(
     }
 
 
-    private fun formatDate(date: String): String? {
-
-        try {
-            // Parse the time string into a LocalDateTime object
-            val inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
-            val time = ZonedDateTime.parse(date, inputFormat)
-
-            // Format the LocalDateTime object into a string
-            val outputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-            val formattedTime = time.format(outputFormat)
-
-            // Print the formatted time string
-            return formattedTime
-        } catch (e: DateTimeParseException) {
-            e.printStackTrace()
-        }
-        return null
-    }
-
-    private fun getRelativeTime(timeString: String): String? {
-        return try {
-            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss")
-            val currentDateTime = LocalDateTime.now().atZone(ZoneId.of("Europe/Lisbon"))
-            val messageDateTime = LocalDateTime.parse(timeString, formatter)
-            val duration = Duration.between(messageDateTime, currentDateTime)
 
 
-            return when {
-                duration.seconds < 60 -> "Just now"
-                duration.toMinutes() < 60 -> "${duration.toMinutes()} minutes ago"
-                duration.toHours() < 24 -> "${duration.toHours()} hours ago"
-                duration.toHours() < 48 -> "Yesterday"
-                duration.toDays() < 10 -> "${duration.toDays()} days ago"
-                else -> {
-                    formatDate(timeString)
-                }
-            }
-        } catch (e: DateTimeParseException) {
-            "Invalid time format"
-        }
-        return null
-    }
+
 }
 
 

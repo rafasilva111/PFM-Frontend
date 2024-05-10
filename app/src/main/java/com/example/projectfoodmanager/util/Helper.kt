@@ -22,23 +22,13 @@ import com.example.projectfoodmanager.data.model.Avatar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import java.util.*
-import android.Manifest
-import android.app.Activity
-import android.content.ContentValues
-import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Environment
-import android.provider.MediaStore
-import androidx.core.content.FileProvider
-import com.example.projectfoodmanager.BuildConfig
 import java.io.*
 import java.text.SimpleDateFormat
+import java.time.*
+import java.time.format.DateTimeParseException
 
 class Helper {
     companion object {
@@ -152,11 +142,12 @@ class Helper {
 
         fun loadRecipeImage(recipeIV: ImageView, imgSource: String) {
             val imgRef = Firebase.storage.reference.child(imgSource)
+            println(imgSource)
             imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                val imageURL = Uri.toString()
-                Glide.with(recipeIV.context).load(imageURL).into(recipeIV)
+                Glide.with(recipeIV.context).load(Uri.toString()).into(recipeIV)
             }
             .addOnFailureListener {
+                println(it)
                 recipeIV.setImageResource(R.drawable.default_image_recipe)
             }
 
@@ -169,7 +160,7 @@ class Helper {
         var STATUS_BAR_COLOR: Boolean? = null // true for mainColor (red), false for secondary (white)
         var MENU_VISIBILITY: Boolean? = null // true for visible, false for gone
 
-        fun changeStatusBarColor(mainColor: Boolean, activity: FragmentActivity?, context: Context?){
+        fun changeTheme(mainColor: Boolean, activity: FragmentActivity?, context: Context?){
             val window = activity?.window
             if (window != null && context != null) {
                 if (mainColor) {
@@ -196,6 +187,7 @@ class Helper {
             }
 
         }
+
 
         fun changeMenuVisibility(visibility: Boolean, activity: FragmentActivity?) {
 
@@ -315,5 +307,49 @@ class Helper {
             // Return false in case of errors
             return true
         }
+
+        private fun formatDate(date: String): String? {
+
+            try {
+                // Parse the time string into a LocalDateTime object
+                val inputFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss")
+                val time = LocalDateTime.parse(date, inputFormat)
+
+                // Format the LocalDateTime object into a string
+                val outputFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy  HH:mm")
+                val formattedTime = time.format(outputFormat)
+
+                // Print the formatted time string
+                return formattedTime
+            } catch (e: DateTimeParseException) {
+                e.printStackTrace()
+            }
+            return null
+        }
+
+        fun getRelativeTime(timeString: String): String? {
+            return try {
+                val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss")
+                val currentDateTime = LocalDateTime.now().atZone(ZoneId.of("Europe/Lisbon"))
+                val messageDateTime = LocalDateTime.parse(timeString, formatter)
+                val duration = Duration.between(messageDateTime, currentDateTime)
+
+
+                return when {
+                    duration.seconds < 60 -> "Just now"
+                    duration.toMinutes() < 60 -> "${duration.toMinutes()} minutes ago"
+                    duration.toHours() < 24 -> "${duration.toHours()} hours ago"
+                    duration.toHours() < 48 -> "Yesterday"
+                    duration.toDays() < 10 -> "${duration.toDays()} days ago"
+                    else -> {
+                        formatDate(timeString)
+                    }
+                }
+            } catch (e: DateTimeParseException) {
+                "Invalid time format"
+            }
+        }
     }
+
+
 }

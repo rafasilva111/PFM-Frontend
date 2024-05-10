@@ -5,14 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Preparation
+import com.example.projectfoodmanager.data.model.recipe.Preparation
 import com.example.projectfoodmanager.databinding.ItemCreateRecipePreparationLayoutBinding
 
 
 class PreparationAdapter(
     items: MutableList<Preparation>,
-    val onItemClicked: (Int,Preparation) -> Unit,
-    val onUpdateClicked: (Int,Preparation) -> Unit,
+    val onItemClicked: (Int, Preparation) -> Unit,
+    val onUpdateClicked: (Int, Preparation) -> Unit,
 ) : RecyclerView.Adapter<PreparationAdapter.MyViewHolder>() {
 
     private val TAG: String? = "IngredientsAdapter"

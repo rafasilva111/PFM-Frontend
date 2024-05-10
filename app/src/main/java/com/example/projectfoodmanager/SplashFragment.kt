@@ -10,12 +10,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.databinding.FragmentSplashBinding
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Constants.MAX_CALENDER_DAYS
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.example.projectfoodmanager.viewmodels.ShoppingListViewModel
@@ -81,7 +82,7 @@ class SplashFragment : Fragment() {
 
         val activity = requireActivity()
         changeMenuVisibility(false, activity)
-        changeStatusBarColor(true,activity,requireContext())
+        changeTheme(true,activity,requireContext())
 
         /**
          *  OnBoarding
@@ -228,7 +229,6 @@ class SplashFragment : Fragment() {
                     is NetworkResult.Error -> {
                         findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                         Log.e(TAG, "bindObservers: getUserRecipesBackground error "+result.message)
-                        toast(getString(R.string.welcome))
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -239,7 +239,8 @@ class SplashFragment : Fragment() {
         updateSharedPreferenceTracker.addObserver { list ->
             if (list.isNotEmpty() && list.all { it }) {
                 findNavController().navigate(R.id.action_splashFragment_to_app_navigation)
-                toast(getString(R.string.welcome))
+
+
             }
         }
     }

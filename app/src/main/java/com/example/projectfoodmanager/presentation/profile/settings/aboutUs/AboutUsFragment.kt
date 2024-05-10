@@ -60,7 +60,7 @@ class AboutUsFragment : Fragment() {
         val activity = requireActivity()
 
         Helper.changeMenuVisibility(false, activity)
-        Helper.changeStatusBarColor(false, activity, requireContext())
+        Helper.changeTheme(false, activity, requireContext())
 
         binding.backIB.setOnClickListener {
             findNavController().navigateUp()

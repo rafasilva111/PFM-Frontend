@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.util.Helper
@@ -48,7 +48,7 @@ class NewCalenderEntryFragmentListingAdapter(
         notifyDataSetChanged()
     }
 
-    fun updateItem(position: Int,item: Recipe,user: User){
+    fun updateItem(position: Int, item: Recipe, user: User){
         list.removeAt(position)
         list.add(position,item)
         this.user = user
@@ -74,24 +74,24 @@ class NewCalenderEntryFragmentListingAdapter(
             if (user==null)
                 user= sharedPreference.getUserSession()
 
-            binding.dateTV.text = formatServerTimeToDateString(item.created_date)
+            binding.dateTV.text = formatServerTimeToDateString(item.createdDate)
 
             //Load Recipe img
-            Helper.loadRecipeImage(binding.imageView,item.img_source)
+            Helper.loadRecipeImage(binding.imageView,item.imgSource)
 
             //Load Recipe user img
-            Helper.loadUserImage(binding.imgAuthorIV,item.created_by.imgSource)
+            Helper.loadUserImage(binding.imgAuthorIV,item.createdBy.imgSource)
 
             binding.idTV.text = item.id.toString()
-            binding.nameAuthorTV.text = item.created_by.name
+            binding.nameAuthorTV.text = item.createdBy.name
             binding.recipeTitleTV.text = item.title
             binding.recipeDescriptionTV.text = item.description
             binding.itemLayout.setOnClickListener {
                 onItemClicked.invoke(adapterPosition, item)
             }
             binding.nLikeTV.text = item.likes.toString()
-            binding.ratingRecipeRB.rating = item.source_rating.toFloat()
-            binding.ratingMedTV.text = item.source_rating
+            binding.ratingRecipeRB.rating = item.sourceRating.toFloat()
+            binding.ratingMedTV.text = item.sourceRating
 
             binding.favoritesIB.visibility=View.INVISIBLE
             //--------- LIKES ---------

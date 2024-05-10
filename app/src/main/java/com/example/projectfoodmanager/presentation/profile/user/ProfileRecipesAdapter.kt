@@ -3,7 +3,7 @@ package com.example.projectfoodmanager.presentation.profile.user
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.databinding.ItemProfileRecipeLayoutBinding
 import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import java.time.LocalDate
@@ -49,7 +49,7 @@ class ProfileRecipesAdapter(
     inner class MyViewHolder constructor(private val binding: ItemProfileRecipeLayoutBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: Recipe) {
 
-            loadRecipeImage(binding.recipeIV, item.img_source)
+            loadRecipeImage(binding.recipeIV, item.imgSource)
 
         }
     }

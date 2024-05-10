@@ -92,27 +92,27 @@ class CalendarEntryDetailFragment : Fragment() {
         //SET RECEITA
 
         //-> Load Author name
-        binding.authorTV.text = objCalEntry.recipe.created_by.name
+        binding.authorTV.text = objCalEntry.recipe.createdBy.name
 
         //-> Load Author img
-        loadUserImage(binding.authorIV, objCalEntry.recipe.created_by.imgSource)
+        loadUserImage(binding.authorIV, objCalEntry.recipe.createdBy.imgSource)
 
         //-> Load Recipe img
-        loadRecipeImage(binding.imageView,objCalEntry.recipe.img_source)
+        loadRecipeImage(binding.imageView,objCalEntry.recipe.imgSource)
 
 
         //--> AUTHOR NAME
-        binding.authorTV.text= objCalEntry.recipe.created_by.name
+        binding.authorTV.text= objCalEntry.recipe.createdBy.name
 
         //--> AUTHOR VERIFIED
-        if(objCalEntry.recipe.created_by.verified){
+        if(objCalEntry.recipe.createdBy.verified){
             binding.verifyUserIV.visibility = View.VISIBLE
         }else{
             binding.verifyUserIV.visibility = View.INVISIBLE
         }
 
         //--> DATE
-        binding.dateTV.text =formatServerTimeToDateString(objCalEntry.recipe.created_date)
+        binding.dateTV.text =formatServerTimeToDateString(objCalEntry.recipe.createdDate)
 
         //--> ID
         binding.idTV.text = objCalEntry.recipe.id.toString()
@@ -128,8 +128,8 @@ class CalendarEntryDetailFragment : Fragment() {
         }*/
 
         //--> RATING
-        binding.ratingRecipeRB.rating = objCalEntry.recipe.source_rating.toFloat()
-        binding.ratingMedTV.text = objCalEntry.recipe.source_rating
+        binding.ratingRecipeRB.rating = objCalEntry.recipe.sourceRating.toFloat()
+        binding.ratingMedTV.text = objCalEntry.recipe.sourceRating
 
         //--> TITLE
         binding.recipeTitleTV.text = objCalEntry.recipe.title

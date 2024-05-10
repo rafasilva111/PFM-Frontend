@@ -12,7 +12,7 @@ import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentSessionProfileBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.UserViewModel
@@ -108,7 +108,7 @@ class UserSessionFragment : Fragment() {
          * */
         val activity = requireActivity()
         changeMenuVisibility(true,activity)
-        changeStatusBarColor(false, activity, context)
+        changeTheme(false, activity, context)
 
         /**
          * Buttons

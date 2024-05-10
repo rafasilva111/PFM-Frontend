@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Tag
+import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.recipe.Tag
 import com.example.projectfoodmanager.databinding.FragmentRecipeTabBinding
 import com.example.projectfoodmanager.presentation.recipe.details.IngredientListingAdapter
 import com.example.projectfoodmanager.presentation.recipe.details.PreparationListingAdapter

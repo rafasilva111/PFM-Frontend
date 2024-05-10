@@ -199,4 +199,11 @@ object FirebaseNotificationCode{
     const val SECURITY = 6
     const val SYSTEM = 7
     const val LIKE = 8
+    const val RECIPE_CREATED = 9
+    const val COMMENT_LIKED = 10
+}
+
+object FragmentsToOpen{
+    const val FRAGMENT_COMMENTS = 1
+
 }

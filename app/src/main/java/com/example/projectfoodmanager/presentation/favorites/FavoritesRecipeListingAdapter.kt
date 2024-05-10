@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
@@ -63,7 +63,7 @@ class FavoritesRecipeListingAdapter(
         notifyDataSetChanged()
     }
 
-    fun updateItem(position: Int,item: Recipe,user: User){
+    fun updateItem(position: Int, item: Recipe, user: User){
         list.removeAt(position)
         list.add(position,item)
         this.user = user
@@ -87,7 +87,7 @@ class FavoritesRecipeListingAdapter(
         fun bind(item: Recipe) {
             //binding.authorTV.text = item.company
             //------- IMAGEM DA RECIPE -------
-            val imgRecipeRef = Firebase.storage.reference.child(item.img_source)
+            val imgRecipeRef = Firebase.storage.reference.child(item.imgSource)
             imgRecipeRef.downloadUrl.addOnSuccessListener { Uri ->
                 val imageURL = Uri.toString()
                 Glide.with(binding.imageView.context).load(imageURL).into(binding.imageView)
@@ -96,19 +96,19 @@ class FavoritesRecipeListingAdapter(
             //------- AUTOR DA RECIPE -------
 
             // todo rafael fix esta merda
-            binding.nameAuthorTV.text = item.created_by.name
+            binding.nameAuthorTV.text = item.createdBy.name
 
-            if (!item.created_by.verified) {
+            if (!item.createdBy.verified) {
                 binding.verifyUserIV.visibility = View.INVISIBLE
             }
 
             //AUTHOR-> IMG
-            if (item.created_by.imgSource.contains("avatar")){
-                val avatar= Avatar.getAvatarByName(item.created_by.imgSource)
+            if (item.createdBy.imgSource.contains("avatar")){
+                val avatar= Avatar.getAvatarByName(item.createdBy.imgSource)
                 binding.imgAuthorIV.setImageResource(avatar!!.imgId)
 
             }else{
-                val imgRef = Firebase.storage.reference.child(item.created_by.imgSource)
+                val imgRef = Firebase.storage.reference.child(item.createdBy.imgSource)
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
                     Glide.with(binding.imgAuthorIV.context).load(Uri.toString()).into(binding.imgAuthorIV)
                 }
@@ -122,7 +122,7 @@ class FavoritesRecipeListingAdapter(
 
             //------- INFOS DA RECIPE -------
 
-            binding.dateTV.text = formatServerTimeToDateString(item.created_date)
+            binding.dateTV.text = formatServerTimeToDateString(item.createdDate)
             binding.recipeTitleTV.text = item.title
             binding.recipeDescriptionTV.text = item.description.toString()
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
@@ -140,8 +140,8 @@ class FavoritesRecipeListingAdapter(
             }
 
 
-            binding.ratingRecipeRB.rating = item.source_rating.toFloat()
-            binding.ratingMedTV.text = item.source_rating.toString()
+            binding.ratingRecipeRB.rating = item.sourceRating.toFloat()
+            binding.ratingMedTV.text = item.sourceRating.toString()
 
 /*            binding.timeTV.text = item.time
             binding.difficultyTV.text = item.difficulty

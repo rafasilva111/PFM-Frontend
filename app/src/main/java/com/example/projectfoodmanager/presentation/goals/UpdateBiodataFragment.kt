@@ -20,7 +20,7 @@ import com.example.projectfoodmanager.util.Constraints.USER_MAX_WEIGHT
 import com.example.projectfoodmanager.util.Constraints.USER_MIN_HEIGHT
 import com.example.projectfoodmanager.util.Constraints.USER_MIN_WEIGHT
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -190,7 +190,7 @@ class UpdateBiodataFragment : Fragment() {
 
         val activity = requireActivity()
         changeMenuVisibility(false, activity)
-        changeStatusBarColor(true, activity, requireContext())
+        changeTheme(true, activity, requireContext())
 
 
 

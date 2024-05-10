@@ -19,10 +19,10 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.notification.Notification
+import com.example.projectfoodmanager.data.model.notification.NotificationList
+import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
@@ -70,25 +70,24 @@ interface RemoteDataSource {
 	 * Comments
 	 * */
 
-	/** Get */
-	suspend fun getCommentsByRecipePaginated(recipeId: Int,page: Int): Response<CommentList>
-	suspend fun getSizedCommentsByRecipePaginated(recipeId: Int, page: Int, pageSize: Int): Response<CommentList>
-	suspend fun getCommentsByClientPaginated(clientId: Int, page: Int): Response<CommentList>
-
 	/** General */
+	suspend fun getComment(commentId: Int): Response<Comment>
 	suspend fun createComments(recipeId: Int,comment: CommentDTO): Response<Comment>
 	suspend fun patchComment(commentId: Int, comment: CommentDTO): Response<Comment>
 	suspend fun deleteComment(commentId: Int): Response<Comment>
+
+	/** Special Gets */
+	suspend fun getCommentsByRecipe(recipeId: Int, page: Int, pageSize: Int): Response<CommentList>
+	suspend fun getCommentsByClient(clientId: Int, page: Int): Response<CommentList>
 
 	/** Like Function */
 	suspend fun deleteLikeOnComment(commentId: Int): Response<Comment>
 	suspend fun postLikeOnComment(commentId: Int): Response<Comment>
 
 
-
-
-
-	//calender
+	/**
+	 * Calender
+	 * */
 	suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryDTO): Response<CalenderEntry>
 	suspend fun getEntryOnCalender(date: String):  Response<CalenderEntryList>
 	suspend fun getEntryOnCalender(fromDate: String, toDate: String):  Response<CalenderDatedEntryList>
@@ -117,7 +116,7 @@ interface RemoteDataSource {
 	suspend fun deleteShoppingList(shoppingListId: Int): Response<IdResponse>
 
 	/** Notifications */
-	suspend fun getNotifications(page: Int?, pageSize: Int?): Response<NotificationList>
+	suspend fun getNotifications(page: Int?, pageSize: Int?, lastId: Int?): Response<NotificationList>
 	suspend fun getNotification(id: Int?): Response<Notification>
 	suspend fun putNotification(id: Int?, notification: Notification): Response<Unit>
 	suspend fun putNotifications(idListRequest: IdListRequest): Response<Unit>

@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.model.modelResponse.recipe
+package com.example.projectfoodmanager.data.model.recipe
 import com.example.projectfoodmanager.data.model.modelResponse.metadata.Metadata
 data class RecipeList(
     val _metadata: Metadata,

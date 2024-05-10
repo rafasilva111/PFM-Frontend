@@ -29,7 +29,7 @@ import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfMonth
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfWeek
@@ -241,7 +241,7 @@ class CalendarFragment : Fragment() {
          * */
         val activity = requireActivity()
 
-        changeStatusBarColor(false, activity, requireContext())
+        changeTheme(false, activity, requireContext())
         changeMenuVisibility(true,activity)
 
         setMonthView()

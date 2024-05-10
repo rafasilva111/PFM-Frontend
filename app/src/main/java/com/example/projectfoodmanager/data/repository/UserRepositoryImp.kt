@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
+import com.example.projectfoodmanager.data.model.notification.Notification
+import com.example.projectfoodmanager.data.model.notification.NotificationList
 import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.user.User
@@ -508,9 +508,9 @@ class UserRepositoryImp @Inject constructor(
     override val deleteNotificationsResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
         get() = _deleteNotificationsResponseLiveData
 
-    override suspend fun getNotifications(page: Int?, pageSize: Int?) {
+    override suspend fun getNotifications(page: Int?, pageSize: Int?, lastId: Int?) {
         handleApiResponse(_getNotificationsResponseLiveData) {
-            remoteDataSource.getNotifications(page,pageSize)
+            remoteDataSource.getNotifications(page,pageSize,lastId)
         }
     }
 

@@ -64,7 +64,7 @@ class SendUsAMessageFragment : Fragment() {
          */
 
         Helper.changeMenuVisibility(false, requireActivity())
-        Helper.changeStatusBarColor(false, activity, requireContext())
+        Helper.changeTheme(false, activity, requireContext())
 
 
         binding.send.setOnClickListener {

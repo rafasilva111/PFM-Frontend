@@ -1,16 +1,14 @@
 package com.example.projectfoodmanager
 
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.core.view.WindowCompat
 import androidx.navigation.fragment.findNavController
+import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.databinding.FragmentHomeNewBinding
-import com.example.projectfoodmanager.presentation.recipe.details.RecipeDetailFragment
-import com.example.projectfoodmanager.util.Helper
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.FragmentsToOpen
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
+import com.example.projectfoodmanager.util.toast
 
 class HomeFragment : Fragment() {
 
@@ -41,7 +39,7 @@ class HomeFragment : Fragment() {
          * */
 
         
-        changeStatusBarColor(true, requireActivity(), requireContext())
+        changeTheme(true, requireActivity(), requireContext())
 
         /** no status bar limits */
 
@@ -59,6 +57,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_registerFragment)
         }
     }
+
 
     override fun onPause() {
         super.onPause()

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
 import com.example.projectfoodmanager.data.model.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -103,9 +103,17 @@ class RecipeRepositoryImp @Inject constructor(
 
     }
 
-    private val _functionCreateCommentOnRecipe = MutableLiveData<Event<NetworkResult<Comment>>>()
-    override val functionPostCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
-        get() = _functionCreateCommentOnRecipe
+    /**
+     * Comments Section
+     */
+
+    private val _functionGetComment = MutableLiveData<Event<NetworkResult<Comment>>>()
+    override val functionGetComment: LiveData<Event<NetworkResult<Comment>>>
+        get() = _functionGetComment
+
+    private val _functionCreateComment = MutableLiveData<Event<NetworkResult<Comment>>>()
+    override val functionPostComment: LiveData<Event<NetworkResult<Comment>>>
+        get() = _functionCreateComment
 
     private val _functionPatchComment = MutableLiveData<Event<NetworkResult<Comment>>>()
     override val functionPatchComment:  LiveData<Event<NetworkResult<Comment>>>
@@ -117,9 +125,17 @@ class RecipeRepositoryImp @Inject constructor(
         get() = _functionDeleteComment
 
 
+    override suspend fun getComment(commentId: Int) {
+        handleApiResponse(
+            _functionGetComment
+        ) {
+            remoteDataSource.getComment(commentId)
+        }
+    }
+
     override suspend fun postComment(recipeId: Int, comment: CommentDTO) {
         handleApiResponse(
-            _functionCreateCommentOnRecipe
+            _functionCreateComment
         ) {
             remoteDataSource.createComments(recipeId,comment)
         }
@@ -164,7 +180,33 @@ class RecipeRepositoryImp @Inject constructor(
             remoteDataSource.deleteLikeOnComment(commentId)
         }
     }
-    // NOT OTIMIZED
+
+
+    private val _functionGetCommentsByRecipe = MutableLiveData<Event<NetworkResult<CommentList>>>()
+    override val functionGetCommentsByRecipe: LiveData<Event<NetworkResult<CommentList>>>
+        get() = _functionGetCommentsByRecipe
+
+    private val _functionGetCommentsByClient = MutableLiveData<Event<NetworkResult<CommentList>>>()
+    override val functionGetCommentsByClient: LiveData<Event<NetworkResult<CommentList>>>
+        get() = _functionGetCommentsByClient
+
+    override suspend fun getCommentsByRecipe(recipeId: Int, page: Int, pageSize: Int) {
+        handleApiResponse(
+            _functionGetCommentsByRecipe
+        ) {
+            remoteDataSource.getCommentsByRecipe(recipeId,page,pageSize)
+        }
+    }
+
+    override suspend fun getCommentsByClient(clientId: Int, page: Int) {
+
+        handleApiResponse(
+            _functionGetCommentsByClient
+        ) {
+            remoteDataSource.getCommentsByClient(clientId,page)
+        }
+    }
+
 
     /**
      * Like Function
@@ -312,95 +354,5 @@ class RecipeRepositoryImp @Inject constructor(
             _functionRemoveSaveOnRecipe.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
     }
-
-    /// COMMENTS SECTION
-
-    private val _functionGetCommentsOnRecipePaginated = MutableLiveData<Event<NetworkResult<CommentList>>>()
-    override val functionGetCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
-        get() = _functionGetCommentsOnRecipePaginated
-
-    override suspend fun getCommentsByRecipePaginated(recipeId: Int, page: Int) {
-        _functionGetCommentsOnRecipePaginated.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.getCommentsByRecipePaginated(recipeId,page)
-        if (response.isSuccessful && response.body() != null) {
-            Log.i(TAG, "handleResponse: request made was sucessfull.")
-            Log.i(TAG, "handleResponse: response body -> ${response.body()}")
-            _functionGetCommentsOnRecipePaginated.postValue(Event(NetworkResult.Success(
-                response.body()!!
-            )))
-        }
-        else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
-            _functionGetCommentsOnRecipePaginated.postValue(Event(NetworkResult.Error(errorObj)))
-        }
-        else{
-            _functionGetCommentsOnRecipePaginated.postValue(Event(NetworkResult.Error("Something Went Wrong")))
-        }
-    }
-
-
-
-
-    // LiveData for searched recipes
-    private val _functionGetSizedCommentsOnRecipePaginated = MutableLiveData<Event<NetworkResult<CommentList>>>()
-    override val functionGetSizedCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
-        get() = _functionGetSizedCommentsOnRecipePaginated
-
-
-    override suspend fun getSizedCommentsByRecipePaginated(recipeId: Int, page: Int, pageSize: Int) {
-        _functionGetSizedCommentsOnRecipePaginated.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.getSizedCommentsByRecipePaginated(recipeId,page,pageSize)
-        if (response.isSuccessful && response.body() != null) {
-            Log.i(TAG, "handleResponse: request made was sucessfull.")
-            Log.i(TAG, "handleResponse: response body -> ${response.body()}")
-            _functionGetSizedCommentsOnRecipePaginated.postValue(Event(NetworkResult.Success(
-                response.body()!!
-            )))
-        }
-        else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
-            _functionGetSizedCommentsOnRecipePaginated.postValue(Event(NetworkResult.Error(errorObj)))
-        }
-        else{
-            _functionGetSizedCommentsOnRecipePaginated.postValue(Event(NetworkResult.Error("Something Went Wrong")))
-        }
-    }
-
-
-    // LiveData for searched recipes
-    private val _functionGetCommentsByClientPaginated = MutableLiveData<Event<NetworkResult<CommentList>>>()
-    override val functionGetCommentsByClientPaginated: LiveData<Event<NetworkResult<CommentList>>>
-        get() = _functionGetCommentsByClientPaginated
-
-
-    override suspend fun getCommentsByClientPaginated(clientId: Int, page: Int) {
-        _functionGetCommentsByClientPaginated.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
-        val response =remoteDataSource.getCommentsByClientPaginated(clientId,page)
-        if (response.isSuccessful && response.body() != null) {
-            Log.i(TAG, "handleResponse: request made was sucessfull.")
-            Log.i(TAG, "handleResponse: response body -> ${response.body()}")
-            _functionGetSizedCommentsOnRecipePaginated.postValue(Event(NetworkResult.Success(
-                response.body()!!
-            )))
-        }
-        else if(response.errorBody()!=null){
-            val errorObj = response.errorBody()!!.charStream().readText()
-            Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
-            _functionGetCommentsByClientPaginated.postValue(Event(NetworkResult.Error(errorObj)))
-        }
-        else{
-            _functionGetCommentsByClientPaginated.postValue(Event(NetworkResult.Error("Something Went Wrong")))
-        }
-    }
-
-
-
-
-
 
 }

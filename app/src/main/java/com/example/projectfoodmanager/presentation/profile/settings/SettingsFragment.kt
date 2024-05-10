@@ -143,7 +143,7 @@ class SettingsFragment : Fragment() {
 
         val activity = requireActivity()
         changeMenuVisibility(false, activity)
-        Helper.changeStatusBarColor(false, activity, requireContext())
+        Helper.changeTheme(false, activity, requireContext())
         binding.header.titleTV.text = "Definições"
 
         /** internet connection observer*/

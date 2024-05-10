@@ -9,11 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.databinding.FragmentBlankBinding
-import com.example.projectfoodmanager.presentation.goals.createGoal.CreateGoalFragment
 import com.example.projectfoodmanager.util.Event
-import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
 import com.example.projectfoodmanager.viewmodels.GoalsViewModel
@@ -117,7 +115,7 @@ class BlankFragment : Fragment() {
 
         val activity = requireActivity()
         changeMenuVisibility(false, activity)
-        changeStatusBarColor(false, activity, requireContext())
+        changeTheme(false, activity, requireContext())
 
     }
 

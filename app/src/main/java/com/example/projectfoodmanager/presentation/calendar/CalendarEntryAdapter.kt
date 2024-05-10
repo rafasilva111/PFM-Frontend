@@ -63,8 +63,8 @@ class CalendarEntryAdapter(
 
     inner class MyViewHolder(private val binding: ItemCalenderEntryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CalenderEntry) {
-            if (item.recipe.img_source.isNotEmpty()){
-                val imgRef = Firebase.storage.reference.child(item.recipe.img_source)
+            if (item.recipe.imgSource.isNotEmpty()){
+                val imgRef = Firebase.storage.reference.child(item.recipe.imgSource)
                 imgRef.downloadUrl.addOnSuccessListener { Uri ->
                     val imageURL = Uri.toString()
                     Glide.with(binding.recipeIV.context).load(imageURL).into(binding.recipeIV)

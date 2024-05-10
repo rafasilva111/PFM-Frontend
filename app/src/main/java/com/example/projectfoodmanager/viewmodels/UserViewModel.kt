@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
+import com.example.projectfoodmanager.data.model.notification.Notification
+import com.example.projectfoodmanager.data.model.notification.NotificationList
 import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.user.User
@@ -217,9 +217,9 @@ class UserViewModel @Inject constructor(
     val getNotificationsResponseLiveData: LiveData<Event<NetworkResult<NotificationList>>>
         get() = repository.getNotificationsResponseLiveData
 
-    fun getNotifications(page: Int? = null,pageSize: Int? = null){
+    fun getNotifications(page: Int? = null, pageSize: Int? = null, lastId: Int?= null){
         viewModelScope.launch {
-            repository.getNotifications(page = page ,pageSize = pageSize)
+            repository.getNotifications(page = page ,pageSize = pageSize,lastId=lastId)
         }
     }
 

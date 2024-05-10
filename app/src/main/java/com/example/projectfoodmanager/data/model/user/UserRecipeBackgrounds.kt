@@ -1,7 +1,6 @@
 package com.example.projectfoodmanager.data.model.user
 
 import android.os.Parcelable
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
 import com.example.projectfoodmanager.util.*
@@ -316,7 +316,7 @@ class FavoritesFragment : Fragment() {
     }
 
     override fun onStart() {
-        Helper.changeStatusBarColor(false, activity, context)
+        Helper.changeTheme(false, activity, context)
         super.onStart()
     }
 
@@ -804,7 +804,7 @@ class FavoritesFragment : Fragment() {
         ib?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_1))
     }
 
-    private fun filterRecipes(recipeList: MutableList<Recipe>,string: String): MutableList<Recipe>{
+    private fun filterRecipes(recipeList: MutableList<Recipe>, string: String): MutableList<Recipe>{
         val filteredList = mutableListOf<Recipe>()
         for (recipe in recipeList)
             for (tag in recipe.tags)
@@ -815,7 +815,7 @@ class FavoritesFragment : Fragment() {
         return filteredList
     }
 
-    private fun searchRecipes(recipeList: MutableList<Recipe>,string: String): MutableList<Recipe>{
+    private fun searchRecipes(recipeList: MutableList<Recipe>, string: String): MutableList<Recipe>{
         val filteredList = mutableListOf<Recipe>()
         for (recipe in recipeList){
             if (recipe.title.lowercase().contains(string.lowercase()) ||recipe.id.toString().contains(string.lowercase())){

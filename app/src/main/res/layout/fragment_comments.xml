@@ -12,6 +12,7 @@
         android:id="@+id/parentLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:elevation="5dp"
         android:background="@drawable/layout_main"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,26 +25,29 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/SRL_details"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:fillViewport="true"
-            android:isScrollContainer="false"
+
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toTopOf="@+id/progress_bar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/header">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@android:color/transparent"
-                android:listSelector="@android:color/transparent" />
 
-        </ScrollView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:divider="@android:color/transparent"
+                    android:listSelector="@android:color/transparent" />
+
+
+
+        </androidx.core.widget.NestedScrollView>
 
         <ProgressBar
             android:id="@+id/progress_bar"

@@ -1,11 +1,12 @@
-package com.example.projectfoodmanager.notification
+package com.example.projectfoodmanager.di.notification
 
 
 import android.content.Intent
 import android.util.Log
-import com.example.projectfoodmanager.util.FirebaseNotificationCode
+import com.example.projectfoodmanager.data.model.notification.Notification
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -16,6 +17,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     @Inject
     lateinit var mNotificationManager: MyNotificationManager
+
+    @Inject
+    lateinit var gson: Gson
 
     companion object {
         const val ACTION_NOTIFICATION_RECEIVED = "com.example.projectfoodmanager.ACTION_NOTIFICATION_RECEIVED"
@@ -31,22 +35,21 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Data Payload: " + remoteMessage.data)
-            try {
 
-                val notificationData = HashMap<String, String>()
-                notificationData["title"] = remoteMessage.data["title"] ?: ""
-                notificationData["message"] = remoteMessage.data["message"] ?: ""
-                notificationData["type"] = remoteMessage.data["type"] ?: ""
 
-                mNotificationManager.textNotification(notificationData["title"], notificationData["message"])
+            val notificationData = remoteMessage.data.toNotification()
+           mNotificationManager.textNotification(notificationData)
 
-                val intent = Intent(ACTION_NOTIFICATION_RECEIVED)
-                intent.putExtra(EXTRA_NOTIFICATION_DATA, notificationData) // You can put more data if needed
-                sendBroadcast(intent)
+            sendBroadcast(Intent(ACTION_NOTIFICATION_RECEIVED).apply {
+                putExtra(EXTRA_NOTIFICATION_DATA, notificationData)
+            })
 
-            } catch (e: Exception) {
-                Log.d(TAG, "Exception: " + e.message)
-            }
+
         }
+    }
+
+    // Extension function to convert a Map<String, String> to a Notification object
+    private fun Map<String, String>.toNotification(): Notification {
+        return gson.fromJson(this["notification"]?: "", Notification::class.java)
     }
 }

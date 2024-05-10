@@ -13,7 +13,7 @@ import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.fitnessReport.GenericReport
 import com.example.projectfoodmanager.databinding.FragmentCreateGoalBinding
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.SharedPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
@@ -177,7 +177,7 @@ class CreateGoalFragment : Fragment() {
 
         val activity = requireActivity()
         changeMenuVisibility(false, activity)
-        changeStatusBarColor(false, activity, requireContext())
+        changeTheme(false, activity, requireContext())
 
     }
 

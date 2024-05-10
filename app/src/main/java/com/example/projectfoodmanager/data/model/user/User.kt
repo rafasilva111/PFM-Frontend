@@ -1,13 +1,9 @@
 package com.example.projectfoodmanager.data.model.user
 
 import android.os.Parcelable
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplefied
+import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.recipe.RecipeSimplified
 import com.example.projectfoodmanager.data.model.user.goal.Goal
-import com.google.gson.Gson
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonObject
-import com.google.gson.annotations.JsonAdapter
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
@@ -51,11 +47,13 @@ data class User(
     val updatedDate: String?,
     @SerializedName("followed_state")
     val followedState: String? = null,
+    @SerializedName("followers_c")
     val followers: Int = 0,
+    @SerializedName("followeds_c")
     val followeds: Int = 0,
-    @SerializedName("followers_request")
+    @SerializedName("followers_request_c")
     val followersRequest: Int = 0,
-    @SerializedName("followeds_request")
+    @SerializedName("followeds_request_c")
     val followedsRequest: Int = 0,
     @SerializedName("fitness_goal")
     var fitnessGoal: Goal? = null
@@ -85,7 +83,7 @@ data class User(
             -1
     }
 
-    fun checkIfLiked(recipe: RecipeSimplefied): Int {
+    fun checkIfLiked(recipe: RecipeSimplified): Int {
         return if (likedRecipes.isNotEmpty())
             likedRecipes.indexOfFirst { it.id == recipe.id }
         else

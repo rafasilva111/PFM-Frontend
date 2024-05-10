@@ -11,12 +11,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.example.projectfoodmanager.viewmodels.UserViewModel
@@ -151,7 +151,7 @@ class ProfileFragment : Fragment() {
 
         val activity = requireActivity()
         changeMenuVisibility(false,activity)
-        changeStatusBarColor(true,activity,requireContext())
+        changeTheme(true,activity,requireContext())
 
         if (::user.isInitialized)
             loadUserUI()

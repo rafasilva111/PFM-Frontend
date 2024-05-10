@@ -209,7 +209,7 @@ class FollowerFragment : Fragment() {
 
         val activity = requireActivity()
         Helper.changeMenuVisibility(false, activity)
-        Helper.changeStatusBarColor(false, activity, requireContext())
+        Helper.changeTheme(false, activity, requireContext())
 
         currentUser = sharedPreference.getUserSession()
 

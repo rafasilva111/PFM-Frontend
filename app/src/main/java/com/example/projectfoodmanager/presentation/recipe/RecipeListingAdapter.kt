@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
@@ -68,32 +68,32 @@ class RecipeListingAdapter(
         fun bind(item: Recipe) {
 
             //Load Author img
-            loadUserImage(binding.imgAuthorIV,item.created_by.imgSource)
+            loadUserImage(binding.imgAuthorIV,item.createdBy.imgSource)
 
             //Load Author name
-            binding.nameAuthorTV.text = formatNameToNameUpper(item.created_by.name)
+            binding.nameAuthorTV.text = formatNameToNameUpper(item.createdBy.name)
 
             //Validate that the author is verified
-            if (item.created_by.verified){
+            if (item.createdBy.verified){
                 binding.verifyUserIV.visibility=View.VISIBLE
             }else{
                 binding.verifyUserIV.visibility=View.INVISIBLE
             }
 
             // Load Recipe img
-            if (item.img_source.isNotEmpty()){
+            if (item.imgSource.isNotEmpty()){
 
-                Helper.loadRecipeImage(binding.imageView,item.img_source)
+                Helper.loadRecipeImage(binding.imageView,item.imgSource)
             }
 
             // Load Author img
-            if (item.created_by.imgSource.isNotEmpty()){
+            if (item.createdBy.imgSource.isNotEmpty()){
                 //-> Load Recipe img
-                loadUserImage(binding.imgAuthorIV,item.created_by.imgSource)
+                loadUserImage(binding.imgAuthorIV,item.createdBy.imgSource)
             }
 
 
-            binding.dateTV.text = formatServerTimeToDateString(item.created_date)
+            binding.dateTV.text = formatServerTimeToDateString(item.createdDate)
             binding.recipeTitleTV.text = item.title
             binding.idTV.text = item.id.toString()
 
@@ -113,8 +113,8 @@ class RecipeListingAdapter(
             // get user from shared prefrences
             val user = sharedPreference.getUserSession()
 
-            binding.ratingRecipeRB.rating = item.source_rating.toFloat()
-            binding.ratingMedTV.text = item.source_rating
+            binding.ratingRecipeRB.rating = item.sourceRating.toFloat()
+            binding.ratingMedTV.text = item.sourceRating
 
 /*
 

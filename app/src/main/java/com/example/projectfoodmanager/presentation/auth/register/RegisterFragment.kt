@@ -13,7 +13,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,7 +63,7 @@ class RegisterFragment : Fragment() {
          *  General
          * */
 
-        changeStatusBarColor(false, requireActivity(), requireContext())
+        changeTheme(false, requireActivity(), requireContext())
 
         binding.fragmentRegisterViewPager.adapter = RegisterTabAdapter(requireActivity().supportFragmentManager, lifecycle,binding)
         binding.fragmentRegisterViewPager.isUserInputEnabled =false

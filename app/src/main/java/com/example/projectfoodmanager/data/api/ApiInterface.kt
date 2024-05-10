@@ -17,10 +17,10 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.notification.Notification
+import com.example.projectfoodmanager.data.model.notification.NotificationList
+import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
@@ -116,21 +116,11 @@ interface ApiInterface {
      * Comments
      * */
 
-    /** Gets */
-
-    @GET("$API_V1_BASE_URL/comment")
-    suspend fun getComment(@Query("userId") commentId: Int): Response<Comment>
-
-    @GET("$API_V1_BASE_URL/comment/list")
-    suspend fun getCommentsByRecipe(@Query("recipe_id") recipeId: Int,@Query("page") page: Int): Response<CommentList>
-
-    @GET("$API_V1_BASE_URL/comment/list")
-    suspend fun getSizedCommentsByRecipePaginated(@Query("recipe_id")recipeId: Int,@Query("recipe_id") page: Int,@Query("recipe_id") pageSize: Int): Response<CommentList>
-
-    @GET("$API_V1_BASE_URL/comment")
-    suspend fun getCommentsByClientPaginated(@Query("user_id") clientId: Int,@Query("page") page: Int): Response<CommentList>
 
     /** General */
+
+    @GET("$API_V1_BASE_URL/comment")
+    suspend fun getComment(@Query("id") commentId: Int): Response<Comment>
 
     @POST("$API_V1_BASE_URL/comment")
     suspend fun createComments(@Query("recipe_id") recipeId: Int,@Body comment : CommentDTO): Response<Comment>
@@ -140,6 +130,14 @@ interface ApiInterface {
 
     @DELETE("$API_V1_BASE_URL/comment")
     suspend fun deleteComment(@Query("id") commentId: Int): Response<Comment>
+
+    /** Special Gets */
+
+    @GET("$API_V1_BASE_URL/comment/list")
+    suspend fun getCommentsByRecipe(@Query("recipe_id") recipeId: Int,@Query("page") page: Int,@Query("page_size") pageSize: Int): Response<CommentList>
+
+    @GET("$API_V1_BASE_URL/comment")
+    suspend fun getCommentsByClient(@Query("user_id") clientId: Int, @Query("page") page: Int): Response<CommentList>
 
     /** Like Function */
 
@@ -243,7 +241,7 @@ interface ApiInterface {
     /** Notifications */
 
     @GET("$API_V1_BASE_URL/notification/list")
-    suspend fun getNotifications(@Query("page")page: Int?,@Query("page_size") pageSize: Int?): Response<NotificationList>
+    suspend fun getNotifications(@Query("page") page: Int?, @Query("page_size") pageSize: Int?,@Query("last_id") lastId: Int?): Response<NotificationList>
 
     @GET("$API_V1_BASE_URL/notification")
     suspend fun getNotification(@Query("id")id: Int?): Response<Notification>

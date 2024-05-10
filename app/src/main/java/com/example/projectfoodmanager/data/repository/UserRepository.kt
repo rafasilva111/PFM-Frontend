@@ -4,13 +4,12 @@ import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.Notification
-import com.example.projectfoodmanager.data.model.modelResponse.notifications.NotificationList
+import com.example.projectfoodmanager.data.model.notification.Notification
+import com.example.projectfoodmanager.data.model.notification.NotificationList
 import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.user.User
 import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
-import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 
@@ -75,7 +74,7 @@ interface UserRepository {
     val deleteNotificationResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
     val deleteNotificationsResponseLiveData: LiveData<Event<NetworkResult<Unit>>>
 
-    suspend fun getNotifications(page:Int?,pageSize:Int?)
+    suspend fun getNotifications(page: Int?, pageSize: Int?, lastId: Int?)
     suspend fun getNotification(id:Int?)
     suspend fun putNotification(id:Int?, notification: Notification)
     suspend fun putNotifications(idListRequest: IdListRequest)

@@ -5,11 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.databinding.FragmentLanguagesBinding
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
-import com.example.projectfoodmanager.util.Helper.Companion.changeStatusBarColor
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.SharedPreference
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -66,7 +65,7 @@ class LanguagesFragment : Fragment() {
         val activity = requireActivity()
 
         changeMenuVisibility(false,activity)
-        changeStatusBarColor(false,activity,requireContext())
+        changeTheme(false,activity,requireContext())
 
         binding.backIB.setOnClickListener {
             findNavController().navigateUp()

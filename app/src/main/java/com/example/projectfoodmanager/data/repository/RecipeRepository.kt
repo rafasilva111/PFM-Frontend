@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
 import com.example.projectfoodmanager.data.model.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 
@@ -37,18 +37,19 @@ interface RecipeRepository {
     suspend fun addSaveOnRecipe(recipeId: Int)
 
     // comment
-    val functionGetCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
-    val functionGetSizedCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
-    val functionGetCommentsByClientPaginated: LiveData<Event<NetworkResult<CommentList>>>
+    val functionGetCommentsByRecipe: LiveData<Event<NetworkResult<CommentList>>>
+    val functionGetCommentsByClient: LiveData<Event<NetworkResult<CommentList>>>
 
-    val functionPostCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
+    val functionGetComment: LiveData<Event<NetworkResult<Comment>>>
+    val functionPostComment: LiveData<Event<NetworkResult<Comment>>>
     val functionPatchComment: LiveData<Event<NetworkResult<Comment>>>
     val functionDeleteComment: LiveData<Event<NetworkResult<Comment>>>
 
-    suspend fun getCommentsByRecipePaginated(recipeId: Int, page: Int)
-    suspend fun getSizedCommentsByRecipePaginated(recipeId: Int,page: Int,pageSize:Int)
-    suspend fun getCommentsByClientPaginated(clientId: Int, page: Int)
 
+    suspend fun getCommentsByRecipe(recipeId: Int, page: Int, pageSize:Int)
+    suspend fun getCommentsByClient(clientId: Int, page: Int)
+
+    suspend fun getComment(commentId: Int)
     suspend fun postComment(recipeId: Int, comment: CommentDTO)
     suspend fun patchComment(commentId: Int,comment: CommentDTO)
     suspend fun deleteComment(commentId: Int)

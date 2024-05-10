@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
 import com.example.projectfoodmanager.data.model.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.data.repository.RecipeRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -101,38 +101,48 @@ class RecipeViewModel @Inject constructor (
     }
 
     /**
-     * Comments Function
+     * Comments Section
      */
 
-    val functionGetCommentsByClientPaginated: LiveData<Event<NetworkResult<CommentList>>>
-        get() = repository.functionGetCommentsOnRecipePaginated
+    /** Special Gets */
 
-    fun getCommentsByClientPaginated(clientId: Int, page: Int=1) {
+    val functionGetCommentsByClient: LiveData<Event<NetworkResult<CommentList>>>
+        get() = repository.functionGetCommentsByClient
+
+    val functionGetCommentsByRecipe: LiveData<Event<NetworkResult<CommentList>>>
+        get() = repository.functionGetCommentsByRecipe
+
+    fun getCommentsByClient(clientId: Int, page: Int=1) {
         viewModelScope.launch {
-            repository.getCommentsByClientPaginated(clientId,page)
+            repository.getCommentsByClient(clientId,page)
         }
     }
 
-    val functionGetCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
-        get() = repository.functionGetCommentsOnRecipePaginated
-
-    fun getCommentsByRecipePaginated(recipeId: Int, page: Int=1) {
+    fun getCommentsByRecipe(recipeId: Int, page: Int=1, pageSize:Int=8) {
         viewModelScope.launch {
-            repository.getCommentsByRecipePaginated(recipeId,page)
+            repository.getCommentsByRecipe(recipeId,page,pageSize)
         }
     }
 
-    val functionGetSizedCommentsOnRecipePaginated: LiveData<Event<NetworkResult<CommentList>>>
-        get() = repository.functionGetSizedCommentsOnRecipePaginated
+    /** General */
 
-    fun getSizedCommentsByRecipePaginated(recipeId: Int,page: Int=1,pageSize:Int=5) {
-        viewModelScope.launch {
-            repository.getSizedCommentsByRecipePaginated(recipeId,page,pageSize)
-        }
-    }
+    val functionGetComment: LiveData<Event<NetworkResult<Comment>>>
+        get() = repository.functionGetComment
 
     val functionPostCommentOnRecipe: LiveData<Event<NetworkResult<Comment>>>
-        get() = repository.functionPostCommentOnRecipe
+        get() = repository.functionPostComment
+
+    val functionPatchComment: LiveData<Event<NetworkResult<Comment>>>
+        get() = repository.functionPatchComment
+
+    val functionDeleteComment: LiveData<Event<NetworkResult<Comment>>>
+        get() = repository.functionDeleteComment
+
+    fun getComment(commentId: Int) {
+        viewModelScope.launch {
+            repository.getComment(commentId)
+        }
+    }
 
     fun postCommentOnRecipe(recipeId: Int, comment: CommentDTO) {
         viewModelScope.launch {
@@ -140,17 +150,11 @@ class RecipeViewModel @Inject constructor (
         }
     }
 
-    val functionDeleteComment: LiveData<Event<NetworkResult<Comment>>>
-        get() = repository.functionDeleteComment
-
     fun deleteComment(commentId: Int) {
         viewModelScope.launch {
             repository.deleteComment(commentId)
         }
     }
-
-    val functionPatchComment: LiveData<Event<NetworkResult<Comment>>>
-        get() = repository.functionPatchComment
 
     fun patchComment(commentId:Int,comment: CommentDTO) {
         viewModelScope.launch {
@@ -158,19 +162,19 @@ class RecipeViewModel @Inject constructor (
         }
     }
 
-    /** Like Function */
+    /** Comment Like Function */
 
     val functionPostLikeOnComment: LiveData<Event<NetworkResult<Comment>>>
         get() = repository.functionPostLikeOnComment
+
+    val functionDeleteLikeOnComment: LiveData<Event<NetworkResult<Comment>>>
+        get() = repository.functionDeleteLikeOnComment
 
     fun postLikeOnComment(commentId: Int) {
         viewModelScope.launch {
             repository.postLikeOnComment(commentId)
         }
     }
-
-    val functionDeleteLikeOnComment: LiveData<Event<NetworkResult<Comment>>>
-        get() = repository.functionDeleteLikeOnComment
 
     fun deleteLikeOnComment(commentId: Int) {
         viewModelScope.launch {
