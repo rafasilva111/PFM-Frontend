@@ -17,7 +17,7 @@ interface RecipeRepository {
     val recipes: LiveData<Event<NetworkResult<RecipeList>>>
     val recipesCommentedByUser: LiveData<Event<NetworkResult<RecipeList>>>
 
-    suspend fun getRecipes(page: Int,pageSize: Int,userId:Int,searchString:String,searchTag: String, by:String)
+    suspend fun getRecipes(page: Int,pageSize: Int,userId:Int?,searchString:String,searchTag: String, by:String)
     suspend fun getRecipesCommentedByUser(page: Int, clientId: Int, searchString:String?)
 
     // like

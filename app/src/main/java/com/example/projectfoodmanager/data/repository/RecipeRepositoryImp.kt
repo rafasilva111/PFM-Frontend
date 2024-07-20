@@ -65,7 +65,7 @@ class RecipeRepositoryImp @Inject constructor(
 
 
     // Function to get paginated and sorted recipes
-    override suspend fun getRecipes(page: Int,pageSize: Int,userId: Int,searchString:String,searchTag: String, by:String) {
+    override suspend fun getRecipes(page: Int,pageSize: Int,userId: Int?,searchString:String,searchTag: String, by:String) {
 
 
         handleApiResponse(

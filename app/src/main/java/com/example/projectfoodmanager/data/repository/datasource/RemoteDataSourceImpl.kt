@@ -28,7 +28,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.List
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
 import com.example.projectfoodmanager.data.model.user.User
-import com.example.projectfoodmanager.data.model.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
@@ -87,7 +87,7 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getRecipesByClientSearchPaginated(clientId = clientId, string =  string,page = page)
     }
 
-	override suspend fun getRecipes(userId: Int,by: String, searchString: String, searchTag: String, page: Int,pageSize: Int): Response<RecipeList> {
+	override suspend fun getRecipes(userId: Int?,by: String, searchString: String, searchTag: String, page: Int,pageSize: Int): Response<RecipeList> {
 		return apiInterface.getRecipePaginated(userId = userId,page = page,searchString = searchString, searchTag=searchTag,by=by,pageSize = pageSize)
 	}
 

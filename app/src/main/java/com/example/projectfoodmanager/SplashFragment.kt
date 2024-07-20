@@ -95,8 +95,11 @@ class SplashFragment : Fragment() {
             if(sharedPreference.isFirstAppLaunch()){
 
                 // if offline and whit token login anyway
-                if (tokenManager.getToken()!=null && isOnline(requireContext())){
+                if (tokenManager.getAccessToken() !=null && isOnline(requireContext()) ){
                     updateLocalSharedPreferences()
+                }
+                else if (tokenManager.getRefreshToken() !=null){
+                    findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                 }
                 else{
                     findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
@@ -173,7 +176,7 @@ class SplashFragment : Fragment() {
                     }
                     is NetworkResult.Error -> {
                         findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
-                        tokenManager.deleteToken()
+                        tokenManager.deleteSession()
 
                     }
                     is NetworkResult.Loading -> {

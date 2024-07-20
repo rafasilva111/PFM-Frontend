@@ -21,9 +21,9 @@ data class Recipe(
     val time: String,
     val portion: String,
     val difficulty: String,
-    @SerializedName("created_date")
+    @SerializedName("created_at")
     val createdDate: String,
-    @SerializedName("updated_date")
+    @SerializedName("updated_at")
     val updatedDate: String,
     var likes: Int,
     var comments: Int,

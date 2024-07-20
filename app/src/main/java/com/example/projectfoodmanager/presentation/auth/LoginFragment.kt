@@ -148,18 +148,18 @@ class LoginFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        userViewModel.userAuthResponseLiveData.observe(viewLifecycleOwner, Observer {
-            it.getContentIfNotHandled()?.let{
+        userViewModel.userAuthResponseLiveData.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
 
-                when (it) {
+                when (result) {
                     is NetworkResult.Success -> {
-                        tokenManager.saveToken(it.data!!.token)
+                        tokenManager.saveToken(result.data!!)
                         userViewModel.getUserSession()
                     }
                     is NetworkResult.Error -> {
                         binding.loginBtn.isVisible = true
                         binding.progressBar.isVisible = false
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                         setButtonVisibility(visibility = true)
                     }
                     is NetworkResult.Loading -> {
@@ -167,10 +167,10 @@ class LoginFragment : Fragment() {
                     }
                 }
             }
-        })
+        }
 
         userViewModel.userResponseLiveData.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let {result ->
+            response.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
                         if ( result.data!!.fmcToken != "-1")

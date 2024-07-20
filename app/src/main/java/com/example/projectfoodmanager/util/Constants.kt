@@ -11,9 +11,8 @@ object Constants {
     // TODO: Primeira coisa a fazer quando testar
     //rui const val BASE_URL = "http://192.168.1.104:5000/"
 
-    const val BASE_URL = "http://192.168.1.110:5000" // dev rafa
+    const val BASE_URL = "http://192.168.1.110" // dev rafa
     //const val BASE_URL = "http://172.162.241.84" // prod
-    const val USER_TOKEN = "user_token"
 
 
     const val PREFS_TOKEN_FILE = "prefs_token_file"
@@ -21,8 +20,14 @@ object Constants {
 
 }
 
+object Session{
+    const val REFRESH_TOKEN = "refresh_token"
+    const val REFRESH_TOKEN_EXPIRES = "refresh_token_expires"
+    const val ACCESS_TOKEN = "access_token"
+    const val ACCESS_TOKEN_EXPIRES = "access_token_expires"
+}
+
 object SharedPreferencesMetadata{
-    const val SESSION = "SESSION"
     const val CALENDER_ENTRYS = "CALENDER_ENTRYS"
     const val SHOPPING_LIST = "SHOPPING_LIST"
     const val RECIPES_BACKGROUND = "RECIPES_BACKGROUND"

@@ -33,6 +33,7 @@ import java.time.format.DateTimeParseException
 class Helper {
     companion object {
 
+        private val serverZoneId = ZoneId.of("Europe/Lisbon")
 
 
 
@@ -56,10 +57,11 @@ class Helper {
         }
 
         // server string -> localTimeDate
-        fun formatServerTimeToLocalDateTime(localDateTimeString: String): LocalDateTime{
-            return LocalDateTime.parse(localDateTimeString, DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"))
+        fun formatServerTimeToLocalDateTime(serverTimeString: String): LocalDateTime {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
+            val zonedServerTime = ZonedDateTime.parse(serverTimeString, formatter.withZone(serverZoneId))
+            return zonedServerTime.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime()
         }
-
         // server string -> date string
         fun formatServerTimeToDateString(localDateTimeString: String): String{
             return localDateTimeString.split("T")[0]
@@ -277,6 +279,7 @@ class Helper {
         /**
          *  Validation
          * */
+
         fun userIsNot12Old(dateString: String): Boolean {
             // Define the date format
             val dateFormat = SimpleDateFormat("dd/M/yyyy", Locale.getDefault())
@@ -326,6 +329,7 @@ class Helper {
             }
             return null
         }
+
 
         fun getRelativeTime(timeString: String): String? {
             return try {

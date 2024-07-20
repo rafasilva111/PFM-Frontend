@@ -197,7 +197,7 @@ class UserSessionFragment : Fragment() {
             event.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
-                        tokenManager.deleteToken()
+                        tokenManager.deleteSession()
                         sharedPreference.deleteSession()
                         toast("Logout feito com sucesso!")
                         findNavController().navigate(R.id.action_profile_to_login)

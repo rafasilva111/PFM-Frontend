@@ -27,7 +27,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.Shop
 import com.example.projectfoodmanager.data.model.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.user.User
-import com.example.projectfoodmanager.data.model.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
 import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
@@ -79,7 +79,7 @@ interface ApiInterface {
     suspend fun getRecipe(@Query("id") recipeId: Int): Response<Recipe>
 
     @GET("$API_V1_BASE_URL/recipe/list")
-    suspend fun getRecipePaginated(@Query("user_id")userId: Int,@Query("by")by: String,@Query("searchString") searchString: String,
+    suspend fun getRecipePaginated(@Query("user_id")userId: Int?,@Query("by")by: String,@Query("searchString") searchString: String,
                                    @Query("searchTag") searchTag: String,@Query("page") page: Int,@Query("page_size") pageSize: Int): Response<RecipeList>
 
     @GET("$API_V1_BASE_URL/recipe/list")

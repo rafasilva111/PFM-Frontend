@@ -171,6 +171,7 @@ class RecipeListingFragment : Fragment() {
 
         super.onCreate(savedInstanceState)
     }
+
     override fun onStart() {
 
 
@@ -376,8 +377,6 @@ class RecipeListingFragment : Fragment() {
         val activity = requireActivity()
         changeMenuVisibility(true, activity)
         changeTheme(false, activity, requireContext())
-
-
 
     }
 

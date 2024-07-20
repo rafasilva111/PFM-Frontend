@@ -77,14 +77,10 @@ data class User(
 
 
     fun checkIfLiked(recipe: Recipe): Int {
-        return if (likedRecipes.isNotEmpty())
-            likedRecipes.indexOfFirst { it.id == recipe.id }
-        else
-            -1
-    }
+        if (likedRecipes == null)
+            likedRecipes = mutableListOf()
 
-    fun checkIfLiked(recipe: RecipeSimplified): Int {
-        return if (likedRecipes.isNotEmpty())
+        return if ( likedRecipes.isNotEmpty())
             likedRecipes.indexOfFirst { it.id == recipe.id }
         else
             -1
@@ -103,6 +99,10 @@ data class User(
     }
 
     fun checkIfSaved(recipe: Recipe): Int {
+
+        if (savedRecipes == null)
+            savedRecipes = mutableListOf()
+
         return if (savedRecipes.isNotEmpty())
             savedRecipes.indexOfFirst { it.id == recipe.id }
         else

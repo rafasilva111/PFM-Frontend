@@ -445,7 +445,7 @@ class FavoritesFragment : Fragment() {
     private fun getChipList(currentTabSelected: View): MutableList<Recipe> {
         when(currentTabSelected){
             binding.chipCurtidas -> {
-                return user.likedRecipes
+                return user.createdRecipes
             }
             binding.chipGuardados ->{
                 return user.savedRecipes
@@ -562,17 +562,17 @@ class FavoritesFragment : Fragment() {
             }
         }
 
-        userViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let {
-                when (it) {
+        userViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
-                        tokenManager.deleteToken()
+                        tokenManager.deleteSession()
                         sharedPreference.deleteSession()
                         toast(getString(R.string.user_had_no_shared_preferences))
                         findNavController().navigate(R.id.action_profile_to_login)
                     }
                     is NetworkResult.Error -> {
-                        Log.d(TAG, "bindObservers: ${it.message}.")
+                        Log.d(TAG, "bindObservers: ${result.message}.")
                     }
                     is NetworkResult.Loading -> {
                         //binding.progressBar.isVisible = true
