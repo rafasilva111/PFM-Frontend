@@ -46,23 +46,33 @@ class NutritionTabFragment(recipe: Recipe) : Fragment() {
             recipe.nutritionInformation?.let {
             binding.energiaDoseTV.text = recipe.nutritionInformation.energia
             binding.energiaPercTV.text = recipe.nutritionInformation.energia_perc
-            binding.energiaPB.progress = recipe.nutritionInformation.energia_perc.dropLast(1).toInt()
+            recipe.nutritionInformation.energia_perc?.let {
+                binding.energiaPB.progress = it.toDouble().toInt()
+            }
+
 
             binding.fibraDoseTV.text = recipe.nutritionInformation.fibra
             binding.fibraPercTV.text = recipe.nutritionInformation.fibra_perc
-            binding.fibraPB.progress = recipe.nutritionInformation.fibra_perc.dropLast(1).toInt()
+            recipe.nutritionInformation.fibra_perc?.let {
+                binding.fibraPB.progress = it.toDouble().toInt()
+            }
 
             binding.proteinaDoseTV.text = recipe.nutritionInformation.proteina
             //binding.proteinaPercTV.text = recipe.nutrition_informations.proteina_perc
             //binding.proteinaPB.progress = recipe.nutrition_informations.proteina_perc.dropLast(1).toInt()
 
+
             binding.gorduraDoseTV.text = recipe.nutritionInformation.gordura
             binding.gorduraPercTV.text = recipe.nutritionInformation.gordura_perc
-            binding.gorduraPB.progress = recipe.nutritionInformation.gordura_perc.dropLast(1).toInt()
+            recipe.nutritionInformation.gordura_perc?.let {
+                binding.gorduraPB.progress = it.toDouble().toInt()
+            }
 
             binding.gorduraSaturadosDoseTV.text = recipe.nutritionInformation.gordura_saturada
             binding.gorduraSaturadosPercTV.text = recipe.nutritionInformation.gordura_saturada_perc
-            binding.gorduraSaturadosPB.progress = recipe.nutritionInformation.gordura_saturada_perc.dropLast(1).toInt()
+            recipe.nutritionInformation.gordura_saturada_perc?.let {
+                binding.gorduraSaturadosPB.progress = it.toDouble().toInt()
+            }
 
             binding.hidratosCarbonoDoseTV.text = recipe.nutritionInformation.hidratos_carbonos
             //binding.hidratosCarbonoPercTV.text = recipe.nutrition_informations.hidratos_carbonos_perc
@@ -70,7 +80,9 @@ class NutritionTabFragment(recipe: Recipe) : Fragment() {
 
             binding.hidratosAcucaresDoseTV.text = recipe.nutritionInformation.hidratos_carbonos_acucares
             binding.hidratosAcucaresPercTV.text = recipe.nutritionInformation.hidratos_carbonos_acucares_perc
-            binding.hidratosAcucaresPB.progress = recipe.nutritionInformation.hidratos_carbonos_acucares_perc.dropLast(1).toInt()
+            recipe.nutritionInformation.hidratos_carbonos_acucares_perc?.let {
+                binding.hidratosAcucaresPB.progress = it.toDouble().toInt()
+            }
             }
         }
 

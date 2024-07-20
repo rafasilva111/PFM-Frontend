@@ -160,6 +160,8 @@ class UserRepositoryImp @Inject constructor(
             val response =remoteDataSource.getUserAuth()
             if (response.isSuccessful && response.body() != null) {
                 Log.i(TAG, "getUserSession: request made was sucessfull.")
+                // TODO tentar resolver esta martelada
+                response.body()!!.initLists()
                 sharedPreference.saveUserSession(response.body()!!, preventDeleteRecipesBackgrounds )
                 _userLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
             }
