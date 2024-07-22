@@ -8,8 +8,10 @@ import kotlinx.parcelize.Parcelize
 data class ShoppingList (
     val id: Int,
     val name: String,
-    val updated_date: String,
-    val created_date: String,
+    @SerializedName("updated_at")
+    val updatedDate: String,
+    @SerializedName("created_at")
+    val createdDate: String,
     @SerializedName("shopping_ingredients")
     val shoppingIngredients: MutableList<ShoppingIngredient>,
     val archived: Boolean

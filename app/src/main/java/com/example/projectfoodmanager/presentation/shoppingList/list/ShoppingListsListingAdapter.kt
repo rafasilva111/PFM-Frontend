@@ -65,7 +65,7 @@ class ShoppingListsListingAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ShoppingList) {
             binding.nameTV.text = item.name
-            binding.createdDate.text = item.created_date
+            binding.createdDate.text = item.createdDate
 
             binding.shoppingListLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
 

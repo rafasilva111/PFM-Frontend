@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.recipe.Recipe
@@ -279,13 +280,42 @@ class RecipeDetailFragment : Fragment() {
 
         })
 
-        binding.fragmentRecipeDetailViewPager.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
+
+        binding.fragmentRecipeDetailViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                binding.fragmentRecipeDetailTabLayout.selectTab(binding.fragmentRecipeDetailTabLayout.getTabAt(position))
+
+                // Delay the view measurement to ensure it's properly laid out
+                binding.fragmentRecipeDetailViewPager.post {
+
+                    // Get the RecyclerView inside ViewPager2
+                    val recyclerView = binding.fragmentRecipeDetailViewPager.getChildAt(0) as RecyclerView
+
+                    // Get the ViewHolder for the current position
+                    val viewHolder = recyclerView.findViewHolderForAdapterPosition(position)
+                    val view = viewHolder?.itemView
+
+                    // Update TabLayout selection
+                    binding.fragmentRecipeDetailTabLayout.selectTab(binding.fragmentRecipeDetailTabLayout.getTabAt(position))
+
+                    // Measure and adjust ViewPager2 height
+                    view?.let {
+                        // Measure the view
+                        val wMeasureSpec = View.MeasureSpec.makeMeasureSpec(it.width, View.MeasureSpec.EXACTLY)
+                        val hMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                        it.measure(wMeasureSpec, hMeasureSpec)
+
+                        // Adjust the height of ViewPager2 if necessary
+                        if (binding.fragmentRecipeDetailViewPager.layoutParams.height != it.measuredHeight) {
+                            binding.fragmentRecipeDetailViewPager.layoutParams = binding.fragmentRecipeDetailViewPager.layoutParams.apply {
+                                height = it.measuredHeight
+                            }
+                        }
+                    }
+                }
             }
         })
+
 
 
 
