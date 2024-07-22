@@ -5,6 +5,6 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingL
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class ShoppingListSimplefied (
-    val result: MutableList<ShoppingIngredientRequest>
+data class ShoppingListSimplified (
+    val result: MutableList<ShoppingIngredient>
 ): Parcelable

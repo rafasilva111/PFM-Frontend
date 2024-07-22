@@ -16,7 +16,7 @@ class CalenderShoppingListAdapter(
 ) : RecyclerView.Adapter<CalenderShoppingListAdapter.MyViewHolder>() {
 
     private val TAG: String = "CalenderEntryAdapter"
-    var list: MutableList<ShoppingIngredientRequest> = arrayListOf()
+    var list: MutableList<ShoppingIngredient> = arrayListOf()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -33,12 +33,12 @@ class CalenderShoppingListAdapter(
         holder.bind(item)
     }
 
-    fun updateList(list: MutableList<ShoppingIngredientRequest>) {
+    fun updateList(list: MutableList<ShoppingIngredient>) {
         this.list = list
         notifyDataSetChanged()
     }
 
-    fun updateItem(position: Int, item: ShoppingIngredientRequest) {
+    fun updateItem(position: Int, item: ShoppingIngredient) {
         list.removeAt(position)
         list.add(position, item)
         notifyItemChanged(position)
@@ -62,7 +62,7 @@ class CalenderShoppingListAdapter(
 
     inner class MyViewHolder(private val binding: ItemShoppingIngredientBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ShoppingIngredientRequest) {
+        fun bind(item: ShoppingIngredient) {
 
 
             binding.nameTV.text = item.ingredient.name

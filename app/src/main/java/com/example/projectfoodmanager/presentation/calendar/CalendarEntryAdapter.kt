@@ -10,6 +10,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.databinding.ItemCalenderEntryBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToFormatTime
+import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
+import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToLocalDateTime
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.time.LocalDateTime
@@ -86,12 +88,12 @@ class CalendarEntryAdapter(
             binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
 
 
-            binding.timeTV.text = formatLocalTimeToFormatTime(LocalDateTime.parse(item.realization_date,DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss")))
+            binding.timeTV.text = formatServerTimeToDateString(item.realizationDate)
 
 
             //TODO: Melhorar por causa da sharedpreferences
 
-            binding.checkDoneCB.isChecked = item.checked_done
+            binding.checkDoneCB.isChecked = item.checkedDone
 
             binding.checkDoneCB.setOnClickListener {
 

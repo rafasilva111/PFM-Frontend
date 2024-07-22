@@ -23,13 +23,14 @@ import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplified
 import com.example.projectfoodmanager.data.model.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
-import com.example.projectfoodmanager.data.model.user.User
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
+import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
 import com.example.projectfoodmanager.data.model.user.UserList
-import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import retrofit2.Response
@@ -46,7 +47,7 @@ interface ApiInterface {
     suspend fun createUser(@Body user : UserDTO): Response<Unit>
 
     @POST("$API_V1_BASE_URL/auth/login")
-    suspend fun loginUser(@Body user : UserDTO): Response<UserAuthResponse>
+    suspend fun loginUser(@Body user : UserDTO): Response<AuthToken>
 
     @DELETE("$API_V1_BASE_URL/auth")
     suspend fun logoutUser(): Response<String>
@@ -58,7 +59,7 @@ interface ApiInterface {
     suspend fun patchUser(@Body user : UserDTO): Response<Unit>
 
     @GET("$API_V1_BASE_URL/user")
-    suspend fun getUser(@Query("id") userId: Int): Response<User>
+    suspend fun getUser(@Query("id") userId: Int): Response<UserProfile>
 
     @PATCH("$API_V1_BASE_URL/user")
     suspend fun updateUser(@Body user : UserDTO): Response<User>
@@ -67,7 +68,7 @@ interface ApiInterface {
     suspend fun deleteUser(): Response<String>
 
 
-    @GET("$API_V1_BASE_URL/auth/recipes")
+    @GET("$API_V1_BASE_URL/recipe/background")
     suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
 
 
@@ -159,7 +160,7 @@ interface ApiInterface {
     suspend fun getEntryOnCalender(@Query("from_date") fromDate:String,@Query("to_date") toDate: String): Response<CalenderDatedEntryList>
 
     @GET("$API_V1_BASE_URL/calendar/ingredients/list")
-    suspend fun getCalenderIngredients(@Query("from_date") fromDate: String,@Query("to_date") toDate: String): Response<ShoppingListSimplefied>
+    suspend fun getCalenderIngredients(@Query("from_date") fromDate: String,@Query("to_date") toDate: String): Response<ShoppingListSimplified>
 
     @DELETE("$API_V1_BASE_URL/calendar")
     suspend fun deleteCalenderEntry(@Query("id") calenderEntryId: Int): Response<Int>
@@ -169,6 +170,7 @@ interface ApiInterface {
 
     @POST("$API_V1_BASE_URL/calendar/list/check")
     suspend fun checkCalenderEntries(@Body calenderEntryListUpdate: CalenderEntryListUpdate): Response<Unit>
+
 
     /** Follows */
 
@@ -194,9 +196,7 @@ interface ApiInterface {
     suspend fun deleteFollow(@Query("user_follow_id") userId: Int): Response<Unit>
 
 
-
     /** Follows Requests */
-
 
     @GET("$API_V1_BASE_URL/follow/find")
     suspend fun getUsersToFollow(@Query("searchString") searchString:String?,@Query("page") page: Int?,@Query("page_size") pageSize: Int?): Response<UsersToFollowList>
@@ -238,6 +238,7 @@ interface ApiInterface {
     @DELETE("$API_V1_BASE_URL/shopping_list")
     suspend fun deleteShoppingList(@Query("id")shoppingListId: Int): Response<IdResponse>
 
+
     /** Notifications */
 
     @GET("$API_V1_BASE_URL/notification/list")
@@ -258,10 +259,12 @@ interface ApiInterface {
     @POST("$API_V1_BASE_URL/notification/list/delete")
     suspend fun deleteNotifications(@Body idListRequest: IdListRequest): Response<Unit>
 
+
     /** Application report */
 
     @POST("$API_V1_BASE_URL/app/report")
     suspend fun postAppReport(@Body applicationReport: ApplicationReport): Response<Unit>
+
 
     /** Goal */
 

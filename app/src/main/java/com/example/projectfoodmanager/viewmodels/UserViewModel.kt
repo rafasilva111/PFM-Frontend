@@ -9,9 +9,10 @@ import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFo
 import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.notification.NotificationList
 import com.example.projectfoodmanager.data.model.user.UserList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
-import com.example.projectfoodmanager.data.model.user.User
-import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.repository.UserRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -39,7 +40,7 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    val userAuthResponseLiveData: LiveData<Event<NetworkResult<UserAuthResponse>>>
+    val authTokenLiveData: LiveData<Event<NetworkResult<AuthToken>>>
         get() = repository.userAuthLiveData
 
     fun loginUser(email: String, password: String){
@@ -96,7 +97,7 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    val getUserAccountLiveData: LiveData<Event<NetworkResult<User>>>
+    val getUserAccountLiveData: LiveData<Event<NetworkResult<UserProfile>>>
         get() = repository.getUserAccount
 
     fun getUserAccount(userId: Int) {

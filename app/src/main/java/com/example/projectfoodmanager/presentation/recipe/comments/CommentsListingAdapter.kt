@@ -6,9 +6,8 @@ import android.view.*
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.recipe.comment.Comment
-import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.user.UserSimplified
 import com.example.projectfoodmanager.databinding.ItemCommentLayoutBinding
 import com.example.projectfoodmanager.util.Helper

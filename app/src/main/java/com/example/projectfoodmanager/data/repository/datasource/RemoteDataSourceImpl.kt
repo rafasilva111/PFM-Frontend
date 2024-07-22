@@ -26,11 +26,12 @@ import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
-import com.example.projectfoodmanager.data.model.user.User
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplified
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
+import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
 import com.example.projectfoodmanager.data.model.user.UserList
-import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import retrofit2.Response
@@ -45,7 +46,7 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.createUser(user = user)
 	}
 
-	override suspend fun loginUser(email: String, password: String): Response<UserAuthResponse> {
+	override suspend fun loginUser(email: String, password: String): Response<AuthToken> {
 		return apiInterface.loginUser(UserDTO(email = email, password = password))
 	}
 
@@ -57,7 +58,7 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getUserSession()
 	}
 
-	override suspend fun getUserById(userId: Int): Response<User> {
+	override suspend fun getUserById(userId: Int): Response<UserProfile> {
 		return apiInterface.getUser(userId = userId)
 	}
 	override suspend fun updateUser(user: UserDTO): Response<User> {
@@ -175,7 +176,7 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getEntryOnCalender(date = date)
 	}
 
-	override suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingListSimplefied> {
+	override suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingListSimplified> {
 		return apiInterface.getCalenderIngredients(fromDate = fromDate,toDate = toDate)
 	}
 

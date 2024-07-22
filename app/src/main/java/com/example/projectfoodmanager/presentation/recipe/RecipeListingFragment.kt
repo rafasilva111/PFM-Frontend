@@ -536,7 +536,7 @@ class RecipeListingFragment : Fragment() {
 
                             // sets page data
 
-                            currentPage = it.data!!._metadata.current_page
+                            currentPage = it.data!!._metadata.page
                             nextPage = it.data._metadata.next != null
 
                             // check if list empty

@@ -9,9 +9,10 @@ import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFo
 import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.notification.NotificationList
 import com.example.projectfoodmanager.data.model.user.UserList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
-import com.example.projectfoodmanager.data.model.user.User
-import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
@@ -121,29 +122,29 @@ class UserRepositoryImp @Inject constructor(
 
     }
 
-    private val _userAuthResponseLiveData = MutableLiveData<Event<NetworkResult<UserAuthResponse>>>()
-    override val userAuthLiveData: LiveData<Event<NetworkResult<UserAuthResponse>>>
-        get() = _userAuthResponseLiveData
+    private val _AuthTokenLiveData = MutableLiveData<Event<NetworkResult<AuthToken>>>()
+    override val userAuthLiveData: LiveData<Event<NetworkResult<AuthToken>>>
+        get() = _AuthTokenLiveData
 
     override suspend fun loginUser(email: String, password: String) {
-        _userAuthResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        _AuthTokenLiveData.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making login request.")
         try {
             val response =remoteDataSource.loginUser(email,password)
             if (response.isSuccessful && response.body() != null) {
                 Log.i(TAG, "loginUser: request made was sucessfull.")
-                _userAuthResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+                _AuthTokenLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
             }
             else if(response.errorBody()!=null){
                 val errorObj = response.errorBody()!!.charStream().readText()
                 Log.i(TAG, "loginUser: request made was sucessfull. \n"+errorObj)
-                _userAuthResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+                _AuthTokenLiveData.postValue(Event(NetworkResult.Error(errorObj)))
             }
             else{
-                _userAuthResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+                _AuthTokenLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
             }
         } catch (e:SocketTimeoutException){
-            _userAuthResponseLiveData.postValue(Event(NetworkResult.Error("No connection to host server...")))
+            _AuthTokenLiveData.postValue(Event(NetworkResult.Error("No connection to host server...")))
             return
         }
     }
@@ -265,8 +266,8 @@ class UserRepositoryImp @Inject constructor(
     }
 
 
-    private val _getUserAccount = MutableLiveData<Event<NetworkResult<User>>>()
-    override val getUserAccount: LiveData<Event<NetworkResult<User>>>
+    private val _getUserAccount = MutableLiveData<Event<NetworkResult<UserProfile>>>()
+    override val getUserAccount: LiveData<Event<NetworkResult<UserProfile>>>
         get() = _getUserAccount
 
     override suspend fun getUserAccount(userId: Int) {

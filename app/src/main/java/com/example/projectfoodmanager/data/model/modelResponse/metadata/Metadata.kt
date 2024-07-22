@@ -1,14 +1,18 @@
 package com.example.projectfoodmanager.data.model.modelResponse.metadata
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Metadata(
-    val current_page: Int,
-    val items_per_page: Int,
-    val total_items: Int,
-    val total_pages: Int,
+    val page: Int,
+    @SerializedName("page_size")
+    val pageSize: Int,
+    @SerializedName("total_items")
+    val totalItems: Int,
+    @SerializedName("total_pages")
+    val totalPages: Int,
     val next: String?,
     val previous: String?
 ) : Parcelable

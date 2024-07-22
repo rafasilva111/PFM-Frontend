@@ -1,8 +1,7 @@
-package com.example.projectfoodmanager.data.model.user
+package com.example.projectfoodmanager.data.model.modelResponse.user
 
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.recipe.Recipe
-import com.example.projectfoodmanager.data.model.recipe.RecipeSimplified
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
@@ -41,20 +40,14 @@ data class User(
     @SerializedName("created_recipes")
     @JvmField
     var createdRecipes: MutableList<Recipe> = mutableListOf(),
-    @SerializedName("created_date")
+    @SerializedName("created_at")
     val createdDate: String?,
-    @SerializedName("updated_date")
+    @SerializedName("updated_at")
     val updatedDate: String?,
-    @SerializedName("followed_state")
-    val followedState: String? = null,
     @SerializedName("followers_c")
     val followers: Int = 0,
     @SerializedName("followeds_c")
     val followeds: Int = 0,
-    @SerializedName("followers_request_c")
-    val followersRequest: Int = 0,
-    @SerializedName("followeds_request_c")
-    val followedsRequest: Int = 0,
     @SerializedName("fitness_goal")
     var fitnessGoal: Goal? = null
 

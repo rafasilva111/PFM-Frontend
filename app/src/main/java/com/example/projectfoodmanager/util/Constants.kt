@@ -11,8 +11,8 @@ object Constants {
     // TODO: Primeira coisa a fazer quando testar
     //rui const val BASE_URL = "http://192.168.1.104:5000/"
 
-    const val BASE_URL = "http://192.168.1.110" // dev rafa
-    //const val BASE_URL = "http://172.162.241.84" // prod
+    const val BASE_URL = "http://192.168.1.110:8000" // dev rafa
+    //const val BASE_URL = "http://172.162.241.76" // prod
 
 
     const val PREFS_TOKEN_FILE = "prefs_token_file"

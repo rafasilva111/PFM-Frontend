@@ -41,7 +41,7 @@ class SplashFragment : Fragment() {
 
     // constants
     val TAG: String = "SplashFragment"
-    val updateSharedPreferenceTracker: ObservableList<Boolean> = ObservableList()
+    val updateSharedPreferenceTracker: ObservableList<Boolean?> = ObservableList()
 
     // injects
     @Inject
@@ -99,6 +99,7 @@ class SplashFragment : Fragment() {
                     updateLocalSharedPreferences()
                 }
                 else if (tokenManager.getRefreshToken() !=null){
+                    // todo obter novo access token
                     findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                 }
                 else{
@@ -114,6 +115,7 @@ class SplashFragment : Fragment() {
 
 
     private fun updateLocalSharedPreferences() {
+
         val sharedPreferencesMetadata = sharedPreference.getSharedPreferencesMetadata()
         updateSharedPreferenceTracker.clear()
 
@@ -124,7 +126,7 @@ class SplashFragment : Fragment() {
 
         // se session estiver a null ou se session estiver a true vai buscar a info
         if (calenderEntrys == null || calenderEntrys == true){
-            updateSharedPreferenceTracker.add(0,false)
+            updateSharedPreferenceTracker.add(0,null)
             // get calender entrys from -15 days to +15 days to have smt in memory
             LocalDateTime.now().let { dateNow ->
                 calendarViewModel.getCalendarDatedEntryList(
@@ -142,7 +144,7 @@ class SplashFragment : Fragment() {
 
         // se session estiver a null ou se session estiver a true vai buscar a info
         if (shoppingLists == null || shoppingLists == true){
-            updateSharedPreferenceTracker.add(1,false)
+            updateSharedPreferenceTracker.add(1,null)
             shoppingListViewModel.getUserShoppingLists()
         }
         else if (shoppingLists == false)
@@ -153,7 +155,7 @@ class SplashFragment : Fragment() {
 
         // se session estiver a null ou se session estiver a true vai buscar a info
         if (recipesBackground == null || recipesBackground == true) {
-            updateSharedPreferenceTracker.add(2,false)
+            updateSharedPreferenceTracker.add(2,null)
             userViewModel.getUserRecipesBackground()
         }
         else if (recipesBackground == false)
@@ -189,13 +191,15 @@ class SplashFragment : Fragment() {
             response.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
-                        if (updateSharedPreferenceTracker.isNotEmpty()){
-                            updateSharedPreferenceTracker[0] = true
-                            updateSharedPreferenceTracker.notifyObservers()
-                        }
+
+                        updateSharedPreferenceTracker[0] = true
+                        updateSharedPreferenceTracker.notifyObservers()
+
 
                     }
                     is NetworkResult.Error -> {
+                        updateSharedPreferenceTracker[0] = false
+                        updateSharedPreferenceTracker.notifyObservers()
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -207,12 +211,15 @@ class SplashFragment : Fragment() {
             response.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
-                        if (updateSharedPreferenceTracker.isNotEmpty()) {
-                            updateSharedPreferenceTracker[1] = true
-                            updateSharedPreferenceTracker.notifyObservers()
-                        }
+
+                        updateSharedPreferenceTracker[1] = true
+                        updateSharedPreferenceTracker.notifyObservers()
+
                     }
                     is NetworkResult.Error -> {
+                        // todo fix
+                        updateSharedPreferenceTracker[1] = true
+                        updateSharedPreferenceTracker.notifyObservers()
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -224,14 +231,14 @@ class SplashFragment : Fragment() {
             response.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
-                        if (updateSharedPreferenceTracker.isNotEmpty()) {
-                            updateSharedPreferenceTracker[2] = true
-                            updateSharedPreferenceTracker.notifyObservers()}
+
+                        updateSharedPreferenceTracker[2] = true
+                        updateSharedPreferenceTracker.notifyObservers()
 
                     }
                     is NetworkResult.Error -> {
-                        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
-                        Log.e(TAG, "bindObservers: getUserRecipesBackground error "+result.message)
+                        updateSharedPreferenceTracker[2] = false
+                        updateSharedPreferenceTracker.notifyObservers()
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -240,11 +247,15 @@ class SplashFragment : Fragment() {
         }
 
         updateSharedPreferenceTracker.addObserver { list ->
-            if (list.isNotEmpty() && list.all { it }) {
+
+            if (list.isNotEmpty() && list.all { it != null && it }) {
                 findNavController().navigate(R.id.action_splashFragment_to_app_navigation)
-
-
             }
+            else if(list.isNotEmpty() && list.all { it != null}){
+                findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                Log.e(TAG, "Warning -> issue ")
+            }
+
         }
     }
 

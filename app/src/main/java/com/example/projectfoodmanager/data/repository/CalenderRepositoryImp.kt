@@ -9,7 +9,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplified
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
@@ -136,8 +136,8 @@ class CalenderRepositoryImp @Inject constructor(
     }
 
 
-    private val _functionGetCalenderIngredients = MutableLiveData<Event<NetworkResult<ShoppingListSimplefied>>>()
-    override val getCalendarIngredients: LiveData<Event<NetworkResult<ShoppingListSimplefied>>>
+    private val _functionGetCalenderIngredients = MutableLiveData<Event<NetworkResult<ShoppingListSimplified>>>()
+    override val getCalendarIngredients: LiveData<Event<NetworkResult<ShoppingListSimplified>>>
         get() = _functionGetCalenderIngredients
 
     override suspend fun getCalendarIngredients(fromDate: LocalDateTime, toDate: LocalDateTime) {

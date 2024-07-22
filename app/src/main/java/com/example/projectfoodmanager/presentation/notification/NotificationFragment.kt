@@ -337,7 +337,7 @@ class NotificationFragment : Fragment() {
 
                             binding.fragmentNotificationFollowRequests.visibility = View.VISIBLE
 
-                            binding.nRequestBadgeTV.text = result.data._metadata.total_items.toString()
+                            binding.nRequestBadgeTV.text = result.data._metadata.totalItems.toString()
 
 
                             loadUserImage(binding.imgFirstReqIV, result.data.result[0].imgSource)

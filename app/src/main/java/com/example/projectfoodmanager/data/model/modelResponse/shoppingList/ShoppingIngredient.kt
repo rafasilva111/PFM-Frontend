@@ -9,11 +9,12 @@ import java.time.LocalDateTime
 @Parcelize
 data class ShoppingIngredient(
 
-    val id: Int?,
+    val id: Int,
     val ingredient: Ingredient,
-    val quantity: Float,
     val checked: Boolean,
-    val extra_quantity: Float?,
+    val quantity: Float,
+    @SerializedName("extra_quantity")
+    val extraQuantity: Float?,
     val units: String,
     val extra_units: String?
 ): Parcelable

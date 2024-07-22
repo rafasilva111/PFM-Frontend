@@ -12,7 +12,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.recipe.Recipe
-import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
@@ -39,7 +40,7 @@ class ProfileFragment : Fragment() {
     /** variables */
     private val TAG: String = "ProfileFragment"
     private var userId: Int = -1
-    private lateinit var user: User
+    private lateinit var user: UserProfile
     private lateinit var recipeListed: MutableList<Recipe>
 
     private var manager: GridLayoutManager = GridLayoutManager(activity?.applicationContext, 3)
@@ -190,8 +191,10 @@ class ProfileFragment : Fragment() {
 
         binding.descTV.text = user.description
 
-        binding.nFollowedsTV.text = user.followeds.toString()
-        binding.nFollowersTV.text = user.followers.toString()
+        binding.nFollowedsTV.text = user.followsCount.toString()
+        binding.nFollowersTV.text = user.followersCount.toString()
+
+        binding.nRecipesTV.text = user.recipesCreated.toString()
     }
 
     private fun showValidationErrors(error: String) {
@@ -225,7 +228,7 @@ class ProfileFragment : Fragment() {
 
                         // sets page data
 
-                        currentPage = result.data!!._metadata.current_page
+                        currentPage = result.data!!._metadata.page
                         nextPage = result.data._metadata.next != null
 
                         // check if list empty

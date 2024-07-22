@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
@@ -148,7 +147,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun bindObservers() {
-        userViewModel.userAuthResponseLiveData.observe(viewLifecycleOwner) { response ->
+        userViewModel.authTokenLiveData.observe(viewLifecycleOwner) { response ->
             response.getContentIfNotHandled()?.let { result ->
 
                 when (result) {

@@ -394,7 +394,7 @@ class CalendarFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
 
-                        if(it.data!!.checked_done){
+                        if(it.data!!.checkedDone){
                             toast("Refeição consumida")
                         }else{
                             toast("Refeição não consumida")

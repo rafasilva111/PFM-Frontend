@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.recipe.Recipe
-import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FragmentRecipeLikesChipsTag.COMMENTED
@@ -493,7 +493,7 @@ class FavoritesFragment : Fragment() {
 
                         // sets page data
 
-                        currentPage = it.data._metadata.current_page
+                        currentPage = it.data._metadata.page
                         nextPage = it.data._metadata.next != null
 
                         // updates recipe list
@@ -537,7 +537,7 @@ class FavoritesFragment : Fragment() {
 
                         // sets page data
 
-                        currentPage = it.data._metadata.current_page
+                        currentPage = it.data._metadata.page
                         nextPage = it.data._metadata.next != null
 
                         // updates recipe list

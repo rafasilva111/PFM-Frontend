@@ -25,11 +25,12 @@ import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
-import com.example.projectfoodmanager.data.model.user.User
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplified
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
+import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
 import com.example.projectfoodmanager.data.model.user.UserList
-import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import retrofit2.Response
@@ -38,10 +39,10 @@ interface RemoteDataSource {
 
 	//user
 	suspend fun registerUser(user: UserDTO) : Response<Unit>
-	suspend fun loginUser(email: String, password: String) : Response<UserAuthResponse>
+	suspend fun loginUser(email: String, password: String) : Response<AuthToken>
 	suspend fun logoutUser() : Response<String>
 	suspend fun getUserAuth() : Response<User>
-	suspend fun getUserById(userId: Int): Response<User>
+	suspend fun getUserById(userId: Int): Response<UserProfile>
 	suspend fun updateUser(user: UserDTO): Response<User>
 	suspend fun deleteUser(): Response<String>
 	suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
@@ -91,7 +92,7 @@ interface RemoteDataSource {
 	suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryDTO): Response<CalenderEntry>
 	suspend fun getEntryOnCalender(date: String):  Response<CalenderEntryList>
 	suspend fun getEntryOnCalender(fromDate: String, toDate: String):  Response<CalenderDatedEntryList>
-	suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingListSimplefied>
+	suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingListSimplified>
 	suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Int>
 	suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
 	suspend fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate): Response<Unit>

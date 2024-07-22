@@ -6,8 +6,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
-import com.example.projectfoodmanager.data.model.user.User
-import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.SharedPreferencesConstants.IS_FIRST_APP_LAUNCH
@@ -129,7 +129,7 @@ class SharedPreference @Inject constructor(
      * */
 
 
-    fun saveUserSession(user: User,preventDeleteRecipesBackgrounds: Boolean = false) {
+    fun saveUserSession(user: User, preventDeleteRecipesBackgrounds: Boolean = false) {
 
         if (preventDeleteRecipesBackgrounds){
             val userOld = getUserSession()
@@ -149,9 +149,8 @@ class SharedPreference @Inject constructor(
 
     fun saveUserRecipesSession(userRecipeBackgrounds: UserRecipeBackgrounds) {
         val user: User = gson.fromJson(sharedPreferences.getString(USER_SESSION,""), User::class.java)
-        user.likedRecipes = userRecipeBackgrounds.result.recipes_liked
-        user.savedRecipes = userRecipeBackgrounds.result.recipes_saved
-        user.createdRecipes = userRecipeBackgrounds.result.recipes_created
+        user.savedRecipes = userRecipeBackgrounds.savedRecipes
+        user.createdRecipes = userRecipeBackgrounds.createdRecipes
         saveSingleMetadata(USER_SESSION_BACKGROUND_RECIPES,true)
         saveUserSession(user)
     }
@@ -185,7 +184,7 @@ class SharedPreference @Inject constructor(
         return user
     }
 
-    fun updateUserSession(user: User,preventDeleteRecipesBackgrounds: Boolean = false) {
+    fun updateUserSession(user: User, preventDeleteRecipesBackgrounds: Boolean = false) {
         saveUserSession(user,preventDeleteRecipesBackgrounds)
     }
 
@@ -225,7 +224,7 @@ class SharedPreference @Inject constructor(
 
     fun saveCalendarEntry(calenderEntry: CalenderEntry) {
         val fullCalenderEntryList = getAllCalendarEntrys()
-        val dateString = formatServerTimeToDateString(calenderEntry.realization_date)
+        val dateString = formatServerTimeToDateString(calenderEntry.realizationDate)
         if (dateString !in fullCalenderEntryList){
             fullCalenderEntryList[dateString] = mutableListOf()
             fullCalenderEntryList.comparator()
@@ -234,7 +233,7 @@ class SharedPreference @Inject constructor(
 
         val pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss")
         fullCalenderEntryList[dateString]!!.sortBy { unit ->
-            LocalDateTime.parse(unit.realization_date, pattern)
+            LocalDateTime.parse(unit.realizationDate, pattern)
         }
 
         saveSingleMetadata(SharedPreferencesMetadata.CALENDER_ENTRYS,true)
@@ -287,7 +286,7 @@ class SharedPreference @Inject constructor(
 
     fun updateCalendarEntry(calenderEntry: CalenderEntry) {
         val fullCalenderEntryList = getAllCalendarEntrys()
-        val dateString = calenderEntry.realization_date.split("T")[0]
+        val dateString = calenderEntry.realizationDate.split("T")[0]
         
         for (list in fullCalenderEntryList.values){
             list.removeIf {
@@ -314,7 +313,7 @@ class SharedPreference @Inject constructor(
         for (list in fullCalenderEntryList.values)
             for (item in list)
                 if (item.id in calenderEntryList )
-                    item.checked_done  = calenderEntryListUpdate.calenderEntryStateList[calenderEntryList.indexOf(item.id)].checkedDone!!
+                    item.checkedDone  = calenderEntryListUpdate.calenderEntryStateList[calenderEntryList.indexOf(item.id)].checkedDone!!
 
 
         sharedPreferences.edit().putString(USER_SESSION_CALENDER,gson.toJson(fullCalenderEntryList)).apply()
@@ -334,7 +333,7 @@ class SharedPreference @Inject constructor(
     fun deleteCalendarEntry(calenderEntry: CalenderEntry) {
         val fullCalenderEntry = getAllCalendarEntrys()
 
-        val key = formatServerTimeToDateString(calenderEntry.realization_date)
+        val key = formatServerTimeToDateString(calenderEntry.realizationDate)
 
         val calenderDayEntrys = fullCalenderEntry[key]
         if (calenderDayEntrys != null){

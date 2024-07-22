@@ -7,9 +7,10 @@ import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFo
 import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.notification.NotificationList
 import com.example.projectfoodmanager.data.model.user.UserList
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
-import com.example.projectfoodmanager.data.model.user.User
-import com.example.projectfoodmanager.data.model.user.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 
@@ -19,14 +20,14 @@ interface UserRepository {
     /** User */
 
     val userRegisterLiveData: LiveData<Event<NetworkResult<String>>>
-    val userAuthLiveData: LiveData<Event<NetworkResult<UserAuthResponse>>>
+    val userAuthLiveData: LiveData<Event<NetworkResult<AuthToken>>>
     val userLogoutLiveData: LiveData<Event<NetworkResult<String>>>
     val userLiveData: LiveData<Event<NetworkResult<User>>>
     val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
     val userUpdateLiveData: LiveData<Event<NetworkResult<User>>>
     val deleteUserAccount: LiveData<Event<NetworkResult<String>>>
 
-    val getUserAccount: LiveData<Event<NetworkResult<User>>>
+    val getUserAccount: LiveData<Event<NetworkResult<UserProfile>>>
 
     suspend fun registerUser(user : UserDTO)
     suspend fun loginUser(email: String, password: String)

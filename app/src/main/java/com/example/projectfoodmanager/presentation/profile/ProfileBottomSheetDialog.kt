@@ -11,7 +11,7 @@ import android.view.WindowInsetsController
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentProfileBottomSheetDialogBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.viewmodels.UserViewModel

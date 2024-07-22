@@ -2,7 +2,7 @@ package com.example.projectfoodmanager.util
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.projectfoodmanager.data.model.modelResponse.user.UserAuthResponse
+import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
 import com.example.projectfoodmanager.util.Constants.PREFS_TOKEN_FILE
 import com.example.projectfoodmanager.util.Session.ACCESS_TOKEN
 import com.example.projectfoodmanager.util.Session.ACCESS_TOKEN_EXPIRES
@@ -16,12 +16,12 @@ class TokenManager @Inject constructor(@ApplicationContext context: Context) {
     private var prefs: SharedPreferences =
         context.getSharedPreferences(PREFS_TOKEN_FILE, Context.MODE_PRIVATE)
 
-    fun saveToken(authResponse: UserAuthResponse) {
+    fun saveToken(authResponse: AuthToken) {
         val editor = prefs.edit()
-        editor.putString(REFRESH_TOKEN, authResponse.refresh_token)
-        editor.putString(REFRESH_TOKEN_EXPIRES, authResponse.refresh_token_expires)
-        editor.putString(ACCESS_TOKEN, authResponse.access_token)
-        editor.putString(ACCESS_TOKEN_EXPIRES, authResponse.access_token_expires)
+        editor.putString(REFRESH_TOKEN, authResponse.refreshToken)
+        editor.putString(REFRESH_TOKEN_EXPIRES, authResponse.refreshTokenExpires)
+        editor.putString(ACCESS_TOKEN, authResponse.accessToken)
+        editor.putString(ACCESS_TOKEN_EXPIRES, authResponse.accessTokenExpires)
         editor.apply()
     }
 

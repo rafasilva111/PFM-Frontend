@@ -7,7 +7,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplefied
+import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplified
 
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -19,7 +19,7 @@ interface CalenderRepository {
     val createEntryOnCalender: LiveData<Event<NetworkResult<CalenderEntry>>>
     val getEntryOnCalendarLiveData: LiveData<Event<NetworkResult<CalenderEntryList>>>
     val getCalenderDatedEntryList: LiveData<Event<NetworkResult<CalenderDatedEntryList>>>
-    val getCalendarIngredients: LiveData<Event<NetworkResult<ShoppingListSimplefied>>>
+    val getCalendarIngredients: LiveData<Event<NetworkResult<ShoppingListSimplified>>>
     val deleteCalendarEntry: LiveData<Event<NetworkResult<Int>>>
     val patchCalendarEntry: LiveData<Event<NetworkResult<CalenderEntry>>>
     val checkCalenderEntries: LiveData<Event<NetworkResult<Boolean>>>

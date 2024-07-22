@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
 import com.example.projectfoodmanager.data.model.recipe.comment.Comment
-import com.example.projectfoodmanager.data.model.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentCommentsBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
@@ -310,7 +310,7 @@ class CommentsFragment : Fragment() {
                         }
 
 
-                        currentPage = it.data!!._metadata.current_page
+                        currentPage = it.data!!._metadata.page
                         nextPage = it.data._metadata.next != null
 
 
