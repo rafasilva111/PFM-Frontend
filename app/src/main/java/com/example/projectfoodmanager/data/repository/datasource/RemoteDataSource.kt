@@ -3,8 +3,8 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
-import com.example.projectfoodmanager.data.model.recipe.comment.Comment
-import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
@@ -77,9 +77,7 @@ interface RemoteDataSource {
 	suspend fun patchComment(commentId: Int, comment: CommentDTO): Response<Comment>
 	suspend fun deleteComment(commentId: Int): Response<Comment>
 
-	/** Special Gets */
-	suspend fun getCommentsByRecipe(recipeId: Int, page: Int, pageSize: Int): Response<CommentList>
-	suspend fun getCommentsByClient(clientId: Int, page: Int): Response<CommentList>
+	suspend fun getComments(recipeId: Int?,clientId: Int?, page: Int, pageSize: Int): Response<CommentList>
 
 	/** Like Function */
 	suspend fun deleteLikeOnComment(commentId: Int): Response<Comment>

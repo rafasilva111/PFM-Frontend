@@ -19,6 +19,7 @@ import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.FirebaseMessagingTopics.NOTIFICATION_USER_TOPIC_BASE
 import com.example.projectfoodmanager.util.NetworkResult
 import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.TokenManager
 import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Response
 import java.net.SocketTimeoutException
@@ -29,6 +30,7 @@ class UserRepositoryImp @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val firebaseMessaging: FirebaseMessaging,
     private val sharedPreference: SharedPreference,
+    private val tokenManager: TokenManager,
     private val gson: Gson
 ) : UserRepository {
 
@@ -111,6 +113,7 @@ class UserRepositoryImp @Inject constructor(
         }
         else if(response.errorBody()!=null){
             val errorTxt = response.errorBody()?.string()
+
             Log.i(TAG, "loginUser: request made was not sucessfull: $errorTxt")
             val errorObj = gson.fromJson(errorTxt, ValidationError::class.java)
             Log.i(TAG, "loginUser: request made was not sucessfull: $errorObj")
@@ -136,6 +139,8 @@ class UserRepositoryImp @Inject constructor(
                 _AuthTokenLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
             }
             else if(response.errorBody()!=null){
+                tokenManager.deleteSession()
+                val teste = tokenManager.getAccessToken()
                 val errorObj = response.errorBody()!!.charStream().readText()
                 Log.i(TAG, "loginUser: request made was sucessfull. \n"+errorObj)
                 _AuthTokenLiveData.postValue(Event(NetworkResult.Error(errorObj)))

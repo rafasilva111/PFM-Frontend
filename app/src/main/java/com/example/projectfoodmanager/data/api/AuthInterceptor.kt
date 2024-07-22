@@ -12,11 +12,15 @@ class AuthInterceptor @Inject constructor() : Interceptor {
     @Inject
     lateinit var tokenManager: TokenManager
     private val TAG = "AuthInterceptor"
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().newBuilder()
         val token = tokenManager.getAccessToken()
-        Log.i(TAG, "intercept: user token: $token")
-        request.addHeader("Authorization", "Bearer $token")
+
+        token?.let {
+            request.addHeader("Authorization", "Bearer $it")
+        }
+
         return chain.proceed(request.build())
     }
 }

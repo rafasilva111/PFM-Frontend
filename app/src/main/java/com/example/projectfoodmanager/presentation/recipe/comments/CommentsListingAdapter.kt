@@ -6,7 +6,7 @@ import android.view.*
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.user.UserSimplified
 import com.example.projectfoodmanager.databinding.ItemCommentLayoutBinding
@@ -116,10 +116,10 @@ class CommentsListingAdapter(
 
             binding.TVCAuthor.text = context.getString(R.string.full_name,  item.user?.name)
             binding.TVCMessage.text = item.text
-            binding.TVCData.text = if (item.updated_date != item.created_date) {
-                getRelativeTime(item.updated_date!!)
+            binding.TVCData.text = if (item.updatedDate != item.createdDate) {
+                getRelativeTime(item.updatedDate!!)
             } else {
-                getRelativeTime(item.created_date!!)
+                getRelativeTime(item.createdDate!!)
             }
 
             binding.TVCNLikes.text = context.getString(R.string.COMMENT_ITEM_LAYOUT_LIKES,  item.likes)

@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
-import com.example.projectfoodmanager.data.model.recipe.comment.Comment
-import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
@@ -182,31 +182,18 @@ class RecipeRepositoryImp @Inject constructor(
     }
 
 
-    private val _functionGetCommentsByRecipe = MutableLiveData<Event<NetworkResult<CommentList>>>()
-    override val functionGetCommentsByRecipe: LiveData<Event<NetworkResult<CommentList>>>
-        get() = _functionGetCommentsByRecipe
+    private val _functionGetComments = MutableLiveData<Event<NetworkResult<CommentList>>>()
+    override val functionGetComments: LiveData<Event<NetworkResult<CommentList>>>
+        get() = _functionGetComments
 
-    private val _functionGetCommentsByClient = MutableLiveData<Event<NetworkResult<CommentList>>>()
-    override val functionGetCommentsByClient: LiveData<Event<NetworkResult<CommentList>>>
-        get() = _functionGetCommentsByClient
 
-    override suspend fun getCommentsByRecipe(recipeId: Int, page: Int, pageSize: Int) {
+    override suspend fun getComments(recipeId: Int?, clientId: Int?, page: Int, pageSize: Int) {
         handleApiResponse(
-            _functionGetCommentsByRecipe
+            _functionGetComments
         ) {
-            remoteDataSource.getCommentsByRecipe(recipeId,page,pageSize)
+            remoteDataSource.getComments(recipeId, clientId, page,pageSize)
         }
     }
-
-    override suspend fun getCommentsByClient(clientId: Int, page: Int) {
-
-        handleApiResponse(
-            _functionGetCommentsByClient
-        ) {
-            remoteDataSource.getCommentsByClient(clientId,page)
-        }
-    }
-
 
     /**
      * Like Function

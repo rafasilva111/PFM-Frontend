@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.data.model.notification.Notification
-import com.example.projectfoodmanager.data.model.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.user.UserSimplified
 import com.example.projectfoodmanager.databinding.NotificationListEntryBinding
 import com.example.projectfoodmanager.util.Helper.Companion.getRelativeTime

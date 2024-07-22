@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
-import com.example.projectfoodmanager.data.model.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentCommentsBinding
 import com.example.projectfoodmanager.util.*
@@ -296,7 +296,7 @@ class CommentsFragment : Fragment() {
             }
         }
 
-        recipeViewModel.functionGetCommentsByRecipe.observe(viewLifecycleOwner) { it ->
+        recipeViewModel.functionGetComments.observe(viewLifecycleOwner) { it ->
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {

@@ -24,8 +24,8 @@ import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplified
-import com.example.projectfoodmanager.data.model.recipe.comment.Comment
-import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
@@ -42,7 +42,12 @@ interface ApiInterface {
         const val API_V1_BASE_URL = "api/v1"
     }
 
-    //user
+    /**
+     * User
+     * */
+
+    /** General */
+
     @POST("$API_V1_BASE_URL/auth")
     suspend fun createUser(@Body user : UserDTO): Response<Unit>
 
@@ -68,11 +73,13 @@ interface ApiInterface {
     suspend fun deleteUser(): Response<String>
 
 
-    @GET("$API_V1_BASE_URL/recipe/background")
-    suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
 
 
-    //recipe
+    /**
+     * Recipe
+     * */
+    /** General */
+
     @POST("$API_V1_BASE_URL/recipe")
     suspend fun createRecipe(@Body recipe : RecipeRequest): Response<Recipe>
 
@@ -89,12 +96,16 @@ interface ApiInterface {
     @GET("$API_V1_BASE_URL/recipe/list")
     suspend fun getRecipesByClientSearchPaginated(@Query("commented_by") clientId: Int,@Query("string") string: String,@Query("page") page: Int): Response<RecipeList>
 
-
     @PUT("$API_V1_BASE_URL/recipe")
     suspend fun updateRecipe(@Query("id") recipeId: Int,@Body recipe : RecipeRequest): Response<Recipe>
 
     @DELETE("$API_V1_BASE_URL/recipe")
     suspend fun deleteRecipe(@Query("id") recipeId: Int): Response<String>
+
+    /** Background */
+
+    @GET("$API_V1_BASE_URL/recipe/background")
+    suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
 
     @GET("$API_V1_BASE_URL/recipe/likes")
     suspend fun getUserLikedRecipes(): Response<RecipeList>
@@ -120,25 +131,22 @@ interface ApiInterface {
 
     /** General */
 
-    @GET("$API_V1_BASE_URL/comment")
+    @GET("$API_V1_BASE_URL/recipe/comment")
     suspend fun getComment(@Query("id") commentId: Int): Response<Comment>
 
-    @POST("$API_V1_BASE_URL/comment")
+    @POST("$API_V1_BASE_URL/recipe/comment")
     suspend fun createComments(@Query("recipe_id") recipeId: Int,@Body comment : CommentDTO): Response<Comment>
 
-    @PATCH("$API_V1_BASE_URL/comment")
+    @PATCH("$API_V1_BASE_URL/recipe/comment")
     suspend fun patchComment(@Query("id") commentId: Int, @Body comment : CommentDTO): Response<Comment>
 
-    @DELETE("$API_V1_BASE_URL/comment")
+    @DELETE("$API_V1_BASE_URL/recipe/comment")
     suspend fun deleteComment(@Query("id") commentId: Int): Response<Comment>
 
-    /** Special Gets */
+    @GET("$API_V1_BASE_URL/recipe/comment/list")
+    suspend fun getComments(@Query("recipe_id") recipeId: Int?,@Query("user_id") clientId: Int?,@Query("page") page: Int,@Query("page_size") pageSize: Int): Response<CommentList>
 
-    @GET("$API_V1_BASE_URL/comment/list")
-    suspend fun getCommentsByRecipe(@Query("recipe_id") recipeId: Int,@Query("page") page: Int,@Query("page_size") pageSize: Int): Response<CommentList>
 
-    @GET("$API_V1_BASE_URL/comment")
-    suspend fun getCommentsByClient(@Query("user_id") clientId: Int, @Query("page") page: Int): Response<CommentList>
 
     /** Like Function */
 

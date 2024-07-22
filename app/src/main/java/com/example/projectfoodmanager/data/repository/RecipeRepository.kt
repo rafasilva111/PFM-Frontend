@@ -2,8 +2,8 @@ package com.example.projectfoodmanager.data.repository
 
 import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
-import com.example.projectfoodmanager.data.model.recipe.comment.Comment
-import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -37,17 +37,14 @@ interface RecipeRepository {
     suspend fun addSaveOnRecipe(recipeId: Int)
 
     // comment
-    val functionGetCommentsByRecipe: LiveData<Event<NetworkResult<CommentList>>>
-    val functionGetCommentsByClient: LiveData<Event<NetworkResult<CommentList>>>
+    val functionGetComments: LiveData<Event<NetworkResult<CommentList>>>
 
     val functionGetComment: LiveData<Event<NetworkResult<Comment>>>
     val functionPostComment: LiveData<Event<NetworkResult<Comment>>>
     val functionPatchComment: LiveData<Event<NetworkResult<Comment>>>
     val functionDeleteComment: LiveData<Event<NetworkResult<Comment>>>
 
-
-    suspend fun getCommentsByRecipe(recipeId: Int, page: Int, pageSize:Int)
-    suspend fun getCommentsByClient(clientId: Int, page: Int)
+    suspend fun getComments(recipeId: Int?,clientId: Int?, page: Int, pageSize:Int)
 
     suspend fun getComment(commentId: Int)
     suspend fun postComment(recipeId: Int, comment: CommentDTO)

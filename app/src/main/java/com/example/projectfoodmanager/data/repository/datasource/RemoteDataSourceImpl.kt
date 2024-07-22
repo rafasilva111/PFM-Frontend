@@ -4,8 +4,8 @@ package com.example.projectfoodmanager.data.repository.datasource
 import com.example.projectfoodmanager.data.api.ApiInterface
 import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
-import com.example.projectfoodmanager.data.model.recipe.comment.Comment
-import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
@@ -140,15 +140,11 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.deleteComment(commentId= commentId)
 	}
 
-	/** Special Gets */
-	override suspend fun getCommentsByRecipe(recipeId: Int,page: Int,pageSize: Int): Response<CommentList> {
-		return apiInterface.getCommentsByRecipe(recipeId = recipeId,page = page,pageSize = pageSize)
+	override suspend fun getComments(recipeId: Int?,clientId: Int?, page: Int, pageSize: Int): Response<CommentList> {
+		return apiInterface.getComments(recipeId = recipeId, clientId = clientId,page = page,pageSize = pageSize)
 	}
 
 
-	override suspend fun getCommentsByClient(clientId: Int, page: Int): Response<CommentList> {
-		return apiInterface.getCommentsByClient(clientId = clientId,page = page)
-	}
 
 	/** Like Function */
 	override suspend fun postLikeOnComment(commentId: Int): Response<Comment> {

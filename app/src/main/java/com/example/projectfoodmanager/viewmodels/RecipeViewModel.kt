@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
-import com.example.projectfoodmanager.data.model.recipe.comment.Comment
-import com.example.projectfoodmanager.data.model.recipe.comment.CommentList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.recipe.RecipeList
 import com.example.projectfoodmanager.data.repository.RecipeRepository
 import com.example.projectfoodmanager.util.Event
@@ -106,21 +106,13 @@ class RecipeViewModel @Inject constructor (
 
     /** Special Gets */
 
-    val functionGetCommentsByClient: LiveData<Event<NetworkResult<CommentList>>>
-        get() = repository.functionGetCommentsByClient
+    val functionGetComments: LiveData<Event<NetworkResult<CommentList>>>
+        get() = repository.functionGetComments
 
-    val functionGetCommentsByRecipe: LiveData<Event<NetworkResult<CommentList>>>
-        get() = repository.functionGetCommentsByRecipe
 
-    fun getCommentsByClient(clientId: Int, page: Int=1) {
+    fun getCommentsByRecipe(recipeId: Int? = null,clientId: Int? = null, page: Int=1, pageSize:Int=8) {
         viewModelScope.launch {
-            repository.getCommentsByClient(clientId,page)
-        }
-    }
-
-    fun getCommentsByRecipe(recipeId: Int, page: Int=1, pageSize:Int=8) {
-        viewModelScope.launch {
-            repository.getCommentsByRecipe(recipeId,page,pageSize)
+            repository.getComments(recipeId, clientId,page,pageSize)
         }
     }
 

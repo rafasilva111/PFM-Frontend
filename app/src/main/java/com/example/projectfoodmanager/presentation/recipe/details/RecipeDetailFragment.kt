@@ -329,8 +329,8 @@ class RecipeDetailFragment : Fragment() {
     private fun bindObservers() {
 
         // Like function
-        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let {
+        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
                         toast(getString(R.string.recipe_liked))
@@ -349,8 +349,8 @@ class RecipeDetailFragment : Fragment() {
             }
         }
 
-        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let {
+        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
                         toast(getString(R.string.recipe_removed_liked))
@@ -370,8 +370,8 @@ class RecipeDetailFragment : Fragment() {
 
         // save function
 
-        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let {
+        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
                         toast(getString(R.string.recipe_saved))
@@ -389,8 +389,8 @@ class RecipeDetailFragment : Fragment() {
             }
         }
 
-        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let {
+        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
                         toast(getString(R.string.recipe_removed_saved))
@@ -410,8 +410,8 @@ class RecipeDetailFragment : Fragment() {
 
         // comments function
 
-        recipeViewModel.functionGetCommentsByRecipe.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let { result ->
+        recipeViewModel.functionGetComments.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
 

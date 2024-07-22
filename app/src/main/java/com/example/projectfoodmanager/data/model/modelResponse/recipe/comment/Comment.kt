@@ -1,8 +1,9 @@
-package com.example.projectfoodmanager.data.model.recipe.comment
+package com.example.projectfoodmanager.data.model.modelResponse.recipe.comment
 
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.recipe.RecipeSimplified
 import com.example.projectfoodmanager.data.model.user.UserSimplified
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -11,8 +12,10 @@ data class Comment(
     val text: String,
     val user: UserSimplified? = null,
     val recipe: RecipeSimplified,
-    val created_date: String? = "",
-    val updated_date: String? = "",
+    @SerializedName("created_at")
+    val createdDate: String? = "",
+    @SerializedName("updated_at")
+    val updatedDate: String? = "",
     val likes: Int = 0,
     val liked: Boolean = false
 
