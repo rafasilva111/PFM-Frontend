@@ -21,8 +21,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFo
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
 import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.notification.NotificationList
-import com.example.projectfoodmanager.data.model.recipe.Recipe
-import com.example.projectfoodmanager.data.model.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplified
@@ -56,16 +56,13 @@ interface RemoteDataSource {
 	suspend fun updateRecipe(recipeId: Int,recipe: RecipeRequest): Response<Recipe>
 	suspend fun deleteRecipe(recipeId: Int): Response<String>
 
-	suspend fun getUserLikedRecipes(): Response<RecipeList>
+	suspend fun getLikedRecipes(page: Int,pageSize: Int): Response<RecipeList>
+	suspend fun addLike(recipeId: Int): Response<Recipe>
+	suspend fun removeLike(recipeId: Int): Response<Recipe>
 
-	suspend fun addLike(recipeId: Int): Response<Unit>
-	suspend fun removeLike(recipeId: Int): Response<Unit>
-	suspend fun addSave(recipeId: Int): Response<Unit>
-	suspend fun removeSave(recipeId: Int): Response<Unit>
-
-	suspend fun getRecipesByClientPaginated(clientId: Int, page: Int): Response<RecipeList>
-	suspend fun getRecipesByClientSearchPaginated(clientId: Int, string: String, page: Int): Response<RecipeList>
-
+	suspend fun addSave(recipeId: Int): Response<Recipe>
+	suspend fun removeSave(recipeId: Int): Response<Recipe>
+	
 
 	/**
 	 * Comments

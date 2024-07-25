@@ -2,8 +2,8 @@ package com.example.projectfoodmanager.data.model.modelRequest
 
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.modelResponse.ingredients.IngredientQuantity
-import com.example.projectfoodmanager.data.model.recipe.NutritionInformations
-import com.example.projectfoodmanager.data.model.recipe.Preparation
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.NutritionInformations
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Preparation
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 

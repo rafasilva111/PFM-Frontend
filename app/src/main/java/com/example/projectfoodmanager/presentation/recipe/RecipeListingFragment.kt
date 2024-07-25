@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.notification.Notification
-import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.di.notification.MyFirebaseMessagingService
 import com.example.projectfoodmanager.util.*
@@ -85,34 +85,37 @@ class RecipeListingFragment : Fragment() {
     // adapters
     private val adapter by lazy {
         RecipeListingAdapter(
-            onItemClicked = {pos,item ->
+            requireContext(),
+            onItemClicked = {pos,recipe ->
                 // use pos to reset current page to pos page, so it will refresh the pos page
                 refreshPage =  ceil((pos+1).toFloat()/PaginationNumber.DEFAULT).toInt()
+
                 findNavController().navigate(R.id.action_recipeListingFragment_to_receitaDetailFragment,Bundle().apply {
-                    putParcelable("Recipe",item)
+                    putInt("recipe_id",recipe.id)
                 })
 
                 changeMenuVisibility(false,activity)
             },
-            onLikeClicked = {item,like ->
-                if(like){
-                    recipeViewModel.addLikeOnRecipe(item.id)
-                }
-                else{
-                    recipeViewModel.removeLikeOnRecipe(item.id)
+            onLikeClicked = {recipe,like ->
+
+
+                if (like) {
+                    recipeViewModel.addLikeOnRecipe(recipe.id)
+                } else {
+                    recipeViewModel.removeLikeOnRecipe(recipe.id)
                 }
 
-            },
-            onSaveClicked = {item,saved ->
-                if(saved){
-                    recipeViewModel.addSaveOnRecipe(item.id)
-                }
-                else{
-                    recipeViewModel.removeSaveOnRecipe(item.id)
-                }
 
             },
-            sharedPreference
+            onSaveClicked = {recipe,saved ->
+
+                if (saved) {
+                    recipeViewModel.addSaveOnRecipe(recipe.id)
+                } else {
+                    recipeViewModel.removeSaveOnRecipe(recipe.id)
+                }
+
+            }
         )
     }
 
@@ -132,6 +135,7 @@ class RecipeListingFragment : Fragment() {
             manager.orientation=LinearLayoutManager.HORIZONTAL
             manager.reverseLayout=false
             binding.recyclerView.layoutManager = manager
+            binding.recyclerView.itemAnimator = null
             snapHelper.attachToRecyclerView(binding.recyclerView)
 
             binding.root
@@ -215,10 +219,9 @@ class RecipeListingFragment : Fragment() {
             binding.recyclerView.adapter = adapter
 
 
-            if (recipeListed.isEmpty())
-                recipeViewModel.getRecipes(page = currentPage, by = RecipesSortingType.VERIFIED)
-            else
-                adapter.updateList(recipeListed)
+
+            recipeViewModel.getRecipes(page = currentPage, searchString= searchString,searchTag= searchTag, by = sortedBy)
+
             // get recipes for first time
 
 
@@ -242,25 +245,18 @@ class RecipeListingFragment : Fragment() {
                         handler.postDelayed({
                             if (searchString == text) {
                                 // verifica se tag está a ser usada se não pesquisa a string nas tags da receita
-                                if (searchTag.isEmpty())
-                                    recipeViewModel.getRecipes(
-                                        page = currentPage,
-                                        searchString =searchString,
-                                        searchTag = searchString,
-                                        by = sortedBy
-                                    )
-                                else {
-                                    recipeViewModel.getRecipes(
-                                        page = currentPage,
-                                        searchString = searchString,
-                                        searchTag = searchTag,
-                                        by = sortedBy
-                                    )
-                                }
+
+                                recipeViewModel.getRecipes(
+                                    page = currentPage,
+                                    searchString =searchString,
+                                    searchTag = searchTag,
+                                    by = sortedBy
+                                )
+
                             }
                         }, 400)
 
-                        searchString = text
+                        searchString = text.lowercase()
 
                     } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
                     else if (searchString != "" && text == "") {
@@ -302,13 +298,8 @@ class RecipeListingFragment : Fragment() {
             val chipGroup: ChipGroup = binding.chipGroup
 
 
+            activateSearchChip(chipGroup)
 
-            if (sortedBy.isNotEmpty())
-                activateSearchChip(chipGroup)
-            else{
-                chipSelected = chipGroup.findViewById(chipGroup.checkedChipId)
-                sortedBy = RecipesSortingType.VERIFIED
-            }
 
 
             chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
@@ -399,6 +390,7 @@ class RecipeListingFragment : Fragment() {
 
             if (chip.tag == sortedBy) {
                 chip.isChecked = true
+                chipSelected = chip
                 break
             }
 
@@ -426,31 +418,33 @@ class RecipeListingFragment : Fragment() {
         scrollListener = object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    // prevent missed calls to api // needs to be reseted on search so it could be a next page
 
-                    if (nextPage){
-                        //val visibleItemCount: Int = manager.childCount
-                        val pastVisibleItem: Int =
-                            manager.findLastCompletelyVisibleItemPosition()
-                        //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
+                    val pastVisibleItemSinceLastFetch: Int = manager.findLastCompletelyVisibleItemPosition()
 
-                        if ((pastVisibleItem + 1) >= recipeListed.size){
 
-                            // verifica se tag está a ser uusada se não pesquisa a string nas tags da receita
+                    // if User is on the penultimate recipe of currenct page, get next page
+                    if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 2))
+                        if (nextPage ){
+                            //val visibleItemCount: Int = manager.childCount
+                            //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
+
+
+
+                                // verifica se tag está a ser uusada se não pesquisa a string nas tags da receita
                             if (searchTag.isEmpty())
                                 recipeViewModel.getRecipes(page = ++currentPage, searchString = searchString,searchTag= searchString, by = sortedBy)
                             else{
                                 recipeViewModel.getRecipes(page = ++currentPage, searchString = searchString,searchTag= searchTag, by = sortedBy)
                             }
+
                         }
-                        //Log.d(TAG, pag_index.toString())
-                        //Log.d(TAG, visibleItemCount.toString())
-                        //Log.d(TAG, pastVisibleItem.toString())
-                    }
-                    else if (!noMoreRecipesMessagePresented){
-                        noMoreRecipesMessagePresented = true
-                        toast("Sorry cant find more recipes.",ToastType.ALERT)
-                    }
+
+                    // if User is on the last recipe of currenct page, and no next page present notice to user
+                    if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 1))
+                        if (!nextPage && !noMoreRecipesMessagePresented){
+                            noMoreRecipesMessagePresented = true
+                            toast("Sorry cant find more recipes.",ToastType.ALERT)
+                        }
 
 
                 }
@@ -505,7 +499,7 @@ class RecipeListingFragment : Fragment() {
          * Recipes
          */
 
-        recipeViewModel.recipesResponseLiveData.observe(viewLifecycleOwner
+        recipeViewModel.functionGetRecipes.observe(viewLifecycleOwner
         ) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
@@ -537,7 +531,9 @@ class RecipeListingFragment : Fragment() {
                             // sets page data
 
                             currentPage = it.data!!._metadata.page
-                            nextPage = it.data._metadata.next != null
+                            nextPage = it.data._metadata.nextPage != null
+
+                            noMoreRecipesMessagePresented = nextPage
 
                             // check if list empty
 
@@ -554,7 +550,7 @@ class RecipeListingFragment : Fragment() {
 
                             if (currentPage == 1){
                                 recipeListed = it.data.result
-                                noMoreRecipesMessagePresented = false
+
                             }
                             else{
                                 recipeListed += it.data.result
@@ -584,25 +580,21 @@ class RecipeListingFragment : Fragment() {
          */
 
 
-        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
+        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
 
                         binding.progressBar.hide()
 
-                        // updates local list
-                        for (item in recipeListed.toMutableList()) {
-                            if (item.id == it.data) {
-                                item.likes++
-                                sharedPreference.addRecipeToLikedList(item)
-                                adapter.updateItem(recipeListed.indexOf(item), item)
-                                break
-                            }
+                        result.data?.let {
+                            adapter.updateItem(it)
                         }
+
+
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -610,25 +602,19 @@ class RecipeListingFragment : Fragment() {
             }
         }
 
-        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
+        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
 
                         binding.progressBar.hide()
 
-                        // updates local list
-                        for (item in recipeListed.toMutableList()) {
-                            if (item.id == it.data) {
-                                item.likes--
-                                sharedPreference.removeRecipeFromLikedList(item)
-                                adapter.updateItem(recipeListed.indexOf(item), item)
-                                break
-                            }
+                        result.data?.let {
+                            adapter.updateItem(it)
                         }
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -640,22 +626,18 @@ class RecipeListingFragment : Fragment() {
          * Save function
          */
 
-        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
+        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+            when (result) {
                     is NetworkResult.Success -> {
                         binding.progressBar.hide()
-                        // updates local list
-                        for (item in recipeListed.toMutableList()) {
-                            if (item.id == it.data) {
-                                sharedPreference.addSaveToUserSession(item)
-                                adapter.updateItem(recipeListed.indexOf(item), item)
-                                break
-                            }
+
+                        result.data?.let {
+                            adapter.updateItem(it)
                         }
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -663,22 +645,18 @@ class RecipeListingFragment : Fragment() {
             }
         }
 
-        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
+        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
                         binding.progressBar.hide()
-                        // updates local list
-                        for (item in recipeListed.toMutableList()) {
-                            if (item.id == it.data) {
-                                sharedPreference.removeSaveFromUserSession(item)
-                                adapter.updateItem(recipeListed.indexOf(item), item)
-                                break
-                            }
+
+                        result.data?.let {
+                            adapter.updateItem(it)
                         }
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -690,12 +668,12 @@ class RecipeListingFragment : Fragment() {
          * Notifications
          */
 
-        userViewModel.getNotificationsResponseLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
+        userViewModel.getNotificationsResponseLiveData.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
 
-                        numberOfNotifications = it.data!!.notSeen
+                        numberOfNotifications = result.data!!.notSeen
 
                         changeNotificationNumber()
 
@@ -738,57 +716,50 @@ class RecipeListingFragment : Fragment() {
         when(currentTabSelected){
             binding.recipeListingFilterVerified -> {
                 sortedBy = RecipesSortingType.VERIFIED
-                recipeViewModel.getRecipes(by = sortedBy)
             }
             binding.recipeListingFilterAll-> {
                 sortedBy = RecipesSortingType.ALL
-                recipeViewModel.getRecipes()
+
             }
             binding.recipeListingFilterRecent-> {
                 sortedBy = RecipesSortingType.DATE
-                recipeViewModel.getRecipes(by = sortedBy)
             }
             binding.recipeListingFilterSugestions-> {
-                // TODO
-                //sortedBy = RecipesSortingType.VERIFIED
-                //recipeViewModel.getRecipes(by = RecipesSortingType.SUGGESTION)
+                toast("Sorry, not implement yet...")
+                return
             }
             binding.recipeListingFilterPersonalizedSugestions-> {
-                // TODO
-                //sortedBy = RecipesSortingType.VERIFIED
-                //recipeViewModel.getRecipes(by = RecipesSortingType.PERSONALIZED_SUGGESTION)
+                toast("Sorry, not implement yet...")
+                return
             }
             binding.recipeListingFilterRandom-> {
                 sortedBy = RecipesSortingType.RANDOM
-                recipeViewModel.getRecipes(by = sortedBy)
             }
             binding.recipeListingFilterMostLiked-> {
                 sortedBy = RecipesSortingType.LIKES
-                recipeViewModel.getRecipes(by = sortedBy)
             }
             binding.recipeListingFilterMostSaved-> {
                 sortedBy = RecipesSortingType.SAVES
-                recipeViewModel.getRecipes(by = sortedBy)
             }
         }
+        recipeViewModel.getRecipes(page = currentPage, searchString= searchString,searchTag= searchTag, by = sortedBy)
         //slowly move to position 0
         binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
     }
 
     companion object {
-        private var recipeListed: MutableList<Recipe> = mutableListOf()
+
+        private var recipeListed: MutableList<RecipeSimplified> = mutableListOf()
 
         // pagination
         private var currentPage:Int = 1
         private var nextPage:Boolean = true
 
-
-        // tags filter ( bottom filters)
+        // Filters
         private var searchTag: String = ""
-        // search filter
         private var searchString: String = ""
         private var chipSelected: Chip? = null
-        private var sortedBy: String = ""
+        private var sortedBy: String = RecipesSortingType.VERIFIED
 
     }
 

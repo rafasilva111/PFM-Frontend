@@ -1,7 +1,8 @@
 package com.example.projectfoodmanager.data.model.modelResponse.user
 
 import android.os.Parcelable
-import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
@@ -31,9 +32,6 @@ data class User(
     val weight: Double = 0.0,
     val age: Int? = 0,
     val rating: Double = 0.0,
-    @SerializedName("liked_recipes")
-    @JvmField
-    var likedRecipes: MutableList<Recipe> = mutableListOf(),
     @SerializedName("saved_recipes")
     @JvmField
     var savedRecipes: MutableList<Recipe> = mutableListOf(),
@@ -57,59 +55,36 @@ data class User(
 
     // this is needed
     fun initLists() {
-        if (likedRecipes == null){
-            likedRecipes = mutableListOf()
-        }
-        if (savedRecipes == null){
-            savedRecipes = mutableListOf()
-        }
-        if (createdRecipes == null){
-            createdRecipes = mutableListOf()
-        }
+
+        savedRecipes = mutableListOf()
+        createdRecipes = mutableListOf()
+
     }
 
 
-    fun checkIfLiked(recipe: Recipe): Int {
-        if (likedRecipes == null)
-            likedRecipes = mutableListOf()
-
-        return if ( likedRecipes.isNotEmpty())
-            likedRecipes.indexOfFirst { it.id == recipe.id }
-        else
-            -1
-    }
-
-    fun  addLike(recipe: Recipe){
-        if (this.checkIfLiked(recipe) == -1){
-            likedRecipes.add(recipe)
-        }
-    }
-
-    fun removeLike(recipe: Recipe){
-        val index = checkIfLiked(recipe)
-        if (index != -1)
-            likedRecipes.removeAt(index)
-    }
-
-    fun checkIfSaved(recipe: Recipe): Int {
-
-        if (savedRecipes == null)
-            savedRecipes = mutableListOf()
+    fun checkIfSaved(recipeId: Int): Int {
 
         return if (savedRecipes.isNotEmpty())
-            savedRecipes.indexOfFirst { it.id == recipe.id }
+            savedRecipes.indexOfFirst { it.id == recipeId }
         else
             -1
     }
 
     fun addSave(recipe: Recipe){
-        if (checkIfSaved(recipe) == -1){
+        if (checkIfSaved(recipe.id) == -1){
             savedRecipes.add(recipe)
         }
     }
 
+
     fun removeSave(recipe: Recipe){
-        val index = checkIfSaved(recipe)
+        val index = checkIfSaved(recipe.id)
+        if (index != -1)
+            savedRecipes.removeAt(index)
+    }
+
+    fun removeSave(recipe: RecipeSimplified){
+        val index = checkIfSaved(recipe.id)
         if (index != -1)
             savedRecipes.removeAt(index)
     }

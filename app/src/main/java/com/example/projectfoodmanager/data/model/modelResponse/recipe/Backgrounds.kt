@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.model.recipe
+package com.example.projectfoodmanager.data.model.modelResponse.recipe
 
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.modelResponse.user.User

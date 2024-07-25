@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.presentation.recipe.details.tabs.NutritionTabFragment
 import com.example.projectfoodmanager.presentation.recipe.details.tabs.RecipeTabFragment
 

@@ -11,8 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.util.*
@@ -41,7 +40,7 @@ class ProfileFragment : Fragment() {
     private val TAG: String = "ProfileFragment"
     private var userId: Int = -1
     private lateinit var user: UserProfile
-    private lateinit var recipeListed: MutableList<Recipe>
+    private lateinit var recipeListed: MutableList<RecipeSimplified>
 
     private var manager: GridLayoutManager = GridLayoutManager(activity?.applicationContext, 3)
 
@@ -220,7 +219,7 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        recipeViewModel.recipesResponseLiveData.observe(viewLifecycleOwner) { event ->
+        recipeViewModel.functionGetRecipes.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
@@ -229,7 +228,7 @@ class ProfileFragment : Fragment() {
                         // sets page data
 
                         currentPage = result.data!!._metadata.page
-                        nextPage = result.data._metadata.next != null
+                        nextPage = result.data._metadata.nextPage != null
 
                         // check if list empty
 

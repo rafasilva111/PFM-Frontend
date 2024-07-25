@@ -22,8 +22,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFo
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
 import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.notification.NotificationList
-import com.example.projectfoodmanager.data.model.recipe.Recipe
-import com.example.projectfoodmanager.data.model.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplified
@@ -80,14 +80,6 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getRecipe(recipeId = recipeId)
 	}
 
-	override suspend fun getRecipesByClientPaginated(clientId: Int, page: Int): Response<RecipeList> {
-		return apiInterface.getRecipesByClientPaginated(clientId = clientId,page = page)
-	}
-
-    override suspend fun getRecipesByClientSearchPaginated(clientId: Int, string: String, page: Int): Response<RecipeList> {
-		return apiInterface.getRecipesByClientSearchPaginated(clientId = clientId, string =  string,page = page)
-    }
-
 	override suspend fun getRecipes(userId: Int?,by: String, searchString: String, searchTag: String, page: Int,pageSize: Int): Response<RecipeList> {
 		return apiInterface.getRecipePaginated(userId = userId,page = page,searchString = searchString, searchTag=searchTag,by=by,pageSize = pageSize)
 	}
@@ -99,23 +91,23 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.deleteRecipe(recipeId = recipeId)
 	}
 
-	override suspend fun getUserLikedRecipes(): Response<RecipeList> {
-		return apiInterface.getUserLikedRecipes()
+	override suspend fun getLikedRecipes(page: Int,pageSize: Int): Response<RecipeList> {
+		return apiInterface.getLikedRecipes(page,pageSize)
 	}
 
-	override suspend fun addLike(recipeId: Int): Response<Unit> {
+	override suspend fun addLike(recipeId: Int): Response<Recipe> {
 		return apiInterface.addLike(recipeId = recipeId)
 	}
 
-	override suspend fun removeLike(recipeId: Int): Response<Unit> {
+	override suspend fun removeLike(recipeId: Int): Response<Recipe> {
 		return apiInterface.removeLike(recipeId = recipeId)
 	}
 
-	override suspend fun addSave(recipeId: Int): Response<Unit> {
+	override suspend fun addSave(recipeId: Int): Response<Recipe> {
 		return apiInterface.addSave(recipeId = recipeId)
 	}
 
-	override suspend fun removeSave(recipeId: Int): Response<Unit> {
+	override suspend fun removeSave(recipeId: Int): Response<Recipe> {
 		return apiInterface.removeSave(recipeId = recipeId)
 	}
 

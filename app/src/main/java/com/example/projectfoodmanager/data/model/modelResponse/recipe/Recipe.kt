@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.model.recipe
+package com.example.projectfoodmanager.data.model.modelResponse.recipe
 
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.modelResponse.ingredients.IngredientQuantity
@@ -35,5 +35,36 @@ data class Recipe(
     @SerializedName("nutrition_information")
     val nutritionInformation: NutritionInformations?,
     @SerializedName("created_by")
-    var createdBy: UserSimplified
+    var createdBy: UserSimplified,
+
+    val saved: Boolean,
+    var liked: Boolean
 ) : Parcelable
+
+fun Recipe.toRecipeSimplified(): RecipeSimplified {
+    return RecipeSimplified(
+        id = this.id,
+        title = this.title,
+        description = this.description,
+        imgSource = this.imgSource,
+        difficulty = this.difficulty,
+        portion = this.portion,
+        time = this.time,
+        likes = this.likes,
+        views = this.views,
+        verified = this.verified,
+        rating = this.rating,
+        sourceRating = this.sourceRating,
+        sourceLink = this.sourceLink,
+        createdBy = this.createdBy,
+        createdDate = this.createdDate,
+        updatedDate = this.updatedDate,
+        tags = this.tags,
+        saved = this.saved,
+        liked = this.liked
+    )
+}
+
+fun MutableList<Recipe>.toRecipeSimplifiedList(): MutableList<RecipeSimplified> {
+    return this.map { it.toRecipeSimplified() }.toMutableList()
+}

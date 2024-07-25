@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.*
@@ -42,7 +42,7 @@ class RecipeDetailFragment : Fragment() {
 
     // constants
     val TAG: String = "ReceitaDetailFragment"
-    private var objRecipe: Recipe? = null
+    private var recipeId: Int = -1
     private lateinit var user: User
 
 
@@ -75,67 +75,39 @@ class RecipeDetailFragment : Fragment() {
         /**
          *  Arguments
          * */
-
+        super.onCreate(savedInstanceState)
        arguments?.let {
 
-           objRecipe = if (Build.VERSION.SDK_INT >= 33) {
-               arguments?.getParcelable("Recipe", Recipe::class.java)
-           } else {
-               arguments?.getParcelable("Recipe")
-           }
+           recipeId = arguments?.getInt("recipe_id")!!
 
            userPortion = arguments?.getFloat("UserPortion",-1F)!!
 
-            // todo rafa isto deve ser tratado na base de dados
-           recipePortion = if (objRecipe!!.portion.lowercase().contains("pessoas"))
+            // todo rafa isto deve ser tratado na base de dados ps: não está
+          /* recipePortion = if (objRecipe!!.portion.lowercase().contains("pessoas"))
                objRecipe!!.portion.split(" ")[0].toFloat()
            else
-               -1F
+               -1F*/
         }
 
-        super.onCreate(savedInstanceState)
+
+
+
     }
 
 
-    @ExperimentalBadgeUtils
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        if (isOnline(requireView().context)) {
 
+            recipeViewModel.getRecipe(id = recipeId)
+            // selecionar as 2/3 primeiras imagens para colocar na zona dos comments
+            recipeViewModel.getCommentsByRecipe(recipeId, pageSize = 2)
 
-
-        if (objRecipe != null) {
-            if (isOnline(view.context)) {
-
-                // selecionar as 2/3 primeiras imagens para colocar na zona dos comments
-                recipeViewModel.getCommentsByRecipe(objRecipe!!.id, pageSize = 2)
-
-/*
-                binding.commentsFB.viewTreeObserver.addOnGlobalLayoutListener(object :
-                    ViewTreeObserver.OnGlobalLayoutListener {
-
-                    override fun onGlobalLayout() {
-                        val badgeDrawable = BadgeDrawable.create(requireContext())
-                        badgeDrawable.number = objRecipe!!.comments
-                        badgeDrawable.horizontalOffset = 30
-                        badgeDrawable.verticalOffset = 20
-
-                        BadgeUtils.attachBadgeDrawable(
-                            badgeDrawable,
-                            binding.commentsFB,
-                            null
-                        )
-
-                        // Remove the listener once it's no longer needed
-                        binding.commentsFB.viewTreeObserver.removeOnGlobalLayoutListener(
-                            this
-                        )
-                    }
-                })*/
-            }
-
-            setUI(objRecipe!!)
         }
 
+
+        setUI()
+        bindObservers()
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -144,7 +116,7 @@ class RecipeDetailFragment : Fragment() {
         super.onStart()
     }
 
-    private fun setUI(recipe: Recipe) {
+    private fun setUI() {
 
         /**
          *  General
@@ -153,7 +125,21 @@ class RecipeDetailFragment : Fragment() {
         // Remove status abr limits
         requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
-        user = sharedPreference.getUserSession()
+
+        /**
+         *  Navigations
+         * */
+
+        binding.backIB.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+
+
+    }
+
+
+    private fun updateRecipeUI(recipe: Recipe){
 
         /** Recipe Info */
 
@@ -195,27 +181,29 @@ class RecipeDetailFragment : Fragment() {
         }
 
         // likes
-        updateLikeUI()
+        updateLikeUI(recipe)
 
 
         binding.likeIB.setOnClickListener {
-            if (sharedPreference.getUserSession().checkIfLiked(recipe) == -1) {
-                recipeViewModel.addLikeOnRecipe(recipe.id)
-            } else {
+            if (recipe.liked)
                 recipeViewModel.removeLikeOnRecipe(recipe.id)
-            }
+            else
+                recipeViewModel.addLikeOnRecipe(recipe.id)
+
+
         }
 
         // Favorites
-        updateSaveUI()
+        updateSaveUI(recipe)
 
 
         binding.favoritesIB.setOnClickListener {
-            if (sharedPreference.getUserSession().checkIfSaved(recipe) == -1) {
-                recipeViewModel.addSaveOnRecipe(recipe.id)
-            } else {
+            if (recipe.saved)
                 recipeViewModel.removeSaveOnRecipe(recipe.id)
-            }
+            else
+                recipeViewModel.addSaveOnRecipe(recipe.id)
+
+
         }
 
 
@@ -232,7 +220,7 @@ class RecipeDetailFragment : Fragment() {
             })
         }
 
-        // go to creater profile
+        // go to creator profile
         binding.profileAuthorCV.setOnClickListener{
             findNavController().navigate(R.id.action_receitaDetailFragment_to_profileFragment,Bundle().apply {
                 putInt("user_id",recipe.createdBy.id)
@@ -242,15 +230,9 @@ class RecipeDetailFragment : Fragment() {
         // go to create calender entry
         binding.calenderIB.setOnClickListener {
             findNavController().navigate(R.id.action_receitaDetailFragment_to_newCalenderEntryFragment,Bundle().apply {
-                putParcelable("Recipe",objRecipe)
+                putParcelable("Recipe",recipe)
             })
         }
-
-        // go back
-        binding.backIB.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
 
         /**
          *  Tab Layout
@@ -316,11 +298,7 @@ class RecipeDetailFragment : Fragment() {
             }
         })
 
-
-
-
     }
-
 
     private fun loadUI() {
         /**
@@ -333,45 +311,62 @@ class RecipeDetailFragment : Fragment() {
 
     }
 
-    private fun updateLikeUI(){
+    private fun updateLikeUI(recipe: Recipe){
 
-        objRecipe?.let { recipe ->
+        binding.numberLikeTV.text = recipe.likes.toString()
 
-            binding.numberLikeTV.text = recipe.likes.toString()
+        if (recipe.liked) {
+            binding.likeIB.setImageResource(R.drawable.ic_like_active)
+        } else
+            binding.likeIB.setImageResource(R.drawable.ic_like_black)
 
-            if (user.checkIfLiked(recipe) != -1) {
-                binding.likeIB.setImageResource(R.drawable.ic_like_active)
-            } else
-                binding.likeIB.setImageResource(R.drawable.ic_like_black)
-        }
     }
 
-    private fun updateSaveUI() {
-        objRecipe?.let { recipe ->
+    private fun updateSaveUI(recipe: Recipe) {
 
-            if (user.checkIfSaved(recipe) != -1) {
+            if (recipe.saved)
                 binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
-            } else
+            else
                 binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
-        }
+
     }
 
     private fun bindObservers() {
 
-        // Like function
-        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        toast(getString(R.string.recipe_liked))
+        /**
+         * Get Recipe
+         */
 
-                        objRecipe!!.likes++
-                        user = sharedPreference.addRecipeToLikedList(objRecipe!!)
-                        updateLikeUI()
+        recipeViewModel.functionGetRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+
+                        result.data?.let { updateRecipeUI(it) }
 
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+
+        // Like function
+        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        result.data?.let { updateLikeUI(it) }
+
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -380,17 +375,15 @@ class RecipeDetailFragment : Fragment() {
         }
 
         recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let {
-                when (it) {
+            response.getContentIfNotHandled()?.let {result ->
+                when (result) {
                     is NetworkResult.Success -> {
-                        toast(getString(R.string.recipe_removed_liked))
 
-                        objRecipe!!.likes--
-                        user = sharedPreference.removeRecipeFromLikedList(objRecipe!!)
-                        updateLikeUI()
+
+                        result.data?.let { updateLikeUI(it) }
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -401,17 +394,17 @@ class RecipeDetailFragment : Fragment() {
         // save function
 
         recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let {
-                when (it) {
+            response.getContentIfNotHandled()?.let {result ->
+                when (result) {
                     is NetworkResult.Success -> {
-                        toast(getString(R.string.recipe_saved))
 
-                        user = sharedPreference.addSaveToUserSession(objRecipe!!)
-                        updateSaveUI()
+
+                        result.data?.let { updateSaveUI(it) }
+
 
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -420,17 +413,14 @@ class RecipeDetailFragment : Fragment() {
         }
 
         recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let {
-                when (it) {
+            response.getContentIfNotHandled()?.let {result ->
+                when (result) {
                     is NetworkResult.Success -> {
-                        toast(getString(R.string.recipe_removed_saved))
-
-                        user = sharedPreference.removeSaveFromUserSession(objRecipe!!)
-                        updateSaveUI()
+                        result.data?.let { updateSaveUI(it) }
 
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                     }

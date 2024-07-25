@@ -13,6 +13,8 @@ data class Metadata(
     val totalItems: Int,
     @SerializedName("total_pages")
     val totalPages: Int,
-    val next: String?,
-    val previous: String?
+    @SerializedName("next_page")
+    val nextPage: String?,
+    @SerializedName("previous_page")
+    val previousPage: String?
 ) : Parcelable

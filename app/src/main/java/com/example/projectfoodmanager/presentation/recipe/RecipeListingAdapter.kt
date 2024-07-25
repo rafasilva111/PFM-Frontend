@@ -1,30 +1,31 @@
 package com.example.projectfoodmanager.presentation.recipe
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.toRecipeSimplified
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
-import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
+import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
-import com.example.projectfoodmanager.util.SharedPreference
-
 
 class RecipeListingAdapter(
-    val onItemClicked: (Int, Recipe) -> Unit,
-    val onLikeClicked: (Recipe, Boolean) -> Unit,
-    val onSaveClicked: (Recipe, Boolean) -> Unit,
-    private val sharedPreference: SharedPreference
+    private val context: Context,
+    val onItemClicked: (Int, RecipeSimplified) -> Unit,
+    val onLikeClicked: (RecipeSimplified, Boolean) -> Unit,
+    val onSaveClicked: (RecipeSimplified, Boolean) -> Unit
 ) : RecyclerView.Adapter<RecipeListingAdapter.MyViewHolder>() {
 
 
 
-    private val TAG: String? = "RecipeListingAdapter"
-    private var list: MutableList<Recipe> = arrayListOf()
+    private val TAG: String = "RecipeListingAdapter"
+    private var list: MutableList<RecipeSimplified> = arrayListOf()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -37,15 +38,39 @@ class RecipeListingAdapter(
         holder.bind(item)
     }
 
-    fun updateList(list: MutableList<Recipe>){
+    fun updateList(list: MutableList<RecipeSimplified>){
         this.list = list
         notifyDataSetChanged()
     }
 
-    fun updateItem(position: Int,item: Recipe){
+    fun updateItem(position: Int,item: RecipeSimplified){
         list.removeAt(position)
         list.add(position,item)
         notifyItemChanged(position)
+    }
+
+    fun updateItem(item: RecipeSimplified){
+
+        for ((index, recipe) in list.withIndex()){
+            if (recipe.id == item.id) {
+                list[index] = item
+                notifyItemChanged(index)
+                break
+            }
+        }
+
+    }
+
+    fun updateItem(item: Recipe){
+
+        for ((index, recipe) in list.withIndex()){
+            if (recipe.id == item.id) {
+                list[index] = item.toRecipeSimplified()
+                notifyItemChanged(index)
+                break
+            }
+        }
+
     }
 
 
@@ -65,10 +90,35 @@ class RecipeListingAdapter(
 
 
     inner class MyViewHolder(private val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Recipe) {
 
-            //Load Author img
-            loadUserImage(binding.imgAuthorIV,item.createdBy.imgSource)
+        fun bind(item: RecipeSimplified) {
+
+
+            /**
+             * Loading Images
+             */
+
+            // Load Recipe img
+            if (item.imgSource.isNotEmpty()) {
+
+                // Current drawable is the default image, proceed to load
+                loadRecipeImage(binding.imageView, item.imgSource)
+
+                // Current drawable is not the default image, do not load
+
+            }
+
+            // Load Author img
+            if (item.createdBy.imgSource.isNotEmpty()) {
+
+                loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource)
+
+            }
+
+
+            /**
+             * Details
+             */
 
             //Load Author name
             binding.nameAuthorTV.text = formatNameToNameUpper(item.createdBy.name)
@@ -79,19 +129,6 @@ class RecipeListingAdapter(
             }else{
                 binding.verifyUserIV.visibility=View.INVISIBLE
             }
-
-            // Load Recipe img
-            if (item.imgSource.isNotEmpty()){
-
-                Helper.loadRecipeImage(binding.imageView,item.imgSource)
-            }
-
-            // Load Author img
-            if (item.createdBy.imgSource.isNotEmpty()){
-                //-> Load Recipe img
-                loadUserImage(binding.imgAuthorIV,item.createdBy.imgSource)
-            }
-
 
             binding.dateTV.text = formatServerTimeToDateString(item.createdDate)
             binding.recipeTitleTV.text = item.title
@@ -110,66 +147,45 @@ class RecipeListingAdapter(
                 binding.verifyRecipeTV.visibility= View.VISIBLE
             }
 
-            // get user from shared prefrences
-            val user = sharedPreference.getUserSession()
 
             binding.ratingRecipeRB.rating = item.sourceRating.toFloat()
             binding.ratingMedTV.text = item.sourceRating
 
-/*
 
-            binding.timeTV.text = item.time
-            binding.difficultyTV.text = item.difficulty
+            /**
+             * Likes Function
+             */
 
-            when(item.difficulty){
-                RecipeDifficultyConstants.LOW->{
-                    binding.difficultyIV.setImageResource(R.drawable.low_difficulty)
-                }
-                RecipeDifficultyConstants.MEDIUM->{
-                    binding.difficultyIV.setImageResource(R.drawable.medium_difficulty)
-                }
-                RecipeDifficultyConstants.HIGH->{
-                    binding.difficultyIV.setImageResource(R.drawable.high_difficulty)
-                }
-            }
-
-            binding.portionTV.text = item.portion
-*/
-
-            //--------- LIKES ---------
-            if(user.checkIfLiked(item) != -1){
+            if(item.liked)
                 binding.likeIB.setImageResource(R.drawable.ic_like_active)
-            }
             else
                 binding.likeIB.setImageResource(R.drawable.ic_like_black)
 
 
             binding.likeIB.setOnClickListener {
-                if(user.checkIfLiked(item) == -1) {
-                    onLikeClicked.invoke(item, true)
-                }
-                else
-                {
+                if(item.liked)
                     onLikeClicked.invoke(item, false)
-                }
+                else
+                    onLikeClicked.invoke(item, true)
+
             }
 
 
-            //--------- FAVORITES ---------
-            if(user.checkIfSaved(item) != -1){
+            /**
+             * Saves Function
+             */
+
+            if(item.saved)
                 binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
-            }
             else
                 binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
 
             binding.favoritesIB.setOnClickListener {
-                if(user.checkIfSaved(item) == -1) {
-                    onSaveClicked.invoke(item, true)
-                }
-                else
-                {
+                if(item.saved)
                     onSaveClicked.invoke(item, false)
-                }
+                else
+                    onSaveClicked.invoke(item, true)
+
             }
 
         }

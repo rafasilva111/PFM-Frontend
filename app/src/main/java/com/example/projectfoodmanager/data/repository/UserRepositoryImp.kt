@@ -243,7 +243,7 @@ class UserRepositoryImp @Inject constructor(
         _getUserRecipesBackgroundLiveData.postValue(Event(NetworkResult.Loading()))
         val response = remoteDataSource.getUserRecipesBackground()
         if (response.isSuccessful) {
-            sharedPreference.saveUserRecipesSession(response.body()!!)
+            sharedPreference.addSavedRecipesAnCreatedRecipes(response.body()!!)
             Log.i(TAG, "updateUser: request made was sucessfull.")
             _getUserRecipesBackgroundLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
         }

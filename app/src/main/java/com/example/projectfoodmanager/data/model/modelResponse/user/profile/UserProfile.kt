@@ -1,8 +1,6 @@
 package com.example.projectfoodmanager.data.model.modelResponse.user.profile
 
 import android.os.Parcelable
-import com.example.projectfoodmanager.data.model.recipe.Recipe
-import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 

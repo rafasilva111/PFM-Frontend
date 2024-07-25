@@ -22,13 +22,15 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.toRecipeSimplifiedList
 import com.example.projectfoodmanager.databinding.FragmentFavoritesBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.FragmentRecipeLikesChipsTag.COMMENTED
 import com.example.projectfoodmanager.util.FragmentRecipeLikesChipsTag.LAST_SEEN
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
+import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
@@ -86,6 +88,7 @@ class FavoritesFragment : Fragment() {
     // adapters
     private val adapter by lazy {
         FavoritesRecipeListingAdapter(
+            context = requireContext(),
             onItemClicked = { _, item ->
                 findNavController().navigate(R.id.action_favoritesFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("Recipe",item)
@@ -94,26 +97,20 @@ class FavoritesFragment : Fragment() {
 
             },
             onLikeClicked = {item,like ->
-                if(like){
+                if(like)
                     recipeViewModel.addLikeOnRecipe(item.id)
-                }
-                else{
+                else
                     recipeViewModel.removeLikeOnRecipe(item.id)
-                }
 
             },
             onSaveClicked = {item,saved ->
                 
-                if(saved){
+                if(saved)
                     recipeViewModel.addSaveOnRecipe(item.id)
-                }
-                else{
+                else
                     recipeViewModel.removeSaveOnRecipe(item.id)
-                }
 
             },
-            userViewModel,
-            recipeViewModel
         )
     }
 
@@ -150,29 +147,8 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         bindObservers()
+
         user = sharedPreference.getUserSession()
-        //valida shared preferences
-
-
-        try {
-
-            if (user.likedRecipes.isNullOrEmpty()) {
-                Log.d(TAG, "onViewCreated: user.saved_recipes is empty")
-                //Mensagem sem receitas
-                binding.tvNoRecipes.visibility = View.VISIBLE
-
-            } else {
-                //Mensagem com receitas
-                binding.tvNoRecipes.visibility = View.GONE
-
-                adapter.updateList(user.likedRecipes, user)
-            }
-        } catch (e: Exception) {
-            Log.d(TAG, "onViewCreated: User had no shared prefences...")
-            // se não tiver shared preferences o user não tem sessão válida
-            //tera um comportamento diferente offilne
-            userViewModel.logoutUser()
-        }
 
 
         /**
@@ -194,7 +170,7 @@ class FavoritesFragment : Fragment() {
 
 
                             if (chipSelected.tag.toString().toInt() == COMMENTED){
-                                recipeViewModel.getRecipesCommentedByUserPaginated(clientId = user.id, searchString = text)
+                                //recipeViewModel.getRecipesCommentedByUserPaginated(clientId = user.id, searchString = text)
                             }
                             else if (chipSelected.tag.toString().toInt() == LAST_SEEN){
                                 toast("Not implemented yet")
@@ -293,15 +269,8 @@ class FavoritesFragment : Fragment() {
             // todo check if recipes removed from sharedPreferences ( in case user in offline mode removes like)
             // caso sim atualizar a bd
 
-            recipeViewModel.getUserLikedRecipes()
+            recipeViewModel.getLikedRecipes()
 
-
-            //validação da shared preferences feita no observer
-
-
-
-            // todo atualiza a lista de comments mediante http://{{dev}}/api/v1/recipe/comments
-            //authViewModel.getUserBackgrounds()
 
 
         } else {
@@ -316,7 +285,7 @@ class FavoritesFragment : Fragment() {
     }
 
     override fun onStart() {
-        Helper.changeTheme(false, activity, context)
+        changeTheme(false, activity, context)
         super.onStart()
     }
 
@@ -329,17 +298,8 @@ class FavoritesFragment : Fragment() {
         when(currentTabSelected){
             binding.chipCurtidas -> {
 
-                onlineChipFilter = false
-
-                //list
-                if (recipes.isEmpty()){
-                    binding.tvNoRecipes.visibility = View.VISIBLE
-                    binding.tvNoRecipes.text = getString(R.string.no_recipes_liked)
-                }
-                else
-                    binding.tvNoRecipes.visibility = View.INVISIBLE
-
-                adapter.updateList(recipes, user)
+                onlineChipFilter = true
+                changeRecyclerViewScrollListener(true)
 
             }
             binding.chipGuardados ->{
@@ -408,11 +368,11 @@ class FavoritesFragment : Fragment() {
                             if ((pastVisibleItem + 1) >= adapter.list.size){
 
 
-                                if (stringToSearch.isNullOrEmpty()) {
+                                /*if (stringToSearch.isNullOrEmpty()) {
                                     recipeViewModel.getRecipesCommentedByUserPaginated(page = ++currentPage, clientId = user.id)
                                 } else {
                                     recipeViewModel.getRecipesCommentedByUserPaginated(page = ++currentPage, clientId = user.id, searchString = stringToSearch)
-                                }
+                                }*/
                             }
 
                             Log.d(TAG, pastVisibleItem.toString())
@@ -434,7 +394,6 @@ class FavoritesFragment : Fragment() {
             }
         }
 
-
         if (state)
             binding.recyclerView.addOnScrollListener(scrollListener!!)
         else
@@ -442,19 +401,21 @@ class FavoritesFragment : Fragment() {
 
     }
 
-    private fun getChipList(currentTabSelected: View): MutableList<Recipe> {
+    private fun getChipList(currentTabSelected: View): MutableList<RecipeSimplified> {
+        user = sharedPreference.getUserSession()
+
         when(currentTabSelected){
             binding.chipCurtidas -> {
-                return user.createdRecipes
+                recipeViewModel.getLikedRecipes()
             }
             binding.chipGuardados ->{
-                return user.savedRecipes
+                return user.savedRecipes.toRecipeSimplifiedList()
             }
             binding.chipCriadas ->{
-                return user.createdRecipes
+                return user.createdRecipes.toRecipeSimplifiedList()
             }
             binding.chipCommented ->{
-                recipeViewModel.getRecipesCommentedByUserPaginated(clientId = user.id)
+                //recipeViewModel.getRecipesCommentedByUserPaginated(clientId = user.id)
 
             }
             binding.chipLastSeem ->{
@@ -473,7 +434,7 @@ class FavoritesFragment : Fragment() {
 
     private fun bindObservers() {
 
-        recipeViewModel.recipesCommentedByUserSearchPaginated.observe(viewLifecycleOwner) { it ->
+        /*recipeViewModel.recipesCommentedByUserSearchPaginated.observe(viewLifecycleOwner) { it ->
             it.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
@@ -560,7 +521,7 @@ class FavoritesFragment : Fragment() {
                     }
                 }
             }
-        }
+        }*/
 
         userViewModel.userLogoutResponseLiveData.observe(viewLifecycleOwner) { response ->
             response.getContentIfNotHandled()?.let { result ->
@@ -581,31 +542,54 @@ class FavoritesFragment : Fragment() {
             }
         }
 
+
+
         // Like function
-        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { it ->
-            it.getContentIfNotHandled()?.let {
-                when (it) {
+
+        recipeViewModel.functionGetLikedRecipes.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        result.data?.let {
+
+                            binding.tvNoRecipes.visibility = View.GONE
+
+                            adapter.updateList(it.result, user)
+
+                        } ?:run {
+
+                            binding.tvNoRecipes.visibility = View.VISIBLE
+                        }
+
+                    }
+                    is NetworkResult.Error -> {
+                        Log.d(TAG, "bindObservers: ${result.message}.")
+                    }
+                    is NetworkResult.Loading -> {
+                        //binding.progressBar.isVisible = true
+                    }
+                }
+            }
+        }
+
+        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
                         binding.progressBar.hide()
-                        toast(getString(R.string.recipe_liked))
 
-                        val listOnAdapter = adapter.getAdapterList()
-                        // updates local list
-                        for (item in listOnAdapter) {
-                            if (item.id == it.data) {
-                                item.likes++
-                                adapter.updateItem(
-                                    listOnAdapter.indexOf(item),
-                                    item,
-                                    sharedPreference.addRecipeToLikedList(item)
-                                )
-                                break
-                            }
+                        result.data?.let {
+                            if (chipSelected == binding.chipCurtidas)
+                                adapter.removeItem(it)
+                            else
+                                adapter.updateItem(it)
                         }
+
                     }
                     is NetworkResult.Error -> {
                         binding.progressBar.hide()
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                         binding.progressBar.show()
@@ -614,33 +598,23 @@ class FavoritesFragment : Fragment() {
             }
         }
 
-        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { it ->
-            it.getContentIfNotHandled()?.let {
-                when (it) {
+        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
                         
                         binding.progressBar.hide()
-                        toast(getString(R.string.recipe_removed_liked))
 
-                        val listOnAdapter = adapter.getAdapterList()
-
-
-                        // updates local list
-                        for (item in listOnAdapter.toMutableList()) {
-                            if (item.id == it.data) {
-                                item.likes--
-                                adapter.updateItem(
-                                    listOnAdapter.indexOf(item),
-                                    item,
-                                    sharedPreference.removeRecipeFromLikedList(item)
-                                )
-                                break
-                            }
+                        result.data?.let {
+                            if (chipSelected == binding.chipCurtidas)
+                                adapter.removeItem(it)
+                            else
+                                adapter.updateItem(it)
                         }
                     }
                     is NetworkResult.Error -> {
                         binding.progressBar.hide()
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                         binding.progressBar.show()
@@ -651,26 +625,25 @@ class FavoritesFragment : Fragment() {
 
         // save function
 
-        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let {
-                when (it) {
+        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
+
                         binding.progressBar.hide()
-                        toast(getString(R.string.recipe_saved))
 
-                        val listOnAdapter = adapter.getAdapterList()
+                        result.data?.let {
+                            if (chipSelected == binding.chipGuardados)
+                                adapter.removeItem(it)
+                            else
+                                adapter.updateItem(it)
 
-                        // updates local list
-                        for (item in listOnAdapter) {
-                            if (item.id == it.data) {
-                                adapter.updateItem(listOnAdapter.indexOf(item), item, sharedPreference.addSaveToUserSession(item))
-                                break
-                            }
                         }
+
                     }
                     is NetworkResult.Error -> {
                         binding.progressBar.hide()
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                         binding.progressBar.show()
@@ -679,26 +652,23 @@ class FavoritesFragment : Fragment() {
             }
         }
 
-        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let {
-                when (it) {
+        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
+
                         binding.progressBar.hide()
-                        toast(getString(R.string.recipe_removed_from_saves))
 
-                        val listOnAdapter = adapter.getAdapterList()
-
-                        // updates local list
-                        for (item in listOnAdapter) {
-                            if (item.id == it.data) {
-                                adapter.updateItem(listOnAdapter.indexOf(item), item, sharedPreference.removeSaveFromUserSession(item))
-                                break
-                            }
+                        result.data?.let {
+                            if (chipSelected == binding.chipGuardados)
+                                adapter.removeItem(it)
+                            else
+                                adapter.updateItem(it)
                         }
                     }
                     is NetworkResult.Error -> {
                         binding.progressBar.hide()
-                        showValidationErrors(it.message.toString())
+                        showValidationErrors(result.message.toString())
                     }
                     is NetworkResult.Loading -> {
                         binding.progressBar.show()
@@ -719,12 +689,12 @@ class FavoritesFragment : Fragment() {
                         val listOnAdapter = adapter.getAdapterList()
 
                         // updates local list
-                        for (item in listOnAdapter) {
+                        /*for (item in listOnAdapter) {
                             if (item.id == it.data) {
                                 adapter.updateItem(listOnAdapter.indexOf(item), item, sharedPreference.removeSaveFromUserSession(item))
                                 break
                             }
-                        }
+                        }*/
                     }
                     is NetworkResult.Error -> {
                         binding.progressBar.hide()
@@ -756,7 +726,7 @@ class FavoritesFragment : Fragment() {
             }
             else{
                 filteredTag=tag
-                adapter.updateList(filterRecipes(getChipList(chipSelected),tag))
+                adapter.updateList(filterRecipesByTag(getChipList(chipSelected),tag))
             }
         }
     }
@@ -804,8 +774,8 @@ class FavoritesFragment : Fragment() {
         ib?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_1))
     }
 
-    private fun filterRecipes(recipeList: MutableList<Recipe>, string: String): MutableList<Recipe>{
-        val filteredList = mutableListOf<Recipe>()
+    private fun filterRecipesByTag(recipeList: MutableList<RecipeSimplified>, string: String): MutableList<RecipeSimplified>{
+        val filteredList = mutableListOf<RecipeSimplified>()
         for (recipe in recipeList)
             for (tag in recipe.tags)
                 if (tag.title.lowercase() == string){
@@ -815,8 +785,8 @@ class FavoritesFragment : Fragment() {
         return filteredList
     }
 
-    private fun searchRecipes(recipeList: MutableList<Recipe>, string: String): MutableList<Recipe>{
-        val filteredList = mutableListOf<Recipe>()
+    private fun searchRecipes(recipeList: MutableList<RecipeSimplified>, string: String): MutableList<RecipeSimplified>{
+        val filteredList = mutableListOf<RecipeSimplified>()
         for (recipe in recipeList){
             if (recipe.title.lowercase().contains(string.lowercase()) ||recipe.id.toString().contains(string.lowercase())){
                 filteredList.add(recipe)

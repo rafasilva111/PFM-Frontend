@@ -1,7 +1,7 @@
 package com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground
 
 import android.os.Parcelable
-import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
@@ -14,4 +14,4 @@ data class UserRecipeBackgrounds(
     @SerializedName("saved_recipes")
     val savedRecipes: MutableList<Recipe> = mutableListOf(),
 
-): Parcelable
+    ): Parcelable

@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectfoodmanager.data.model.recipe.Preparation
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Preparation
 import com.example.projectfoodmanager.databinding.FragmentStepPreparationBinding
 import java.util.*
 

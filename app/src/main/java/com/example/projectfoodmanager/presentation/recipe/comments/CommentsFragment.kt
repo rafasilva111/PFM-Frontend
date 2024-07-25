@@ -311,7 +311,7 @@ class CommentsFragment : Fragment() {
 
 
                         currentPage = it.data!!._metadata.page
-                        nextPage = it.data._metadata.next != null
+                        nextPage = it.data._metadata.nextPage != null
 
 
 

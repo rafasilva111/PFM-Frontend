@@ -22,9 +22,9 @@ object RepositoryModule {
     @Singleton
     fun recipeRepository(
         remoteDataSource: RemoteDataSourceImpl,
-        gson: Gson
+        sharedPreference: SharedPreference
     ): RecipeRepository {
-        return RecipeRepositoryImp(remoteDataSource,gson)
+        return RecipeRepositoryImp(remoteDataSource,sharedPreference)
     }
 
     @Provides

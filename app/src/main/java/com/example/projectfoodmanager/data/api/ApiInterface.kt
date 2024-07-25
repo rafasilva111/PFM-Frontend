@@ -19,8 +19,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFo
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
 import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.notification.NotificationList
-import com.example.projectfoodmanager.data.model.recipe.Recipe
-import com.example.projectfoodmanager.data.model.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplified
@@ -78,23 +78,19 @@ interface ApiInterface {
     /**
      * Recipe
      * */
+
     /** General */
 
     @POST("$API_V1_BASE_URL/recipe")
     suspend fun createRecipe(@Body recipe : RecipeRequest): Response<Recipe>
 
-    @GET("$API_V1_BASE_URL/recipe/list")
+    @GET("$API_V1_BASE_URL/recipe")
     suspend fun getRecipe(@Query("id") recipeId: Int): Response<Recipe>
 
     @GET("$API_V1_BASE_URL/recipe/list")
     suspend fun getRecipePaginated(@Query("user_id")userId: Int?,@Query("by")by: String,@Query("searchString") searchString: String,
                                    @Query("searchTag") searchTag: String,@Query("page") page: Int,@Query("page_size") pageSize: Int): Response<RecipeList>
 
-    @GET("$API_V1_BASE_URL/recipe/list")
-    suspend fun getRecipesByClientPaginated(@Query("commented_by") clientId: Int,@Query("page") page: Int): Response<RecipeList>
-
-    @GET("$API_V1_BASE_URL/recipe/list")
-    suspend fun getRecipesByClientSearchPaginated(@Query("commented_by") clientId: Int,@Query("string") string: String,@Query("page") page: Int): Response<RecipeList>
 
     @PUT("$API_V1_BASE_URL/recipe")
     suspend fun updateRecipe(@Query("id") recipeId: Int,@Body recipe : RecipeRequest): Response<Recipe>
@@ -107,20 +103,20 @@ interface ApiInterface {
     @GET("$API_V1_BASE_URL/recipe/background")
     suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
 
-    @GET("$API_V1_BASE_URL/recipe/likes")
-    suspend fun getUserLikedRecipes(): Response<RecipeList>
+    @GET("$API_V1_BASE_URL/recipe/like")
+    suspend fun getLikedRecipes(@Query("page") page: Int, @Query("page_size") pageSize: Int): Response<RecipeList>
 
     @POST("$API_V1_BASE_URL/recipe/like")
-    suspend fun addLike(@Query("id") recipeId: Int): Response<Unit>
+    suspend fun addLike(@Query("id") recipeId: Int): Response<Recipe>
 
     @DELETE("$API_V1_BASE_URL/recipe/like")
-    suspend fun removeLike(@Query("id") recipeId: Int): Response<Unit>
+    suspend fun removeLike(@Query("id") recipeId: Int): Response<Recipe>
 
     @POST("$API_V1_BASE_URL/recipe/save")
-    suspend fun addSave(@Query("id") recipeId: Int): Response<Unit>
+    suspend fun addSave(@Query("id") recipeId: Int): Response<Recipe>
 
     @DELETE("$API_V1_BASE_URL/recipe/save")
-    suspend fun removeSave(@Query("id") recipeId: Int): Response<Unit>
+    suspend fun removeSave(@Query("id") recipeId: Int): Response<Recipe>
 
 
 

@@ -1,7 +1,7 @@
 package com.example.projectfoodmanager.data.model.modelResponse.calender
 
 import android.os.Parcelable
-import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 

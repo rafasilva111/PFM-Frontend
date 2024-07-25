@@ -3,7 +3,8 @@ package com.example.projectfoodmanager.presentation.profile.user
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
 import com.example.projectfoodmanager.databinding.ItemProfileRecipeLayoutBinding
 import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import java.time.LocalDate
@@ -18,7 +19,7 @@ class ProfileRecipesAdapter(
         this.setHasStableIds(true)
     }
 
-    var recipeListed: MutableList<Recipe> = mutableListOf()
+    var recipeListed: MutableList<RecipeSimplified> = mutableListOf()
     //private var currentSelected: TextView
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -40,14 +41,14 @@ class ProfileRecipesAdapter(
 
 
 
-    fun updateList(daysInMonthArray: MutableList<Recipe>) {
+    fun updateList(daysInMonthArray: MutableList<RecipeSimplified>) {
         val firstPosition = recipeListed.size
         recipeListed += daysInMonthArray
         notifyItemRangeChanged(firstPosition,daysInMonthArray.size)
     }
 
     inner class MyViewHolder constructor(private val binding: ItemProfileRecipeLayoutBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(item: Recipe) {
+        fun bind(item: RecipeSimplified) {
 
             loadRecipeImage(binding.recipeIV, item.imgSource)
 

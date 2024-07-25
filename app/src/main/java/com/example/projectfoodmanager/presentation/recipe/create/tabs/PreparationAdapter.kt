@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectfoodmanager.data.model.recipe.Preparation
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Preparation
 import com.example.projectfoodmanager.databinding.ItemCreateRecipePreparationLayoutBinding
 
 

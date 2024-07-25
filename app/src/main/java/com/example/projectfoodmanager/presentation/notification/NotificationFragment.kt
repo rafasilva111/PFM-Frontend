@@ -289,7 +289,7 @@ class NotificationFragment : Fragment() {
                             return@let
                         }
 
-                        if (it.data._metadata.next != null)
+                        if (it.data._metadata.nextPage != null)
                             binding.seeMoreTv.show()
                         else
                             binding.seeMoreTv.hide()

@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.model.recipe
+package com.example.projectfoodmanager.data.model.modelResponse.recipe
 
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.user.UserSimplified
@@ -17,6 +17,7 @@ data class RecipeSimplified(
     val time: String,
     val likes: Int,
     val views: Int,
+    val verified: Boolean,
     val rating: Double = 0.0,
     @SerializedName("source_rating")
     val sourceRating: String,
@@ -24,8 +25,14 @@ data class RecipeSimplified(
     val sourceLink: String,
     @SerializedName("created_by")
     var createdBy: UserSimplified,
-    @SerializedName("created_date")
+    @SerializedName("created_at")
     val createdDate: String,
-    @SerializedName("updated_date")
-    val updatedDate: String
+    @SerializedName("updated_at")
+    val updatedDate: String,
+
+    var tags: MutableList<Tag> = mutableListOf(),
+
+    val saved: Boolean,
+    val liked: Boolean
+
 ): Parcelable

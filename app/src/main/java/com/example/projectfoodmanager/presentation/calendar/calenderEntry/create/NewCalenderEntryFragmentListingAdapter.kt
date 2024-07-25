@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.util.Helper
@@ -96,9 +96,8 @@ class NewCalenderEntryFragmentListingAdapter(
             binding.favoritesIB.visibility=View.INVISIBLE
             //--------- LIKES ---------
 
-            if(user!!.checkIfLiked(item) != -1){
+            if(item.liked)
                 binding.likeIB.setImageResource(R.drawable.ic_like_active)
-            }
             else
                 binding.likeIB.setImageResource(R.drawable.ic_like_black)
 

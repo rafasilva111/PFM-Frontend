@@ -1,7 +1,7 @@
 package com.example.projectfoodmanager.data.model.notification
 
 import android.os.Parcelable
-import com.example.projectfoodmanager.data.model.recipe.RecipeSimplified
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.user.UserSimplified
 import kotlinx.parcelize.Parcelize

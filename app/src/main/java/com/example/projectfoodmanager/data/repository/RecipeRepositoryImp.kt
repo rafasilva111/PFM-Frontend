@@ -4,19 +4,20 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
-import com.example.projectfoodmanager.data.model.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
-import com.google.gson.Gson
+import com.example.projectfoodmanager.util.SharedPreference
 import retrofit2.Response
 import javax.inject.Inject
 
 class RecipeRepositoryImp @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val gson: Gson
+    private val sharedPreference: SharedPreference
 ) : RecipeRepository {
 
     private val TAG:String = "RecipeRepositoryImp"
@@ -58,10 +59,14 @@ class RecipeRepositoryImp @Inject constructor(
      * Recipes
      */
 
-    // LiveData for sorted recipes
-    private val _recipesResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeList>>>()
-    override val recipes: LiveData<Event<NetworkResult<RecipeList>>>
-        get() = _recipesResponseLiveData
+
+    private val _functionGetRecipes = MutableLiveData<Event<NetworkResult<RecipeList>>>()
+    override val functionGetRecipes: LiveData<Event<NetworkResult<RecipeList>>>
+        get() = _functionGetRecipes
+
+    private val _functionGetRecipe= MutableLiveData<Event<NetworkResult<Recipe>>>()
+    override val functionGetRecipe: LiveData<Event<NetworkResult<Recipe>>>
+        get() = _functionGetRecipe
 
 
     // Function to get paginated and sorted recipes
@@ -69,39 +74,29 @@ class RecipeRepositoryImp @Inject constructor(
 
 
         handleApiResponse(
-            _recipesResponseLiveData
+            _functionGetRecipes
         ) {
             remoteDataSource.getRecipes(userId,by,searchString,searchTag, page,pageSize)
         }
     }
 
 
-    // LiveData for searched recipes
-
-    private val _recipesCommentedByUserSearchPaginated = MutableLiveData<Event<NetworkResult<RecipeList>>>()
-    override val recipesCommentedByUser: LiveData<Event<NetworkResult<RecipeList>>>
-        get() = _recipesCommentedByUserSearchPaginated
 
 
-    // Function to search recipes by clients
-    override suspend fun getRecipesCommentedByUser(page: Int, clientId: Int, searchString:String?) {
-        // Use the helper function to make the API request
-        searchString?.let {
-            handleApiResponse(
-                _recipesCommentedByUserSearchPaginated
-            ) {
-                remoteDataSource.getRecipesByClientSearchPaginated(clientId, searchString, page)
-            }
-        }?: run {
-            // Code to execute when `nullableValue` is null
-            handleApiResponse(
-                _recipesCommentedByUserSearchPaginated
-            ) {
-                remoteDataSource.getRecipesByClientPaginated(clientId,page)
-            }
+    // Function to get paginated and sorted recipes
+    override suspend fun getRecipe(id: Int) {
+
+
+        handleApiResponse(
+            _functionGetRecipe
+        ) {
+            remoteDataSource.getRecipe(id)
         }
-
     }
+
+
+
+
 
     /**
      * Comments Section
@@ -200,14 +195,14 @@ class RecipeRepositoryImp @Inject constructor(
      */
 
     private val _userLikedRecipesResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeList>>>()
-    override val userLikedRecipes: LiveData<Event<NetworkResult<RecipeList>>>
+    override val functionGetLikedRecipes: LiveData<Event<NetworkResult<RecipeList>>>
         get() = _userLikedRecipesResponseLiveData
 
 
-    override suspend fun getUserLikedRecipes() {
+    override suspend fun getLikedRecipes(page: Int,pageSize: Int) {
         _userLikedRecipesResponseLiveData.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "AuthRepositoryImp - getUserLikedRecipes: Making request.")
-        val response =remoteDataSource.getUserLikedRecipes()
+        val response =remoteDataSource.getLikedRecipes(page,pageSize)
 
         //handle response RecipeListResponse
 
@@ -235,12 +230,12 @@ class RecipeRepositoryImp @Inject constructor(
     }
 
 
-    private val _functionLikeOnRecipe = MutableLiveData<Event<NetworkResult<Int>>>()
-    override val functionLikeOnRecipe: LiveData<Event<NetworkResult<Int>>>
+    private val _functionLikeOnRecipe = MutableLiveData<Event<NetworkResult<Recipe>>>()
+    override val functionLikeOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
         get() = _functionLikeOnRecipe
 
-    private val _functionRemoveLikeOnRecipe = MutableLiveData<Event<NetworkResult<Int>>>()
-    override val functionRemoveLikeOnRecipe: LiveData<Event<NetworkResult<Int>>>
+    private val _functionRemoveLikeOnRecipe = MutableLiveData<Event<NetworkResult<Recipe>>>()
+    override val functionRemoveLikeOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
         get() = _functionRemoveLikeOnRecipe
 
 
@@ -252,8 +247,9 @@ class RecipeRepositoryImp @Inject constructor(
         if (response.isSuccessful && response.body() != null) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             Log.i(TAG, "handleResponse: response body -> ${response.body()}")
+            sharedPreference.addLikeToSavedRecipes(response.body()!!)
             _functionLikeOnRecipe.postValue(Event(NetworkResult.Success(
-                recipeId
+                response.body()!!
             )))
         }
         else if(response.errorBody()!=null){
@@ -272,10 +268,11 @@ class RecipeRepositoryImp @Inject constructor(
         // todo fazer alterações na shared preferences aqui
 
         val response =remoteDataSource.removeLike(recipeId)
-        if (response.isSuccessful && response.code() == 204) {
+        if (response.isSuccessful && response.code() == 200) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
+            sharedPreference.removeLikeFromSavedRecipes(response.body()!!)
             _functionRemoveLikeOnRecipe.postValue(Event(NetworkResult.Success(
-                recipeId
+                response.body()!!
             )))
         }
         else if(response.errorBody()!=null){
@@ -290,12 +287,12 @@ class RecipeRepositoryImp @Inject constructor(
     }
 
 
-    private val _functionAddSaveOnRecipe = MutableLiveData<Event<NetworkResult<Int>>>()
-    override val functionAddSaveOnRecipe: LiveData<Event<NetworkResult<Int>>>
+    private val _functionAddSaveOnRecipe = MutableLiveData<Event<NetworkResult<Recipe>>>()
+    override val functionAddSaveOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
         get() = _functionAddSaveOnRecipe
 
-    private val _functionRemoveSaveOnRecipe = MutableLiveData<Event<NetworkResult<Int>>>()
-    override val functionRemoveSaveOnRecipe: LiveData<Event<NetworkResult<Int>>>
+    private val _functionRemoveSaveOnRecipe = MutableLiveData<Event<NetworkResult<Recipe>>>()
+    override val functionRemoveSaveOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
         get() = _functionRemoveSaveOnRecipe
 
 
@@ -306,13 +303,15 @@ class RecipeRepositoryImp @Inject constructor(
         if (response.isSuccessful && response.body() != null) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             Log.i(TAG, "handleResponse: response body -> ${response.body()}")
+            sharedPreference.addSavedRecipe(response.body()!!)
             _functionAddSaveOnRecipe.postValue(Event(NetworkResult.Success(
-                recipeId
+                response.body()!!
             )))
         }
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()
             Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
+
             _functionAddSaveOnRecipe.postValue(Event(NetworkResult.Error(errorObj)))
         }
         else{
@@ -326,10 +325,11 @@ class RecipeRepositoryImp @Inject constructor(
         // todo fazer alterações na shared preferences aqui
 
         val response =remoteDataSource.removeSave(recipeId)
-        if (response.isSuccessful && response.code() == 204) {
+        if (response.isSuccessful && response.code() == 200) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
+            sharedPreference.removeSavedRecipe(response.body()!!)
             _functionRemoveSaveOnRecipe.postValue(Event(NetworkResult.Success(
-                recipeId
+                response.body()!!
             )))
         }
         else if(response.errorBody()!=null){

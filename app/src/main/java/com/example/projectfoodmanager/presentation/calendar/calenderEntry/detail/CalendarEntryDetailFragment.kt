@@ -148,7 +148,7 @@ class CalendarEntryDetailFragment : Fragment() {
 
         //--> SAVE
         binding.favoritesIB.isEnabled = false
-        if(user.checkIfSaved(objCalEntry.recipe) != -1){
+        if(objCalEntry.recipe.saved){
             binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
         }
         else
@@ -158,7 +158,7 @@ class CalendarEntryDetailFragment : Fragment() {
         binding.nLikeTV.text = objCalEntry.recipe.likes.toString()
 
         binding.likeIB.isEnabled = false
-        if(user.checkIfLiked(objCalEntry.recipe) != -1){
+        if(objCalEntry.recipe.liked){
             binding.likeIB.setImageResource(R.drawable.ic_like_active)
         }
         else

@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
-import com.example.projectfoodmanager.data.model.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBinding
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
@@ -343,9 +343,9 @@ class NewCalenderEntryFragment : Fragment() {
 
             }
             1 ->{
-                // favoritos
+                // liked
                 // tab title
-                binding.listingTV.text = "Favoritos"
+                /*binding.listingTV.text = "Favoritos"
                 binding.listingIV.setImageResource(R.drawable.ic_like_active)
                 binding.previousBtn.visibility = View.VISIBLE
                 binding.nextBtn.visibility = View.VISIBLE
@@ -360,7 +360,7 @@ class NewCalenderEntryFragment : Fragment() {
                     binding.tvNoRecipes.visibility = View.INVISIBLE
 
                 recipeRecyclerViewList = recipes
-                adapter.updateList(recipeRecyclerViewList, user)
+                adapter.updateList(recipeRecyclerViewList, user)*/
             }
             2 ->{
                 // criados

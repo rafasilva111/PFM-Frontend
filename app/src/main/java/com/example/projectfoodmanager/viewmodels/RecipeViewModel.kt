@@ -5,9 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
-import com.example.projectfoodmanager.data.model.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.repository.RecipeRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -24,8 +25,8 @@ class RecipeViewModel @Inject constructor (
      * Recipes
      */
 
-    val recipesResponseLiveData: LiveData<Event<NetworkResult<RecipeList>>>
-        get() = repository.recipes
+    val functionGetRecipes: LiveData<Event<NetworkResult<RecipeList>>>
+        get() = repository.functionGetRecipes
 
     fun getRecipes(page: Int = 1,pageSize: Int = 10,userId: Int? = null,searchString: String = "", searchTag: String = "", by:String= ""){
 
@@ -35,33 +36,39 @@ class RecipeViewModel @Inject constructor (
 
     }
 
-    val recipesCommentedByUserPaginated: LiveData<Event<NetworkResult<RecipeList>>>
-        get() = repository.recipesCommentedByUser
+    val functionGetRecipe: LiveData<Event<NetworkResult<Recipe>>>
+        get() = repository.functionGetRecipe
 
-    val recipesCommentedByUserSearchPaginated: LiveData<Event<NetworkResult<RecipeList>>>
-        get() = repository.recipesCommentedByUser
+    fun getRecipe(id:Int){
 
-    fun getRecipesCommentedByUserPaginated(page: Int = 1, clientId: Int, searchString: String? = null){
         viewModelScope.launch {
-            repository.getRecipesCommentedByUser(page,clientId,searchString)
+            repository.getRecipe(id)
         }
+
     }
+
+
 
     /**
      * Like Function
      */
 
-    val functionLikeOnRecipe: LiveData<Event<NetworkResult<Int>>>
-        get() = repository.functionLikeOnRecipe
 
-    val userLikedRecipes: LiveData<Event<NetworkResult<RecipeList>>>
-        get() = repository.userLikedRecipes
+    val functionGetLikedRecipes: LiveData<Event<NetworkResult<RecipeList>>>
+        get() = repository.functionGetLikedRecipes
 
-    fun getUserLikedRecipes() {
+    fun getLikedRecipes(page: Int = 1,pageSize: Int = 10) {
         viewModelScope.launch {
-            repository.getUserLikedRecipes()
+            repository.getLikedRecipes(page,pageSize)
         }
     }
+
+    val functionLikeOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
+        get() = repository.functionLikeOnRecipe
+
+    val functionRemoveLikeOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
+        get() = repository.functionRemoveLikeOnRecipe
+
 
     fun addLikeOnRecipe(recipeId: Int) {
         viewModelScope.launch {
@@ -69,8 +76,7 @@ class RecipeViewModel @Inject constructor (
         }
     }
 
-    val functionRemoveLikeOnRecipe: LiveData<Event<NetworkResult<Int>>>
-        get() = repository.functionRemoveLikeOnRecipe
+
 
     fun removeLikeOnRecipe(recipeId: Int) {
         viewModelScope.launch {
@@ -82,17 +88,19 @@ class RecipeViewModel @Inject constructor (
      * Save Function
      */
 
-    val functionAddSaveOnRecipe: LiveData<Event<NetworkResult<Int>>>
+    val functionAddSaveOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
         get() = repository.functionAddSaveOnRecipe
+
+
+
+    val functionRemoveSaveOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
+        get() = repository.functionRemoveSaveOnRecipe
 
     fun addSaveOnRecipe(recipeId: Int) {
         viewModelScope.launch {
             repository.addSaveOnRecipe(recipeId)
         }
     }
-
-    val functionRemoveSaveOnRecipe: LiveData<Event<NetworkResult<Int>>>
-        get() = repository.functionRemoveSaveOnRecipe
 
     fun removeSaveOnRecipe(recipeId: Int) {
         viewModelScope.launch {
