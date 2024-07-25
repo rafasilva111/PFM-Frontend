@@ -12,6 +12,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.repository.RecipeRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
+import com.example.projectfoodmanager.util.PaginationNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +29,7 @@ class RecipeViewModel @Inject constructor (
     val functionGetRecipes: LiveData<Event<NetworkResult<RecipeList>>>
         get() = repository.functionGetRecipes
 
-    fun getRecipes(page: Int = 1,pageSize: Int = 10,userId: Int? = null,searchString: String = "", searchTag: String = "", by:String= ""){
+    fun getRecipes(page: Int = 1, pageSize: Int = PaginationNumber.DEFAULT, userId: Int? = null, searchString: String = "", searchTag: String = "", by:String= ""){
 
         viewModelScope.launch {
             repository.getRecipes(page,pageSize,userId,searchString,searchTag,by)

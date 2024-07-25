@@ -28,7 +28,7 @@ class RecipeListingAdapter(
     private val TAG: String = "RecipeListingAdapter"
     private var list: MutableList<RecipeSimplified> = arrayListOf()
 
-    var imagesToLoad: Int = 2
+    var imagesToLoad: Int = 4
     var imagesLoaded: Int = 0
 
 
@@ -105,26 +105,20 @@ class RecipeListingAdapter(
              */
 
             // Load Recipe img
-            if (item.imgSource.isNotEmpty()) {
-
-                // Current drawable is the default image, proceed to load
+            if (item.imgSource.isNotEmpty())
                 loadRecipeImage(binding.imageView, item.imgSource){
                     imageLoadingListener.onImageLoaded()
                 }
-
-                // Current drawable is not the default image, do not load
-
-            }
+            else
+                imageLoadingListener.onImageLoaded()
 
             // Load Author img
-            if (item.createdBy.imgSource.isNotEmpty()) {
-
+            if (item.createdBy.imgSource.isNotEmpty())
                 loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){
                     imageLoadingListener.onImageLoaded()
                 }
-
-            }
-
+            else
+                imageLoadingListener.onImageLoaded()
 
             /**
              * Details
@@ -146,7 +140,10 @@ class RecipeListingAdapter(
 
             // string -> localTimeDate
             binding.recipeDescriptionTV.text = item.description
-            binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
+            binding.itemLayout.setOnClickListener {
+
+                onItemClicked.invoke(adapterPosition, item)
+            }
             binding.nLikeTV.text = item.likes.toString()
 
             if (!item.verified){

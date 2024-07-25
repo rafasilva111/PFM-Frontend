@@ -89,9 +89,14 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                 // use pos to reset current page to pos page, so it will refresh the pos page
                 refreshPage =  ceil((pos+1).toFloat()/PaginationNumber.DEFAULT).toInt()
 
+                // we need to hide recycler view to prevent image flickering
+
+
                 findNavController().navigate(R.id.action_recipeListingFragment_to_receitaDetailFragment,Bundle().apply {
                     putInt("recipe_id",recipe.id)
                 })
+
+
 
                 changeMenuVisibility(false,activity)
             },
@@ -193,6 +198,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         val activity = requireActivity()
         changeMenuVisibility(true, activity)
         changeTheme(false,activity,requireContext())
+
 
         setRecyclerViewScrollListener()
 
@@ -372,24 +378,32 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     }
 
     override fun onResume() {
-        super.onResume()
+
         // Register the broadcast receiver
+        binding.recyclerView.visibility = View.INVISIBLE
         context?.registerReceiver(notificationReceiver, IntentFilter(MyFirebaseMessagingService.ACTION_NOTIFICATION_RECEIVED))
+        super.onResume()
     }
 
     override fun onPause() {
-        super.onPause()
+
         // Unregister the broadcast receiver to avoid memory leaks
+        adapter.imagesLoaded = 0
         context?.unregisterReceiver(notificationReceiver)
+        super.onPause()
     }
 
     override fun onImageLoaded() {
         requireActivity().runOnUiThread {
             adapter.imagesLoaded++
+
+
             if (adapter.imagesLoaded == adapter.imagesToLoad) {
                 binding.recyclerView.visibility = View.VISIBLE
                 binding.progressBar.hide()
+
             }
+
         }
     }
 
@@ -432,20 +446,16 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
 
                     // if User is on the penultimate recipe of currenct page, get next page
-                    if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 2))
+                    if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 3))
                         if (nextPage ){
                             //val visibleItemCount: Int = manager.childCount
                             //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
 
 
+                            recipeViewModel.getRecipes(page = ++currentPage, searchString = searchString,searchTag= searchTag, by = sortedBy)
 
-                                // verifica se tag está a ser uusada se não pesquisa a string nas tags da receita
-                            if (searchTag.isEmpty())
-                                recipeViewModel.getRecipes(page = ++currentPage, searchString = searchString,searchTag= searchString, by = sortedBy)
-                            else{
-                                recipeViewModel.getRecipes(page = ++currentPage, searchString = searchString,searchTag= searchTag, by = sortedBy)
-                            }
-
+                            // prevent double request, this variable is change after response from getRecipes
+                            nextPage = false
                         }
 
                     // if User is on the last recipe of currenct page, and no next page present notice to user
@@ -518,11 +528,10 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
                         if (refreshPage != 0) {
 
-                            val lastIndex =
-                                if (recipeListed.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) - 1 else recipeListed.size - 1
-                            var firstIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) lastIndex - 4 else 0
+                            val lastIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) else adapter.itemCount
+                            var firstIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (lastIndex - PaginationNumber.DEFAULT) else 0
 
-                            recipeListed.subList(firstIndex, lastIndex + 1).clear()
+                            recipeListed.subList(firstIndex, lastIndex).clear()
 
 
                             for (recipe in it.data!!.result) {
@@ -556,18 +565,15 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
                             // checks if new search
 
-                            if (currentPage == 1){
+                            if (currentPage == 1)
                                 recipeListed = it.data.result
-
-                            }
-                            else{
+                            else
                                 recipeListed += it.data.result
-                            }
+
 
                             adapter.updateList(recipeListed)
                         }
 
-                        binding.progressBar.hide()
 
                     }
                     is NetworkResult.Error -> {
@@ -593,7 +599,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                 when (result) {
                     is NetworkResult.Success -> {
 
-                        binding.progressBar.hide()
 
                         result.data?.let {
                             adapter.updateItem(it)
@@ -614,8 +619,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             response.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
-
-                        binding.progressBar.hide()
 
                         result.data?.let {
                             adapter.updateItem(it)
@@ -638,7 +641,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             response.getContentIfNotHandled()?.let { result ->
             when (result) {
                     is NetworkResult.Success -> {
-                        binding.progressBar.hide()
+
 
                         result.data?.let {
                             adapter.updateItem(it)
@@ -657,7 +660,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             response.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
-                        binding.progressBar.hide()
 
                         result.data?.let {
                             adapter.updateItem(it)
@@ -750,10 +752,11 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                 sortedBy = RecipesSortingType.SAVES
             }
         }
-        recipeViewModel.getRecipes(page = currentPage, searchString= searchString,searchTag= searchTag, by = sortedBy)
+        recipeViewModel.getRecipes(page = 1, searchString= searchString,searchTag= searchTag, by = sortedBy)
         //slowly move to position 0
         binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
     }
+
 
     companion object {
 

@@ -16,22 +16,25 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.toRecipeSi
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
+import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.ImageLoadingListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 
 class FavoritesRecipeListingAdapter(
-    private val context: Context,
     val onItemClicked: (Int, RecipeSimplified) -> Unit,
     val onLikeClicked: (RecipeSimplified, Boolean) -> Unit,
     val onSaveClicked: (RecipeSimplified, Boolean) -> Unit,
+    private val imageLoadingListener: ImageLoadingListener
 ) : RecyclerView.Adapter<FavoritesRecipeListingAdapter.MyViewHolder>() {
 
 
-    private var user: User? = null
-    private val TAG: String = "RecipeListingAdapter"
     var list: MutableList<RecipeSimplified> = arrayListOf()
+
+    var imagesToLoad: Int = 2
+    var imagesLoaded: Int = 0
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -45,30 +48,14 @@ class FavoritesRecipeListingAdapter(
         holder.bind(item)
     }
 
-    fun getAdapterList():MutableList<RecipeSimplified>{
-        return this.list
-    }
-
-    fun updateList(list: MutableList<RecipeSimplified>, user: User){
-        this.list = list
-        this.user = user
-
-        notifyDataSetChanged()
-    }
 
     fun updateList(list: MutableList<RecipeSimplified>){
         this.list = list
-
-        notifyDataSetChanged()
+        imagesLoaded = 0
+        notifyItemRangeChanged(0,this.list.size)
     }
 
 
-    fun concatList(list: MutableList<RecipeSimplified>){
-        val initialSize = this.list.size
-        this.list.addAll(list)
-
-        notifyItemRangeInserted(initialSize, list.size)
-    }
 
     fun updateItem(item: Recipe){
 
@@ -121,28 +108,21 @@ class FavoritesRecipeListingAdapter(
 
             // Load Recipe img
             if (item.imgSource.isNotEmpty()) {
-                val currentRecipeDrawable = binding.imageView.drawable
-                val defaultRecipeDrawable = ContextCompat.getDrawable(context, R.drawable.default_image_recipe)!!.constantState
 
-                if (currentRecipeDrawable != null && currentRecipeDrawable.constantState == defaultRecipeDrawable) {
-                    // Current drawable is the default image, proceed to load
-                    Helper.loadRecipeImage(binding.imageView, item.imgSource)
+                loadRecipeImage(binding.imageView, item.imgSource){
+                    imageLoadingListener.onImageLoaded()
                 }
+
                 // Current drawable is not the default image, do not load
 
             }
 
             // Load Author img
             if (item.createdBy.imgSource.isNotEmpty()) {
-                val currentAuthorDrawable = binding.imgAuthorIV.drawable
-                val defaultAuthorDrawable = ContextCompat.getDrawable(context, R.drawable.default_image_recipe)
 
-
-                if ((currentAuthorDrawable != null) && currentAuthorDrawable.constantState == defaultAuthorDrawable?.constantState) {
-                    // Current drawable is the default image, proceed to load
-                    loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource)
+                loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){
+                    imageLoadingListener.onImageLoaded()
                 }
-                // Current drawable is not the default image, do not load
 
             }
 

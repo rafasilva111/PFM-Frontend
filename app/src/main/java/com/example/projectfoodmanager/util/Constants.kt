@@ -63,7 +63,7 @@ object FireStorage{
 }
 
 object PaginationNumber{
-    const val DEFAULT: Int = 5
+    const val DEFAULT: Int = 10
     const val COMMENTS: Int = 20
 }
 

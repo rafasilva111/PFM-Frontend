@@ -41,7 +41,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class FavoritesFragment : Fragment() {
+class FavoritesFragment : Fragment(),ImageLoadingListener {
 
     // binding
     lateinit var binding: FragmentFavoritesBinding
@@ -88,7 +88,6 @@ class FavoritesFragment : Fragment() {
     // adapters
     private val adapter by lazy {
         FavoritesRecipeListingAdapter(
-            context = requireContext(),
             onItemClicked = { _, item ->
                 findNavController().navigate(R.id.action_favoritesFragment_to_receitaDetailFragment,Bundle().apply {
                     putParcelable("Recipe",item)
@@ -111,6 +110,7 @@ class FavoritesFragment : Fragment() {
                     recipeViewModel.removeSaveOnRecipe(item.id)
 
             },
+            this
         )
     }
 
@@ -284,6 +284,17 @@ class FavoritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
+    override fun onImageLoaded() {
+        requireActivity().runOnUiThread {
+            adapter.imagesLoaded++
+            if (adapter.imagesLoaded == adapter.imagesToLoad) {
+                binding.recyclerView.visibility = View.VISIBLE
+                binding.recyclerView.itemAnimator = null
+                binding.progressBar.hide()
+            }
+        }
+    }
+
     override fun onStart() {
         changeTheme(false, activity, context)
         super.onStart()
@@ -314,7 +325,7 @@ class FavoritesFragment : Fragment() {
                 else
                     binding.tvNoRecipes.visibility = View.INVISIBLE
 
-                adapter.updateList(recipes, user)
+                adapter.updateList(recipes)
             }
             binding.chipCriadas ->{
 
@@ -330,21 +341,24 @@ class FavoritesFragment : Fragment() {
                 else
                     binding.tvNoRecipes.visibility = View.INVISIBLE
 
-                adapter.updateList(recipes, user)
+                adapter.updateList(recipes)
 
             }
             binding.chipCommented ->{
+
+                toast("Sorry, not implement yet...")
+                return
 
                 onlineChipFilter = true
                 changeRecyclerViewScrollListener(true)
             }
             binding.chipLastSeem ->{
-                // todo
+                toast("Sorry, not implement yet...")
                 return
 
                 onlineChipFilter = true
 
-                adapter.updateList(recipes, user)
+                adapter.updateList(recipes)
 
                 changeRecyclerViewScrollListener(true)
             }
@@ -555,7 +569,7 @@ class FavoritesFragment : Fragment() {
 
                             binding.tvNoRecipes.visibility = View.GONE
 
-                            adapter.updateList(it.result, user)
+                            adapter.updateList(it.result)
 
                         } ?:run {
 
@@ -679,33 +693,6 @@ class FavoritesFragment : Fragment() {
 
         // comments function
 
-        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        binding.progressBar.hide()
-                        toast(getString(R.string.recipe_removed_from_saves))
-
-                        val listOnAdapter = adapter.getAdapterList()
-
-                        // updates local list
-                        /*for (item in listOnAdapter) {
-                            if (item.id == it.data) {
-                                adapter.updateItem(listOnAdapter.indexOf(item), item, sharedPreference.removeSaveFromUserSession(item))
-                                break
-                            }
-                        }*/
-                    }
-                    is NetworkResult.Error -> {
-                        binding.progressBar.hide()
-                        showValidationErrors(it.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                        binding.progressBar.show()
-                    }
-                }
-            }
-        }
 
     }
 

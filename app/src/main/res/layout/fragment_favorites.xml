@@ -209,6 +209,7 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical"
             android:textAlignment="center"
+            android:visibility="invisible"
             app:flow_horizontalAlign="center"
             app:flow_verticalAlign="center"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
