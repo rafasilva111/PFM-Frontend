@@ -3,6 +3,7 @@ package com.example.projectfoodmanager.util
 import android.Manifest.permission.*
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -17,6 +18,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,6 +32,7 @@ import java.io.*
 import java.text.SimpleDateFormat
 import java.time.*
 import java.time.format.DateTimeParseException
+import javax.sql.DataSource
 
 class Helper {
     companion object {
@@ -129,6 +133,102 @@ class Helper {
         }
 
 
+        fun loadRecipeImage(recipeIV: ImageView, imgSource: String) {
+            val imgRef = Firebase.storage.reference.child(imgSource)
+            println(imgSource)
+            imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                Glide.with(recipeIV.context).load(Uri.toString()).into(recipeIV)
+            }
+                .addOnFailureListener {
+                    println(it)
+                    recipeIV.setImageResource(R.drawable.default_image_recipe)
+                }
+
+        }
+
+
+        fun loadUserImage(imgAuthorIV: ImageView, imgSource: String, onImageLoaded: () -> Unit) {
+            imgAuthorIV.setImageResource(R.drawable.img_profile)
+
+            if (imgSource.isNotEmpty()) {
+                if (imgSource.contains("avatar")) {
+                    val avatar = Avatar.getAvatarByName(imgSource)
+                    imgAuthorIV.setImageResource(avatar!!.imgId)
+                    onImageLoaded()  // Call the callback as image loading is synchronous in this case
+
+                } else {
+                    val imgRef = Firebase.storage.reference.child(imgSource)
+                    imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                        Glide.with(imgAuthorIV.context)
+                            .load(Uri.toString())
+                            .listener(object : RequestListener<Drawable> {
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: com.bumptech.glide.request.target.Target<Drawable>?,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    imgAuthorIV.setImageResource(R.drawable.img_profile)
+                                    onImageLoaded()
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable?,
+                                    model: Any?,
+                                    target: com.bumptech.glide.request.target.Target<Drawable>?,
+                                    dataSource: com.bumptech.glide.load.DataSource?,
+                                    isFirstResource: Boolean
+                                ): Boolean {
+                                    onImageLoaded()
+                                    return false
+                                }
+                            })
+                            .into(imgAuthorIV)
+                    }.addOnFailureListener {
+                        imgAuthorIV.setImageResource(R.drawable.img_profile)
+                        onImageLoaded()
+                    }
+                }
+            } else {
+                onImageLoaded()
+            }
+        }
+
+        fun loadRecipeImage(recipeIV: ImageView, imgSource: String, onImageLoaded: () -> Unit) {
+            val imgRef = Firebase.storage.reference.child(imgSource)
+            imgRef.downloadUrl.addOnSuccessListener { Uri ->
+                Glide.with(recipeIV.context)
+                    .load(Uri.toString())
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: com.bumptech.glide.request.target.Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            recipeIV.setImageResource(R.drawable.default_image_recipe)
+                            onImageLoaded()
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: com.bumptech.glide.request.target.Target<Drawable>?,
+                            dataSource: com.bumptech.glide.load.DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            onImageLoaded()
+                            return false
+                        }
+                    })
+                    .into(recipeIV)
+            }.addOnFailureListener {
+                recipeIV.setImageResource(R.drawable.default_image_recipe)
+                onImageLoaded()
+            }
+        }
 
         fun getStartAndEndOfWeek(date: LocalDate): Pair<LocalDate, LocalDate> {
             val startOfWeek = date.with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY))
@@ -142,18 +242,7 @@ class Helper {
             return Pair(startOfMonth, endOfMonth)
         }
 
-        fun loadRecipeImage(recipeIV: ImageView, imgSource: String) {
-            val imgRef = Firebase.storage.reference.child(imgSource)
-            println(imgSource)
-            imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                Glide.with(recipeIV.context).load(Uri.toString()).into(recipeIV)
-            }
-            .addOnFailureListener {
-                println(it)
-                recipeIV.setImageResource(R.drawable.default_image_recipe)
-            }
 
-        }
 
         fun closeKeyboard(activity: FragmentActivity,view: View) {
             (activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)

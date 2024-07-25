@@ -44,7 +44,7 @@ import kotlin.math.ceil
 
 
 @AndroidEntryPoint
-class RecipeListingFragment : Fragment() {
+class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
 
 
@@ -85,7 +85,6 @@ class RecipeListingFragment : Fragment() {
     // adapters
     private val adapter by lazy {
         RecipeListingAdapter(
-            requireContext(),
             onItemClicked = {pos,recipe ->
                 // use pos to reset current page to pos page, so it will refresh the pos page
                 refreshPage =  ceil((pos+1).toFloat()/PaginationNumber.DEFAULT).toInt()
@@ -115,7 +114,8 @@ class RecipeListingFragment : Fragment() {
                     recipeViewModel.removeSaveOnRecipe(recipe.id)
                 }
 
-            }
+            },
+            this
         )
     }
 
@@ -371,7 +371,6 @@ class RecipeListingFragment : Fragment() {
 
     }
 
-
     override fun onResume() {
         super.onResume()
         // Register the broadcast receiver
@@ -382,6 +381,16 @@ class RecipeListingFragment : Fragment() {
         super.onPause()
         // Unregister the broadcast receiver to avoid memory leaks
         context?.unregisterReceiver(notificationReceiver)
+    }
+
+    override fun onImageLoaded() {
+        requireActivity().runOnUiThread {
+            adapter.imagesLoaded++
+            if (adapter.imagesLoaded == adapter.imagesToLoad) {
+                binding.recyclerView.visibility = View.VISIBLE
+                binding.progressBar.hide()
+            }
+        }
     }
 
     private fun activateSearchChip(chipGroup: ChipGroup) {
@@ -508,7 +517,7 @@ class RecipeListingFragment : Fragment() {
                         // isto é usado para atualizar os likes caso o user vá a detail view
 
                         if (refreshPage != 0) {
-                            binding.progressBar.hide()
+
                             val lastIndex =
                                 if (recipeListed.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) - 1 else recipeListed.size - 1
                             var firstIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) lastIndex - 4 else 0
@@ -526,7 +535,6 @@ class RecipeListingFragment : Fragment() {
                             refreshPage = 0
                         }
                         else {
-                            binding.progressBar.hide()
 
                             // sets page data
 

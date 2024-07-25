@@ -88,8 +88,8 @@ interface ApiInterface {
     suspend fun getRecipe(@Query("id") recipeId: Int): Response<Recipe>
 
     @GET("$API_V1_BASE_URL/recipe/list")
-    suspend fun getRecipePaginated(@Query("user_id")userId: Int?,@Query("by")by: String,@Query("searchString") searchString: String,
-                                   @Query("searchTag") searchTag: String,@Query("page") page: Int,@Query("page_size") pageSize: Int): Response<RecipeList>
+    suspend fun getRecipePaginated(@Query("user_id")userId: Int?,@Query("by")by: String,@Query("search_string") searchString: String,
+                                   @Query("search_tag") searchTag: String,@Query("page") page: Int,@Query("page_size") pageSize: Int): Response<RecipeList>
 
 
     @PUT("$API_V1_BASE_URL/recipe")
@@ -203,7 +203,7 @@ interface ApiInterface {
     /** Follows Requests */
 
     @GET("$API_V1_BASE_URL/follow/find")
-    suspend fun getUsersToFollow(@Query("searchString") searchString:String?,@Query("page") page: Int?,@Query("page_size") pageSize: Int?): Response<UsersToFollowList>
+    suspend fun getUsersToFollow(@Query("search_string") searchString:String?,@Query("page") page: Int?,@Query("page_size") pageSize: Int?): Response<UsersToFollowList>
 
     @GET("$API_V1_BASE_URL/follow/requests/list")
     suspend fun getFollowRequests(@Query("page_size") pageSize: Int): Response<UserList>

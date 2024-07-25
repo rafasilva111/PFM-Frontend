@@ -14,18 +14,22 @@ import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUppe
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.ImageLoadingListener
 
 class RecipeListingAdapter(
-    private val context: Context,
     val onItemClicked: (Int, RecipeSimplified) -> Unit,
     val onLikeClicked: (RecipeSimplified, Boolean) -> Unit,
-    val onSaveClicked: (RecipeSimplified, Boolean) -> Unit
+    val onSaveClicked: (RecipeSimplified, Boolean) -> Unit,
+    private val imageLoadingListener: ImageLoadingListener
 ) : RecyclerView.Adapter<RecipeListingAdapter.MyViewHolder>() {
 
 
 
     private val TAG: String = "RecipeListingAdapter"
     private var list: MutableList<RecipeSimplified> = arrayListOf()
+
+    var imagesToLoad: Int = 2
+    var imagesLoaded: Int = 0
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -40,7 +44,9 @@ class RecipeListingAdapter(
 
     fun updateList(list: MutableList<RecipeSimplified>){
         this.list = list
-        notifyDataSetChanged()
+
+        imagesLoaded = 0
+        notifyItemRangeChanged(0,this.list.size)
     }
 
     fun updateItem(position: Int,item: RecipeSimplified){
@@ -102,7 +108,9 @@ class RecipeListingAdapter(
             if (item.imgSource.isNotEmpty()) {
 
                 // Current drawable is the default image, proceed to load
-                loadRecipeImage(binding.imageView, item.imgSource)
+                loadRecipeImage(binding.imageView, item.imgSource){
+                    imageLoadingListener.onImageLoaded()
+                }
 
                 // Current drawable is not the default image, do not load
 
@@ -111,7 +119,9 @@ class RecipeListingAdapter(
             // Load Author img
             if (item.createdBy.imgSource.isNotEmpty()) {
 
-                loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource)
+                loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){
+                    imageLoadingListener.onImageLoaded()
+                }
 
             }
 
