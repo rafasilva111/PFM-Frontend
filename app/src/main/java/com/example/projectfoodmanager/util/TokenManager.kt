@@ -2,6 +2,8 @@ package com.example.projectfoodmanager.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.projectfoodmanager.data.api.ApiInterface
+import com.example.projectfoodmanager.data.api.ApiInterface.Companion.API_V1_BASE_URL
 import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
 import com.example.projectfoodmanager.util.Constants.PREFS_TOKEN_FILE
 import com.example.projectfoodmanager.util.Session.ACCESS_TOKEN
@@ -9,6 +11,11 @@ import com.example.projectfoodmanager.util.Session.ACCESS_TOKEN_EXPIRES
 import com.example.projectfoodmanager.util.Session.REFRESH_TOKEN
 import com.example.projectfoodmanager.util.Session.REFRESH_TOKEN_EXPIRES
 import dagger.hilt.android.qualifiers.ApplicationContext
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.json.JSONObject
+import java.io.IOException
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -22,6 +29,12 @@ class TokenManager @Inject constructor(@ApplicationContext context: Context) {
         editor.putString(REFRESH_TOKEN_EXPIRES, authResponse.refreshTokenExpires)
         editor.putString(ACCESS_TOKEN, authResponse.accessToken)
         editor.putString(ACCESS_TOKEN_EXPIRES, authResponse.accessTokenExpires)
+        editor.apply()
+    }
+
+    fun saveToken(authResponse: String) {
+        val editor = prefs.edit()
+        editor.putString(ACCESS_TOKEN, authResponse)
         editor.apply()
     }
 
@@ -66,6 +79,38 @@ class TokenManager @Inject constructor(@ApplicationContext context: Context) {
         }
 
         return null
+    }
+
+    fun refreshAccessToken(client: OkHttpClient): AuthToken? {
+        val refreshToken = getRefreshToken() ?: return null
+
+        val requestBody = FormBody.Builder()
+            .add("refresh", refreshToken)
+            .build()
+
+        val request = Request.Builder()
+            .url("$API_V1_BASE_URL/")
+            .post(requestBody)
+            .build()
+
+        return try {
+            val response = client.newCall(request).execute()
+            if (response.isSuccessful) {
+                val responseBody = response.body()!!.string()
+                val jsonObject = JSONObject(responseBody)
+
+                AuthToken(refreshToken = jsonObject.getString("refresh_toke"),
+                    refreshTokenExpires = jsonObject.getString("refresh_token_expires"),
+                    accessToken = jsonObject.getString("access_token"),
+                    accessTokenExpires = jsonObject.getString("access_token_expires")
+                )
+
+            } else {
+                null
+            }
+        } catch (e: IOException) {
+            null
+        }
     }
 
     fun deleteAccessToken() {

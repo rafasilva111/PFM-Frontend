@@ -249,7 +249,7 @@ class SharedPreference @Inject constructor(
             LocalDateTime.parse(unit.realizationDate, pattern)
         }
 
-        saveSingleMetadata(SharedPreferencesMetadata.CALENDER_ENTRYS,true)
+        saveSingleMetadata(SharedPreferencesMetadata.CALENDER_ENTRIES,true)
         sharedPreferences.edit().putString(USER_SESSION_CALENDER,gson.toJson(fullCalenderEntryList)).apply()
     }
 

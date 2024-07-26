@@ -82,6 +82,10 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     @Inject
     lateinit var sharedPreference: SharedPreference
 
+    @Inject
+    lateinit var tokenManager: TokenManager
+
+
     // adapters
     private val adapter by lazy {
         RecipeListingAdapter(
@@ -129,6 +133,8 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         savedInstanceState: Bundle?
     ): View {
         bindObservers()
+
+        tokenManager.saveToken("teste")
 
         return if (this::binding.isInitialized){
             binding.root
@@ -556,7 +562,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
                             if(it.data.result.isEmpty()){
                                 binding.noRecipesTV.visibility=View.VISIBLE
-                                adapter.updateList(mutableListOf())
+                                adapter.cleanList()
                                 return@let
                             }else{
                                 binding.noRecipesTV.visibility=View.GONE

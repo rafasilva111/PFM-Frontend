@@ -7,11 +7,11 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
-class AuthInterceptor @Inject constructor() : Interceptor {
+class AuthInterceptor @Inject constructor(
+    private val tokenManager: TokenManager,
+) : Interceptor {
 
-    @Inject
-    lateinit var tokenManager: TokenManager
-    private val TAG = "AuthInterceptor"
+
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().newBuilder()

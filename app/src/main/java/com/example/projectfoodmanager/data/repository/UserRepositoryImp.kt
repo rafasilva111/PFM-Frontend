@@ -140,7 +140,7 @@ class UserRepositoryImp @Inject constructor(
             }
             else if(response.errorBody()!=null){
                 tokenManager.deleteSession()
-                val teste = tokenManager.getAccessToken()
+
                 val errorObj = response.errorBody()!!.charStream().readText()
                 Log.i(TAG, "loginUser: request made was sucessfull. \n"+errorObj)
                 _AuthTokenLiveData.postValue(Event(NetworkResult.Error(errorObj)))
@@ -165,14 +165,16 @@ class UserRepositoryImp @Inject constructor(
         try {
             val response =remoteDataSource.getUserAuth()
             if (response.isSuccessful && response.body() != null) {
-                Log.i(TAG, "getUserSession: request made was sucessfull.")
+
                 // TODO tentar resolver esta martelada
                 response.body()!!.initLists()
                 sharedPreference.saveUserSession(response.body()!!, preventDeleteRecipesBackgrounds )
                 _userLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
             }
             else if(response.errorBody()!=null){
-                Log.i(TAG, "getUserSession: request made was not sucessfull."+response.errorBody()!!.charStream().readText())
+                tokenManager.deleteSession()
+
+
                 val errorObj = response.errorBody()!!.charStream().readText()
                 _userLiveData.postValue(Event(NetworkResult.Error(errorObj)))
             }
@@ -181,7 +183,7 @@ class UserRepositoryImp @Inject constructor(
             }
         }catch (e:SocketTimeoutException){
             _userLiveData.postValue(Event(NetworkResult.Error("No connection to host server...")))
-            return
+
         }
     }
 

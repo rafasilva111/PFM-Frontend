@@ -57,6 +57,10 @@ interface ApiInterface {
     @DELETE("$API_V1_BASE_URL/auth")
     suspend fun logoutUser(): Response<String>
 
+
+
+
+
     @GET("$API_V1_BASE_URL/auth")
     suspend fun getUserSession(): Response<User>
 

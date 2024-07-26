@@ -28,7 +28,7 @@ object Session{
 }
 
 object SharedPreferencesMetadata{
-    const val CALENDER_ENTRYS = "CALENDER_ENTRYS"
+    const val CALENDER_ENTRIES = "CALENDER_ENTRYS"
     const val SHOPPING_LIST = "SHOPPING_LIST"
     const val RECIPES_BACKGROUND = "RECIPES_BACKGROUND"
 }
