@@ -134,7 +134,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     ): View {
         bindObservers()
 
-        tokenManager.saveToken("teste")
 
         return if (this::binding.isInitialized){
             binding.root

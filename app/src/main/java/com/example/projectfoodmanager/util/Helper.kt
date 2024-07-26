@@ -62,10 +62,12 @@ class Helper {
 
         // server string -> localTimeDate
         fun formatServerTimeToLocalDateTime(serverTimeString: String): LocalDateTime {
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
-            val zonedServerTime = ZonedDateTime.parse(serverTimeString, formatter.withZone(serverZoneId))
-            return zonedServerTime.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime()
+
+            return ZonedDateTime.parse(serverTimeString.removeSuffix("Z"), DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                .withZoneSameInstant(ZoneId.systemDefault())
+                .toLocalDateTime()
         }
+
         // server string -> date string
         fun formatServerTimeToDateString(localDateTimeString: String): String{
             return localDateTimeString.split("T")[0]
