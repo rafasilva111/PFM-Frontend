@@ -81,37 +81,6 @@ class TokenManager @Inject constructor(@ApplicationContext context: Context) {
         return null
     }
 
-    fun refreshAccessToken(client: OkHttpClient): AuthToken? {
-        val refreshToken = getRefreshToken() ?: return null
-
-        val requestBody = FormBody.Builder()
-            .add("refresh", refreshToken)
-            .build()
-
-        val request = Request.Builder()
-            .url("$API_V1_BASE_URL/")
-            .post(requestBody)
-            .build()
-
-        return try {
-            val response = client.newCall(request).execute()
-            if (response.isSuccessful) {
-                val responseBody = response.body()!!.string()
-                val jsonObject = JSONObject(responseBody)
-
-                AuthToken(refreshToken = jsonObject.getString("refresh_toke"),
-                    refreshTokenExpires = jsonObject.getString("refresh_token_expires"),
-                    accessToken = jsonObject.getString("access_token"),
-                    accessTokenExpires = jsonObject.getString("access_token_expires")
-                )
-
-            } else {
-                null
-            }
-        } catch (e: IOException) {
-            null
-        }
-    }
 
     fun deleteAccessToken() {
         val editor = prefs.edit()
