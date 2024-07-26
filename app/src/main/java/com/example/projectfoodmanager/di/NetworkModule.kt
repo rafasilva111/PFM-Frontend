@@ -1,4 +1,5 @@
 package com.example.projectfoodmanager.di
+import android.content.Context
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
@@ -7,12 +8,16 @@ import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import com.example.projectfoodmanager.data.api.ApiInterface
+import com.example.projectfoodmanager.data.api.AuthApiInterface
+import com.example.projectfoodmanager.data.api.AuthAuthenticator
 import com.example.projectfoodmanager.data.api.AuthInterceptor
 import com.example.projectfoodmanager.util.Constants
+import com.example.projectfoodmanager.util.TokenManager
 import okhttp3.OkHttpClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -26,16 +31,67 @@ import javax.inject.Singleton
 @Retention(AnnotationRetention.BINARY)
 annotation class FirstRetrofit
 
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class SecondRetrofit
+
 
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
 
+	@Singleton
+	@Provides
+	fun provideTokenManager(@ApplicationContext context: Context): TokenManager = TokenManager(context)
+
+
+	@Singleton
+	@Provides
+	fun provideOkHttpClient(
+		authInterceptor: AuthInterceptor,
+		authAuthenticator: AuthAuthenticator,
+	): OkHttpClient {
+		val loggingInterceptor = HttpLoggingInterceptor()
+		loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
+		return OkHttpClient.Builder()
+			.addInterceptor(authInterceptor)
+			.addInterceptor(loggingInterceptor)
+			.authenticator(authAuthenticator)
+			.build()
+	}
+
+	@Singleton
+	@Provides
+	fun provideAuthInterceptor(tokenManager: TokenManager): AuthInterceptor =
+		AuthInterceptor(tokenManager)
+
+	@Singleton
+	@Provides
+	fun provideAuthAuthenticator(tokenManager: TokenManager): AuthAuthenticator =
+		AuthAuthenticator(tokenManager)
+
+	@Singleton
+	@Provides
+	fun provideRetrofitBuilder(): Retrofit.Builder =
+		Retrofit.Builder()
+			.baseUrl(Constants.BASE_URL)
+			.addConverterFactory(GsonConverterFactory.create())
+
+	@Singleton
+	@Provides
+	fun provideAuthAPIService(retrofit: Retrofit.Builder): AuthApiInterface =
+		retrofit
+			.build()
+			.create(AuthApiInterface::class.java)
+
+	@Singleton
+	@Provides
+	fun provideMainAPIService(okHttpClient: OkHttpClient, retrofit: Retrofit.Builder): ApiInterface =
+		retrofit
+			.client(okHttpClient)
+			.build()
+			.create(ApiInterface::class.java)
+
 	// First set of code
-	@FirstRetrofit
+	/*@FirstRetrofit
 	@Provides
 	@Singleton
 	fun providesRetrofit(authInterceptor: AuthInterceptor): Retrofit {
@@ -76,7 +132,6 @@ class NetworkModule {
 	@Singleton
 	fun providesAPI(@FirstRetrofit retrofit: Retrofit): ApiInterface {
 		return retrofit.create(ApiInterface::class.java)
-	}
-
+	}*/
 
 }

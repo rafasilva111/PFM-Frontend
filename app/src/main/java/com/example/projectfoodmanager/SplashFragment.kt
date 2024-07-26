@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
-import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.databinding.FragmentSplashBinding
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.util.*
@@ -96,7 +95,11 @@ class SplashFragment : Fragment() {
 
                 // if offline and whit token login anyway
                 if (tokenManager.getAccessToken() !=null && isOnline(requireContext()) ){
-                    updateLocalSharedPreferences()
+
+                        userViewModel.getUserSession()
+
+
+
                 }
                 else if (tokenManager.getRefreshToken() !=null){
                     // todo obter novo access token
@@ -119,13 +122,13 @@ class SplashFragment : Fragment() {
         val sharedPreferencesMetadata = sharedPreference.getSharedPreferencesMetadata()
         updateSharedPreferenceTracker.clear()
 
-        userViewModel.getUserSession()
 
-        // Calender entrys
-        val calenderEntrys = sharedPreferencesMetadata[SharedPreferencesMetadata.CALENDER_ENTRYS]
+
+        /** Calendar Entries */
+        val calenderEntries = sharedPreferencesMetadata[SharedPreferencesMetadata.CALENDER_ENTRIES]
 
         // se session estiver a null ou se session estiver a true vai buscar a info
-        if (calenderEntrys == null || calenderEntrys == true){
+        if (calenderEntries == null || calenderEntries == true){
             updateSharedPreferenceTracker.add(0,null)
             // get calender entrys from -15 days to +15 days to have smt in memory
             LocalDateTime.now().let { dateNow ->
@@ -136,10 +139,12 @@ class SplashFragment : Fragment() {
                 )
             }
         }
-        else if (calenderEntrys == false)
+        else if (calenderEntries == false)
             TODO("update calenderEntrys on db")
 
-        // Shopping Lists
+
+        /** Shopping Lists */
+
         val shoppingLists = sharedPreferencesMetadata[SharedPreferencesMetadata.SHOPPING_LIST]
 
         // se session estiver a null ou se session estiver a true vai buscar a info
@@ -150,7 +155,8 @@ class SplashFragment : Fragment() {
         else if (shoppingLists == false)
             TODO("update shoppingLists on db")
 
-        // Recipes Background
+        /** Recipes Background */
+
         val recipesBackground = sharedPreferencesMetadata[SharedPreferencesMetadata.RECIPES_BACKGROUND]
 
         // se session estiver a null ou se session estiver a true vai buscar a info
@@ -174,11 +180,13 @@ class SplashFragment : Fragment() {
                                 if (result.data.fmcToken != token)
                                     userViewModel.updateUser(UserDTO(fmc_token = token))
                             }
+                        updateLocalSharedPreferences()
 
                     }
                     is NetworkResult.Error -> {
                         findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
-                        tokenManager.deleteSession()
+
+                        toast(result.message.toString(),ToastType.ERROR)
 
                     }
                     is NetworkResult.Loading -> {
