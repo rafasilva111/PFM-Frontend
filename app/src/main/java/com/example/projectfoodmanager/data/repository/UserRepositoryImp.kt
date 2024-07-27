@@ -12,7 +12,7 @@ import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
-import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipesBackground
 import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.Event
@@ -158,7 +158,7 @@ class UserRepositoryImp @Inject constructor(
     override val userLiveData: LiveData<Event<NetworkResult<User>>>
         get() = _userLiveData
 
-    override suspend fun getUserSession(preventDeleteRecipesBackgrounds: Boolean) {
+    override suspend fun getUserSession() {
         _userLiveData.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "getUserSession: making login request.")
 
@@ -166,9 +166,7 @@ class UserRepositoryImp @Inject constructor(
             val response =remoteDataSource.getUserAuth()
             if (response.isSuccessful && response.body() != null) {
 
-                // TODO tentar resolver esta martelada
-                response.body()!!.initLists()
-                sharedPreference.saveUserSession(response.body()!!, preventDeleteRecipesBackgrounds )
+                sharedPreference.saveUserSession(response.body()!!)
                 _userLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
             }
             else if(response.errorBody()!=null){
@@ -221,7 +219,7 @@ class UserRepositoryImp @Inject constructor(
         val response = remoteDataSource.updateUser(userDTO)
         if (response.isSuccessful) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
-            sharedPreference.updateUserSession(response.body()!!)
+            sharedPreference.saveUserSession(response.body()!!)
             _userUpdateResponseLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
 
         }
@@ -237,15 +235,15 @@ class UserRepositoryImp @Inject constructor(
 
     }
 
-    private val _getUserRecipesBackgroundLiveData = MutableLiveData<Event<NetworkResult<UserRecipeBackgrounds>>>()
-    override val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
+    private val _getUserRecipesBackgroundLiveData = MutableLiveData<Event<NetworkResult<UserRecipesBackground>>>()
+    override val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipesBackground>>>
         get() = _getUserRecipesBackgroundLiveData
 
     override suspend fun getUserRecipesBackground() {
         _getUserRecipesBackgroundLiveData.postValue(Event(NetworkResult.Loading()))
         val response = remoteDataSource.getUserRecipesBackground()
         if (response.isSuccessful) {
-            sharedPreference.addSavedRecipesAnCreatedRecipes(response.body()!!)
+            sharedPreference.saveUserRecipesBackground(response.body()!!)
             Log.i(TAG, "updateUser: request made was sucessfull.")
             _getUserRecipesBackgroundLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
         }

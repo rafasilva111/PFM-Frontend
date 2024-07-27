@@ -31,7 +31,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
 import com.example.projectfoodmanager.data.model.user.UserList
-import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipesBackground
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import retrofit2.Response
@@ -68,7 +68,7 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.deleteUser()
 	}
 
-	override suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds> {
+	override suspend fun getUserRecipesBackground(): Response<UserRecipesBackground> {
 		return apiInterface.getUserRecipesBackground()
 	}
 

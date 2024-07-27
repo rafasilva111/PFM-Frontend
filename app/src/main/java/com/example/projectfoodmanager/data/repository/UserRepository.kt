@@ -10,7 +10,7 @@ import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
-import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipesBackground
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
 
@@ -23,7 +23,7 @@ interface UserRepository {
     val userAuthLiveData: LiveData<Event<NetworkResult<AuthToken>>>
     val userLogoutLiveData: LiveData<Event<NetworkResult<String>>>
     val userLiveData: LiveData<Event<NetworkResult<User>>>
-    val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
+    val getUserRecipesBackground: LiveData<Event<NetworkResult<UserRecipesBackground>>>
     val userUpdateLiveData: LiveData<Event<NetworkResult<User>>>
     val deleteUserAccount: LiveData<Event<NetworkResult<String>>>
 
@@ -31,7 +31,7 @@ interface UserRepository {
 
     suspend fun registerUser(user : UserDTO)
     suspend fun loginUser(email: String, password: String)
-    suspend fun getUserSession(preventDeleteRecipesBackgrounds: Boolean)
+    suspend fun getUserSession()
     suspend fun logoutUser()
     suspend fun updateUser(userDTO: UserDTO)
     suspend fun getUserRecipesBackground()

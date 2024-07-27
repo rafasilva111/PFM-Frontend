@@ -37,9 +37,6 @@ import javax.sql.DataSource
 class Helper {
     companion object {
 
-        private val serverZoneId = ZoneId.of("Europe/Lisbon")
-
-
 
         fun isValidEmail(email: String): Boolean {
             return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches()

@@ -30,7 +30,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
 import com.example.projectfoodmanager.data.model.user.UserList
-import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipesBackground
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import retrofit2.Response
@@ -45,7 +45,7 @@ interface RemoteDataSource {
 	suspend fun getUserById(userId: Int): Response<UserProfile>
 	suspend fun updateUser(user: UserDTO): Response<User>
 	suspend fun deleteUser(): Response<String>
-	suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
+	suspend fun getUserRecipesBackground(): Response<UserRecipesBackground>
 
 	//recipe
 	suspend fun createRecipe(recipe : RecipeRequest): Response<Recipe>
