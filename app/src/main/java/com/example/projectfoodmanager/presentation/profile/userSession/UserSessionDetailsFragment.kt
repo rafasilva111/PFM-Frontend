@@ -102,7 +102,7 @@ class UserSessionDetailsFragment : Fragment() {
         setUI()
 
         if (isOnline(requireView().context)) {
-            userViewModel.getUserSession(preventDeleteRecipesBackgrounds = true)
+            userViewModel.getUserSession()
         }else{
             user = sharedPreference.getUserSession()
             loadUI()

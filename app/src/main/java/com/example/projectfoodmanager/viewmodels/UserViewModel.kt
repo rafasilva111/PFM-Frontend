@@ -12,7 +12,7 @@ import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
-import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipesBackground
 import com.example.projectfoodmanager.data.repository.UserRepository
 import com.example.projectfoodmanager.util.Event
 import com.example.projectfoodmanager.util.NetworkResult
@@ -52,9 +52,9 @@ class UserViewModel @Inject constructor(
     val userResponseLiveData: LiveData<Event<NetworkResult<User>>>
         get() = repository.userLiveData
 
-    fun getUserSession(preventDeleteRecipesBackgrounds: Boolean = false){
+    fun getUserSession(){
         viewModelScope.launch {
-            repository.getUserSession(preventDeleteRecipesBackgrounds = preventDeleteRecipesBackgrounds)
+            repository.getUserSession()
         }
     }
 
@@ -79,7 +79,7 @@ class UserViewModel @Inject constructor(
     }
 
 
-    val getUserRecipesBackgroundLiveData: LiveData<Event<NetworkResult<UserRecipeBackgrounds>>>
+    val getUserRecipesBackgroundLiveData: LiveData<Event<NetworkResult<UserRecipesBackground>>>
         get() = repository.getUserRecipesBackground
 
     fun getUserRecipesBackground() {

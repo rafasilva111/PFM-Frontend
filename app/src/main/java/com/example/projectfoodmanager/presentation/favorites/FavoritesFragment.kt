@@ -416,17 +416,16 @@ class FavoritesFragment : Fragment(),ImageLoadingListener {
     }
 
     private fun getChipList(currentTabSelected: View): MutableList<RecipeSimplified> {
-        user = sharedPreference.getUserSession()
 
         when(currentTabSelected){
             binding.chipCurtidas -> {
                 recipeViewModel.getLikedRecipes()
             }
             binding.chipGuardados ->{
-                return user.savedRecipes.toRecipeSimplifiedList()
+                return sharedPreference.getUserRecipesBackgroundSavedRecipes().toRecipeSimplifiedList()
             }
             binding.chipCriadas ->{
-                return user.createdRecipes.toRecipeSimplifiedList()
+                return sharedPreference.getUserRecipesBackgroundCreatedRecipes().toRecipeSimplifiedList()
             }
             binding.chipCommented ->{
                 //recipeViewModel.getRecipesCommentedByUserPaginated(clientId = user.id)

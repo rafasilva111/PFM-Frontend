@@ -7,7 +7,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
-import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipesBackground
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.SharedPreferencesConstants.IS_FIRST_APP_LAUNCH
@@ -57,8 +57,7 @@ class SharedPreference @Inject constructor(
      *  Metadata
      * */
 
-    /**
-     * Get
+    /**     Get
      * */
 
     /** Multiple */
@@ -77,8 +76,7 @@ class SharedPreference @Inject constructor(
         return getSharedPreferencesMetadata()[sharedPreferencesMetadata]!!
     }
 
-    /**
-     * Save
+    /**     Save
      * */
 
     /** Multiple */
@@ -97,8 +95,7 @@ class SharedPreference @Inject constructor(
         sharedPreferences.edit().putString(METADATA,gson.toJson(allSharedPreferencesMetadata)).apply()
     }
 
-    /**
-     * Delete
+    /**     Delete
      * */
 
     fun deleteSession() {
@@ -109,12 +106,15 @@ class SharedPreference @Inject constructor(
         sharedPreferences.edit().remove(USER_SESSION_SHOPPING_LISTS).apply()
     }
 
+
+
+
     /**
      *  User
      * */
 
-    /**
-     * Get
+
+    /**     Get
      * */
 
     fun getUserSession(): User {
@@ -124,21 +124,16 @@ class SharedPreference @Inject constructor(
         )
     }
 
-    /**
-     * Save
+    /**     Save
      * */
 
 
-    fun saveUserSession(user: User, preventDeleteRecipesBackgrounds: Boolean = false) {
-
-        if (preventDeleteRecipesBackgrounds){
-            val userOld = getUserSession()
-            user.savedRecipes = userOld.savedRecipes
-            user.createdRecipes = userOld.createdRecipes
-        }
-
+    fun saveUserSession(user: User) {
          sharedPreferences.edit().putString(USER_SESSION,gson.toJson(user)).apply()
     }
+
+
+
 
 
     /**
@@ -146,60 +141,78 @@ class SharedPreference @Inject constructor(
      * */
 
 
-    fun addSavedRecipesAnCreatedRecipes(userRecipeBackgrounds: UserRecipeBackgrounds) {
-        val user: User = gson.fromJson(sharedPreferences.getString(USER_SESSION,""), User::class.java)
-        user.savedRecipes = userRecipeBackgrounds.savedRecipes
-        user.createdRecipes = userRecipeBackgrounds.createdRecipes
+    /**     Get
+     * */
+
+    fun getUserRecipesBackground(): UserRecipesBackground {
+        return gson.fromJson(
+            sharedPreferences.getString(USER_SESSION_BACKGROUND_RECIPES, ""),
+            UserRecipesBackground::class.java
+        )
+    }
+
+    fun getUserRecipesBackgroundSavedRecipes(): MutableList<Recipe> {
+        return gson.fromJson(
+            sharedPreferences.getString(USER_SESSION_BACKGROUND_RECIPES, ""),
+            UserRecipesBackground::class.java
+        ).savedRecipes
+    }
+
+    fun getUserRecipesBackgroundCreatedRecipes(): MutableList<Recipe> {
+        return gson.fromJson(
+            sharedPreferences.getString(USER_SESSION_BACKGROUND_RECIPES, ""),
+            UserRecipesBackground::class.java
+        ).createdRecipes
+    }
+
+    /**     Save
+     * */
+
+    fun saveUserRecipesBackground(userRecipesBackground: UserRecipesBackground) {
+        sharedPreferences.edit().putString(USER_SESSION_BACKGROUND_RECIPES,gson.toJson(userRecipesBackground)).apply()
         saveSingleMetadata(USER_SESSION_BACKGROUND_RECIPES,true)
-        saveUserSession(user)
     }
 
 
 
-    fun addSavedRecipe(recipe: Recipe): User {
-        val user: User = gson.fromJson(sharedPreferences.getString(USER_SESSION,""), User::class.java)
-        user.addSave(recipe)
-        saveUserSession(user)
-        return user
+    fun addSavedRecipe(recipe: Recipe){
+        val userRecipesBackground = getUserRecipesBackground()
+        userRecipesBackground.savedRecipes.add(recipe)
+        saveUserRecipesBackground(userRecipesBackground)
     }
 
-    fun removeSavedRecipe(recipe: Recipe): User {
-        val user: User = gson.fromJson(sharedPreferences.getString(USER_SESSION,""), User::class.java)
-        user.removeSave(recipe)
-        saveUserSession(user)
-        return user
+    fun removeSavedRecipe(recipe: Recipe) {
+        val userRecipesBackground = getUserRecipesBackground()
+        userRecipesBackground.savedRecipes.remove(recipe)
+        saveUserRecipesBackground(userRecipesBackground)
     }
 
-    fun addLikeToSavedRecipes(recipe: Recipe): User {
-        val user: User = gson.fromJson(sharedPreferences.getString(USER_SESSION,""), User::class.java)
-        for (item in user.savedRecipes)
+    fun addLikeToSavedRecipes(recipe: Recipe) {
+        val userRecipesBackground = getUserRecipesBackground()
+
+        for (item in userRecipesBackground.savedRecipes)
             if (item.id == recipe.id){
                 item.liked = true
                 item.likes += 1
                 break
             }
 
-        saveUserSession(user)
-        return user
+        saveUserRecipesBackground(userRecipesBackground)
     }
 
-    fun removeLikeFromSavedRecipes(recipe: Recipe): User {
-        val user: User = gson.fromJson(sharedPreferences.getString(USER_SESSION,""), User::class.java)
-        for (item in user.savedRecipes)
+    fun removeLikeFromSavedRecipes(recipe: Recipe) {
+        val userRecipesBackground = getUserRecipesBackground()
+
+        for (item in userRecipesBackground.savedRecipes)
             if (item.id == recipe.id){
                 item.liked = false
                 item.likes -= 1
                 break
             }
 
-
-        saveUserSession(user)
-        return user
+        saveUserRecipesBackground(userRecipesBackground)
     }
 
-    fun updateUserSession(user: User, preventDeleteRecipesBackgrounds: Boolean = false) {
-        saveUserSession(user,preventDeleteRecipesBackgrounds)
-    }
 
     /**
      *  Calender Entrys

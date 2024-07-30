@@ -32,12 +32,6 @@ data class User(
     val weight: Double = 0.0,
     val age: Int? = 0,
     val rating: Double = 0.0,
-    @SerializedName("saved_recipes")
-    @JvmField
-    var savedRecipes: MutableList<Recipe> = mutableListOf(),
-    @SerializedName("created_recipes")
-    @JvmField
-    var createdRecipes: MutableList<Recipe> = mutableListOf(),
     @SerializedName("created_at")
     val createdDate: String?,
     @SerializedName("updated_at")
@@ -51,43 +45,4 @@ data class User(
 
 
 
-) : Parcelable {
-
-    // this is needed
-    fun initLists() {
-
-        savedRecipes = mutableListOf()
-        createdRecipes = mutableListOf()
-
-    }
-
-
-    fun checkIfSaved(recipeId: Int): Int {
-
-        return if (savedRecipes.isNotEmpty())
-            savedRecipes.indexOfFirst { it.id == recipeId }
-        else
-            -1
-    }
-
-    fun addSave(recipe: Recipe){
-        if (checkIfSaved(recipe.id) == -1){
-            savedRecipes.add(recipe)
-        }
-    }
-
-
-    fun removeSave(recipe: Recipe){
-        val index = checkIfSaved(recipe.id)
-        if (index != -1)
-            savedRecipes.removeAt(index)
-    }
-
-    fun removeSave(recipe: RecipeSimplified){
-        val index = checkIfSaved(recipe.id)
-        if (index != -1)
-            savedRecipes.removeAt(index)
-    }
-
-
-}
+) : Parcelable

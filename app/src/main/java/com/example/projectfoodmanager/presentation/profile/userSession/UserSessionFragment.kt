@@ -61,7 +61,7 @@ class UserSessionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         if (isOnline(requireView().context)) {
-            userViewModel.getUserSession(preventDeleteRecipesBackgrounds = true)
+            userViewModel.getUserSession()
         }else{
             user = sharedPreference.getUserSession()
             loadUI()

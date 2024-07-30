@@ -30,7 +30,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
 import com.example.projectfoodmanager.data.model.user.UserList
-import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipeBackgrounds
+import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipesBackground
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import retrofit2.Response
@@ -105,7 +105,7 @@ interface ApiInterface {
     /** Background */
 
     @GET("$API_V1_BASE_URL/recipe/background")
-    suspend fun getUserRecipesBackground(): Response<UserRecipeBackgrounds>
+    suspend fun getUserRecipesBackground(): Response<UserRecipesBackground>
 
     @GET("$API_V1_BASE_URL/recipe/like")
     suspend fun getLikedRecipes(@Query("page") page: Int, @Query("page_size") pageSize: Int): Response<RecipeList>
