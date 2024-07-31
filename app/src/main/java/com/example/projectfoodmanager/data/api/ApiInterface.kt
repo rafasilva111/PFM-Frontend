@@ -108,7 +108,7 @@ interface ApiInterface {
     suspend fun getUserRecipesBackground(): Response<UserRecipesBackground>
 
     @GET("$API_V1_BASE_URL/recipe/like")
-    suspend fun getLikedRecipes(@Query("page") page: Int, @Query("page_size") pageSize: Int): Response<RecipeList>
+    suspend fun getLikedRecipes(@Query("page") page: Int, @Query("page_size") pageSize: Int,@Query("search_string") searchString: String): Response<RecipeList>
 
     @POST("$API_V1_BASE_URL/recipe/like")
     suspend fun addLike(@Query("id") recipeId: Int): Response<Recipe>
@@ -231,19 +231,19 @@ interface ApiInterface {
 
     /** Shopping List */
 
-    @POST("$API_V1_BASE_URL/shopping_list")
+    @POST("$API_V1_BASE_URL/shopping/shopping-list")
     suspend fun postShoppingList(@Body shoppingIngredientList: ShoppingListRequest): Response<ShoppingList>
 
-    @GET("$API_V1_BASE_URL/shopping_list")
+    @GET("$API_V1_BASE_URL/shopping/shopping-list/list")
     suspend fun getShoppingList(): Response<ListOfShoppingLists>
 
-    @GET("$API_V1_BASE_URL/shopping_list")
+    @GET("$API_V1_BASE_URL/shopping/shopping-list")
     suspend fun getShoppingList(@Query("id") shoppingListId: Int): Response<ShoppingList>
 
-    @PUT("$API_V1_BASE_URL/shopping_list")
+    @PUT("$API_V1_BASE_URL/shopping/shopping-list")
     suspend fun putShoppingList(@Query("id")shoppingListId: Int,@Body shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
 
-    @DELETE("$API_V1_BASE_URL/shopping_list")
+    @DELETE("$API_V1_BASE_URL/shopping/shopping-list")
     suspend fun deleteShoppingList(@Query("id")shoppingListId: Int): Response<IdResponse>
 
 

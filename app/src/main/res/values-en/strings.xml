@@ -57,7 +57,7 @@
     <string name="weight_problem_2">Be careful, those are some weird numbers</string>
     <string name="height_problem">Invalid height</string>
     <string name="txt_error_message">%1$S*</string>
-    <string name="no_recipes_found">No recipes found.</string>
+    <string name="no_recipes">No recipes found.</string>
     <string name="user_logout_successfully">User logged out successfully.</string>
     <string name="user_had_no_shared_preferences">User session invalid.</string>
     <string name="get_saved_recipes">Saved recipes</string>

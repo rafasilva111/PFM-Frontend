@@ -6,25 +6,30 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.toRecipeSimplified
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
+import com.example.projectfoodmanager.util.ImageLoadingListener
 import com.example.projectfoodmanager.util.SharedPreference
 import javax.inject.Inject
 
 
 class NewCalenderEntryFragmentListingAdapter(
-    val onItemClicked: (Int, Recipe) -> Unit
+    val onItemClicked: (Int, RecipeSimplified) -> Unit,
+    private val imageLoadingListener: ImageLoadingListener
 ) : RecyclerView.Adapter<NewCalenderEntryFragmentListingAdapter.MyViewHolder>() {
 
     @Inject
     lateinit var sharedPreference: SharedPreference
 
-    private var user: User? = null
     private val TAG: String = "RecipeListingAdapter"
-    private var list: MutableList<Recipe> = arrayListOf()
+    private var list: MutableList<RecipeSimplified> = arrayListOf()
 
+    var imagesToLoad: Int = 2
+    var imagesLoaded: Int = 0
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -38,21 +43,50 @@ class NewCalenderEntryFragmentListingAdapter(
         holder.bind(item)
     }
 
-    fun getAdapterList():MutableList<Recipe>{
-        return this.list
+    fun cleanList(){
+        val listSize = this.list.size
+        this.list = arrayListOf()
+        notifyItemRangeRemoved(0,listSize)
     }
 
-    fun updateList(list: MutableList<Recipe>, user: User){
-        this.list = list
-        this.user = user
-        notifyDataSetChanged()
+    fun setList(_list: MutableList<RecipeSimplified>){
+        cleanList()
+        this.list = _list
+        imagesLoaded = 0
+        notifyItemRangeChanged(0,this.list.size)
     }
 
-    fun updateItem(position: Int, item: Recipe, user: User){
+    fun appendList(_list: MutableList<RecipeSimplified>){
+        val listSize = this.list.size
+        this.list = (this.list + _list).toMutableList()
+        notifyItemRangeChanged(listSize,this.list.size)
+    }
+
+
+    fun updateItem(position: Int,item: RecipeSimplified){
         list.removeAt(position)
         list.add(position,item)
-        this.user = user
         notifyItemChanged(position)
+    }
+
+    fun updateItem(item: RecipeSimplified){
+        for ((index, recipe) in list.withIndex()){
+            if (recipe.id == item.id) {
+                list[index] = item
+                notifyItemChanged(index)
+                break
+            }
+        }
+    }
+
+    fun updateItem(item: Recipe){
+        for ((index, recipe) in list.withIndex()){
+            if (recipe.id == item.id) {
+                list[index] = item.toRecipeSimplified()
+                notifyItemChanged(index)
+                break
+            }
+        }
     }
 
     fun removeItem(position: Int){
@@ -69,18 +103,30 @@ class NewCalenderEntryFragmentListingAdapter(
     inner class MyViewHolder(private val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(item: Recipe) {
+        fun bind(item: RecipeSimplified) {
 
-            if (user==null)
-                user= sharedPreference.getUserSession()
 
             binding.dateTV.text = formatServerTimeToDateString(item.createdDate)
 
-            //Load Recipe img
-            Helper.loadRecipeImage(binding.imageView,item.imgSource)
+            /**
+             * Loading Images
+             */
 
-            //Load Recipe user img
-            Helper.loadUserImage(binding.imgAuthorIV,item.createdBy.imgSource)
+            // Load Recipe img
+            if (item.imgSource.isNotEmpty())
+                Helper.loadRecipeImage(binding.imageView, item.imgSource) {
+                    imageLoadingListener.onImageLoaded()
+                }
+            else
+                imageLoadingListener.onImageLoaded()
+
+            // Load Author img
+            if (item.createdBy.imgSource.isNotEmpty())
+                Helper.loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource) {
+                    imageLoadingListener.onImageLoaded()
+                }
+            else
+                imageLoadingListener.onImageLoaded()
 
             binding.idTV.text = item.id.toString()
             binding.nameAuthorTV.text = item.createdBy.name

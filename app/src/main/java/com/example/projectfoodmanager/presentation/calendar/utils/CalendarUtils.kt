@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter
 
 class CalendarUtils {
     companion object {
+        var todayDate: LocalDate = LocalDate.now()
         var currentDate: LocalDate = LocalDate.now()
         var selectedDate: LocalDate = LocalDate.now()
         var currentRecipeId: String? = null

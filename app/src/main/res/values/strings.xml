@@ -113,7 +113,7 @@
     <string name="height_problem">Enter height</string>
 
     <string name="txt_error_message">%1$S*</string>
-    <string name="no_recipes_found">No recipes found.</string>
+    <string name="no_recipes">No recipes found.</string>
     <string name="user_logout_successfully">User logout successfully.</string>
     <string name="user_had_no_shared_preferences">User session invalid.</string>
     <string name="get_saved_recipes">Saved recipes</string>

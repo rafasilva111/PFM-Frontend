@@ -26,7 +26,7 @@ interface RecipeRepository {
     val functionLikeOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
     val functionRemoveLikeOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
 
-    suspend fun getLikedRecipes(page: Int,pageSize: Int)
+    suspend fun getLikedRecipes(page: Int,pageSize: Int,searchString: String)
     suspend fun addLikeOnRecipe(recipeId: Int)
     suspend fun removeLikeOnRecipe(recipeId: Int)
 

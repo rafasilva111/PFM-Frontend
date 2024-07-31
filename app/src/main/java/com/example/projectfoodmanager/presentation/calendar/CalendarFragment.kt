@@ -38,7 +38,8 @@ import com.example.projectfoodmanager.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import javax.inject.Inject
-
+import java.time.temporal.ChronoUnit
+import kotlin.math.floor
 @AndroidEntryPoint
 class CalendarFragment : Fragment() {
 
@@ -63,7 +64,7 @@ class CalendarFragment : Fragment() {
     private val adapterCalMonth by lazy {
         CalendarAdapter(
             daysInMonthArray(
-                currentDate
+                selectedDate
             ),
             onItemClicked = { selectedDate ->
                 binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
@@ -92,7 +93,7 @@ class CalendarFragment : Fragment() {
     private val adapterCalWeekly by lazy {
         CalendarAdapter(
             daysInWeekArray(
-                currentDate
+                selectedDate
             ),
             onItemClicked = { selectedDate ->
                 //TODO: Confirmar com o rafa
@@ -146,9 +147,6 @@ class CalendarFragment : Fragment() {
         }
 
 
-
-
-
         bindObservers()
         return binding.root
     }
@@ -159,13 +157,39 @@ class CalendarFragment : Fragment() {
 
     }
 
+
+
+
+
+    /**
+     *  Android LifeCycle
+     * */
+
+    override fun onStart() {
+
+        loadUI()
+        super.onStart()
+    }
+
+
+    override fun onPause() {
+
+        // delete notifications
+        if (calenderEntriesToBeChecked.isNotEmpty())
+            calenderViewModel.checkCalenderEntries(CalenderEntryListUpdate(calenderEntryStateList=calenderEntriesToBeChecked))
+        super.onPause()
+    }
+
+    /**
+     *  General
+     * */
+
     private fun setUI() {
         /**
          *  General
          * */
 
         binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
-        binding.nRegistersTV.text = nrRecipes
 
         binding.calEntrysRV.layoutManager = LinearLayoutManager(activity)
         binding.calEntrysRV.adapter = adapterEntry
@@ -192,45 +216,34 @@ class CalendarFragment : Fragment() {
 
         binding.monthViewBtn.setOnClickListener {
             setMonthView()
-            binding.monthViewBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color))
-            binding.monthViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.white)))
-
-            binding.weeklyViewBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.grayLightBTN))
-            binding.weeklyViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color)))
-
         }
 
 
         binding.weeklyViewBtn.setOnClickListener {
             setWeeklyView()
-
-            binding.weeklyViewBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color))
-            binding.weeklyViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.white)))
-
-            binding.monthViewBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.grayLightBTN))
-            binding.monthViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color)))
-
-
         }
 
 
         binding.previousBtn.setOnClickListener {
-            currentDate = currentDate.minusMonths(1)
+            currentDate = if (weeklyViewSelected)
+                currentDate.minusDays(7)
+            else
+                currentDate.minusMonths(1)
             updateCalenderView()
         }
 
         binding.nextBtn.setOnClickListener {
-            currentDate = currentDate.plusMonths(1)
+            currentDate = if (weeklyViewSelected)
+                currentDate.plusDays(7)
+            else
+                currentDate.plusMonths(1)
+
             updateCalenderView()
         }
 
         binding.addBasketIB.setOnClickListener {
             navigateToCalenderShoppingList()
         }
-
-
-
-
 
     }
 
@@ -244,20 +257,30 @@ class CalendarFragment : Fragment() {
         changeTheme(false, activity, requireContext())
         changeMenuVisibility(true,activity)
 
-        setMonthView()
+        // set Calendar View
+        if (weeklyViewSelected)
+            setWeeklyView()
+        else
+            setMonthView()
 
-        val targetDate = if (selectedDate != currentDate) selectedDate else currentDate
-        val calendarEntry = sharedPreference.getEntryOnCalendar(targetDate.atStartOfDay())
+
+        val calendarEntry = sharedPreference.getEntryOnCalendar(selectedDate.atStartOfDay())
         calendarEntry?.let {
-            adapterEntry.updateList(it)
+
             if (calendarEntry.isEmpty()) {
                 binding.emptyRegTV.show()
             } else {
                 binding.emptyRegTV.hide()
+                adapterEntry.updateList(it)
             }
+
             binding.nRegistersTV.text = adapterEntry.itemCount.toString()
         }
     }
+
+    /**
+     *  Functions
+     * */
 
     private fun askUserPortionPreference() {
 
@@ -301,58 +324,76 @@ class CalendarFragment : Fragment() {
         changeMenuVisibility(false,activity)
     }
 
-    override fun onStart() {
-
-        loadUI()
-        super.onStart()
-    }
-
     private fun setMonthView() {
-        binding.calWeeklyRV.visibility = View.INVISIBLE
+
+        weeklyViewSelected = false
+
+        binding.monthViewBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color))
+        binding.monthViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.white)))
+
+        binding.weeklyViewBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.grayLightBTN))
+        binding.weeklyViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color)))
+
         binding.calMonthRV.visibility = View.VISIBLE
+        binding.calWeeklyRV.visibility = View.INVISIBLE
 
-        currentDate = LocalDate.now()
 
-        binding.monthYearTV.text = formatDateMonthYear(currentDate)!!.replaceFirstChar { it.uppercase() }
+        currentDate = selectedDate
+
 
         val layoutManager: RecyclerView.LayoutManager =
             GridLayoutManager(activity?.applicationContext, 7)
         binding.calMonthRV.layoutManager = layoutManager
         binding.calMonthRV.adapter = adapterCalMonth
+
+        updateCalenderView()
     }
 
     private fun setWeeklyView() {
 
-        binding.calMonthRV.visibility = View.GONE
+        weeklyViewSelected = true
+
+        binding.weeklyViewBtn.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color))
+        binding.weeklyViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.white)))
+
+        binding.monthViewBtn.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.grayLightBTN))
+        binding.monthViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color)))
+
+        binding.calMonthRV.visibility = View.INVISIBLE
         binding.calWeeklyRV.visibility = View.VISIBLE
 
 
-        currentDate = LocalDate.now()
-        binding.monthYearTV.text = formatDateMonthYear(currentDate)!!.replaceFirstChar { it.uppercase() }
+        currentDate = selectedDate
+
         val layoutManager: RecyclerView.LayoutManager = GridLayoutManager(activity?.applicationContext, 7)
         binding.calWeeklyRV.layoutManager = layoutManager
         binding.calWeeklyRV.adapter = adapterCalWeekly
 
-        //setEventAdapter()
+
+        updateCalenderView()
     }
 
     private fun updateCalenderView() {
 
-        binding.monthYearTV.text = formatDateMonthYear(currentDate)!!
+        binding.monthYearTV.text = formatDateMonthYear(currentDate)!!.replaceFirstChar { it.uppercase() }
 
-        if (binding.calMonthRV.visibility == View.VISIBLE) {
-            adapterCalMonth.updateList(
-                daysInMonthArray(
-                    currentDate
-                )
-            )
-        } else {
+
+        if (weeklyViewSelected)
             adapterCalWeekly.updateList(
                 daysInWeekArray(
                     currentDate
                 )
             )
-        }
+        else
+            adapterCalMonth.updateList(
+                daysInMonthArray(
+                    currentDate
+                )
+            )
+
+
 
     }
 
@@ -366,13 +407,12 @@ class CalendarFragment : Fragment() {
 
                         adapterEntry.updateList(it.data!!.result)
 
-                        if (it.data.result.size != 0){
-                            nrRecipes= it.data.result.size.toString()
-                        }else{
-                            nrRecipes= "0"
+                        binding.nRegistersTV.text = it.data.result.size.toString()
+
+                        if (it.data.result.size == 0){
                             binding.emptyRegTV.show()
                         }
-                        binding.nRegistersTV.text = nrRecipes
+
 
                     }
                     is NetworkResult.Error -> {
@@ -430,17 +470,11 @@ class CalendarFragment : Fragment() {
         }
     }
 
-
-    override fun onPause() {
-
-        // delete notifications
-        if (calenderEntriesToBeChecked.isNotEmpty())
-            calenderViewModel.checkCalenderEntries(CalenderEntryListUpdate(calenderEntryStateList=calenderEntriesToBeChecked))
-        super.onPause()
-    }
+    /**
+     *  Object
+     * */
 
     companion object{
-        var nrRecipes = "0"
+        var weeklyViewSelected: Boolean = true
     }
-
 }

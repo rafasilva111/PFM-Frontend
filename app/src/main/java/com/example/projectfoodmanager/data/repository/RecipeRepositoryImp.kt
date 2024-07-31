@@ -199,10 +199,10 @@ class RecipeRepositoryImp @Inject constructor(
         get() = _userLikedRecipesResponseLiveData
 
 
-    override suspend fun getLikedRecipes(page: Int,pageSize: Int) {
+    override suspend fun getLikedRecipes(page: Int,pageSize: Int,searchString: String) {
         _userLikedRecipesResponseLiveData.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "AuthRepositoryImp - getUserLikedRecipes: Making request.")
-        val response =remoteDataSource.getLikedRecipes(page,pageSize)
+        val response =remoteDataSource.getLikedRecipes(page,pageSize,searchString)
 
         //handle response RecipeListResponse
 

@@ -43,10 +43,10 @@ class RecipeListingAdapter(
     }
 
     fun updateList(list: MutableList<RecipeSimplified>){
+        val limit = if(list.size > this.list.size) list.size else this.list.size
         this.list = list
-
         imagesLoaded = 0
-        notifyItemRangeChanged(0,this.list.size)
+        notifyItemRangeChanged(0,limit)
     }
 
     fun updateItem(position: Int,item: RecipeSimplified){
@@ -56,7 +56,6 @@ class RecipeListingAdapter(
     }
 
     fun updateItem(item: RecipeSimplified){
-
         for ((index, recipe) in list.withIndex()){
             if (recipe.id == item.id) {
                 list[index] = item
@@ -64,11 +63,9 @@ class RecipeListingAdapter(
                 break
             }
         }
-
     }
 
     fun updateItem(item: Recipe){
-
         for ((index, recipe) in list.withIndex()){
             if (recipe.id == item.id) {
                 list[index] = item.toRecipeSimplified()
@@ -76,7 +73,6 @@ class RecipeListingAdapter(
                 break
             }
         }
-
     }
 
 

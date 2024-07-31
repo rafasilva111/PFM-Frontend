@@ -48,14 +48,14 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
 
 
-    // binding
+    /** Binding */
     lateinit var binding: FragmentRecipeListingBinding
 
-    // viewModels
+    /** ViewModels */
     private val recipeViewModel by activityViewModels<RecipeViewModel>()
     private val userViewModel by activityViewModels<UserViewModel>()
 
-    // constants
+    /** Constants */
     private val TAG: String = "RecipeListingFragment"
 
 
@@ -69,8 +69,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     private var oldFilerTag: String =""
     private var numberOfNotifications: Int = 0
 
-
-
     private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             numberOfNotifications += 1
@@ -78,15 +76,16 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         }
     }
 
-    // injects
+    /** Injections */
+
     @Inject
     lateinit var sharedPreference: SharedPreference
-
     @Inject
     lateinit var tokenManager: TokenManager
 
 
-    // adapters
+    /** Adapters */
+
     private val adapter by lazy {
         RecipeListingAdapter(
             onItemClicked = {pos,recipe ->
@@ -481,10 +480,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     }
 
-    private fun showValidationErrors(error: String) {
-        toast(error, type = ToastType.ERROR)
-    }
-
     private fun filterOnClick(tag:String){
 
         binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
@@ -524,9 +519,9 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
          */
 
         recipeViewModel.functionGetRecipes.observe(viewLifecycleOwner
-        ) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
+        ) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
 
                         // isto é usado para atualizar os likes caso o user vá a detail view
@@ -539,7 +534,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                             recipeListed.subList(firstIndex, lastIndex).clear()
 
 
-                            for (recipe in it.data!!.result) {
+                            for (recipe in result.data!!.result) {
                                 recipeListed.add(firstIndex, recipe)
                                 firstIndex++
                             }
@@ -552,14 +547,14 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
                             // sets page data
 
-                            currentPage = it.data!!._metadata.page
-                            nextPage = it.data._metadata.nextPage != null
+                            currentPage = result.data!!._metadata.page
+                            nextPage = result.data._metadata.nextPage != null
 
                             noMoreRecipesMessagePresented = nextPage
 
                             // check if list empty
 
-                            if(it.data.result.isEmpty()){
+                            if(result.data.result.isEmpty()){
                                 binding.noRecipesTV.visibility=View.VISIBLE
                                 adapter.cleanList()
                                 return@let
@@ -571,9 +566,9 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                             // checks if new search
 
                             if (currentPage == 1)
-                                recipeListed = it.data.result
+                                recipeListed = result.data.result
                             else
-                                recipeListed += it.data.result
+                                recipeListed += result.data.result
 
 
                             adapter.updateList(recipeListed)
@@ -583,7 +578,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                     }
                     is NetworkResult.Error -> {
                         binding.progressBar.hide()
-                        showValidationErrors(it.message.toString())
+                        toast(result.message.toString(), type = ToastType.ERROR)
                     }
                     is NetworkResult.Loading -> {
                         binding.noRecipesTV.visibility = View.GONE
@@ -612,8 +607,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
-                    }
+                                            }
                     is NetworkResult.Loading -> {
                     }
                 }
@@ -630,7 +624,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                         }
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
+                        toast(result.message.toString(), type = ToastType.ERROR)
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -653,7 +647,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                         }
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
+                        toast(result.message.toString(), type = ToastType.ERROR)
                     }
                     is NetworkResult.Loading -> {
                     }
@@ -671,7 +665,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                         }
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
+                        toast(result.message.toString(), type = ToastType.ERROR)
                     }
                     is NetworkResult.Loading -> {
                     }

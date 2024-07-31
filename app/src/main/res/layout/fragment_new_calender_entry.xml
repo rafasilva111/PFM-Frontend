@@ -90,6 +90,7 @@
                 android:id="@+id/listingIV"
                 android:layout_width="20dp"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
                 android:src="@drawable/ic_favorito_active"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/listingTV"
@@ -147,6 +148,7 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical"
             android:textAlignment="center"
+            android:visibility="invisible"
             app:flow_horizontalAlign="center"
             app:flow_verticalAlign="center"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -155,8 +157,17 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/SVsearch"
-            app:layout_constraintVertical_bias="1.0"
-            />
+            app:layout_constraintVertical_bias="1.0" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/favoritesRV"
+            app:layout_constraintTop_toTopOf="@+id/favoritesRV" />
 
         <TextView
             android:id="@+id/tv_no_recipes"
@@ -518,13 +529,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
