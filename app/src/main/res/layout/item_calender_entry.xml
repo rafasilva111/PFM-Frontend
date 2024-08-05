@@ -103,7 +103,7 @@
             android:id="@+id/checkDoneCB"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:alpha="0.5"/>
+            />
 
     </LinearLayout>
 

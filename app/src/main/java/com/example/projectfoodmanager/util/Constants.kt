@@ -46,13 +46,15 @@ object SharedPreferencesConstants{
 }
 
 object CALENDAR_MEALS_TAG {
-    const val PEQUENO_ALMOCO = "PEQUENO ALMOÇO"
-    const val LANCHE_DA_MANHA = "LANCHE DA MANHÃ"
-    const val ALMOCO = "ALMOÇO"
-    const val LANCHE_DA_TARDE = "LANCHE DA TARDE"
-    const val JANTAR = "JANTAR"
-    const val CEIA = "CEIA"
+    const val PEQUENO_ALMOCO = "Breakfast"
+    const val LANCHE_DA_MANHA = "Morning Snack"
+    const val ALMOCO = "Lunch"
+    const val LANCHE_DA_TARDE = "Afternoon Snack"
+    const val JANTAR = "Dinner"
+    const val CEIA = "Supper"
+    const val OTHER = "Other"
 }
+
 
 object ActionResultCodes{
     const val GALLERY_REQUEST_CODE = 1
@@ -207,6 +209,18 @@ object FirebaseNotificationCode{
     const val RECIPE_CREATED = 9
     const val COMMENT_LIKED = 10
 }
+
+enum class ErrorTypes(val code: String, val description: String) {
+    ARGS("ARGS", "Error in arguments"),
+    PAGINATION("PAGINATION", "Error in pagination"),
+    LOGICAL("LOGICAL", "Error in using faulty data to app logic"),
+    CONSTRAINT("CONSTRAINT", "Error in a constraint"),
+    MISSING_MODEL("MISSING_MODEL", "Error find model"),
+    MISSING("MISSING", "Error model missing something."),
+    RESOURCE_LIMIT("RESOURCE_LIMIT", "Error in resource limit."),
+    INTERNAL("INTERNAL", "Internal server error");
+}
+
 
 object FragmentsToOpen{
     const val FRAGMENT_COMMENTS = 1

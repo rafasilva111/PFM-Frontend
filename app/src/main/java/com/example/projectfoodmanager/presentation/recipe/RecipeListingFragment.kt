@@ -63,7 +63,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     private var noMoreRecipesMessagePresented = false
 
     private var snapHelper : SnapHelper = PagerSnapHelper()
-    lateinit var manager: LinearLayoutManager
+    private lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
     private var refreshPage: Int = 0
     private var oldFilerTag: String =""

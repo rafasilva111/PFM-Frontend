@@ -19,6 +19,8 @@ import javax.inject.Inject
 
 class NewCalenderEntryFragmentListingAdapter(
     val onItemClicked: (Int, RecipeSimplified) -> Unit,
+    val onLikeClicked: (RecipeSimplified, Boolean) -> Unit,
+    val onSaveClicked: (RecipeSimplified, Boolean) -> Unit,
     private val imageLoadingListener: ImageLoadingListener
 ) : RecyclerView.Adapter<NewCalenderEntryFragmentListingAdapter.MyViewHolder>() {
 
@@ -43,16 +45,20 @@ class NewCalenderEntryFragmentListingAdapter(
         holder.bind(item)
     }
 
+    fun getList():MutableList<RecipeSimplified>{
+        return this.list.toMutableList()
+    }
+
     fun cleanList(){
         val listSize = this.list.size
         this.list = arrayListOf()
+        imagesLoaded = 0
         notifyItemRangeRemoved(0,listSize)
     }
 
     fun setList(_list: MutableList<RecipeSimplified>){
         cleanList()
         this.list = _list
-        imagesLoaded = 0
         notifyItemRangeChanged(0,this.list.size)
     }
 
@@ -94,6 +100,16 @@ class NewCalenderEntryFragmentListingAdapter(
         notifyItemChanged(position)
     }
 
+    fun removeItem(item: Recipe){
+        for ((index, recipe) in list.withIndex()){
+            if (recipe.id == item.id) {
+                this.list.removeAt(index)
+                notifyItemRemoved(index)
+                break
+            }
+        }
+    }
+
     override fun getItemCount(): Int {
         return list.size
     }
@@ -128,6 +144,11 @@ class NewCalenderEntryFragmentListingAdapter(
             else
                 imageLoadingListener.onImageLoaded()
 
+
+            /**
+             * Details
+             */
+
             binding.idTV.text = item.id.toString()
             binding.nameAuthorTV.text = item.createdBy.name
             binding.recipeTitleTV.text = item.title
@@ -139,13 +160,42 @@ class NewCalenderEntryFragmentListingAdapter(
             binding.ratingRecipeRB.rating = item.sourceRating.toFloat()
             binding.ratingMedTV.text = item.sourceRating
 
-            binding.favoritesIB.visibility=View.INVISIBLE
-            //--------- LIKES ---------
+
+            /**
+             * Likes Function
+             */
 
             if(item.liked)
                 binding.likeIB.setImageResource(R.drawable.ic_like_active)
             else
                 binding.likeIB.setImageResource(R.drawable.ic_like_black)
+
+
+            binding.likeIB.setOnClickListener {
+                if(item.liked)
+                    onLikeClicked.invoke(item, false)
+                else
+                    onLikeClicked.invoke(item, true)
+
+            }
+
+
+            /**
+             * Saves Function
+             */
+
+            if(item.saved)
+                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
+            else
+                binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
+
+            binding.favoritesIB.setOnClickListener {
+                if(item.saved)
+                    onSaveClicked.invoke(item, false)
+                else
+                    onSaveClicked.invoke(item, true)
+
+            }
 
 
         }

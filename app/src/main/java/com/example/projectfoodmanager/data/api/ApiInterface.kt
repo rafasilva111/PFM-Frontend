@@ -1,13 +1,13 @@
 package com.example.projectfoodmanager.data.api
 
 
-import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
@@ -54,8 +54,9 @@ interface ApiInterface {
     @POST("$API_V1_BASE_URL/auth/login")
     suspend fun loginUser(@Body user : UserDTO): Response<AuthToken>
 
-    @DELETE("$API_V1_BASE_URL/auth")
-    suspend fun logoutUser(): Response<String>
+    // You cant define a body in delete requests
+    @HTTP(method = "DELETE", path = "$API_V1_BASE_URL/auth", hasBody = true)
+    suspend fun logoutUser(@Body logoutRequest : RefreshToken): Response<Unit>
 
 
 
@@ -159,7 +160,7 @@ interface ApiInterface {
     // calender
 
     @POST("$API_V1_BASE_URL/calendar")
-    suspend fun createCalenderEntry(@Query("recipe_id") recipeId: Int,@Body calenderEntryRequest : CalenderEntryDTO): Response<CalenderEntry>
+    suspend fun createCalenderEntry(@Body calenderEntryRequest : CalenderEntryRequest): Response<CalenderEntry>
 
     @GET("$API_V1_BASE_URL/calendar/list")
     suspend fun getEntryOnCalender(@Query("date")date: String): Response<CalenderEntryList>
@@ -174,10 +175,10 @@ interface ApiInterface {
     suspend fun deleteCalenderEntry(@Query("id") calenderEntryId: Int): Response<Int>
 
     @PATCH("$API_V1_BASE_URL/calendar")
-    suspend fun patchCalenderEntry(@Query("id") calenderEntryId: Int, @Body calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
+    suspend fun patchCalenderEntry(@Query("id") calenderEntryId: Int, @Body calenderPatchRequest : CalenderEntryRequest): Response<CalenderEntry>
 
-    @POST("$API_V1_BASE_URL/calendar/list/check")
-    suspend fun checkCalenderEntries(@Body calenderEntryListUpdate: CalenderEntryListUpdate): Response<Unit>
+    @PATCH("$API_V1_BASE_URL/calendar/list/check")
+    suspend fun checkCalenderEntries(@Body calenderEntryCheckListRequest: CalenderEntryCheckListRequest): Response<Unit>
 
 
     /** Follows */

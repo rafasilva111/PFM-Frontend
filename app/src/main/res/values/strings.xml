@@ -278,14 +278,30 @@
         <item>Feminino</item>
     </string-array>
 
-    <string-array name="tagEntryCalender_array">
+
+
+    <!-- res/values/arrays.xml -->
+
+    <string-array name="tagEntryCalender_items">
         <item>Pequeno Almoço</item>
         <item>Lanche da manhã</item>
         <item>Almoço</item>
         <item>Lanche da tarde</item>
         <item>Jantar</item>
         <item>Ceia</item>
+        <item>Outro</item>
     </string-array>
+
+    <string-array name="tagEntryCalender_values">
+        <item>Breakfast</item>
+        <item>Morning Snack</item>
+        <item>Lunch</item>
+        <item>Afternoon Snack</item>
+        <item>Dinner</item>
+        <item>Supper</item>
+        <item>Other</item>
+    </string-array>
+
 
     <string-array name="portionEntryCalender_array">
         <item>Utilizar porção definida pelo usuário.</item>

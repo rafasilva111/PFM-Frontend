@@ -3,9 +3,8 @@ package com.example.projectfoodmanager.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
@@ -31,9 +30,9 @@ class CalendarViewModel @Inject constructor(
     val createEntryOnCalendarLiveData: LiveData<Event<NetworkResult<CalenderEntry>>>
         get() = repository.createEntryOnCalender
 
-    fun createEntryOnCalendar(recipeId: Int, calenderEntryRequest: CalenderEntryDTO){
+    fun createEntryOnCalendar(calenderEntryRequest: CalenderEntryRequest){
         viewModelScope.launch {
-            repository.createEntryOnCalender(recipeId,calenderEntryRequest)
+            repository.createEntryOnCalender(calenderEntryRequest)
         }
     }
 
@@ -83,7 +82,7 @@ class CalendarViewModel @Inject constructor(
     val patchCalendarEntryLiveData: LiveData<Event<NetworkResult<CalenderEntry>>>
         get() = repository.patchCalendarEntry
 
-    fun patchCalendarEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest) {
+    fun patchCalendarEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryRequest) {
         viewModelScope.launch {
             repository.patchCalenderEntry(calenderEntryId,calenderPatchRequest)
         }
@@ -92,10 +91,10 @@ class CalendarViewModel @Inject constructor(
     val checkCalenderEntriesLiveData: LiveData<Event<NetworkResult<Boolean>>>
         get() = repository.checkCalenderEntries
 
-    fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate) {
+    fun checkCalenderEntries(calenderEntryCheckListRequest: CalenderEntryCheckListRequest) {
 
         viewModelScope.launch {
-            repository.checkCalenderEntries(calenderEntryListUpdate)
+            repository.checkCalenderEntries(calenderEntryCheckListRequest)
         }
     }
 

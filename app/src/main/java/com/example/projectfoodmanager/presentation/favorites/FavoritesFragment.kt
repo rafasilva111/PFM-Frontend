@@ -65,7 +65,7 @@ class FavoritesFragment : Fragment(),ImageLoadingListener {
     lateinit var user: User
     private var oldFilterTag: String =""
 
-        // pagination
+    // pagination
     private var refreshPage: Int = 0
     private var currentPage: Int = 0
     private var nextPage:Boolean = true
@@ -134,10 +134,9 @@ class FavoritesFragment : Fragment(),ImageLoadingListener {
             manager.orientation = LinearLayoutManager.HORIZONTAL
             manager.reverseLayout = false
             binding.recyclerView.layoutManager = manager
+            binding.recyclerView.itemAnimator = null
             snapHelper.attachToRecyclerView(binding.recyclerView)
 
-
-            //setRecyclerViewScrollListener()
 
             binding.root
         }
@@ -289,7 +288,7 @@ class FavoritesFragment : Fragment(),ImageLoadingListener {
             adapter.imagesLoaded++
             if (adapter.imagesLoaded == adapter.imagesToLoad) {
                 binding.recyclerView.visibility = View.VISIBLE
-                binding.recyclerView.itemAnimator = null
+
                 binding.progressBar.hide()
             }
         }

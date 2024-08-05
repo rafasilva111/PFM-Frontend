@@ -225,7 +225,6 @@ class SplashFragment : Fragment() {
 
                     }
                     is NetworkResult.Error -> {
-                        // todo fix
                         updateSharedPreferenceTracker[1] = false
                         updateSharedPreferenceTracker.notifyObservers()
                     }

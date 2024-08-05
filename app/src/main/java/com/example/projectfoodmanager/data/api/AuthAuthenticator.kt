@@ -1,6 +1,6 @@
 package com.example.projectfoodmanager.data.api
 
-import com.example.projectfoodmanager.data.model.modelRequest.auth.RefreshAuthToken
+import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
 import com.example.projectfoodmanager.util.Constants
 import com.example.projectfoodmanager.util.TokenManager
@@ -45,6 +45,6 @@ class AuthAuthenticator @Inject constructor(
             .client(okHttpClient)
             .build()
         val service = retrofit.create(AuthApiInterface::class.java)
-        return service.refreshToken(RefreshAuthToken(refreshToken))
+        return service.refreshToken(RefreshToken(refreshToken))
     }
 }

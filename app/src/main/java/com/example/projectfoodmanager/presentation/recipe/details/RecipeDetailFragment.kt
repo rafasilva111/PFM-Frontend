@@ -53,7 +53,6 @@ class RecipeDetailFragment : Fragment() {
     lateinit var sharedPreference: SharedPreference
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,23 +74,21 @@ class RecipeDetailFragment : Fragment() {
         /**
          *  Arguments
          * */
-        super.onCreate(savedInstanceState)
-       arguments?.let {
 
-           recipeId = arguments?.getInt("recipe_id")!!
+        arguments?.let {
 
-           userPortion = arguments?.getFloat("UserPortion",-1F)!!
+            recipeId = arguments?.getInt("recipe_id")!!
+
+            userPortion = arguments?.getFloat("user_portion", -1F)!!
 
             // todo rafa isto deve ser tratado na base de dados ps: não está
-          /* recipePortion = if (objRecipe!!.portion.lowercase().contains("pessoas"))
-               objRecipe!!.portion.split(" ")[0].toFloat()
-           else
-               -1F*/
+            /* recipePortion = if (objRecipe!!.portion.lowercase().contains("pessoas"))
+                 objRecipe!!.portion.split(" ")[0].toFloat()
+             else
+             -1F*/
         }
 
-
-
-
+        super.onCreate(savedInstanceState)
     }
 
 
@@ -123,7 +120,10 @@ class RecipeDetailFragment : Fragment() {
          * */
 
         // Remove status abr limits
-        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        requireActivity().window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
 
 
         /**
@@ -135,35 +135,34 @@ class RecipeDetailFragment : Fragment() {
         }
 
 
-
     }
 
 
-    private fun updateRecipeUI(recipe: Recipe){
+    private fun updateRecipeUI(recipe: Recipe) {
 
         /** Recipe Info */
 
-        loadRecipeImage(binding.IVRecipe,recipe.imgSource)
+        loadRecipeImage(binding.IVRecipe, recipe.imgSource)
 
         binding.TVRef.text = recipe.id.toString()
         binding.dateTV.text = formatServerTimeToDateString(recipe.createdDate)
         binding.titleTV.text = recipe.title
         binding.ratingRecipeRB.rating = recipe.sourceRating.toFloat()
         binding.ratingMedTV.text = recipe.sourceRating
-        binding.commentsTV.text = recipe.comments.toString() +" "+ getString(R.string.nr_comments)
+        binding.commentsTV.text = recipe.comments.toString() + " " + getString(R.string.nr_comments)
         binding.numberLikeTV.text = recipe.likes.toString()
         binding.timeTV.text = recipe.time
         binding.dificultyTV.text = recipe.difficulty
         binding.portionTV.text = recipe.portion
 
-        when(recipe.difficulty){
-            RecipeDifficultyConstants.LOW->{
+        when (recipe.difficulty) {
+            RecipeDifficultyConstants.LOW -> {
                 binding.IV2.setImageResource(R.drawable.low_difficulty)
             }
-            RecipeDifficultyConstants.MEDIUM->{
+            RecipeDifficultyConstants.MEDIUM -> {
                 binding.IV2.setImageResource(R.drawable.medium_difficulty)
             }
-            RecipeDifficultyConstants.HIGH->{
+            RecipeDifficultyConstants.HIGH -> {
                 binding.IV2.setImageResource(R.drawable.high_difficulty)
             }
         }
@@ -174,9 +173,9 @@ class RecipeDetailFragment : Fragment() {
 
         binding.nameAuthorTV.text = formatNameToNameUpper(recipe.createdBy.name)
 
-        if(recipe.createdBy.verified){
+        if (recipe.createdBy.verified) {
             binding.verifyUserIV.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.verifyUserIV.visibility = View.INVISIBLE
         }
 
@@ -207,30 +206,29 @@ class RecipeDetailFragment : Fragment() {
         }
 
 
-
         /**
          *  Navigation
          * */
 
         // go to Comments
         binding.commentsCV.setOnClickListener {
-            findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment,Bundle().apply {
+            findNavController().navigate(R.id.action_receitaDetailFragment_to_receitaCommentsFragment, Bundle().apply {
                 putInt("recipe_id", recipe.id)
                 putInt("user_id", recipe.id)
             })
         }
 
         // go to creator profile
-        binding.profileAuthorCV.setOnClickListener{
-            findNavController().navigate(R.id.action_receitaDetailFragment_to_profileFragment,Bundle().apply {
-                putInt("user_id",recipe.createdBy.id)
+        binding.profileAuthorCV.setOnClickListener {
+            findNavController().navigate(R.id.action_receitaDetailFragment_to_profileFragment, Bundle().apply {
+                putInt("user_id", recipe.createdBy.id)
             })
         }
 
         // go to create calender entry
         binding.calenderIB.setOnClickListener {
-            findNavController().navigate(R.id.action_receitaDetailFragment_to_newCalenderEntryFragment,Bundle().apply {
-                putParcelable("Recipe",recipe)
+            findNavController().navigate(R.id.action_receitaDetailFragment_to_newCalenderEntryFragment, Bundle().apply {
+                putParcelable("Recipe", recipe)
             })
         }
 
@@ -241,7 +239,7 @@ class RecipeDetailFragment : Fragment() {
         // enables back from comments
         binding.fragmentRecipeDetailViewPager.isSaveEnabled = false
 
-        if (binding.fragmentRecipeDetailTabLayout.tabCount != 2){
+        if (binding.fragmentRecipeDetailTabLayout.tabCount != 2) {
             binding.fragmentRecipeDetailTabLayout.addTab(binding.fragmentRecipeDetailTabLayout.newTab().setText("Recipe"))
             binding.fragmentRecipeDetailTabLayout.addTab(binding.fragmentRecipeDetailTabLayout.newTab().setText("Nutrition"))
         }
@@ -311,7 +309,7 @@ class RecipeDetailFragment : Fragment() {
 
     }
 
-    private fun updateLikeUI(recipe: Recipe){
+    private fun updateLikeUI(recipe: Recipe) {
 
         binding.numberLikeTV.text = recipe.likes.toString()
 
@@ -324,10 +322,10 @@ class RecipeDetailFragment : Fragment() {
 
     private fun updateSaveUI(recipe: Recipe) {
 
-            if (recipe.saved)
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
-            else
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
+        if (recipe.saved)
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
+        else
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
 
     }
 
@@ -375,7 +373,7 @@ class RecipeDetailFragment : Fragment() {
         }
 
         recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let {result ->
+            response.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
 
@@ -394,7 +392,7 @@ class RecipeDetailFragment : Fragment() {
         // save function
 
         recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let {result ->
+            response.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
 
@@ -413,7 +411,7 @@ class RecipeDetailFragment : Fragment() {
         }
 
         recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let {result ->
+            response.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
                         result.data?.let { updateSaveUI(it) }
@@ -449,8 +447,7 @@ class RecipeDetailFragment : Fragment() {
                             } catch (_: IndexOutOfBoundsException) {
                             }
 
-                        }
-                        else{
+                        } else {
                             binding.userComent1IV.visibility = View.GONE
                             binding.userComent2IV.visibility = View.INVISIBLE
                         }
@@ -480,13 +477,10 @@ class RecipeDetailFragment : Fragment() {
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
-    companion object{
+    companion object {
         var userPortion: Float = -1F
         var recipePortion: Float = -1F
     }
-
-
-
 
 
 }
