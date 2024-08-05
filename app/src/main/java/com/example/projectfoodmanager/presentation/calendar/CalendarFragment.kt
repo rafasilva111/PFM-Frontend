@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -18,9 +19,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.databinding.FragmentCalendarBinding
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.currentDate
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.daysInMonthArray
@@ -38,29 +38,32 @@ import com.example.projectfoodmanager.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import javax.inject.Inject
-import java.time.temporal.ChronoUnit
-import kotlin.math.floor
-@AndroidEntryPoint
-class CalendarFragment : Fragment() {
 
-    // binding
+@AndroidEntryPoint
+class CalendarFragment : Fragment(),ImageLoadingListener {
+
+    /** Binding */
     lateinit var binding: FragmentCalendarBinding
 
-    // viewModels
+    /** ViewModels */
     private val userViewModel by activityViewModels<UserViewModel>()
     private val calenderViewModel by activityViewModels<CalendarViewModel>()
 
-    // constants
+    /** Constants */
     val TAG: String = "CalenderFragment"
 
-    private val calenderEntriesToBeChecked: MutableList<CalenderEntryDTO> = mutableListOf()
+    private val calenderEntriesToBeChecked: MutableList<Int> = mutableListOf()
+    private val calenderEntriesToBeUnchecked: MutableList<Int> = mutableListOf()
 
-    // injects
+    private lateinit var manager: LinearLayoutManager
+
+    /** Injections */
 
     @Inject
     lateinit var sharedPreference: SharedPreference
 
-    //adapters
+    /** Adapters */
+
     private val adapterCalMonth by lazy {
         CalendarAdapter(
             daysInMonthArray(
@@ -69,16 +72,16 @@ class CalendarFragment : Fragment() {
             onItemClicked = { selectedDate ->
                 binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
 
-                val calenderEntry = sharedPreference.getEntryOnCalendar(selectedDate.atStartOfDay())
+                val calenderEntries = sharedPreference.getEntryOnCalendar(selectedDate.atStartOfDay())
                 // check if any entry in shared if not try getting it from the server
-                if (calenderEntry == null)
+                if (calenderEntries == null)
                     calenderViewModel.getEntryOnCalendar(selectedDate.atStartOfDay())
                 else{
                     // update calender entrys list
-                    adapterEntry.updateList(calenderEntry)
+                    adapterEntry.setList(calenderEntries)
                     binding.nRegistersTV.text= adapterEntry.itemCount.toString()
                     // show no recipes text
-                    if (calenderEntry.isEmpty())
+                    if (calenderEntries.isEmpty())
                         binding.emptyRegTV.show()
                     else {
                         binding.emptyRegTV.hide()
@@ -96,22 +99,33 @@ class CalendarFragment : Fragment() {
                 selectedDate
             ),
             onItemClicked = { selectedDate ->
-                //TODO: Confirmar com o rafa
                 binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
 
                 val calenderEntry = sharedPreference.getEntryOnCalendar(selectedDate.atStartOfDay())
+
+                binding.calEntrysRV.visibility = View.INVISIBLE
+                binding.progressBar.show()
+
+                // Update Calender checked entries
+                if (calenderEntriesToBeChecked.isNotEmpty() or calenderEntriesToBeUnchecked.isNotEmpty())
+                    calenderViewModel.checkCalenderEntries(
+                        CalenderEntryCheckListRequest(
+                            checked = calenderEntriesToBeChecked,
+                            unchecked = calenderEntriesToBeUnchecked
+                        )
+                    )
+
                 // check if any entry in shared if not try getting it from the server
                 if (calenderEntry == null)
                     calenderViewModel.getEntryOnCalendar(selectedDate.atStartOfDay())
                 else{
                     // update calender entrys list
-                    adapterEntry.updateList(calenderEntry)
+                    adapterEntry.setList(calenderEntry)
+                    binding.progressBar.hide()
+
                     // show no recipes text
-                    if (calenderEntry.isEmpty())
-                        binding.emptyRegTV.show()
-                    else {
-                        binding.emptyRegTV.hide()
-                    }
+                    binding.emptyRegTV.isVisible = calenderEntry.isEmpty()
+
                 }
             }
         )
@@ -122,19 +136,53 @@ class CalendarFragment : Fragment() {
             onItemClicked = { _, item ->
 
                 findNavController().navigate(R.id.action_calendarFragment_to_calendarEntryDetailFragment,Bundle().apply {
-                    putParcelable("CalenderEntry",item)
+                    putParcelable("calendar_entry",item)
                 })
                 changeMenuVisibility(false,activity)
             },
             onDoneClicked = { checkDone, item->
-                if (CalenderEntryDTO(id = item.id,checkedDone = !checkDone) !in calenderEntriesToBeChecked)
-                    calenderEntriesToBeChecked.add(CalenderEntryDTO(id = item.id, checkedDone = checkDone))
-                else
-                    calenderEntriesToBeChecked.remove(CalenderEntryDTO(id = item.id, checkedDone = !checkDone))
-            }
+
+
+                if (checkDone){
+
+                    if(item.id in calenderEntriesToBeUnchecked)
+                        calenderEntriesToBeUnchecked.remove(item.id)
+
+                    calenderEntriesToBeChecked.add(item.id)
+                }
+                else{
+                    if(item.id in calenderEntriesToBeChecked)
+                        calenderEntriesToBeChecked.remove(item.id)
+
+                    calenderEntriesToBeUnchecked.add(item.id)
+                }
+
+
+            },
+            this
         )
     }
 
+
+    /** Interfaces */
+
+    override fun onImageLoaded() {
+        requireActivity().runOnUiThread {
+            adapterEntry.imagesLoaded++
+            if (adapterEntry.imagesLoaded >= manager.findLastCompletelyVisibleItemPosition()) {
+                binding.progressBar.hide()
+                binding.calEntrysRV.visibility = View.VISIBLE
+            }
+            else{
+                binding.calEntrysRV.visibility = View.INVISIBLE
+            }
+
+        }
+    }
+
+    /**
+     *  Android LifeCycle
+     * */
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -157,26 +205,25 @@ class CalendarFragment : Fragment() {
 
     }
 
-
-
-
-
-    /**
-     *  Android LifeCycle
-     * */
-
     override fun onStart() {
 
         loadUI()
         super.onStart()
     }
 
-
     override fun onPause() {
 
-        // delete notifications
-        if (calenderEntriesToBeChecked.isNotEmpty())
-            calenderViewModel.checkCalenderEntries(CalenderEntryListUpdate(calenderEntryStateList=calenderEntriesToBeChecked))
+        if (calenderEntriesToBeChecked.isNotEmpty() or calenderEntriesToBeUnchecked.isNotEmpty())
+            calenderViewModel.checkCalenderEntries(
+                CalenderEntryCheckListRequest(
+                    checked = calenderEntriesToBeChecked,
+                    unchecked = calenderEntriesToBeUnchecked
+                )
+            )
+
+        binding.calEntrysRV.visibility = View.INVISIBLE
+        binding.progressBar.show()
+
         super.onPause()
     }
 
@@ -191,17 +238,16 @@ class CalendarFragment : Fragment() {
 
         binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
 
-        binding.calEntrysRV.layoutManager = LinearLayoutManager(activity)
+        manager = LinearLayoutManager(activity)
+        binding.calEntrysRV.layoutManager = manager
         binding.calEntrysRV.adapter = adapterEntry
-
+        binding.calEntrysRV.itemAnimator = null
 
         /** Check for user portion */
         if( sharedPreference.isFirstPortionAsk()) {
             sharedPreference.saveFirstPortionAsk()
             askUserPortionPreference()
         }
-
-
 
 
         /**
@@ -218,11 +264,9 @@ class CalendarFragment : Fragment() {
             setMonthView()
         }
 
-
         binding.weeklyViewBtn.setOnClickListener {
             setWeeklyView()
         }
-
 
         binding.previousBtn.setOnClickListener {
             currentDate = if (weeklyViewSelected)
@@ -257,6 +301,7 @@ class CalendarFragment : Fragment() {
         changeTheme(false, activity, requireContext())
         changeMenuVisibility(true,activity)
 
+
         // set Calendar View
         if (weeklyViewSelected)
             setWeeklyView()
@@ -271,10 +316,83 @@ class CalendarFragment : Fragment() {
                 binding.emptyRegTV.show()
             } else {
                 binding.emptyRegTV.hide()
-                adapterEntry.updateList(it)
+                adapterEntry.setList(it)
             }
 
             binding.nRegistersTV.text = adapterEntry.itemCount.toString()
+        }
+        //todo else vai buscar a net
+    }
+
+    private fun bindObservers() {
+        calenderViewModel.getEntryOnCalendarLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        binding.progressBar.hide()
+                        binding.calEntrysRV.show()
+
+                        adapterEntry.setList(it.data!!.result)
+
+                        binding.nRegistersTV.text = it.data.result.size.toString()
+
+                        if (it.data.result.size == 0){
+                            binding.emptyRegTV.show()
+                        }
+
+
+                    }
+                    is NetworkResult.Error -> {
+                        toast(it.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.progressBar.show()
+                        binding.calEntrysRV.hide()
+                        binding.emptyRegTV.hide()
+
+                    }
+                }
+            }
+        }
+
+        calenderViewModel.patchCalendarEntryLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+            networkResultEvent.getContentIfNotHandled()?.let {
+                when (it) {
+                    is NetworkResult.Success -> {
+
+                        if(it.data!!.checkedDone){
+                            toast("Refeição consumida")
+                        }else{
+                            toast("Refeição não consumida")
+                        }
+
+                    }
+                    is NetworkResult.Error -> {
+                        toast(it.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        //binding.progressBar.show()
+
+                    }
+                }
+            }
+        }
+
+        userViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        toast(getString(R.string.DATA_UPDATED))
+                        result.data?.let { sharedPreference.saveUserSession(it) }
+                    }
+                    is NetworkResult.Error -> {
+
+                    }
+                    is NetworkResult.Loading -> {
+
+                    }
+                }
+            }
         }
     }
 
@@ -335,7 +453,7 @@ class CalendarFragment : Fragment() {
         binding.weeklyViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color)))
 
         binding.calMonthRV.visibility = View.VISIBLE
-        binding.calWeeklyRV.visibility = View.INVISIBLE
+        binding.calWeeklyRV.visibility = View.GONE
 
 
         currentDate = selectedDate
@@ -361,7 +479,7 @@ class CalendarFragment : Fragment() {
             ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.grayLightBTN))
         binding.monthViewBtn.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(this.requireContext(), R.color.main_color)))
 
-        binding.calMonthRV.visibility = View.INVISIBLE
+        binding.calMonthRV.visibility = View.GONE
         binding.calWeeklyRV.visibility = View.VISIBLE
 
 
@@ -395,79 +513,6 @@ class CalendarFragment : Fragment() {
 
 
 
-    }
-
-    private fun bindObservers() {
-        calenderViewModel.getEntryOnCalendarLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        binding.progressBar.hide()
-                        binding.calEntrysRV.show()
-
-                        adapterEntry.updateList(it.data!!.result)
-
-                        binding.nRegistersTV.text = it.data.result.size.toString()
-
-                        if (it.data.result.size == 0){
-                            binding.emptyRegTV.show()
-                        }
-
-
-                    }
-                    is NetworkResult.Error -> {
-                        toast(it.message.toString(), type = ToastType.ERROR)
-                    }
-                    is NetworkResult.Loading -> {
-                        binding.progressBar.show()
-                        binding.calEntrysRV.hide()
-                        binding.emptyRegTV.hide()
-
-                    }
-                }
-            }
-        }
-
-
-        calenderViewModel.patchCalendarEntryLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
-                    is NetworkResult.Success -> {
-
-                        if(it.data!!.checkedDone){
-                            toast("Refeição consumida")
-                        }else{
-                            toast("Refeição não consumida")
-                        }
-
-                    }
-                    is NetworkResult.Error -> {
-                        toast(it.message.toString(), type = ToastType.ERROR)
-                    }
-                    is NetworkResult.Loading -> {
-                        //binding.progressBar.show()
-
-                    }
-                }
-            }
-        }
-
-        userViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-                        toast(getString(R.string.DATA_UPDATED))
-                        result.data?.let { sharedPreference.saveUserSession(it) }
-                    }
-                    is NetworkResult.Error -> {
-
-                    }
-                    is NetworkResult.Loading -> {
-
-                    }
-                }
-            }
-        }
     }
 
     /**

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.notification.NotificationList
@@ -193,17 +194,20 @@ class UserRepositoryImp @Inject constructor(
     override suspend fun logoutUser() {
         _userLogoutResponseLiveData.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "logoutUser: making login request.")
-        val response =remoteDataSource.logoutUser()
+        val response = remoteDataSource.logoutUser(RefreshToken(tokenManager.getRefreshToken()!!))
 
         if (response.isSuccessful && response.code() == 204) {
-            Log.i(TAG, "logoutUser: request made was sucessfull.")
+            Log.i(TAG, "logoutUser | request made was sucessfull.")
             sharedPreference.deleteSession()
             _userLogoutResponseLiveData.postValue(Event(NetworkResult.Success(response.code().toString())))
         }
         else if(response.errorBody()!=null){
-            Log.i(TAG, "logoutUser: request made was not sucessfull."+response.errorBody()!!.charStream().readText())
-            val errorObj = response.errorBody()!!.charStream().readText()
-            _userLogoutResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+            Log.w(TAG, "logoutUser | request made was unsuccessful.")
+            val errorMessage = response.errorBody()!!.charStream().readText()
+            Log.w(TAG, "logoutUser | errorMessage: $errorMessage")
+            val errorObj = gson.fromJson(errorMessage, ValidationError::class.java)
+            Log.w(TAG, "logoutUser | errorMessage: $errorObj")
+            _userLogoutResponseLiveData.postValue(Event(NetworkResult.Error(error = errorObj)))
         }
         else{
             _userLogoutResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))

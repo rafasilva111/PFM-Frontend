@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.databinding.FragmentSessionProfileBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
@@ -175,6 +177,29 @@ class UserSessionFragment : Fragment() {
         toast(String.format(resources.getString(R.string.txt_error_message, error)))
     }
 
+    private fun showValidationErrors(error: ValidationError) {
+
+        var stringBuilder = ""
+        val errorsFlat = mutableListOf<String>()
+
+        for ((type,messages) in error.errors.entries){
+            stringBuilder +="Error: $type\n"
+            for (message in messages){
+                stringBuilder +="$message\n"
+                errorsFlat.add(stringBuilder)
+            }
+            stringBuilder+="\n"
+        }
+
+        if (ErrorTypes.INTERNAL.code in error.errors && "Token is blacklisted" in error.errors[ErrorTypes.INTERNAL.code]!!){
+            deleteSessionData()
+            navigateToLoginView()
+        }
+
+
+        toast(stringBuilder,ToastType.ERROR)
+    }
+
     private fun bindObservers() {
         userViewModel.userResponseLiveData.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { result ->
@@ -197,14 +222,12 @@ class UserSessionFragment : Fragment() {
             event.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
-                        tokenManager.deleteSession()
-                        sharedPreference.deleteSession()
                         toast("Logout feito com sucesso!")
-                        findNavController().navigate(R.id.action_profile_to_login)
-                        changeMenuVisibility(false, activity)
+                        deleteSessionData()
+                        navigateToLoginView()
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
+                        showValidationErrors(result.error!!)
                     }
                     is NetworkResult.Loading -> {
                         //binding.progressBar.isVisible = true
@@ -236,6 +259,15 @@ class UserSessionFragment : Fragment() {
 
     }
 
+    private fun navigateToLoginView() {
+        findNavController().navigate(R.id.action_profile_to_login)
+        changeMenuVisibility(false, activity)
+    }
+
+    private fun deleteSessionData() {
+        tokenManager.deleteSession()
+        sharedPreference.deleteSession()
+    }
 
 
 }

@@ -3,9 +3,8 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
@@ -97,12 +96,12 @@ class CalenderRepositoryImp @Inject constructor(
     override val createEntryOnCalender: LiveData<Event<NetworkResult<CalenderEntry>>>
         get() = _functionCreateEntryOnCalender
 
-    override suspend fun createEntryOnCalender(recipeId: Int,comment: CalenderEntryDTO) {
+    override suspend fun createEntryOnCalender(comment: CalenderEntryRequest) {
         handleApiResponse(
             _functionCreateEntryOnCalender,
             saveSharedPreferences = true
         ) {
-            remoteDataSource.createCalenderEntry(recipeId,comment)
+            remoteDataSource.createCalenderEntry(comment)
         }
     }
 
@@ -111,7 +110,6 @@ class CalenderRepositoryImp @Inject constructor(
         get() = _functionGetEntryOnCalender
 
     override suspend fun getEntryOnCalender(date: LocalDateTime) {
-
         handleApiResponse(
             _functionGetEntryOnCalender
         ) {
@@ -168,7 +166,7 @@ class CalenderRepositoryImp @Inject constructor(
         get() = _functionPatchCalenderEntry
 
 
-    override suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest) {
+    override suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryRequest) {
         _functionPatchCalenderEntry.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
 
@@ -196,16 +194,16 @@ class CalenderRepositoryImp @Inject constructor(
 
 
 
-    override suspend fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate) {
+    override suspend fun checkCalenderEntries(calenderEntryCheckListRequest: CalenderEntryCheckListRequest) {
         _checkCalenderEntries.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "loginUser: making addLikeOnRecipe request.")
 
-        val response =remoteDataSource.checkCalenderEntries(calenderEntryListUpdate)
+        val response =remoteDataSource.checkCalenderEntries(calenderEntryCheckListRequest)
 
         if (response.isSuccessful) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             // todo update shared preferences
-            sharedPreference.updateCalenderEntriesState(calenderEntryListUpdate)
+            sharedPreference.updateCalenderEntriesState(calenderEntryCheckListRequest)
             _checkCalenderEntries.postValue(Event(NetworkResult.Success(response.isSuccessful
             )))
         }

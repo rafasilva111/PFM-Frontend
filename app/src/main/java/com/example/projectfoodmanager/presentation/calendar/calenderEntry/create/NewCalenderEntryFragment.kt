@@ -1,14 +1,14 @@
 package com.example.projectfoodmanager.presentation.calendar.calenderEntry.create
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.text.format.DateFormat.is24HourFormat
-import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.NumberPicker
+import android.widget.SearchView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,11 +18,9 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.toRecipeSimplifiedList
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBinding
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
 import com.example.projectfoodmanager.util.*
@@ -55,33 +53,32 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
     /** Constants */
     private val TAG: String = "NewCalenderEntryFragment"
-    private var snapHelper: SnapHelper = PagerSnapHelper()
-    lateinit var manager: LinearLayoutManager
-
-
-    lateinit var user: User
-    private var currentTabSelected :Int = 0
+    private var currentTabSelected: Int = SelectedTab.SAVED
 
     private var objRecipe: Recipe? = null
-    private var recipeListed: MutableList<RecipeSimplified> = mutableListOf()
-    private lateinit var scrollListener: RecyclerView.OnScrollListener
+    private var chosenDate: Long? = null
 
-    private var chosenDate: Long?=null
 
-    private lateinit var tags : List<String>
-    private lateinit var portions : List<String>
-
-    private var checkedTag: Int= -1
-    private var checkedPortion: Int= -1
-
+    // Dialogs
     private lateinit var tagDialog: AlertDialog
+    private lateinit var tags: List<String>
+    private var selectedTag: Int = -1
+
     private lateinit var dateDialog: MaterialDatePicker<Long>
     private lateinit var timeDialog: MaterialTimePicker
     private lateinit var portionDialog: AlertDialog
+    private lateinit var portions: List<String>
+    private var checkedPortion: Int = -1
+
     private lateinit var customPortionNumberDialog: AlertDialog
 
+    // Search Function
     private var newSearch: Boolean = false
 
+    // Adapter
+    private var snapHelper: SnapHelper = PagerSnapHelper()
+    lateinit var manager: LinearLayoutManager
+    private lateinit var scrollListener: RecyclerView.OnScrollListener
 
     // Pagination
     private var noMoreRecipesMessagePresented = false
@@ -91,6 +88,7 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
     @Inject
     lateinit var sharedPreference: SharedPreference
+
     @Inject
     lateinit var tokenManager: TokenManager
 
@@ -99,27 +97,54 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
     private val adapter by lazy {
         NewCalenderEntryFragmentListingAdapter(
+
             onItemClicked = { _, item ->
-                findNavController().navigate(R.id.action_newCalenderEntryFragment_to_receitaDetailFragment,Bundle().apply {
-                    putParcelable("Recipe",item)
+                findNavController().navigate(R.id.action_newCalenderEntryFragment_to_receitaDetailFragment, Bundle().apply {
+                    putParcelable("recipe", item)
                 })
+            },
+            onLikeClicked = { recipe, like ->
+
+
+                if (like) {
+                    recipeViewModel.addLikeOnRecipe(recipe.id)
+                } else {
+                    recipeViewModel.removeLikeOnRecipe(recipe.id)
+                }
+
+
+            },
+            onSaveClicked = { recipe, saved ->
+
+                if (saved) {
+                    recipeViewModel.addSaveOnRecipe(recipe.id)
+                } else {
+                    recipeViewModel.removeSaveOnRecipe(recipe.id)
+                }
+
             },
             this
         )
     }
 
+    /** Interfaces */
+
     override fun onImageLoaded() {
         requireActivity().runOnUiThread {
             adapter.imagesLoaded++
-
-            if (adapter.imagesLoaded == adapter.imagesToLoad) {
-                binding.favoritesRV.visibility = View.VISIBLE
+            if (adapter.imagesLoaded >= adapter.imagesToLoad) {
                 binding.progressBar.hide()
-
+                binding.favoritesRV.visibility = View.VISIBLE
+            } else {
+                binding.favoritesRV.visibility = View.INVISIBLE
             }
 
         }
     }
+
+    /**
+     *  Android LifeCycle
+     * */
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -127,16 +152,18 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
     ): View {
 
 
-            if (!this::binding.isInitialized) {
-                binding = FragmentNewCalenderEntryBinding.inflate(layoutInflater)
-            }
-
-            return binding.root
+        if (!this::binding.isInitialized) {
+            binding = FragmentNewCalenderEntryBinding.inflate(layoutInflater)
         }
+
+        return binding.root
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
-        tags =  resources.getStringArray(R.array.tagEntryCalender_array).toList()
+        tags = resources.getStringArray(R.array.tagEntryCalender_items).toList()
         portions = resources.getStringArray(R.array.portionEntryCalender_array).toList()
 
         objRecipe = if (Build.VERSION.SDK_INT >= 33) {
@@ -149,14 +176,24 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
         super.onCreate(savedInstanceState)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUI()
         super.onViewCreated(view, savedInstanceState)
         bindObservers()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    override fun onDestroy() {
+
+        /** Reset navigation back color */
+        requireActivity().window.navigationBarColor = requireContext().getColor(R.color.main_color)
+
+        super.onDestroy()
+    }
+
+    /**
+     *  General
+     * */
+
     private fun setUI() {
 
         /**
@@ -172,6 +209,7 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
         manager.reverseLayout = false
         binding.favoritesRV.layoutManager = manager
         binding.favoritesRV.adapter = adapter
+        binding.favoritesRV.itemAnimator = null
         snapHelper.attachToRecyclerView(binding.favoritesRV)
 
         binding.dateValTV.text = selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
@@ -183,11 +221,10 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
         /** If we receive recipe as argument*/
 
-        if (objRecipe == null){
+        if (objRecipe == null) {
             updateView(currentTabSelected)
-        }
-        else{
-            updateView(3)
+        } else {
+            updateView(SelectedTab.ALL)
         }
 
         /**
@@ -198,10 +235,10 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
         /** Tag Dialog */
         tagDialog = MaterialAlertDialogBuilder(requireActivity())
             .setTitle(getString(R.string.COMMON_DIALOG_CATEGORY_TITLE))
-            .setSingleChoiceItems(ArrayAdapter(requireContext(), R.layout.item_checked_text_view, tags), checkedTag) { dialog, which ->
+            .setSingleChoiceItems(ArrayAdapter(requireContext(), R.layout.item_checked_text_view, tags), selectedTag) { dialog, which ->
                 // Handle the item selection here
-                checkedTag = which
-                binding.tagValTV.text = tags[checkedTag]
+                selectedTag = which
+                binding.tagValTV.text = tags[selectedTag]
                 dialog.dismiss()
             }
             .setNegativeButton(getString(R.string.COMMON_DIALOG_CANCEL)) { dialog, _ ->
@@ -209,22 +246,22 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
             }.create()
 
         /** Date Dialog */
-        dateDialog =MaterialDatePicker.Builder.datePicker()
-                .setTitleText(getString(R.string.COMMON_DIALOG_DATE_TITLE))
-                .setSelection(
-                    if (chosenDate == null )
-                        selectedDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
-                    else
-                        chosenDate
-                )
-                .build()
+        dateDialog = MaterialDatePicker.Builder.datePicker()
+            .setTitleText(getString(R.string.COMMON_DIALOG_DATE_TITLE))
+            .setSelection(
+                if (chosenDate == null)
+                    selectedDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+                else
+                    chosenDate
+            )
+            .build()
 
 
         dateDialog.addOnCancelListener {
             dateDialog.dismiss()
         }
 
-        dateDialog.addOnPositiveButtonClickListener {selection->
+        dateDialog.addOnPositiveButtonClickListener { selection ->
             chosenDate = selection
             val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
@@ -236,13 +273,13 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
         /** Time Dialog */
         val timeNow = LocalTime.now()
 
-        timeDialog =MaterialTimePicker.Builder()
-                    .setTimeFormat(if (is24HourFormat(context)) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H)
-                    .setHour(timeNow.hour)
-                    .setMinute(timeNow.minute)
-                    .setTitleText(getString(R.string.COMMON_DIALOG_TIME_TITLE))
+        timeDialog = MaterialTimePicker.Builder()
+            .setTimeFormat(if (is24HourFormat(context)) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H)
+            .setHour(timeNow.hour)
+            .setMinute(timeNow.minute)
+            .setTitleText(getString(R.string.COMMON_DIALOG_TIME_TITLE))
 
-                    .build()
+            .build()
 
         timeDialog.addOnPositiveButtonClickListener {
             binding.timeValTV.text = getString(
@@ -260,18 +297,18 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
         portionDialog = MaterialAlertDialogBuilder(requireActivity())
             .setTitle(getString(R.string.COMMON_DIALOG_PORTION_TITLE))
-            .setSingleChoiceItems(ArrayAdapter(requireContext(), R.layout.item_checked_text_view, portions), checkedTag) { dialog, which ->
+            .setSingleChoiceItems(ArrayAdapter(requireContext(), R.layout.item_checked_text_view, portions), selectedTag) { dialog, which ->
 
-                when (which){
+                when (which) {
                     0 -> {
-                        checkedPortion = user.userPortion
-                        binding.portionValTv.text = getString(R.string.FRAGMENT_NEW_CALENDER_ENTRY,checkedPortion)
+                        checkedPortion = sharedPreference.getUserSession().userPortion
+                        binding.portionValTv.text = getString(R.string.FRAGMENT_NEW_CALENDER_ENTRY, checkedPortion)
                     }
                     1 -> {
                         checkedPortion = 1
-                        binding.portionValTv.text = getString(R.string.FRAGMENT_NEW_CALENDER_ENTRY,checkedPortion)
+                        binding.portionValTv.text = getString(R.string.FRAGMENT_NEW_CALENDER_ENTRY, checkedPortion)
                     }
-                    2 ->{
+                    2 -> {
                         customPortionNumberDialog.show()
                     }
                 }
@@ -292,7 +329,7 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
             .setCancelable(false)
             .setPositiveButton(getString(R.string.COMMON_DIALOG_SELECT)) { dialog, _ ->
                 checkedPortion = numberPicker.value
-                binding.portionValTv.text = getString(R.string.FRAGMENT_NEW_CALENDER_ENTRY,checkedPortion)
+                binding.portionValTv.text = getString(R.string.FRAGMENT_NEW_CALENDER_ENTRY, checkedPortion)
 
                 dialog.dismiss()
             }
@@ -338,142 +375,105 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
         binding.completeRegIB.setOnClickListener {
 
-            val (valid,message) = validation()
+            val (valid, message) = validation()
             if (valid) {
-                val (recipe_id,calenderEntryRequest) = getCalenderEntryRequest()
-                calendarViewModel.createEntryOnCalendar(recipe_id,calenderEntryRequest)
-            }
-            else{
+                calendarViewModel.createEntryOnCalendar(getCalenderEntryRequest())
+            } else {
                 toast(message, ToastType.ALERT)
             }
         }
-    }
 
 
-    private fun updateView(currentTabSelected: Int) {
+        /**
+         * Search filter
+         */
 
+        binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
 
-        when(currentTabSelected){
-            SelectedTab.SAVED -> {
-                // Saved
-                // General
-                binding.previousBtn.visibility = View.GONE
+            override fun onQueryTextChange(text: String?): Boolean {
+                if (text != null && text != "") {
+                    // importante se não não funciona
+                    currentPage = 1
+                    newSearch = true
 
-                binding.listingTV.text = "Guardados"
-                binding.listingIV.setImageResource(R.drawable.ic_favorito_active)
+                    // debouncer
+                    val handler = Handler()
+                    handler.postDelayed({
+                        if (searchString == text) {
+                            // verifica se tag está a ser usada se não pesquisa a string nas tags da receita
 
+                            recipeViewModel.getRecipes(
+                                page = currentPage,
+                                pageSize = defaultPageSize,
+                                searchString = searchString
+                            )
 
-                // List
-                val recipes = sharedPreference.getUserRecipesBackgroundSavedRecipes()
-                if (recipes.isEmpty()){
-                    binding.tvNoRecipes.visibility = View.VISIBLE
-                    binding.tvNoRecipes.text = getString(R.string.no_recipes_saved)
+                        }
+                    }, 400)
+
+                    searchString = text.lowercase()
+
+                } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
+                else if (searchString != "" && text == "") {
+                    searchString = text
+                    currentPage = 1
+
+                    recipeViewModel.getRecipes(
+                        page = currentPage,
+                        pageSize = defaultPageSize,
+                        searchString = searchString
+                    )
+                } else {
+                    searchString = ""
                 }
-                else
-                    binding.tvNoRecipes.visibility = View.INVISIBLE
 
-                recipeListed = recipes.toRecipeSimplifiedList()
-                adapter.setList(recipeListed)
-
+                //slowly move to position 0
+                binding.favoritesRV.layoutManager?.smoothScrollToPosition(binding.favoritesRV, null, 0)
+                return true
             }
-            SelectedTab.CREATED ->{
-                // Created
-                // General
-                binding.previousBtn.visibility = View.VISIBLE
-                binding.nextBtn.visibility = View.VISIBLE
+        })
 
-                binding.listingTV.text = "Criados"
-                // todo rui falta aqui um icon para os criados
-                binding.listingIV.setImageResource(R.drawable.ic_favorito_active)
-
-
-                // List
-                val recipes = sharedPreference.getUserRecipesBackgroundCreatedRecipes()
-                if (recipes.isEmpty()){
-                    binding.tvNoRecipes.visibility = View.VISIBLE
-                    binding.tvNoRecipes.text = getString(R.string.no_recipes_created)
-                }
-                else
-                    binding.tvNoRecipes.visibility = View.INVISIBLE
-
-
-                recipeListed = recipes.toRecipeSimplifiedList()
-                adapter.setList(recipeListed)
-
-            }
-            SelectedTab.LIKED ->{
-                // Liked
-                // General
-                binding.listingTV.text = "Favoritos"
-                binding.listingIV.setImageResource(R.drawable.ic_like_active)
-
-                binding.previousBtn.visibility = View.VISIBLE
-                binding.nextBtn.visibility = View.VISIBLE
-
-
-                // List
-                binding.favoritesRV.visibility = View.INVISIBLE // prevent image flicker
-                binding.tvNoRecipes.visibility = View.GONE
-                binding.progressBar.show()
-
-                recipeViewModel.getLikedRecipes(page = 1, pageSize = defaultPageSize, searchString = searchString)
-
-            }
-            SelectedTab.ALL ->{
-                // All Recipes
-                // General
-                binding.listingTV.text = "Todas as receitas"
-                binding.listingIV.setImageResource(R.drawable.ic_baseline_menu_book_24) // todo rui falta aqui um icon para todas as receitas
-
-                binding.nextBtn.visibility = View.GONE
-
-
-                // List
-                binding.favoritesRV.visibility = View.INVISIBLE// prevent image flicker
-                binding.tvNoRecipes.visibility = View.GONE
-                binding.progressBar.show()
-
-                recipeViewModel.getRecipes(page = 1, pageSize = defaultPageSize, searchString = searchString)
-
-            }
-        }
-    }
-
-    private fun validation():Pair<Boolean,String> {
-
-        val localDateTime  = LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))
-
-        if (recipeListed.isEmpty())
-            return false to "No recipe selected."
-
-        if (localDateTime < LocalDateTime.now())
-            return false to "Date should be before today."
-
-        if (binding.tagValTV.text == getString(R.string.none))
-            return false to "Tag cant be none."
-
-        return true to ""
-
-    }
-
-    private fun getCalenderEntryRequest(): Pair<Int, CalenderEntryDTO> {
-        val localDateTime  = LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))
-        return recipeListed[manager.findFirstCompletelyVisibleItemPosition()].id to CalenderEntryDTO(
-            tag = binding.tagValTV.text.toString().uppercase(),
-            portion=checkedPortion,
-            realizationDate = formatLocalTimeToServerTime(localDateTime)
-        )
     }
 
     private fun bindObservers() {
 
+        /**
+         * Calendar
+         */
 
+        calendarViewModel.createEntryOnCalendarLiveData.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        binding.detailsPanel.show()
+                        binding.progressBar.hide()
+                        toast("Nova entrada no calendario adicionada.")
+                        findNavController().navigateUp()
+
+                    }
+                    is NetworkResult.Error -> {
+                        binding.detailsPanel.show()
+                        binding.progressBar.hide()
+                        toast(result.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.detailsPanel.hide()
+                        binding.progressBar.show()
+
+                    }
+                }
+            }
+        }
 
         /**
          * Recipes
          */
 
-        recipeViewModel.functionGetRecipes.observe(viewLifecycleOwner
+        recipeViewModel.functionGetRecipes.observe(
+            viewLifecycleOwner
         ) { response ->
             response.getContentIfNotHandled()?.let { result ->
                 when (result) {
@@ -496,11 +496,9 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
                         if (currentPage == 1) {
                             adapter.setList(result.data.result)
-                        }
-                        else {
+                        } else {
                             adapter.appendList(result.data.result)
                         }
-
 
 
                     }
@@ -509,12 +507,14 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
                         toast(result.message.toString(), type = ToastType.ERROR)
                     }
                     is NetworkResult.Loading -> {
+                        binding.progressBar.show()
                     }
                 }
             }
         }
 
-        recipeViewModel.functionGetLikedRecipes.observe(viewLifecycleOwner
+        recipeViewModel.functionGetLikedRecipes.observe(
+            viewLifecycleOwner
         ) { response ->
             response.getContentIfNotHandled()?.let { result ->
                 when (result) {
@@ -537,8 +537,7 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
                         if (currentPage == 1) {
                             adapter.setList(result.data.result)
-                        }
-                        else {
+                        } else {
                             adapter.appendList(result.data.result)
                         }
 
@@ -549,31 +548,6 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
                         toast(result.message.toString(), type = ToastType.ERROR)
                     }
                     is NetworkResult.Loading -> {
-
-                    }
-                }
-            }
-        }
-
-        /**
-         * Calendar
-         */
-
-        calendarViewModel.createEntryOnCalendarLiveData.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-                        binding.detailsPanel.show()
-                        binding.progressBar.hide()
-                        toast ("Nova entrada no calendario adicionada.")
-                        findNavController().navigateUp()
-
-                    }
-                    is NetworkResult.Error -> {
-                        Log.d(TAG, "bindObservers: ${result.message}.")
-                    }
-                    is NetworkResult.Loading -> {
-                        binding.detailsPanel.hide()
                         binding.progressBar.show()
 
                     }
@@ -581,18 +555,227 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
             }
         }
 
+        /**
+         * Like function
+         */
+
+
+        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+
+                        result.data?.let {
+                            adapter.updateItem(it)
+                        }
+
+
+                    }
+                    is NetworkResult.Error -> {
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        result.data?.let {
+                            if (currentTabSelected == SelectedTab.LIKED)
+                                adapter.removeItem(it)
+                            else
+                                adapter.updateItem(it)
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        toast(result.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        /**
+         * Save function
+         */
+
+        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+
+                        result.data?.let {
+                            adapter.updateItem(it)
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        toast(result.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        result.data?.let {
+                            if (currentTabSelected == SelectedTab.SAVED)
+                                adapter.removeItem(it)
+                            else
+                                adapter.updateItem(it)
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        toast(result.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+
     }
 
-    override fun onDestroy() {
+    /**
+     *  Functions
+     * */
 
-        /** Reset navigation back color */
-        requireActivity().window.navigationBarColor = requireContext().getColor(R.color.main_color)
+    private fun updateView(currentTabSelected: Int) {
 
-        super.onDestroy()
+
+        when (currentTabSelected) {
+            SelectedTab.SAVED -> {
+                // Saved
+                // General
+                binding.previousBtn.visibility = View.GONE
+
+                binding.listingTV.text = "Guardados"
+                binding.listingIV.setImageResource(R.drawable.ic_favorito_active)
+
+
+                // List
+                val recipes = sharedPreference.getUserRecipesBackgroundSavedRecipes()
+                if (recipes.isEmpty()) {
+                    binding.tvNoRecipes.visibility = View.VISIBLE
+                    binding.tvNoRecipes.text = getString(R.string.no_recipes_saved)
+                } else
+                    binding.tvNoRecipes.visibility = View.INVISIBLE
+
+                adapter.setList(recipes.toRecipeSimplifiedList())
+            }
+            SelectedTab.CREATED -> {
+                // Created
+                // General
+                binding.previousBtn.visibility = View.VISIBLE
+                binding.nextBtn.visibility = View.VISIBLE
+
+                binding.listingTV.text = "Criados"
+                // todo rui falta aqui um icon para os criados
+                binding.listingIV.setImageResource(R.drawable.ic_favorito_active)
+
+
+                // List
+                val recipes = sharedPreference.getUserRecipesBackgroundCreatedRecipes()
+                if (recipes.isEmpty()) {
+                    binding.tvNoRecipes.visibility = View.VISIBLE
+                    binding.tvNoRecipes.text = getString(R.string.no_recipes_created)
+                } else
+                    binding.tvNoRecipes.visibility = View.INVISIBLE
+
+
+                adapter.setList(recipes.toRecipeSimplifiedList())
+
+            }
+            SelectedTab.LIKED -> {
+                // Liked
+                // General
+                binding.listingTV.text = "Favoritos"
+                binding.listingIV.setImageResource(R.drawable.ic_like_active)
+
+                binding.previousBtn.visibility = View.VISIBLE
+                binding.nextBtn.visibility = View.VISIBLE
+
+
+                // List
+                binding.favoritesRV.visibility = View.INVISIBLE // prevent image flicker
+                binding.tvNoRecipes.visibility = View.GONE
+
+
+                recipeViewModel.getLikedRecipes(page = 1, pageSize = defaultPageSize, searchString = searchString)
+
+            }
+            SelectedTab.ALL -> {
+                // All Recipes
+                // General
+                binding.listingTV.text = "Todas as receitas"
+                binding.listingIV.setImageResource(R.drawable.ic_baseline_menu_book_24) // todo rui falta aqui um icon para todas as receitas
+
+                binding.nextBtn.visibility = View.GONE
+
+
+                // List
+                binding.favoritesRV.visibility = View.INVISIBLE// prevent image flicker
+                binding.tvNoRecipes.visibility = View.GONE
+
+
+                recipeViewModel.getRecipes(page = 1, pageSize = defaultPageSize, searchString = searchString)
+
+            }
+        }
+    }
+
+    private fun validation(): Pair<Boolean, String> {
+
+        val localDateTime = LocalDateTime.of(
+            LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+            LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm"))
+        )
+
+
+        if (manager.findFirstCompletelyVisibleItemPosition() == RecyclerView.NO_POSITION)
+            return false to "No recipe selected."
+
+        if (localDateTime < LocalDateTime.now())
+            return false to "Date should be before today."
+
+        if (binding.tagValTV.text == getString(R.string.none))
+            return false to "Tag cant be none."
+
+        if (checkedPortion == -1)
+            return false to "Portion cant be none."
+
+        return true to ""
+
+    }
+
+    private fun getCalenderEntryRequest(): CalenderEntryRequest {
+        return CalenderEntryRequest(
+            tag = resources.getStringArray(R.array.tagEntryCalender_values).toList()[selectedTag],
+            portion = checkedPortion,
+            realizationDate = formatLocalTimeToServerTime(
+                LocalDateTime.of(
+                    LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                    LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm"))
+                )
+            ),
+            recipe = adapter.getList()[manager.findFirstCompletelyVisibleItemPosition()].id
+        )
     }
 
     private fun setRecyclerViewScrollListener() {
-        scrollListener = object : RecyclerView.OnScrollListener(){
+        scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
 
@@ -601,12 +784,16 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
                     // if User is on the penultimate recipe of currenct page, get next page
                     if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 3))
-                        if (nextPage){
+                        if (nextPage) {
                             //val visibleItemCount: Int = manager.childCount
                             //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
 
                             if (currentTabSelected == SelectedTab.LIKED)
-                                recipeViewModel.getLikedRecipes(page = ++currentPage, pageSize = defaultPageSize, searchString = searchString)
+                                recipeViewModel.getLikedRecipes(
+                                    page = ++currentPage,
+                                    pageSize = defaultPageSize,
+                                    searchString = searchString
+                                )
                             else if (currentTabSelected == SelectedTab.ALL)
                                 recipeViewModel.getRecipes(page = ++currentPage, pageSize = defaultPageSize, searchString = searchString)
 
@@ -616,9 +803,9 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
                     // if User is on the last recipe of currenct page, and no next page present notice to user
                     if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 1))
-                        if (!nextPage && !noMoreRecipesMessagePresented){
+                        if (!nextPage && !noMoreRecipesMessagePresented) {
                             noMoreRecipesMessagePresented = true
-                            toast("Sorry cant find more recipes.",ToastType.ALERT)
+                            toast("Sorry cant find more recipes.", ToastType.ALERT)
                         }
 
 
@@ -632,12 +819,13 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
     }
 
+
     companion object {
 
 
         // pagination
-        private var currentPage:Int = 1
-        private var nextPage:Boolean = true
+        private var currentPage: Int = 1
+        private var nextPage: Boolean = true
 
         // Filters
         private var searchString: String = ""
@@ -651,5 +839,4 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
         }
 
     }
-
 }

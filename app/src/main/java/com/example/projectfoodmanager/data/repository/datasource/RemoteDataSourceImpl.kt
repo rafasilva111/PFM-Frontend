@@ -2,19 +2,19 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.api.ApiInterface
-import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
@@ -50,8 +50,8 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.loginUser(UserDTO(email = email, password = password))
 	}
 
-	override suspend fun logoutUser(): Response<String> {
-		return apiInterface.logoutUser()
+	override suspend fun logoutUser(logoutRequest: RefreshToken): Response<Unit> {
+		return apiInterface.logoutUser(logoutRequest)
 	}
 
 	override suspend fun getUserAuth(): Response<User> {
@@ -152,8 +152,8 @@ class RemoteDataSourceImpl @Inject constructor(
 
 
 	//Calender
-	override suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryDTO): Response<CalenderEntry> {
-		return apiInterface.createCalenderEntry(recipeId= recipeId,calenderEntryRequest = comment)
+	override suspend fun createCalenderEntry(comment : CalenderEntryRequest): Response<CalenderEntry> {
+		return apiInterface.createCalenderEntry(calenderEntryRequest = comment)
 	}
 
 	override suspend fun getEntryOnCalender(fromDate: String,toDate: String): Response<CalenderDatedEntryList> {
@@ -172,12 +172,12 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.deleteCalenderEntry(calenderEntryId)
 	}
 
-	override suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry> {
+	override suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryRequest): Response<CalenderEntry> {
 		return apiInterface.patchCalenderEntry(calenderEntryId,calenderPatchRequest)
 	}
 
-	override suspend fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate): Response<Unit> {
-		return apiInterface.checkCalenderEntries(calenderEntryListUpdate)
+	override suspend fun checkCalenderEntries(calenderEntryCheckListRequest: CalenderEntryCheckListRequest): Response<Unit> {
+		return apiInterface.checkCalenderEntries(calenderEntryCheckListRequest)
 	}
 
 	/** Follows  */

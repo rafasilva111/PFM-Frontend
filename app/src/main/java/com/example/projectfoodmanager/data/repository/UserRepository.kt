@@ -3,6 +3,7 @@ package com.example.projectfoodmanager.data.repository
 import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.notification.NotificationList

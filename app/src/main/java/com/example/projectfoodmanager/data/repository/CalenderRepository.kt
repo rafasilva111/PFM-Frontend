@@ -1,9 +1,8 @@
 package com.example.projectfoodmanager.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
@@ -25,12 +24,12 @@ interface CalenderRepository {
     val checkCalenderEntries: LiveData<Event<NetworkResult<Boolean>>>
 
 
-    suspend fun createEntryOnCalender(recipeId: Int,comment: CalenderEntryDTO)
+    suspend fun createEntryOnCalender(comment: CalenderEntryRequest)
     suspend fun getEntryOnCalender(date: LocalDateTime)
     suspend fun getCalenderDatedEntryList(fromDate: LocalDateTime,toDate:LocalDateTime,cleanseOldRegistry: Boolean)
     suspend fun getCalendarIngredients(fromDate: LocalDateTime, toDate: LocalDateTime)
     suspend fun deleteCalenderEntry(calenderEntry: CalenderEntry)
-    suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest)
-    suspend fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate)
+    suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryRequest)
+    suspend fun checkCalenderEntries(calenderEntryCheckListRequest: CalenderEntryCheckListRequest)
 
 }

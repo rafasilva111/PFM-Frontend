@@ -1,19 +1,19 @@
 package com.example.projectfoodmanager.data.repository.datasource
 
 
-import com.example.projectfoodmanager.data.model.dtos.calender.CalenderEntryDTO
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
 import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryListUpdate
-import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryPatchRequest
+import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
@@ -40,7 +40,7 @@ interface RemoteDataSource {
 	//user
 	suspend fun registerUser(user: UserDTO) : Response<Unit>
 	suspend fun loginUser(email: String, password: String) : Response<AuthToken>
-	suspend fun logoutUser() : Response<String>
+	suspend fun logoutUser(logoutRequest: RefreshToken) : Response<Unit>
 	suspend fun getUserAuth() : Response<User>
 	suspend fun getUserById(userId: Int): Response<UserProfile>
 	suspend fun updateUser(user: UserDTO): Response<User>
@@ -84,13 +84,13 @@ interface RemoteDataSource {
 	/**
 	 * Calender
 	 * */
-	suspend fun createCalenderEntry(recipeId: Int,comment : CalenderEntryDTO): Response<CalenderEntry>
+	suspend fun createCalenderEntry(comment : CalenderEntryRequest): Response<CalenderEntry>
 	suspend fun getEntryOnCalender(date: String):  Response<CalenderEntryList>
 	suspend fun getEntryOnCalender(fromDate: String, toDate: String):  Response<CalenderDatedEntryList>
 	suspend fun getCalenderIngredients(fromDate: String, toDate: String): Response<ShoppingListSimplified>
 	suspend fun deleteCalenderEntry(calenderEntryId: Int): Response<Int>
-	suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryPatchRequest): Response<CalenderEntry>
-	suspend fun checkCalenderEntries(calenderEntryListUpdate: CalenderEntryListUpdate): Response<Unit>
+	suspend fun patchCalenderEntry(calenderEntryId: Int, calenderPatchRequest : CalenderEntryRequest): Response<CalenderEntry>
+	suspend fun checkCalenderEntries(calenderEntryCheckListRequest: CalenderEntryCheckListRequest): Response<Unit>
 
 	//followers
 	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>

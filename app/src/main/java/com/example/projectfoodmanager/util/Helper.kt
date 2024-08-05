@@ -66,12 +66,18 @@ class Helper {
         }
 
         // server string -> date string
-        fun formatServerTimeToDateString(localDateTimeString: String): String{
-            return localDateTimeString.split("T")[0]
+        fun formatServerTimeToDateString(serverTimeString: String): String{
+            return formatServerTimeToLocalDateTime(serverTimeString).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        }
+
+        // server string -> time string
+        fun formatServerTimeToTimeString(serverTimeString: String): String{
+            return formatServerTimeToLocalDateTime(serverTimeString).format(DateTimeFormatter.ofPattern("HH:mm"))
         }
 
         fun formatLocalTimeToServerTime(localTime: LocalDateTime): String{
-            return localTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss"))
+
+            return localTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         }
 
 
@@ -221,6 +227,7 @@ class Helper {
                             onImageLoaded()
                             return false
                         }
+
                     })
                     .into(recipeIV)
             }.addOnFailureListener {
