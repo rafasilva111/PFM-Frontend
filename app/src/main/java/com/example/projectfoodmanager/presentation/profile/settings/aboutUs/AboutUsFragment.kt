@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.databinding.FragmentAboutUsBinding
 import com.example.projectfoodmanager.util.Helper
-import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

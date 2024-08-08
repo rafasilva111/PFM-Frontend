@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFollowRequestBinding
-import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.util.ToastType
 import com.example.projectfoodmanager.util.toast
 import com.example.projectfoodmanager.viewmodels.UserViewModel

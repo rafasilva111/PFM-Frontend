@@ -67,7 +67,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:scrollbars="none"
-
+            app:layout_anchor="@+id/HSV_filter_1"
+            app:layout_anchorGravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -78,62 +79,62 @@
                 android:id="@+id/chipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:singleSelection="true"
                 android:layout_marginStart="10dp"
+                android:layout_marginEnd="60dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/SVsearch">
+                app:layout_constraintTop_toBottomOf="@+id/SVsearch"
+                app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
-                    style="@style/Widget.App.Chip"
                     android:id="@+id/chipCurtidas"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_liked"
-                    android:tag="@string/chip_tag_likes"
                     android:checked="true"
+                    android:tag="@string/chip_tag_likes"
+                    android:text="@string/tab_liked"
                     android:textSize="15sp"
                     app:chipMinHeight="20dp" />
 
                 <com.google.android.material.chip.Chip
-                    style="@style/Widget.App.Chip"
                     android:id="@+id/chipGuardados"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_saved"
                     android:tag="@string/chip_tag_saves"
+                    android:text="@string/tab_saved"
                     android:textSize="15sp"
                     app:chipMinHeight="20dp" />
 
                 <com.google.android.material.chip.Chip
-                    style="@style/Widget.App.Chip"
                     android:id="@+id/chipCriadas"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_created"
                     android:tag="@string/chip_tag_created"
+                    android:text="@string/tab_created"
                     android:textSize="15sp"
                     app:chipMinHeight="20dp" />
 
                 <com.google.android.material.chip.Chip
-                    style="@style/Widget.App.Chip"
                     android:id="@+id/chipCommented"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_coment"
                     android:tag="@string/chip_tag_commented"
+                    android:text="@string/tab_coment"
                     android:textSize="15sp"
                     app:chipMinHeight="20dp" />
 
                 <com.google.android.material.chip.Chip
-                    style="@style/Widget.App.Chip"
                     android:id="@+id/chipLastSeem"
+                    style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tab_last_seen"
                     android:tag="@string/chip_tag_last_seen"
+                    android:text="@string/tab_last_seen"
                     android:textSize="15sp"
                     app:chipMinHeight="20dp" />
 
@@ -182,7 +183,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -205,21 +206,14 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:textAlignment="center"
             android:visibility="invisible"
-            app:flow_horizontalAlign="center"
-            app:flow_verticalAlign="center"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -408,34 +402,34 @@
             android:padding="2dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/vegiCL"
+                android:id="@+id/vegCL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:background="@drawable/card_cat"
                 android:backgroundTint="@color/transparent"
                 android:elevation="0dp"
-                android:tag="vegetarianaCL">
+                android:tag="vegCL">
 
                 <TextView
-                    android:id="@+id/vegiTV"
+                    android:id="@+id/vegTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
-                    android:tag="vegetarianaTV"
+                    android:tag="vegTV"
                     android:text="Salada"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/main_color"
                     android:textSize="11sp"
-                    app:layout_constraintEnd_toEndOf="@+id/vegi_filt_IB"
-                    app:layout_constraintStart_toStartOf="@+id/vegi_filt_IB"
+                    app:layout_constraintEnd_toEndOf="@+id/veg_filt_IB"
+                    app:layout_constraintStart_toStartOf="@+id/veg_filt_IB"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
                 <ImageButton
-                    android:id="@+id/vegi_filt_IB"
+                    android:id="@+id/veg_filt_IB"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="3dp"
@@ -445,10 +439,10 @@
                     android:padding="11dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_veget"
-                    android:tag="vegetariana_filt_IB"
+                    android:tag="veg_filt_IB"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/vegiTV" />
+                    app:layout_constraintTop_toBottomOf="@+id/vegTV" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

@@ -22,6 +22,7 @@ import com.example.projectfoodmanager.di.notification.MyFirebaseMessagingService
 import com.example.projectfoodmanager.di.notification.MyFirebaseMessagingService.Companion.EXTRA_NOTIFICATION_DATA
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.network.NetworkResult
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import java.time.LocalDateTime
 

@@ -22,6 +22,9 @@ import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToLo
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToTimeString
 import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -36,7 +39,7 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener{
+class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
 
 
     /** Binding */

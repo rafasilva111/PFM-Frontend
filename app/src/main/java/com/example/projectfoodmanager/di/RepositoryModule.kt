@@ -4,8 +4,8 @@ package com.example.projectfoodmanager.di
 import com.example.projectfoodmanager.data.repository.*
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourceImpl
 import com.example.projectfoodmanager.data.repository.UserRepository
-import com.example.projectfoodmanager.util.SharedPreference
-import com.example.projectfoodmanager.util.TokenManager
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import dagger.Module

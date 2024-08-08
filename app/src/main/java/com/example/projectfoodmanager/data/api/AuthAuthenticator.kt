@@ -3,7 +3,7 @@ package com.example.projectfoodmanager.data.api
 import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
 import com.example.projectfoodmanager.util.Constants
-import com.example.projectfoodmanager.util.TokenManager
+import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor

@@ -9,9 +9,9 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Co
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
-import com.example.projectfoodmanager.util.Event
-import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.network.Event
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -199,19 +199,22 @@ class RecipeRepositoryImp @Inject constructor(
         get() = _userLikedRecipesResponseLiveData
 
 
-    override suspend fun getLikedRecipes(page: Int,pageSize: Int,searchString: String) {
+    override suspend fun getLikedRecipes(page: Int,pageSize: Int,searchString: String, searchTag: String) {
         _userLikedRecipesResponseLiveData.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "AuthRepositoryImp - getUserLikedRecipes: Making request.")
-        val response =remoteDataSource.getLikedRecipes(page,pageSize,searchString)
+        val response =remoteDataSource.getLikedRecipes(page,pageSize,searchString,searchTag)
 
         //handle response RecipeListResponse
 
         if (response.isSuccessful && response.body() != null) {
             Log.i(TAG, "AuthRepositoryImp - getUserLikedRecipes: Request was sucessfull.")
             Log.i(TAG, "AuthRepositoryImp - getUserLikedRecipes: Response body -> ${response.body()}.")
-            _userLikedRecipesResponseLiveData.postValue(Event(NetworkResult.Success(
+            _userLikedRecipesResponseLiveData.postValue(
+                Event(
+                NetworkResult.Success(
                 response.body()!!
-            )))
+            ))
+            )
         }
         else if(response.errorBody()!=null){
             try {
@@ -248,9 +251,12 @@ class RecipeRepositoryImp @Inject constructor(
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             Log.i(TAG, "handleResponse: response body -> ${response.body()}")
             sharedPreference.addLikeToSavedRecipes(response.body()!!)
-            _functionLikeOnRecipe.postValue(Event(NetworkResult.Success(
+            _functionLikeOnRecipe.postValue(
+                Event(
+                NetworkResult.Success(
                 response.body()!!
-            )))
+            ))
+            )
         }
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()
@@ -271,9 +277,12 @@ class RecipeRepositoryImp @Inject constructor(
         if (response.isSuccessful && response.code() == 200) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             sharedPreference.removeLikeFromSavedRecipes(response.body()!!)
-            _functionRemoveLikeOnRecipe.postValue(Event(NetworkResult.Success(
+            _functionRemoveLikeOnRecipe.postValue(
+                Event(
+                NetworkResult.Success(
                 response.body()!!
-            )))
+            ))
+            )
         }
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()
@@ -304,9 +313,12 @@ class RecipeRepositoryImp @Inject constructor(
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             Log.i(TAG, "handleResponse: response body -> ${response.body()}")
             sharedPreference.addSavedRecipe(response.body()!!)
-            _functionAddSaveOnRecipe.postValue(Event(NetworkResult.Success(
+            _functionAddSaveOnRecipe.postValue(
+                Event(
+                NetworkResult.Success(
                 response.body()!!
-            )))
+            ))
+            )
         }
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()
@@ -328,9 +340,12 @@ class RecipeRepositoryImp @Inject constructor(
         if (response.isSuccessful && response.code() == 200) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             sharedPreference.removeSavedRecipe(response.body()!!)
-            _functionRemoveSaveOnRecipe.postValue(Event(NetworkResult.Success(
+            _functionRemoveSaveOnRecipe.postValue(
+                Event(
+                NetworkResult.Success(
                 response.body()!!
-            )))
+            ))
+            )
         }
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()

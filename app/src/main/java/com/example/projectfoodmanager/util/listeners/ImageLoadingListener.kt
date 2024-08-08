@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.util
+package com.example.projectfoodmanager.util.listeners
 
 interface ImageLoadingListener {
     fun onImageLoaded()

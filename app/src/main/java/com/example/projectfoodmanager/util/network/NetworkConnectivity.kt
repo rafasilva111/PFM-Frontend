@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.util
+package com.example.projectfoodmanager.util.network
 
 import android.content.BroadcastReceiver
 import android.content.Context

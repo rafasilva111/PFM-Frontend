@@ -22,6 +22,8 @@ import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.closeKeyboard
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.messaging.FirebaseMessaging

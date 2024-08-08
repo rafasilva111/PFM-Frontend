@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.databinding.FragmentSessionProfileBinding
@@ -17,6 +16,9 @@ import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 

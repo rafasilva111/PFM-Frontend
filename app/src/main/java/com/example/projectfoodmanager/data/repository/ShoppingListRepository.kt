@@ -6,8 +6,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 
-import com.example.projectfoodmanager.util.Event
-import com.example.projectfoodmanager.util.NetworkResult
+import com.example.projectfoodmanager.util.network.Event
+import com.example.projectfoodmanager.util.network.NetworkResult
 
 interface ShoppingListRepository {
 

@@ -4,14 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
-import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
-import com.example.projectfoodmanager.util.Event
-import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.network.Event
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import retrofit2.Response
 import javax.inject.Inject
 

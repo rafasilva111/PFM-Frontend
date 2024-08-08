@@ -34,6 +34,10 @@ import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.chip.Chip
@@ -58,17 +62,27 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     /** Constants */
     private val TAG: String = "RecipeListingFragment"
 
-
-    private var newSearch: Boolean = false
-    private var noMoreRecipesMessagePresented = false
-
+    // RecyclerView
     private var snapHelper : SnapHelper = PagerSnapHelper()
     private lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
-    private var refreshPage: Int = 0
-    private var oldFilerTag: String =""
-    private var numberOfNotifications: Int = 0
 
+
+    // Reloading current page
+    private var refreshPage: Int = 0
+
+    // Pagination
+    private var noMoreRecipesMessagePresented = false
+
+    // Filters
+    // Tag Filters
+    private var oldFilerTag: String =""
+
+    // Search
+    private var newSearch: Boolean = false
+
+    // Notifications
+    private var numberOfNotifications: Int = 0
     private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             numberOfNotifications += 1
@@ -125,6 +139,22 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             },
             this
         )
+    }
+
+    /** Interfaces */
+
+    override fun onImageLoaded() {
+        requireActivity().runOnUiThread {
+            adapter.imagesLoaded++
+
+
+            if (adapter.imagesLoaded == adapter.imagesToLoad) {
+                binding.recyclerView.visibility = View.VISIBLE
+                binding.progressBar.hide()
+
+            }
+
+        }
     }
 
     override fun onCreateView(
@@ -191,6 +221,26 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         loadUI()
         super.onStart()
     }
+
+    override fun onPause() {
+
+        // Unregister the broadcast receiver to avoid memory leaks
+        adapter.imagesLoaded = 0
+        context?.unregisterReceiver(notificationReceiver)
+        super.onPause()
+    }
+
+    override fun onResume() {
+
+        // Register the broadcast receiver
+        binding.recyclerView.visibility = View.INVISIBLE
+        context?.registerReceiver(notificationReceiver, IntentFilter(MyFirebaseMessagingService.ACTION_NOTIFICATION_RECEIVED))
+        super.onResume()
+    }
+
+    /**
+     *  General
+     * */
 
     private fun setUI() {
 
@@ -307,10 +357,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
             val chipGroup: ChipGroup = binding.chipGroup
 
-
             activateSearchChip(chipGroup)
-
-
 
             chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
                 if (checkedId.isNotEmpty()) {
@@ -381,35 +428,202 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     }
 
-    override fun onResume() {
+    private fun bindObservers() {
 
-        // Register the broadcast receiver
-        binding.recyclerView.visibility = View.INVISIBLE
-        context?.registerReceiver(notificationReceiver, IntentFilter(MyFirebaseMessagingService.ACTION_NOTIFICATION_RECEIVED))
-        super.onResume()
-    }
+        /**
+         * Recipes
+         */
 
-    override fun onPause() {
+        recipeViewModel.functionGetRecipes.observe(viewLifecycleOwner
+        ) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
 
-        // Unregister the broadcast receiver to avoid memory leaks
-        adapter.imagesLoaded = 0
-        context?.unregisterReceiver(notificationReceiver)
-        super.onPause()
-    }
+                        // isto é usado para atualizar os likes caso o user vá a detail view
+                        if (refreshPage != 0) {
 
-    override fun onImageLoaded() {
-        requireActivity().runOnUiThread {
-            adapter.imagesLoaded++
+                            val lastIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) else adapter.itemCount
+                            var firstIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (lastIndex - PaginationNumber.DEFAULT) else 0
+
+                            recipeListed.subList(firstIndex, lastIndex).clear()
 
 
-            if (adapter.imagesLoaded == adapter.imagesToLoad) {
-                binding.recyclerView.visibility = View.VISIBLE
-                binding.progressBar.hide()
+                            for (recipe in result.data!!.result) {
+                                recipeListed.add(firstIndex, recipe)
+                                firstIndex++
+                            }
+                            adapter.updateList(recipeListed)
 
+                            //reset control variables
+                            refreshPage = 0
+                        }
+                        else {
+
+                            // sets page data
+
+                            currentPage = result.data!!._metadata.page
+                            nextPage = result.data._metadata.nextPage != null
+
+                            noMoreRecipesMessagePresented = nextPage
+
+                            // check if list empty
+
+                            if(result.data.result.isEmpty()){
+                                binding.progressBar.hide()
+                                binding.noRecipesTV.visibility=View.VISIBLE
+                                adapter.cleanList()
+                                return@let
+                            }else{
+                                binding.noRecipesTV.visibility=View.GONE
+
+                            }
+
+                            // checks if new search
+
+                            if (currentPage == 1){
+                                recipeListed = result.data.result
+                                adapter.setList(result.data.result)
+                            }
+                            else{
+                                recipeListed += result.data.result
+                                adapter.appendList(result.data.result)
+                            }
+                        }
+
+
+                    }
+                    is NetworkResult.Error -> {
+                        binding.progressBar.hide()
+                        toast(result.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.noRecipesTV.visibility = View.GONE
+                        binding.offlineTV.visibility = View.GONE
+                        binding.progressBar.show()
+                    }
+                }
             }
-
         }
+
+        /**
+         * Like function
+         */
+
+
+        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+
+                        result.data?.let {
+                            adapter.updateItem(it)
+                        }
+
+
+                    }
+                    is NetworkResult.Error -> {
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        result.data?.let {
+                            adapter.updateItem(it)
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        toast(result.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        /**
+         * Save function
+         */
+
+        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+
+                        result.data?.let {
+                            adapter.updateItem(it)
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        toast(result.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        result.data?.let {
+                            adapter.updateItem(it)
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        toast(result.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        /**
+         * Notifications
+         */
+
+        userViewModel.getNotificationsResponseLiveData.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        numberOfNotifications = result.data!!.notSeen
+
+                        changeNotificationNumber()
+
+
+
+                    }
+                    is NetworkResult.Error -> {
+
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
     }
+
+    /**
+     *  Functions
+     * */
+
+    /** Filters */
+
+    /** Chip Filters */
 
     private fun activateSearchChip(chipGroup: ChipGroup) {
         for (i in 0 until chipGroup.childCount) {
@@ -435,7 +649,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             elevation = 3f
         }
 
-        tv?.setTextColor(resources.getColor(R.color.white))
+        tv?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
 
         ib?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_1))
         oldFilerTag = tag
@@ -512,194 +726,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     }
 
-    private fun bindObservers() {
-
-        /**
-         * Recipes
-         */
-
-        recipeViewModel.functionGetRecipes.observe(viewLifecycleOwner
-        ) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-
-                        // isto é usado para atualizar os likes caso o user vá a detail view
-
-                        if (refreshPage != 0) {
-
-                            val lastIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) else adapter.itemCount
-                            var firstIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (lastIndex - PaginationNumber.DEFAULT) else 0
-
-                            recipeListed.subList(firstIndex, lastIndex).clear()
-
-
-                            for (recipe in result.data!!.result) {
-                                recipeListed.add(firstIndex, recipe)
-                                firstIndex++
-                            }
-                            adapter.updateList(recipeListed)
-
-                            //reset control variables
-                            refreshPage = 0
-                        }
-                        else {
-
-                            // sets page data
-
-                            currentPage = result.data!!._metadata.page
-                            nextPage = result.data._metadata.nextPage != null
-
-                            noMoreRecipesMessagePresented = nextPage
-
-                            // check if list empty
-
-                            if(result.data.result.isEmpty()){
-                                binding.noRecipesTV.visibility=View.VISIBLE
-                                adapter.cleanList()
-                                return@let
-                            }else{
-                                binding.noRecipesTV.visibility=View.GONE
-
-                            }
-
-                            // checks if new search
-
-                            if (currentPage == 1)
-                                recipeListed = result.data.result
-                            else
-                                recipeListed += result.data.result
-
-
-                            adapter.updateList(recipeListed)
-                        }
-
-
-                    }
-                    is NetworkResult.Error -> {
-                        binding.progressBar.hide()
-                        toast(result.message.toString(), type = ToastType.ERROR)
-                    }
-                    is NetworkResult.Loading -> {
-                        binding.noRecipesTV.visibility = View.GONE
-                        binding.offlineTV.visibility = View.GONE
-                        binding.progressBar.show()
-                    }
-                }
-            }
-        }
-
-        /**
-         * Like function
-         */
-
-
-        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-
-
-                        result.data?.let {
-                            adapter.updateItem(it)
-                        }
-
-
-                    }
-                    is NetworkResult.Error -> {
-                                            }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        }
-
-        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-
-                        result.data?.let {
-                            adapter.updateItem(it)
-                        }
-                    }
-                    is NetworkResult.Error -> {
-                        toast(result.message.toString(), type = ToastType.ERROR)
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        }
-
-        /**
-         * Save function
-         */
-
-        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-            when (result) {
-                    is NetworkResult.Success -> {
-
-
-                        result.data?.let {
-                            adapter.updateItem(it)
-                        }
-                    }
-                    is NetworkResult.Error -> {
-                        toast(result.message.toString(), type = ToastType.ERROR)
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        }
-
-        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-
-                        result.data?.let {
-                            adapter.updateItem(it)
-                        }
-                    }
-                    is NetworkResult.Error -> {
-                        toast(result.message.toString(), type = ToastType.ERROR)
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        }
-
-        /**
-         * Notifications
-         */
-
-        userViewModel.getNotificationsResponseLiveData.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-
-                        numberOfNotifications = result.data!!.notSeen
-
-                        changeNotificationNumber()
-
-
-
-                    }
-                    is NetworkResult.Error -> {
-
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        }
-
-    }
-
     private fun changeNotificationNumber(){
         if (numberOfNotifications>0 ) {
             binding.notificationsBadgeTV.visibility = View.VISIBLE
@@ -711,7 +737,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     private fun changeFilterSearch(tag: String){
         if (searchTag == tag){
-           searchTag =""
+            searchTag =""
             updateView(chipSelected!!)
         }
         else{
@@ -756,6 +782,9 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
     }
 
+    /**
+     *  Object
+     * */
 
     companion object {
 

@@ -1,8 +1,7 @@
 package com.example.projectfoodmanager.data.api
 
 
-import android.util.Log
-import com.example.projectfoodmanager.util.TokenManager
+import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject

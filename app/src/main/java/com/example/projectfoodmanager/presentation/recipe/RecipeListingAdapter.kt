@@ -1,6 +1,5 @@
 package com.example.projectfoodmanager.presentation.recipe
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUppe
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
-import com.example.projectfoodmanager.util.ImageLoadingListener
+import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
 
 class RecipeListingAdapter(
     val onItemClicked: (Int, RecipeSimplified) -> Unit,
@@ -49,6 +48,29 @@ class RecipeListingAdapter(
         notifyItemRangeChanged(0,limit)
     }
 
+    fun getList():MutableList<RecipeSimplified>{
+        return this.list.toMutableList()
+    }
+
+    fun cleanList(){
+        val listSize = this.list.size
+        this.list = arrayListOf()
+        imagesLoaded = 0
+        notifyItemRangeRemoved(0,listSize)
+    }
+
+    fun setList(_list: MutableList<RecipeSimplified>){
+        cleanList()
+        this.list = _list
+        notifyItemRangeChanged(0,this.list.size)
+    }
+
+    fun appendList(_list: MutableList<RecipeSimplified>){
+        val listSize = this.list.size
+        this.list = (this.list + _list).toMutableList()
+        notifyItemRangeChanged(listSize,this.list.size)
+    }
+
     fun updateItem(position: Int,item: RecipeSimplified){
         list.removeAt(position)
         list.add(position,item)
@@ -73,12 +95,6 @@ class RecipeListingAdapter(
                 break
             }
         }
-    }
-
-
-    fun cleanList(){
-        this.list= arrayListOf()
-        notifyDataSetChanged()
     }
 
     fun removeItem(position: Int){

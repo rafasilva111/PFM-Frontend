@@ -1,26 +1,17 @@
 package com.example.projectfoodmanager.presentation.favorites
 
-import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.toRecipeSimplified
 import com.example.projectfoodmanager.databinding.ItemRecipeLayoutBinding
-import com.example.projectfoodmanager.util.Helper
+import com.example.projectfoodmanager.util.BaseAdapter
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
-import com.example.projectfoodmanager.util.ImageLoadingListener
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
+import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
 
 
 class FavoritesRecipeListingAdapter(
@@ -28,33 +19,14 @@ class FavoritesRecipeListingAdapter(
     val onLikeClicked: (RecipeSimplified, Boolean) -> Unit,
     val onSaveClicked: (RecipeSimplified, Boolean) -> Unit,
     private val imageLoadingListener: ImageLoadingListener
-) : RecyclerView.Adapter<FavoritesRecipeListingAdapter.MyViewHolder>() {
+) : BaseAdapter<RecipeSimplified, ItemRecipeLayoutBinding>(
+    ItemRecipeLayoutBinding::inflate
+) {
 
+    private val TAG = "CalenderEntryAdapter"
 
-    var list: MutableList<RecipeSimplified> = arrayListOf()
-
-    var imagesToLoad: Int = 2
-    var imagesLoaded: Int = 0
-
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = ItemRecipeLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-
-        return MyViewHolder(itemView)
-    }
-
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val item = list[position]
-        holder.bind(item)
-    }
-
-
-    fun updateList(list: MutableList<RecipeSimplified>){
-        this.list = list
-        imagesLoaded = 0
-        notifyItemRangeChanged(0,this.list.size)
-    }
-
+    private var list: MutableList<RecipeSimplified> = arrayListOf()
+    override var imagesToLoad = 2
 
 
     fun updateItem(item: Recipe){
@@ -69,11 +41,6 @@ class FavoritesRecipeListingAdapter(
 
     }
 
-    fun removeItem(position: Int){
-        list.removeAt(position)
-        notifyItemChanged(position)
-    }
-
     fun removeItem(item: Recipe){
         for ((index, recipe) in list.withIndex()){
             if (recipe.id == item.id) {
@@ -85,125 +52,109 @@ class FavoritesRecipeListingAdapter(
 
     }
 
-    fun addItem(item: Recipe){
-        list.add(item.toRecipeSimplified())
-        notifyItemInserted( list.size)
+    override fun bind(binding: ItemRecipeLayoutBinding, item: RecipeSimplified, position: Int) {
 
-    }
+        /**
+         * Loading Images
+         */
 
-    override fun getItemCount(): Int {
-        return list.size
-    }
-
-
-
-    inner class MyViewHolder(private val binding: ItemRecipeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-
-
-        fun bind(item: RecipeSimplified) {
-
-            /**
-             * Loading Images
-             */
-
-            // Load Recipe img
-            if (item.imgSource.isNotEmpty()) {
-
-                loadRecipeImage(binding.imageView, item.imgSource){
-                    imageLoadingListener.onImageLoaded()
-                }
-
-                // Current drawable is not the default image, do not load
-
+        // Load Recipe img
+        if (item.imgSource.isNotEmpty())
+            loadRecipeImage(binding.imageView, item.imgSource) {
+                imageLoadingListener.onImageLoaded()
             }
+        else
+            imageLoadingListener.onImageLoaded()
 
-            // Load Author img
-            if (item.createdBy.imgSource.isNotEmpty()) {
 
-                loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){
-                    imageLoadingListener.onImageLoaded()
-                }
 
+        // Load Author img
+        if (item.createdBy.imgSource.isNotEmpty())
+            loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){
+                imageLoadingListener.onImageLoaded()
             }
+        else
+            imageLoadingListener.onImageLoaded()
 
-            /**
-             * Details
-             */
+        /**
+         * Details
+         */
 
-            //------- AUTOR DA RECIPE -------
+        //------- AUTOR DA RECIPE -------
 
-            binding.nameAuthorTV.text = item.createdBy.name
+        binding.nameAuthorTV.text = item.createdBy.name
 
-            if (!item.createdBy.verified) {
-                binding.verifyUserIV.visibility = View.INVISIBLE
-            }
+        if (!item.createdBy.verified) {
+            binding.verifyUserIV.visibility = View.INVISIBLE
+        }
 
-            //AUTHOR-> IMG
-            if (item.createdBy.imgSource.contains("avatar")){
-                val avatar= Avatar.getAvatarByName(item.createdBy.imgSource)
-                binding.imgAuthorIV.setImageResource(avatar!!.imgId)
+        //AUTHOR-> IMG
+        if (item.createdBy.imgSource.contains("avatar")){
+            val avatar= Avatar.getAvatarByName(item.createdBy.imgSource)
+            binding.imgAuthorIV.setImageResource(avatar!!.imgId)
 
-            }
-
-
-            //------- INFOS DA RECIPE -------
-
-            binding.dateTV.text = formatServerTimeToDateString(item.createdDate)
-            binding.recipeTitleTV.text = item.title
-            binding.recipeDescriptionTV.text = item.description
-            binding.itemLayout.setOnClickListener { onItemClicked.invoke(adapterPosition, item) }
-            binding.nLikeTV.text = item.likes.toString()
+        }
 
 
-
-            //------- RECEITA VERIFICADA OU NÃO -------
-            if (!item.verified){
-                binding.verifyRecipeIV.visibility= View.INVISIBLE
-                binding.verifyRecipeTV.visibility= View.INVISIBLE
-            }else{
-                binding.verifyRecipeIV.visibility= View.VISIBLE
-                binding.verifyRecipeTV.visibility= View.VISIBLE
-            }
+        //------- INFOS DA RECIPE -------
+        binding.idTV.text = item.id.toString()
+        binding.dateTV.text = formatServerTimeToDateString(item.createdDate)
+        binding.recipeTitleTV.text = item.title
+        binding.recipeDescriptionTV.text = item.description
+        binding.itemLayout.setOnClickListener { onItemClicked.invoke(position, item) }
+        binding.nLikeTV.text = item.likes.toString()
 
 
-            binding.ratingRecipeRB.rating = item.sourceRating.toFloat()
-            binding.ratingMedTV.text = item.sourceRating
+
+        //------- RECEITA VERIFICADA OU NÃO -------
+        if (!item.verified){
+            binding.verifyRecipeIV.visibility= View.INVISIBLE
+            binding.verifyRecipeTV.visibility= View.INVISIBLE
+        }else{
+            binding.verifyRecipeIV.visibility= View.VISIBLE
+            binding.verifyRecipeTV.visibility= View.VISIBLE
+        }
 
 
-            /**
-             * Likes Function
-             */
+        binding.ratingRecipeRB.rating = item.sourceRating.toFloat()
+        binding.ratingMedTV.text = item.sourceRating
 
-            if (item.liked)
-                binding.likeIB.setImageResource(R.drawable.ic_like_active)
+
+        /**
+         * Likes Function
+         */
+
+        if (item.liked)
+            binding.likeIB.setImageResource(R.drawable.ic_like_active)
+        else
+            binding.likeIB.setImageResource(R.drawable.ic_like_black)
+
+
+        binding.likeIB.setOnClickListener {
+            if(item.liked)
+                onLikeClicked.invoke(item, false)
             else
-                binding.likeIB.setImageResource(R.drawable.ic_like_black)
+                onLikeClicked.invoke(item, true)
 
+        }
 
-            binding.likeIB.setOnClickListener {
-                if(item.liked)
-                    onLikeClicked.invoke(item, false)
-                else
-                    onLikeClicked.invoke(item, true)
+        /**
+         * Saves Function
+         */
 
-            }
+        if(item.saved)
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
+        else
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
 
-            /**
-             * Saves Function
-             */
-
+        binding.favoritesIB.setOnClickListener {
             if(item.saved)
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
+                onSaveClicked.invoke(item, false)
             else
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
+                onSaveClicked.invoke(item, true)
 
-            binding.favoritesIB.setOnClickListener {
-                if(item.saved)
-                    onSaveClicked.invoke(item, false)
-                else
-                    onSaveClicked.invoke(item, true)
-
-            }
         }
     }
+
+
 }

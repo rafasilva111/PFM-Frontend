@@ -17,6 +17,8 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingL
 import com.example.projectfoodmanager.databinding.FragmentCalenderIngredientsBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.updateSystemBarsAppearance
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.example.projectfoodmanager.viewmodels.ShoppingListViewModel

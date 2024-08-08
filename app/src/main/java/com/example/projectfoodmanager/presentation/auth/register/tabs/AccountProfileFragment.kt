@@ -43,6 +43,7 @@ import com.example.projectfoodmanager.util.Helper.Companion.checkPermission
 import com.example.projectfoodmanager.util.Helper.Companion.randomAvatarImg
 import com.example.projectfoodmanager.util.Helper.Companion.requestPermission
 import com.example.projectfoodmanager.util.Helper.Companion.userIsNot12Old
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.yalantis.ucrop.UCrop

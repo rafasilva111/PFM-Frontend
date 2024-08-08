@@ -10,8 +10,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplified
 import com.example.projectfoodmanager.data.repository.CalenderRepository
-import com.example.projectfoodmanager.util.Event
-import com.example.projectfoodmanager.util.NetworkResult
+import com.example.projectfoodmanager.util.network.Event
+import com.example.projectfoodmanager.util.network.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

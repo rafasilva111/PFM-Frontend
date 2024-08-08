@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.util
+package com.example.projectfoodmanager.util.sharedpreferences
 
 import android.content.SharedPreferences
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
@@ -9,6 +9,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.Shop
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipesBackground
 import com.example.projectfoodmanager.data.model.user.goal.Goal
+import com.example.projectfoodmanager.util.Constants
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToLocalDateTime
 import com.example.projectfoodmanager.util.SharedPreferencesConstants.IS_FIRST_APP_LAUNCH
@@ -18,6 +19,7 @@ import com.example.projectfoodmanager.util.SharedPreferencesConstants.USER_SESSI
 import com.example.projectfoodmanager.util.SharedPreferencesConstants.USER_SESSION_BACKGROUND_RECIPES
 import com.example.projectfoodmanager.util.SharedPreferencesConstants.USER_SESSION_CALENDER
 import com.example.projectfoodmanager.util.SharedPreferencesConstants.USER_SESSION_SHOPPING_LISTS
+import com.example.projectfoodmanager.util.SharedPreferencesMetadata
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.time.LocalDate

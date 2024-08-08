@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.databinding.FragmentShoppingListListingBinding
-import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.util.ToastType
 import com.example.projectfoodmanager.util.toast
 import com.example.projectfoodmanager.viewmodels.ShoppingListViewModel

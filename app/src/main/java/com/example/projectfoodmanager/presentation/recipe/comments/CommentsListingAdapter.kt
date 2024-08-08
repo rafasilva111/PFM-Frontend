@@ -11,7 +11,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.user.UserSimplified
 import com.example.projectfoodmanager.databinding.ItemCommentLayoutBinding
 import com.example.projectfoodmanager.util.Helper
-import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.util.Helper.Companion.getRelativeTime
 class CommentsListingAdapter(
     val sharedPreferences: SharedPreference,
