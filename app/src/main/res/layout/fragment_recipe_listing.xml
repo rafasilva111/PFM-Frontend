@@ -198,6 +198,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/recipe_listing_filter_sugestions"
+                        android:tag="SUGGESTIONS"
                         android:textSize="15sp"
                         app:chipMinHeight="20dp" />
 
@@ -207,7 +208,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/most_saved"
-                        android:tag="@string/teste"
+                        android:tag="MOST_SAVED"
                         android:textSize="15sp"
                         app:chipMinHeight="20dp" />
 
@@ -217,6 +218,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/most_liked"
+                        android:tag="MOST_LIKED"
                         android:textSize="15sp"
                         app:chipMinHeight="20dp" />
 
@@ -226,6 +228,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/recipe_listing_filter_recent"
+                        android:tag="MOST_RECENT"
                         android:textSize="15sp"
                         app:chipMinHeight="20dp" />
 
@@ -235,6 +238,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/random"
+                        android:tag="RANDOM"
                         android:textSize="15sp"
                         app:chipMinHeight="20dp" />
 
@@ -244,6 +248,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/recipe_listing_filter_personalized_sugestions"
+                        android:tag="PERSONALIZED_SUGGESTIONS"
                         android:textSize="15sp"
                         app:chipMinHeight="20dp" />
 

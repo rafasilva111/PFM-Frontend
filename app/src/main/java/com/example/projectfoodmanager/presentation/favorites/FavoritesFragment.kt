@@ -77,6 +77,7 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
     // Chip Filters
     private var onlineChipFilter: Boolean = false
     private var selectedTab: String = SelectedTab.LIKED
+    private lateinit var chipSelected: Chip
 
     // Tag Filters
     private var previousSelectTag: String =""
@@ -265,13 +266,20 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
          * Chip filters
          */
 
+        chipSelected = binding.chipGroup.selectChipByTag(selectedTab)!!
+
         binding.chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
 
             if (checkedId.isNotEmpty()) {
                 group.findViewById<Chip>(checkedId[0])?.let {
-                    it.isChecked = false
-                    updateView(it.tag as String )
+                    chipSelected.isChecked = false
+                    chipSelected = it
+
+                    updateView(chipSelected.tag as String )
                 }
+            } else {
+                // If no chip is selected, select the last selected one
+                chipSelected.isChecked = true
             }
         }
 

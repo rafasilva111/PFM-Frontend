@@ -90,9 +90,14 @@ class Helper {
             return localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         }
 
+        fun formatDateStringToLocalDateTime(dateString: String): LocalDateTime{
+            return LocalDateTime.of(LocalDate.parse(dateString, DEFAULT_DATE_FORMAT), LocalTime.MIDNIGHT)
+        }
         fun formatLocalTimeToFormatTime(localTime: LocalDateTime): String{
             return localTime.format(DateTimeFormatter.ofPattern("HH:mm"))
         }
+
+
 
 
         fun isOnline(context: Context): Boolean {
