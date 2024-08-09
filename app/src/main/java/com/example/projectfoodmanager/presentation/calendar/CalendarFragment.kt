@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.databinding.FragmentCalendarBinding
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.currentDate
@@ -30,7 +30,7 @@ import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
-import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
+import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfMonth
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfWeek
 import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
@@ -73,7 +73,7 @@ class CalendarFragment : Fragment(), ImageLoadingListener {
                 selectedDate
             ),
             onItemClicked = { selectedDate ->
-                binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
+                binding.registersDateTV.text= formatLocalDateToDateString(selectedDate)
 
                 val calenderEntries = sharedPreference.getEntryOnCalendar(selectedDate.atStartOfDay())
                 // check if any entry in shared if not try getting it from the server
@@ -102,7 +102,7 @@ class CalendarFragment : Fragment(), ImageLoadingListener {
                 selectedDate
             ),
             onItemClicked = { selectedDate ->
-                binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
+                binding.registersDateTV.text= formatLocalDateToDateString(selectedDate)
 
                 val calenderEntry = sharedPreference.getEntryOnCalendar(selectedDate.atStartOfDay())
 
@@ -239,7 +239,7 @@ class CalendarFragment : Fragment(), ImageLoadingListener {
          *  General
          * */
 
-        binding.registersDateTV.text= formatLocalDateToFormatDate(selectedDate)
+        binding.registersDateTV.text= formatLocalDateToDateString(selectedDate)
 
         manager = LinearLayoutManager(activity)
         binding.calEntrysRV.layoutManager = manager
@@ -418,13 +418,13 @@ class CalendarFragment : Fragment(), ImageLoadingListener {
 
         /** Select button  */
         myDialog.findViewById<Button>(R.id.use_first_recipes_portion).setOnClickListener {
-            userViewModel.updateUser(UserDTO(user_portion = numberPicker.value))
+            userViewModel.updateUser(UserRequest(user_portion = numberPicker.value))
             myDialog.dismiss()
         }
 
         /** Ignore button  */
         myDialog.findViewById<Button>(R.id.use_seconds_recipes_portion).setOnClickListener {
-            userViewModel.updateUser(UserDTO(user_portion = 0))
+            userViewModel.updateUser(UserRequest(user_portion = 0))
             myDialog.dismiss()
         }
 

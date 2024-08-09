@@ -12,7 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentSettingsBinding
 import com.example.projectfoodmanager.util.*
@@ -130,7 +130,7 @@ class SettingsFragment : Fragment() {
 
         binding.SWNotify.isChecked = user.fmcToken == "-1"
 
-        binding.SWPrivacy.isChecked = user.profile_type== "PRIVATE"
+        binding.SWPrivacy.isChecked = user.profileType== "PRIVATE"
 
         // todo
         binding.SWCarinhosMode.isChecked = false
@@ -225,6 +225,6 @@ class SettingsFragment : Fragment() {
 
         // update user
         if ( fmcToken != null ||profileType != null)
-            userViewModel.updateUser(UserDTO(fmc_token = fmcToken,profile_type = profileType))
+            userViewModel.updateUser(UserRequest(fmc_token = fmcToken,profileType = profileType))
     }
 }

@@ -3,7 +3,7 @@ package com.example.projectfoodmanager.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.notification.Notification
@@ -34,7 +34,7 @@ class UserViewModel @Inject constructor(
     val userRegisterLiveData: LiveData<Event<NetworkResult<String>>>
         get() = repository.userRegisterLiveData
 
-    fun registerUser(userRequest: UserDTO){
+    fun registerUser(userRequest: UserRequest){
         viewModelScope.launch {
             repository.registerUser(userRequest)
         }
@@ -62,7 +62,7 @@ class UserViewModel @Inject constructor(
     val userUpdateResponseLiveData: LiveData<Event<NetworkResult<User>>>
         get() = repository.userUpdateLiveData
 
-    fun updateUser(userRequest: UserDTO){
+    fun updateUser(userRequest: UserRequest){
         viewModelScope.launch {
             repository.updateUser(userRequest)
         }

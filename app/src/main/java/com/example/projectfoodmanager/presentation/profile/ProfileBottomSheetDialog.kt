@@ -129,7 +129,7 @@ class ProfileBottomSheetDialog : BottomSheetDialogFragment() {
         //TODO: O numero de receitas
         //binding.nRecipesTV.text=
 
-        if (objUser.profile_type=="PRIVATE"){
+        if (objUser.profileType=="PRIVATE"){
             binding.privateAccountLL.visibility=View.VISIBLE
 
         }else{
@@ -173,7 +173,7 @@ class ProfileBottomSheetDialog : BottomSheetDialogFragment() {
             //TODO: Verificar se o utilizador é ou não seguidor
             userViewModel.postFollowRequest(objUser.id)
 
-            if (objUser.profile_type=="PRIVATE"){
+            if (objUser.profileType=="PRIVATE"){
                 binding.followBTN.text = "Aguardar confirmação"
             }else{
                 binding.followBTN.text = "A seguir"

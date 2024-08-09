@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
@@ -178,7 +178,7 @@ class LoginFragment : Fragment() {
                         if ( result.data!!.fmcToken != "-1")
                             FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
                                 if (result.data.fmcToken != token)
-                                    userViewModel.updateUser(UserDTO(fmc_token = token))
+                                    userViewModel.updateUser(UserRequest(fmc_token = token))
                             }
 
                         LocalDateTime.now().let { dateNow ->

@@ -3,7 +3,7 @@ package com.example.projectfoodmanager.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.example.projectfoodmanager.data.repository.GoalRepository

@@ -3,7 +3,7 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
@@ -105,7 +105,7 @@ class UserRepositoryImp @Inject constructor(
         get() = _userRegisterLiveData
 
 
-    override suspend fun registerUser(user: UserDTO) {
+    override suspend fun registerUser(user: UserRequest) {
         _userRegisterLiveData.postValue(Event(NetworkResult.Loading()))
         val response = remoteDataSource.registerUser(user)
         if (response.isSuccessful && response.code() == 201) {
@@ -218,9 +218,10 @@ class UserRepositoryImp @Inject constructor(
     override val userUpdateLiveData: LiveData<Event<NetworkResult<User>>>
         get() = _userUpdateResponseLiveData
 
-    override suspend fun updateUser(userDTO: UserDTO) {
+    override suspend fun updateUser(userRequest: UserRequest) {
         _userUpdateResponseLiveData.postValue(Event(NetworkResult.Loading()))
-        val response = remoteDataSource.updateUser(userDTO)
+
+        val response = remoteDataSource.updateUser(userRequest)
         if (response.isSuccessful) {
             Log.i(TAG, "updateUser: request made was sucessfull.")
             sharedPreference.saveUserSession(response.body()!!)
@@ -236,6 +237,9 @@ class UserRepositoryImp @Inject constructor(
         else{
             _userUpdateResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
+
+
+
 
     }
 

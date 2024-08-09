@@ -2,11 +2,11 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
-import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
+import com.example.projectfoodmanager.data.model.modelRequest.comment.CommentDTO
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
-import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
+import com.example.projectfoodmanager.data.model.modelRequest.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
@@ -38,12 +38,12 @@ import retrofit2.Response
 interface RemoteDataSource {
 
 	//user
-	suspend fun registerUser(user: UserDTO) : Response<Unit>
+	suspend fun registerUser(user: UserRequest) : Response<Unit>
 	suspend fun loginUser(email: String, password: String) : Response<AuthToken>
 	suspend fun logoutUser(logoutRequest: RefreshToken) : Response<Unit>
 	suspend fun getUserAuth() : Response<User>
 	suspend fun getUserById(userId: Int): Response<UserProfile>
-	suspend fun updateUser(user: UserDTO): Response<User>
+	suspend fun updateUser(user: UserRequest): Response<User>
 	suspend fun deleteUser(): Response<String>
 	suspend fun getUserRecipesBackground(): Response<UserRecipesBackground>
 

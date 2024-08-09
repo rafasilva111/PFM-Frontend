@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentUpdateBiodataBinding
 import com.example.projectfoodmanager.util.*
@@ -43,7 +43,7 @@ class UpdateBiodataFragment : Fragment() {
     /** variables */
     val TAG: String = "UpdateBiodata"
     private lateinit var user : User
-    private var activityLevel : Float = 0.0f
+    private var activityLevel : Double = 0.0
 
     private lateinit var onBackDialog: MaterialAlertDialogBuilder
 
@@ -138,12 +138,12 @@ class UpdateBiodataFragment : Fragment() {
         binding.activityLevelRg.setOnCheckedChangeListener { _, checkedId ->
             validateActivityLevel()
             when (checkedId) {
-                R.id.op1_RB -> activityLevel = 1.2F
-                R.id.op2_RB -> activityLevel = 1.375F
-                R.id.op3_RB -> activityLevel = 1.465F
-                R.id.op4_RB -> activityLevel = 1.55F
-                R.id.op5_RB -> activityLevel = 1.725F
-                R.id.op6_RB -> activityLevel = 1.9F
+                R.id.op1_RB -> activityLevel = 1.2
+                R.id.op2_RB -> activityLevel = 1.375
+                R.id.op3_RB -> activityLevel = 1.465
+                R.id.op4_RB -> activityLevel = 1.55
+                R.id.op5_RB -> activityLevel = 1.725
+                R.id.op6_RB -> activityLevel = 1.9
             }
 
         }
@@ -218,8 +218,8 @@ class UpdateBiodataFragment : Fragment() {
 
     }
 
-    private fun patchUser(): UserDTO {
-        val userPatchData = UserDTO()
+    private fun patchUser(): UserRequest {
+        val userPatchData = UserRequest()
 
         /** Sex  */
         val genders = resources.getStringArray(R.array.gender_array)
@@ -229,7 +229,7 @@ class UpdateBiodataFragment : Fragment() {
         }
 
         /** Activity Level  */
-        userPatchData.activity_level = activityLevel
+        userPatchData.activityLevel = activityLevel
 
         /** Weight  */
         userPatchData.weight =  binding.weightEt.text.toString().toFloat()

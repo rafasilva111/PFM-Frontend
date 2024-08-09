@@ -3,11 +3,11 @@ package com.example.projectfoodmanager.data.repository.datasource
 
 import com.example.projectfoodmanager.data.api.ApiInterface
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
-import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
+import com.example.projectfoodmanager.data.model.modelRequest.comment.CommentDTO
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
-import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
+import com.example.projectfoodmanager.data.model.modelRequest.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
@@ -42,12 +42,12 @@ class RemoteDataSourceImpl @Inject constructor(
 ) : RemoteDataSource {
 
 	//User
-	override suspend fun registerUser(user: UserDTO): Response<Unit> {
+	override suspend fun registerUser(user: UserRequest): Response<Unit> {
 		return apiInterface.createUser(user = user)
 	}
 
 	override suspend fun loginUser(email: String, password: String): Response<AuthToken> {
-		return apiInterface.loginUser(UserDTO(email = email, password = password))
+		return apiInterface.loginUser(UserRequest(email = email, password = password))
 	}
 
 	override suspend fun logoutUser(logoutRequest: RefreshToken): Response<Unit> {
@@ -61,7 +61,7 @@ class RemoteDataSourceImpl @Inject constructor(
 	override suspend fun getUserById(userId: Int): Response<UserProfile> {
 		return apiInterface.getUser(userId = userId)
 	}
-	override suspend fun updateUser(user: UserDTO): Response<User> {
+	override suspend fun updateUser(user: UserRequest): Response<User> {
 		return apiInterface.updateUser(user = user )
 	}
 	override suspend fun deleteUser(): Response<String> {
