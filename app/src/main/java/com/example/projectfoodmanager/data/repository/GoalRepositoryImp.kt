@@ -3,7 +3,7 @@ package com.example.projectfoodmanager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource

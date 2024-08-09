@@ -30,11 +30,15 @@ import com.example.projectfoodmanager.AvatarGVAdapter
 import com.example.projectfoodmanager.BuildConfig
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentSessionAccountProfileBinding
 import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateTimeToDateString
+import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateTimeToServerTime
+import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
+import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToLocalDateTime
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.util.Helper.Companion.userIsNot12Old
@@ -46,9 +50,9 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.yalantis.ucrop.UCrop
 import java.io.*
 import java.lang.ref.WeakReference
-import java.text.SimpleDateFormat
 import java.time.DateTimeException
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -65,17 +69,10 @@ class UserSessionDetailsFragment : Fragment() {
     /** variables */
     private val TAG: String = "SessionProfileFragment"
     private lateinit var user: User
+    private var newUser: UserRequest = UserRequest()
     private lateinit var imagePickingActivityResultLauncher: ActivityResultLauncher<Intent>
-    private val PATCH_PERSONAL_DATA = 0;
-    private val PATCH_BIOMETRIC_DATA = 1;
-    private val PATCH_AUTH_DATA = 2;
-    private lateinit var savedDate:String
-    private var activityLevel : Float = 0.0f
-
-
 
     /** Image */
-    var imgURI: Uri? = null
     var selectedAvatar: String? = null
 
     /** injects */
@@ -84,10 +81,15 @@ class UserSessionDetailsFragment : Fragment() {
     @Inject
     lateinit var sharedPreference: SharedPreference
 
+    /**
+     *  Android LifeCycle
+     * */
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        bindObservers()
 
         // Inflate the layout for this fragment
         if (!this::binding.isInitialized) {
@@ -100,8 +102,6 @@ class UserSessionDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        bindObservers()
-
         setUI()
 
         if (isOnline(requireView().context)) {
@@ -111,10 +111,12 @@ class UserSessionDetailsFragment : Fragment() {
             loadUI()
         }
 
-
-
         super.onViewCreated(view, savedInstanceState)
     }
+
+    /**
+     *  General
+     * */
 
     private fun loadUI(){
         /**
@@ -130,8 +132,11 @@ class UserSessionDetailsFragment : Fragment() {
         binding.firstNameEt.setText(name[0])
         binding.lastNameEt.setText(name[1])
 
-        savedDate = user.birth_date.toString()
-        binding.dateEt.setText(savedDate)
+
+        user.birthDate?.let {
+            binding.dateEt.setText(formatServerTimeToDateString(it))
+        }
+
 
         val genders = resources.getStringArray(R.array.default_gender_array)
         when(user.sex){
@@ -202,8 +207,6 @@ class UserSessionDetailsFragment : Fragment() {
         /**
          *  Notifications
          * */
-
-
 
 
         /**
@@ -311,26 +314,25 @@ class UserSessionDetailsFragment : Fragment() {
         }
 
         binding.dateEt.setOnClickListener {
-            binding.dateEt.isEnabled = false
-
-            val currentDate = LocalDate.parse(savedDate,DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-            val selectedMillis =  currentDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
 
             val mtDatePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Selecione a sua data de nascimento")
                 .setTheme(R.style.Widget_AppTheme_MaterialDatePicker)
-                .setSelection(selectedMillis)
+                .setSelection(formatServerTimeToLocalDateTime(user.birthDate!!)
+                    .toInstant(ZoneOffset.UTC)
+                    .toEpochMilli())
                 .build()
 
             mtDatePicker.addOnPositiveButtonClickListener{ selection ->
 
                 val selectedDate = Date(selection)
-                val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                val formattedDate = formatter.format(selectedDate)
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+                    .atStartOfDay()
 
-                savedDate = formattedDate
-                binding.dateEt.setText(formattedDate)
-                binding.dateEt.isEnabled = true
+                user.birthDate = formatLocalDateTimeToServerTime(selectedDate)
+                binding.dateEt.setText(formatLocalDateTimeToDateString(selectedDate))
             }
             mtDatePicker.addOnCancelListener {  binding.dateEt.isEnabled = true}
 
@@ -363,7 +365,6 @@ class UserSessionDetailsFragment : Fragment() {
                 }
             }
         }
-
 
         binding.dateEt.setOnFocusChangeListener { view, hasFocus ->
             if (!hasFocus){
@@ -410,12 +411,12 @@ class UserSessionDetailsFragment : Fragment() {
         binding.activityLevelRg.setOnCheckedChangeListener { _, checkedId ->
             validateActivityLevel()
             when(checkedId){
-                R.id.op1_RB-> activityLevel= 1.2F
-                R.id.op2_RB-> activityLevel= 1.375F
-                R.id.op3_RB-> activityLevel= 1.465F
-                R.id.op4_RB-> activityLevel= 1.55F
-                R.id.op5_RB-> activityLevel= 1.725F
-                R.id.op6_RB-> activityLevel= 1.9F
+                R.id.op1_RB-> newUser.activityLevel= 1.2
+                R.id.op2_RB-> newUser.activityLevel= 1.375
+                R.id.op3_RB-> newUser.activityLevel= 1.465
+                R.id.op4_RB-> newUser.activityLevel= 1.55
+                R.id.op5_RB-> newUser.activityLevel= 1.725
+                R.id.op6_RB-> newUser.activityLevel= 1.9
             }
 
         }
@@ -469,7 +470,6 @@ class UserSessionDetailsFragment : Fragment() {
             }
         }
 
-
         /**
          * Buttons
          */
@@ -486,8 +486,8 @@ class UserSessionDetailsFragment : Fragment() {
             binding.dateEt.clearFocus()
             binding.sexEt.clearFocus()
 
-            if (validation(PATCH_PERSONAL_DATA))
-                userViewModel.updateUser(patchUser(PATCH_PERSONAL_DATA))
+            if (validation(SelectedTab.PERSONAL_DATA))
+                userViewModel.updateUser(patchUser(SelectedTab.PERSONAL_DATA))
         }
 
         /** Update BiometricData  */
@@ -501,8 +501,8 @@ class UserSessionDetailsFragment : Fragment() {
             binding.weightEt.clearFocus()
             binding.heightEt.clearFocus()
 
-            if (validation(PATCH_BIOMETRIC_DATA))
-                userViewModel.updateUser(patchUser(PATCH_BIOMETRIC_DATA))
+            if (validation(SelectedTab.BIOMETRIC_DATA))
+                userViewModel.updateUser(patchUser(SelectedTab.BIOMETRIC_DATA))
 
         }
 
@@ -520,8 +520,8 @@ class UserSessionDetailsFragment : Fragment() {
             binding.userNameET.clearFocus()
             binding.passEt.clearFocus()
             binding.passEtConf.clearFocus()
-            if (validation(PATCH_AUTH_DATA))
-                userViewModel.updateUser(patchUser(PATCH_AUTH_DATA))
+            if (validation(SelectedTab.AUTHENTICATION_DATA))
+                userViewModel.updateUser(patchUser(SelectedTab.AUTHENTICATION_DATA))
         }
 
         /** Reset to Old Personal Data  */
@@ -542,6 +542,57 @@ class UserSessionDetailsFragment : Fragment() {
 
     }
 
+    private fun bindObservers() {
+        userViewModel.userResponseLiveData.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        user = result.data!!
+
+                        loadUI()
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(result.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                        //binding.progressBar.isVisible = true
+                    }
+                }
+            }
+        }
+
+        userViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner) { userSessionResponse ->
+            userSessionResponse.getContentIfNotHandled()?.let { result->
+
+                when (result) {
+                    is NetworkResult.Success -> {
+                        toast("Dados atualizados com sucesso")
+
+                        user = result.data!!
+
+                        loadUI()
+
+                    }
+                    is NetworkResult.Error -> {
+
+                        toast("Dados não atualizados, alguma coisa se passou.",ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        // show loading bar
+                        //todo falta aqui uma loading bar
+
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    /**
+     *  Functions
+     * */
 
     private fun hideKeyboard() {
         (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view?.windowToken, 0)
@@ -558,14 +609,12 @@ class UserSessionDetailsFragment : Fragment() {
         }
     }
 
-    private fun validation(type:Int): Boolean {
+    private fun validation(selectedTab:String): Boolean {
 
         var isValid = true
 
-        when(type){
-            PATCH_PERSONAL_DATA -> {
-                //TODO
-
+        when(selectedTab){
+            SelectedTab.PERSONAL_DATA -> {
                 /** First Name  */
 
                 if (binding.firstNameEt.text.isNullOrEmpty()){
@@ -609,7 +658,7 @@ class UserSessionDetailsFragment : Fragment() {
 
             }
 
-            PATCH_BIOMETRIC_DATA -> {
+            SelectedTab.BIOMETRIC_DATA -> {
                 val heightString = binding.heightEt.text.toString()
                 val height = heightString.toFloatOrNull()
 
@@ -651,7 +700,7 @@ class UserSessionDetailsFragment : Fragment() {
 
                 isValid = validateActivityLevel() and isValid
             }
-            PATCH_AUTH_DATA -> {
+            SelectedTab.AUTHENTICATION_DATA -> {
                 //TODO
             }
         }
@@ -696,6 +745,58 @@ class UserSessionDetailsFragment : Fragment() {
             binding.errorActivityLevelTV.visibility=View.INVISIBLE
         }
         return isValid
+    }
+
+    private fun errorOnBirthdate(error: String){
+        binding.dateTL.isErrorEnabled=true
+        binding.dateTL.error=error
+    }
+
+    private fun patchUser(selectedTab: String): UserRequest {
+
+        val userRequest = UserRequest()
+
+        when(selectedTab){
+            SelectedTab.PERSONAL_DATA -> {
+                /** First Name  */
+                userRequest.name = binding.firstNameEt.text.toString().trim() + " " + binding.lastNameEt.text.toString().trim()
+
+                /** Birth Date  */
+                userRequest.birth_date = binding.dateEt.text.toString()
+
+                /** Sex  */
+                val genders = resources.getStringArray(R.array.default_gender_array)
+                when(binding.sexEt.text.toString()){
+                    genders[0] -> userRequest.sex = SEX.M
+                    genders[1] -> userRequest.sex = SEX.F
+                    else -> userRequest.sex = null
+                }
+
+                /** Img Source  */
+                userRequest.img_source = selectedAvatar
+
+            }
+            SelectedTab.BIOMETRIC_DATA -> {
+
+                /** Activity Level  */
+                userRequest.activityLevel = newUser.activityLevel
+
+                /** Weight  */
+                userRequest.weight =  binding.weightEt.text.toString().toFloat()
+
+                /** Height  */
+                userRequest.height = binding.heightEt.text.toString().toFloat()
+            }
+            SelectedTab.AUTHENTICATION_DATA -> {
+                //TODO
+            }
+        }
+
+        return userRequest
+    }
+
+    private fun showValidationErrors(error: String) {
+        toast(String.format(resources.getString(R.string.txt_error_message, error)))
     }
 
     /**
@@ -793,103 +894,21 @@ class UserSessionDetailsFragment : Fragment() {
             .into(binding.profileIV)
     }
 
-    private fun errorOnBirthdate(error: String){
-        binding.dateTL.isErrorEnabled=true
-        binding.dateTL.error=error
-    }
 
-    private fun patchUser(type:Int):UserDTO{
 
-        val userDTO = UserDTO()
 
-        when(type){
-            PATCH_PERSONAL_DATA -> {
-                /** First Name  */
-                userDTO.name = binding.firstNameEt.text.toString().trim() + " " + binding.lastNameEt.text.toString().trim()
 
-                /** Birth Date  */
-                userDTO.birth_date = binding.dateEt.text.toString()
+    /**
+     *  Object
+     * */
 
-                /** Sex  */
-                val genders = resources.getStringArray(R.array.default_gender_array)
-                when(binding.sexEt.text.toString()){
-                    genders[0] -> userDTO.sex = SEX.M
-                    genders[1] -> userDTO.sex = SEX.F
-                    else -> userDTO.sex = null
-                }
+    companion object {
 
-                /** Img Source  */
-                userDTO.img_source = selectedAvatar
-
-            }
-            PATCH_BIOMETRIC_DATA -> {
-
-                /** Activity Level  */
-                userDTO.activity_level = activityLevel
-
-                /** Weight  */
-                userDTO.weight =  binding.weightEt.text.toString().toFloat()
-
-                /** Height  */
-                userDTO.height = binding.heightEt.text.toString().toFloat()
-            }
-            PATCH_AUTH_DATA -> {
-                //TODO
-            }
+        object SelectedTab {
+            const val PERSONAL_DATA = "1"
+            const val BIOMETRIC_DATA = "2"
+            const val AUTHENTICATION_DATA = "3"
         }
-
-        return userDTO
-    }
-
-    private fun showValidationErrors(error: String) {
-        toast(String.format(resources.getString(R.string.txt_error_message, error)))
-    }
-
-    private fun bindObservers() {
-        userViewModel.userResponseLiveData.observe(viewLifecycleOwner) { event ->
-            event.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-
-                        user = result.data!!
-
-                        loadUI()
-                    }
-                    is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                        //binding.progressBar.isVisible = true
-                    }
-                }
-            }
-        }
-
-        userViewModel.userUpdateResponseLiveData.observe(viewLifecycleOwner) { userSessionResponse ->
-            userSessionResponse.getContentIfNotHandled()?.let { result->
-
-                when (result) {
-                    is NetworkResult.Success -> {
-                        toast("Dados atualizados com sucesso")
-
-                        user = result.data!!
-
-                        loadUI()
-
-                    }
-                    is NetworkResult.Error -> {
-                        toast("Dados não atualizados, alguma coisa se passou.",ToastType.ERROR)
-                    }
-                    is NetworkResult.Loading -> {
-                        // show loading bar
-                        //todo falta aqui uma loading bar
-
-                    }
-                }
-            }
-        }
-
-
     }
 
 }

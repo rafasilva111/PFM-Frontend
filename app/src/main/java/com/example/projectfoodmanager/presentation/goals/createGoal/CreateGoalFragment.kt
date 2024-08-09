@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.fitnessReport.GenericReport
 import com.example.projectfoodmanager.databinding.FragmentCreateGoalBinding

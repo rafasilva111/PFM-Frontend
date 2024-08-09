@@ -22,7 +22,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
-import com.example.projectfoodmanager.presentation.favorites.FavoritesRecipeListingAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -33,66 +32,62 @@ import java.io.*
 import java.text.SimpleDateFormat
 import java.time.*
 import java.time.format.DateTimeParseException
-import javax.sql.DataSource
 
 class Helper {
     companion object {
 
 
-        fun isValidEmail(email: String): Boolean {
-            return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        }
-
-        fun hideKeyboard(view: View){
-            try {
-                val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view.windowToken, 0)
-            }catch (e: Exception){
-
-            }
-        }
-
         fun formatNameToNameUpper(name: String):String{
-
-            return name.split(' ').joinToString(" ") { it.replaceFirstChar { if (it.isLowerCase()) it.titlecase(
-                Locale.getDefault()) else it.toString() } }
+            return name.split(' ').joinToString(" ") { x ->
+                x.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } }
         }
+
+        /**
+         *  Time Helpers
+         */
+
+        private val DEFAULT_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        private val DEFAULT_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm")
 
         // server string -> localTimeDate
         fun formatServerTimeToLocalDateTime(serverTimeString: String): LocalDateTime {
+            // Remove the 'Z' if an offset is present
+            val cleanedTimeString = if (serverTimeString.endsWith("Z") && serverTimeString.contains("+")) {
+                serverTimeString.removeSuffix("Z")
+            } else {
+                serverTimeString
+            }
 
-            return ZonedDateTime.parse(serverTimeString.removeSuffix("Z"), DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+            return ZonedDateTime.parse(cleanedTimeString, DateTimeFormatter.ISO_DATE_TIME)
                 .withZoneSameInstant(ZoneId.systemDefault())
                 .toLocalDateTime()
         }
 
         // server string -> date string
         fun formatServerTimeToDateString(serverTimeString: String): String{
-            return formatServerTimeToLocalDateTime(serverTimeString).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+            return formatServerTimeToLocalDateTime(serverTimeString).format(DEFAULT_DATE_FORMAT)
         }
 
         // server string -> time string
         fun formatServerTimeToTimeString(serverTimeString: String): String{
-            return formatServerTimeToLocalDateTime(serverTimeString).format(DateTimeFormatter.ofPattern("HH:mm"))
+            return formatServerTimeToLocalDateTime(serverTimeString).format(DEFAULT_TIME_FORMAT)
         }
 
-        fun formatLocalTimeToServerTime(localTime: LocalDateTime): String{
+        fun formatLocalDateTimeToServerTime(localTime: LocalDateTime): String{
 
             return localTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         }
 
-
-        fun formatLocalDateToFormatDate(localTime: LocalDateTime): String{
-            return localTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        fun formatLocalDateTimeToDateString(localDateTime: LocalDateTime): String{
+            return localDateTime.format(DEFAULT_DATE_FORMAT)
         }
 
-        fun formatLocalDateToFormatDate(localDate: LocalDate): String{
-            return localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        fun formatLocalDateToDateString(localDate: LocalDate): String{
+            return localDate.format(DEFAULT_DATE_FORMAT)
         }
 
-        fun formatLocalTimeToFormatTime(localTime: LocalDateTime): String{
-            return localTime.format(DateTimeFormatter.ofPattern("HH:mm"))
-        }
+
+
 
 
         fun isOnline(context: Context): Boolean {

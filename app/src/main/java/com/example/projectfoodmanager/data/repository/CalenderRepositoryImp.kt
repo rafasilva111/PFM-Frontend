@@ -11,7 +11,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplified
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.network.Event
-import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
+import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateTimeToServerTime
 import com.example.projectfoodmanager.util.network.NetworkResult
 import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import retrofit2.Response
@@ -113,7 +113,7 @@ class CalenderRepositoryImp @Inject constructor(
         handleApiResponse(
             _functionGetEntryOnCalender
         ) {
-            remoteDataSource.getEntryOnCalender(formatLocalTimeToServerTime(date))
+            remoteDataSource.getEntryOnCalender(formatLocalDateTimeToServerTime(date))
         }
     }
 
@@ -128,7 +128,7 @@ class CalenderRepositoryImp @Inject constructor(
             saveSharedPreferences = true,
             cleanseOldRegistry = cleanseOldRegistry
         ) {
-            remoteDataSource.getEntryOnCalender(formatLocalTimeToServerTime(fromDate),formatLocalTimeToServerTime(toDate))
+            remoteDataSource.getEntryOnCalender(formatLocalDateTimeToServerTime(fromDate),formatLocalDateTimeToServerTime(toDate))
         }
 
     }
@@ -143,7 +143,7 @@ class CalenderRepositoryImp @Inject constructor(
         handleApiResponse(
             _functionGetCalenderIngredients
         ) {
-            remoteDataSource.getCalenderIngredients(formatLocalTimeToServerTime(fromDate),formatLocalTimeToServerTime(toDate))
+            remoteDataSource.getCalenderIngredients(formatLocalDateTimeToServerTime(fromDate),formatLocalDateTimeToServerTime(toDate))
         }
     }
 

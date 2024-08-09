@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.model.dtos.user.goal
+package com.example.projectfoodmanager.data.model.modelRequest.user.goal
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

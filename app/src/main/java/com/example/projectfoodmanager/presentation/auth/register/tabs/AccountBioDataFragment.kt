@@ -37,7 +37,7 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
 
     /** constants */
     val TAG: String = "BioDataFragment"
-    private var activityLevel : Float = 0.0f
+    private var activityLevel : Double = 0.0
 
     /** injects */
 
@@ -107,12 +107,12 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
         binding.activityLevelRg.setOnCheckedChangeListener { _, checkedId ->
             validateActivityLevel()
             when(checkedId){
-                R.id.op1_RB-> activityLevel= 1.2F
-                R.id.op2_RB-> activityLevel= 1.375F
-                R.id.op3_RB-> activityLevel= 1.465F
-                R.id.op4_RB-> activityLevel= 1.55F
-                R.id.op5_RB-> activityLevel= 1.725F
-                R.id.op6_RB-> activityLevel= 1.9F
+                R.id.op1_RB-> activityLevel= 1.2
+                R.id.op2_RB-> activityLevel= 1.375
+                R.id.op3_RB-> activityLevel= 1.465
+                R.id.op4_RB-> activityLevel= 1.55
+                R.id.op5_RB-> activityLevel= 1.725
+                R.id.op6_RB-> activityLevel= 1.9
             }
         }
 
@@ -172,7 +172,7 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
     private fun patchUser() {
 
         /** Activity Level  */
-        RegisterFragment.user.activity_level = activityLevel
+        RegisterFragment.user.activityLevel = activityLevel
 
         /** Weight  */
         RegisterFragment.user.weight =  binding.weightEt.text.toString().toFloat()

@@ -16,7 +16,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.databinding.FragmentCalendarEntryDetailBinding
 import com.example.projectfoodmanager.util.*
-import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
+import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateTimeToServerTime
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDateString
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToLocalDateTime
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToTimeString
@@ -361,7 +361,7 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
 
         return CalenderEntryRequest(
             tag = resources.getStringArray(R.array.tagEntryCalender_values).toList()[tagSelected],
-            realizationDate = formatLocalTimeToServerTime(
+            realizationDate = formatLocalDateTimeToServerTime(
                 LocalDateTime.of(
                     LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                     LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm"))

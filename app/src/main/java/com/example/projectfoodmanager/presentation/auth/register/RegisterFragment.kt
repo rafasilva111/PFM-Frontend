@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.databinding.FragmentRegisterBinding
 import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
@@ -150,7 +150,7 @@ class RegisterFragment : Fragment() {
 
 
     companion object{
-        var user: UserDTO = UserDTO()
+        var user: UserRequest = UserRequest()
 
         /** Image */
         var imgURI: Uri? = null

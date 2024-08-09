@@ -1,7 +1,7 @@
 package com.example.projectfoodmanager.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.notification.Notification
@@ -29,11 +29,11 @@ interface UserRepository {
 
     val getUserAccount: LiveData<Event<NetworkResult<UserProfile>>>
 
-    suspend fun registerUser(user : UserDTO)
+    suspend fun registerUser(user : UserRequest)
     suspend fun loginUser(email: String, password: String)
     suspend fun getUserSession()
     suspend fun logoutUser()
-    suspend fun updateUser(userDTO: UserDTO)
+    suspend fun updateUser(userRequest: UserRequest)
     suspend fun getUserRecipesBackground()
     suspend fun deleteUserAccount()
 

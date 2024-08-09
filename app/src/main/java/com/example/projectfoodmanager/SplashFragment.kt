@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.databinding.FragmentSplashBinding
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.util.*
@@ -181,7 +181,7 @@ class SplashFragment : Fragment() {
                         if ( result.data!!.fmcToken != "-1")
                             firebaseMessaging.token.addOnSuccessListener { token ->
                                 if (result.data.fmcToken != token)
-                                    userViewModel.updateUser(UserDTO(fmc_token = token))
+                                    userViewModel.updateUser(UserRequest(fmc_token = token))
                             }
                         updateLocalSharedPreferences()
 

@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.model.dtos.recipe.comment
+package com.example.projectfoodmanager.data.model.modelRequest.comment
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

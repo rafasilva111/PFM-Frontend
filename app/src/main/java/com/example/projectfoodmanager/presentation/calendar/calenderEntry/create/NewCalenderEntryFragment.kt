@@ -24,7 +24,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.toRecipeSi
 import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBinding
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
 import com.example.projectfoodmanager.util.*
-import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
+import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateTimeToServerTime
 import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
 import com.example.projectfoodmanager.util.network.NetworkResult
 import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
@@ -768,7 +768,7 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
         return CalenderEntryRequest(
             tag = resources.getStringArray(R.array.tagEntryCalender_values).toList()[selectedTag],
             portion = checkedPortion,
-            realizationDate = formatLocalTimeToServerTime(
+            realizationDate = formatLocalDateTimeToServerTime(
                 LocalDateTime.of(
                     LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                     LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm"))

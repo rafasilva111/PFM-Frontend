@@ -2,9 +2,9 @@ package com.example.projectfoodmanager.data.api
 
 
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
-import com.example.projectfoodmanager.data.model.dtos.recipe.comment.CommentDTO
-import com.example.projectfoodmanager.data.model.dtos.user.UserDTO
-import com.example.projectfoodmanager.data.model.dtos.user.goal.GoalDTO
+import com.example.projectfoodmanager.data.model.modelRequest.comment.CommentDTO
+import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
+import com.example.projectfoodmanager.data.model.modelRequest.user.goal.GoalDTO
 import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
@@ -49,10 +49,10 @@ interface ApiInterface {
     /** General */
 
     @POST("$API_V1_BASE_URL/auth")
-    suspend fun createUser(@Body user : UserDTO): Response<Unit>
+    suspend fun createUser(@Body user : UserRequest): Response<Unit>
 
     @POST("$API_V1_BASE_URL/auth/login")
-    suspend fun loginUser(@Body user : UserDTO): Response<AuthToken>
+    suspend fun loginUser(@Body user : UserRequest): Response<AuthToken>
 
     // You cant define a body in delete requests
     @HTTP(method = "DELETE", path = "$API_V1_BASE_URL/auth", hasBody = true)
@@ -66,13 +66,13 @@ interface ApiInterface {
     suspend fun getUserSession(): Response<User>
 
     @POST("$API_V1_BASE_URL/user")
-    suspend fun patchUser(@Body user : UserDTO): Response<Unit>
+    suspend fun patchUser(@Body user : UserRequest): Response<Unit>
 
     @GET("$API_V1_BASE_URL/user")
     suspend fun getUser(@Query("id") userId: Int): Response<UserProfile>
 
     @PATCH("$API_V1_BASE_URL/user")
-    suspend fun updateUser(@Body user : UserDTO): Response<User>
+    suspend fun updateUser(@Body user : UserRequest): Response<User>
 
     @DELETE("$API_V1_BASE_URL/user")
     suspend fun deleteUser(): Response<String>
