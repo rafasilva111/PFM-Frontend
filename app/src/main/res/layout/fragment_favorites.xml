@@ -7,12 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".presentation.favorites.FavoritesFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
     <TextView
         android:id="@+id/titleTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="35dp"
         android:fontFamily="@font/fedoka"
         android:text="Favoritos"
         android:textColor="@color/black"
@@ -33,7 +39,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/white"
         android:visibility="gone"/>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <android.widget.SearchView
         android:id="@+id/SVsearch"
@@ -50,14 +56,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTV" />
+        app:layout_constraintTop_toBottomOf="@+id/header" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SVsearch">
 
@@ -65,27 +71,25 @@
             android:id="@+id/HSV_filter_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:scrollbars="none"
-            app:layout_anchor="@+id/HSV_filter_1"
-            app:layout_anchorGravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvName">
-
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="60dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/SVsearch"
-                app:singleSelection="true">
+                app:singleSelection="true"
+                app:selectionRequired="true">
+
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipCurtidas"
@@ -144,6 +148,8 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_create_recipe"
         android:layout_width="match_parent"
@@ -183,51 +189,85 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_create_recipe">
+        app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:elevation="7dp"
-            android:indeterminateTint="#FF6410"
+            android:indeterminateTint="@color/main_color"
             android:outlineProvider="none"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
+            app:layout_constraintBottom_toBottomOf="@+id/cardView8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView6"
+            android:layout_width="240dp"
+            android:layout_height="200dp"
+            app:cardBackgroundColor="@color/main_color"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView8"
+            android:layout_width="270dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="15dp"
+            app:cardBackgroundColor="@color/color_1"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/cardView6"
+            app:layout_constraintStart_toStartOf="@+id/cardView6"
+            app:layout_constraintTop_toTopOf="@+id/cardView6" />
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:elevation="8dp"
             android:orientation="vertical"
             android:visibility="invisible"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cardView8" />
+
+        <TextView
+            android:id="@+id/offlineTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="8dp"
+            android:text="Estás offline..."
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/cardView8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tv_no_recipes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="8dp"
+            android:text="@string/no_recipes"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/cardView8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/tv_no_recipes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No recipes to be apresented"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_create_recipe" />
 
     <LinearLayout
         android:layout_width="wrap_content"

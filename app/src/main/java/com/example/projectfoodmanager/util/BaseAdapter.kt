@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
 
 abstract class BaseAdapter<T, VB : ViewBinding>(
     private val inflate: (LayoutInflater, ViewGroup, Boolean) -> VB
@@ -11,7 +12,7 @@ abstract class BaseAdapter<T, VB : ViewBinding>(
 
     private var itemList: MutableList<T> = mutableListOf()
 
-    open var imagesToLoad: Int = 4
+    open var imagesToLoad: Int = DEFAULT_NR_OF_IMAGES_BY_RECIPE_CARD
     var imagesLoaded: Int = 0
 
     abstract fun bind(binding: VB, item: T, position: Int)
@@ -47,6 +48,13 @@ abstract class BaseAdapter<T, VB : ViewBinding>(
         itemList = (itemList + _list).toMutableList()
         notifyItemRangeChanged(listSize,itemList.size)
     }
+
+    fun updateItem(position: Int,item: T){
+        itemList.removeAt(position)
+        itemList.add(position,item)
+        notifyItemChanged(position)
+    }
+
 
 
     fun removeItem(position: Int) {

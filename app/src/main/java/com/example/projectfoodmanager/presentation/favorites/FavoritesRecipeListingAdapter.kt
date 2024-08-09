@@ -26,7 +26,6 @@ class FavoritesRecipeListingAdapter(
     private val TAG = "CalenderEntryAdapter"
 
     private var list: MutableList<RecipeSimplified> = arrayListOf()
-    override var imagesToLoad = 2
 
 
     fun updateItem(item: Recipe){
@@ -60,21 +59,23 @@ class FavoritesRecipeListingAdapter(
 
         // Load Recipe img
         if (item.imgSource.isNotEmpty())
-            loadRecipeImage(binding.imageView, item.imgSource) {
-                imageLoadingListener.onImageLoaded()
+            loadRecipeImage(binding.imageView, item.imgSource){
+                if (position == 0)
+                    imageLoadingListener.onImageLoaded()
             }
         else
-            imageLoadingListener.onImageLoaded()
-
-
+            if (position == 0)
+                imageLoadingListener.onImageLoaded()
 
         // Load Author img
         if (item.createdBy.imgSource.isNotEmpty())
             loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){
-                imageLoadingListener.onImageLoaded()
+                if (position == 0)
+                    imageLoadingListener.onImageLoaded()
             }
         else
-            imageLoadingListener.onImageLoaded()
+            if (position == 0)
+                imageLoadingListener.onImageLoaded()
 
         /**
          * Details

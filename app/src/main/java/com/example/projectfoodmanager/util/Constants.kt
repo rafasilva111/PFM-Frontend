@@ -1,9 +1,19 @@
 package com.example.projectfoodmanager.util
 
+/**
+ *  App Default Tunings
+ **/
 
+/** General */
 
 const val SPLASH_TIME:Long = 1000
 const val LOGIN_TIME:Long = 2000
+
+const val DEBOUNCER_STRING_SEARCH:Long = 1000
+
+/** Cards */
+const val DEFAULT_NR_OF_IMAGES_BY_RECIPE_CARD :Int = 2 // If Recipe Card changes adding new async loaded images this number must change
+
 
 
 
@@ -126,22 +136,16 @@ object RecipeDifficultyConstants{
 }
 
 object RecipeListingFragmentFilters {
-    const val CARNE ="carne"
-    const val PEIXE ="peixe"
-    const val SOPAS ="sopas"
-    const val VEGETARIANA ="veg"
-    const val FRUTA ="fruta"
-    const val BEBIDAS ="bebida"
-    val SALADA ="salada"
-    val PIZZA ="pizza"
-    val SOBREMESA = "sobremesa"
-    val SANDES = "sandes"
-    val LANCHE = "lanche"
-    val PEQUENO_ALMOCO = "pequeno-almoco"
-    val JANTAR = "jantar"
-    val ALMOCO = "almoco"
-    val PETISCO = "petisco"
-
+    const val MEAT ="carne"
+    const val FISH ="peixe"
+    const val SOUP ="sopas"
+    const val VEGAN ="veg"
+    const val FRUIT ="fruta"
+    const val DRINK ="bebida"
+    const val SALAD ="salada"
+    const val PIZZA ="pizza"
+    const val DESSERT = "sobremesa"
+    const val SANDWICH = "sandes"
 }
 
 

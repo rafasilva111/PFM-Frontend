@@ -98,25 +98,25 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
                     textAlignment = View.TEXT_ALIGNMENT_CENTER
 
                     when (item.title.lowercase()) {
-                        RecipeListingFragmentFilters.CARNE -> chipBackgroundColor =
+                        RecipeListingFragmentFilters.MEAT -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_carne, null)
-                        RecipeListingFragmentFilters.PEIXE -> chipBackgroundColor =
+                        RecipeListingFragmentFilters.FISH -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_peixe, null)
-                        RecipeListingFragmentFilters.SOPAS -> chipBackgroundColor =
+                        RecipeListingFragmentFilters.SOUP -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_sopa, null)
-                        RecipeListingFragmentFilters.VEGETARIANA -> chipBackgroundColor =
+                        RecipeListingFragmentFilters.VEGAN -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_vegeteriana, null)
-                        RecipeListingFragmentFilters.FRUTA -> chipBackgroundColor =
+                        RecipeListingFragmentFilters.FRUIT -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_fruta, null)
-                        RecipeListingFragmentFilters.BEBIDAS -> chipBackgroundColor =
+                        RecipeListingFragmentFilters.DRINK -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_bebida, null)
-                        RecipeListingFragmentFilters.SALADA -> chipBackgroundColor =
+                        RecipeListingFragmentFilters.SALAD -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_salada, null)
                         RecipeListingFragmentFilters.PIZZA -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_pizza, null)
-                        RecipeListingFragmentFilters.SOBREMESA -> chipBackgroundColor =
+                        RecipeListingFragmentFilters.DESSERT -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_sobremesa, null)
-                        RecipeListingFragmentFilters.SANDES -> chipBackgroundColor =
+                        RecipeListingFragmentFilters.SANDWICH -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_sandes, null)
 
                         //TODO: é para ser visto melhor

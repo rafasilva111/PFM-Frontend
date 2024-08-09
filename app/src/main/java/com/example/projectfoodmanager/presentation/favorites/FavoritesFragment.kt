@@ -56,7 +56,6 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
 
     // Debounce
     private var debounceJob: Job? = null
-    private val debounceTime = 800L
 
 
     // RecyclerView
@@ -78,10 +77,9 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
     // Chip Filters
     private var onlineChipFilter: Boolean = false
     private var selectedTab: String = SelectedTab.LIKED
-    private lateinit var chipSelected: Chip
 
     // Tag Filters
-    private var oldFilerTag: String =""
+    private var previousSelectTag: String =""
 
     // Search
     private var newSearch: Boolean = false
@@ -161,26 +159,25 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
         bindObservers()
         super.onViewCreated(view, savedInstanceState)
         setUI()
-
     }
 
     override fun onStart() {
-        changeTheme(false, activity, context)
         super.onStart()
     }
 
     override fun onResume() {
-        changeMenuVisibility(true,requireActivity())
         super.onResume()
     }
 
     override fun onPause() {
-        // prevent flicker when reloading recipes
+
+        // reset adapter
+        adapter.removeItems()
         binding.recyclerView.visibility = View.INVISIBLE
+
         super.onPause()
     }
 
@@ -190,7 +187,9 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
 
     private fun setUI(){
 
-
+        val activity = requireActivity()
+        changeMenuVisibility(true, activity)
+        changeTheme(false,activity,requireContext())
 
         binding.recyclerView.adapter = adapter
 
@@ -266,20 +265,13 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
          * Chip filters
          */
 
-        chipSelected = binding.chipGroup.selectChipByTag(SelectedTab.LIKED)!!
-
         binding.chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
 
             if (checkedId.isNotEmpty()) {
                 group.findViewById<Chip>(checkedId[0])?.let {
-                    chipSelected.isChecked = false
-                    chipSelected = it
-
-                    updateView(chipSelected.tag as String )
+                    it.isChecked = false
+                    updateView(it.tag as String )
                 }
-            } else {
-                // If no chip is selected, select the last selected one
-                chipSelected.isChecked = true
             }
         }
 
@@ -290,28 +282,22 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
          */
 
         binding.meatFiltIB.setOnClickListener {
-            changeFilterSearch(RecipeListingFragmentFilters.CARNE)
-            filterOnClick(RecipeListingFragmentFilters.CARNE)
+            changeTagFilter(RecipeListingFragmentFilters.MEAT)
         }
         binding.fishFiltIB.setOnClickListener {
-            changeFilterSearch(RecipeListingFragmentFilters.PEIXE)
-            filterOnClick(RecipeListingFragmentFilters.PEIXE)
+            changeTagFilter(RecipeListingFragmentFilters.FISH)
         }
         binding.soupFiltIB.setOnClickListener {
-            changeFilterSearch(RecipeListingFragmentFilters.SOPAS)
-            filterOnClick(RecipeListingFragmentFilters.SOPAS)
+            changeTagFilter(RecipeListingFragmentFilters.SOUP)
         }
         binding.vegFiltIB.setOnClickListener {
-            changeFilterSearch(RecipeListingFragmentFilters.VEGETARIANA)
-            filterOnClick(RecipeListingFragmentFilters.VEGETARIANA)
+            changeTagFilter(RecipeListingFragmentFilters.VEGAN)
         }
         binding.fruitFiltIB.setOnClickListener {
-            changeFilterSearch(RecipeListingFragmentFilters.FRUTA)
-            filterOnClick(RecipeListingFragmentFilters.FRUTA)
+            changeTagFilter(RecipeListingFragmentFilters.FRUIT)
         }
         binding.drinkFiltIB.setOnClickListener {
-            changeFilterSearch(RecipeListingFragmentFilters.BEBIDAS)
-            filterOnClick(RecipeListingFragmentFilters.BEBIDAS)
+            changeTagFilter(RecipeListingFragmentFilters.DRINK)
         }
 
 
@@ -319,7 +305,8 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
         // coisas que só faz online
 
         if (isOnline(requireContext())) {
-            updateView(chipSelected.tag as String)
+
+            updateView(selectedTab)
 
             /**
              * Search filter
@@ -344,7 +331,7 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
 
                         // Start a new debounce job
                         debounceJob = CoroutineScope(Dispatchers.Main).launch {
-                            delay(debounceTime)
+                            delay(DEBOUNCER_STRING_SEARCH)
                             if (searchString == text) {
                                 updateView(selectedTab )
                             }
@@ -410,17 +397,19 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
                         // isto é usado para atualizar os likes caso o user vá a detail view
                         if (refreshPage != 0) {
 
-                            val lastIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) else adapter.itemCount
-                            var firstIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (lastIndex - PaginationNumber.DEFAULT) else 0
+                            val recipesListed = adapter.getItems()
 
-                            recipeListed.subList(firstIndex, lastIndex).clear()
+                            val lastIndex = if (recipesListed.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) else adapter.itemCount
+                            var firstIndex = if (recipesListed.size >= PaginationNumber.DEFAULT) (lastIndex - PaginationNumber.DEFAULT) else 0
+
+                            recipesListed.subList(firstIndex, lastIndex).clear()
 
 
                             for (recipe in result.data!!.result) {
-                                recipeListed.add(firstIndex, recipe)
+                                recipesListed.add(firstIndex, recipe)
                                 firstIndex++
                             }
-                            adapter.setItems(recipeListed)
+                            adapter.setItems(recipesListed)
 
                             //reset control variables
                             refreshPage = 0
@@ -475,7 +464,7 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
                         binding.progressBar.hide()
 
                         result.data?.let {
-                            if (chipSelected == binding.chipCurtidas)
+                            if (selectedTab == SelectedTab.LIKED)
                                 adapter.removeItem(it)
                             else
                                 adapter.updateItem(it)
@@ -501,7 +490,7 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
                         binding.progressBar.hide()
 
                         result.data?.let {
-                            if (chipSelected == binding.chipCurtidas)
+                            if (selectedTab == SelectedTab.LIKED)
                                 adapter.removeItem(it)
                             else
                                 adapter.updateItem(it)
@@ -528,7 +517,7 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
                         binding.progressBar.hide()
 
                         result.data?.let {
-                            if (chipSelected == binding.chipGuardados)
+                            if (selectedTab == SelectedTab.SAVED)
                                 adapter.removeItem(it)
                             else
                                 adapter.updateItem(it)
@@ -555,7 +544,7 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
                         binding.progressBar.hide()
 
                         result.data?.let {
-                            if (chipSelected == binding.chipGuardados)
+                            if (selectedTab == SelectedTab.SAVED)
                                 adapter.removeItem(it)
                             else
                                 adapter.updateItem(it)
@@ -589,7 +578,7 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
         changeRecyclerViewScrollListener(false)
 
 
-        val recipes = getChipList(currentTabSelected,searchTag, searchString)
+        val recipes = getChipList(currentTabSelected)
 
         binding.addRecipeBtn.visibility = View.GONE
         this.selectedTab = currentTabSelected
@@ -737,32 +726,32 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
         return null
     }
 
-    private fun getChipList(currentTabSelected: String,filterByTag: String,filterByString: String): MutableList<RecipeSimplified> {
+    private fun getChipList(currentTabSelected: String): MutableList<RecipeSimplified> {
 
         when(currentTabSelected){
             binding.chipCurtidas.tag  -> {
-                recipeViewModel.getLikedRecipes(pageSize = 5, searchString = filterByString, searchTag = filterByTag)
+                recipeViewModel.getLikedRecipes(pageSize = 5, searchString = searchString, searchTag = searchTag)
             }
             binding.chipGuardados.tag  ->{
 
                 return when{
-                    filterByTag.isNotEmpty() && filterByString.isNotEmpty() -> {
+                    searchTag.isNotEmpty() && searchString.isNotEmpty() -> {
                         sharedPreference.getUserRecipesBackgroundSavedRecipes()
                             .toRecipeSimplifiedList()
                             .filter { recipe ->
                                 recipe.tags.any { recipeTag -> recipeTag.title.equals(tag, ignoreCase = true) } &&
-                                        recipe.title.contains(filterByString, ignoreCase = true)
+                                        recipe.title.contains(searchString, ignoreCase = true)
                             }
                             .toMutableList()
                     }
-                    filterByTag.isNotEmpty() -> {
+                    searchTag.isNotEmpty() -> {
                         sharedPreference.getUserRecipesBackgroundSavedRecipes().toRecipeSimplifiedList().filter { recipe ->
                             recipe.tags.any { recipeTag -> recipeTag.title.equals(tag, ignoreCase = true) }
                         }.toMutableList()
                     }
-                    filterByString.isNotEmpty() ->{
+                    searchString.isNotEmpty() ->{
                         sharedPreference.getUserRecipesBackgroundSavedRecipes().toRecipeSimplifiedList().filter { recipe ->
-                            recipe.title.contains(filterByString , ignoreCase = true)
+                            recipe.title.contains(searchString , ignoreCase = true)
                         }.toMutableList()
                     }
                     else ->sharedPreference.getUserRecipesBackgroundSavedRecipes().toRecipeSimplifiedList()
@@ -771,23 +760,23 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
             }
             binding.chipCriadas.tag  ->{
                 return when{
-                    filterByTag.isNotEmpty() && filterByString.isNotEmpty() -> {
+                    searchTag.isNotEmpty() && searchString.isNotEmpty() -> {
                         sharedPreference.getUserRecipesBackgroundCreatedRecipes()
                             .toRecipeSimplifiedList()
                             .filter { recipe ->
                                 recipe.tags.any { recipeTag -> recipeTag.title.equals(tag, ignoreCase = true) } &&
-                                        recipe.title.contains(filterByString, ignoreCase = true)
+                                        recipe.title.contains(searchString, ignoreCase = true)
                             }
                             .toMutableList()
                     }
-                    filterByTag.isNotEmpty() -> {
+                    searchTag.isNotEmpty() -> {
                         sharedPreference.getUserRecipesBackgroundCreatedRecipes().toRecipeSimplifiedList().filter { recipe ->
                             recipe.tags.any { recipeTag -> recipeTag.title.equals(tag, ignoreCase = true) }
                         }.toMutableList()
                     }
-                    filterByString.isNotEmpty() ->{
+                    searchString.isNotEmpty() ->{
                         sharedPreference.getUserRecipesBackgroundCreatedRecipes().toRecipeSimplifiedList().filter { recipe ->
-                            recipe.title.contains(filterByString , ignoreCase = true)
+                            recipe.title.contains(searchString , ignoreCase = true)
                         }.toMutableList()
                     }
                     else ->sharedPreference.getUserRecipesBackgroundCreatedRecipes().toRecipeSimplifiedList()
@@ -809,67 +798,38 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
 
     /** Tab Filters */
 
-    private fun changeFilterSearch(tag: String){
+    private fun changeTagFilter(tag: String){
+
+        // Alter Tag
         searchTag = if (searchTag == tag){
             ""
-        } else{
+        }
+        else{
             tag
         }
 
-        updateView(chipSelected.tag as String)
-    }
+        // Update Recipe List
+        updateView(selectedTab)
 
-    private fun filterOnClick(tag:String){
-
+        // Scroll to 0 position
         binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
 
+        // Alter button color
+
         // Change last colors
-        if (oldFilerTag.isNotEmpty()) {
-            val clToUpdate: ConstraintLayout? = binding.root.findViewWithTag(oldFilerTag + "CL") as? ConstraintLayout
-            val tvToUpdate: TextView? = binding.root.findViewWithTag(oldFilerTag + "TV") as? TextView
-            val ibToUpdate: ImageButton? = binding.root.findViewWithTag(oldFilerTag + "_filt_IB") as? ImageButton
-
-            clToUpdate?.apply {
-                backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
-                elevation = 0f
-            }
-
-            tvToUpdate?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
-
-            ibToUpdate?.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
+        if (previousSelectTag.isNotEmpty()) {
+            deactivateTag(previousSelectTag)
         }
 
         // if double clicked reset search
-        if (oldFilerTag == tag) {
-            oldFilerTag = ""
+        if (previousSelectTag == tag) {
+            previousSelectTag = ""
             currentPage = 1
-
-            if (selectedTab ==SelectedTab.LIKED)
-                recipeViewModel.getRecipes(page = currentPage, searchString = searchString)
-            else if (selectedTab == SelectedTab.CREATED || selectedTab == SelectedTab.SAVED )
-                getFilteredRecipesByTag(tag)
+            recipeViewModel.getRecipes(page = currentPage, searchString = searchString)
             return
         }
 
         activateTag(tag)
-
-    }
-
-    private fun getFilteredRecipesByTag(tag:String):MutableList<RecipeSimplified>{
-        when(selectedTab) {
-            SelectedTab.CREATED -> {
-                return sharedPreference.getUserRecipesBackgroundCreatedRecipes().toRecipeSimplifiedList().filter { recipe ->
-                    recipe.tags.any { recipeTag -> recipeTag.title.equals(tag, ignoreCase = true) }
-                }.toMutableList()
-            }
-            SelectedTab.SAVED -> {
-                return sharedPreference.getUserRecipesBackgroundSavedRecipes().toRecipeSimplifiedList().filter { recipe ->
-                    recipe.tags.any { recipeTag -> recipeTag.title.equals(tag, ignoreCase = true) }
-                }.toMutableList()
-            }
-        }
-
-        return mutableListOf()
     }
 
     private fun activateTag(tag: String) {
@@ -886,7 +846,22 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
         tv?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
 
         ib?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_1))
-        oldFilerTag = tag
+        previousSelectTag = tag
+    }
+
+    private fun deactivateTag(tag: String) {
+        val clToUpdate: ConstraintLayout? = binding.root.findViewWithTag(tag + "CL") as? ConstraintLayout
+        val tvToUpdate: TextView? = binding.root.findViewWithTag(tag + "TV") as? TextView
+        val ibToUpdate: ImageButton? = binding.root.findViewWithTag(tag + "_filt_IB") as? ImageButton
+
+        clToUpdate?.apply {
+            backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
+            elevation = 0f
+        }
+
+        tvToUpdate?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
+
+        ibToUpdate?.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
     }
 
 
@@ -895,8 +870,6 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
      * */
 
     companion object {
-        private var recipeListed: MutableList<RecipeSimplified> = mutableListOf()
-
 
         // pagination
         private var currentPage:Int = 1
@@ -905,7 +878,6 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
         // Filters
         private var searchTag: String = ""
         private var searchString: String = ""
-        private var chipSelected: Chip? = null
 
 
         object SelectedTab {
