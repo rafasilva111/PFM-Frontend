@@ -34,6 +34,10 @@ import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.chip.Chip
@@ -58,17 +62,32 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     /** Constants */
     private val TAG: String = "RecipeListingFragment"
 
-
-    private var newSearch: Boolean = false
-    private var noMoreRecipesMessagePresented = false
-
+    // RecyclerView
     private var snapHelper : SnapHelper = PagerSnapHelper()
     private lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
-    private var refreshPage: Int = 0
-    private var oldFilerTag: String =""
-    private var numberOfNotifications: Int = 0
 
+
+    // Reloading current page
+    private var refreshPage: Int = 0
+    private var refreshPosition: Int = 0
+
+    // Pagination
+    private var noMoreRecipesMessagePresented = false
+
+    // Filters
+
+    // Chip Filters
+    private var selectedTab: String = SelectedTab.VERIFIED
+
+    // Tag Filters
+    private var previousSelectTag: String =""
+
+    // Search
+    private var newSearch: Boolean = false
+
+    // Notifications
+    private var numberOfNotifications: Int = 0
     private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             numberOfNotifications += 1
@@ -90,18 +109,13 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         RecipeListingAdapter(
             onItemClicked = {pos,recipe ->
                 // use pos to reset current page to pos page, so it will refresh the pos page
-                refreshPage =  ceil((pos+1).toFloat()/PaginationNumber.DEFAULT).toInt()
 
-                // we need to hide recycler view to prevent image flickering
-
+                refreshPosition =  pos
 
                 findNavController().navigate(R.id.action_recipeListingFragment_to_receitaDetailFragment,Bundle().apply {
                     putInt("recipe_id",recipe.id)
                 })
 
-
-
-                changeMenuVisibility(false,activity)
             },
             onLikeClicked = {recipe,like ->
 
@@ -126,6 +140,22 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             this
         )
     }
+
+    /** Interfaces */
+    override fun onImageLoaded() {
+        requireActivity().runOnUiThread {
+            adapter.imagesLoaded++
+            if (adapter.imagesLoaded == adapter.imagesToLoad) {
+                binding.progressBar.hide()
+                binding.recyclerView.visibility = View.VISIBLE
+            }
+
+        }
+    }
+
+    /**
+     *  Android LifeCycle
+     * */
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -187,12 +217,36 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     override fun onStart() {
 
-
         loadUI()
         super.onStart()
     }
 
+    override fun onPause() {
+
+        // reset adapter
+        adapter.removeItems()
+        binding.recyclerView.visibility = View.INVISIBLE
+
+        // Unregister the broadcast receiver to avoid memory leaks
+        context?.unregisterReceiver(notificationReceiver)
+        super.onPause()
+    }
+
+    override fun onResume() {
+
+
+        // Register the broadcast receiver
+        context?.registerReceiver(notificationReceiver, IntentFilter(MyFirebaseMessagingService.ACTION_NOTIFICATION_RECEIVED))
+        super.onResume()
+    }
+
+    /**
+     *  General
+     * */
+
     private fun setUI() {
+
+
 
 
         /**
@@ -305,23 +359,12 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
              */
 
 
-            val chipGroup: ChipGroup = binding.chipGroup
-
-
-            activateSearchChip(chipGroup)
-
-
-
-            chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
+            binding.chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
                 if (checkedId.isNotEmpty()) {
                     group.findViewById<Chip>(checkedId[0])?.let {
-                        chipSelected!!.isChecked = false
-                        chipSelected = it
-                        updateView(chipSelected!!)
+                        it.isChecked = false
+                        updateView(it.tag as String)
                     }
-                } else {
-                    // If no chip is selected, select the last selected one
-                    chipSelected!!.isChecked = true
                 }
             }
 
@@ -336,31 +379,25 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
              */
 
             if (searchTag.isNotEmpty())
-                activateSearchTag(searchTag)
+                activateTag(searchTag)
 
             binding.meatFiltIB.setOnClickListener {
-                changeFilterSearch(RecipeListingFragmentFilters.CARNE)
-                filterOnClick(RecipeListingFragmentFilters.CARNE)
+                changeTagFilter(RecipeListingFragmentFilters.MEAT)
             }
             binding.fishFiltIB.setOnClickListener {
-                changeFilterSearch(RecipeListingFragmentFilters.PEIXE)
-                filterOnClick(RecipeListingFragmentFilters.PEIXE)
+                changeTagFilter(RecipeListingFragmentFilters.FISH)
             }
             binding.soupFiltIB.setOnClickListener {
-                changeFilterSearch(RecipeListingFragmentFilters.SOPAS)
-                filterOnClick(RecipeListingFragmentFilters.SOPAS)
+                changeTagFilter(RecipeListingFragmentFilters.SOUP)
             }
             binding.vegiFiltIB.setOnClickListener {
-                changeFilterSearch(RecipeListingFragmentFilters.VEGETARIANA)
-                filterOnClick(RecipeListingFragmentFilters.VEGETARIANA)
+                changeTagFilter(RecipeListingFragmentFilters.VEGAN)
             }
             binding.fruitFiltIB.setOnClickListener {
-                changeFilterSearch(RecipeListingFragmentFilters.FRUTA)
-                filterOnClick(RecipeListingFragmentFilters.FRUTA)
+                changeTagFilter(RecipeListingFragmentFilters.FRUIT)
             }
             binding.drinkFiltIB.setOnClickListener {
-                changeFilterSearch(RecipeListingFragmentFilters.BEBIDAS)
-                filterOnClick(RecipeListingFragmentFilters.BEBIDAS)
+                changeTagFilter(RecipeListingFragmentFilters.DRINK)
             }
 
         } else {
@@ -381,137 +418,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     }
 
-    override fun onResume() {
-
-        // Register the broadcast receiver
-        binding.recyclerView.visibility = View.INVISIBLE
-        context?.registerReceiver(notificationReceiver, IntentFilter(MyFirebaseMessagingService.ACTION_NOTIFICATION_RECEIVED))
-        super.onResume()
-    }
-
-    override fun onPause() {
-
-        // Unregister the broadcast receiver to avoid memory leaks
-        adapter.imagesLoaded = 0
-        context?.unregisterReceiver(notificationReceiver)
-        super.onPause()
-    }
-
-    override fun onImageLoaded() {
-        requireActivity().runOnUiThread {
-            adapter.imagesLoaded++
-
-
-            if (adapter.imagesLoaded == adapter.imagesToLoad) {
-                binding.recyclerView.visibility = View.VISIBLE
-                binding.progressBar.hide()
-
-            }
-
-        }
-    }
-
-    private fun activateSearchChip(chipGroup: ChipGroup) {
-        for (i in 0 until chipGroup.childCount) {
-            val chip: Chip = chipGroup.getChildAt(i) as Chip
-
-            if (chip.tag == sortedBy) {
-                chip.isChecked = true
-                chipSelected = chip
-                break
-            }
-
-        }
-    }
-
-    private fun activateSearchTag(tag: String) {
-        val cl: ConstraintLayout? = binding.root.findViewWithTag(tag + "CL") as? ConstraintLayout
-        val tv: TextView? = binding.root.findViewWithTag(tag + "TV") as? TextView
-        val ib: ImageButton? = binding.root.findViewWithTag(tag + "_filt_IB") as? ImageButton
-
-
-        cl?.apply {
-            backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color))
-            elevation = 3f
-        }
-
-        tv?.setTextColor(resources.getColor(R.color.white))
-
-        ib?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_1))
-        oldFilerTag = tag
-    }
-
-    private fun setRecyclerViewScrollListener() {
-        scrollListener = object : RecyclerView.OnScrollListener(){
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-
-                    val pastVisibleItemSinceLastFetch: Int = manager.findLastCompletelyVisibleItemPosition()
-
-
-                    // if User is on the penultimate recipe of currenct page, get next page
-                    if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 3))
-                        if (nextPage ){
-                            //val visibleItemCount: Int = manager.childCount
-                            //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
-
-
-                            recipeViewModel.getRecipes(page = ++currentPage, searchString = searchString,searchTag= searchTag, by = sortedBy)
-
-                            // prevent double request, this variable is change after response from getRecipes
-                            nextPage = false
-                        }
-
-                    // if User is on the last recipe of currenct page, and no next page present notice to user
-                    if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 1))
-                        if (!nextPage && !noMoreRecipesMessagePresented){
-                            noMoreRecipesMessagePresented = true
-                            toast("Sorry cant find more recipes.",ToastType.ALERT)
-                        }
-
-
-                }
-
-                super.onScrollStateChanged(recyclerView, newState)
-
-            }
-        }
-        binding.recyclerView.addOnScrollListener(scrollListener)
-
-    }
-
-    private fun filterOnClick(tag:String){
-
-        binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
-
-        // Change last colors
-        if (oldFilerTag.isNotEmpty()) {
-            val clToUpdate: ConstraintLayout? = binding.root.findViewWithTag(oldFilerTag + "CL") as? ConstraintLayout
-            val tvToUpdate: TextView? = binding.root.findViewWithTag(oldFilerTag + "TV") as? TextView
-            val ibToUpdate: ImageButton? = binding.root.findViewWithTag(oldFilerTag + "_filt_IB") as? ImageButton
-
-            clToUpdate?.apply {
-                backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
-                elevation = 0f
-            }
-
-            tvToUpdate?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
-
-            ibToUpdate?.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
-        }
-
-        // if double clicked reset search
-        if (oldFilerTag == tag) {
-            oldFilerTag = ""
-            currentPage = 1
-            recipeViewModel.getRecipes(page = currentPage, searchString = searchString, by = sortedBy)
-            return
-        }
-
-        activateSearchTag(tag)
-
-    }
-
     private fun bindObservers() {
 
         /**
@@ -524,24 +430,22 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                 when (result) {
                     is NetworkResult.Success -> {
 
-                        // isto é usado para atualizar os likes caso o user vá a detail view
-
-                        if (refreshPage != 0) {
+                        // todo isto não está a fazer diferença
+                        if (refreshPosition != 0) {
+                            val refreshPage =  ceil((refreshPosition+1).toFloat()/PaginationNumber.DEFAULT).toInt()
 
                             val lastIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) else adapter.itemCount
-                            var firstIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (lastIndex - PaginationNumber.DEFAULT) else 0
+                            val firstIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (lastIndex - PaginationNumber.DEFAULT) else 0
 
                             recipeListed.subList(firstIndex, lastIndex).clear()
 
 
-                            for (recipe in result.data!!.result) {
-                                recipeListed.add(firstIndex, recipe)
-                                firstIndex++
-                            }
-                            adapter.updateList(recipeListed)
+                            recipeListed.addAll(firstIndex, result.data!!.result)
+
+                            adapter.setItems(recipeListed)
 
                             //reset control variables
-                            refreshPage = 0
+                            refreshPosition = 0
                         }
                         else {
 
@@ -555,8 +459,9 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                             // check if list empty
 
                             if(result.data.result.isEmpty()){
+                                binding.progressBar.hide()
                                 binding.noRecipesTV.visibility=View.VISIBLE
-                                adapter.cleanList()
+                                adapter.removeItems()
                                 return@let
                             }else{
                                 binding.noRecipesTV.visibility=View.GONE
@@ -565,13 +470,14 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
                             // checks if new search
 
-                            if (currentPage == 1)
+                            if (currentPage == 1){
                                 recipeListed = result.data.result
-                            else
+                                adapter.setItems(result.data.result)
+                            }
+                            else{
                                 recipeListed += result.data.result
-
-
-                            adapter.updateList(recipeListed)
+                                adapter.addItems(result.data.result)
+                            }
                         }
 
 
@@ -607,7 +513,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
                     }
                     is NetworkResult.Error -> {
-                                            }
+                    }
                     is NetworkResult.Loading -> {
                     }
                 }
@@ -638,7 +544,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
         recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { response ->
             response.getContentIfNotHandled()?.let { result ->
-            when (result) {
+                when (result) {
                     is NetworkResult.Success -> {
 
 
@@ -700,6 +606,85 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     }
 
+    /**
+     *  Functions
+     * */
+
+    private fun setRecyclerViewScrollListener() {
+        scrollListener = object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+
+                    val pastVisibleItemSinceLastFetch: Int = manager.findLastCompletelyVisibleItemPosition()
+
+
+                    // if User is on the penultimate recipe of currenct page, get next page
+                    if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 3))
+                        if (nextPage ){
+                            //val visibleItemCount: Int = manager.childCount
+                            //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
+
+
+                            recipeViewModel.getRecipes(page = ++currentPage, searchString = searchString,searchTag= searchTag, by = sortedBy)
+
+                            // prevent double request, this variable is change after response from getRecipes
+                            nextPage = false
+                        }
+
+                    // if User is on the last recipe of currenct page, and no next page present notice to user
+                    if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 1))
+                        if (!nextPage && !noMoreRecipesMessagePresented){
+                            noMoreRecipesMessagePresented = true
+                            toast("Sorry cant find more recipes.",ToastType.ALERT)
+                        }
+
+
+                }
+
+                super.onScrollStateChanged(recyclerView, newState)
+
+            }
+        }
+        binding.recyclerView.addOnScrollListener(scrollListener)
+
+    }
+
+    private fun updateView(currentTabSelected: String) {
+
+        when(currentTabSelected){
+            SelectedTab.VERIFIED -> {
+                sortedBy = RecipesSortingType.VERIFIED
+            }
+            SelectedTab.ALL-> {
+                sortedBy = RecipesSortingType.ALL
+
+            }
+            SelectedTab.MOST_RECENT-> {
+                sortedBy = RecipesSortingType.DATE
+            }
+            SelectedTab.SUGGESTIONS-> {
+                toast("Sorry, not implement yet...")
+                return
+            }
+            SelectedTab.PERSONALIZED_SUGGESTIONS-> {
+                toast("Sorry, not implement yet...")
+                return
+            }
+            SelectedTab.RANDOM-> {
+                sortedBy = RecipesSortingType.RANDOM
+            }
+            SelectedTab.MOST_LIKED-> {
+                sortedBy = RecipesSortingType.LIKES
+            }
+            SelectedTab.MOST_SAVED-> {
+                sortedBy = RecipesSortingType.SAVES
+            }
+        }
+        recipeViewModel.getRecipes(page = 1, searchString= searchString,searchTag= searchTag, by = sortedBy)
+        //slowly move to position 0
+        binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
+    }
+
     private fun changeNotificationNumber(){
         if (numberOfNotifications>0 ) {
             binding.notificationsBadgeTV.visibility = View.VISIBLE
@@ -709,53 +694,93 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         }
     }
 
-    private fun changeFilterSearch(tag: String){
-        if (searchTag == tag){
-           searchTag =""
-            updateView(chipSelected!!)
+    /** Filters */
+
+    /** Chip Filters */
+
+    private fun ChipGroup.selectChipByTag(desiredTag: String): Chip? {
+        for (index in 0 until childCount) {
+            val chip = getChildAt(index) as Chip
+            if (chip.tag == desiredTag) {
+                chip.isChecked = true
+                return chip
+            }
+        }
+        return null
+    }
+
+    /** Tab Filters */
+
+    private fun changeTagFilter(tag: String){
+
+        // Alter Tag
+        searchTag = if (searchTag == tag){
+            ""
         }
         else{
-            searchTag =tag
-            recipeViewModel.getRecipes(searchTag = tag, by = sortedBy)
+            tag
         }
-    }
 
-    private fun updateView(currentTabSelected: View) {
+        // Update Recipe List
+        updateView(selectedTab)
 
-        when(currentTabSelected){
-            binding.recipeListingFilterVerified -> {
-                sortedBy = RecipesSortingType.VERIFIED
-            }
-            binding.recipeListingFilterAll-> {
-                sortedBy = RecipesSortingType.ALL
-
-            }
-            binding.recipeListingFilterRecent-> {
-                sortedBy = RecipesSortingType.DATE
-            }
-            binding.recipeListingFilterSugestions-> {
-                toast("Sorry, not implement yet...")
-                return
-            }
-            binding.recipeListingFilterPersonalizedSugestions-> {
-                toast("Sorry, not implement yet...")
-                return
-            }
-            binding.recipeListingFilterRandom-> {
-                sortedBy = RecipesSortingType.RANDOM
-            }
-            binding.recipeListingFilterMostLiked-> {
-                sortedBy = RecipesSortingType.LIKES
-            }
-            binding.recipeListingFilterMostSaved-> {
-                sortedBy = RecipesSortingType.SAVES
-            }
-        }
-        recipeViewModel.getRecipes(page = 1, searchString= searchString,searchTag= searchTag, by = sortedBy)
-        //slowly move to position 0
+        // Scroll to 0 position
         binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
+
+        // Alter button color
+
+        // Change last colors
+        if (previousSelectTag.isNotEmpty()) {
+            deactivateTag(previousSelectTag)
+        }
+
+        // if double clicked reset search
+        if (previousSelectTag == tag) {
+            previousSelectTag = ""
+            currentPage = 1
+            recipeViewModel.getRecipes(page = currentPage, searchString = searchString, by = sortedBy)
+            return
+        }
+
+        activateTag(tag)
     }
 
+    private fun activateTag(tag: String) {
+        val cl: ConstraintLayout? = binding.root.findViewWithTag(tag + "CL") as? ConstraintLayout
+        val tv: TextView? = binding.root.findViewWithTag(tag + "TV") as? TextView
+        val ib: ImageButton? = binding.root.findViewWithTag(tag + "_filt_IB") as? ImageButton
+
+
+        cl?.apply {
+            backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color))
+            elevation = 3f
+        }
+
+        tv?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+
+        ib?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.color_1))
+        previousSelectTag = tag
+    }
+
+    private fun deactivateTag(tag: String) {
+        val clToUpdate: ConstraintLayout? = binding.root.findViewWithTag(tag + "CL") as? ConstraintLayout
+        val tvToUpdate: TextView? = binding.root.findViewWithTag(tag + "TV") as? TextView
+        val ibToUpdate: ImageButton? = binding.root.findViewWithTag(tag + "_filt_IB") as? ImageButton
+
+        clToUpdate?.apply {
+            backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.transparent))
+            elevation = 0f
+        }
+
+        tvToUpdate?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
+
+        ibToUpdate?.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
+    }
+
+
+    /**
+     *  Object
+     * */
 
     companion object {
 
@@ -768,9 +793,19 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         // Filters
         private var searchTag: String = ""
         private var searchString: String = ""
-        private var chipSelected: Chip? = null
         private var sortedBy: String = RecipesSortingType.VERIFIED
 
+
+        object SelectedTab {
+            const val VERIFIED = "1"
+            const val ALL = "2"
+            const val SUGGESTIONS = "3"
+            const val MOST_SAVED = "4"
+            const val MOST_LIKED = "4"
+            const val MOST_RECENT = "4"
+            const val RANDOM = "4"
+            const val PERSONALIZED_SUGGESTIONS = "5"
+        }
     }
 
 }

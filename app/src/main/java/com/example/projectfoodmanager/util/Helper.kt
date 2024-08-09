@@ -22,6 +22,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
+import com.example.projectfoodmanager.presentation.favorites.FavoritesRecipeListingAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -448,7 +449,17 @@ class Helper {
                 "Invalid time format"
             }
         }
+
+
     }
+
+
+
+
+
+
+
+
 
 
 }

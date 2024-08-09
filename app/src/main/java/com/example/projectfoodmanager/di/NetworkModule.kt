@@ -1,18 +1,11 @@
 package com.example.projectfoodmanager.di
 import android.content.Context
-import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapter
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonWriter
-import java.io.IOException
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import com.example.projectfoodmanager.data.api.ApiInterface
 import com.example.projectfoodmanager.data.api.AuthApiInterface
 import com.example.projectfoodmanager.data.api.AuthAuthenticator
 import com.example.projectfoodmanager.data.api.AuthInterceptor
 import com.example.projectfoodmanager.util.Constants
-import com.example.projectfoodmanager.util.TokenManager
+import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
 import okhttp3.OkHttpClient
 import dagger.Module
 import dagger.Provides
@@ -22,7 +15,6 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
 

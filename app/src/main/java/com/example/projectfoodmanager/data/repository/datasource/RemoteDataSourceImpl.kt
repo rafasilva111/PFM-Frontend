@@ -91,8 +91,8 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.deleteRecipe(recipeId = recipeId)
 	}
 
-	override suspend fun getLikedRecipes(page: Int,pageSize: Int,searchString: String): Response<RecipeList> {
-		return apiInterface.getLikedRecipes(page,pageSize,searchString)
+	override suspend fun getLikedRecipes(page: Int,pageSize: Int,searchString: String, searchTag: String): Response<RecipeList> {
+		return apiInterface.getLikedRecipes(page,pageSize,searchString,searchTag)
 	}
 
 	override suspend fun addLike(recipeId: Int): Response<Recipe> {

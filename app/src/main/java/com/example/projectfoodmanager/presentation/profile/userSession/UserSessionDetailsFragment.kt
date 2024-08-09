@@ -38,6 +38,9 @@ import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.util.Helper.Companion.userIsNot12Old
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.yalantis.ucrop.UCrop

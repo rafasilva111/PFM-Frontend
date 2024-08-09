@@ -11,7 +11,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentGoalsBinding
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
-import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.viewmodels.GoalsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 

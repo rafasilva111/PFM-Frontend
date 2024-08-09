@@ -7,18 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.databinding.FragmentCreateGoalBinding
 import com.example.projectfoodmanager.databinding.FragmentGoalCreateGoalWeightBinding
 import com.example.projectfoodmanager.presentation.goals.createGoal.CreateGoalFragment.Companion.fitnessReport
 import com.example.projectfoodmanager.presentation.goals.createGoal.CreateGoalFragment.Companion.goalGenericReport
 import com.example.projectfoodmanager.presentation.goals.createGoal.CreateGoalFragment.Companion.userGoal
-import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.network.NetworkResult
 import com.example.projectfoodmanager.viewmodels.GoalsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 
 @AndroidEntryPoint

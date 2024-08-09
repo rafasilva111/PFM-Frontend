@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.databinding.FragmentLanguagesBinding
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
-import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

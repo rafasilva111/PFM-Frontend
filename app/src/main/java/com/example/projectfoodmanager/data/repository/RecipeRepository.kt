@@ -6,8 +6,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
-import com.example.projectfoodmanager.util.Event
-import com.example.projectfoodmanager.util.NetworkResult
+import com.example.projectfoodmanager.util.network.Event
+import com.example.projectfoodmanager.util.network.NetworkResult
 
 interface RecipeRepository {
 
@@ -26,7 +26,7 @@ interface RecipeRepository {
     val functionLikeOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
     val functionRemoveLikeOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
 
-    suspend fun getLikedRecipes(page: Int,pageSize: Int,searchString: String)
+    suspend fun getLikedRecipes(page: Int,pageSize: Int,searchString: String,searchTag: String)
     suspend fun addLikeOnRecipe(recipeId: Int)
     suspend fun removeLikeOnRecipe(recipeId: Int)
 

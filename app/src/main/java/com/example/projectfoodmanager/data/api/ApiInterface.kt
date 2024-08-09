@@ -109,7 +109,7 @@ interface ApiInterface {
     suspend fun getUserRecipesBackground(): Response<UserRecipesBackground>
 
     @GET("$API_V1_BASE_URL/recipe/like")
-    suspend fun getLikedRecipes(@Query("page") page: Int, @Query("page_size") pageSize: Int,@Query("search_string") searchString: String): Response<RecipeList>
+    suspend fun getLikedRecipes(@Query("page") page: Int, @Query("page_size") pageSize: Int,@Query("search_string") searchString: String,@Query("search_tag") searchTag: String): Response<RecipeList>
 
     @POST("$API_V1_BASE_URL/recipe/like")
     suspend fun addLike(@Query("id") recipeId: Int): Response<Recipe>

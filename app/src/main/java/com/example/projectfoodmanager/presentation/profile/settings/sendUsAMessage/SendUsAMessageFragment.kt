@@ -11,6 +11,8 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
 import com.example.projectfoodmanager.databinding.FragmentSendUsAMessageBinding
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.viewmodels.MiscellaneousViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

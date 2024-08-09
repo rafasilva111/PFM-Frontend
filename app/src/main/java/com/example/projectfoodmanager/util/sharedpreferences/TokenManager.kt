@@ -1,21 +1,15 @@
-package com.example.projectfoodmanager.util
+package com.example.projectfoodmanager.util.sharedpreferences
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.projectfoodmanager.data.api.ApiInterface
-import com.example.projectfoodmanager.data.api.ApiInterface.Companion.API_V1_BASE_URL
 import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthToken
 import com.example.projectfoodmanager.util.Constants.PREFS_TOKEN_FILE
+import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.Session.ACCESS_TOKEN
 import com.example.projectfoodmanager.util.Session.ACCESS_TOKEN_EXPIRES
 import com.example.projectfoodmanager.util.Session.REFRESH_TOKEN
 import com.example.projectfoodmanager.util.Session.REFRESH_TOKEN_EXPIRES
 import dagger.hilt.android.qualifiers.ApplicationContext
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.json.JSONObject
-import java.io.IOException
 import java.time.LocalDateTime
 import javax.inject.Inject
 

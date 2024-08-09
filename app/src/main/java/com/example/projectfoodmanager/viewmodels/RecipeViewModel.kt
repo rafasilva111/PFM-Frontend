@@ -10,8 +10,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Co
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
 import com.example.projectfoodmanager.data.repository.RecipeRepository
-import com.example.projectfoodmanager.util.Event
-import com.example.projectfoodmanager.util.NetworkResult
+import com.example.projectfoodmanager.util.network.Event
+import com.example.projectfoodmanager.util.network.NetworkResult
 import com.example.projectfoodmanager.util.PaginationNumber
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -58,9 +58,9 @@ class RecipeViewModel @Inject constructor (
     val functionGetLikedRecipes: LiveData<Event<NetworkResult<RecipeList>>>
         get() = repository.functionGetLikedRecipes
 
-    fun getLikedRecipes(page: Int = 1,pageSize: Int = 10, searchString: String = "") {
+    fun getLikedRecipes(page: Int = 1,pageSize: Int = 10, searchString: String = "", searchTag: String = "") {
         viewModelScope.launch {
-            repository.getLikedRecipes(page,pageSize,searchString)
+            repository.getLikedRecipes(page,pageSize,searchString,searchTag)
         }
     }
 

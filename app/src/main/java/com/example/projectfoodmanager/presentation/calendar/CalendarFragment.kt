@@ -33,6 +33,9 @@ import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateToFormatDate
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfMonth
 import com.example.projectfoodmanager.util.Helper.Companion.getStartAndEndOfWeek
+import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,7 +43,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CalendarFragment : Fragment(),ImageLoadingListener {
+class CalendarFragment : Fragment(), ImageLoadingListener {
 
     /** Binding */
     lateinit var binding: FragmentCalendarBinding

@@ -10,10 +10,10 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingListSimplified
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
-import com.example.projectfoodmanager.util.Event
+import com.example.projectfoodmanager.util.network.Event
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
-import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import retrofit2.Response
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -176,8 +176,11 @@ class CalenderRepositoryImp @Inject constructor(
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             sharedPreference.updateCalendarEntry(response.body()!!)
 
-            _functionPatchCalenderEntry.postValue(Event(NetworkResult.Success(response.body()!!
-            )))
+            _functionPatchCalenderEntry.postValue(
+                Event(
+                NetworkResult.Success(response.body()!!
+            ))
+            )
         }
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()
@@ -204,8 +207,11 @@ class CalenderRepositoryImp @Inject constructor(
             Log.i(TAG, "handleResponse: request made was sucessfull.")
             // todo update shared preferences
             sharedPreference.updateCalenderEntriesState(calenderEntryCheckListRequest)
-            _checkCalenderEntries.postValue(Event(NetworkResult.Success(response.isSuccessful
-            )))
+            _checkCalenderEntries.postValue(
+                Event(
+                NetworkResult.Success(response.isSuccessful
+            ))
+            )
         }
         else if(response.errorBody()!=null){
             val errorObj = response.errorBody()!!.charStream().readText()

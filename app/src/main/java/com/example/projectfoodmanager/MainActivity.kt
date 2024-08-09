@@ -4,17 +4,14 @@ package com.example.projectfoodmanager
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.projectfoodmanager.databinding.ActivityMainBinding
 import com.example.projectfoodmanager.util.Helper.Companion.MENU_VISIBILITY
-import com.example.projectfoodmanager.util.NetworkConnectivity
-import com.example.projectfoodmanager.viewmodels.UserViewModel
+import com.example.projectfoodmanager.util.network.NetworkConnectivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

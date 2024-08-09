@@ -25,6 +25,10 @@ import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBindin
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatLocalTimeToServerTime
+import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
 import com.example.projectfoodmanager.viewmodels.CalendarViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -819,6 +823,9 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
     }
 
+    /**
+     *  Object
+     * */
 
     companion object {
 

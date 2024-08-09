@@ -16,11 +16,11 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.profile.User
 import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipesBackground
 import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
-import com.example.projectfoodmanager.util.Event
+import com.example.projectfoodmanager.util.network.Event
 import com.example.projectfoodmanager.util.FirebaseMessagingTopics.NOTIFICATION_USER_TOPIC_BASE
-import com.example.projectfoodmanager.util.NetworkResult
-import com.example.projectfoodmanager.util.SharedPreference
-import com.example.projectfoodmanager.util.TokenManager
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
 import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Response
 import java.net.SocketTimeoutException

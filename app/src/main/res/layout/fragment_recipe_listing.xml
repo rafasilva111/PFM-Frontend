@@ -12,11 +12,12 @@
         android:id="@+id/notificationIV"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginBottom="4dp"
         android:src="@drawable/ic_notification"
+        app:layout_constraintBottom_toBottomOf="@+id/profileCV"
         app:layout_constraintEnd_toStartOf="@+id/profileCV"
-        app:layout_constraintTop_toTopOf="@+id/tvWelcome" />
+        app:layout_constraintTop_toTopOf="@+id/profileCV" />
 
     <TextView
         android:id="@+id/notificationsBadgeTV"
@@ -64,26 +65,32 @@
         app:layout_constraintStart_toStartOf="@+id/profileCV"
         app:layout_constraintTop_toBottomOf="@+id/profileCV" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/profileCV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:foreground="@drawable/border_vip"
-            app:cardCornerRadius="70dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/profileCV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:foreground="@drawable/border_vip"
+        app:cardCornerRadius="70dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/ivProfilePic"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/img_profile"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="true"/>
-        </androidx.cardview.widget.CardView>
+        <ImageView
+            android:id="@+id/ivProfilePic"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/img_profile" />
+    </androidx.cardview.widget.CardView>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tvWelcome"
@@ -105,11 +112,13 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/fredoka_regular"
             android:text="@string/recipe_listing_name"
-            android:textStyle="bold"
             android:textColor="#000000"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/tvWelcome"
             app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 
@@ -128,7 +137,7 @@
             android:queryHint="Search Recipe"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+            app:layout_constraintTop_toBottomOf="@+id/header" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinatorLayout"
@@ -292,16 +301,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:elevation="8dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:orientation="vertical"
-                android:textAlignment="center"
                 android:visibility="invisible"
-                app:flow_horizontalAlign="center"
-                app:flow_verticalAlign="center"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -333,21 +337,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--
 
-        <HorizontalScrollView
-            android:id="@+id/horizontalScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="5dp"
-            android:layout_marginBottom="10dp"
-            android:scrollbars="none"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
--->
 
     <LinearLayout
         android:layout_width="wrap_content"

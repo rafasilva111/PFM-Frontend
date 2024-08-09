@@ -14,7 +14,7 @@ import com.example.projectfoodmanager.data.model.user.goal.fitnessReport.Generic
 import com.example.projectfoodmanager.databinding.FragmentCreateGoalBinding
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
-import com.example.projectfoodmanager.util.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint

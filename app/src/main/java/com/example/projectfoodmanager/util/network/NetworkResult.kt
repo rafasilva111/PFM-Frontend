@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.util
+package com.example.projectfoodmanager.util.network
 
 import com.example.projectfoodmanager.data.model.util.ValidationError
 

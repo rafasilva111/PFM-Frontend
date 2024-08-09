@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.util
+package com.example.projectfoodmanager.util.network
 
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.

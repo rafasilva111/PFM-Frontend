@@ -15,6 +15,9 @@ import com.example.projectfoodmanager.databinding.FragmentRegisterBiodataBinding
 import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment
 import com.example.projectfoodmanager.presentation.auth.register.RegisterFragment.Companion.imgURI
 import com.example.projectfoodmanager.util.*
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
+import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage

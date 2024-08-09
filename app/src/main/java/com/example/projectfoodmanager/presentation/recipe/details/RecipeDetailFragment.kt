@@ -1,7 +1,6 @@
 package com.example.projectfoodmanager.presentation.recipe.details
 
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -23,8 +22,9 @@ import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDa
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
-import com.google.android.material.badge.ExperimentalBadgeUtils
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
