@@ -40,6 +40,8 @@ import com.example.projectfoodmanager.presentation.auth.register.RegisterFragmen
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.ActionResultCodes.GALLERY_REQUEST_CODE
 import com.example.projectfoodmanager.util.Helper.Companion.checkPermission
+import com.example.projectfoodmanager.util.Helper.Companion.formatDateStringToLocalDateTime
+import com.example.projectfoodmanager.util.Helper.Companion.formatLocalDateTimeToServerTime
 import com.example.projectfoodmanager.util.Helper.Companion.randomAvatarImg
 import com.example.projectfoodmanager.util.Helper.Companion.requestPermission
 import com.example.projectfoodmanager.util.Helper.Companion.userIsNot12Old
@@ -417,7 +419,7 @@ class AccountProfileFragment(private var parentBinding: FragmentRegisterBinding)
         RegisterFragment.user.name = binding.firstNameEt.text.toString().trim() + " " + binding.lastNameEt.text.toString().trim()
 
         /** Birth Date  */
-        RegisterFragment.user.birth_date = binding.dateEt.text.toString()
+        RegisterFragment.user.birth_date = formatLocalDateTimeToServerTime(formatDateStringToLocalDateTime(binding.dateEt.text.toString()))
 
         /** Sex  */
         val genders = resources.getStringArray(R.array.default_gender_array)

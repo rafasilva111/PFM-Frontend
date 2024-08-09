@@ -79,6 +79,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     // Chip Filters
     private var selectedTab: String = SelectedTab.VERIFIED
+    private lateinit var chipSelected: Chip
 
     // Tag Filters
     private var previousSelectTag: String =""
@@ -359,12 +360,20 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
              */
 
 
+            chipSelected = binding.chipGroup.selectChipByTag(selectedTab)!!
+
             binding.chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
+
                 if (checkedId.isNotEmpty()) {
                     group.findViewById<Chip>(checkedId[0])?.let {
-                        it.isChecked = false
-                        updateView(it.tag as String)
+                        chipSelected.isChecked = false
+                        chipSelected = it
+
+                        updateView(chipSelected.tag as String )
                     }
+                } else {
+                    // If no chip is selected, select the last selected one
+                    chipSelected.isChecked = true
                 }
             }
 
@@ -651,6 +660,9 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     private fun updateView(currentTabSelected: String) {
 
+        binding.recyclerView.visibility = View.INVISIBLE
+        binding.progressBar.show()
+
         when(currentTabSelected){
             SelectedTab.VERIFIED -> {
                 sortedBy = RecipesSortingType.VERIFIED
@@ -664,10 +676,12 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             }
             SelectedTab.SUGGESTIONS-> {
                 toast("Sorry, not implement yet...")
+                binding.progressBar.hide()
                 return
             }
             SelectedTab.PERSONALIZED_SUGGESTIONS-> {
                 toast("Sorry, not implement yet...")
+                binding.progressBar.hide()
                 return
             }
             SelectedTab.RANDOM-> {
@@ -797,14 +811,14 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
 
         object SelectedTab {
-            const val VERIFIED = "1"
-            const val ALL = "2"
-            const val SUGGESTIONS = "3"
-            const val MOST_SAVED = "4"
-            const val MOST_LIKED = "4"
-            const val MOST_RECENT = "4"
-            const val RANDOM = "4"
-            const val PERSONALIZED_SUGGESTIONS = "5"
+            const val VERIFIED = "VERIFIED"
+            const val ALL = "ALL"
+            const val SUGGESTIONS = "SUGGESTIONS"
+            const val MOST_SAVED = "MOST_SAVED"
+            const val MOST_LIKED = "MOST_LIKED"
+            const val MOST_RECENT = "MOST_RECENT"
+            const val RANDOM = "RANDOM"
+            const val PERSONALIZED_SUGGESTIONS = "PERSONALIZED_SUGGESTIONS"
         }
     }
 
