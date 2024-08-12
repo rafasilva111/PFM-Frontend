@@ -184,16 +184,11 @@ interface ApiInterface {
     /** Follows */
 
     @GET("$API_V1_BASE_URL/follow/list/followers")
-    suspend fun getFollowersByUser(@Query("user_id") userId: Int): Response<UserList>
+    suspend fun getFollowers(@Query("user_id") userId: Int?): Response<UserList>
 
-    @GET("$API_V1_BASE_URL/follow/list/followers")
-    suspend fun getFollowers(): Response<UserList>
+    @GET("$API_V1_BASE_URL/follow/list/follows")
+    suspend fun getFollows(@Query("user_id") userId: Int?): Response<UserList>
 
-    @GET("$API_V1_BASE_URL/follow/list/followeds")
-    suspend fun getFolloweds(): Response<UserList>
-
-    @GET("$API_V1_BASE_URL/follow/list/followeds")
-    suspend fun getFollowedsByUser(@Query("user_id") userId: Int): Response<UserList>
 
     @POST("$API_V1_BASE_URL/followers")
     suspend fun createFollower(@Query("userSenderId") userSenderId: Int,@Query("userReceiverId") userReceiverId: Int): Response<FollowerResponse>

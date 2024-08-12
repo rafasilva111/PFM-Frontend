@@ -95,7 +95,7 @@ interface RemoteDataSource {
 	//followers
 	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>
 	suspend fun getFollowers(userId: Int): Response<UserList>
-	suspend fun getFolloweds(userId: Int): Response<UserList>
+	suspend fun getFollows(userId: Int?): Response<UserList>
 	suspend fun getFollowRequests(pageSize: Int): Response<UserList>
 	suspend fun postAcceptFollowRequest(userId: Int): Response<Unit>
     suspend fun deleteFollowRequest( userId: Int): Response<Unit>

@@ -14,10 +14,10 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UserToFollow
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFollowerBinding
+import com.example.projectfoodmanager.presentation.follower.FollowerFragment.Companion.SelectedTab.ALL
+import com.example.projectfoodmanager.presentation.follower.FollowerFragment.Companion.SelectedTab.FOLLOWERS
+import com.example.projectfoodmanager.presentation.follower.FollowerFragment.Companion.SelectedTab.FOLLOWS
 import com.example.projectfoodmanager.util.*
-import com.example.projectfoodmanager.util.FollowType.FOLLOWEDS
-import com.example.projectfoodmanager.util.FollowType.FOLLOWERS
-import com.example.projectfoodmanager.util.FollowType.NOT_FOLLOWER
 import com.example.projectfoodmanager.util.Helper.Companion.formatNameToNameUpper
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
 import com.example.projectfoodmanager.util.network.NetworkResult
@@ -32,13 +32,19 @@ class FollowerFragment : Fragment() {
 
 
 
-    // binding
+    /** Binding */
     lateinit var binding: FragmentFollowerBinding
 
-    // viewModels
+    /** ViewModels */
     private val userViewModel by activityViewModels<UserViewModel>()
 
-    // constants
+    /** Constants */
+
+
+    private var selectedTab: String = FOLLOWERS
+    private var currentTab: View? = null
+
+
     private var itemPosition: Int = -1
 
     private var userToFollowList: MutableList<UserToFollow> = mutableListOf()
@@ -47,7 +53,7 @@ class FollowerFragment : Fragment() {
     private var userId: Int = -1
     private var userName: String? = null
     private lateinit var currentUser: User
-    private var selectedTab: View? = null
+
 
     // pagination and search
     private var currentPage:Int = 1
@@ -63,14 +69,15 @@ class FollowerFragment : Fragment() {
     // to update items on FindFollowsListingAdapter
     private var findFollowsListingUpdatePosition = -1
 
-    // injects
+    /** Injections */
+
     @Inject
     lateinit var sharedPreference: SharedPreference
 
-    // adapters
+    /** Adapters */
+
     private val adapterFollowers by lazy {
         FollowerListingAdapter(
-            followType,
             onItemClicked = {user_id ->
                 val bundle=Bundle()
                 if (currentUser.id==user_id){
@@ -93,7 +100,7 @@ class FollowerFragment : Fragment() {
                 val message:String
 
 
-                if (followType== FOLLOWERS) {
+                if (selectedTab== FOLLOWERS) {
                     title = "Remover seguidor?"
                     message = "Tem a certeza que pretende remover este seguidor?"
                 }else{
@@ -109,7 +116,7 @@ class FollowerFragment : Fragment() {
                     .setPositiveButton("Sim") { _, _ ->
                         // Remove Follower or Followed
 
-                        if(followType== FOLLOWERS){
+                        if(selectedTab== FOLLOWERS){
                             userViewModel.deleteFollower(user_Id)
                         }
                         else{
@@ -168,13 +175,16 @@ class FollowerFragment : Fragment() {
         )
     }
 
+    /**
+     *  Android LifeCycle
+     * */
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         arguments?.let {
             userId = it.getInt("userId")
             userName = it.getString("userName")
-            followType = it.getInt("followType")
+            selectedTab = it.getString("follow_type", FOLLOWERS)
         }
 
         super.onCreate(savedInstanceState)
@@ -203,6 +213,15 @@ class FollowerFragment : Fragment() {
         bindObservers()
     }
 
+    override fun onStart() {
+        setUI()
+        super.onStart()
+    }
+
+    /**
+     *  General
+     * */
+
     private fun setUI() {
 
         /**
@@ -221,7 +240,7 @@ class FollowerFragment : Fragment() {
 
         binding.nameProfileTV.text= formatNameToNameUpper(userName!!)
 
-        eventClick()
+        updateView(selectedTab)
 
         /**
          * Pagination
@@ -231,15 +250,14 @@ class FollowerFragment : Fragment() {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     if (nextPage){
 
-                        if (followType == NOT_FOLLOWER){
+                        /*if (followType == NOT_FOLLOWER){
                             val pastVisibleItem: Int =  manager.findLastCompletelyVisibleItemPosition()
 
                             if ((pastVisibleItem + 1) >= adapterFindFollows.getList().size){
 
-
                                 userViewModel.getUsersToFollow(page = ++currentPage,searchString =stringToSearch)
                             }
-                        }
+                        }*/
 
                         //Log.d(TAG, pag_index.toString())
                         //Log.d(TAG, visibleItemCount.toString())
@@ -308,71 +326,22 @@ class FollowerFragment : Fragment() {
 
 
         binding.followersBTN.setOnClickListener {
-            followType= FOLLOWERS
-            eventClick()
+            updateView(FOLLOWERS)
 
         }
 
         binding.followedsBTN.setOnClickListener {
-            followType= FOLLOWEDS
-            eventClick()
+            updateView(FOLLOWS)
         }
 
         binding.findFollowsBTN.setOnClickListener {
-            followType = NOT_FOLLOWER
-            eventClick()
+            updateView(ALL)
         }
 
         binding.requestFollowCV.setOnClickListener {
 
             findNavController().navigate(R.id.action_followerFragment_to_followRequestFragment)
         }
-    }
-
-    private fun eventClick() {
-        when (followType) {
-            FOLLOWERS -> {
-                binding.SVsearch.visibility = View.GONE
-
-                /**
-                 * Search filter
-                 */
-
-
-
-                userViewModel.getFollowRequests(pageSize = 1)
-
-
-                selectedTab?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
-                selectedTab = binding.followersBTN
-                selectedTab!!.setBackgroundResource(R.drawable.selector_tab_button)
-
-                userViewModel.getFollowers(id_user = userId)
-            }
-            FOLLOWEDS -> {
-
-                binding.requestFollowCV.visibility = View.GONE
-                binding.SVsearch.visibility = View.GONE
-
-                selectedTab?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
-                selectedTab = binding.followedsBTN
-                selectedTab!!.setBackgroundResource(R.drawable.selector_tab_button)
-                userViewModel.getFolloweds(id_user = userId)
-            }
-            else -> {
-
-                binding.requestFollowCV.visibility = View.GONE
-
-                binding.SVsearch.visibility = View.VISIBLE
-
-
-                selectedTab?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
-                selectedTab = binding.findFollowsBTN
-                selectedTab!!.setBackgroundResource(R.drawable.selector_tab_button)
-                userViewModel.getUsersToFollow()
-            }
-        }
-
     }
 
     private fun bindObservers() {
@@ -389,7 +358,7 @@ class FollowerFragment : Fragment() {
                     is NetworkResult.Success -> {
 
                         // atualiza adapter list
-                        adapterFollowers.updateList(it.data!!.result, FOLLOWERS)
+                        adapterFollowers.updateList(it.data!!.result, FOLLOWS)
                         // sets the adapter
                         binding.followerRV.adapter = adapterFollowers
 
@@ -484,12 +453,12 @@ class FollowerFragment : Fragment() {
 
         /** Get follows */
 
-        userViewModel.getUserFollowedsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
+        userViewModel.getUserFollowsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
             networkResultEvent.getContentIfNotHandled()?.let {
                 when (it) {
                     is NetworkResult.Success -> {
-                        // atualiza adapter list
-                        adapterFollowers.updateList(it.data!!.result, FOLLOWEDS)
+                        // atualiza adapter list todo
+                        adapterFollowers.updateList(it.data!!.result, "")
 
                         // sets the adapter
                         binding.followerRV.adapter = adapterFollowers
@@ -695,13 +664,67 @@ class FollowerFragment : Fragment() {
 
     }
 
+    /**
+     *  Functions
+     * */
+
+    private fun updateView(currentTabSelected: String) {
+
+        selectedTab = currentTabSelected
+        when (selectedTab) {
+            FOLLOWERS -> {
+                binding.SVsearch.visibility = View.GONE
+
+                /**
+                 * Search filter
+                 */
+
+                userViewModel.getFollowRequests(pageSize = 1)
+
+
+                currentTab?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
+                currentTab = binding.followersBTN
+                currentTab!!.setBackgroundResource(R.drawable.selector_tab_button)
+
+                userViewModel.getFollowers(id_user = userId)
+            }
+            FOLLOWS -> {
+
+                binding.requestFollowCV.visibility = View.GONE
+                binding.SVsearch.visibility = View.GONE
+
+                currentTab?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
+                currentTab = binding.followedsBTN
+                currentTab!!.setBackgroundResource(R.drawable.selector_tab_button)
+                userViewModel.getFollows(id_user = userId)
+            }
+            else -> {
+
+                binding.requestFollowCV.visibility = View.GONE
+
+                binding.SVsearch.visibility = View.VISIBLE
+
+
+                currentTab?.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.transparent))
+                currentTab = binding.findFollowsBTN
+                currentTab!!.setBackgroundResource(R.drawable.selector_tab_button)
+                userViewModel.getUsersToFollow()
+            }
+        }
+
+    }
+
+    /**
+     *  Object
+     * */
 
     companion object {
-        var followType:Int=-1
+
+        object SelectedTab {
+            const val ALL = "ALL"
+            const val FOLLOWERS = "FOLLOWERS"
+            const val FOLLOWS = "FOLLOWS"
+        }
     }
 
-    override fun onStart() {
-        setUI()
-        super.onStart()
-    }
 }

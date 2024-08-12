@@ -187,16 +187,12 @@ class RemoteDataSourceImpl @Inject constructor(
 	}
 
 	override suspend fun getFollowers(userId: Int): Response<UserList> {
-		if(userId==-1)
-			return apiInterface.getFollowers()
 
-		return apiInterface.getFollowersByUser(userId)
+		return apiInterface.getFollowers(userId)
 	}
-	override suspend fun getFolloweds(userId: Int): Response<UserList> {
-		if(userId==-1)
-			return apiInterface.getFolloweds()
+	override suspend fun getFollows(userId: Int?): Response<UserList> {
 
-		return apiInterface.getFollowedsByUser(userId)
+		return apiInterface.getFollows(userId)
 	}
 
 	override suspend fun deleteFollower(userId: Int): Response<Unit> {

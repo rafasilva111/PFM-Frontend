@@ -42,13 +42,13 @@ interface UserRepository {
     /** Follows */
 
     val getUserFollowers: LiveData<Event<NetworkResult<UserList>>>
-    val getUserFolloweds: LiveData<Event<NetworkResult<UserList>>>
+    val getUserFollows: LiveData<Event<NetworkResult<UserList>>>
     val deleteFollower: LiveData<Event<NetworkResult<Int>>>
     val deleteFollow: LiveData<Event<NetworkResult<Int>>>
 
 
-    suspend fun getUserFollowers(idUser: Int)
-    suspend fun getUserFollows(idUser: Int)
+    suspend fun getUserFollowers(userId: Int)
+    suspend fun getUserFollows(userId: Int)
     suspend fun deleteFollower(userId: Int)
     suspend fun deleteFollow(userId: Int)
 
@@ -57,13 +57,13 @@ interface UserRepository {
     val getUsersToFollow: LiveData<Event<NetworkResult<UsersToFollowList>>>
     val getFollowRequests: LiveData<Event<NetworkResult<UserList>>>
     val postUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
-    val postUserAcceptFollowRequest: LiveData<Event<NetworkResult<Int>>>
+    val postUserAcceptFollowRequest: LiveData<Event<NetworkResult<Unit>>>
     val deleteFollowRequest: LiveData<Event<NetworkResult<Int>>>
 
     suspend fun getUsersToFollow(searchString:String?,page: Int?,pageSize:Int?)
     suspend fun getFollowRequests(pageSize:Int)
     suspend fun postUserFollowRequest(userId: Int)
-    suspend fun postUserAcceptFollowRequest(idUser: Int)
+    suspend fun postUserAcceptFollowRequest(userId: Int)
     suspend fun deleteFollowRequest(userId: Int)
 
     /** Notifications */

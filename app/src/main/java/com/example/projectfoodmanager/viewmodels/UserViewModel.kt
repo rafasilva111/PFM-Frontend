@@ -120,11 +120,11 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    //GET followeds by userID or authenticated user
-    val getUserFollowedsLiveData: LiveData<Event<NetworkResult<UserList>>>
-        get() = repository.getUserFolloweds
+    //GET follows by userID or authenticated user
+    val getUserFollowsLiveData: LiveData<Event<NetworkResult<UserList>>>
+        get() = repository.getUserFollows
 
-    fun getFolloweds(id_user: Int){
+    fun getFollows(id_user: Int){
         viewModelScope.launch {
             repository.getUserFollows(id_user)
         }
@@ -141,7 +141,7 @@ class UserViewModel @Inject constructor(
     }
 
     //POST accept follow requests by userID
-    val postUserAcceptFollowRequestLiveData: LiveData<Event<NetworkResult<Int>>>
+    val postUserAcceptFollowRequestLiveData: LiveData<Event<NetworkResult<Unit>>>
         get() = repository.postUserAcceptFollowRequest
 
 

@@ -11,6 +11,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.databinding.FragmentSessionProfileBinding
+import com.example.projectfoodmanager.presentation.follower.FollowerFragment
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
@@ -158,7 +159,7 @@ class UserSessionFragment : Fragment() {
         binding.followedsLL.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_followerFragment,Bundle().apply {
                 putInt("userId",-1)
-                putInt("followType",FollowType.FOLLOWEDS)
+                putString("follow_type",FollowerFragment.Companion.SelectedTab.FOLLOWS)
                 putString("userName",user.name)
             })
             changeMenuVisibility(false,activity)
@@ -167,7 +168,7 @@ class UserSessionFragment : Fragment() {
         binding.followersLL.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_followerFragment,Bundle().apply {
                 putInt("userId",-1)
-                putInt("followType",FollowType.FOLLOWERS)
+                putString("follow_type",FollowerFragment.Companion.SelectedTab.FOLLOWERS)
                 putString("userName",user.name)
             })
             changeMenuVisibility(false,activity)
