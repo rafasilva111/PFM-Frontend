@@ -12,12 +12,13 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
-import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
 import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowerRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
 import com.example.projectfoodmanager.data.model.notification.Notification
@@ -182,17 +183,17 @@ class RemoteDataSourceImpl @Inject constructor(
 
 	/** Follows  */
 
-	override suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse> {
+	override suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<Unit> {
 		return apiInterface.createFollower(userSenderId = userSenderId,userReceiverId = userReceiverId)
 	}
 
-	override suspend fun getFollowers(userId: Int): Response<UserList> {
+	override suspend fun getFollowers(page: Int?, pageSize: Int?, userId: Int?, searchString: String?): Response<UserList> {
 
-		return apiInterface.getFollowers(userId)
+		return apiInterface.getFollowers(page,pageSize,userId,searchString)
 	}
-	override suspend fun getFollows(userId: Int?): Response<UserList> {
+	override suspend fun getFollows(page: Int?, pageSize: Int?, userId: Int?, searchString: String?): Response<UserList> {
 
-		return apiInterface.getFollows(userId)
+		return apiInterface.getFollows(page,pageSize,userId,searchString)
 	}
 
 	override suspend fun deleteFollower(userId: Int): Response<Unit> {
@@ -209,7 +210,7 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getUsersToFollow(searchString,page,pageSize)
 	}
 
-	override suspend fun getFollowRequests(pageSize: Int): Response<UserList> {
+	override suspend fun getFollowRequests(pageSize: Int): Response<PaginatedList<FollowerRequest>> {
 		return apiInterface.getFollowRequests(pageSize)
 	}
 
@@ -221,8 +222,8 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.postAcceptFollowRequest(userId)
 	}
 
-	override suspend fun deleteFollowRequest(userId: Int): Response<Unit> {
-		return apiInterface.deleteFollowRequest(userId)
+	override suspend fun deleteFollowRequest(followerId: Int?, followedId: Int?): Response<Unit> {
+		return apiInterface.deleteFollowRequest(followerId,followedId)
 	}
 
 	// shopping list

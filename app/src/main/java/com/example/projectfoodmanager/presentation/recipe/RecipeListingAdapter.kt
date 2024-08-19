@@ -29,6 +29,8 @@ class RecipeListingAdapter(
 
 
 
+
+
     fun updateItem(item: RecipeSimplified){
         for ((index, recipe) in list.withIndex()){
             if (recipe.id == item.id) {
@@ -60,23 +62,15 @@ class RecipeListingAdapter(
             // Load Recipe img
             if (item.imgSource.isNotEmpty())
                 loadRecipeImage(binding.imageView, item.imgSource){
-                    if (position == 0)
-                        imageLoadingListener.onImageLoaded()
+                    imageLoadingListener.onImageLoaded()
                 }
             else
-                if (position == 0)
-                    imageLoadingListener.onImageLoaded()
+                imageLoadingListener.onImageLoaded()
 
             // Load Author img
-            if (item.createdBy.imgSource.isNotEmpty())
-                loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){
-                    if (position == 0)
-                        imageLoadingListener.onImageLoaded()
-                }
-            else
-                if (position == 0)
-                    imageLoadingListener.onImageLoaded()
-
+            loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){
+                imageLoadingListener.onImageLoaded()
+            }
             /**
              * Details
              */

@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.currentDate
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.todayDate
 import java.time.LocalDate
@@ -37,7 +36,7 @@ class CalendarAdapter(
         dayOfMonth.backgroundTintList = ColorStateList.valueOf(
             ContextCompat.getColor(
                 context,
-                R.color.gray
+                R.color.light_gray
             )
         )
 

@@ -10,11 +10,12 @@ import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
-import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
 import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowerRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
 import com.example.projectfoodmanager.data.model.notification.Notification
@@ -184,14 +185,14 @@ interface ApiInterface {
     /** Follows */
 
     @GET("$API_V1_BASE_URL/follow/list/followers")
-    suspend fun getFollowers(@Query("user_id") userId: Int?): Response<UserList>
+    suspend fun getFollowers(@Query("page") page: Int?,@Query("page_size") pageSize: Int?,@Query("user_id") userId: Int?,@Query("search_string") searchString: String?): Response<UserList>
 
     @GET("$API_V1_BASE_URL/follow/list/follows")
-    suspend fun getFollows(@Query("user_id") userId: Int?): Response<UserList>
+    suspend fun getFollows(@Query("page") page: Int?,@Query("page_size") pageSize: Int?,@Query("user_id") userId: Int?,@Query("search_string") searchString: String?): Response<UserList>
 
 
     @POST("$API_V1_BASE_URL/followers")
-    suspend fun createFollower(@Query("userSenderId") userSenderId: Int,@Query("userReceiverId") userReceiverId: Int): Response<FollowerResponse>
+    suspend fun createFollower(@Query("userSenderId") userSenderId: Int,@Query("userReceiverId") userReceiverId: Int): Response<Unit>
 
     @DELETE("$API_V1_BASE_URL/follow")
     suspend fun deleteFollower(@Query("user_follower_id") userId: Int): Response<Unit>
@@ -206,22 +207,18 @@ interface ApiInterface {
     suspend fun getUsersToFollow(@Query("search_string") searchString:String?,@Query("page") page: Int?,@Query("page_size") pageSize: Int?): Response<UsersToFollowList>
 
     @GET("$API_V1_BASE_URL/follow/requests/list")
-    suspend fun getFollowRequests(@Query("page_size") pageSize: Int): Response<UserList>
+    suspend fun getFollowRequests(@Query("page_size") pageSize: Int): Response<PaginatedList<FollowerRequest>>
 
     @POST("$API_V1_BASE_URL/follow")
     suspend fun postFollowRequest(@Query("user_id") userId: Int): Response<Unit>
 
     // accept follow request
     @POST("$API_V1_BASE_URL/follow/requests")
-    suspend fun postAcceptFollowRequest(@Query("user_follower_id") userId: Int): Response<Unit>
+    suspend fun postAcceptFollowRequest(@Query("id") followRequestId: Int): Response<Unit>
 
     // decline follow request
     @DELETE("$API_V1_BASE_URL/follow/requests")
-    suspend fun deleteFollowerRequest(@Query("user_follower_id") userId: Int): Response<Unit>
-
-    // decline follower request
-    @DELETE("$API_V1_BASE_URL/follow/requests")
-    suspend fun deleteFollowRequest(@Query("user_follow_id") userId: Int): Response<Unit>
+    suspend fun deleteFollowRequest(@Query("follower_id") followerId: Int?,@Query("followed_id") followedId: Int?): Response<Unit>
 
 
 

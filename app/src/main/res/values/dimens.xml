@@ -3,12 +3,9 @@
     <dimen name="title_icon">40sp</dimen>
     <dimen name="subTitle">20sp</dimen>
     <dimen name="headerCat">16sp</dimen>
-    <dimen name="contentCat">12sp</dimen>
 
 
-    <dimen name="low_1">10dp</dimen>
     <dimen name="textBTN">16sp</dimen>
-    <dimen name="cardRadius">20dp</dimen>
     <dimen name="title">25sp</dimen>
     <dimen name="title_1">40sp</dimen>
     <dimen name="title_2">30sp</dimen>

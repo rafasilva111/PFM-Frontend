@@ -14,28 +14,53 @@ import com.example.projectfoodmanager.databinding.FragmentFollowRequestBinding
 import com.example.projectfoodmanager.util.network.NetworkResult
 import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.util.ToastType
+import com.example.projectfoodmanager.util.hide
+import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
 import com.example.projectfoodmanager.util.toast
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FollowRequestFragment : Fragment() {
+class FollowRequestFragment : Fragment(), ImageLoadingListener {
 
-    // binding
+    /** Binding */
     lateinit var binding: FragmentFollowRequestBinding
 
-    // viewModels
+    /** ViewModels */
     private val userViewModel by activityViewModels<UserViewModel>()
 
-    // constants
+    /** Constants */
+
+    lateinit var manager: LinearLayoutManager
+
     private lateinit var currentUser: User
     private var itemPosition: Int = -1
 
-
+    /** Injections */
     @Inject
     lateinit var sharedPreference: SharedPreference
 
+    /** Interfaces */
+    override fun onImageLoaded() {
+        requireActivity().runOnUiThread {
+            if (binding.followerRV.visibility != View.VISIBLE) {
+                adapter.imagesLoaded++
+
+                val firstVisibleItemPosition = manager.findFirstVisibleItemPosition()
+                val lastVisibleItemPosition = manager.findLastVisibleItemPosition()
+                val visibleItemCount = lastVisibleItemPosition - firstVisibleItemPosition + 1
+
+                // If all visible images are loaded, hide the progress bar
+                if (adapter.imagesLoaded >= visibleItemCount) {
+                    binding.progressBar.hide()
+                    binding.followerRV.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    /** Adapters */
     private val adapter by lazy {
         FollowRequestListingAdapter(
             onItemClicked = { userID ->
@@ -49,6 +74,11 @@ class FollowRequestFragment : Fragment() {
             }
         )
     }
+
+    /**
+     *  Android LifeCycle
+     * */
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,6 +100,15 @@ class FollowRequestFragment : Fragment() {
         bindObservers()
     }
 
+    override fun onStart() {
+        setUI()
+        super.onStart()
+    }
+
+    /**
+     *  General
+     * */
+
     private fun setUI() {
 
         /**
@@ -80,17 +119,18 @@ class FollowRequestFragment : Fragment() {
 
         userViewModel.getFollowRequests()
 
+        binding.header.titleTV.text = getString(R.string.COMMON_FOLLOW_REQUESTS)
+
         /**
          * Navigation
          */
 
-        binding.backRegIB.setOnClickListener {
+        binding.header.backIB.setOnClickListener {
             findNavController().navigateUp()
         }
 
 
     }
-
 
     private fun bindObservers() {
 
@@ -99,7 +139,7 @@ class FollowRequestFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Success -> {
 
-                        adapter.updateList(it.data!!.result)
+                        adapter.setItems(it.data!!.result)
 
                         if (it.data.result.size != 0){
                             binding.noFollowRequestTV.visibility=View.INVISIBLE
@@ -127,7 +167,7 @@ class FollowRequestFragment : Fragment() {
                         adapter.removeItem(itemPosition)
 
                         toast("Confirmação com sucesso")
-                        if (adapter.getList().isEmpty())
+                        if (adapter.itemCount == 0)
                             findNavController().navigateUp()
 
                     }
@@ -167,8 +207,5 @@ class FollowRequestFragment : Fragment() {
     }
 
 
-    override fun onStart() {
-        setUI()
-        super.onStart()
-    }
+
 }

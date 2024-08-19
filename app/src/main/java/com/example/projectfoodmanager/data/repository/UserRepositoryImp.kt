@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
 import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
+import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowerRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.notification.NotificationList
@@ -302,12 +304,12 @@ class UserRepositoryImp @Inject constructor(
     override val getUserFollowers: LiveData<Event<NetworkResult<UserList>>>
         get() = _userFollowersResponseLiveData
 
-    override suspend fun getUserFollowers(userId: Int) {
+    override suspend fun getUserFollowers(page: Int?,pageSize: Int?,userId: Int?,searchString: String?) {
 
         handleApiResponse(
             _userFollowersResponseLiveData
         ) {
-            remoteDataSource.getFollowers(userId)
+            remoteDataSource.getFollowers(page,pageSize,userId,searchString)
         }
 
     }
@@ -317,27 +319,27 @@ class UserRepositoryImp @Inject constructor(
     override val getUserFollows: LiveData<Event<NetworkResult<UserList>>>
         get() = _userFollowsResponseLiveData
 
-    override suspend fun getUserFollows(userId: Int) {
+    override suspend fun getUserFollows(page: Int?, pageSize: Int?, userId: Int?, searchString: String?) {
 
 
         handleApiResponse(
-            _userFollowersResponseLiveData
+            _userFollowsResponseLiveData
         ) {
-            remoteDataSource.getFollows(userId)
+            remoteDataSource.getFollows(page,pageSize,userId,searchString)
         }
 
     }
 
 
-    private val _functionUserFollowRequestsResponseLiveData = MutableLiveData<Event<NetworkResult<UserList>>>()
-    override val getFollowRequests: LiveData<Event<NetworkResult<UserList>>>
+    private val _functionUserFollowRequestsResponseLiveData = MutableLiveData<Event<NetworkResult<PaginatedList<FollowerRequest>>>>()
+    override val getFollowRequests: LiveData<Event<NetworkResult<PaginatedList<FollowerRequest>>>>
         get() = _functionUserFollowRequestsResponseLiveData
 
 
     override suspend fun getFollowRequests(pageSize: Int) {
 
         handleApiResponse(
-            _userFollowersResponseLiveData
+            _functionUserFollowRequestsResponseLiveData
         ) {
             remoteDataSource.getFollowRequests(pageSize)
         }
@@ -390,15 +392,28 @@ class UserRepositoryImp @Inject constructor(
         }
     }
 
-    private val _functionDeleteFollowRequest = MutableLiveData<Event<NetworkResult<Int>>>()
-    override val deleteFollowRequest: LiveData<Event<NetworkResult<Int>>>
+    private val _functionDeleteFollowerRequest = MutableLiveData<Event<NetworkResult<Unit>>>()
+    override val deleteFollowerRequest: LiveData<Event<NetworkResult<Unit>>>
+        get() = _functionDeleteFollowerRequest
+
+    override suspend fun deleteFollowerRequest(userId: Int) {
+        handleApiResponse(
+            _functionDeleteFollowerRequest
+        ) {
+            remoteDataSource.deleteFollowRequest(followerId = userId)
+        }
+
+    }
+
+    private val _functionDeleteFollowRequest = MutableLiveData<Event<NetworkResult<Unit>>>()
+    override val deleteFollowRequest: LiveData<Event<NetworkResult<Unit>>>
         get() = _functionDeleteFollowRequest
 
     override suspend fun deleteFollowRequest(userId: Int) {
         handleApiResponse(
-            _functionPostUserAcceptFollowRequest
+            _functionDeleteFollowRequest
         ) {
-            remoteDataSource.deleteFollowRequest(userId)
+            remoteDataSource.deleteFollowRequest(followedId = userId)
         }
 
     }

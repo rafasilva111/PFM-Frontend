@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+>
+
 
     <ImageView
         android:id="@+id/verifyUserIV"
@@ -25,7 +25,9 @@
         android:id="@+id/imgAutorCV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
         app:cardCornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,16 +47,36 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:ellipsize="end"
         android:fontFamily="@font/fredoka_regular"
         android:text="Nome"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:ellipsize="end"
         app:layout_constraintBottom_toBottomOf="@+id/imgAutorCV"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout20"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imgAutorCV"
-        app:layout_constraintTop_toTopOf="@+id/imgAutorCV" />
+        app:layout_constraintTop_toTopOf="@+id/imgAutorCV"
+        app:layout_constraintVertical_bias="0.0" />
 
+    <TextView
+        android:id="@+id/usernameTV"
+        android:layout_width="0dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/fredoka_regular"
+        android:text="username"
+        android:textColor="@color/grey"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout20"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/imgAutorCV"
+        app:layout_constraintTop_toBottomOf="@+id/nameTV"
+        app:layout_constraintVertical_bias="0.0" />
 
     <LinearLayout
         android:id="@+id/linearLayout20"

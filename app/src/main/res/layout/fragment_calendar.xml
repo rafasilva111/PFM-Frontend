@@ -164,7 +164,7 @@
             android:layout_weight="1"
             android:text="SUN"
             android:textAlignment="center"
-            android:textColor="@color/gray"
+            android:textColor="@color/light_gray"
             android:textSize="10sp" />
 
         <TextView
@@ -173,7 +173,7 @@
             android:layout_weight="1"
             android:text="MON"
             android:textAlignment="center"
-            android:textColor="@color/gray"
+            android:textColor="@color/light_gray"
             android:textSize="10sp" />
 
         <TextView
@@ -182,7 +182,7 @@
             android:layout_weight="1"
             android:text="TUE"
             android:textAlignment="center"
-            android:textColor="@color/gray"
+            android:textColor="@color/light_gray"
             android:textSize="10sp" />
 
         <TextView
@@ -191,7 +191,7 @@
             android:layout_weight="1"
             android:text="WED"
             android:textAlignment="center"
-            android:textColor="@color/gray"
+            android:textColor="@color/light_gray"
             android:textSize="10sp" />
 
         <TextView
@@ -200,7 +200,7 @@
             android:layout_weight="1"
             android:text="THUR"
             android:textAlignment="center"
-            android:textColor="@color/gray"
+            android:textColor="@color/light_gray"
             android:textSize="10sp" />
 
         <TextView
@@ -209,7 +209,7 @@
             android:layout_weight="1"
             android:text="FRI"
             android:textAlignment="center"
-            android:textColor="@color/gray"
+            android:textColor="@color/light_gray"
             android:textSize="10sp" />
 
         <TextView
@@ -218,7 +218,7 @@
             android:layout_weight="1"
             android:text="SAT"
             android:textAlignment="center"
-            android:textColor="@color/gray"
+            android:textColor="@color/light_gray"
             android:textSize="10sp" />
 
 

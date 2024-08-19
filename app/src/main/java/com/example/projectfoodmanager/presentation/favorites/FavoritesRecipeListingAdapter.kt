@@ -68,14 +68,10 @@ class FavoritesRecipeListingAdapter(
                 imageLoadingListener.onImageLoaded()
 
         // Load Author img
-        if (item.createdBy.imgSource.isNotEmpty())
-            loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){
-                if (position == 0)
-                    imageLoadingListener.onImageLoaded()
-            }
-        else
+        loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){
             if (position == 0)
                 imageLoadingListener.onImageLoaded()
+        }
 
         /**
          * Details

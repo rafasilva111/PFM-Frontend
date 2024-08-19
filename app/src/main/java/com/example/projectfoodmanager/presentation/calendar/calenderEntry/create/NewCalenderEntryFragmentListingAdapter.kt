@@ -135,12 +135,9 @@ class NewCalenderEntryFragmentListingAdapter(
                 imageLoadingListener.onImageLoaded()
 
             // Load Author img
-            if (item.createdBy.imgSource.isNotEmpty())
-                Helper.loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource) {
-                    imageLoadingListener.onImageLoaded()
-                }
-            else
+            Helper.loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource) {
                 imageLoadingListener.onImageLoaded()
+            }
 
 
             /**
