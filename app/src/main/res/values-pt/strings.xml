@@ -1,4 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
+                Common
+        -->
+    <string name="app_name">GoodBites</string>
+    <string name="COMMON_SAVE">Guardar</string>
+    <string name="COMMON_REMOVE">Remover</string>
+    <string name="COMMON_RESET">Reiniciar</string>
+
+    <string name="COMMON_FOLLOWS">A seguir</string>
+    <string name="COMMON_NO_FOLLOWS">Não segues ninguem</string>
+    <string name="COMMON_FOLLOWERS">Seguidores</string>
+    <string name="COMMON_NO_FOLLOWERS">Sem seguidores</string>
+    <string name="COMMON_FOLLOWED">Seguido</string>
+    <string name="COMMON_FOLLOW_REQUESTS">Follow requests</string>
+    <string name="COMMON_NO_FOLLOW_REQUESTS">No follow requests</string>
+
+
+
+    <!-- Dialogs -->
+    <string name="COMMON_DIALOG_YES">Sim</string>
+    <string name="COMMON_DIALOG_NO">Não</string>
+    <string name="COMMON_DIALOG_CANCEL">Cancelar</string>
+    <string name="COMMON_DIALOG_SELECT">Selecionar</string>
+    <string name="COMMON_DIALOG_SKIP">Ignorar</string>
+    <string name="COMMON_DIALOG_CATEGORY_TITLE">Seleciona uma categoria</string>
+    <string name="COMMON_DIALOG_DATE_TITLE">Seleciona uma data</string>
+    <string name="COMMON_DIALOG_TIME_TITLE">Seleciona um horário</string>
+    <string name="COMMON_DIALOG_PORTION_TITLE">Seleciona uma porção</string>
+
+
+
+    <!-- Toast Api Responses -->
+    <string name="DATA_NOT_UPDATED">Dados não atualizados, alguma coisa se passou.</string>
+    <string name="DATA_UPDATED">Dados atualizados com sucesso.</string>
+
+
+    <!-- User Model Response -->
+    <string name="USER_ERROR_GENDER_INVALID">Insira um sexo válido.</string>
+
+    <string name="USER_ERROR_HEIGHT_INVALID">Insira uma altura.</string>
+    <string name="USER_ERROR_HEIGHT_INVALID_2">Insira uma entre %1$.1f m and %2$.1f m.</string>
+
+    <string name="USER_ERROR_WEIGHT_INVALID">Insira um peso.</string>
+    <string name="USER_ERROR_WEIGHT_INVALID_2">Insira um peso entre %1$.1f kg a %2$.1f kg.</string>
+
+    <string name="USER_ERROR_ACTIVITY_LEVEL_INVALID">Insira um nivel de atividade.</string>
+
+    <!-- Place holder -->
+
+
+    <string name="NAME">Nome</string>
+    <string name="USERNAME">Nome de Utilizador</string>
+    <string name="DATE">Data</string>
+
+    <string name="PLACEHOLDER_DEFAULT_IMAGE_DESCRIPTION">Sem descrição.</string>
+
+
+    <!--
+            Fragments String's
+    -->
+
+    <!-- Comments Fragment -->
+
+    <string name="FRAGMENT_COMMENTS_TITLE">Comentários</string>
+
+    <!-- Comment Item Layout -->
+    <string name="COMMENT_ITEM_LAYOUT_COMMENT_TEXT">Comentário...</string>
+    <string name="COMMENT_ITEM_LAYOUT_COMMENT">Comentar</string>
+    <string name="COMMENT_ITEM_LAYOUT_EDIT">Editar</string>
+    <string name="COMMENT_ITEM_LAYOUT_DELETE">Apagar</string>
+    <string name="COMMENT_ITEM_LAYOUT_DELETE_DIALOG_TITLE">Apagar Comentário</string>
+    <string name="COMMENT_ITEM_LAYOUT_DELETE_DIALOG_MESSAGE">Tens a certeza que queres apagar este comentário?</string>
+    <string name="COMMENT_ITEM_LAYOUT_LIKES_DEFAULT">0 Gostos</string>
+    <string name="COMMENT_ITEM_LAYOUT_LIKES">%1$d Gostos</string>
+
+    <!-- Calender Fragment -->
+
+    <!-- Calender Portion Dialog -->
+    <string name="CALENDER_PORTION_DIALOG_TITLE">Preferencias de porção</string>
+    <string name="CALENDER_PORTION_DIALOG_MAIN_DESCRIPTION">Notamos que és um novo membro, e ainda não tens uma porção pré-definida.Queres Adicionar?</string>
+    <string name="CALENDER_PORTION_DIALOG_PRIMARY_DESCRIPTION">Escolhe o numero de pessoas para a porção pré-defenida:</string>
+    <string name="CALENDER_PORTION_DIALOG_FOOTER_DESCRIPTION">Esta opção é usada para ajustar a quantidade de uma receita de acordo com as preferências do usuário, facilitando o cálculo dos ingredientes necessários. Mesmo que não definas agora podereas sempre alterar através do perfil, ou ao adicionar uma receita ao calendário.</string>
+
+    <!-- New Calender Entry Fragment -->
+
+    <string name="FRAGMENT_NEW_CALENDER_ENTRY">%1$d Pessoas</string>
+
+    <!-- Calender Portion Dialog -->
+    <string name="CALENDER_PORTION_DIALOG_NUMBER_TITLE">Seleciona o numero de pessoas</string>
+
+    <!-- FollowerFragment -->
+
+    <string name="FRAGMENT_FOLLOWER_SEARCH_HINT">Procurar utilizadores …</string>
+
+    <!-- Not Treated -->
 
 </resources>

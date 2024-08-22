@@ -124,7 +124,7 @@ class ProfileBottomSheetDialog : BottomSheetDialogFragment() {
 
         //TODO: Caso sejam valores grandes encortar Ex: 1000 = 1k
         binding.nFollowersTV.text= objUser.followers.toString()
-        binding.nFollowedsTV.text= objUser.followeds.toString()
+        binding.nFollowedsTV.text= objUser.follows.toString()
 
         //TODO: O numero de receitas
         //binding.nRecipesTV.text=

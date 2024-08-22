@@ -349,7 +349,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/emptyFollowTV"
+            android:id="@+id/noItemsTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/fredoka_regular"

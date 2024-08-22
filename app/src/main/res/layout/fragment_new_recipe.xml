@@ -92,7 +92,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_default"
-                    android:backgroundTint="@color/gray" />
+                    android:backgroundTint="@color/light_gray" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/step2CL"
@@ -149,7 +149,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_default"
-                    android:backgroundTint="@color/gray" />
+                    android:backgroundTint="@color/light_gray" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -207,7 +207,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_default"
-                    android:backgroundTint="@color/gray" />
+                    android:backgroundTint="@color/light_gray" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/step4CL"
@@ -265,7 +265,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_default"
-                    android:backgroundTint="@color/gray"
+                    android:backgroundTint="@color/light_gray"
                     android:visibility="gone" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout

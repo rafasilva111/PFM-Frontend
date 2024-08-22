@@ -35,19 +35,6 @@
     </style>
 
 
-    <style name="Teste22" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimaryDark">@color/main_color</item>
-        <item name="android:navigationBarColor">@color/main_color</item>
-        <item name="android:windowLightStatusBar">false</item>
-
-    </style>
-
-
-    <style name="Theme.ProjectFoodManager.NoActionBarAndStatusBar">
-        <item name="colorPrimaryDark">@color/main_color</item>
-        <item name="android:windowFullscreen">false</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
     <style name="SubTitleStyle">
         <item name="android:fontFamily">@font/titillium_web_bold</item>
         <item name="android:textSize">16dp</item>

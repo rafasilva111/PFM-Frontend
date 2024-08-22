@@ -23,7 +23,7 @@ class CalenderRepositoryImp @Inject constructor(
     private val sharedPreference: SharedPreference,
 ) : CalenderRepository {
 
-    private val TAG:String = "AuthRepositoryImp"
+    private val TAG:String = "CalenderRepositoryImp"
 
     /**
      * Generic function to handle API requests and responses.
@@ -59,7 +59,7 @@ class CalenderRepositoryImp @Inject constructor(
                     if (saveSharedPreferences) {
                         when (responseBody) {
                             is CalenderEntry -> sharedPreference.saveCalendarEntry(responseBody)
-                            is CalenderDatedEntryList -> sharedPreference.saveMultipleCalendarEntrys(responseBody,cleanseOldRegistry)
+                            is CalenderDatedEntryList -> sharedPreference.saveMultipleCalendarEntries(responseBody,cleanseOldRegistry)
                             else -> Log.e(TAG, "Unable to save this type into shared preferences...")
                         }
                     }

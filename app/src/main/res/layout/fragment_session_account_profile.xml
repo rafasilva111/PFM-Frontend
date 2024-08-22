@@ -15,16 +15,20 @@
 
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:fillViewport="true"
         android:scrollbars="none"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdgeLength="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header">
+        app:layout_constraintTop_toBottomOf="@+id/header"
+>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/fragment_session_profile_CL"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
 
             <androidx.cardview.widget.CardView

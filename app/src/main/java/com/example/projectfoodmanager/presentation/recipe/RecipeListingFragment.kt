@@ -143,14 +143,22 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     }
 
     /** Interfaces */
+
     override fun onImageLoaded() {
         requireActivity().runOnUiThread {
-            adapter.imagesLoaded++
-            if (adapter.imagesLoaded == adapter.imagesToLoad) {
-                binding.progressBar.hide()
-                binding.recyclerView.visibility = View.VISIBLE
-            }
+            if (binding.recyclerView.visibility != View.VISIBLE) {
+                adapter.imagesLoaded++
 
+                val firstVisibleItemPosition = manager.findFirstVisibleItemPosition()
+                val lastVisibleItemPosition = manager.findLastVisibleItemPosition()
+                val visibleItemCount = lastVisibleItemPosition - firstVisibleItemPosition + 1
+
+                // If all visible images are loaded, hide the progress bar
+                if (adapter.imagesLoaded >= visibleItemCount) {
+                    binding.progressBar.hide()
+                    binding.recyclerView.visibility = View.VISIBLE
+                }
+            }
         }
     }
 
@@ -285,7 +293,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
 
 
-            recipeViewModel.getRecipes(page = currentPage, searchString= searchString,searchTag= searchTag, by = sortedBy)
+            updateView(selectedTab)
 
             // get recipes for first time
 
@@ -326,7 +334,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                     } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
                     else if (searchString != "" && text == "") {
                         searchString = text
-                        recipeListed = mutableListOf()
+                        itemsListed = mutableListOf()
                         currentPage = 1
 
                         recipeViewModel.getRecipes(
@@ -443,15 +451,15 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                         if (refreshPosition != 0) {
                             val refreshPage =  ceil((refreshPosition+1).toFloat()/PaginationNumber.DEFAULT).toInt()
 
-                            val lastIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) else adapter.itemCount
-                            val firstIndex = if (recipeListed.size >= PaginationNumber.DEFAULT) (lastIndex - PaginationNumber.DEFAULT) else 0
+                            val lastIndex = if (itemsListed.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) else adapter.itemCount
+                            val firstIndex = if (itemsListed.size >= PaginationNumber.DEFAULT) (lastIndex - PaginationNumber.DEFAULT) else 0
 
-                            recipeListed.subList(firstIndex, lastIndex).clear()
+                            itemsListed.subList(firstIndex, lastIndex).clear()
 
 
-                            recipeListed.addAll(firstIndex, result.data!!.result)
+                            itemsListed.addAll(firstIndex, result.data!!.result)
 
-                            adapter.setItems(recipeListed)
+                            adapter.setItems(itemsListed)
 
                             //reset control variables
                             refreshPosition = 0
@@ -480,11 +488,11 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                             // checks if new search
 
                             if (currentPage == 1){
-                                recipeListed = result.data.result
+                                itemsListed = result.data.result
                                 adapter.setItems(result.data.result)
                             }
                             else{
-                                recipeListed += result.data.result
+                                itemsListed += result.data.result
                                 adapter.addItems(result.data.result)
                             }
                         }
@@ -498,7 +506,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                     is NetworkResult.Loading -> {
                         binding.noRecipesTV.visibility = View.GONE
                         binding.offlineTV.visibility = View.GONE
-                        binding.progressBar.show()
                     }
                 }
             }
@@ -791,6 +798,10 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         ibToUpdate?.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
 
     /**
      *  Object
@@ -798,7 +809,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     companion object {
 
-        private var recipeListed: MutableList<RecipeSimplified> = mutableListOf()
+        private var itemsListed: MutableList<RecipeSimplified> = mutableListOf()
 
         // pagination
         private var currentPage:Int = 1

@@ -46,8 +46,8 @@ class Helper {
          *  Time Helpers
          */
 
-        private val DEFAULT_DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        private val DEFAULT_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm")
+        val DEFAULT_DATE_FORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val DEFAULT_TIME_FORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
         // server string -> localTimeDate
         fun formatServerTimeToLocalDateTime(serverTimeString: String): LocalDateTime {

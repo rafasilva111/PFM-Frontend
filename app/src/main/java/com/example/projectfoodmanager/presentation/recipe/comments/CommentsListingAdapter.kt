@@ -13,6 +13,8 @@ import com.example.projectfoodmanager.databinding.ItemCommentLayoutBinding
 import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.util.Helper.Companion.getRelativeTime
+import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+
 class CommentsListingAdapter(
     val sharedPreferences: SharedPreference,
     val onProfilePressed: (UserSimplified) -> Unit,
@@ -161,8 +163,7 @@ class CommentsListingAdapter(
 
             }
 
-            item.user!!.imgSource.let{
-                Helper.loadUserImage(binding.IVAuthor, it)}
+            loadUserImage(binding.IVAuthor, item.user!!.imgSource)
         }
     }
 

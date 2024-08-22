@@ -67,7 +67,7 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
     override fun onImageLoaded() {
         requireActivity().runOnUiThread {
             imagesLoaded++
-            if (imagesLoaded >= 2) {
+            if (imagesLoaded >= DEFAULT_NR_OF_IMAGES_BY_RECIPE_CARD) {
                 binding.progressBar.hide()
                 binding.recipeCL.visibility = View.VISIBLE
             }
@@ -75,6 +75,7 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
 
         }
     }
+
 
     /**
      *  Android LifeCycle
@@ -132,12 +133,9 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
         binding.authorTV.text = objCalEntry.recipe.createdBy.name
 
         //-> Load Author img
-        if (objCalEntry.recipe.createdBy.imgSource.isNotEmpty())
-            loadUserImage(binding.authorIV, objCalEntry.recipe.createdBy.imgSource) {
-                onImageLoaded()
-            }
-        else
+        loadUserImage(binding.authorIV, objCalEntry.recipe.createdBy.imgSource) {
             onImageLoaded()
+        }
 
         //-> Load Recipe img
         if (objCalEntry.recipe.imgSource.isNotEmpty())

@@ -11,12 +11,13 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
-import com.example.projectfoodmanager.data.model.modelResponse.FollowerResponse
-import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.Id
+import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
 import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntryList
+import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowerRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.modelResponse.miscellaneous.ApplicationReport
 import com.example.projectfoodmanager.data.model.notification.Notification
@@ -93,12 +94,13 @@ interface RemoteDataSource {
 	suspend fun checkCalenderEntries(calenderEntryCheckListRequest: CalenderEntryCheckListRequest): Response<Unit>
 
 	//followers
-	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<FollowerResponse>
-	suspend fun getFollowers(userId: Int): Response<UserList>
-	suspend fun getFolloweds(userId: Int): Response<UserList>
-	suspend fun getFollowRequests(pageSize: Int): Response<UserList>
+	suspend fun createFollower( userSenderId: Int, userReceiverId: Int): Response<Unit>
+	suspend fun getFollowers(page: Int?,pageSize: Int?,userId: Int?,searchString: String?): Response<UserList>
+	suspend fun getFollows(page: Int?,pageSize: Int?,userId: Int?,searchString: String?): Response<UserList>
+	suspend fun getFollowRequests(pageSize: Int): Response<PaginatedList<FollowerRequest>>
 	suspend fun postAcceptFollowRequest(userId: Int): Response<Unit>
-    suspend fun deleteFollowRequest( userId: Int): Response<Unit>
+    suspend fun deleteFollowerRequest( followerId: Int): Response<Unit>
+    suspend fun deleteFollowRequest(  followId: Int): Response<Unit>
     suspend fun deleteFollower(userId: Int): Response<Unit>
 	suspend fun deleteFollow(userId: Int): Response<Unit>
 	suspend fun postFollowRequest(userId: Int): Response<Unit>
@@ -109,7 +111,7 @@ interface RemoteDataSource {
 	suspend fun getShoppingList(shoppingListId: Int): Response<ShoppingList>
 	suspend fun postShoppingList(shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
 	suspend fun putShoppingList(shoppingListId: Int, shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
-	suspend fun deleteShoppingList(shoppingListId: Int): Response<IdResponse>
+	suspend fun deleteShoppingList(shoppingListId: Int): Response<Id>
 
 	/** Notifications */
 	suspend fun getNotifications(page: Int?, pageSize: Int?, lastId: Int?): Response<NotificationList>

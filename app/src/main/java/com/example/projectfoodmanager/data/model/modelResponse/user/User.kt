@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class User(
     val id: Int,
     val name: String,
-    val username: String?,
+    val username: String,
     @SerializedName("birth_date")
     var birthDate: String?,
     val email: String,
@@ -38,11 +38,9 @@ data class User(
     val updatedDate: String?,
     @SerializedName("followers_c")
     val followers: Int = 0,
-    @SerializedName("followeds_c")
-    val followeds: Int = 0,
+    @SerializedName("follows_c")
+    val follows: Int = 0,
     @SerializedName("fitness_goal")
     var fitnessGoal: Goal? = null
-
-
 
 ) : Parcelable

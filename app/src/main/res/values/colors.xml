@@ -5,7 +5,6 @@
     <color name="color_1">#F5E1CE</color>
     <color name="color_2">#E8C39E</color>
     <color name="color_3">#F4F4F4</color>
-    <color name="color_4">#60E7E7E7</color>
     <color name="main_color">#62162F</color>
     <color name="secondary_title">#FBBB18</color>
     <color name="unchecked">#E8E8E8</color>
@@ -40,7 +39,6 @@
 
     // REFEIÇÃO-------------------------
     <color name="catg_sobremesa">#00bfff</color>
-    <color name="catg_entradas">#AE725F</color>
 
     // -------------------------
     <color name="catg_peq_almoco">#F0E68C</color>
@@ -54,41 +52,31 @@
 
 
     <color name="pressedColor">#EFEFEF</color>
-    <color name="focusedColor">#818181</color>
 
-<!--    <color name="">#1e90ff</color>
-    <color name="">#ffd700</color>
-    <color name="">#87ceeb</color>
-    <color name="">#da70d6</color>
-    <color name="">#7cfc00</color>
-    <color name="">#ffa07a</color>
-    <color name="">#ffa500</color>
-    <color name="">#00ffff</color>-->
+    <!--    <color name="">#1e90ff</color>
+        <color name="">#ffd700</color>
+        <color name="">#87ceeb</color>
+        <color name="">#da70d6</color>
+        <color name="">#7cfc00</color>
+        <color name="">#ffa07a</color>
+        <color name="">#ffa500</color>
+        <color name="">#00ffff</color>-->
 
 
 
 
 
     <!--fragment_home_new-->
-    <color name="_bg__android_large___2_ek2_color">#FFFFFF</color>
     <color name="ellipse_65_color">#FABB18</color>
-    <color name="rectangle_575_color">#EBEBEB</color>
     <!--fragment_home_new-->
 
-    <color name="grey">#DADADA</color>//Default
-
-    <color name="teal_700">#FF018786</color>
-
-    <color name="tab_selected">#FF000000</color>
-    <color name="tab_unselected">#4D000000</color>
     <color name="purple_700">#FF000000</color>
     <color name="purple_500">#FF000000</color>
 
     <!--calendar colors-->
-    <color name="gray">#888</color>
+    <color name="light_gray">#888</color>
+    <color name="grey">#DADADA</color>
     <color name="grayLightBTN">#F4F4F4</color>
-    <color name="blue">#0000FF</color>
-
 
 
 </resources>

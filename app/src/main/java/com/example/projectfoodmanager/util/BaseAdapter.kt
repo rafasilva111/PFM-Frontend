@@ -28,6 +28,7 @@ abstract class BaseAdapter<T, VB : ViewBinding>(
         bind(holder.binding, itemList[position], position)
     }
 
+
     override fun getItemCount(): Int = itemList.size
 
     fun getItems(): MutableList<T> = itemList.toMutableList()
@@ -40,13 +41,18 @@ abstract class BaseAdapter<T, VB : ViewBinding>(
 
     fun addItem(item: T) {
         itemList.add(item)
-        notifyItemInserted(itemList.size - 1)
+        notifyItemInserted(itemList.size)
     }
 
-    fun addItems(_list: MutableList<T>){
-        val listSize = itemList.size
-        itemList = (itemList + _list).toMutableList()
-        notifyItemRangeChanged(listSize,itemList.size)
+    fun addItem(item: T,position: Int) {
+        itemList.add(position,item)
+        notifyItemInserted(position)
+    }
+
+    fun addItems(_list: MutableList<T>) {
+        val oldSize = itemList.size
+        itemList.addAll(_list)
+        notifyItemRangeChanged(oldSize-1, _list.size)
     }
 
     fun updateItem(position: Int,item: T){

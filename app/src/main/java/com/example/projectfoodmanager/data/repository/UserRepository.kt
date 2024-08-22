@@ -3,6 +3,9 @@ package com.example.projectfoodmanager.data.repository
 import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelResponse.Id
+import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
+import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowerRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.notification.NotificationList
@@ -42,29 +45,31 @@ interface UserRepository {
     /** Follows */
 
     val getUserFollowers: LiveData<Event<NetworkResult<UserList>>>
-    val getUserFolloweds: LiveData<Event<NetworkResult<UserList>>>
+    val getUserFollows: LiveData<Event<NetworkResult<UserList>>>
     val deleteFollower: LiveData<Event<NetworkResult<Int>>>
     val deleteFollow: LiveData<Event<NetworkResult<Int>>>
 
 
-    suspend fun getUserFollowers(idUser: Int)
-    suspend fun getUserFollows(idUser: Int)
+    suspend fun getUserFollowers(page: Int?,pageSize: Int?,userId: Int?,searchString: String?)
+    suspend fun getUserFollows(page: Int?,pageSize: Int?,userId: Int?,searchString: String?)
     suspend fun deleteFollower(userId: Int)
     suspend fun deleteFollow(userId: Int)
 
     /** Follows Request */
 
     val getUsersToFollow: LiveData<Event<NetworkResult<UsersToFollowList>>>
-    val getFollowRequests: LiveData<Event<NetworkResult<UserList>>>
+    val getFollowRequests: LiveData<Event<NetworkResult<PaginatedList<FollowerRequest>>>>
     val postUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
     val postUserAcceptFollowRequest: LiveData<Event<NetworkResult<Int>>>
     val deleteFollowRequest: LiveData<Event<NetworkResult<Int>>>
+    val deleteFollowerRequest: LiveData<Event<NetworkResult<Int>>>
 
     suspend fun getUsersToFollow(searchString:String?,page: Int?,pageSize:Int?)
     suspend fun getFollowRequests(pageSize:Int)
     suspend fun postUserFollowRequest(userId: Int)
-    suspend fun postUserAcceptFollowRequest(idUser: Int)
+    suspend fun postUserAcceptFollowRequest(id: Int)
     suspend fun deleteFollowRequest(userId: Int)
+    suspend fun deleteFollowerRequest(userId: Int)
 
     /** Notifications */
 

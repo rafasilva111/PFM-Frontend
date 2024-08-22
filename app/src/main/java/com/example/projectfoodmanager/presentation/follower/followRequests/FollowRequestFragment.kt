@@ -9,33 +9,56 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentFollowRequestBinding
 import com.example.projectfoodmanager.util.network.NetworkResult
 import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.util.ToastType
+import com.example.projectfoodmanager.util.hide
+import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
 import com.example.projectfoodmanager.util.toast
 import com.example.projectfoodmanager.viewmodels.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FollowRequestFragment : Fragment() {
+class FollowRequestFragment : Fragment(), ImageLoadingListener {
 
-    // binding
+    /** Binding */
     lateinit var binding: FragmentFollowRequestBinding
 
-    // viewModels
+    /** ViewModels */
     private val userViewModel by activityViewModels<UserViewModel>()
 
-    // constants
-    private lateinit var currentUser: User
+    /** Constants */
+
+    lateinit var manager: LinearLayoutManager
+
     private var itemPosition: Int = -1
 
-
+    /** Injections */
     @Inject
     lateinit var sharedPreference: SharedPreference
 
+    /** Interfaces */
+    override fun onImageLoaded() {
+        requireActivity().runOnUiThread {
+            if (binding.followerRV.visibility != View.VISIBLE) {
+                adapter.imagesLoaded++
+
+                val firstVisibleItemPosition = manager.findFirstVisibleItemPosition()
+                val lastVisibleItemPosition = manager.findLastVisibleItemPosition()
+                val visibleItemCount = lastVisibleItemPosition - firstVisibleItemPosition + 1
+
+                // If all visible images are loaded, hide the progress bar
+                if (adapter.imagesLoaded >= visibleItemCount) {
+                    binding.progressBar.hide()
+                    binding.followerRV.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    /** Adapters */
     private val adapter by lazy {
         FollowRequestListingAdapter(
             onItemClicked = { userID ->
@@ -43,12 +66,29 @@ class FollowRequestFragment : Fragment() {
                     putInt("userId",userID)
                 })
             },
-            onActionBTNClicked = { position,userId ->
+            onAcceptClicked = { position, userId ->
                 itemPosition = position
                 userViewModel.postAcceptFollowRequest(userId)
+            },
+            onRemoveBTNClicked = { position, userId ->
+                itemPosition = position
+                userViewModel.deleteFollower(userId)
+            },
+            onSendRequestClicked = { position, userId ->
+                itemPosition = position
+                userViewModel.postFollowRequest(userId)
+            },
+            onCancelRequestClicked = { position, userId ->
+                itemPosition = position
+                userViewModel.deleteFollowRequest(userId)
             }
         )
     }
+
+    /**
+     *  Android LifeCycle
+     * */
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,38 +110,46 @@ class FollowRequestFragment : Fragment() {
         bindObservers()
     }
 
+    override fun onStart() {
+        setUI()
+        super.onStart()
+    }
+
+    /**
+     *  General
+     * */
+
     private fun setUI() {
 
         /**
          * General
          */
 
-        currentUser = sharedPreference.getUserSession()
-
         userViewModel.getFollowRequests()
+
+        binding.header.titleTV.text = getString(R.string.COMMON_FOLLOW_REQUESTS)
 
         /**
          * Navigation
          */
 
-        binding.backRegIB.setOnClickListener {
+        binding.header.backIB.setOnClickListener {
             findNavController().navigateUp()
         }
 
 
     }
 
-
     private fun bindObservers() {
 
-        userViewModel.getFollowRequestsLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
+        userViewModel.getFollowRequestsLiveData.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
 
-                        adapter.updateList(it.data!!.result)
+                        adapter.setItems(result.data!!.result)
 
-                        if (it.data.result.size != 0){
+                        if (result.data.result.size != 0){
                             binding.noFollowRequestTV.visibility=View.INVISIBLE
                         }else{
                             binding.noFollowRequestTV.visibility=View.VISIBLE
@@ -109,7 +157,7 @@ class FollowRequestFragment : Fragment() {
 
                     }
                     is NetworkResult.Error -> {
-                        toast(it.message.toString(), type = ToastType.ERROR)
+                        toast(result.message.toString(), type = ToastType.ERROR)
                     }
                     is NetworkResult.Loading -> {
                         //todo rui falta progress bar
@@ -120,44 +168,73 @@ class FollowRequestFragment : Fragment() {
             }
         }
 
-        userViewModel.postUserAcceptFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        adapter.removeItem(itemPosition)
+        /**
+         * Accept Follow Request
+         */
 
-                        toast("Confirmação com sucesso")
-                        if (adapter.getList().isEmpty())
-                            findNavController().navigateUp()
+        userViewModel.postUserAcceptFollowRequestLiveData.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        toast("Pedido para seguir aceite!")
+
+                        adapter.updateItemFollower(result.data!!,true)
 
                     }
                     is NetworkResult.Error -> {
-                        toast(it.message.toString(), type = ToastType.ERROR)
+                        toast(result.message.toString(), type = ToastType.ERROR)
                     }
                     is NetworkResult.Loading -> {
-                        //todo rui falta progress bar
-                        //binding.progressBar.show()
 
                     }
                 }
             }
         }
 
-        userViewModel.deleteFollowRequestLiveData.observe(viewLifecycleOwner) { networkResultEvent ->
-            networkResultEvent.getContentIfNotHandled()?.let {
-                when (it) {
+
+
+        /**
+         * Send Follow Request
+         */
+
+        userViewModel.postUserFollowRequestLiveData.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
                     is NetworkResult.Success -> {
-                        toast("Confirmação removida com sucesso")
-                        adapter.removeItem(itemPosition)
-                        //Get FollowRequests
-                        //authViewModel.getFollowRequests()
+                        toast("Pedido para seguir enviado!")
+
+                        adapter.updateItemRequestSent(result.data!!,true)
+
                     }
                     is NetworkResult.Error -> {
-                        toast(it.message.toString(), type = ToastType.ERROR)
+                        toast(result.message.toString(), type = ToastType.ERROR)
                     }
                     is NetworkResult.Loading -> {
-                        //todo rui falta progress bar
-                        //binding.progressBar.show()
+
+                    }
+                }
+            }
+        }
+
+
+        /**
+         * Cancel Follow Request
+         */
+
+        userViewModel.deleteFollowRequestLiveData.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        toast("Pedido de seguir cancelado!")
+
+                        adapter.updateItemRequestSent(result.data!!,false)
+
+
+                    }
+                    is NetworkResult.Error -> {
+                        toast(result.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
 
                     }
                 }
@@ -167,8 +244,5 @@ class FollowRequestFragment : Fragment() {
     }
 
 
-    override fun onStart() {
-        setUI()
-        super.onStart()
-    }
+
 }

@@ -115,11 +115,7 @@ object ImageTagsConstants{
     const val RANDOM_AVATAR ="random_avatar"
 }
 
-object FollowType{
-    const val NOT_FOLLOWER = -1
-    const val FOLLOWERS = 0
-    const val FOLLOWEDS = 1
-}
+
 
 
 object ToastType{

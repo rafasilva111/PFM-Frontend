@@ -169,7 +169,7 @@ class CalendarFragment : Fragment(), ImageLoadingListener {
 
     /** Interfaces */
 
-    override fun onImageLoaded() {
+/*    override fun onImageLoaded() {
         requireActivity().runOnUiThread {
             adapterEntry.imagesLoaded++
             if (adapterEntry.imagesLoaded >= manager.findLastCompletelyVisibleItemPosition()) {
@@ -180,6 +180,22 @@ class CalendarFragment : Fragment(), ImageLoadingListener {
                 binding.calEntrysRV.visibility = View.INVISIBLE
             }
 
+        }
+    }*/
+
+    override fun onImageLoaded() {
+        requireActivity().runOnUiThread {
+            adapterEntry.imagesLoaded++
+
+            val firstVisibleItemPosition = manager.findFirstVisibleItemPosition()
+            val lastVisibleItemPosition = manager.findLastVisibleItemPosition()
+            val visibleItemCount = lastVisibleItemPosition - firstVisibleItemPosition + 1
+
+            // If all visible images are loaded, hide the progress bar
+            if (adapterEntry.imagesLoaded >= visibleItemCount) {
+                binding.progressBar.hide()
+                binding.calEntrysRV.visibility = View.VISIBLE
+            }
         }
     }
 

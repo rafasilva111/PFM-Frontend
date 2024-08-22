@@ -19,8 +19,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var bottomNav: BottomNavigationView
-    lateinit var navController: NavController
-    val TAG: String = "MainActivity"
+    private lateinit var navController: NavController
+    private val TAG: String = "MainActivity"
+
+    // Variable to track the last selected item
+    private var lastSelectedItemId: Int = 0
 
 
 
@@ -55,6 +58,14 @@ class MainActivity : AppCompatActivity() {
         bottomNav = findViewById(R.id.bottomNavigationView)
         navController = (supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment).navController
         bottomNav.setupWithNavController(navController)
+
+        // Handle item reselect events
+        bottomNav.setOnItemReselectedListener { item ->
+            // Prevent reelecting the same item
+            if (item.itemId == lastSelectedItemId) {
+                return@setOnItemReselectedListener
+            }
+        }
 
     }
 

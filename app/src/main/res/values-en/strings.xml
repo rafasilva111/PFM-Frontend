@@ -1,69 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Toast Api Responses -->
-    <string name="DATA_NOT_UPDATED">Dados não atualizados, alguma coisa se passou.</string>
-    <string name="DATA_UPDATED">Dados atualizados com sucesso.</string>
+    <!-- Common -->
+    <string name="app_name">GoodBites</string>
+    <string name="COMMON_SAVE">Save</string>
+    <string name="COMMON_REMOVE">Remove</string>
+    <string name="COMMON_RESET">Reset</string>
 
+    <string name="COMMON_FOLLOWS">Follows</string>
+    <string name="COMMON_NO_FOLLOWS">You are not following anyone</string>
+    <string name="COMMON_FOLLOWERS">Followers</string>
+    <string name="COMMON_NO_FOLLOWERS">No followers</string>
+    <string name="COMMON_FOLLOWED">Followed</string>
+    <string name="COMMON_FOLLOW_REQUESTS">Follow requests</string>
+    <string name="COMMON_NO_FOLLOW_REQUESTS">No follow requests</string>
+
+    <!-- Dialogs -->
+    <string name="COMMON_DIALOG_YES">Yes</string>
+    <string name="COMMON_DIALOG_NO">No</string>
+    <string name="COMMON_DIALOG_CANCEL">Cancel</string>
+    <string name="COMMON_DIALOG_SELECT">Select</string>
+    <string name="COMMON_DIALOG_SKIP">Skip</string>
+    <string name="COMMON_DIALOG_CATEGORY_TITLE">Select a category</string>
+    <string name="COMMON_DIALOG_DATE_TITLE">Select a date</string>
+    <string name="COMMON_DIALOG_TIME_TITLE">Select a time</string>
+    <string name="COMMON_DIALOG_PORTION_TITLE">Select a portion</string>
+
+    <!-- Toast Api Responses -->
+    <string name="DATA_NOT_UPDATED">Data not updated, something went wrong.</string>
+    <string name="DATA_UPDATED">Data updated successfully.</string>
 
     <!-- User Model Response -->
-    <string name="USER_ERROR_GENDER_INVALID">Insira um sexo válido.</string>
+    <string name="USER_ERROR_GENDER_INVALID">Enter a valid gender.</string>
 
-    <string name="USER_ERROR_HEIGHT_INVALID">Insira uma altura.</string>
-    <string name="USER_ERROR_HEIGHT_INVALID_2">Insira uma entre %1$.1f m and %2$.1f m.</string>
+    <string name="USER_ERROR_HEIGHT_INVALID">Enter a height.</string>
+    <string name="USER_ERROR_HEIGHT_INVALID_2">Enter a height between %1$.1f m and %2$.1f m.</string>
 
-    <string name="USER_ERROR_WEIGHT_INVALID">Insira um peso.</string>
-    <string name="USER_ERROR_WEIGHT_INVALID_2">Insira um peso entre %1$.1f kg a %2$.1f kg.</string>
+    <string name="USER_ERROR_WEIGHT_INVALID">Enter a weight.</string>
+    <string name="USER_ERROR_WEIGHT_INVALID_2">Enter a weight between %1$.1f kg and %2$.1f kg.</string>
 
-    <string name="USER_ERROR_ACTIVITY_LEVEL_INVALID">Insira um nivel de atividade.</string>
+    <string name="USER_ERROR_ACTIVITY_LEVEL_INVALID">Enter an activity level.</string>
+
+    <!-- Place holder -->
+    <string name="NAME">Name</string>
+    <string name="USERNAME">Username</string>
+    <string name="DATE">Date</string>
+
+    <string name="PLACEHOLDER_DEFAULT_IMAGE_DESCRIPTION">Default Description.</string>
+
+    <!-- Fragments Strings -->
+
+    <!-- Comments Fragment -->
+    <string name="FRAGMENT_COMMENTS_TITLE">Comments</string>
+
+    <!-- Comment Item Layout -->
+    <string name="COMMENT_ITEM_LAYOUT_COMMENT_TEXT">Comment...</string>
+    <string name="COMMENT_ITEM_LAYOUT_COMMENT">Comment</string>
+    <string name="COMMENT_ITEM_LAYOUT_EDIT">Edit</string>
+    <string name="COMMENT_ITEM_LAYOUT_DELETE">Delete</string>
+    <string name="COMMENT_ITEM_LAYOUT_DELETE_DIALOG_TITLE">Delete Comment</string>
+    <string name="COMMENT_ITEM_LAYOUT_DELETE_DIALOG_MESSAGE">Are you sure you want to delete this comment?</string>
+    <string name="COMMENT_ITEM_LAYOUT_LIKES_DEFAULT">0 Likes</string>
+    <string name="COMMENT_ITEM_LAYOUT_LIKES">%1$d Likes</string>
+
+    <!-- Calendar Fragment -->
+
+    <!-- Calendar Portion Dialog -->
+    <string name="CALENDER_PORTION_DIALOG_TITLE">Portion Preferences</string>
+    <string name="CALENDER_PORTION_DIALOG_MAIN_DESCRIPTION">We noticed that you are a new member, and you don’t have a predefined portion yet. Would you like to add one?</string>
+    <string name="CALENDER_PORTION_DIALOG_PRIMARY_DESCRIPTION">Choose the number of people for the predefined portion:</string>
+    <string name="CALENDER_PORTION_DIALOG_FOOTER_DESCRIPTION">This option is used to adjust the amount of a recipe according to user preferences, making it easier to calculate the necessary ingredients. Even if you don’t set it now, you can always change it through the profile, or when adding a recipe to the calendar.</string>
+
+    <!-- New Calendar Entry Fragment -->
+    <string name="FRAGMENT_NEW_CALENDER_ENTRY">%1$d People</string>
+
+    <!-- Calendar Portion Dialog -->
+    <string name="CALENDER_PORTION_DIALOG_NUMBER_TITLE">Select the number of people</string>
+
+    <!-- FollowerFragment -->
+    <string name="FRAGMENT_FOLLOWER_SEARCH_HINT">Search users ...</string>
 
 
     <!-- Not Treated -->
-    <string name="app_name">GoodBites</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="error_description">Description missing</string>
-    <string name="error_title">Title missing</string>
-    <string name="error_tag_text">Enter text</string>
     <string name="enter_first_name">Enter first name</string>
     <string name="enter_last_name">Enter last name</string>
-    <string name="enter_job_title">Enter job title</string>
     <string name="enter_email">Enter email address</string>
     <string name="enter_password">Enter password</string>
     <string name="enter_birthdate">Enter birthdate</string>
     <string name="invalid_email">Invalid email entered</string>
-    <string name="invalid_email_2">This email is already registered</string>
-    <string name="invalid_email_3">This email does not have an account</string>
     <string name="invalid_birthdate">Invalid birthdate entered, please use the format dd/mm/yyyy</string>
     <string name="invalid_birthdate_2">Invalid birthdate entered, you\'re yet to be born?</string>
     <string name="invalid_password">Your password must be at least 8 characters</string>
     <string name="invalid_password_1">User\'s password is incorrect</string>
-    <string name="invalid_conf_password">Your password and confirm password must be the same</string>
-    <string name="invalid_session">Session is invalid, logging out…</string>
-    <string name="to_many_attemps_to_login_failed">Access to this account has been temporarily put on a cool-down due to many failed login attempts. Try again later.</string>
     <string name="ingredients">Ingredients</string>
-    <string name="receitas">Recipes</string>
-    <string name="perfile">Profile</string>
-    <string name="_0_gostos">0 Likes</string>
-    <string name="goals">Goals</string>
     <string name="calender">Calendar</string>
-    <string name="favorites">Favorites</string>
     <string name="offline_text">User is offline…</string>
     <string name="offline_desc">The user needs to be online to access this tab.</string>
     <string name="continuar">OK, understood.</string>
     <string name="gender">Gender</string>
-    <string name="logout_completed">Logout completed successfully.</string>
-    <string name="welcome">Are you here again, pig?</string>
     <string name="invalid_password_2">The passwords are different</string>
-    <string name="weightEt_problem_1">Please insert a valid weight</string>
-    <string name="weight_problem_2">Be careful, those are some weird numbers</string>
-    <string name="height_problem">Invalid height</string>
     <string name="txt_error_message">%1$S*</string>
     <string name="no_recipes">No recipes found.</string>
-    <string name="user_logout_successfully">User logged out successfully.</string>
     <string name="user_had_no_shared_preferences">User session invalid.</string>
-    <string name="get_saved_recipes">Saved recipes</string>
-    <string name="get_liked_recipes">Liked recipes</string>
-    <string name="recipe_liked">Recipe liked.</string>
-    <string name="recipe_removed_liked">Removed like.</string>
     <string name="user_registered_successfully">User registered successfully.</string>
     <string name="logout_confirmation_description">Are you sure you want to exit?</string>
     <string name="tab_coment">Commented</string>
@@ -72,7 +110,6 @@
     <string name="tab_liked">Liked</string>
     <string name="tab_last_seen">Last recipes viewed</string>
     <string name="recipe_listing_filter_sugestions">Suggestions</string>
-    <string name="recipe_listing_filter_best">Top-rated</string>
     <string name="recipe_listing_filter_recent">Most recent</string>
     <string name="recipe_listing_filter_personalized_sugestions">Personalized Suggestions</string>
     <string name="recipe_listing_welcome">Welcome</string>
@@ -80,22 +117,10 @@
     <string name="goodbites">GoodBites</string>
     <string name="register_string">Register</string>
     <string name="login_string">Login</string>
-    <string name="recipe_removed_from_saves">Saved recipe removed.</string>
-    <string name="recipe_saved">Recipe saved.</string>
     <string name="full_name">%1$s</string>
     <string name="goals_biodata_check_dialog_desc">You don\'t have your biodata inserted, and it is required to proceed. Do you want to insert it?</string>
     <string name="biodata_update">Update</string>
-    <string name="warning">Warning</string>
-    <string name="title">Title</string>
-    <string name="description">Description</string>
     <string name="Update">Update</string>
-    <string name="recipe_removed_saved">Saved recipe removed</string>
-    <string name="username">%1$s</string>
-    <string name="Camera">Camera</string>
-    <string name="Gallery">Gallery</string>
-    <string name="escolhe_uma_forma">Choose a shape:</string>
-    <string name="back"><![CDATA[<-]]></string>
-    <string name="forward"><![CDATA[->]]></string>
     <string name="Birth_Date">Date of Birth</string>
     <string name="email">Email</string>
     <string name="last_name">Last Name</string>
@@ -106,31 +131,17 @@
     <string name="none">None</string>
     <string name="no_recipes_liked">No recipes liked…</string>
     <string name="no_recipes_created">No recipes created…</string>
-    <string name="not_implemented">Not implemented yet…</string>
     <string name="most_saved">Most saved</string>
     <string name="random">Random</string>
     <string name="most_liked">Mais gostadas</string>
     <string name="date_text">%1$s</string>
-    <string name="followers">Followers</string>
-    <string name="followeds">Followeds</string>
-    <string name="no_followers">No followers</string>
-    <string name="no_follows">No followeds</string>
     <string name="name">Name</string>
     <string name="follow">Follow</string>
-    <string name="follow_remove">Remove</string>
-    <string name="no_follow_requests">No follow requests</string>
-    <string name="notifications">Notifications</string>
-    <string name="follow_requests">Follow requests</string>
+    <string name="COMMON_REMOVE_FOLLOW">Remove</string>
     <string name="quantity_placeholder">"%1$.2f %2$s "</string>
     <string name="lista_de_ingredientes">List of Ingredients</string>
     <string name="save_shopping_cart">Save shopping cart</string>
     <string name="NOT_IMPLEMENT_YET">Not implemented yet</string>
-    <string name="CALENDER_PORTION_DIALOG_FOOTER_DESCRIPTION">This option is used to adjust the quantity of a recipe to match the user\'s preferences, making it easier to calculate the necessary items for the shopping list.</string>
-    <string name="CALENDER_PORTION_DIALOG_MAIN_DESCRIPTION">The user has not indicated a preferred portion size, so please select one for them.</string>
-    <string name="COMMON_DIALOG_SKIP">Use recipe\'s portion</string>
-    <string name="CALENDER_PORTION_DIALOG_TITLE">User\'s portion preference</string>
-    <string name="COMMON_DIALOG_SELECT">Select</string>
-    <string name="CALENDER_PORTION_DIALOG_PRIMARY_DESCRIPTION">Choose the desired number of people for whom you\'d like to calculate the portion size of the recipe</string>
     <string name="shopping_list_date">Shopping list %1$d/%2$d %3$d/%4$d</string>
     <string name="listas_de_compras">Shopping Lists</string>
     <string name="lista_de_compras">Shopping List</string>
@@ -145,7 +156,6 @@
     <string name="fragment_calender_ingredients_lista_de_compras">Shopping List</string>
     <string name="profile_shopping_lists">Shopping Lists</string>
     <string name="nr_comments">No. of Comments</string>
-    <string name="no_recipes_comented">No recipes commented…</string>
     <string name="chip_tag_likes">1</string>
     <string name="chip_tag_saves">2</string>
     <string name="chip_tag_created">3</string>
@@ -153,27 +163,16 @@
     <string name="chip_tag_last_seen">5</string>
     <string name="recipes_verified">Verified Recipes</string>
     <string name="recipes_all">All Recipes</string>
-    <string name="fragment_title_about_us">About Us</string>
-    <string name="fragment_faqs_title">FAQs</string>
-    <string name="fragment_languages_title">Languages</string>
-    <string name="fragment_settings_title">Test</string>
-    <string name="fragment_about_us_title">About Us</string>
-    <string name="fragment_FAQs_title">FAQs</string>
-    <string name="fragment_send_us_a_message_title">Send us a message</string>
     <string name="settings_fragment_dialog_desc">Are you sure you want to delete this account?</string>
     <string name="settings_fragment_dialog_title">Deleting account…</string>
     <string name="fragment_followers_find_follows">Find</string>
     <string name="fragment_follower_follower_request_count">0</string>
-    <string name="item_follower_request_sent">Request Sent</string>
-    <string name="fragment_notification_notification_deleted">Notification deleted</string>
+    <string name="ITEM_FOLLOWER_REQUEST_SEND">Request Sent</string>
     <string name="fragment_settings_delete_account">Delete Account</string>
     <string name="profile_fragment_logout_dialog_title">Logout</string>
-    <string name="COMMON_DIALOG_YES">Yes</string>
-    <string name="COMMON_DIALOG_NO">No</string>
     <string name="follower_fragment_no_more_people_to_follow">No more people to follow…</string>
     <string name="fragment_follower_remove_follow_request_title">Cancel request?</string>
     <string name="fragment_follower_remove_follow_request_message">Are you sure you want to cancel the follow request?</string>
-    <string name="fragment_follower_search_hint">Search Recipe</string>
     <string name="fragment_send_us_a_message_message_title">Title</string>
     <string name="fragment_send_us_a_message_message">Message</string>
     <string name="fragment_send_us_a_message_send">Send</string>
@@ -185,9 +184,7 @@
     <string name="fragment_notification_entry">Notification</string>
     <string name="fragment_notifications_no_notification">No notifications</string>
     <string name="accept">Accept</string>
-    <string name="new_recipe_fragment_tabTitles_Ingredients">Ingredients</string>
 
-    <string name="new_recipe_fragment_tabTitles_Details">Details</string>
     <string name="two">2</string>
     <string name="one">1</string>
     <string name="three">3</string>

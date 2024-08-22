@@ -1,119 +1,85 @@
 package com.example.projectfoodmanager.presentation.follower
 
-import android.view.LayoutInflater
+
 import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.ItemFollowerLayoutBinding
-import com.example.projectfoodmanager.util.FollowType
+import com.example.projectfoodmanager.util.BaseAdapter
 import com.example.projectfoodmanager.util.Helper
+import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
 
 
 class FollowerListingAdapter(
-    private var followType: Int,
     val onItemClicked: (Int) -> Unit,
     val onActionBTNClicked: (Int,Int) -> Unit,
     val onRemoveBTNClicked: (Int,Int) -> Unit,
-) : RecyclerView.Adapter<FollowerListingAdapter.MyViewHolder>() {
+    private val imageLoadingListener: ImageLoadingListener
+) : BaseAdapter<User, ItemFollowerLayoutBinding>(
+    ItemFollowerLayoutBinding::inflate
+) {
 
     private val TAG: String = "FollowerAdapter"
-    private var list: MutableList<User> = arrayListOf()
+    private lateinit var followType: String
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = ItemFollowerLayoutBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return MyViewHolder(itemView)
+
+    fun setItems(list: MutableList<User>, followType:String){
+        this.followType = followType
+        this.setItems(list)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val item = list[position]
-        holder.bind(item)
-    }
+    override fun bind(binding: ItemFollowerLayoutBinding, item: User, position: Int) {
 
-    fun updateList(list: MutableList<User>, followType: Int? = null){
-        if (followType != null)
-            this.followType = followType
-        this.list = list
-        notifyDataSetChanged()
-    }
-
-    fun getList():MutableList<User>{
-        return this.list
-    }
-
-    fun updateItem(position: Int,item: User){
-        list.removeAt(position)
-        list.add(position,item)
-        notifyItemChanged(position)
-    }
+        //Load Author img
+        loadUserImage(binding.imgAuthorIV, item.imgSource) {
+            if (position == 0)
+                imageLoadingListener.onImageLoaded()
+        }
 
 
-    fun cleanList(){
-        this.list= arrayListOf()
-        notifyDataSetChanged()
-    }
+        binding.nameTV.text= Helper.formatNameToNameUpper(item.name)
 
-    fun removeItem(position: Int){
-        list.removeAt(position)
-        notifyItemChanged(position)
-    }
+        if(item.verified){
+            binding.verifyUserIV.visibility=View.VISIBLE
+        }else{
+            binding.verifyUserIV.visibility=View.INVISIBLE
+        }
 
-    override fun getItemCount(): Int {
-        return list.size
-    }
-
-
-    inner class MyViewHolder(private val binding: ItemFollowerLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(user: User) {
-
-            //Load Author img
-            Helper.loadUserImage(binding.imgAuthorIV, user.imgSource)
-
-            binding.nameTV.text= Helper.formatNameToNameUpper(user.name)
-
-            if(user.verified){
-                binding.verifyUserIV.visibility=View.VISIBLE
-            }else{
-                binding.verifyUserIV.visibility=View.INVISIBLE
+        when(followType){
+            FollowerFragment.Companion.SelectedTab.FOLLOWERS -> {
+                binding.removeFollowBTN.visibility=View.VISIBLE
+                binding.removeFollowBTN.text=binding.root.context.getString(R.string.COMMON_REMOVE)
+                binding.sendFollowRequestBTN.visibility=View.GONE
             }
-
-            when(followType){
-                FollowType.FOLLOWERS -> {
-                    binding.removeFollowBTN.visibility=View.VISIBLE
-                    binding.removeFollowBTN.text="Remove"
-                    binding.actionFollowBTN.visibility=View.GONE
-                }
-                FollowType.FOLLOWEDS -> {
-                    binding.removeFollowBTN.visibility=View.VISIBLE
-                    binding.removeFollowBTN.text="Followed"
-                    binding.actionFollowBTN.visibility=View.GONE
-                }
-                else -> {
-                    binding.removeFollowBTN.visibility=View.GONE
-                    binding.actionFollowBTN.visibility=View.VISIBLE
-                }
+            FollowerFragment.Companion.SelectedTab.FOLLOWS -> {
+                binding.removeFollowBTN.visibility=View.VISIBLE
+                binding.removeFollowBTN.text=binding.root.context.getString(R.string.COMMON_FOLLOWED)
+                binding.sendFollowRequestBTN.visibility=View.GONE
             }
-
-            binding.itemLayoutCL.setOnClickListener {
-                onItemClicked.invoke(user.id)
+            else -> {
+                binding.removeFollowBTN.visibility=View.GONE
+                binding.sendFollowRequestBTN.visibility=View.VISIBLE
             }
+        }
 
-            binding.actionFollowBTN.setOnClickListener {
+        binding.itemLayoutCL.setOnClickListener {
+            onItemClicked.invoke(item.id)
+        }
 
-                onActionBTNClicked.invoke(bindingAdapterPosition,user.id)
-            }
+        binding.sendFollowRequestBTN.setOnClickListener {
 
-            binding.removeFollowBTN.setOnClickListener {
+            onActionBTNClicked.invoke(position,item.id)
+        }
 
-                onRemoveBTNClicked.invoke(bindingAdapterPosition, user.id)
-            }
+        binding.removeFollowBTN.setOnClickListener {
 
+            onRemoveBTNClicked.invoke(position, item.id)
         }
 
 
     }
-
 
 
 

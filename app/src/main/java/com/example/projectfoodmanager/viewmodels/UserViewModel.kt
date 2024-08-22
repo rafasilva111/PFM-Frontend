@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelResponse.Id
+import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
+import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowerRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
 import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.notification.NotificationList
@@ -114,24 +117,24 @@ class UserViewModel @Inject constructor(
     val getUserFollowersLiveData: LiveData<Event<NetworkResult<UserList>>>
         get() = repository.getUserFollowers
 
-    fun getFollowers(id_user: Int) {
+    fun getFollowers(page: Int? = null,pageSize: Int?= null,userId: Int?,searchString: String?= null) {
         viewModelScope.launch {
-            repository.getUserFollowers(id_user)
+            repository.getUserFollowers(page,pageSize,userId,searchString)
         }
     }
 
-    //GET followeds by userID or authenticated user
-    val getUserFollowedsLiveData: LiveData<Event<NetworkResult<UserList>>>
-        get() = repository.getUserFolloweds
+    //GET follows by userID or authenticated user
+    val getUserFollowsLiveData: LiveData<Event<NetworkResult<UserList>>>
+        get() = repository.getUserFollows
 
-    fun getFolloweds(id_user: Int){
+    fun getFollows(page: Int?= null,pageSize: Int?= null,userId: Int?,searchString: String?= null){
         viewModelScope.launch {
-            repository.getUserFollows(id_user)
+            repository.getUserFollows(page,pageSize,userId,searchString)
         }
     }
 
     //GET follow requests (authenticated user)
-    val getFollowRequestsLiveData: LiveData<Event<NetworkResult<UserList>>>
+    val getFollowRequestsLiveData: LiveData<Event<NetworkResult<PaginatedList<FollowerRequest>>>>
         get() = repository.getFollowRequests
 
     fun getFollowRequests(pageSize: Int = 10){
@@ -145,9 +148,9 @@ class UserViewModel @Inject constructor(
         get() = repository.postUserAcceptFollowRequest
 
 
-    fun postAcceptFollowRequest(userId: Int) {
+    fun postAcceptFollowRequest(id: Int) {
         viewModelScope.launch {
-            repository.postUserAcceptFollowRequest(userId)
+            repository.postUserAcceptFollowRequest(id)
         }
     }
 
@@ -171,6 +174,16 @@ class UserViewModel @Inject constructor(
     fun deleteFollowRequest(userId: Int) {
         viewModelScope.launch {
             repository.deleteFollowRequest(userId)
+        }
+    }
+
+    val deleteFollowerRequestLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.deleteFollowerRequest
+
+
+    fun deleteFollowerRequest(userId: Int) {
+        viewModelScope.launch {
+            repository.deleteFollowerRequest(userId)
         }
     }
 
@@ -202,7 +215,7 @@ class UserViewModel @Inject constructor(
         get() = repository.getUsersToFollow
 
 
-    fun getUsersToFollow(searchString:String? = null,page: Int? = null,pageSize:Int? = null) {
+    fun getUsersToFollow(searchString:String? = null,page: Int? = null,pageSize:Int? = 15) {
         viewModelScope.launch {
             repository.getUsersToFollow(searchString,page,pageSize)
         }

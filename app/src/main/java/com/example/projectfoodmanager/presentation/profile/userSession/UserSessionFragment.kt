@@ -11,6 +11,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.databinding.FragmentSessionProfileBinding
+import com.example.projectfoodmanager.presentation.follower.FollowerFragment
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
@@ -47,7 +48,6 @@ class UserSessionFragment : Fragment() {
     lateinit var sharedPreference: SharedPreference
 
     // adapters
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -95,7 +95,7 @@ class UserSessionFragment : Fragment() {
             binding.verifyUserIV.visibility = View.INVISIBLE
 
 
-        binding.nFollowedsTV.text = user.followeds.toString()
+        binding.nFollowedsTV.text = user.follows.toString()
         binding.nFollowersTV.text = user.followers.toString()
 
         /**
@@ -157,8 +157,7 @@ class UserSessionFragment : Fragment() {
 
         binding.followedsLL.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_followerFragment,Bundle().apply {
-                putInt("userId",-1)
-                putInt("followType",FollowType.FOLLOWEDS)
+                putString("follow_type",FollowerFragment.Companion.SelectedTab.FOLLOWS)
                 putString("userName",user.name)
             })
             changeMenuVisibility(false,activity)
@@ -166,8 +165,7 @@ class UserSessionFragment : Fragment() {
 
         binding.followersLL.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_followerFragment,Bundle().apply {
-                putInt("userId",-1)
-                putInt("followType",FollowType.FOLLOWERS)
+                putString("follow_type",FollowerFragment.Companion.SelectedTab.FOLLOWERS)
                 putString("userName",user.name)
             })
             changeMenuVisibility(false,activity)
@@ -176,7 +174,7 @@ class UserSessionFragment : Fragment() {
 
 
     private fun showValidationErrors(error: String) {
-        toast(String.format(resources.getString(R.string.txt_error_message, error)))
+        toast(resources.getString(R.string.txt_error_message, error))
     }
 
     private fun showValidationErrors(error: ValidationError) {
