@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
-import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.Id
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 
@@ -62,7 +62,7 @@ class ShoppingListRepositoryImp @Inject constructor(
 
                     if (deleteSharedPreferences) {
                         when (responseBody) {
-                            is  IdResponse -> sharedPreference.deleteShoppingList(responseBody.id)
+                            is  Id -> sharedPreference.deleteShoppingList(responseBody.id)
                             is ShoppingList -> sharedPreference.deleteShoppingList(responseBody.id)
                             else -> Log.e(TAG, "Unable to save this type into shared preferences...")
                         }
@@ -146,8 +146,8 @@ class ShoppingListRepositoryImp @Inject constructor(
 
     // delete
 
-    private val _deleteShoppingListLiveData = MutableLiveData<Event<NetworkResult<IdResponse>>>()
-    override val deleteShoppingListLiveData: LiveData<Event<NetworkResult<IdResponse>>>
+    private val _deleteShoppingListLiveData = MutableLiveData<Event<NetworkResult<Id>>>()
+    override val deleteShoppingListLiveData: LiveData<Event<NetworkResult<Id>>>
         get() = _deleteShoppingListLiveData
 
     override suspend fun deleteShoppingList(shoppingListId: Int) {

@@ -51,16 +51,16 @@ class FollowerListingAdapter(
             FollowerFragment.Companion.SelectedTab.FOLLOWERS -> {
                 binding.removeFollowBTN.visibility=View.VISIBLE
                 binding.removeFollowBTN.text=binding.root.context.getString(R.string.COMMON_REMOVE)
-                binding.actionFollowBTN.visibility=View.GONE
+                binding.sendFollowRequestBTN.visibility=View.GONE
             }
             FollowerFragment.Companion.SelectedTab.FOLLOWS -> {
                 binding.removeFollowBTN.visibility=View.VISIBLE
                 binding.removeFollowBTN.text=binding.root.context.getString(R.string.COMMON_FOLLOWED)
-                binding.actionFollowBTN.visibility=View.GONE
+                binding.sendFollowRequestBTN.visibility=View.GONE
             }
             else -> {
                 binding.removeFollowBTN.visibility=View.GONE
-                binding.actionFollowBTN.visibility=View.VISIBLE
+                binding.sendFollowRequestBTN.visibility=View.VISIBLE
             }
         }
 
@@ -68,7 +68,7 @@ class FollowerListingAdapter(
             onItemClicked.invoke(item.id)
         }
 
-        binding.actionFollowBTN.setOnClickListener {
+        binding.sendFollowRequestBTN.setOnClickListener {
 
             onActionBTNClicked.invoke(position,item.id)
         }

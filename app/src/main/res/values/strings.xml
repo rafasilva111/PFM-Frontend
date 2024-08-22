@@ -4,6 +4,7 @@
             Common
     -->
     <string name="app_name">GoodBites</string>
+    <string name="COMMON_ACCEPT">Aceitar</string>
     <string name="COMMON_SAVE">Guardar</string>
     <string name="COMMON_REMOVE">Remover</string>
     <string name="COMMON_RESET">Reiniciar</string>
@@ -13,8 +14,9 @@
     <string name="COMMON_FOLLOWERS">Seguidores</string>
     <string name="COMMON_NO_FOLLOWERS">Sem seguidores</string>
     <string name="COMMON_FOLLOWED">Seguido</string>
-    <string name="COMMON_FOLLOW_REQUESTS">Follow requests</string>
-    <string name="COMMON_NO_FOLLOW_REQUESTS">No follow requests</string>
+    <string name="COMMON_FOLLOW_REQUESTS">Pedidos para seguir</string>
+    <string name="COMMON_NO_FOLLOW_REQUESTS">Sem pedidos para seguir</string>
+    <string name="COMMON_REMOVE_FOLLOW">Deixar de seguir</string>
 
 
 
@@ -51,7 +53,10 @@
 
 
     <string name="NAME">Nome</string>
+    <string name="USERNAME">Nome de Utilizador</string>
     <string name="DATE">Data</string>
+
+    <string name="PLACEHOLDER_DEFAULT_IMAGE_DESCRIPTION">Sem descrição.</string>
 
 
     <!--
@@ -63,7 +68,7 @@
     <string name="FRAGMENT_COMMENTS_TITLE">Comentários</string>
 
     <!-- Comment Item Layout -->
-    <string name="COMMENT_ITEM_LAYOUT_COMMENT_TEXT">Comentário...</string>
+    <string name="COMMENT_ITEM_LAYOUT_COMMENT_TEXT">Comentário…</string>
     <string name="COMMENT_ITEM_LAYOUT_COMMENT">Comentar</string>
     <string name="COMMENT_ITEM_LAYOUT_EDIT">Editar</string>
     <string name="COMMENT_ITEM_LAYOUT_DELETE">Apagar</string>
@@ -88,8 +93,12 @@
     <string name="CALENDER_PORTION_DIALOG_NUMBER_TITLE">Seleciona o numero de pessoas</string>
 
     <!-- FollowerFragment -->
+    <string name="FRAGMENT_FOLLOWER_SEARCH_HINT">Procurar utilizadores …</string>
 
-    <string name="FRAGMENT_FOLLOWER_SEARCH_HINT">Procurar utilizadores ...</string>
+    <!-- FollowerRequestFragment -->
+    <string name="ITEM_FOLLOWER_REQUEST_SEND">Seguir</string>
+    <string name="ITEM_FOLLOWER_REQUEST_SENT">Pedido enviado</string>
+    <string name="ITEM_FOLLOWER_REQUEST_CANCEL">Cancelar pedido</string>
 
     <!-- Not Treated -->
 
@@ -154,7 +163,7 @@
 
     <string name="name">Name</string>
     <string name="follow">Follow</string>
-    <string name="follow_remove">Remove</string>
+
 
     <string name="quantity_placeholder">"%1$.2f %2$s "</string>
     <string name="lista_de_ingredientes">Lista de ingredientes</string>
@@ -189,7 +198,7 @@
     <string name="fragment_followers_find_follows">Find</string>
     <string name="fragment_follower_follower_request_count">0</string>
     <string name="follower_fragment_no_more_people_to_follow">Sem mais pessoas para seguir…</string>
-    <string name="item_follower_request_sent">Request Sent</string>
+
     <string name="fragment_follower_remove_follow_request_title">Cancelar request?</string>
     <string name="fragment_follower_remove_follow_request_message">Tem a certeza que pretende cancelar o pedido de seguir?</string>
 

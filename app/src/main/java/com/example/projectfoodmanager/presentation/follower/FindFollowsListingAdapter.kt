@@ -49,11 +49,11 @@ class FindFollowsListingAdapter(
 
         if (item.requestSent) {
             binding.removeFollowRequestBTN.visibility=View.VISIBLE
-            binding.actionFollowBTN.visibility=View.GONE
+            binding.sendFollowRequestBTN.visibility=View.GONE
         }
         else{
             binding.removeFollowRequestBTN.visibility=View.GONE
-            binding.actionFollowBTN.visibility=View.VISIBLE
+            binding.sendFollowRequestBTN.visibility=View.VISIBLE
         }
 
 
@@ -61,8 +61,7 @@ class FindFollowsListingAdapter(
             onItemClicked.invoke(item.user.id)
         }
 
-        binding.actionFollowBTN.setOnClickListener {
-
+        binding.sendFollowRequestBTN.setOnClickListener {
             onActionBTNClicked.invoke(position,item.user.id)
         }
 

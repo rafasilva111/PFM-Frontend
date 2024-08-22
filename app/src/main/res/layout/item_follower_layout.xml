@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemLayoutCL"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
->
+    android:orientation="horizontal">
 
 
     <ImageView
@@ -18,6 +16,7 @@
         android:elevation="8dp"
         android:src="@drawable/verified"
         android:visibility="visible"
+        android:contentDescription="@string/PLACEHOLDER_DEFAULT_IMAGE_DESCRIPTION"
         app:layout_constraintBottom_toBottomOf="@+id/imgAutorCV"
         app:layout_constraintStart_toEndOf="@+id/imgAutorCV" />
 
@@ -37,6 +36,7 @@
             android:id="@+id/imgAuthorIV"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:contentDescription="@string/PLACEHOLDER_DEFAULT_IMAGE_DESCRIPTION"
             android:src="@drawable/img_profile" />
 
     </androidx.cardview.widget.CardView>
@@ -49,7 +49,7 @@
         android:layout_marginStart="10dp"
         android:ellipsize="end"
         android:fontFamily="@font/fredoka_regular"
-        android:text="Nome"
+        android:text="@string/NAME"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imgAutorCV"
@@ -67,7 +67,7 @@
         android:layout_marginTop="5dp"
         android:ellipsize="end"
         android:fontFamily="@font/fredoka_regular"
-        android:text="username"
+        android:text="@string/USERNAME"
         android:textColor="@color/grey"
         android:textSize="12sp"
         android:textStyle="bold"
@@ -88,7 +88,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/actionFollowBTN"
+            android:id="@+id/acceptFollowRequest"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_gravity="center_vertical|end"
@@ -96,12 +96,13 @@
             android:padding="0dp"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
-            app:backgroundTint="#259FFF"
+            app:backgroundTint="@color/main_color"
             app:strokeColor="#00FF2700"
             app:strokeWidth="2dp"
             android:fontFamily="@font/fredoka_regular"
             android:textStyle="bold"
-            android:text="@string/follow"
+            android:text="@string/COMMON_ACCEPT"
+            android:visibility="gone"
             android:textSize="13sp" />
 
 
@@ -114,12 +115,27 @@
             android:layout_marginStart="10dp"
             android:padding="0dp"
             android:backgroundTint="@color/grey"
-            android:text="@string/follow_remove"
+            android:text="@string/COMMON_REMOVE_FOLLOW"
             android:fontFamily="@font/fredoka_regular"
             android:textStyle="bold"
             android:textSize="13sp"
             android:textColor="@color/black"
             android:visibility="gone"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sendFollowRequestBTN"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginStart="10dp"
+            android:padding="0dp"
+            android:backgroundTint="@color/color_2"
+            android:text="@string/ITEM_FOLLOWER_REQUEST_SEND"
+            android:fontFamily="@font/fredoka_regular"
+            android:textStyle="bold"
+            android:textSize="13sp"
+            android:textColor="@color/black"
+            android:visibility="visible"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/removeFollowRequestBTN"
@@ -129,12 +145,14 @@
             android:layout_marginStart="10dp"
             android:padding="0dp"
             android:backgroundTint="@color/grey"
-            android:text="@string/item_follower_request_sent"
+            android:text="@string/ITEM_FOLLOWER_REQUEST_CANCEL"
             android:fontFamily="@font/fredoka_regular"
             android:textStyle="bold"
             android:textSize="13sp"
             android:textColor="@color/black"
             android:visibility="gone"/>
+
+
     </LinearLayout>
 
 

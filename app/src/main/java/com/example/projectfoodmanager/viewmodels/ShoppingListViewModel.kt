@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
-import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.Id
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 import com.example.projectfoodmanager.data.repository.ShoppingListRepository
@@ -69,7 +69,7 @@ class ShoppingListViewModel @Inject constructor(
 
     // delete
 
-    val deleteShoppingListLiveData: LiveData<Event<NetworkResult<IdResponse>>>
+    val deleteShoppingListLiveData: LiveData<Event<NetworkResult<Id>>>
         get() = repository.deleteShoppingListLiveData
 
     fun deleteShoppingList(shoppingListId: Int) {

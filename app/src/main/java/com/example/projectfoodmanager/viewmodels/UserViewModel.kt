@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelResponse.Id
 import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowerRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
@@ -143,13 +144,13 @@ class UserViewModel @Inject constructor(
     }
 
     //POST accept follow requests by userID
-    val postUserAcceptFollowRequestLiveData: LiveData<Event<NetworkResult<Unit>>>
+    val postUserAcceptFollowRequestLiveData: LiveData<Event<NetworkResult<Int>>>
         get() = repository.postUserAcceptFollowRequest
 
 
-    fun postAcceptFollowRequest(userId: Int) {
+    fun postAcceptFollowRequest(id: Int) {
         viewModelScope.launch {
-            repository.postUserAcceptFollowRequest(userId)
+            repository.postUserAcceptFollowRequest(id)
         }
     }
 
@@ -166,7 +167,7 @@ class UserViewModel @Inject constructor(
 
     // delete follow request
 
-    val deleteFollowRequestLiveData: LiveData<Event<NetworkResult<Unit>>>
+    val deleteFollowRequestLiveData: LiveData<Event<NetworkResult<Int>>>
         get() = repository.deleteFollowRequest
 
 
@@ -176,15 +177,13 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    // delete follower request
-
-    val deleteFollowerRequestLiveData: LiveData<Event<NetworkResult<Unit>>>
-        get() = repository.deleteFollowRequest
+    val deleteFollowerRequestLiveData: LiveData<Event<NetworkResult<Int>>>
+        get() = repository.deleteFollowerRequest
 
 
     fun deleteFollowerRequest(userId: Int) {
         viewModelScope.launch {
-            repository.deleteFollowRequest(userId)
+            repository.deleteFollowerRequest(userId)
         }
     }
 

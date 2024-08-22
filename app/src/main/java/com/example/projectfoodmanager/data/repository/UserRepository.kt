@@ -3,6 +3,7 @@ package com.example.projectfoodmanager.data.repository
 import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelResponse.Id
 import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
 import com.example.projectfoodmanager.data.model.modelResponse.follows.FollowerRequest
 import com.example.projectfoodmanager.data.model.modelResponse.follows.UsersToFollowList
@@ -59,14 +60,14 @@ interface UserRepository {
     val getUsersToFollow: LiveData<Event<NetworkResult<UsersToFollowList>>>
     val getFollowRequests: LiveData<Event<NetworkResult<PaginatedList<FollowerRequest>>>>
     val postUserFollowRequest: LiveData<Event<NetworkResult<Int>>>
-    val postUserAcceptFollowRequest: LiveData<Event<NetworkResult<Unit>>>
-    val deleteFollowRequest: LiveData<Event<NetworkResult<Unit>>>
-    val deleteFollowerRequest: LiveData<Event<NetworkResult<Unit>>>
+    val postUserAcceptFollowRequest: LiveData<Event<NetworkResult<Int>>>
+    val deleteFollowRequest: LiveData<Event<NetworkResult<Int>>>
+    val deleteFollowerRequest: LiveData<Event<NetworkResult<Int>>>
 
     suspend fun getUsersToFollow(searchString:String?,page: Int?,pageSize:Int?)
     suspend fun getFollowRequests(pageSize:Int)
     suspend fun postUserFollowRequest(userId: Int)
-    suspend fun postUserAcceptFollowRequest(userId: Int)
+    suspend fun postUserAcceptFollowRequest(id: Int)
     suspend fun deleteFollowRequest(userId: Int)
     suspend fun deleteFollowerRequest(userId: Int)
 

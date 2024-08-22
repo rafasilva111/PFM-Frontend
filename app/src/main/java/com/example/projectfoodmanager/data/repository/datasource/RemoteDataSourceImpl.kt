@@ -12,7 +12,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
-import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.Id
 import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
 import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
@@ -222,8 +222,12 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.postAcceptFollowRequest(userId)
 	}
 
-	override suspend fun deleteFollowRequest(followerId: Int?, followedId: Int?): Response<Unit> {
-		return apiInterface.deleteFollowRequest(followerId,followedId)
+	override suspend fun deleteFollowerRequest(followerId: Int): Response<Unit> {
+		return apiInterface.deleteFollowRequest(followerId = followerId)
+	}
+
+	override suspend fun deleteFollowRequest( followId: Int): Response<Unit> {
+		return apiInterface.deleteFollowRequest(followId = followId)
 	}
 
 	// shopping list
@@ -247,7 +251,7 @@ class RemoteDataSourceImpl @Inject constructor(
 	}
 
 	// delete
-	override suspend fun deleteShoppingList(shoppingListId: Int): Response<IdResponse> {
+	override suspend fun deleteShoppingList(shoppingListId: Int): Response<Id> {
 		return apiInterface.deleteShoppingList(shoppingListId)
 	}
 

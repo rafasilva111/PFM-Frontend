@@ -11,7 +11,7 @@ import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
-import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.Id
 import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
 import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
@@ -99,7 +99,8 @@ interface RemoteDataSource {
 	suspend fun getFollows(page: Int?,pageSize: Int?,userId: Int?,searchString: String?): Response<UserList>
 	suspend fun getFollowRequests(pageSize: Int): Response<PaginatedList<FollowerRequest>>
 	suspend fun postAcceptFollowRequest(userId: Int): Response<Unit>
-    suspend fun deleteFollowRequest( followerId: Int? = null, followedId: Int? = null): Response<Unit>
+    suspend fun deleteFollowerRequest( followerId: Int): Response<Unit>
+    suspend fun deleteFollowRequest(  followId: Int): Response<Unit>
     suspend fun deleteFollower(userId: Int): Response<Unit>
 	suspend fun deleteFollow(userId: Int): Response<Unit>
 	suspend fun postFollowRequest(userId: Int): Response<Unit>
@@ -110,7 +111,7 @@ interface RemoteDataSource {
 	suspend fun getShoppingList(shoppingListId: Int): Response<ShoppingList>
 	suspend fun postShoppingList(shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
 	suspend fun putShoppingList(shoppingListId: Int, shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
-	suspend fun deleteShoppingList(shoppingListId: Int): Response<IdResponse>
+	suspend fun deleteShoppingList(shoppingListId: Int): Response<Id>
 
 	/** Notifications */
 	suspend fun getNotifications(page: Int?, pageSize: Int?, lastId: Int?): Response<NotificationList>

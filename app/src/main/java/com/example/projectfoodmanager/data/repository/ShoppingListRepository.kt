@@ -2,7 +2,7 @@ package com.example.projectfoodmanager.data.repository
 
 import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
-import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.Id
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ShoppingList
 import com.example.projectfoodmanager.data.model.modelResponse.shoppingList.ListOfShoppingLists
 
@@ -31,7 +31,7 @@ interface ShoppingListRepository {
     suspend fun archiveShoppingList(shoppingListId: Int, shoppingListRequest: ShoppingListRequest)
 
     // delete
-    val deleteShoppingListLiveData: LiveData<Event<NetworkResult<IdResponse>>>
+    val deleteShoppingListLiveData: LiveData<Event<NetworkResult<Id>>>
 
     suspend fun deleteShoppingList(shoppingListId: Int)
 }

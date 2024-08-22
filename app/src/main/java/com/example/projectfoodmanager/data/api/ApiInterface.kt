@@ -10,7 +10,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
-import com.example.projectfoodmanager.data.model.modelResponse.IdResponse
+import com.example.projectfoodmanager.data.model.modelResponse.Id
 import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderEntry
@@ -218,7 +218,7 @@ interface ApiInterface {
 
     // decline follow request
     @DELETE("$API_V1_BASE_URL/follow/requests")
-    suspend fun deleteFollowRequest(@Query("follower_id") followerId: Int?,@Query("followed_id") followedId: Int?): Response<Unit>
+    suspend fun deleteFollowRequest(@Query("follower_id") followerId: Int? = null,@Query("follow_id") followId: Int? = null): Response<Unit>
 
 
 
@@ -237,7 +237,7 @@ interface ApiInterface {
     suspend fun putShoppingList(@Query("id")shoppingListId: Int,@Body shoppingListRequest: ShoppingListRequest): Response<ShoppingList>
 
     @DELETE("$API_V1_BASE_URL/shopping/shopping-list")
-    suspend fun deleteShoppingList(@Query("id")shoppingListId: Int): Response<IdResponse>
+    suspend fun deleteShoppingList(@Query("id")shoppingListId: Int): Response<Id>
 
 
     /** Notifications */
@@ -274,7 +274,6 @@ interface ApiInterface {
 
     @POST("$API_V1_BASE_URL/goals")
     suspend fun createFitnessGoal(@Body goalDTO: GoalDTO): Response<Goal>
-
 
 
 }

@@ -7,6 +7,10 @@ data class FollowerRequest(
     var id: Int,
     val follower: User,
     val followed: User,
+    @SerializedName("is_follow")
+    var isFollow: Boolean,
+    @SerializedName("request_sent")
+    var requestSent: Boolean,
     @SerializedName("created_at")
     val createdDate: String
 )
