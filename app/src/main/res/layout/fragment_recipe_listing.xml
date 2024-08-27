@@ -82,7 +82,7 @@
             android:layout_height="60dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@drawable/img_profile" />
+            android:src="@drawable/default_image_user" />
     </androidx.cardview.widget.CardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout

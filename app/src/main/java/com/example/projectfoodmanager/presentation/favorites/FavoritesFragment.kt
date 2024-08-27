@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -54,8 +55,7 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
     /** Constants */
     val TAG: String = "FavoritesFragmentFragment"
 
-    // Debounce
-    private var debounceJob: Job? = null
+
 
 
     // RecyclerView
@@ -83,7 +83,8 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
     private var previousSelectTag: String =""
 
     // Search
-    private var newSearch: Boolean = false
+    // Debounce
+    private var debounceJob: Job? = null
 
     /** Injects */
     @Inject
@@ -166,6 +167,7 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
     }
 
     override fun onStart() {
+        loadUI()
         super.onStart()
     }
 
@@ -174,11 +176,6 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
     }
 
     override fun onPause() {
-
-        // reset adapter
-        adapter.removeItems()
-        binding.recyclerView.visibility = View.INVISIBLE
-
         super.onPause()
     }
 
@@ -221,16 +218,19 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
 
             override fun onQueryTextChange(text: String?): Boolean {
                 if (text != null && text != "") {
-                    // importante se não não funciona
+                    // Control Variables
                     currentPage = 1
-                    newSearch = true
 
-                    // debouncer
-                    val handler = Handler()
-                    handler.postDelayed({
+                    // Cancel the previous debounce job if it exists
+                    debounceJob?.cancel()
+
+                    // Start a new debounce job
+                    debounceJob = viewLifecycleOwner.lifecycleScope.launch{
                         if (searchString == text) {
-                            // verifica se tag está a ser usada se não pesquisa a string nas tags da receita
+                            delay(DEBOUNCER_STRING_SEARCH)
 
+                            // If user haven't change the search string for a while,
+                            // then it's a new search
                             recipeViewModel.getRecipes(
                                 page = currentPage,
                                 pageSize = defaultPageSize,
@@ -238,25 +238,30 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
                             )
 
                         }
-                    }, 400)
+                    }
 
-                    searchString = text.lowercase()
+
 
                 } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
                 else if (searchString != "" && text == "") {
-                    searchString = text
+                    // If user searched for something and them cleaned the text
+
+                    // Reset Control Variables
+                    searchString = ""
                     currentPage = 1
 
+                    // Get recipes with empty searchString
                     recipeViewModel.getRecipes(
                         page = currentPage,
                         pageSize = defaultPageSize,
                         searchString = searchString
                     )
                 } else {
+                    // Reset Control Variables
                     searchString = ""
                 }
 
-                //slowly move to position 0
+                // Slowly move to position 0
                 binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
                 return true
             }
@@ -308,59 +313,68 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
             changeTagFilter(RecipeListingFragmentFilters.DRINK)
         }
 
+        /**
+         * Search filter
+         */
+
+        binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(text: String?): Boolean {
+                if (text != null && text != "") {
+                    // importante se não não funciona
+                    currentPage = 1
+
+                    // Update the search string
+                    searchString = text.lowercase()
+
+                    // Cancel the previous job if it's still running
+                    debounceJob?.cancel()
+
+                    // Start a new debounce job
+                    debounceJob = viewLifecycleOwner.lifecycleScope.launch {
+                        delay(DEBOUNCER_STRING_SEARCH)
+                        if (searchString == text) {
+                            updateView(selectedTab )
+                        }
+                    }
 
 
-        // coisas que só faz online
+                } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
+                else if (searchString != "" && text == "") {
+                    // If user searched for something and them cleaned the text
 
+                    // Reset Control Variables
+                    searchString = ""
+                    currentPage = 1
+
+
+                    updateView(selectedTab)
+                } else {
+                    searchString = ""
+                }
+
+                //slowly move to position 0
+                binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
+                return true
+            }
+        })
+
+
+
+
+
+
+    }
+
+    private fun loadUI() {
         if (isOnline(requireContext())) {
 
             updateView(selectedTab)
 
-            /**
-             * Search filter
-             */
 
-            binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(p0: String?): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextChange(text: String?): Boolean {
-                    if (text != null && text != "") {
-                        // importante se não não funciona
-                        currentPage = 1
-                        newSearch = true
-
-                        // Update the search string
-                        searchString = text.lowercase()
-
-                        // Cancel the previous job if it's still running
-                        debounceJob?.cancel()
-
-                        // Start a new debounce job
-                        debounceJob = CoroutineScope(Dispatchers.Main).launch {
-                            delay(DEBOUNCER_STRING_SEARCH)
-                            if (searchString == text) {
-                                updateView(selectedTab )
-                            }
-                        }
-
-
-                    } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
-                    else if (searchString != "" && text == "") {
-                        searchString = text
-                        adapter.removeItems()
-                        currentPage = 1
-                        updateView(selectedTab)
-                    } else {
-                        searchString = ""
-                    }
-
-                    //slowly move to position 0
-                    binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
-                    return true
-                }
-            })
 
 
         } else {
@@ -371,7 +385,6 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
 
 
         }
-
     }
 
     private fun bindObservers() {
@@ -402,7 +415,7 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
                 when (result) {
                     is NetworkResult.Success -> {
 
-                        // isto é usado para atualizar os likes caso o user vá a detail view
+                        // todo isto é usado para atualizar os likes caso o user vá a detail view
                         if (refreshPage != 0) {
 
                             val recipesListed = adapter.getItems()
@@ -425,7 +438,6 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
                         else {
 
                             // sets page data
-
                             currentPage = result.data!!._metadata.page
                             nextPage = result.data._metadata.nextPage != null
 
@@ -580,16 +592,20 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
      * */
 
     private fun updateView(currentTabSelected: String) {
-        // UI related
+        this.selectedTab = currentTabSelected
+
+        // Set loading UI
         binding.recyclerView.visibility = View.INVISIBLE
         binding.progressBar.show()
         changeRecyclerViewScrollListener(false)
 
+        // Reset adapter items
+        adapter.removeItems()
 
         val recipes = getChipList(currentTabSelected)
 
+        // Update UI
         binding.addRecipeBtn.visibility = View.GONE
-        this.selectedTab = currentTabSelected
 
         when(currentTabSelected){
             binding.chipCurtidas.tag -> {
@@ -637,21 +653,19 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
 
                 toast("Sorry, not implement yet...")
                 binding.progressBar.hide()
-                return
 
-                onlineChipFilter = true
-                changeRecyclerViewScrollListener(true)
+                //onlineChipFilter = true
+                //changeRecyclerViewScrollListener(true)
             }
             binding.chipLastSeem.tag  ->{
                 toast("Sorry, not implement yet...")
                 binding.progressBar.hide()
-                return
 
-                onlineChipFilter = true
+                //onlineChipFilter = true
 
-                adapter.setItems(recipes)
+                //adapter.setItems(recipes)
 
-                changeRecyclerViewScrollListener(true)
+                //changeRecyclerViewScrollListener(true)
             }
         }
     }

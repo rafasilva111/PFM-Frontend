@@ -7,13 +7,12 @@ import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.text.TextUtils
 import android.util.Log
-import android.util.Patterns
 import android.view.View
 import android.view.WindowInsetsController
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import androidx.compose.foundation.pager.PageSize
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -28,19 +27,22 @@ import com.google.firebase.storage.ktx.storage
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import java.util.*
-import java.io.*
 import java.text.SimpleDateFormat
 import java.time.*
 import java.time.format.DateTimeParseException
+import kotlin.math.ceil
 
 class Helper {
     companion object {
 
 
-        fun formatNameToNameUpper(name: String):String{
+        fun formatNameToNameUpper(name: String): String {
             return name.split(' ').joinToString(" ") { x ->
-                x.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } }
+                x.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+            }
         }
+
+        private val firebaseStorageReference = Firebase.storage.reference
 
         /**
          *  Time Helpers
@@ -52,11 +54,12 @@ class Helper {
         // server string -> localTimeDate
         fun formatServerTimeToLocalDateTime(serverTimeString: String): LocalDateTime {
             // Remove the 'Z' if an offset is present
-            val cleanedTimeString = if (serverTimeString.endsWith("Z") && serverTimeString.contains("+")) {
-                serverTimeString.removeSuffix("Z")
-            } else {
-                serverTimeString
-            }
+            val cleanedTimeString =
+                if (serverTimeString.endsWith("Z") && serverTimeString.contains("+")) {
+                    serverTimeString.removeSuffix("Z")
+                } else {
+                    serverTimeString
+                }
 
             return ZonedDateTime.parse(cleanedTimeString, DateTimeFormatter.ISO_DATE_TIME)
                 .withZoneSameInstant(ZoneId.systemDefault())
@@ -64,36 +67,39 @@ class Helper {
         }
 
         // server string -> date string
-        fun formatServerTimeToDateString(serverTimeString: String): String{
+        fun formatServerTimeToDateString(serverTimeString: String): String {
             return formatServerTimeToLocalDateTime(serverTimeString).format(DEFAULT_DATE_FORMAT)
         }
 
         // server string -> time string
-        fun formatServerTimeToTimeString(serverTimeString: String): String{
+        fun formatServerTimeToTimeString(serverTimeString: String): String {
             return formatServerTimeToLocalDateTime(serverTimeString).format(DEFAULT_TIME_FORMAT)
         }
 
-        fun formatLocalDateTimeToServerTime(localTime: LocalDateTime): String{
+        fun formatLocalDateTimeToServerTime(localTime: LocalDateTime): String {
 
-            return localTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+            return localTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         }
 
-        fun formatLocalDateTimeToDateString(localDateTime: LocalDateTime): String{
+        fun formatLocalDateTimeToDateString(localDateTime: LocalDateTime): String {
             return localDateTime.format(DEFAULT_DATE_FORMAT)
         }
 
-        fun formatLocalDateToDateString(localDate: LocalDate): String{
+        fun formatLocalDateToDateString(localDate: LocalDate): String {
             return localDate.format(DEFAULT_DATE_FORMAT)
         }
 
-        fun formatDateStringToLocalDateTime(dateString: String): LocalDateTime{
-            return LocalDateTime.of(LocalDate.parse(dateString, DEFAULT_DATE_FORMAT), LocalTime.MIDNIGHT)
+        fun formatDateStringToLocalDateTime(dateString: String): LocalDateTime {
+            return LocalDateTime.of(
+                LocalDate.parse(dateString, DEFAULT_DATE_FORMAT),
+                LocalTime.MIDNIGHT
+            )
         }
-        fun formatLocalTimeToFormatTime(localTime: LocalDateTime): String{
+
+        fun formatLocalTimeToFormatTime(localTime: LocalDateTime): String {
             return localTime.format(DateTimeFormatter.ofPattern("HH:mm"))
         }
-
-
 
 
         fun isOnline(context: Context): Boolean {
@@ -119,22 +125,22 @@ class Helper {
         }
 
         fun loadUserImage(imgAuthorIV: ImageView, imgSource: String) {
-            imgAuthorIV.setImageResource(R.drawable.img_profile)
+            imgAuthorIV.setImageResource(R.drawable.default_image_user)
 
 
             if (imgSource.isNotEmpty())
-                if (imgSource.contains("avatar")){
-                    val avatar= Avatar.getAvatarByName(imgSource)
+                if (imgSource.contains("avatar")) {
+                    val avatar = Avatar.getAvatarByName(imgSource)
                     imgAuthorIV.setImageResource(avatar!!.imgId)
 
-                }else{
+                } else {
                     val imgRef = Firebase.storage.reference.child(imgSource)
                     imgRef.downloadUrl.addOnSuccessListener { Uri ->
                         Glide.with(imgAuthorIV.context).load(Uri.toString()).into(imgAuthorIV)
                     }
-                    .addOnFailureListener {
-                        imgAuthorIV.setImageResource(R.drawable.img_profile)
-                    }
+                        .addOnFailureListener {
+                            imgAuthorIV.setImageResource(R.drawable.default_image_user)
+                        }
                 }
 
         }
@@ -154,59 +160,65 @@ class Helper {
         }
 
 
-        fun loadUserImage(imgAuthorIV: ImageView, imgSource: String, onImageLoaded: () -> Unit) {
-            imgAuthorIV.setImageResource(R.drawable.img_profile)
+        fun loadUserImage(userIV: ImageView, imgSource: String, onImageLoaded: () -> Unit) {
 
-            if (imgSource.isNotEmpty()) {
-                if (imgSource.contains("avatar")) {
-                    val avatar = Avatar.getAvatarByName(imgSource)
-                    imgAuthorIV.setImageResource(avatar!!.imgId)
-                    onImageLoaded()  // Call the callback as image loading is synchronous in this case
 
-                } else {
-                    val imgRef = Firebase.storage.reference.child(imgSource)
-                    imgRef.downloadUrl.addOnSuccessListener { Uri ->
-                        Glide.with(imgAuthorIV.context)
-                            .load(Uri.toString())
-                            .listener(object : RequestListener<Drawable> {
-                                override fun onLoadFailed(
-                                    e: GlideException?,
-                                    model: Any?,
-                                    target: com.bumptech.glide.request.target.Target<Drawable>?,
-                                    isFirstResource: Boolean
-                                ): Boolean {
-                                    imgAuthorIV.setImageResource(R.drawable.img_profile)
-                                    onImageLoaded()
-                                    return false
-                                }
+            if (imgSource.isEmpty()) {
+                userIV.setImageResource(R.drawable.default_image_user)
+                onImageLoaded()
+                return
+            }
+            if (imgSource.contains("avatar")) {
+                userIV.setImageResource(Avatar.getAvatarByName(imgSource)!!.imgId)
+                onImageLoaded()
+                return
+            }
 
-                                override fun onResourceReady(
-                                    resource: Drawable?,
-                                    model: Any?,
-                                    target: com.bumptech.glide.request.target.Target<Drawable>?,
-                                    dataSource: com.bumptech.glide.load.DataSource?,
-                                    isFirstResource: Boolean
-                                ): Boolean {
-                                    onImageLoaded()
-                                    return false
-                                }
-                            })
-                            .into(imgAuthorIV)
-                    }.addOnFailureListener {
-                        imgAuthorIV.setImageResource(R.drawable.img_profile)
-                        onImageLoaded()
-                    }
-                }
-            } else {
+            firebaseStorageReference.child(imgSource).downloadUrl.addOnSuccessListener { uri ->
+                Glide.with(userIV.context)
+                    .load(uri.toString())
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: com.bumptech.glide.request.target.Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            userIV.setImageResource(R.drawable.default_image_user)
+                            onImageLoaded()
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: com.bumptech.glide.request.target.Target<Drawable>?,
+                            dataSource: com.bumptech.glide.load.DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            onImageLoaded()
+                            return false
+                        }
+                    })
+                    .into(userIV)
+            }.addOnFailureListener {
                 onImageLoaded()
             }
         }
 
+
         fun loadRecipeImage(recipeIV: ImageView, imgSource: String, onImageLoaded: () -> Unit) {
-            val imgRef = Firebase.storage.reference.child(imgSource)
-            imgRef.downloadUrl.addOnSuccessListener { Uri ->
+
+            if (imgSource.isEmpty()) {
+                recipeIV.setImageResource(R.drawable.default_image_recipe)
+                onImageLoaded()
+                return
+            }
+
+
+            firebaseStorageReference.child(imgSource).downloadUrl.addOnSuccessListener { uri ->
                 Glide.with(recipeIV.context)
-                    .load(Uri.toString())
+                    .load(uri.toString())
                     .listener(object : RequestListener<Drawable> {
                         override fun onLoadFailed(
                             e: GlideException?,
@@ -233,13 +245,15 @@ class Helper {
                     })
                     .into(recipeIV)
             }.addOnFailureListener {
-                recipeIV.setImageResource(R.drawable.default_image_recipe)
                 onImageLoaded()
             }
+
+
         }
 
         fun getStartAndEndOfWeek(date: LocalDate): Pair<LocalDate, LocalDate> {
-            val startOfWeek = date.with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY))
+            val startOfWeek =
+                date.with(TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY))
             val endOfWeek = date.with(TemporalAdjusters.nextOrSame(java.time.DayOfWeek.SUNDAY))
             return Pair(startOfWeek, endOfWeek)
         }
@@ -251,25 +265,29 @@ class Helper {
         }
 
 
-
-        fun closeKeyboard(activity: FragmentActivity,view: View) {
-            (activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(view.windowToken, 0)
+        fun closeKeyboard(activity: FragmentActivity, view: View) {
+            (activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                view.windowToken,
+                0
+            )
         }
 
-        var STATUS_BAR_COLOR: Boolean? = null // true for mainColor (red), false for secondary (white)
+        var STATUS_BAR_COLOR: Boolean? =
+            null // true for mainColor (red), false for secondary (white)
         var MENU_VISIBILITY: Boolean? = null // true for visible, false for gone
 
-        fun changeTheme(mainColor: Boolean, activity: FragmentActivity?, context: Context?){
+        fun changeTheme(mainColor: Boolean, activity: FragmentActivity?, context: Context?) {
             val window = activity?.window
             if (window != null && context != null) {
                 if (mainColor) {
-                    if (STATUS_BAR_COLOR != true){
+                    if (STATUS_BAR_COLOR != true) {
                         //BACKGROUND in NAVIGATION BAR
 
                         window.statusBarColor = context.getColor(R.color.main_color)
                         window.navigationBarColor = context.getColor(R.color.main_color)
                         @Suppress("DEPRECATION")
-                        window.decorView.systemUiVisibility = window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()  //set status text  light
+                        window.decorView.systemUiVisibility =
+                            window.decorView.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()  //set status text  light
                         STATUS_BAR_COLOR = true
                     }
                 } else {
@@ -278,7 +296,8 @@ class Helper {
                         window.statusBarColor = context.getColor(R.color.background_1)
 
 
-                        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR //set status text dark
+                        window.decorView.systemUiVisibility =
+                            View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR //set status text dark
 
                         STATUS_BAR_COLOR = false
                     }
@@ -292,21 +311,21 @@ class Helper {
 
             val menu = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
-            if (visibility ) {
-                if((MENU_VISIBILITY != true)){
+            if (visibility) {
+                if ((MENU_VISIBILITY != true)) {
                     menu!!.visibility = View.VISIBLE
                     MENU_VISIBILITY = true
                 }
 
             } else {
-                if((MENU_VISIBILITY != false)){
+                if ((MENU_VISIBILITY != false)) {
                     menu!!.visibility = View.GONE
                     MENU_VISIBILITY = false
                 }
             }
         }
 
-        fun updateSystemBarsAppearance(activity: FragmentActivity,context: Context) {
+        fun updateSystemBarsAppearance(activity: FragmentActivity, context: Context) {
             val window = activity.window
 
             // set bottom bar color
@@ -364,13 +383,12 @@ class Helper {
          * */
         fun randomAvatarImg(sex: String): Avatar {
 
-            return when(sex) {
+            return when (sex) {
                 "Masculino" -> Avatar.avatarArrayList[(0 until 5).random()]
                 "Feminino" -> Avatar.avatarArrayList[(6 until 10).random()]
                 else -> Avatar.avatarArrayList[(0 until 10).random()]
             }
         }
-
 
 
         /**
@@ -452,15 +470,9 @@ class Helper {
         }
 
 
+        fun calculateRefreshPage(page: Int, pageSize: Int = PaginationNumber.DEFAULT): Int {
+            return ceil((page + 1).toFloat() / pageSize).toInt()
+
+        }
     }
-
-
-
-
-
-
-
-
-
-
 }

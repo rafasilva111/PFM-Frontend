@@ -7,7 +7,6 @@ import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,14 +17,19 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.bumptech.glide.Glide
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
+import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.toRecipeSimplified
+import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.di.notification.MyFirebaseMessagingService
 import com.example.projectfoodmanager.util.*
@@ -38,13 +42,15 @@ import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
 import com.example.projectfoodmanager.util.network.NetworkResult
 import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
-import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
+import com.example.projectfoodmanager.viewmodels.UserViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.ceil
 
 
 @AndroidEntryPoint
@@ -66,11 +72,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     private var snapHelper : SnapHelper = PagerSnapHelper()
     private lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
-
-
-    // Reloading current page
-    private var refreshPage: Int = 0
-    private var refreshPosition: Int = 0
+    private lateinit var preloadModelProvider: RecipePreloadModelProvider
 
     // Pagination
     private var noMoreRecipesMessagePresented = false
@@ -85,7 +87,8 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     private var previousSelectTag: String =""
 
     // Search
-    private var newSearch: Boolean = false
+    // Debounce
+    private var debounceJob: Job? = null
 
     // Notifications
     private var numberOfNotifications: Int = 0
@@ -111,11 +114,14 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             onItemClicked = {pos,recipe ->
                 // use pos to reset current page to pos page, so it will refresh the pos page
 
-                refreshPosition =  pos
+                currentPosition =  pos
+
 
                 findNavController().navigate(R.id.action_recipeListingFragment_to_receitaDetailFragment,Bundle().apply {
                     putInt("recipe_id",recipe.id)
                 })
+                binding.progressBar.show()
+                binding.recyclerView.visibility = View.GONE
 
             },
             onLikeClicked = {recipe,like ->
@@ -146,7 +152,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     override fun onImageLoaded() {
         requireActivity().runOnUiThread {
-            if (binding.recyclerView.visibility != View.VISIBLE) {
+            if (binding.recyclerView.visibility != View.VISIBLE && binding.recyclerView.visibility != View.GONE) {
                 adapter.imagesLoaded++
 
                 val firstVisibleItemPosition = manager.findFirstVisibleItemPosition()
@@ -154,9 +160,8 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                 val visibleItemCount = lastVisibleItemPosition - firstVisibleItemPosition + 1
 
                 // If all visible images are loaded, hide the progress bar
-                if (adapter.imagesLoaded >= visibleItemCount) {
-                    binding.progressBar.hide()
-                    binding.recyclerView.visibility = View.VISIBLE
+                if (adapter.imagesLoaded >= visibleItemCount * DEFAULT_NR_OF_IMAGES_BY_RECIPE_CARD) {
+                    showRecyclerView()
                 }
             }
         }
@@ -224,17 +229,8 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onStart() {
-
-        loadUI()
-        super.onStart()
-    }
-
     override fun onPause() {
 
-        // reset adapter
-        adapter.removeItems()
-        binding.recyclerView.visibility = View.INVISIBLE
 
         // Unregister the broadcast receiver to avoid memory leaks
         context?.unregisterReceiver(notificationReceiver)
@@ -254,9 +250,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
      * */
 
     private fun setUI() {
-
-
-
 
         /**
          * General
@@ -287,152 +280,153 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         //Set Profile Image
         loadUserImage(binding.ivProfilePic, user.imgSource)
 
+        /**
+         * Search filter
+         */
+
+        binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(text: String?): Boolean {
+                if (text != null && text != "") {
+                    // Control Variables
+                    currentPage = 1
+                    searchString = text.lowercase()
+
+                    // Cancel the previous debounce job if it exists
+                    debounceJob?.cancel()
+
+                    // Start a new debounce job
+                    debounceJob = viewLifecycleOwner.lifecycleScope.launch {
+                        delay(DEBOUNCER_STRING_SEARCH)
+
+                        // If user haven't change the search string for a while,
+                        // then it's a new search
+                        if (searchString == text) {
+                            hideRecyclerView()
+                            recipeViewModel.getRecipes(
+                                page = currentPage,
+                                searchString =searchString,
+                                searchTag = searchTag,
+                                by = sortedBy
+                            )
+
+                        }
+                    }
+                }  else if (searchString != "" && text == "") {
+                    // If user searched for something and them cleaned the text
+
+                    // Reset Control Variables
+                    searchString = ""
+                    currentPage = 1
+                    itemsListed = mutableListOf() // TODO this needs to be reviewed
+                    hideRecyclerView()
+
+
+                    // Get recipes with empty searchString
+                    recipeViewModel.getRecipes(
+                        page = currentPage,
+                        searchString = searchString,
+                        searchTag = searchTag,
+                        by = sortedBy
+                    )
+                } else {
+                    // Reset Control Variables
+                    searchString = ""
+                }
+
+                // Slowly move to position 0
+                binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
+                return true
+            }
+        })
+
+        /**
+         * Notifications
+         */
+
+        binding.notificationIV.setOnClickListener {
+            findNavController().navigate(R.id.action_recipeListingFragment_to_notificationFragment)
+            changeMenuVisibility(false, activity)
+        }
+
+
+        /**
+         * Chip filters
+         */
+
+
+        chipSelected = binding.chipGroup.selectChipByTag(selectedTab)!!
+
+        binding.chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
+
+            if (checkedId.isNotEmpty()) {
+                group.findViewById<Chip>(checkedId[0])?.let {
+                    chipSelected.isChecked = false
+                    chipSelected = it
+
+                    updateView(chipSelected.tag as String )
+                }
+            } else {
+                // If no chip is selected, select the last selected one
+                chipSelected.isChecked = true
+            }
+        }
+
+        /**
+         * Notifications
+         */
+
+        userViewModel.getNotifications(pageSize = 1)
+
+        /**
+         * Bottom Tag Filters
+         */
+
+        if (searchTag.isNotEmpty())
+            activateTag(searchTag)
+
+        binding.meatFiltIB.setOnClickListener {
+            changeTagFilter(RecipeListingFragmentFilters.MEAT)
+        }
+        binding.fishFiltIB.setOnClickListener {
+            changeTagFilter(RecipeListingFragmentFilters.FISH)
+        }
+        binding.soupFiltIB.setOnClickListener {
+            changeTagFilter(RecipeListingFragmentFilters.SOUP)
+        }
+        binding.vegiFiltIB.setOnClickListener {
+            changeTagFilter(RecipeListingFragmentFilters.VEGAN)
+        }
+        binding.fruitFiltIB.setOnClickListener {
+            changeTagFilter(RecipeListingFragmentFilters.FRUIT)
+        }
+        binding.drinkFiltIB.setOnClickListener {
+            changeTagFilter(RecipeListingFragmentFilters.DRINK)
+        }
+
 
         if (isOnline(requireContext())) {
             binding.recyclerView.adapter = adapter
 
 
 
-            updateView(selectedTab)
+            // if firstTime
+            if (currentPosition == -1)
+                updateView(selectedTab)
+            else{
+                // If user entered in a recipe, update the item in the list
+                recipeViewModel.getRecipe(adapter.getItems()[currentPosition].id)
+            }
 
             // get recipes for first time
-
-
-            /**
-             * Search filter
-             */
-
-            binding.SVsearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(p0: String?): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextChange(text: String?): Boolean {
-                    if (text != null && text != "") {
-                        // importante se não não funciona
-                        currentPage = 1
-                        newSearch = true
-
-                        // debouncer
-                        val handler = Handler()
-                        handler.postDelayed({
-                            if (searchString == text) {
-                                // verifica se tag está a ser usada se não pesquisa a string nas tags da receita
-
-                                recipeViewModel.getRecipes(
-                                    page = currentPage,
-                                    searchString =searchString,
-                                    searchTag = searchTag,
-                                    by = sortedBy
-                                )
-
-                            }
-                        }, 400)
-
-                        searchString = text.lowercase()
-
-                    } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
-                    else if (searchString != "" && text == "") {
-                        searchString = text
-                        itemsListed = mutableListOf()
-                        currentPage = 1
-
-                        recipeViewModel.getRecipes(
-                            page = currentPage,
-                            searchString = searchString,
-                            searchTag = searchTag,
-                            by = sortedBy
-                        )
-                    } else {
-                        searchString = ""
-                    }
-
-                    //slowly move to position 0
-                    binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
-                    return true
-                }
-            })
-
-            /**
-             * Notifications
-             */
-
-            binding.notificationIV.setOnClickListener {
-                findNavController().navigate(R.id.action_recipeListingFragment_to_notificationFragment)
-                changeMenuVisibility(false, activity)
-            }
-
-
-            /**
-             * Chip filters
-             */
-
-
-            chipSelected = binding.chipGroup.selectChipByTag(selectedTab)!!
-
-            binding.chipGroup.setOnCheckedStateChangeListener { group, checkedId ->
-
-                if (checkedId.isNotEmpty()) {
-                    group.findViewById<Chip>(checkedId[0])?.let {
-                        chipSelected.isChecked = false
-                        chipSelected = it
-
-                        updateView(chipSelected.tag as String )
-                    }
-                } else {
-                    // If no chip is selected, select the last selected one
-                    chipSelected.isChecked = true
-                }
-            }
-
-            /**
-             * Notifications
-             */
-
-            userViewModel.getNotifications(pageSize = 1)
-
-            /**
-             * Bottom Tag Filters
-             */
-
-            if (searchTag.isNotEmpty())
-                activateTag(searchTag)
-
-            binding.meatFiltIB.setOnClickListener {
-                changeTagFilter(RecipeListingFragmentFilters.MEAT)
-            }
-            binding.fishFiltIB.setOnClickListener {
-                changeTagFilter(RecipeListingFragmentFilters.FISH)
-            }
-            binding.soupFiltIB.setOnClickListener {
-                changeTagFilter(RecipeListingFragmentFilters.SOUP)
-            }
-            binding.vegiFiltIB.setOnClickListener {
-                changeTagFilter(RecipeListingFragmentFilters.VEGAN)
-            }
-            binding.fruitFiltIB.setOnClickListener {
-                changeTagFilter(RecipeListingFragmentFilters.FRUIT)
-            }
-            binding.drinkFiltIB.setOnClickListener {
-                changeTagFilter(RecipeListingFragmentFilters.DRINK)
-            }
 
         } else {
             binding.offlineTV.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.GONE
         }
-    }
-
-    private fun loadUI() {
-
-        /**
-         *  General
-         * */
-
-        val activity = requireActivity()
-        changeMenuVisibility(true, activity)
-        changeTheme(false, activity, requireContext())
-
     }
 
     private fun bindObservers() {
@@ -447,57 +441,57 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                 when (result) {
                     is NetworkResult.Success -> {
 
-                        // todo isto não está a fazer diferença
-                        if (refreshPosition != 0) {
-                            val refreshPage =  ceil((refreshPosition+1).toFloat()/PaginationNumber.DEFAULT).toInt()
+                        // Control Variables
+                        currentPage = result.data!!._metadata.page
+                        nextPage = result.data._metadata.nextPage != null
 
-                            val lastIndex = if (itemsListed.size >= PaginationNumber.DEFAULT) (refreshPage * PaginationNumber.DEFAULT) else adapter.itemCount
-                            val firstIndex = if (itemsListed.size >= PaginationNumber.DEFAULT) (lastIndex - PaginationNumber.DEFAULT) else 0
+                        noMoreRecipesMessagePresented = nextPage
 
-                            itemsListed.subList(firstIndex, lastIndex).clear()
+                        // Check if list empty
+                        if(result.data.result.isEmpty()){
+                            binding.noRecipesTV.visibility=View.VISIBLE
+                            return@let
+                        }else{
+                            binding.noRecipesTV.visibility=View.GONE
 
-
-                            itemsListed.addAll(firstIndex, result.data!!.result)
-
-                            adapter.setItems(itemsListed)
-
-                            //reset control variables
-                            refreshPosition = 0
                         }
-                        else {
 
-                            // sets page data
-
-                            currentPage = result.data!!._metadata.page
-                            nextPage = result.data._metadata.nextPage != null
-
-                            noMoreRecipesMessagePresented = nextPage
-
-                            // check if list empty
-
-                            if(result.data.result.isEmpty()){
-                                binding.progressBar.hide()
-                                binding.noRecipesTV.visibility=View.VISIBLE
-                                adapter.removeItems()
-                                return@let
-                            }else{
-                                binding.noRecipesTV.visibility=View.GONE
-
-                            }
-
-                            // checks if new search
-
-                            if (currentPage == 1){
-                                itemsListed = result.data.result
-                                adapter.setItems(result.data.result)
-                            }
-                            else{
-                                itemsListed += result.data.result
-                                adapter.addItems(result.data.result)
-                            }
+                        // Checks if new search
+                        if (currentPage == 1){
+                            adapter.setItems(result.data.result)
+                            setItemsToImagePreload(result.data.result)
+                        }
+                        else{
+                            adapter.addItems(result.data.result)
                         }
 
 
+
+                    }
+                    is NetworkResult.Error -> {
+                        binding.progressBar.hide()
+                        toast(result.message.toString(), type = ToastType.ERROR)
+                    }
+                    is NetworkResult.Loading -> {
+                        binding.noRecipesTV.visibility = View.GONE
+                        binding.offlineTV.visibility = View.GONE
+                    }
+                }
+            }
+        }
+
+        recipeViewModel.functionGetRecipe.observe(viewLifecycleOwner
+        ) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        result.data?.let {
+                            adapter.updateItem(currentPosition,
+                                it.toRecipeSimplified())
+                        }
+
+                        hideRecyclerView()
                     }
                     is NetworkResult.Error -> {
                         binding.progressBar.hide()
@@ -622,6 +616,33 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     }
 
+    private fun appendItemsToImagePreload(recipeList: MutableList<RecipeSimplified>) {
+        if (! ::preloadModelProvider.isInitialized){
+            initImagePreload(recipeList)
+            return
+        }
+        preloadModelProvider.addItems(recipeList)
+
+    }
+
+    private fun setItemsToImagePreload(recipeList: MutableList<RecipeSimplified>) {
+        if (! ::preloadModelProvider.isInitialized){
+            initImagePreload(recipeList)
+        }
+        preloadModelProvider.setItems(recipeList)
+    }
+
+    private fun initImagePreload(recipeList: MutableList<RecipeSimplified>) {
+        preloadModelProvider = RecipePreloadModelProvider(recipeList, requireContext())
+        val preloader = RecyclerViewPreloader(
+            Glide.with(this),
+            preloadModelProvider,
+            ViewPreloadSizeProvider(),
+            5, /* maxPreload */
+        )
+        binding.recyclerView.addOnScrollListener(preloader)
+    }
+
     /**
      *  Functions
      * */
@@ -629,33 +650,30 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     private fun setRecyclerViewScrollListener() {
         scrollListener = object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-
-                    val pastVisibleItemSinceLastFetch: Int = manager.findLastCompletelyVisibleItemPosition()
 
 
-                    // if User is on the penultimate recipe of currenct page, get next page
-                    if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 3))
-                        if (nextPage ){
-                            //val visibleItemCount: Int = manager.childCount
-                            //val pag_index = floor(((pastVisibleItem + 1) / FireStorePaginations.RECIPE_LIMIT).toDouble())
+                val pastVisibleItemSinceLastFetch: Int = manager.findLastVisibleItemPosition()
 
 
-                            recipeViewModel.getRecipes(page = ++currentPage, searchString = searchString,searchTag= searchTag, by = sortedBy)
+                // if User is on the penultimate recipe of currenct page, get next page
+                if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 3))
+                    if (nextPage){
 
-                            // prevent double request, this variable is change after response from getRecipes
-                            nextPage = false
-                        }
+                        recipeViewModel.getRecipes(page = ++currentPage, searchString = searchString,searchTag= searchTag, by = sortedBy)
 
-                    // if User is on the last recipe of currenct page, and no next page present notice to user
-                    if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 1))
-                        if (!nextPage && !noMoreRecipesMessagePresented){
-                            noMoreRecipesMessagePresented = true
-                            toast("Sorry cant find more recipes.",ToastType.ALERT)
-                        }
+                        // prevent double request, this variable is change after response from getRecipes
+                        nextPage = false
+                    }
+
+                // if User is on the last recipe of currenct page, and no next page present notice to user
+                if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 1))
+                    if (!nextPage && !noMoreRecipesMessagePresented){
+                        noMoreRecipesMessagePresented = true
+                        toast("Sorry cant find more recipes.",ToastType.ALERT)
+                    }
 
 
-                }
+
 
                 super.onScrollStateChanged(recyclerView, newState)
 
@@ -667,8 +685,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     private fun updateView(currentTabSelected: String) {
 
-        binding.recyclerView.visibility = View.INVISIBLE
-        binding.progressBar.show()
+        hideRecyclerView()
 
         when(currentTabSelected){
             SelectedTab.VERIFIED -> {
@@ -701,9 +718,20 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                 sortedBy = RecipesSortingType.SAVES
             }
         }
-        recipeViewModel.getRecipes(page = 1, searchString= searchString,searchTag= searchTag, by = sortedBy)
+
+        // If first loading
+
+        recipeViewModel.getRecipes(
+            page = 1,
+            searchString = searchString,
+            searchTag = searchTag,
+            by = sortedBy
+        )
+
         //slowly move to position 0
         binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
+
+
     }
 
     private fun changeNotificationNumber(){
@@ -713,6 +741,26 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         } else{
             binding.notificationsBadgeTV.visibility =View.GONE
         }
+    }
+
+    private fun showRecyclerView() {
+        binding.progressBar.hide()
+        binding.recyclerView.visibility = View.VISIBLE
+        // Reset the number of images loaded
+        adapter.imagesLoaded = 0
+
+        if ( currentPosition != -1) {
+            binding.recyclerView.scrollToPosition(currentPosition)
+
+            // Reset current position
+            currentPosition = -1
+        }
+    }
+
+    private fun hideRecyclerView() {
+
+        binding.progressBar.show()
+        binding.recyclerView.visibility = View.INVISIBLE
     }
 
     /** Filters */
@@ -798,11 +846,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         ibToUpdate?.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-
     /**
      *  Object
      * */
@@ -813,6 +856,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
         // pagination
         private var currentPage:Int = 1
+        private var currentPosition:Int = -1
         private var nextPage:Boolean = true
 
         // Filters

@@ -37,7 +37,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:contentDescription="@string/PLACEHOLDER_DEFAULT_IMAGE_DESCRIPTION"
-            android:src="@drawable/img_profile" />
+            android:src="@drawable/default_image_user" />
 
     </androidx.cardview.widget.CardView>
 

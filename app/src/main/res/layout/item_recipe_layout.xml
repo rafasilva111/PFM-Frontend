@@ -63,7 +63,7 @@
                     android:id="@+id/imgAuthorIV"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/img_profile"
+                    android:src="@drawable/default_image_user"
                     android:scaleType="fitXY"/>
 
             </androidx.cardview.widget.CardView>

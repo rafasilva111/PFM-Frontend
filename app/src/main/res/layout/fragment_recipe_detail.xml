@@ -6,11 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".presentation.recipe.details.RecipeDetailFragment">
 
+    <LinearLayout
+        android:id="@+id/fragment_splash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:visibility="invisible"
+        >
+        <include
+            layout="@layout/fragment_splash"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+    </LinearLayout>
+
+
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/main_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -418,28 +436,28 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="3dp">
+                        android:padding="5dp">
 
                         <ImageView
                             android:id="@+id/userComent1IV"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:contentDescription="userComent1"
-                            android:src="@drawable/img_profile"
+                            android:src="@drawable/default_image_user"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="ImageContrastCheck" />
+                            tools:ignore="ImageContrastCheck"
+                            android:visibility="gone"/>
 
                         <ImageView
                             android:id="@+id/userComent2IV"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
-                            android:layout_marginStart="-10dp"
-                            android:src="@drawable/img_profile"
+                            android:contentDescription="userComent2"
+                            android:src="@drawable/default_image_user"
                             app:layout_constraintStart_toEndOf="@+id/userComent1IV"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="ImageContrastCheck,ImageContrastCheck"
-                            android:contentDescription="userComent2" />
+                            tools:ignore="ImageContrastCheck,ImageContrastCheck" />
 
                         <ImageView
                             android:id="@+id/moreCommentsIV"
@@ -460,7 +478,7 @@
                             android:id="@+id/commentsTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
+                            android:layout_marginStart="10dp"
                             android:fontFamily="@font/fredoka_regular"
                             android:text="@string/nr_comments"
                             android:textSize="13sp"
@@ -661,11 +679,11 @@
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/fragment_recipe_detail_tab_layout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@color/transparent"
-                app:tabMode="fixed"
+
                 app:tabGravity="fill"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -681,13 +699,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/fragment_recipe_detail_tab_layout">
+
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/fragment_recipe_detail_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:background="@color/transparent"
-
-                />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

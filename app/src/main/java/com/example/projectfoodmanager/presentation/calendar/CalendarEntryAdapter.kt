@@ -9,6 +9,7 @@ import com.example.projectfoodmanager.data.model.modelResponse.calender.Calender
 import com.example.projectfoodmanager.databinding.ItemCalenderEntryBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToTimeString
+import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
 
 
@@ -83,12 +84,9 @@ class CalendarEntryAdapter(
 
 
             // Load Recipe img
-            if (item.recipe.imgSource.isNotEmpty())
-                Helper.loadRecipeImage(binding.recipeIV, item.recipe.imgSource) {
-                    imageLoadingListener.onImageLoaded()
-                }
-            else
+            loadRecipeImage(binding.recipeIV, item.recipe.imgSource) {
                 imageLoadingListener.onImageLoaded()
+            }
 
 
             /**

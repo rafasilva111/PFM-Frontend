@@ -32,7 +32,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/img_profile" />
+                android:src="@drawable/default_image_user" />
 
         </androidx.cardview.widget.CardView>
 
@@ -79,7 +79,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/img_profile" />
+                    android:src="@drawable/default_image_user" />
 
             </androidx.cardview.widget.CardView>
 

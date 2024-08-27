@@ -86,7 +86,7 @@
                     android:id="@+id/IVcommentBottonImage"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/img_profile" />
+                    android:src="@drawable/default_image_user" />
 
             </androidx.cardview.widget.CardView>
 

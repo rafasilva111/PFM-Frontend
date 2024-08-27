@@ -14,6 +14,11 @@ import com.example.projectfoodmanager.util.Helper
 import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.util.Helper.Companion.getRelativeTime
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class CommentsListingAdapter(
     val sharedPreferences: SharedPreference,
@@ -23,6 +28,10 @@ class CommentsListingAdapter(
     val onEditPressed: (Int) -> Unit,
     val onCommentPressed: (Int) -> Unit,
 ): RecyclerView.Adapter<CommentsListingAdapter.MyViewHolder>() {
+
+
+    // Debounce
+    private var debounceJob: Job? = null
 
     private lateinit var  userSession: User
     private var i : Int = 0
@@ -137,13 +146,18 @@ class CommentsListingAdapter(
             binding.CVComment.isClickable = true
             binding.CVComment.setOnClickListener {
                 i++
-                Handler().postDelayed({
+                // Cancel the previous debounce job if it exists
+                debounceJob?.cancel()
+
+                // Start a new debounce job
+                debounceJob =CoroutineScope(Dispatchers.Main).launch{
+                    delay(500)
                     if (i == 2) {
                         binding.CVComment.isClickable = false
                         onLikePressed.invoke(item.id,item.liked)
                     }
                     i = 0
-                }, 500)
+                }
             }
 
             binding.TVCEdit.isVisible = true

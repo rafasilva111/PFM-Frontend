@@ -22,6 +22,7 @@ import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDa
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
 import com.example.projectfoodmanager.util.network.NetworkResult
 import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.viewmodels.RecipeViewModel
@@ -31,28 +32,45 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class RecipeDetailFragment : Fragment() {
+class RecipeDetailFragment : Fragment(), ImageLoadingListener {
 
 
-    // binding
+    /** Binding */
     lateinit var binding: FragmentRecipeDetailBinding
 
-    // viewModels
+    /** ViewModels */
     private val recipeViewModel: RecipeViewModel by viewModels()
 
-    // constants
+    /** Constants */
     val TAG: String = "ReceitaDetailFragment"
     private var recipeId: Int = -1
-    private lateinit var user: User
+    private var imagesLoaded: Int = 0
 
-
+    // RecyclerView
     lateinit var manager: LinearLayoutManager
 
-    // injects
+    /** Injections */
     @Inject
     lateinit var sharedPreference: SharedPreference
 
+    /** Interfaces */
+    override fun onImageLoaded() {
+        requireActivity().runOnUiThread {
+            if (binding.mainView.visibility != View.VISIBLE) {
+                imagesLoaded++
 
+                // If all visible images are loaded, hide the progress bar
+                if (imagesLoaded>= DEFAULT_NR_OF_IMAGES_BY_RECIPE_CARD) {
+                    showRecyclerView()
+                }
+            }
+        }
+    }
+
+
+    /**
+     *  Android LifeCycle
+     * */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -91,6 +109,13 @@ class RecipeDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onPause() {
+        super.onPause()
+        //destroy variables
+        userPortion = -1F
+        recipePortion = -1F
+        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -112,6 +137,12 @@ class RecipeDetailFragment : Fragment() {
         loadUI()
         super.onStart()
     }
+
+
+    /**
+     *  General
+     * */
+
 
     private fun setUI() {
 
@@ -137,19 +168,173 @@ class RecipeDetailFragment : Fragment() {
 
     }
 
+    private fun loadUI() {
+        /**
+         *  General
+         * */
+
+        val activity = requireActivity()
+        changeMenuVisibility(false, activity)
+        changeTheme(false, activity, requireContext())
+
+    }
+
+    private fun bindObservers() {
+
+        /**
+         * Get Recipe
+         */
+
+        recipeViewModel.functionGetRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+
+                        result.data?.let { updateRecipeUI(it) }
+
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(result.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+
+        // Like function
+        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        result.data?.let { updateLikeUI(it) }
+
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(result.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+
+                        result.data?.let { updateLikeUI(it) }
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(result.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        // save function
+
+        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+
+                        result.data?.let { updateSaveUI(it) }
+
+
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(result.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+                        result.data?.let { updateSaveUI(it) }
+
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(result.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+
+        // comments function
+
+        recipeViewModel.functionGetComments.observe(viewLifecycleOwner) { response ->
+            response.getContentIfNotHandled()?.let { result ->
+                when (result) {
+                    is NetworkResult.Success -> {
+
+                        if (result.data!!.result.size == 1)
+                            binding.commentsTV.text = getString(R.string.FRAGMENT_RECIPE_DETAIL_NR_COMMENT, result.data.result.size);
+                        else
+                            binding.commentsTV.text = getString(R.string.FRAGMENT_RECIPE_DETAIL_NR_COMMENTS, result.data.result.size);
+
+
+                        if (result.data.result.size > 0) {
+                            result.data.result[0].user?.imgSource?.let { img ->
+                                binding.userComent2IV.visibility = View.VISIBLE
+                                loadUserImage(binding.userComent2IV, img)
+                            }
+                        }
+
+
+                        if (result.data.result.size > 1) {
+                            result.data.result[1].user?.imgSource?.let { img ->
+                                binding.userComent1IV.visibility = View.VISIBLE
+                                loadUserImage(binding.userComent1IV, img)
+                            }
+                        }
+
+
+
+
+                    }
+                    is NetworkResult.Error -> {
+                        showValidationErrors(result.message.toString())
+                    }
+                    is NetworkResult.Loading -> {
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *  Functions
+     * */
 
     private fun updateRecipeUI(recipe: Recipe) {
 
         /** Recipe Info */
 
-        loadRecipeImage(binding.IVRecipe, recipe.imgSource)
+        loadRecipeImage(binding.IVRecipe, recipe.imgSource){
+            onImageLoaded()
+        }
 
         binding.TVRef.text = recipe.id.toString()
         binding.dateTV.text = formatServerTimeToDateString(recipe.createdDate)
         binding.titleTV.text = recipe.title
         binding.ratingRecipeRB.rating = recipe.sourceRating.toFloat()
         binding.ratingMedTV.text = recipe.sourceRating
-        binding.commentsTV.text = recipe.comments.toString() + " " + getString(R.string.nr_comments)
         binding.numberLikeTV.text = recipe.likes.toString()
         binding.timeTV.text = recipe.time
         binding.dificultyTV.text = recipe.difficulty
@@ -169,7 +354,9 @@ class RecipeDetailFragment : Fragment() {
 
         /** User Info */
 
-        loadUserImage(binding.imageAuthorIV, recipe.createdBy.imgSource)
+        loadUserImage(binding.imageAuthorIV, recipe.createdBy.imgSource){
+            onImageLoaded()
+        }
 
         binding.nameAuthorTV.text = formatNameToNameUpper(recipe.createdBy.name)
 
@@ -298,17 +485,6 @@ class RecipeDetailFragment : Fragment() {
 
     }
 
-    private fun loadUI() {
-        /**
-         *  General
-         * */
-
-        val activity = requireActivity()
-        changeMenuVisibility(false, activity)
-        changeTheme(false, activity, requireContext())
-
-    }
-
     private fun updateLikeUI(recipe: Recipe) {
 
         binding.numberLikeTV.text = recipe.likes.toString()
@@ -329,153 +505,23 @@ class RecipeDetailFragment : Fragment() {
 
     }
 
-    private fun bindObservers() {
-
-        /**
-         * Get Recipe
-         */
-
-        recipeViewModel.functionGetRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-
-
-                        result.data?.let { updateRecipeUI(it) }
-
-                    }
-                    is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        }
-
-
-        // Like function
-        recipeViewModel.functionLikeOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-
-                        result.data?.let { updateLikeUI(it) }
-
-                    }
-                    is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        }
-
-        recipeViewModel.functionRemoveLikeOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-
-
-                        result.data?.let { updateLikeUI(it) }
-                    }
-                    is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        }
-
-        // save function
-
-        recipeViewModel.functionAddSaveOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-
-
-                        result.data?.let { updateSaveUI(it) }
-
-
-                    }
-                    is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        }
-
-        recipeViewModel.functionRemoveSaveOnRecipe.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-                        result.data?.let { updateSaveUI(it) }
-
-                    }
-                    is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        }
-
-        // comments function
-
-        recipeViewModel.functionGetComments.observe(viewLifecycleOwner) { response ->
-            response.getContentIfNotHandled()?.let { result ->
-                when (result) {
-                    is NetworkResult.Success -> {
-
-                        // selecionar as 2/3 primeiras imagens
-                        if (result.data!!.result.isNotEmpty()) {
-                            try {
-                                result.data.result[0].user?.imgSource?.let { img ->
-                                    binding.userComent1IV.visibility = View.VISIBLE
-                                    loadUserImage(binding.userComent1IV, img)
-                                }
-                                result.data.result[1].user?.imgSource?.let { img ->
-                                    binding.userComent1IV.visibility = View.VISIBLE
-                                    loadUserImage(binding.userComent2IV, img)
-                                }
-                            } catch (_: IndexOutOfBoundsException) {
-                            }
-
-                        } else {
-                            binding.userComent1IV.visibility = View.GONE
-                            binding.userComent2IV.visibility = View.INVISIBLE
-                        }
-
-
-                    }
-                    is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
-                    }
-                    is NetworkResult.Loading -> {
-                    }
-                }
-            }
-        }
-    }
-
     private fun showValidationErrors(toString: String) {
         Log.d(TAG, "showValidationErrors: " + toString)
     }
 
-
-    override fun onPause() {
-        super.onPause()
-        //destroy variables
-        userPortion = -1F
-        recipePortion = -1F
-        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+    private fun showRecyclerView() {
+        binding.fragmentSplash.visibility = View.INVISIBLE
+        binding.mainView.visibility = View.VISIBLE
     }
+
+    private fun hideRecyclerView() {
+        binding.fragmentSplash.visibility = View.VISIBLE
+        binding.mainView.visibility = View.INVISIBLE
+    }
+
+    /**
+     *  Object
+     * */
 
     companion object {
         var userPortion: Float = -1F

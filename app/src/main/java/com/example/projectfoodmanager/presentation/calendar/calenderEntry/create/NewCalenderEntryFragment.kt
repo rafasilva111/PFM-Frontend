@@ -12,6 +12,7 @@ import android.widget.SearchView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -36,6 +37,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -76,8 +80,9 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
     private lateinit var customPortionNumberDialog: AlertDialog
 
-    // Search Function
-    private var newSearch: Boolean = false
+    // Search
+    // Debounce
+    private var debounceJob: Job? = null
 
     // Adapter
     private var snapHelper: SnapHelper = PagerSnapHelper()
@@ -155,12 +160,12 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
             val visibleItemCount = lastVisibleItemPosition - firstVisibleItemPosition + 1
 
             // If all visible images are loaded, hide the progress bar
-            if (adapter.imagesLoaded >= visibleItemCount) {
-                binding.progressBar.hide()
-                binding.favoritesRV.visibility = View.VISIBLE
+            if (adapter.imagesLoaded >= visibleItemCount * DEFAULT_NR_OF_IMAGES_BY_RECIPE_CARD) {
+                showRecyclerView()
             }
         }
     }
+
 
     /**
      *  Android LifeCycle
@@ -415,15 +420,20 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
             override fun onQueryTextChange(text: String?): Boolean {
                 if (text != null && text != "") {
-                    // importante se não não funciona
+                    // Control Variables
                     currentPage = 1
-                    newSearch = true
 
-                    // debouncer
-                    val handler = Handler()
-                    handler.postDelayed({
+                    // Cancel the previous debounce job if it exists
+                    debounceJob?.cancel()
+
+                    // Start a new debounce job
+                    debounceJob = viewLifecycleOwner.lifecycleScope.launch{
+                        delay(DEBOUNCER_STRING_SEARCH)
+
+                        // If user haven't change the search string for a while,
+                        // then it's a new search
                         if (searchString == text) {
-                            // verifica se tag está a ser usada se não pesquisa a string nas tags da receita
+                            hideRecyclerView()
 
                             recipeViewModel.getRecipes(
                                 page = currentPage,
@@ -432,21 +442,26 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
                             )
 
                         }
-                    }, 400)
+                    }
 
-                    searchString = text.lowercase()
 
-                } // se já fez pesquisa e text vazio ( stringToSearch != null) e limpou o texto
-                else if (searchString != "" && text == "") {
-                    searchString = text
+
+                } else if (searchString != "" && text == "") {
+                    // If user searched for something and them cleaned the text
+
+                    // Reset Control Variables
+                    searchString = ""
                     currentPage = 1
 
+                    // Get recipes with empty searchString
                     recipeViewModel.getRecipes(
                         page = currentPage,
                         pageSize = defaultPageSize,
                         searchString = searchString
                     )
                 } else {
+                    // Reset Control Variables
+
                     searchString = ""
                 }
 
@@ -837,6 +852,16 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
         }
         binding.favoritesRV.addOnScrollListener(scrollListener)
 
+    }
+
+    private fun showRecyclerView() {
+        binding.progressBar.hide()
+        binding.favoritesRV.visibility = View.VISIBLE
+    }
+
+    private fun hideRecyclerView() {
+        binding.progressBar.show()
+        binding.favoritesRV.visibility = View.INVISIBLE
     }
 
     /**

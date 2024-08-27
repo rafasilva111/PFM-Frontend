@@ -10,7 +10,7 @@ abstract class BaseAdapter<T, VB : ViewBinding>(
     private val inflate: (LayoutInflater, ViewGroup, Boolean) -> VB
 ) : RecyclerView.Adapter<BaseAdapter<T, VB>.BaseViewHolder>() {
 
-    private var itemList: MutableList<T> = mutableListOf()
+    protected var itemList: MutableList<T> = mutableListOf()
 
     open var imagesToLoad: Int = DEFAULT_NR_OF_IMAGES_BY_RECIPE_CARD
     var imagesLoaded: Int = 0
@@ -25,40 +25,46 @@ abstract class BaseAdapter<T, VB : ViewBinding>(
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        bind(holder.binding, itemList[position], position)
+        bind(holder.binding, this.itemList[position], position)
     }
 
 
-    override fun getItemCount(): Int = itemList.size
+    override fun getItemCount(): Int = this.itemList.size
 
-    fun getItems(): MutableList<T> = itemList.toMutableList()
+    fun getItems(): MutableList<T> = this.itemList.toMutableList()
 
     fun setItems(items: MutableList<T>) {
         removeItems()
-        itemList = items
-        notifyItemRangeChanged(0,itemList.size)
+        this.itemList = items
+        notifyItemRangeChanged(0,this.itemList.size)
     }
 
     fun addItem(item: T) {
-        itemList.add(item)
-        notifyItemInserted(itemList.size)
+        this.itemList.add(item)
+        notifyItemInserted(this.itemList.size)
     }
 
     fun addItem(item: T,position: Int) {
-        itemList.add(position,item)
+        this.itemList.add(position,item)
         notifyItemInserted(position)
     }
 
     fun addItems(_list: MutableList<T>) {
-        val oldSize = itemList.size
-        itemList.addAll(_list)
+        val oldSize = this.itemList.size
+        this.itemList.addAll(_list)
         notifyItemRangeChanged(oldSize-1, _list.size)
     }
 
     fun updateItem(position: Int,item: T){
-        itemList.removeAt(position)
-        itemList.add(position,item)
+        this.itemList.removeAt(position)
+        this.itemList.add(position,item)
         notifyItemChanged(position)
+    }
+
+    fun updateItems(position: Int,_list: MutableList<T>){
+        this.itemList.subList(position,position+_list.size).clear()
+        this.itemList.addAll(position,_list)
+        notifyItemRangeChanged(position,_list.size)
     }
 
 

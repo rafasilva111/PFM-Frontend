@@ -22,19 +22,12 @@ class RecipeListingAdapter(
     ItemRecipeLayoutBinding::inflate
 ) {
 
-
-
     private val TAG: String = "RecipeListingAdapter"
-    private var list: MutableList<RecipeSimplified> = arrayListOf()
-
-
-
-
 
     fun updateItem(item: RecipeSimplified){
-        for ((index, recipe) in list.withIndex()){
+        for ((index, recipe) in itemList.withIndex()){
             if (recipe.id == item.id) {
-                list[index] = item
+                itemList[index] = item
                 notifyItemChanged(index)
                 break
             }
@@ -42,9 +35,9 @@ class RecipeListingAdapter(
     }
 
     fun updateItem(item: Recipe){
-        for ((index, recipe) in list.withIndex()){
+        for ((index, recipe) in itemList.withIndex()){
             if (recipe.id == item.id) {
-                list[index] = item.toRecipeSimplified()
+                itemList[index] = item.toRecipeSimplified()
                 notifyItemChanged(index)
                 break
             }
@@ -60,12 +53,9 @@ class RecipeListingAdapter(
              */
 
             // Load Recipe img
-            if (item.imgSource.isNotEmpty())
-                loadRecipeImage(binding.imageView, item.imgSource){
-                    imageLoadingListener.onImageLoaded()
-                }
-            else
+            loadRecipeImage(binding.imageView, item.imgSource){
                 imageLoadingListener.onImageLoaded()
+            }
 
             // Load Author img
             loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){

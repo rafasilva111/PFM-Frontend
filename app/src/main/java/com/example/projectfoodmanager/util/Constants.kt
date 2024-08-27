@@ -12,7 +12,7 @@ const val LOGIN_TIME:Long = 2000
 const val DEBOUNCER_STRING_SEARCH:Long = 1000
 
 /** Cards */
-const val DEFAULT_NR_OF_IMAGES_BY_RECIPE_CARD :Int = 2 // If Recipe Card changes adding new async loaded images this number must change
+const val DEFAULT_NR_OF_IMAGES_BY_RECIPE_CARD :Int = 2 // todo If Recipe Card changes adding new async loaded images this number must change
 
 
 
@@ -21,8 +21,8 @@ object Constants {
     // TODO: Primeira coisa a fazer quando testar
     //rui const val BASE_URL = "http://192.168.1.104:5000/"
 
-    const val BASE_URL = "http://192.168.1.110:8000" // dev rafa
-    //const val BASE_URL = "http://172.162.241.76" // prod
+    //const val BASE_URL = "http://192.168.1.110:8000" // dev rafa
+    const val BASE_URL = "http://172.162.241.76" // prod
 
 
     const val PREFS_TOKEN_FILE = "prefs_token_file"
