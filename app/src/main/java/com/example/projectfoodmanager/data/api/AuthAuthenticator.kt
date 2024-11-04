@@ -16,22 +16,26 @@ class AuthAuthenticator @Inject constructor(
 ): Authenticator {
 
 
-    override fun authenticate(route: Route?, response: Response): Request? {
+    override fun authenticate(route: Route?, response: Response): Request? = runBlocking {
+        val refreshToken = tokenManager.getRefreshToken()
+            ?: // If there's no refresh token, return null to stop retrying and avoid the recursive loop
+            return@runBlocking null
 
-        return runBlocking {
-            val newToken = getNewToken(tokenManager.getRefreshToken()!!)
+        // Try to get a new token using the refresh token
+        val newToken = getNewToken(refreshToken)
 
-            if (!newToken.isSuccessful || newToken.body() == null) { //Couldn't refresh the token, so restart the login process
-                tokenManager.deleteSession()
-            }
-
-            newToken.body()?.let {
-                tokenManager.saveToken(newToken.body()!!)
-                response.request().newBuilder()
-                    .header("Authorization", "Bearer ${it.accessToken}")
-                    .build()
-            }
+        if (!newToken.isSuccessful || newToken.body() == null) {
+            // If token refresh fails, clear the session and return null
+            tokenManager.deleteSession()
+            return@runBlocking null
         }
+
+        // If successful, save the new token and update the request with the new access token
+        val newAccessToken = newToken.body()!!.accessToken
+        tokenManager.saveToken(newToken.body()!!)
+        return@runBlocking response.request().newBuilder()
+            .header("Authorization", "Bearer $newAccessToken")
+            .build()
     }
 
     private suspend fun getNewToken(refreshToken: String): retrofit2.Response<AuthToken> {

@@ -19,12 +19,6 @@ import javax.inject.Qualifier
 import javax.inject.Singleton
 
 
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class FirstRetrofit
-
-
-
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
