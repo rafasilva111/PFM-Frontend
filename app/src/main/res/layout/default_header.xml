@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/transparent">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageButton
         android:id="@+id/backIB"
@@ -13,7 +13,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/bg_action_btn"
-        android:padding="10dp"
+        android:padding="5dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_back_black"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,6 +33,38 @@
         app:layout_constraintBottom_toBottomOf="@+id/backIB"
         app:layout_constraintStart_toEndOf="@+id/backIB"
         app:layout_constraintTop_toTopOf="@+id/backIB" />
+
+    <ImageButton
+        android:id="@+id/notificationIB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:padding="10dp"
+        android:background="#00FFFFFF"
+        android:src="@drawable/ic_notifications"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/moreIB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:padding="10dp"
+        android:background="#00FFFFFF"
+        android:src="@drawable/ic_more_options"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -319,7 +319,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="30dp"
                     app:layout_constraintBottom_toTopOf="@+id/titleTV"
-                    app:layout_constraintStart_toStartOf="@+id/titleTV">
+                    app:layout_constraintStart_toStartOf="@+id/titleTV"
+                    android:alpha="0.6">
 
                     <ImageView
                         android:id="@+id/imageView10"
@@ -339,45 +340,46 @@
                         android:padding="2dp"
                         android:text="02/03/2022"
                         android:textAlignment="center"
-                        android:textSize="13sp" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/linearLayout4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="@+id/ratingRecipeRB"
-                    app:layout_constraintEnd_toEndOf="@+id/titleTV"
-                    app:layout_constraintTop_toTopOf="@+id/ratingRecipeRB">
-
-                    <ImageView
-                        android:id="@+id/codeIV"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_bars_code"
-                        app:layout_constraintBottom_toBottomOf="@+id/TV_Ref"
-                        app:layout_constraintEnd_toStartOf="@+id/TV_Ref"
-                        app:layout_constraintTop_toTopOf="@+id/TV_Ref"
-                        android:contentDescription="code" />
-
-                    <TextView
-                        android:id="@+id/TV_Ref"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:alpha="0.8"
-                        android:fontFamily="@font/fredoka_regular"
-                        android:gravity="center_vertical"
-                        android:text="0"
                         android:textSize="13sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        />
+
                 </LinearLayout>
+
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/linearLayout4"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/ratingRecipeRB"-->
+<!--                    app:layout_constraintEnd_toEndOf="@+id/titleTV"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/ratingRecipeRB">-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/codeIV"-->
+<!--                        android:layout_width="16dp"-->
+<!--                        android:layout_height="16dp"-->
+<!--                        android:layout_marginEnd="5dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:src="@drawable/ic_bars_code"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/TV_Ref"-->
+<!--                        app:layout_constraintEnd_toStartOf="@+id/TV_Ref"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/TV_Ref"-->
+<!--                        android:contentDescription="code" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/TV_Ref"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:alpha="0.8"-->
+<!--                        android:fontFamily="@font/fredoka_regular"-->
+<!--                        android:gravity="center_vertical"-->
+<!--                        android:text="0"-->
+<!--                        android:textSize="13sp"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent" />-->
+<!--                </LinearLayout>-->
 
 
                 <TextView
@@ -446,8 +448,8 @@
                             android:src="@drawable/default_image_user"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="ImageContrastCheck"
-                            android:visibility="gone"/>
+                            android:visibility="gone"
+                            tools:visibility="visible"/>
 
                         <ImageView
                             android:id="@+id/userComent2IV"
@@ -455,9 +457,10 @@
                             android:layout_height="35dp"
                             android:contentDescription="userComent2"
                             android:src="@drawable/default_image_user"
+                            android:visibility="visible"
                             app:layout_constraintStart_toEndOf="@+id/userComent1IV"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="ImageContrastCheck,ImageContrastCheck" />
+                            tools:visibility="visible" />
 
                         <ImageView
                             android:id="@+id/moreCommentsIV"
@@ -471,7 +474,9 @@
                             android:src="@drawable/ic_more"
                             android:contentDescription="more"
                             app:layout_constraintStart_toEndOf="@+id/userComent2IV"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:visibility="gone"
+                            tools:visibility="visible"/>
 
 
                         <TextView
@@ -480,11 +485,11 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:fontFamily="@font/fredoka_regular"
-                            android:text="@string/nr_comments"
-                            android:textSize="13sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/moreCommentsIV"
+                            android:text="@string/no_comments"
+                            android:textSize="15sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/userComent2IV"
                             app:layout_constraintStart_toEndOf="@+id/moreCommentsIV"
-                            app:layout_constraintTop_toTopOf="@+id/moreCommentsIV" />
+                            app:layout_constraintTop_toTopOf="@+id/userComent2IV" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -496,7 +501,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="30dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="30dp"
                     android:layout_weight="1"
                     android:background="#E1E1E1"

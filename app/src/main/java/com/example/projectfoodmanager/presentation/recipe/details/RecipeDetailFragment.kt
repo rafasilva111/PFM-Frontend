@@ -283,28 +283,30 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
                 when (result) {
                     is NetworkResult.Success -> {
 
-                        if (result.data!!.result.size == 1)
-                            binding.commentsTV.text = getString(R.string.FRAGMENT_RECIPE_DETAIL_NR_COMMENT, result.data.result.size);
+                        if(result.data!!.result.size==0)
+                            binding.commentsTV.text = getString(R.string.no_comments);
                         else
-                            binding.commentsTV.text = getString(R.string.FRAGMENT_RECIPE_DETAIL_NR_COMMENTS, result.data.result.size);
+                            if (result.data!!.result.size == 1)
+                                binding.commentsTV.text = getString(R.string.FRAGMENT_RECIPE_DETAIL_NR_COMMENT, result.data.result.size);
+                            else
+                                binding.commentsTV.text = getString(R.string.FRAGMENT_RECIPE_DETAIL_NR_COMMENTS, result.data.result.size);
 
 
                         if (result.data.result.size > 0) {
                             result.data.result[0].user?.imgSource?.let { img ->
                                 binding.userComent2IV.visibility = View.VISIBLE
+                                binding.moreCommentsIV.visibility = View.VISIBLE
                                 loadUserImage(binding.userComent2IV, img)
                             }
                         }
 
-
                         if (result.data.result.size > 1) {
                             result.data.result[1].user?.imgSource?.let { img ->
                                 binding.userComent1IV.visibility = View.VISIBLE
+                                binding.moreCommentsIV.visibility = View.VISIBLE
                                 loadUserImage(binding.userComent1IV, img)
                             }
                         }
-
-
 
 
                     }
@@ -330,7 +332,7 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
             onImageLoaded()
         }
 
-        binding.TVRef.text = recipe.id.toString()
+//        binding.TVRef.text = recipe.id.toString()
         binding.dateTV.text = formatServerTimeToDateString(recipe.createdDate)
         binding.titleTV.text = recipe.title
         binding.ratingRecipeRB.rating = recipe.sourceRating.toFloat()

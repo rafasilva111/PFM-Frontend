@@ -16,5 +16,7 @@ data class Metadata(
     @SerializedName("next_page")
     val nextPage: String?,
     @SerializedName("previous_page")
-    val previousPage: String?
+    val previousPage: String?,
+    @SerializedName("current_page")
+    val currentPage: String?
 ) : Parcelable

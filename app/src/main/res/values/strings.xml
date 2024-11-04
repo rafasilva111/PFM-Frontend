@@ -19,7 +19,6 @@
     <string name="COMMON_REMOVE_FOLLOW">Deixar de seguir</string>
 
 
-
     <!-- Dialogs -->
     <string name="COMMON_DIALOG_YES">Sim</string>
     <string name="COMMON_DIALOG_NO">Não</string>
@@ -30,7 +29,6 @@
     <string name="COMMON_DIALOG_DATE_TITLE">Seleciona uma data</string>
     <string name="COMMON_DIALOG_TIME_TITLE">Seleciona um horário</string>
     <string name="COMMON_DIALOG_PORTION_TITLE">Seleciona uma porção</string>
-
 
 
     <!-- Toast Api Responses -->
@@ -103,6 +101,8 @@
     <!-- FragmentRecipeDetail -->
     <string name="FRAGMENT_RECIPE_DETAIL_NR_COMMENT">%1$d Comentário</string>
     <string name="FRAGMENT_RECIPE_DETAIL_NR_COMMENTS">%1$d Comentários</string>
+
+    <string name="FRAGMENT_RECIPE_SEARCH_HINT">Procurar receita …</string>
 
     <!-- Not Treated -->
 
@@ -241,7 +241,8 @@
     <string name="fragment_goal_title">Objectivos</string>
     <string name="fragment_goal_create_goal_tab_ideal_weight_title">Peso Ideal</string>
     <string name="FRAGMENT_NOTIFICATION_TITLE">Notificações</string>
-
+    <string name="nr_recipes">Receitas</string>
+    <string name="no_comments">Sem comentáros</string>
 
 
     <string-array name="default_gender_array">
@@ -254,7 +255,6 @@
         <item>Masculino</item>
         <item>Feminino</item>
     </string-array>
-
 
 
     <!-- res/values/arrays.xml -->

@@ -8,8 +8,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
+import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
@@ -18,6 +21,7 @@ import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
 import com.example.projectfoodmanager.util.network.NetworkResult
 import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
@@ -45,7 +49,10 @@ class ProfileFragment : Fragment() {
     private lateinit var user: UserProfile
     private lateinit var recipeListed: MutableList<RecipeSimplified>
 
-    private var manager: GridLayoutManager = GridLayoutManager(activity?.applicationContext, 3)
+    private lateinit var mostPopularRVManager: LinearLayoutManager
+    private lateinit var lastestRVManager: LinearLayoutManager
+    private lateinit var preloadModelProvider: RecipePreloadModelProvider
+
 
 
     // Pagination
@@ -53,29 +60,6 @@ class ProfileFragment : Fragment() {
     private var currentPage:Int = 1
     private var noMoreRecipesMessagePresented:Boolean = true
 
-    private var scrollListener: RecyclerView.OnScrollListener = object : RecyclerView.OnScrollListener(){
-        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                // prevent missed calls to api // needs to be reseted on search so it could be a next page
-
-                if (nextPage){
-                    val pastVisibleItem: Int = manager.findLastCompletelyVisibleItemPosition()
-
-                    if ((pastVisibleItem + 1)  >= recipeListed.size){
-                        recipeViewModel.getRecipes(page = ++currentPage, userId = user.id, pageSize = 15)
-                    }
-                }
-                else if (!noMoreRecipesMessagePresented){
-                    noMoreRecipesMessagePresented = true
-                    toast("Sorry cant find more recipes.",ToastType.ALERT)
-                }
-
-
-            }
-
-            super.onScrollStateChanged(recyclerView, newState)
-        }
-    }
 
     /** injects */
     @Inject
@@ -84,13 +68,60 @@ class ProfileFragment : Fragment() {
     lateinit var sharedPreference: SharedPreference
 
     /** adapters */
-    private val profileRecipesAdapter by lazy {
+    private val mostPopularRecipesAdapter by lazy {
         ProfileRecipesAdapter(
-            onItemClicked = { selectedDate ->
+            onItemClicked = { position, item ->
+                val bundle = Bundle()
+                bundle.putInt("recipe_id", item.id)
 
+
+                //findNavController().navigate(R.id.action_profileFragment_to_recipeFragment, bundle)
+            },
+            imageLoadingListener = object : ImageLoadingListener {
+                override fun onImageLoaded() {
+                    //binding.progressBar.isVisible = false
+                }
             }
         )
+
     }
+
+    private val latestRecipesAdapter by lazy {
+        ProfileRecipesAdapter(
+            onItemClicked = { position, item ->
+                val bundle = Bundle()
+                bundle.putInt("recipe_id", item.id)
+
+                //findNavController().navigate(R.id.action_profileFragment_to_recipeFragment, bundle)
+            },
+            imageLoadingListener = object : ImageLoadingListener {
+                override fun onImageLoaded() {
+                    //binding.progressBar.isVisible = false
+                }
+            }
+        )
+
+    }
+
+
+    /** Interfaces */
+
+//    override fun onImageLoaded() {
+//        requireActivity().runOnUiThread {
+//            if (binding.recyclerView.visibility != View.VISIBLE && binding.recyclerView.visibility != View.GONE) {
+//                adapter.imagesLoaded++
+//
+//                val firstVisibleItemPosition = manager.findFirstVisibleItemPosition()
+//                val lastVisibleItemPosition = manager.findLastVisibleItemPosition()
+//                val visibleItemCount = lastVisibleItemPosition - firstVisibleItemPosition + 1
+//
+//                // If all visible images are loaded, hide the progress bar
+//                if (adapter.imagesLoaded >= visibleItemCount * DEFAULT_NR_OF_IMAGES_BY_RECIPE_CARD) {
+//                    showRecyclerView()
+//                }
+//            }
+//        }
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -127,10 +158,16 @@ class ProfileFragment : Fragment() {
 
 
         /**
+         * Title
+         */
+
+        binding.header.notificationIB.visibility = View.VISIBLE
+
+        /**
          * Buttons
          */
 
-        binding.backIB.setOnClickListener {
+        binding.header.backIB.setOnClickListener {
             findNavController().navigateUp()
         }
 
@@ -138,7 +175,15 @@ class ProfileFragment : Fragment() {
          * Recycler View ScrollView Listener
          */
 
-        binding.recipesRV.layoutManager = manager
+        mostPopularRVManager = LinearLayoutManager(activity)
+        mostPopularRVManager.orientation = RecyclerView.HORIZONTAL
+
+        lastestRVManager = LinearLayoutManager(activity)
+        lastestRVManager.orientation = RecyclerView.HORIZONTAL
+
+
+        binding.mostPopularRecipesRV.layoutManager = mostPopularRVManager
+        binding.latestRecipesRV.layoutManager = lastestRVManager
 
 
     }
@@ -146,15 +191,18 @@ class ProfileFragment : Fragment() {
     private fun loadUI(){
 
         userViewModel.getUserAccount(userId)
-        recipeViewModel.getRecipes(userId=userId, pageSize = 15)
+        recipeViewModel.getRecipes(userId=userId, pageSize = 6, by = RecipesSortingType.LIKES)
+        recipeViewModel.getRecipes(userId=userId, pageSize = 6, by = RecipesSortingType.DATE)
+        //recipeViewModel.getRecipes(userId=userId, pageSize = 6, by = "user")
 
         /**
          *  General
          * */
 
         val activity = requireActivity()
+
         changeMenuVisibility(false,activity)
-        changeTheme(true,activity,requireContext())
+        changeTheme(false, requireActivity(), requireContext())
 
         if (::user.isInitialized)
             loadUserUI()
@@ -164,15 +212,17 @@ class ProfileFragment : Fragment() {
          */
 
 
-        binding.recipesRV.layoutManager = manager
-        binding.recipesRV.adapter = profileRecipesAdapter
-
-        binding.recipesRV.addOnScrollListener(scrollListener)
+        binding.mostPopularRecipesRV.adapter = mostPopularRecipesAdapter
+        binding.latestRecipesRV.adapter = latestRecipesAdapter
 
 
     }
 
     private fun loadUserUI() {
+
+
+        binding.header.titleTV.text = user.name
+
 
         /**
          * Image
@@ -184,6 +234,14 @@ class ProfileFragment : Fragment() {
          * Info
          */
 
+        if (user.userType == UserType.VIP) {
+            binding.profileCV.foreground = ContextCompat.getDrawable(requireContext(), R.drawable.border_vip);
+            binding.vipIV.visibility = View.VISIBLE
+        }else{
+            binding.profileCV.foreground = null;
+            binding.vipIV.visibility = View.GONE
+        }
+
         binding.nameTV.text = getString(R.string.full_name, user.name)
 
         if (user.userType == UserType.VIP) {
@@ -191,16 +249,55 @@ class ProfileFragment : Fragment() {
             binding.vipIV.visibility = View.VISIBLE
         }
 
-        binding.descTV.text = user.description
+        if (user.verified) {
+            binding.verifyUserIV.visibility = View.VISIBLE
+        }
+
+        binding.descTV.text = user.description.ifEmpty { "Sem descrição." }
 
         binding.nFollowedsTV.text = user.followsCount.toString()
         binding.nFollowersTV.text = user.followersCount.toString()
 
         binding.nRecipesTV.text = user.recipesCreated.toString()
+
+        binding.seeMore1MB.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("sortby", RecipesSortingType.LIKES)
+            findNavController().navigate(R.id.action_profileFragment_to_profileRecipeListingFragment, bundle)
+        }
+
+        binding.seeMore2MB.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("sortby", RecipesSortingType.DATE)
+            findNavController().navigate(R.id.action_profileFragment_to_profileRecipeListingFragment, bundle)
+        }
     }
 
     private fun showValidationErrors(error: String) {
-        toast(String.format(resources.getString(R.string.txt_error_message, error)))
+        //toast(String.format(resources.getString(R.string.txt_error_message, error)))
+    }
+
+    private fun setItemsToImagePreload(recipeList: MutableList<RecipeSimplified>, sortingType: String) {
+        if (! ::preloadModelProvider.isInitialized){
+            preloadModelProvider = RecipePreloadModelProvider(recipeList, requireContext())
+            val preloader = RecyclerViewPreloader(
+                Glide.with(this),
+                preloadModelProvider,
+                ViewPreloadSizeProvider(),
+                5, /* maxPreload */
+            )
+
+            when(sortingType){
+                RecipesSortingType.LIKES -> {
+                    binding.mostPopularRecipesRV.addOnScrollListener(preloader)
+                }
+                RecipesSortingType.DATE -> {
+                    binding.latestRecipesRV.addOnScrollListener(preloader)
+                }
+            }
+
+        }
+        preloadModelProvider.setItems(recipeList)
     }
 
     private fun bindObservers() {
@@ -222,46 +319,59 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        /**
+         * Recipes
+         */
+
         recipeViewModel.functionGetRecipes.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { result ->
                 when (result) {
                     is NetworkResult.Success -> {
 
+                        // Check if list empty
+                        if(result.data!!.result.isEmpty()){
 
-                        // sets page data
-
-                        currentPage = result.data!!._metadata.page
-                        nextPage = result.data._metadata.nextPage != null
-
-                        // check if list empty
-
-                       /* if(result.data.result.isEmpty()){
-                            binding.offlineTV.text = getString(R.string.no_recipes_found)
-                            binding.offlineTV.visibility=View.VISIBLE
-                            adapter.updateList(mutableListOf())
+                            // Hide topic
+                            binding.noRecipesTV.visibility=View.VISIBLE
                             return@let
                         }else{
-                            binding.offlineTV.visibility=View.GONE
 
-                        }*/
+                            // Show topic
+                            binding.noRecipesTV.visibility=View.GONE
 
-                        // checks if new search
 
-                        if (currentPage == 1){
-                            recipeListed = result.data.result
-                            noMoreRecipesMessagePresented = false
+                            val palavras  = listOf(RecipesSortingType.LIKES,RecipesSortingType.DATE)
+
+
+
+                            val test = palavras.find { palavra -> result.data._metadata.currentPage!!.contains(palavra) }
+
+                            when(test){
+                                RecipesSortingType.LIKES -> {
+                                    mostPopularRecipesAdapter.setItems(result.data.result)
+                                    binding.mostPopularRecipesCL.visibility = View.VISIBLE
+                                }
+                                RecipesSortingType.DATE -> {
+                                    latestRecipesAdapter.setItems(result.data.result)
+                                    binding.latestRecipesCL.visibility = View.VISIBLE
+                                }
+                                else -> {
+                                    mostPopularRecipesAdapter.setItems(result.data.result)
+                                }
+                            }
+
+                            setItemsToImagePreload(result.data.result, result.data._metadata.currentPage.toString())
+
                         }
-                        else{
-                            recipeListed += result.data.result
-                        }
 
-                        profileRecipesAdapter.updateList(result.data.result)
                     }
                     is NetworkResult.Error -> {
-                        showValidationErrors(result.message.toString())
+                        //binding.progressBar.hide()
+                        toast(result.message.toString(), type = ToastType.ERROR)
                     }
                     is NetworkResult.Loading -> {
-                        //binding.progressBar.isVisible = true
+                        binding.noRecipesTV.visibility = View.GONE
+                        //binding.offlineTV.visibility = View.GONE
                     }
                 }
             }

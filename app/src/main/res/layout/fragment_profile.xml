@@ -4,62 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.profile.userSession.UserSessionFragment">
+    tools:context=".presentation.profile.user.ProfileFragment">
 
+
+    <include
+        android:id="@+id/header"
+        layout="@layout/default_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/header"
+        android:fadingEdge="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/layout_bg_rounded_2_corners_v1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginEnd="24dp"
-                    android:fontFamily="@font/fedoka"
-                    android:text="Perfil"
-                    android:textColor="@color/white"
-                    android:textSize="30sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <ImageButton
-                    android:id="@+id/backIB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:backgroundTint="#00000000"
-                    android:minWidth="48dp"
-                    android:minHeight="48dp"
-                    android:padding="5dp"
-                    android:rotation="180"
-                    android:src="@drawable/ic_arrow"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView"
-                    app:tint="@color/white" />
 
                 <ImageView
                     android:id="@+id/vipIV"
@@ -75,61 +42,40 @@
                     app:layout_constraintBottom_toTopOf="@+id/profileCV"
                     app:layout_constraintEnd_toEndOf="@+id/profileCV" />
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/profileCV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
-                    android:foreground="@drawable/border_vip"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profileCV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
+                android:foreground="@drawable/border_vip"
+                app:cardCornerRadius="70dp"
+                app:layout_constraintBottom_toTopOf="@+id/nameTV"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                    app:cardCornerRadius="70dp"
-                    app:layout_constraintBottom_toTopOf="@+id/nameTV"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView">
-
-                    <ImageView
-                        android:id="@+id/profileIV"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/default_image_user"
-                        android:scaleType="fitXY"
-                        android:adjustViewBounds="true"/>
-                </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/profileIV"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/default_image_user" />
+            </androidx.cardview.widget.CardView>
 
 
                 <TextView
                     android:id="@+id/nameTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/fedoka"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/fredoka_medium"
                     android:text="Nome Apelido"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/profileCV"
-                    app:layout_constraintHorizontal_bias="0.298"
                     app:layout_constraintStart_toStartOf="@+id/profileCV"
                     app:layout_constraintTop_toBottomOf="@+id/profileCV" />
 
-                <TextView
-                    android:id="@+id/descTV"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:fontFamily="@font/fedoka"
-                    android:text="Descrição"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/nameTV" />
 
                 <ImageView
                     android:id="@+id/verifyUserIV"
@@ -138,148 +84,307 @@
                     android:layout_marginStart="5dp"
                     android:elevation="8dp"
                     android:src="@drawable/verified"
-                    android:visibility="visible"
+                    android:visibility="gone"
+                    tools:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="@+id/nameTV"
                     app:layout_constraintStart_toEndOf="@+id/nameTV"
                     app:layout_constraintTop_toTopOf="@+id/nameTV" />
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout5"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginTop="-30dp"
-                android:background="@drawable/layout_bg_rounded_2_corners_v2"
-                android:translationZ="-1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
                     android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/profileCV"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    app:layout_constraintStart_toEndOf="@+id/profileCV"
+                    app:layout_constraintTop_toTopOf="@+id/profileCV">
 
                     <LinearLayout
                         android:id="@+id/recipesLL"
-                        android:layout_width="100dp"
+                        android:layout_width="80dp"
                         android:layout_height="50dp"
                         android:gravity="center"
                         android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/fedoka"
-                            android:text="Receitas"
-                            android:textAlignment="center"
-                            android:textColor="#4A4A4A"
-                            android:textSize="14sp"/>
 
                         <TextView
                             android:id="@+id/nRecipesTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:alpha="0.7"
                             android:text="0"
                             android:textAlignment="center"
                             android:textColor="#4A4A4A"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:alpha="0.7"/>
+                            android:textSize="15sp"
+                            android:fontFamily="@font/fredoka_medium"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/fredoka_regular"
+                            android:text="receitas"
+                            android:textAlignment="center"
+                            android:textColor="#4A4A4A"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/followersLL"
-                        android:layout_width="100dp"
+                        android:layout_width="80dp"
                         android:layout_height="50dp"
                         android:gravity="center"
                         android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/fedoka"
-                            android:text="Seguidores"
-                            android:textAlignment="center"
-                            android:textColor="#4A4A4A"
-                            android:textSize="14sp"
-                            />
 
                         <TextView
                             android:id="@+id/nFollowersTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:alpha="0.7"
                             android:text="0"
                             android:textAlignment="center"
                             android:textColor="#4A4A4A"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:alpha="0.7"/>
+                            android:textSize="15sp"
+                            android:fontFamily="@font/fredoka_medium" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/fredoka_regular"
+                            android:text="seguidores"
+                            android:textAlignment="center"
+                            android:textColor="#4A4A4A"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/followedsLL"
-                        android:layout_width="100dp"
+                        android:layout_width="80dp"
                         android:layout_height="50dp"
                         android:gravity="center"
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/fedoka"
-                            android:text="A seguir"
-                            android:textAlignment="center"
-                            android:textColor="#4A4A4A"
-                            android:textSize="14sp" />
-
-                        <TextView
                             android:id="@+id/nFollowedsTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:alpha="0.7"
                             android:text="0"
                             android:textAlignment="center"
                             android:textColor="#4A4A4A"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:alpha="0.7"/>
+                            android:textSize="15sp"
+                            android:fontFamily="@font/fredoka_medium" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/fredoka_regular"
+                            android:text="a seguir"
+                            android:textAlignment="center"
+                            android:textColor="#4A4A4A"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+
                     </LinearLayout>
 
                 </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_gravity="center"
+
+                <TextView
+                    android:id="@+id/descTV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:maxLines="4"
+                    android:text="Descrição"
+                    android:textSize="13sp"
+                    android:alpha="0.6"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nameTV" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/materialButton3"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="30dp"
+                android:text="Seguir"
+                app:layout_constraintStart_toStartOf="@+id/descTV"
+                app:layout_constraintTop_toBottomOf="@+id/descTV" />
+
+
+            <TextView
+                android:id="@+id/noRecipesTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="90dp"
+                android:text="@string/no_recipes"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+                app:layout_constraintTop_toBottomOf="@+id/materialButton3"
+                app:layout_constraintVertical_bias="0" />
 
-                <androidx.recyclerview.widget.RecyclerView
 
-                    android:id="@+id/recipesRV"
-                    android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/mostPopularRecipesCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/materialButton3"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/header1TV"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/fredoka_medium"
+                    android:text="Mais populares"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/seeMore1MB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20dp"
+                    android:backgroundTint="#EBEBEB"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:padding="0dp"
+                    android:text="Ver mais"
+                    android:textColor="#666666"
+                    app:rippleColor="#B8B8B8"
+                    app:layout_constraintBottom_toBottomOf="@+id/header1TV"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/header1TV" />
+
+                <View
+                    android:id="@+id/view7"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="#0C000000"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/header1TV"
+                    app:layout_constraintTop_toBottomOf="@+id/header1TV" />
+
+                <androidx.recyclerview.widget.RecyclerView
+
+                    android:id="@+id/mostPopularRecipesRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:requiresFadingEdge="horizontal"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view7" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/latestRecipesCL"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/mostPopularRecipesCL"
+                app:layout_constraintStart_toStartOf="@+id/mostPopularRecipesCL"
+                app:layout_constraintTop_toBottomOf="@+id/mostPopularRecipesCL"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/header2TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/fredoka_medium"
+                    android:text="Mais recentes"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/seeMore2MB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="20dp"
+                    android:backgroundTint="#EBEBEB"
+                    android:fontFamily="@font/fredoka_regular"
+                    android:padding="0dp"
+                    android:text="Ver mais"
+                    android:textColor="#6B6B6B"
+                    app:layout_constraintBottom_toBottomOf="@+id/header2TV"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/header2TV"
+                    app:rippleColor="#B8B8B8" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="#0C000000"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/header2TV"
+                    app:layout_constraintTop_toBottomOf="@+id/header2TV" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+
+                    android:id="@+id/latestRecipesRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:requiresFadingEdge="horizontal"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </ScrollView>
 

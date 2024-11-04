@@ -175,7 +175,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        bindObservers()
 
 
         return if (this::binding.isInitialized){
@@ -196,7 +195,10 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         setUI()
+        bindObservers()
+
         super.onViewCreated(view, savedInstanceState)
 
     }
@@ -352,11 +354,11 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             changeMenuVisibility(false, activity)
         }
 
+        userViewModel.getNotifications(pageSize = 1)
 
         /**
          * Chip filters
          */
-
 
         chipSelected = binding.chipGroup.selectChipByTag(selectedTab)!!
 
@@ -375,11 +377,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             }
         }
 
-        /**
-         * Notifications
-         */
 
-        userViewModel.getNotifications(pageSize = 1)
 
         /**
          * Bottom Tag Filters
@@ -449,6 +447,8 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
                         // Check if list empty
                         if(result.data.result.isEmpty()){
+
+
                             binding.noRecipesTV.visibility=View.VISIBLE
                             return@let
                         }else{
@@ -616,6 +616,11 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     }
 
+
+    /**
+     *  Functions
+     * */
+
     private fun appendItemsToImagePreload(recipeList: MutableList<RecipeSimplified>) {
         if (! ::preloadModelProvider.isInitialized){
             initImagePreload(recipeList)
@@ -643,9 +648,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         binding.recyclerView.addOnScrollListener(preloader)
     }
 
-    /**
-     *  Functions
-     * */
 
     private fun setRecyclerViewScrollListener() {
         scrollListener = object : RecyclerView.OnScrollListener(){
@@ -654,15 +656,18 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
                 val pastVisibleItemSinceLastFetch: Int = manager.findLastVisibleItemPosition()
 
-
                 // if User is on the penultimate recipe of currenct page, get next page
                 if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 3))
-                    if (nextPage){
+                    if (isOnline(requireContext()))
+                        if (nextPage){
 
-                        recipeViewModel.getRecipes(page = ++currentPage, searchString = searchString,searchTag= searchTag, by = sortedBy)
+                            recipeViewModel.getRecipes(page = ++currentPage, searchString = searchString,searchTag= searchTag, by = sortedBy)
 
-                        // prevent double request, this variable is change after response from getRecipes
-                        nextPage = false
+                            // prevent double request, this variable is change after response from getRecipes
+                            nextPage = false
+                        }
+                    else{
+                        toast("Sorry no Internet Connection",ToastType.ALERT)
                     }
 
                 // if User is on the last recipe of currenct page, and no next page present notice to user

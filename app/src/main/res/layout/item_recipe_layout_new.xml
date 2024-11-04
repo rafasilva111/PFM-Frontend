@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:outlineProvider="none">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/CV_image_recipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="20dp"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/default_image_recipe"
+            android:foreground="@drawable/gradient_overlay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Conteúdo (texto e ícones) -->
+    <LinearLayout
+        android:id="@+id/linearLayout29"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Título -->
+        <TextView
+            android:id="@+id/recipeTitleTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Alforreca com ovos"
+            android:fontFamily="@font/fredoka_medium"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_rate"
+                app:tint="#DADADA"/>
+
+            <TextView
+                android:id="@+id/ratingMedTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fredoka_regular"
+                android:text="4,5"
+                android:textColor="#DADADA"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/recipeTitleTV"
+                app:layout_constraintTop_toBottomOf="@+id/recipeTitleTV" />
+
+
+            <!-- Ícone de tempo -->
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_like_black"
+                app:tint="#DADADA"
+                android:layout_marginStart="20dp"/>
+
+            <TextView
+                android:id="@+id/numLikesTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fredoka_medium"
+                android:text="1"
+                android:textColor="#DADADA"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginStart="1dp"
+                app:layout_constraintStart_toStartOf="@+id/recipeTitleTV"
+                app:layout_constraintTop_toBottomOf="@+id/recipeTitleTV" />
+
+
+        </LinearLayout>
+
+
+        <!-- Detalhes (tempo, dificuldade, pessoas) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+                <!-- Ícone de tempo -->
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_time"
+                    app:tint="#FFFFFF" />
+
+                <!-- Texto de tempo -->
+                <TextView
+                    android:id="@+id/timeTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="4 min"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+            <!-- Ícone de dificuldade -->
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_difficulty"
+                app:tint="#FFFFFF" />
+
+            <!-- Texto de dificuldade -->
+            <TextView
+                android:id="@+id/difficultyTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="Fácil"
+                android:textColor="#FFFFFF" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+            <!-- Ícone de pessoas -->
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_person"
+                app:tint="#FFFFFF" />
+
+            <!-- Texto de pessoas -->
+            <TextView
+                android:id="@+id/portionTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="3 Pessoas"
+                android:textColor="#FFFFFF" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/verifyRecipeIV"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        android:elevation="11dp"
+        android:src="@drawable/verified_recipe"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/CV_image_recipe" />
+
+    <TextView
+        android:id="@+id/verifyRecipeTV"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="-18dp"
+        android:background="@drawable/layout_bg_rounded_1"
+        android:backgroundTint="#FFEBB0"
+        android:elevation="10dp"
+        android:fontFamily="@font/fedoka"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Verificada"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/verifyRecipeIV"
+        app:layout_constraintStart_toEndOf="@+id/verifyRecipeIV"
+        app:layout_constraintTop_toTopOf="@+id/verifyRecipeIV" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,7 +25,7 @@
     <item
         android:id="@+id/fragment_session_profile"
         android:title="@string/profile_title"
-        android:icon="@drawable/ic_more"
+        android:icon="@drawable/ic_more_options"
         app:showAsAction="ifRoom"/>
 
 

@@ -50,24 +50,36 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
                     android:text="0%"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="@+id/energia_PB"
                     app:layout_constraintEnd_toEndOf="@+id/energia_PB"
                     app:layout_constraintStart_toStartOf="@+id/energia_PB"
                     app:layout_constraintTop_toTopOf="@+id/energia_PB" />
 
-                <ProgressBar
+<!--                <ProgressBar-->
+<!--                    android:id="@+id/energia_PB"-->
+<!--                    android:layout_width="80dp"-->
+<!--                    android:layout_height="80dp"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:indeterminateOnly="false"-->
+<!--                    android:progressDrawable="@drawable/custom_progress_1"-->
+<!--              -->
+<!--                    app:layout_constraintVertical_bias="0.0" />-->
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/energia_PB"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="5dp"
-                    android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_1"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    tools:progress="75"
+                    app:trackColor="#92C5C5C5"
+                    app:indicatorColor="#FFEA00"
+                    app:trackCornerRadius="10dp"
+                    app:indicatorSize="80dp"
+                    app:trackThickness="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -76,7 +88,6 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:layout_marginTop="5dp"
-
                 android:orientation="horizontal">
 
                 <ImageView
@@ -89,6 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:textSize="15sp"
                     android:text="0 g"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -131,7 +143,8 @@
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:layout_marginBottom="10dp"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -143,24 +156,27 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
                     android:text="0%"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="@+id/proteina_PB"
                     app:layout_constraintEnd_toEndOf="@+id/proteina_PB"
                     app:layout_constraintStart_toStartOf="@+id/proteina_PB"
                     app:layout_constraintTop_toTopOf="@+id/proteina_PB" />
 
-                <ProgressBar
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/proteina_PB"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="5dp"
-                    android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_1"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    tools:progress="75"
+                    app:trackColor="#F0F0F0"
+                    app:indicatorColor="#2196F3"
+                    app:trackCornerRadius="10dp"
+                    app:indicatorSize="80dp"
+                    app:trackThickness="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -182,6 +198,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:textSize="15sp"
                     android:text="0 g"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -210,7 +227,8 @@
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:layout_marginBottom="10dp"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -222,24 +240,27 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
                     android:text="0%"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="@+id/fibra_PB"
                     app:layout_constraintEnd_toEndOf="@+id/fibra_PB"
                     app:layout_constraintStart_toStartOf="@+id/fibra_PB"
                     app:layout_constraintTop_toTopOf="@+id/fibra_PB" />
 
-                <ProgressBar
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/fibra_PB"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="5dp"
-                    android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_3"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    tools:progress="75"
+                    app:trackColor="#92C5C5C5"
+                    app:indicatorColor="#FF8400"
+                    app:trackCornerRadius="10dp"
+                    app:indicatorSize="80dp"
+                    app:trackThickness="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -260,6 +281,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:textSize="15sp"
                     android:text="0 g"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -301,7 +323,8 @@
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:layout_marginBottom="10dp"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -313,24 +336,27 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
                     android:text="0%"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="@+id/gordura_PB"
                     app:layout_constraintEnd_toEndOf="@+id/gordura_PB"
                     app:layout_constraintStart_toStartOf="@+id/gordura_PB"
                     app:layout_constraintTop_toTopOf="@+id/gordura_PB" />
 
-                <ProgressBar
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/gordura_PB"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="5dp"
-                    android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_4"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    tools:progress="75"
+                    app:trackColor="#92C5C5C5"
+                    app:indicatorColor="#4CAF50"
+                    app:trackCornerRadius="10dp"
+                    app:indicatorSize="80dp"
+                    app:trackThickness="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -352,6 +378,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:textSize="15sp"
                     android:text="0 g"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -379,7 +406,8 @@
                 android:text="dos quais saturados"
                 android:textAlignment="center"
                 android:textColor="#252525"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                android:layout_marginBottom="10dp"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -392,23 +420,27 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
                     android:text="0%"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@+id/gorduraSaturados_PB"
                     app:layout_constraintEnd_toEndOf="@+id/gorduraSaturados_PB"
                     app:layout_constraintStart_toStartOf="@+id/gorduraSaturados_PB"
                     app:layout_constraintTop_toTopOf="@+id/gorduraSaturados_PB" />
 
-                <ProgressBar
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/gorduraSaturados_PB"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="5dp"
-                    android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_4"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    tools:progress="75"
+                    app:trackColor="#92C5C5C5"
+                    app:indicatorColor="#4CAF50"
+                    app:trackCornerRadius="10dp"
+                    app:indicatorSize="60dp"
+                    app:trackThickness="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -431,6 +463,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="0 g"
+                    android:textSize="15sp"
                     android:textAlignment="center" />
             </LinearLayout>
 
@@ -467,7 +500,8 @@
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:layout_marginBottom="10dp"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -479,24 +513,27 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
                     android:text="0%"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="@+id/hidratosCarbono_PB"
                     app:layout_constraintEnd_toEndOf="@+id/hidratosCarbono_PB"
                     app:layout_constraintStart_toStartOf="@+id/hidratosCarbono_PB"
                     app:layout_constraintTop_toTopOf="@+id/hidratosCarbono_PB" />
 
-                <ProgressBar
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/hidratosCarbono_PB"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="5dp"
-                    android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_5"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    tools:progress="75"
+                    app:trackColor="#92C5C5C5"
+                    app:indicatorColor="#FB4B4B"
+                    app:trackCornerRadius="10dp"
+                    app:indicatorSize="80dp"
+                    app:trackThickness="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -518,6 +555,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:textSize="15sp"
                     android:text="0 g"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -545,7 +583,8 @@
                 android:text="dos quais açúcares"
                 android:textAlignment="center"
                 android:textColor="#252525"
-                android:textSize="11sp" />
+                android:textSize="11sp"
+                android:layout_marginBottom="10dp"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -557,23 +596,27 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
                     android:text="0%"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="@+id/hidratosAcucares_PB"
                     app:layout_constraintEnd_toEndOf="@+id/hidratosAcucares_PB"
                     app:layout_constraintStart_toStartOf="@+id/hidratosAcucares_PB"
                     app:layout_constraintTop_toTopOf="@+id/hidratosAcucares_PB" />
 
-                <ProgressBar
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/hidratosAcucares_PB"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="5dp"
-                    android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_5"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    tools:progress="75"
+                    app:trackColor="#92C5C5C5"
+                    app:indicatorColor="#FB4B4B"
+                    app:trackCornerRadius="10dp"
+                    app:indicatorSize="60dp"
+                    app:trackThickness="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -595,6 +638,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
+                    android:textSize="15sp"
                     android:text="0 g"
                     android:textAlignment="center" />
             </LinearLayout>
@@ -606,17 +650,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="50dp"
         android:text="Leia atentamente o rótulo dos produtos que usar como ingredientes, estes valores são apenas estimativas e devem ser tomadas como tal."
         android:textAlignment="center"
-        android:textSize="12sp"
+        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
         app:layout_constraintVertical_bias="0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

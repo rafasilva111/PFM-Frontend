@@ -446,6 +446,14 @@ class Helper {
         }
 
 
+        fun formatPercent(value: Double): String {
+            return if (value % 1.0 == 0.0) {
+                "${value.toInt()}%"
+            } else {
+                "$value%"
+            }
+        }
+
         fun getRelativeTime(timeString: String): String? {
             return try {
                 val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy'T'HH:mm:ss")
