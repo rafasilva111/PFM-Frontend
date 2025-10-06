@@ -14,7 +14,7 @@ data class UserSimplified(
     val verified: Boolean,
     @SerializedName("user_type")
     var userType: String,
-    @SerializedName("img_source")
+    @SerializedName("image")
     val imgSource: String="",
     @SerializedName("follows_c")
     val followsCount: Int=0,

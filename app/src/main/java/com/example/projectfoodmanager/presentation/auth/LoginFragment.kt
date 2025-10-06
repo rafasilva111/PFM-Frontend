@@ -72,12 +72,10 @@ class LoginFragment : Fragment() {
             isValid = false
             binding.emailTL.isErrorEnabled=true
             binding.emailTL.error=getString(R.string.enter_email)
-            //toast(getString(R.string.enter_email))
         }else if (!binding.emailEt.text.toString().isValidEmail()){
             isValid = false
             binding.emailTL.isErrorEnabled=true
             binding.emailTL.error=getString(R.string.invalid_email)
-            //toast(getString(R.string.invalid_email))
 
         }else{
             binding.emailTL.isErrorEnabled=false
@@ -87,12 +85,10 @@ class LoginFragment : Fragment() {
             isValid = false
             binding.passwordTL.isErrorEnabled=true
             binding.passwordTL.error=getString(R.string.enter_password)
-            //toast(getString(R.string.enter_password))
         }else if (binding.passEt.text.toString().length < 8){
             isValid = false
             binding.passwordTL.isErrorEnabled=true
             binding.passwordTL.error=getString(R.string.invalid_password)
-            //toast(getString(R.string.invalid_password))
         }else{
             binding.passwordTL.isErrorEnabled=false
         }

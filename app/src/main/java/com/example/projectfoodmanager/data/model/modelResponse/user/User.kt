@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import java.time.OffsetDateTime
 
 @Parcelize
 data class User(
@@ -23,7 +24,7 @@ data class User(
     var userType: String,
     @SerializedName("user_portion")
     val userPortion: Int,
-    @SerializedName("img_source")
+    @SerializedName("image")
     val imgSource: String="",
     @SerializedName("activity_level")
     var activityLevel: Double = 0.0,
@@ -33,7 +34,7 @@ data class User(
     val age: Int? = 0,
     val rating: Double = 0.0,
     @SerializedName("created_at")
-    val createdDate: String?,
+    val createdDate: OffsetDateTime?,
     @SerializedName("updated_at")
     val updatedDate: String?,
     @SerializedName("followers_c")

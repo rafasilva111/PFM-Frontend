@@ -3,7 +3,6 @@ package com.example.projectfoodmanager.presentation.favorites
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -761,14 +760,14 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
                         sharedPreference.getUserRecipesBackgroundSavedRecipes()
                             .toRecipeSimplifiedList()
                             .filter { recipe ->
-                                recipe.tags.any { recipeTag -> recipeTag.title.equals(tag, ignoreCase = true) } &&
+                                recipe.tags.any { recipeTag -> recipeTag.text.equals(tag, ignoreCase = true) } &&
                                         recipe.title.contains(searchString, ignoreCase = true)
                             }
                             .toMutableList()
                     }
                     searchTag.isNotEmpty() -> {
                         sharedPreference.getUserRecipesBackgroundSavedRecipes().toRecipeSimplifiedList().filter { recipe ->
-                            recipe.tags.any { recipeTag -> recipeTag.title.equals(tag, ignoreCase = true) }
+                            recipe.tags.any { recipeTag -> recipeTag.text.equals(tag, ignoreCase = true) }
                         }.toMutableList()
                     }
                     searchString.isNotEmpty() ->{
@@ -786,14 +785,14 @@ class FavoritesFragment : Fragment(), ImageLoadingListener {
                         sharedPreference.getUserRecipesBackgroundCreatedRecipes()
                             .toRecipeSimplifiedList()
                             .filter { recipe ->
-                                recipe.tags.any { recipeTag -> recipeTag.title.equals(tag, ignoreCase = true) } &&
+                                recipe.tags.any { recipeTag -> recipeTag.text.equals(tag, ignoreCase = true) } &&
                                         recipe.title.contains(searchString, ignoreCase = true)
                             }
                             .toMutableList()
                     }
                     searchTag.isNotEmpty() -> {
                         sharedPreference.getUserRecipesBackgroundCreatedRecipes().toRecipeSimplifiedList().filter { recipe ->
-                            recipe.tags.any { recipeTag -> recipeTag.title.equals(tag, ignoreCase = true) }
+                            recipe.tags.any { recipeTag -> recipeTag.text.equals(tag, ignoreCase = true) }
                         }.toMutableList()
                     }
                     searchString.isNotEmpty() ->{

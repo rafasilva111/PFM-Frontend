@@ -441,6 +441,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                 when (result) {
                     is NetworkResult.Success -> {
 
+
                         // Control Variables
                         currentPage = result.data!!._metadata.page
                         nextPage = result.data._metadata.nextPage != null
@@ -449,6 +450,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
                         // Check if list empty
                         if(result.data.result.isEmpty()){
+                            binding.progressBar.hide()
                             binding.noRecipesTV.visibility=View.VISIBLE
                             return@let
                         }else{
@@ -638,7 +640,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             Glide.with(this),
             preloadModelProvider,
             ViewPreloadSizeProvider(),
-            5, /* maxPreload */
+            10, /* maxPreload */
         )
         binding.recyclerView.addOnScrollListener(preloader)
     }
@@ -648,38 +650,64 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
      * */
 
     private fun setRecyclerViewScrollListener() {
-        scrollListener = object : RecyclerView.OnScrollListener(){
+        scrollListener = object : RecyclerView.OnScrollListener() {
+
+            // Track if a background prefetch is scheduled
+            private var prefetchJob: Job? = null
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val lastVisibleItem = manager.findLastVisibleItemPosition()
+                val totalItemCount = adapter.itemCount
+
+                // 🎯 Prefetch when the user is within the last 8 items
+                if (lastVisibleItem >= totalItemCount - 8 && nextPage) {
+                    nextPage = false // prevent duplicate calls
+                    recipeViewModel.getRecipes(
+                        page = ++currentPage,
+                        searchString = searchString,
+                        searchTag = searchTag,
+                        by = sortedBy
+                    )
+                }
+            }
+
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-
-
-                val pastVisibleItemSinceLastFetch: Int = manager.findLastVisibleItemPosition()
-
-
-                // if User is on the penultimate recipe of currenct page, get next page
-                if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 3))
-                    if (nextPage){
-
-                        recipeViewModel.getRecipes(page = ++currentPage, searchString = searchString,searchTag= searchTag, by = sortedBy)
-
-                        // prevent double request, this variable is change after response from getRecipes
-                        nextPage = false
-                    }
-
-                // if User is on the last recipe of currenct page, and no next page present notice to user
-                if (pastVisibleItemSinceLastFetch == (adapter.itemCount - 1))
-                    if (!nextPage && !noMoreRecipesMessagePresented){
-                        noMoreRecipesMessagePresented = true
-                        toast("Sorry cant find more recipes.",ToastType.ALERT)
-                    }
-
-
-
-
                 super.onScrollStateChanged(recyclerView, newState)
 
+                val lastVisibleItem = manager.findLastVisibleItemPosition()
+                val totalItemCount = adapter.itemCount
+
+                // 💤 When user stops scrolling, schedule a background prefetch (like Instagram)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && nextPage) {
+                    prefetchJob?.cancel()
+                    prefetchJob = viewLifecycleOwner.lifecycleScope.launch {
+                        delay(1500) // 1.5s after user stops scrolling
+                        if (lastVisibleItem >= totalItemCount - 10 && nextPage) {
+                            recipeViewModel.getRecipes(
+                                page = ++currentPage,
+                                searchString = searchString,
+                                searchTag = searchTag,
+                                by = sortedBy
+                            )
+                            nextPage = false
+                        }
+                    }
+                }
+
+                // 📭 Show "no more recipes" message if user reaches the end
+                if (lastVisibleItem == totalItemCount - 1 && !nextPage && !noMoreRecipesMessagePresented) {
+                    noMoreRecipesMessagePresented = true
+                    toast("Sorry, can't find more recipes.", ToastType.ALERT)
+                }
             }
         }
-        binding.recyclerView.addOnScrollListener(scrollListener)
+
+        binding.recyclerView.apply {
+            addOnScrollListener(scrollListener)
+            setItemViewCacheSize(10)
+        }
 
     }
 

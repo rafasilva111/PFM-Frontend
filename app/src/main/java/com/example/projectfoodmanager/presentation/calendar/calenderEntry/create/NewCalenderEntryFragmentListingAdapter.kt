@@ -152,7 +152,7 @@ class NewCalenderEntryFragmentListingAdapter(
                 onItemClicked.invoke(adapterPosition, item)
             }
             binding.nLikeTV.text = item.likes.toString()
-            binding.ratingRecipeRB.rating = item.sourceRating.toFloat()
+            binding.ratingRecipeRB.rating = item.sourceRating?.toFloat() ?: 0f
             binding.ratingMedTV.text = item.sourceRating
 
 

@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 data class Recipe(
     val id: Int,
     val title: String,
-    @SerializedName("img_source")
+    @SerializedName("image")
     val imgSource: String,
     val verified: Boolean,
     val rating: Double = 0.0,

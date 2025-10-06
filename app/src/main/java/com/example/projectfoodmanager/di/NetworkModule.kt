@@ -6,6 +6,13 @@ import com.example.projectfoodmanager.data.api.AuthAuthenticator
 import com.example.projectfoodmanager.data.api.AuthInterceptor
 import com.example.projectfoodmanager.util.Constants
 import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
 import okhttp3.OkHttpClient
 import dagger.Module
 import dagger.Provides
@@ -15,6 +22,8 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Type
+import java.time.OffsetDateTime
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -54,12 +63,29 @@ class NetworkModule {
 	fun provideAuthAuthenticator(tokenManager: TokenManager): AuthAuthenticator =
 		AuthAuthenticator(tokenManager)
 
+
+	class OffsetDateTimeAdapter : JsonDeserializer<OffsetDateTime>, JsonSerializer<OffsetDateTime> {
+		override fun deserialize(json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext?): OffsetDateTime {
+			return OffsetDateTime.parse(json.asString)
+		}
+
+		override fun serialize(src: OffsetDateTime, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
+			return JsonPrimitive(src.toString())
+		}
+	}
+
 	@Singleton
 	@Provides
-	fun provideRetrofitBuilder(): Retrofit.Builder =
-		Retrofit.Builder()
+	fun provideRetrofitBuilder(): Retrofit.Builder {
+
+		val gson = GsonBuilder()
+			.registerTypeAdapter(OffsetDateTime::class.java, OffsetDateTimeAdapter())
+			.create()
+
+		return  Retrofit.Builder()
 			.baseUrl(Constants.BASE_URL)
-			.addConverterFactory(GsonConverterFactory.create())
+			.addConverterFactory(GsonConverterFactory.create(gson))
+	}
 
 	@Singleton
 	@Provides

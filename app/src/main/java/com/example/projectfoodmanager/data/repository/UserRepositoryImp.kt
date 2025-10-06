@@ -23,6 +23,7 @@ import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSourc
 import com.example.projectfoodmanager.util.network.Event
 import com.example.projectfoodmanager.util.FirebaseMessagingTopics.NOTIFICATION_USER_TOPIC_BASE
 import com.example.projectfoodmanager.util.network.NetworkResult
+import com.example.projectfoodmanager.util.parseErrorMessage
 import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
 import com.google.firebase.messaging.FirebaseMessaging
@@ -144,25 +145,28 @@ class UserRepositoryImp @Inject constructor(
 
     override suspend fun loginUser(email: String, password: String) {
         _AuthTokenLiveData.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "loginUser: making login request.")
+        Log.i(TAG, "${::loginUser.name}: making login request.")
         try {
             val response =remoteDataSource.loginUser(email,password)
             if (response.isSuccessful && response.body() != null) {
-                Log.i(TAG, "loginUser: request made was sucessfull.")
+
+                Log.i(TAG, "${::loginUser.name}: request made was successful.")
                 _AuthTokenLiveData.postValue(Event(NetworkResult.Success(response.body()!!)))
             }
             else if(response.errorBody()!=null){
                 tokenManager.deleteSession()
+                val (errorType, errorMessage) = parseErrorMessage(response.errorBody()!!.charStream().readText())
 
-                val errorObj = response.errorBody()!!.charStream().readText()
-                Log.i(TAG, "loginUser: request made was sucessfull. \n"+errorObj)
-                _AuthTokenLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+                Log.i(TAG, "${::loginUser.name}: request made was unsuccessful. \n")
+                Log.i(TAG, "${::loginUser.name}: $errorType - $errorMessage")
+
+                _AuthTokenLiveData.postValue(Event(NetworkResult.Error(errorMessage)))
             }
             else{
-                _AuthTokenLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+                _AuthTokenLiveData.postValue(Event(NetworkResult.Error("${::loginUser.name}: something Went Wrong")))
             }
         } catch (e:SocketTimeoutException){
-            _AuthTokenLiveData.postValue(Event(NetworkResult.Error("No connection to host server...")))
+            _AuthTokenLiveData.postValue(Event(NetworkResult.Error("${::loginUser.name}: no connection to host server...")))
             return
         }
     }

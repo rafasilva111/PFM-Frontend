@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Tag(
     val id: Int,
-    val title: String
+    val text: String
 ): Parcelable

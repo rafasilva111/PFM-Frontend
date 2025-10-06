@@ -160,10 +160,10 @@ class Helper {
         }
 
 
-        fun loadUserImage(userIV: ImageView, imgSource: String, onImageLoaded: () -> Unit) {
+        fun loadUserImage(userIV: ImageView, imgSource: String?, onImageLoaded: () -> Unit) {
 
 
-            if (imgSource.isEmpty()) {
+            if (imgSource.isNullOrEmpty()) {
                 userIV.setImageResource(R.drawable.default_image_user)
                 onImageLoaded()
                 return
@@ -174,79 +174,72 @@ class Helper {
                 return
             }
 
-            firebaseStorageReference.child(imgSource).downloadUrl.addOnSuccessListener { uri ->
-                Glide.with(userIV.context)
-                    .load(uri.toString())
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: com.bumptech.glide.request.target.Target<Drawable>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            userIV.setImageResource(R.drawable.default_image_user)
-                            onImageLoaded()
-                            return false
-                        }
+            firebaseStorageReference.child(imgSource).downloadUrl
+                .addOnSuccessListener { uri ->
+                    Glide.with(userIV.context)
+                        .load(uri.toString())
+                        .into(object : com.bumptech.glide.request.target.CustomTarget<Drawable>() {
+                            override fun onResourceReady(
+                                resource: Drawable,
+                                transition: com.bumptech.glide.request.transition.Transition<in Drawable>?
+                            ) {
+                                userIV.setImageDrawable(resource)
+                                onImageLoaded() // ✅ called only after image is set
+                            }
 
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: com.bumptech.glide.request.target.Target<Drawable>?,
-                            dataSource: com.bumptech.glide.load.DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            onImageLoaded()
-                            return false
-                        }
-                    })
-                    .into(userIV)
-            }.addOnFailureListener {
-                onImageLoaded()
-            }
+                            override fun onLoadCleared(placeholder: Drawable?) {
+                            }
+
+
+                            override fun onLoadFailed(errorDrawable: Drawable?) {
+                                userIV.setImageResource(R.drawable.default_image_user)
+                                onImageLoaded() // Also call here to avoid hanging
+                            }
+                        })
+                }
+                .addOnFailureListener {
+                    userIV.setImageResource(R.drawable.default_image_user)
+                    onImageLoaded()
+                }
         }
 
 
-        fun loadRecipeImage(recipeIV: ImageView, imgSource: String, onImageLoaded: () -> Unit) {
+        fun loadRecipeImage(recipeIV: ImageView, imgSource: String?, onImageLoaded: () -> Unit) {
 
-            if (imgSource.isEmpty()) {
+            if (imgSource.isNullOrEmpty()) {
                 recipeIV.setImageResource(R.drawable.default_image_recipe)
                 onImageLoaded()
                 return
             }
 
 
-            firebaseStorageReference.child(imgSource).downloadUrl.addOnSuccessListener { uri ->
-                Glide.with(recipeIV.context)
-                    .load(uri.toString())
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: com.bumptech.glide.request.target.Target<Drawable>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            recipeIV.setImageResource(R.drawable.default_image_recipe)
-                            onImageLoaded()
-                            return false
-                        }
+            firebaseStorageReference.child(imgSource).downloadUrl
+                .addOnSuccessListener { uri ->
+                    Glide.with(recipeIV.context)
+                        .load(uri.toString())
+                        .into(object : com.bumptech.glide.request.target.CustomTarget<Drawable>() {
+                            override fun onResourceReady(
+                                resource: Drawable,
+                                transition: com.bumptech.glide.request.transition.Transition<in Drawable>?
+                            ) {
+                                recipeIV.setImageDrawable(resource)
+                                onImageLoaded() // ✅ called after image is set into recipeIV
+                            }
 
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: com.bumptech.glide.request.target.Target<Drawable>?,
-                            dataSource: com.bumptech.glide.load.DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            onImageLoaded()
-                            return false
-                        }
+                            override fun onLoadCleared(placeholder: Drawable?) {
+                                // Optional: handle if needed (e.g., view recycled)
+                            }
 
-                    })
-                    .into(recipeIV)
-            }.addOnFailureListener {
-                onImageLoaded()
-            }
+                            override fun onLoadFailed(errorDrawable: Drawable?) {
+                                recipeIV.setImageResource(R.drawable.default_image_recipe)
+                                onImageLoaded() // ✅ even in failure case
+                            }
+                        })
+                }
+                .addOnFailureListener {
+                    recipeIV.setImageResource(R.drawable.default_image_recipe)
+                    onImageLoaded()
+                }
 
 
         }

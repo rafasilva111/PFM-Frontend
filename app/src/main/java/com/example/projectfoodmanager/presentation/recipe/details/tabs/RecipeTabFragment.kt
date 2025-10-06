@@ -80,7 +80,7 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
 
 
             // TODO: Obter a lista ordenada da base de dados
-            val mutList: MutableList<Tag> = list.sortedBy { it.title.length }.toMutableList()
+            val mutList: MutableList<Tag> = list.sortedBy { it.text.length }.toMutableList()
 
 
 
@@ -90,14 +90,14 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
                 val chip = Chip(context)
 
                 chip.apply {
-                    text = item.title
+                    text = item.text
                     textSize = 12F
                     chipEndPadding = 0F
 
                     textStartPadding = 0F
                     textAlignment = View.TEXT_ALIGNMENT_CENTER
 
-                    when (item.title.lowercase()) {
+                    when (item.text.lowercase()) {
                         RecipeListingFragmentFilters.MEAT -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_carne, null)
                         RecipeListingFragmentFilters.FISH -> chipBackgroundColor =

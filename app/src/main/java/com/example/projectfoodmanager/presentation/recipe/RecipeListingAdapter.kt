@@ -96,7 +96,7 @@ class RecipeListingAdapter(
             }
 
 
-            binding.ratingRecipeRB.rating = item.sourceRating.toFloat()
+            binding.ratingRecipeRB.rating = item.sourceRating?.toFloat() ?: 0f
             binding.ratingMedTV.text = item.sourceRating
 
 

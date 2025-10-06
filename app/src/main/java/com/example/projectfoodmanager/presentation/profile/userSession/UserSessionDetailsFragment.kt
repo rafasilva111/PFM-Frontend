@@ -27,7 +27,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.projectfoodmanager.AvatarGVAdapter
-import com.example.projectfoodmanager.BuildConfig
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
 import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
@@ -815,8 +814,8 @@ class UserSessionDetailsFragment : Fragment() {
             image?.compress(Bitmap.CompressFormat.JPEG,100,stream)
             stream.flush()
             stream.close()
-            uri= FileProvider.getUriForFile(Objects.requireNonNull(requireActivity().applicationContext),
-                BuildConfig.APPLICATION_ID + ".provider", file);
+            //uri= FileProvider.getUriForFile(Objects.requireNonNull(requireActivity().applicationContext),
+            //    BuildConfig.APPLICATION_ID + ".provider", file);
 
 
         } catch (e: FileNotFoundException) {

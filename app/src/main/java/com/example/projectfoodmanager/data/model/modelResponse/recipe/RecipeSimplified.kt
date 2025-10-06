@@ -10,7 +10,7 @@ data class RecipeSimplified(
     val id: Int,
     val title: String,
     val description: String,
-    @SerializedName("img_source")
+    @SerializedName("image")
     val imgSource: String,
     val difficulty: String,
     val portion: String,
@@ -20,7 +20,7 @@ data class RecipeSimplified(
     val verified: Boolean,
     val rating: Double = 0.0,
     @SerializedName("source_rating")
-    val sourceRating: String,
+    val sourceRating: String?,
     @SerializedName("source_link")
     val sourceLink: String,
     @SerializedName("created_by")
