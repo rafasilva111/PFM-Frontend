@@ -333,12 +333,28 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
         binding.TVRef.text = recipe.id.toString()
         binding.dateTV.text = formatServerTimeToDateString(recipe.createdDate)
         binding.titleTV.text = recipe.title
-        binding.ratingRecipeRB.rating = recipe.sourceRating.toFloat()
-        binding.ratingMedTV.text = recipe.sourceRating
+        binding.ratingMedTV.text = recipe.sourceRating.toString()
         binding.numberLikeTV.text = recipe.likes.toString()
-        binding.timeTV.text = recipe.time
+
         binding.dificultyTV.text = recipe.difficulty
-        binding.portionTV.text = recipe.portion
+
+        //--> Times
+        binding.timeTV.text = if (recipe.time > 60) {
+            "${recipe.time / 60}h ${recipe.time % 60}m"
+        } else {
+            "${recipe.time}m"
+        }
+
+        //--> RATING
+        binding.ratingRecipeRB.rating = recipe.sourceRating.toFloat()
+        binding.ratingMedTV.text = recipe.sourceRating.toString()
+
+
+        binding.portionTV.text = if (recipe.portionUpper == null) {
+            "${recipe.portionLower} ${recipe.portionUnits}"
+        } else {
+            "${recipe.portionLower}-${recipe.portionUpper} ${recipe.portionUnits}"
+        }
 
         when (recipe.difficulty) {
             RecipeDifficultyConstants.LOW -> {
@@ -530,79 +546,3 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
 
 
 }
-
-/* binding.profileAuthorCV.setOnClickListener {
-
-
-           *//*     val view : View = layoutInflater.inflate(R.layout.modal_bottom_sheet_profile,null)
-                   val dialog = BottomSheetDialog(requireContext())
-                   dialog.behavior.state=BottomSheetBehavior.STATE_COLLAPSED
-                   dialog.behavior.peekHeight=650
-
-                   dialog.setContentView(view)
-                   dialog.show()*//*
-            //findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,bundle)
-
-            *//*           findNavController().navigate(R.id.action_receitaDetailFragment_to_profileBottomSheetDialog,Bundle().apply {
-                           putParcelable("User", recipe.created_by)
-                       })*//*
-
-
-
-            *//*        findNavController().navigate(R.id.action_receitaDetailFragment_to_followerFragment,Bundle().apply {
-                          putInt("userID",recipe.created_by.id)
-                          putString("userName",recipe.created_by.name)
-                          putInt("followType",FollowType.FOLLOWERS)
-                      })
-          *//*
-        }*/
-
-/*        //val standardBottomSheet = findViewById<FrameLayout>(R.id.standard_bottom_sheet)
-        val adaptiveViewBS = BottomSheetBehavior.from(binding.adaptiveViewBS!!)
-        // Use this to programmatically apply behavior attributes; eg.
-        adaptiveViewBS.saveFlags = BottomSheetBehavior.SAVE_ALL
-        adaptiveViewBS.setState(STATE_HIDDEN);*/
-
-/*        binding.commentsCV.setOnClickListener {
-
-            //adaptiveViewBS.setState(STATE_COLLAPSED);
-
-            val modalBottomSheet = ModalBottomSheet()
-            modalBottomSheet.show(parentFragmentManager, ModalBottomSheet.TAG)
-
-            //standardBottomSheetBehavior.isDraggable=false
-*//*            val newFragment = CommentsFragment()
-            newFragment.arguments = bundle
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragmentFL, newFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()*//*
-        }*/
-
-/*   adaptiveViewBS.addBottomSheetCallback(object : BottomSheetCallback() {
-
-        override fun onStateChanged(bottomSheet: View, newState: Int) {
-            // Handle state change
-            val bottomSheet = BottomSheetBehavior.from(bottomSheet)
-            if (bottomSheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                // Bottom sheet is in full-screen mode
-                //toast("FULL-MODE")
-              //  bottomSheet.isDraggable=false
-            }
-        }
-        override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            // Handle slide offset change
-        }
-    })
-
-    binding.dragHandle!!.setOnTouchListener { view, motionEvent ->
-        if(motionEvent.action == MotionEvent.ACTION_DOWN) {
-          //     adaptiveViewBS.isDraggable=true
-        }
-        true
-    }*/
-
-/*      binding.IVSource.setOnClickListener {
-          val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(recipe.source_link))
-          startActivity(browserIntent)
-      }*/

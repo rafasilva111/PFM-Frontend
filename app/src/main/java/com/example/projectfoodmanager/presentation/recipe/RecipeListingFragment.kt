@@ -367,7 +367,8 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                     chipSelected.isChecked = false
                     chipSelected = it
 
-                    updateView(chipSelected.tag as String )
+                    selectedTab = chipSelected.tag as String
+                    updateView()
                 }
             } else {
                 // If no chip is selected, select the last selected one
@@ -415,7 +416,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
             // if firstTime
             if (currentPosition == -1)
-                updateView(selectedTab)
+                updateView()
             else{
                 // If user entered in a recipe, update the item in the list
                 recipeViewModel.getRecipe(adapter.getItems()[currentPosition].id)
@@ -711,11 +712,11 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     }
 
-    private fun updateView(currentTabSelected: String) {
+    private fun updateView() {
 
         hideRecyclerView()
 
-        when(currentTabSelected){
+        when(selectedTab){
             SelectedTab.VERIFIED -> {
                 sortedBy = RecipesSortingType.VERIFIED
             }
@@ -819,7 +820,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         }
 
         // Update Recipe List
-        updateView(selectedTab)
+        updateView()
 
         // Scroll to 0 position
         binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)

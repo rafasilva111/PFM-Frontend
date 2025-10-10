@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recipeTabParentConstraint"
@@ -9,228 +8,227 @@
     tools:context=".presentation.recipe.details.tabs.RecipeTabFragment">
 
 
-            <LinearLayout
-                android:id="@+id/linearLayout3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:layout_weight="1"
-                    android:text="Descrição"
-                    android:fontFamily="@font/fredoka_semibold"
-                    android:textSize="16sp"
-                    android:textColor="@color/black" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/fredoka_semibold"
+            android:text="@string/COMMON_DESCRIPTION"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="#63AAAAAA" />
-                <TextView
-                    android:id="@+id/descriptionTV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="descrição"
-                    android:fontFamily="@font/fredoka_regular"
-                    android:textSize="13sp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="#63AAAAAA" />
 
-            </LinearLayout>
+        <TextView
+            android:id="@+id/descriptionTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/fredoka_regular"
+            android:text="@string/COMMON_DESCRIPTION"
+            android:textSize="13sp" />
 
-            <LinearLayout
-                android:id="@+id/tag_LL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+    </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:layout_weight="1"
-                        android:text="Categorias"
-                        android:fontFamily="@font/fredoka_semibold"
-                        android:textSize="16sp"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/numberCategoriasTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:layout_weight="1"
-                        android:text="nº Categorias"
-                        android:textAlignment="textEnd"
-                        android:fontFamily="@font/fredoka_medium"
-                        android:textColor="@color/grey_2"
-                        android:textSize="13sp" />
-                </LinearLayout>
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:background="#63AAAAAA" />
-
-            </LinearLayout>
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/CH_tags"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@+id/tag_LL"
-                app:layout_constraintStart_toStartOf="@+id/tag_LL"
-                app:layout_constraintTop_toBottomOf="@+id/tag_LL" />
-
-
-            <LinearLayout
-                android:id="@+id/ingridients_LL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/CH_tags">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:layout_weight="1"
-                        android:text="Ingridientes"
-                        android:fontFamily="@font/fredoka_semibold"
-                        android:textSize="16sp"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/numberIngridientsTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:layout_weight="1"
-                        android:text="nº Ingredients"
-                        android:textAlignment="textEnd"
-                        android:fontFamily="@font/fredoka_medium"
-                        android:textSize="13sp"
-                        android:textColor="@color/grey_2" />
-                </LinearLayout>
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:background="#63AAAAAA" />
-
-            </LinearLayout>
+    <LinearLayout
+        android:id="@+id/tag_LL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <LinearLayout
-            android:id="@+id/ingredientsLL"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintEnd_toEndOf="@+id/ingridients_LL"
-            app:layout_constraintStart_toStartOf="@+id/ingridients_LL"
-            app:layout_constraintTop_toBottomOf="@+id/ingridients_LL">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recipeIngredientsRV"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/headerIngredientsListCatLL"
-                app:layout_constraintVertical_bias="0.0"
-                android:nestedScrollingEnabled="false"/>
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/fredoka_semibold"
+                android:text="@string/FRAGMENT_RECIPE_TAB_CATEGORY_LABEL"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/numberCategoriesTV"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/fredoka_medium"
+                android:text="@string/FRAGMENT_RECIPE_TAB_NUMBER_CATEGORY_LABEL"
+                android:textAlignment="textEnd"
+                android:textColor="@color/grey_2"
+                android:textSize="13sp" />
         </LinearLayout>
 
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="#63AAAAAA" />
+
+    </LinearLayout>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/CH_tags"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/tag_LL"
+        app:layout_constraintStart_toStartOf="@+id/tag_LL"
+        app:layout_constraintTop_toBottomOf="@+id/tag_LL" />
 
 
-            <LinearLayout
-                android:id="@+id/preparation_LL"
+    <LinearLayout
+        android:id="@+id/ingredients_LL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CH_tags">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ingredientsLL">
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/fredoka_semibold"
+                android:text="@string/FRAGMENT_RECIPE_TAB_INGREDIENTS_LABEL"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:layout_weight="1"
-                        android:text="Preparação"
-                        android:fontFamily="@font/fredoka_semibold"
-                        android:textSize="16sp"
-                        android:textColor="@color/black" />
-
-                    <TextView
-                        android:id="@+id/numberPreparationTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:layout_weight="1"
-                        android:text="nº Passos"
-                        android:textAlignment="textEnd"
-                        android:fontFamily="@font/fredoka_medium"
-                        android:textSize="13sp"
-                        android:textColor="@color/grey_2" />
-                </LinearLayout>
+            <TextView
+                android:id="@+id/numberIngridientsTV"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/fredoka_medium"
+                android:text="@string/FRAGMENT_RECIPE_TAB_NUMBER_INGREDIENTS_LABEL"
+                android:textAlignment="textEnd"
+                android:textColor="@color/grey_2"
+                android:textSize="13sp" />
+        </LinearLayout>
 
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_weight="1"
-                    android:background="#63AAAAAA" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="#63AAAAAA" />
 
-            </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ingredientsLL"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/ingredients_LL"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/ingredients_LL"
+        app:layout_constraintTop_toBottomOf="@+id/ingredients_LL">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recipeIngredientsRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerIngredientsListCatLL"
+            app:layout_constraintVertical_bias="0.0" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/preparation_LL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingredientsLL">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/fredoka_semibold"
+                android:text="@string/FRAGMENT_RECIPE_TAB_PREPARATION_LABEL"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/numberPreparationTV"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/fredoka_medium"
+                android:text="@string/FRAGMENT_RECIPE_TAB_NUMBER_PREPARATION_LABEL"
+                android:textAlignment="textEnd"
+                android:textColor="@color/grey_2"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="#63AAAAAA" />
+
+    </LinearLayout>
 
 
     <LinearLayout
@@ -250,868 +248,14 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
+            android:nestedScrollingEnabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/headerIngredientsListCatLL"
-            app:layout_constraintVertical_bias="0.0"
-            android:nestedScrollingEnabled="false"/>
+            app:layout_constraintVertical_bias="0.0" />
     </LinearLayout>
-
-            <!--    <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Verificado"
-                android:textSize="@dimen/low_1"
-                android:textStyle="bold"
-                android:textColor="#464946"
-                android:layout_marginStart="5dp"
-                app:layout_constraintBottom_toBottomOf="@+id/IV_verified"
-                app:layout_constraintStart_toEndOf="@+id/IV_verified"
-                app:layout_constraintTop_toTopOf="@+id/IV_verified" />-->
-
-
-<!--            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/CH_tags"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-                app:layout_constraintStart_toStartOf="@+id/linearLayout"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-
-            <TextView
-                android:id="@+id/TV_description_Info"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:justificationMode="inter_word"
-                android:text="TextView"
-                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-                app:layout_constraintStart_toStartOf="@+id/linearLayout"
-                app:layout_constraintTop_toBottomOf="@+id/CH_tags" />
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/CL_Ingredientes"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="@+id/TV_description_Info"
-                app:layout_constraintStart_toStartOf="@+id/TV_description_Info"
-                app:layout_constraintTop_toBottomOf="@+id/TV_description_Info">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/CV_title_Ingredients"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#DCDCDC"
-                    app:cardCornerRadius="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp">
-
-                        <TextView
-                            android:id="@+id/tvIngridients"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:fontFamily="@font/fedoka"
-                            android:text="Ingredientes"
-                            android:textColor="#000000"
-                            android:textSize="15sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/IV_arrow_ingrid"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:src="@drawable/ic_arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.cardview.widget.CardView>
-
-
-                <LinearLayout
-                    android:id="@+id/LL_cont_Ingredients"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-15dp"
-                    android:layout_marginBottom="10dp"
-                    android:animateLayoutChanges="true"
-                    android:background="@drawable/layout_bg_rounded_2_corners_v2"
-                    android:backgroundTint="#FFFFFF"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/CV_title_Ingredients"
-                    app:layout_constraintStart_toStartOf="@+id/CV_title_Ingredients"
-                    app:layout_constraintTop_toBottomOf="@+id/CV_title_Ingredients">
-
-                    <ListView
-                        android:id="@+id/LV_Ingridients_Info"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:divider="@android:color/transparent"
-                        android:dividerHeight="2dp"
-                        android:visibility="gone" />
-
-
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/CL_Preparation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="@+id/CL_Ingredientes"
-                app:layout_constraintStart_toStartOf="@+id/CL_Ingredientes"
-                app:layout_constraintTop_toBottomOf="@+id/CL_Ingredientes">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/CV_title_Preparation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#DCDCDC"
-                    app:cardCornerRadius="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="5dp">
-
-                        <TextView
-                            android:id="@+id/tvPreparation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:fontFamily="@font/fedoka"
-                            android:text="Preparação"
-                            android:textColor="#000000"
-                            android:textSize="15sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/IV_arrow_prep"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:src="@drawable/ic_arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.cardview.widget.CardView>
-
-
-                <LinearLayout
-                    android:id="@+id/LL_cont_Preparation"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-15dp"
-                    android:animateLayoutChanges="true"
-                    android:background="@drawable/layout_bg_rounded_2_corners_v2"
-                    android:backgroundTint="#FFFFFF"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/CV_title_Preparation"
-                    app:layout_constraintStart_toStartOf="@+id/CV_title_Preparation"
-                    app:layout_constraintTop_toBottomOf="@+id/CV_title_Preparation">
-
-                    <ListView
-                        android:id="@+id/LV_Preparation_Info"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="10dp"
-                        android:divider="@android:color/transparent"
-                        android:dividerHeight="2dp"
-                        android:visibility="gone" />
-
-
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/CL_Nutrition"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="30dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/CL_Preparation"
-                app:layout_constraintStart_toStartOf="@+id/CL_Preparation"
-                app:layout_constraintTop_toBottomOf="@+id/CL_Preparation"
-                app:layout_constraintVertical_bias="0">
-
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/CV_title_Nutrition"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#DCDCDC"
-                    app:cardCornerRadius="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="5dp">
-
-                        <TextView
-                            android:id="@+id/tvNutrition"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="20dp"
-                            android:fontFamily="@font/fedoka"
-                            android:text="Nutrição"
-                            android:textColor="#000000"
-                            android:textSize="15sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/IV_arrow_nutri"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="5dp"
-                            android:src="@drawable/ic_arrow_right"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.cardview.widget.CardView>
-
-
-                <LinearLayout
-                    android:id="@+id/LL_cont_Nutrition"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-15dp"
-                    android:animateLayoutChanges="true"
-                    android:background="@drawable/layout_bg_rounded_2_corners_v2"
-                    android:backgroundTint="#FFFFFF"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/CV_title_Nutrition"
-                    app:layout_constraintStart_toStartOf="@+id/CV_title_Nutrition"
-                    app:layout_constraintTop_toBottomOf="@+id/CV_title_Nutrition">
-
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/CV_r_nutrition"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        app:cardBackgroundColor="#66E8E8E8"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="1dp"
-                        app:contentPadding="10dp">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/textView2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:fontFamily="@font/fedoka"
-                                android:text="Resumo nutricional"
-                                android:textAlignment="center"
-                                android:textColor="@color/black"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/textView3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:text="Por dose e por % do VDR*"
-                                android:textAlignment="center"
-                                android:textColor="@color/black"
-                                android:textSize="10sp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:orientation="horizontal"
-                                android:padding="6dp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/textView3"
-                                app:layout_constraintVertical_bias="0">
-
-                                <LinearLayout
-                                    android:layout_width="45dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_marginBottom="5dp"
-                                        android:fontFamily="@font/fedoka"
-                                        android:gravity="center"
-                                        android:text="Energia"
-                                        android:textAlignment="center"
-                                        android:textColor="@color/black"
-                                        android:textSize="10sp" />
-
-                                    <TextView
-                                        android:id="@+id/TV_R_doseEnergia"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginBottom="5dp"
-                                        android:text="497 Kcal"
-                                        android:textAlignment="center"
-                                        android:textColor="@color/black"
-                                        android:textSize="10sp" />
-
-                                    <TextView
-                                        android:id="@+id/TV_R_percEnergia"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="25%"
-                                        android:textAlignment="center"
-                                        android:textColor="@color/black"
-                                        android:textSize="10sp"
-                                        android:textStyle="bold" />
-
-                                </LinearLayout>
-
-                                <View
-                                    android:layout_width="1dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_margin="8dp"
-                                    android:background="#CACACA" />
-
-                                <LinearLayout
-                                    android:layout_width="45dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_marginBottom="5dp"
-                                        android:fontFamily="@font/fedoka"
-                                        android:gravity="center"
-                                        android:text="Gordura"
-                                        android:textAlignment="center"
-                                        android:textColor="@color/black"
-                                        android:textSize="10sp" />
-
-                                    <TextView
-                                        android:id="@+id/TV_R_doseGordura"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginBottom="5dp"
-                                        android:text="497 Kcal"
-                                        android:textAlignment="center"
-                                        android:textColor="@color/black"
-                                        android:textSize="10sp" />
-
-                                    <TextView
-                                        android:id="@+id/TV_R_percGordura"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="25%"
-                                        android:textAlignment="center"
-                                        android:textColor="@color/black"
-                                        android:textSize="10sp"
-                                        android:textStyle="bold" />
-
-                                </LinearLayout>
-
-                                <View
-                                    android:layout_width="1dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_margin="8dp"
-                                    android:background="#CACACA" />
-
-                                <LinearLayout
-                                    android:layout_width="55dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="30dp"
-                                        android:layout_marginBottom="5dp"
-                                        android:fontFamily="@font/fedoka"
-                                        android:gravity="center"
-                                        android:text="Gorduras saturadas"
-                                        android:textAlignment="center"
-                                        android:textColor="@color/black"
-                                        android:textSize="10sp" />
-
-                                    <TextView
-                                        android:id="@+id/TV_R_doseGordSat"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginBottom="5dp"
-                                        android:text="497 Kcal"
-                                        android:textAlignment="center"
-                                        android:textColor="@color/black"
-                                        android:textSize="10sp" />
-
-                                    <TextView
-                                        android:id="@+id/TV_R_percGordSat"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:text="25%"
-                                        android:textAlignment="center"
-                                        android:textColor="@color/black"
-                                        android:textSize="10sp"
-                                        android:textStyle="bold" />
-
-                                </LinearLayout>
-
-                            </LinearLayout>
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <TableLayout
-                        android:id="@+id/TB_nutrition"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp">
-
-                        <TableRow
-                            android:layout_marginBottom="5dp"
-                            android:background="@drawable/bg_default"
-                            android:backgroundTint="@color/color_1"
-                            android:padding="5dp">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="bottom"
-                                android:layout_weight="4"
-                                android:paddingStart="10dp"
-                                android:paddingBottom="10dp"
-                                android:text="Declaração nutricional"
-                                android:textAllCaps="true"
-                                android:textColor="@color/black"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="bottom"
-                                android:layout_weight="1"
-                                android:gravity="center_horizontal"
-                                android:text="Dose"
-                                android:textAllCaps="true"
-                                android:textColor="@color/black"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="bottom"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:paddingBottom="10dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="10dp"
-                                    android:gravity="end"
-                                    android:paddingStart="10dp"
-                                    android:text="Adulta"
-                                    android:textColor="@color/black"
-                                    android:textSize="6sp" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_horizontal"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="% VDR"
-                                        android:textColor="@color/black"
-                                        android:textSize="12sp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="10dp"
-                                        android:text="*"
-                                        android:textColor="@color/black"
-                                        android:textSize="10sp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                        </TableRow>
-
-                        <TableRow android:gravity="center_horizontal">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-                                android:gravity="bottom"
-                                android:paddingStart="10dp"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp"
-                                android:text="Energia"
-                                android:textColor="@color/black"
-                                android:textSize="10sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/TV_doseEnergia"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="77 kcal"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/TV_percEnergia"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="25%"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-
-                        </TableRow>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="#DCDCDC" />
-
-                        <TableRow>
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-                                android:gravity="bottom"
-                                android:paddingStart="10dp"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp"
-                                android:text="Gordura"
-                                android:textColor="@color/black"
-                                android:textSize="10sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/TV_doseGordura"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="77 kcal"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/TV_percGordura"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="25%"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-
-                        </TableRow>
-
-                        <TableRow>
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-                                android:gravity="bottom"
-                                android:paddingStart="20dp"
-                                android:paddingBottom="5dp"
-                                android:text="das quais saturadas"
-                                android:textColor="@color/black"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/TV_doseGordSat"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="77 kcal"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/TV_percGordSat"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="25%"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-
-                        </TableRow>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="#DCDCDC" />
-
-                        <TableRow>
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-                                android:gravity="bottom"
-                                android:paddingStart="10dp"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp"
-                                android:text="Hidratos de carbono"
-                                android:textColor="@color/black"
-                                android:textSize="10sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/TV_doseHCarbono"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="77 kcal"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/TV_percHCarbono"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="25%"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-
-                        </TableRow>
-
-                        <TableRow>
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-                                android:gravity="bottom"
-                                android:paddingStart="20dp"
-                                android:paddingBottom="5dp"
-                                android:text="das quais açúcares"
-                                android:textColor="@color/black"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/TV_doseHCAcucar"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="77 kcal"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/TV_percHCAcucar"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="25%"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-                        </TableRow>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="#DCDCDC" />
-
-                        <TableRow>
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-                                android:gravity="bottom"
-                                android:paddingStart="10dp"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp"
-                                android:text="Fibra"
-                                android:textColor="@color/black"
-                                android:textSize="10sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/TV_doseFibra"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="77 kcal"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/TV_percFibra"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="25%"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-                        </TableRow>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="#DCDCDC" />
-
-                        <TableRow>
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-                                android:gravity="bottom"
-                                android:paddingStart="10dp"
-                                android:paddingTop="5dp"
-                                android:paddingBottom="5dp"
-                                android:text="Proteínas"
-                                android:textColor="@color/black"
-                                android:textSize="10sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/TV_doseProteina"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="77 kcal"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-
-                            <TextView
-                                android:id="@+id/TV_percProteina"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingEnd="10dp"
-                                android:text="25%"
-                                android:textAlignment="textEnd"
-                                android:textColor="#2B2B2B"
-                                android:textSize="10sp" />
-                        </TableRow>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="#DCDCDC" />
-
-                        <TableRow
-                            android:layout_marginTop="20dp"
-                            android:background="@drawable/bg_default"
-                            android:backgroundTint="#D3D3D3">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="4"
-                                android:gravity="bottom"
-                                android:paddingStart="10dp"
-                                android:text="*Valor Diário de Referência"
-                                android:textColor="@color/black"
-                                android:textSize="9sp" />
-
-                        </TableRow>
-                    </TableLayout>
-
-                </LinearLayout>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

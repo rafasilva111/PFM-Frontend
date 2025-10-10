@@ -82,7 +82,7 @@ class PreparationAdapter(
 
             binding.stepTV.text= (bindingAdapterPosition + 1).toString()
             //binding.numberStepTv.text= item.step.toString()
-            binding.discriptionTV.text= item.description
+            binding.descriptionTV.text= item.description
 
             binding.itemLayout.setOnClickListener {
                 onItemClicked.invoke(bindingAdapterPosition,item)

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Preparation
 import com.example.projectfoodmanager.databinding.ItemRecipePreparationLayoutBinding
 
@@ -34,7 +35,7 @@ class PreparationListingAdapter(
 
     fun updateList(list: MutableList<Preparation>) {
         this.list = list
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, list.size)
     }
 
     fun updateItem(position: Int, item: Preparation) {
@@ -45,8 +46,11 @@ class PreparationListingAdapter(
 
 
     fun cleanList() {
-        this.list = arrayListOf()
-        notifyDataSetChanged()
+        val oldSize = list.size
+        list.clear()
+        if (oldSize > 0) {
+            notifyItemRangeRemoved(0, oldSize)
+        }
     }
 
     fun removeItem(position: Int) {
@@ -65,14 +69,11 @@ class PreparationListingAdapter(
 
 
             binding.stepTV.text = item.step.toString()
-            binding.numberStepTv.text = item.step.toString() + " Passo"
-            binding.discriptionTV.text = item.description
+            binding.numberStepTv.text = context?.getString(R.string.ITEM_PREPARATION, item.step)
+            binding.descriptionTV.text = item.description
 
-            if (position == list.size-1)
+            if (list.last() == item)
                 binding.lineV.isVisible=false
-
-
-
         }
     }
 }

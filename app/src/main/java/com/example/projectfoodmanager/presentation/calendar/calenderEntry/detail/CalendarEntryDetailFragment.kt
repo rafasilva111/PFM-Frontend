@@ -174,7 +174,7 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
 
         //--> RATING
         binding.ratingRecipeRB.rating = objCalEntry.recipe.sourceRating.toFloat()
-        binding.ratingMedTV.text = objCalEntry.recipe.sourceRating
+        binding.ratingMedTV.text = objCalEntry.recipe.sourceRating.toString()
 
         //--> TITLE
         binding.recipeTitleTV.text = objCalEntry.recipe.title

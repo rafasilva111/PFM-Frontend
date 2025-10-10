@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipeTabParentConstraint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/recipeTabParentConstraint"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.recipe.details.tabs.NutritionTabFragment">
 
 
     <LinearLayout
-        android:id="@+id/linearLayout6"
+        android:id="@+id/linearLayout7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:baselineAligned="false"
         android:orientation="horizontal"
-        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- ENERGIA -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                 android:backgroundTint="#FFFBA9"
                 android:fontFamily="@font/fedoka"
                 android:padding="7dp"
-                android:text="Energia"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_ENERGY_LABEL"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
@@ -45,19 +45,19 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/energia_percTV"
+                    android:id="@+id/energy_percTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
-                    android:text="0%"
+                    android:text="@string/FRAGMENT_NUTRITION_TAB_PERCENTAGE_PLACEHOLDER"
                     android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/energia_PB"
-                    app:layout_constraintEnd_toEndOf="@+id/energia_PB"
-                    app:layout_constraintStart_toStartOf="@+id/energia_PB"
-                    app:layout_constraintTop_toTopOf="@+id/energia_PB" />
+                    app:layout_constraintBottom_toBottomOf="@+id/energy_PB"
+                    app:layout_constraintEnd_toEndOf="@+id/energy_PB"
+                    app:layout_constraintStart_toStartOf="@+id/energy_PB"
+                    app:layout_constraintTop_toTopOf="@+id/energy_PB" />
 
                 <ProgressBar
-                    android:id="@+id/energia_PB"
+                    android:id="@+id/energy_PB"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginTop="5dp"
@@ -71,47 +71,20 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
+            <TextView
+                android:id="@+id/energyDose_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/dose" />
-
-                <TextView
-                    android:id="@+id/energiaDose_TV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="0 g"
-                    android:textAlignment="center" />
-            </LinearLayout>
+                android:drawablePadding="5dp"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_GRAMS_PLACEHOLDER"
+                android:textAlignment="center"
+                app:drawableStartCompat="@drawable/dose_resized" />
 
 
         </LinearLayout>
 
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
-
-        <!-- PROTEINA -->
+        <!-- Protein -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -127,7 +100,7 @@
                 android:backgroundTint="#D6FDFF"
                 android:fontFamily="@font/fedoka"
                 android:padding="7dp"
-                android:text="Proteina"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_PROTEIN_LABEL"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
@@ -138,24 +111,24 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/proteina_percTV"
+                    android:id="@+id/protein_percTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
-                    android:text="0%"
+                    android:text="@string/FRAGMENT_NUTRITION_TAB_PERCENTAGE_PLACEHOLDER"
                     android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/proteina_PB"
-                    app:layout_constraintEnd_toEndOf="@+id/proteina_PB"
-                    app:layout_constraintStart_toStartOf="@+id/proteina_PB"
-                    app:layout_constraintTop_toTopOf="@+id/proteina_PB" />
+                    app:layout_constraintBottom_toBottomOf="@+id/protein_PB"
+                    app:layout_constraintEnd_toEndOf="@+id/protein_PB"
+                    app:layout_constraintStart_toStartOf="@+id/protein_PB"
+                    app:layout_constraintTop_toTopOf="@+id/protein_PB" />
 
                 <ProgressBar
-                    android:id="@+id/proteina_PB"
+                    android:id="@+id/protein_PB"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginTop="5dp"
                     android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_1"
+                    android:progressDrawable="@drawable/custom_progress_2"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -163,120 +136,30 @@
                     app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:layout_marginTop="5dp"
-
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/dose" />
-
-                <TextView
-                    android:id="@+id/proteinaDose_TV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="0 g"
-                    android:textAlignment="center" />
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-
-        <!-- FIBRA -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
 
             <TextView
-                android:layout_width="130dp"
+                android:id="@+id/proteinDose_TV"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/layout_badge_nutrition"
-                android:backgroundTint="#FFF3D6"
-                android:fontFamily="@font/fedoka"
-                android:padding="7dp"
-                android:text="Fibra"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/fibra_percTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/fedoka"
-                    android:text="0%"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/fibra_PB"
-                    app:layout_constraintEnd_toEndOf="@+id/fibra_PB"
-                    app:layout_constraintStart_toStartOf="@+id/fibra_PB"
-                    app:layout_constraintTop_toTopOf="@+id/fibra_PB" />
-
-                <ProgressBar
-                    android:id="@+id/fibra_PB"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="5dp"
-                    android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_3"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
                 android:layout_marginTop="5dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/dose" />
-
-                <TextView
-                    android:id="@+id/fibraDose_TV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="0 g"
-                    android:textAlignment="center" />
-            </LinearLayout>
+                android:drawablePadding="5dp"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_GRAMS_PLACEHOLDER"
+                android:textAlignment="center"
+                app:drawableStartCompat="@drawable/dose_resized" />
 
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <!-- GORDURA -->
+    <!-- Fat -->
 
     <LinearLayout
         android:id="@+id/linearLayout8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-
+        android:baselineAligned="false"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -297,7 +180,7 @@
                 android:backgroundTint="#D9F6CE"
                 android:fontFamily="@font/fedoka"
                 android:padding="7dp"
-                android:text="Gordura"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_FAT_LABEL"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
@@ -308,24 +191,24 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/gordura_percTV"
+                    android:id="@+id/fat_percTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
-                    android:text="0%"
+                    android:text="@string/FRAGMENT_NUTRITION_TAB_PERCENTAGE_PLACEHOLDER"
                     android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/gordura_PB"
-                    app:layout_constraintEnd_toEndOf="@+id/gordura_PB"
-                    app:layout_constraintStart_toStartOf="@+id/gordura_PB"
-                    app:layout_constraintTop_toTopOf="@+id/gordura_PB" />
+                    app:layout_constraintBottom_toBottomOf="@+id/fat_PB"
+                    app:layout_constraintEnd_toEndOf="@+id/fat_PB"
+                    app:layout_constraintStart_toStartOf="@+id/fat_PB"
+                    app:layout_constraintTop_toTopOf="@+id/fat_PB" />
 
                 <ProgressBar
-                    android:id="@+id/gordura_PB"
+                    android:id="@+id/fat_PB"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginTop="5dp"
                     android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_4"
+                    android:progressDrawable="@drawable/custom_progress_3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -334,27 +217,15 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <TextView
+                android:id="@+id/fatDose_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:gravity="center"
-
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/dose" />
-
-                <TextView
-                    android:id="@+id/gorduraDose_TV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="0 g"
-                    android:textAlignment="center" />
-            </LinearLayout>
+                android:drawablePadding="5dp"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_GRAMS_PLACEHOLDER"
+                android:textAlignment="center"
+                app:drawableStartCompat="@drawable/dose_resized" />
 
 
         </LinearLayout>
@@ -367,6 +238,7 @@
             android:layout_marginEnd="30dp"
             android:layout_weight="1"
             android:orientation="vertical"
+            android:gravity="center"
             android:padding="10dp">
 
             <TextView
@@ -376,7 +248,7 @@
                 android:backgroundTint="#D9F6CE"
                 android:fontFamily="@font/fedoka"
                 android:padding="7dp"
-                android:text="dos quais saturados"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_FAT_SATURATED_LABEL"
                 android:textAlignment="center"
                 android:textColor="#252525"
                 android:textSize="11sp" />
@@ -387,24 +259,24 @@
 
 
                 <TextView
-                    android:id="@+id/gorduraSaturados_percTV"
+                    android:id="@+id/fatSaturated_percTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
-                    android:text="0%"
+                    android:text="@string/FRAGMENT_NUTRITION_TAB_PERCENTAGE_PLACEHOLDER"
                     android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/gorduraSaturados_PB"
-                    app:layout_constraintEnd_toEndOf="@+id/gorduraSaturados_PB"
-                    app:layout_constraintStart_toStartOf="@+id/gorduraSaturados_PB"
-                    app:layout_constraintTop_toTopOf="@+id/gorduraSaturados_PB" />
+                    app:layout_constraintBottom_toBottomOf="@+id/fatSaturated_PB"
+                    app:layout_constraintEnd_toEndOf="@+id/fatSaturated_PB"
+                    app:layout_constraintStart_toStartOf="@+id/fatSaturated_PB"
+                    app:layout_constraintTop_toTopOf="@+id/fatSaturated_PB" />
 
                 <ProgressBar
-                    android:id="@+id/gorduraSaturados_PB"
+                    android:id="@+id/fatSaturated_PB"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginTop="5dp"
                     android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_4"
+                    android:progressDrawable="@drawable/custom_progress_3"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -412,37 +284,27 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+
+            <TextView
+                android:id="@+id/fatSaturatedDose_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:gravity="center"
-
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/dose" />
-
-                <TextView
-                    android:id="@+id/gorduraSaturadosDose_TV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="0 g"
-                    android:textAlignment="center" />
-            </LinearLayout>
+                android:drawablePadding="5dp"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_GRAMS_PLACEHOLDER"
+                android:textAlignment="center"
+                app:drawableStartCompat="@drawable/dose_resized" />
 
         </LinearLayout>
     </LinearLayout>
 
-    <!-- HIDRATOS -->
+    <!-- Carbohydrates -->
     <LinearLayout
         android:id="@+id/linearLayout9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -463,7 +325,7 @@
                 android:backgroundTint="#FFD7D7"
                 android:fontFamily="@font/fedoka"
                 android:padding="7dp"
-                android:text="Hidratos de carbono"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_CARBOHYDRATES_LABEL"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
@@ -474,24 +336,24 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/hidratosCarbono_percTV"
+                    android:id="@+id/carbohydrate_percTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
-                    android:text="0%"
+                    android:text="@string/FRAGMENT_NUTRITION_TAB_PERCENTAGE_PLACEHOLDER"
                     android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/hidratosCarbono_PB"
-                    app:layout_constraintEnd_toEndOf="@+id/hidratosCarbono_PB"
-                    app:layout_constraintStart_toStartOf="@+id/hidratosCarbono_PB"
-                    app:layout_constraintTop_toTopOf="@+id/hidratosCarbono_PB" />
+                    app:layout_constraintBottom_toBottomOf="@+id/carbohydrate_PB"
+                    app:layout_constraintEnd_toEndOf="@+id/carbohydrate_PB"
+                    app:layout_constraintStart_toStartOf="@+id/carbohydrate_PB"
+                    app:layout_constraintTop_toTopOf="@+id/carbohydrate_PB" />
 
                 <ProgressBar
-                    android:id="@+id/hidratosCarbono_PB"
+                    android:id="@+id/carbohydrate_PB"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginTop="5dp"
                     android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_5"
+                    android:progressDrawable="@drawable/custom_progress_4"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -500,28 +362,15 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <TextView
+                android:id="@+id/carbohydrateDose_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:gravity="center"
-
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/dose" />
-
-                <TextView
-                    android:id="@+id/hidratosCarbonoDose_TV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="0 g"
-                    android:textAlignment="center" />
-            </LinearLayout>
-
+                android:drawablePadding="5dp"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_GRAMS_PLACEHOLDER"
+                android:textAlignment="center"
+                app:drawableStartCompat="@drawable/dose_resized" />
 
         </LinearLayout>
 
@@ -532,6 +381,7 @@
             android:layout_marginTop="34dp"
             android:layout_marginEnd="30dp"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -542,7 +392,7 @@
                 android:backgroundTint="#FFD7D7"
                 android:fontFamily="@font/fedoka"
                 android:padding="7dp"
-                android:text="dos quais açúcares"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_SUGAR_LABEL"
                 android:textAlignment="center"
                 android:textColor="#252525"
                 android:textSize="11sp" />
@@ -552,24 +402,24 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/hidratosAcucares_percTV"
+                    android:id="@+id/sugars_percTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/fedoka"
-                    android:text="0%"
+                    android:text="@string/FRAGMENT_NUTRITION_TAB_PERCENTAGE_PLACEHOLDER"
                     android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/hidratosAcucares_PB"
-                    app:layout_constraintEnd_toEndOf="@+id/hidratosAcucares_PB"
-                    app:layout_constraintStart_toStartOf="@+id/hidratosAcucares_PB"
-                    app:layout_constraintTop_toTopOf="@+id/hidratosAcucares_PB" />
+                    app:layout_constraintBottom_toBottomOf="@+id/sugars_PB"
+                    app:layout_constraintEnd_toEndOf="@+id/sugars_PB"
+                    app:layout_constraintStart_toStartOf="@+id/sugars_PB"
+                    app:layout_constraintTop_toTopOf="@+id/sugars_PB" />
 
                 <ProgressBar
-                    android:id="@+id/hidratosAcucares_PB"
+                    android:id="@+id/sugars_PB"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginTop="5dp"
                     android:indeterminateOnly="false"
-                    android:progressDrawable="@drawable/custom_progress_5"
+                    android:progressDrawable="@drawable/custom_progress_4"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -577,29 +427,136 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <TextView
+                android:id="@+id/sugarsDose_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:gravity="center"
-
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/dose" />
-
-                <TextView
-                    android:id="@+id/hidratosAcucaresDose_TV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="0 g"
-                    android:textAlignment="center" />
-            </LinearLayout>
+                android:drawablePadding="5dp"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_GRAMS_PLACEHOLDER"
+                android:textAlignment="center"
+                app:drawableStartCompat="@drawable/dose_resized" />
 
         </LinearLayout>
+    </LinearLayout>
+
+    <!-- Salt and Fiber -->
+    <LinearLayout
+        android:id="@+id/linearLayout10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout9">
+
+        <!-- Salt -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_badge_nutrition"
+                android:backgroundTint="#D6FDFF"
+                android:fontFamily="@font/fedoka"
+                android:padding="7dp"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_SALT_LABEL"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/sal_percTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/fedoka"
+                    android:text="@string/FRAGMENT_NUTRITION_TAB_PERCENTAGE_PLACEHOLDER"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/sal_PB"
+                    app:layout_constraintEnd_toEndOf="@+id/sal_PB"
+                    app:layout_constraintStart_toStartOf="@+id/sal_PB"
+                    app:layout_constraintTop_toTopOf="@+id/sal_PB" />
+
+                <ProgressBar
+                    android:id="@+id/sal_PB"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="5dp"
+                    android:indeterminateOnly="false"
+                    android:progressDrawable="@drawable/custom_progress_2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/salDose_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:drawablePadding="5dp"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_GRAMS_PLACEHOLDER"
+                android:textAlignment="center"
+                app:drawableStartCompat="@drawable/dose_resized" />
+
+
+
+
+        </LinearLayout>
+
+
+        <!-- FIBRA -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:layout_marginEnd="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/layout_badge_nutrition"
+                android:backgroundTint="#FFF3D6"
+                android:fontFamily="@font/fedoka"
+                android:padding="7dp"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_FIBER_LABEL"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/fiberDose_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:drawablePadding="5dp"
+                android:text="@string/FRAGMENT_NUTRITION_TAB_GRAMS_PLACEHOLDER"
+                android:textAlignment="center"
+                app:drawableStartCompat="@drawable/dose_resized" />
+
+
+        </LinearLayout>
+
     </LinearLayout>
 
 
@@ -610,13 +567,13 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="40dp"
-        android:text="Leia atentamente o rótulo dos produtos que usar como ingredientes, estes valores são apenas estimativas e devem ser tomadas como tal."
+        android:text="@string/FRAGMENT_NUTRITION_TAB_WARRANT"
         android:textAlignment="center"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout10"
         app:layout_constraintVertical_bias="0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

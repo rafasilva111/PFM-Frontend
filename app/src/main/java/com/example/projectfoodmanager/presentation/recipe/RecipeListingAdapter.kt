@@ -48,94 +48,96 @@ class RecipeListingAdapter(
     override fun bind(binding: ItemRecipeLayoutBinding, item: RecipeSimplified, position: Int) {
 
 
-            /**
-             * Loading Images
-             */
+        /**
+         * Loading Images
+         */
 
-            // Load Recipe img
-            loadRecipeImage(binding.imageView, item.imgSource){
-                imageLoadingListener.onImageLoaded()
-            }
+        // Load Recipe img
+        loadRecipeImage(binding.imageView, item.imgSource){
+            imageLoadingListener.onImageLoaded()
+        }
 
-            // Load Author img
-            loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){
-                imageLoadingListener.onImageLoaded()
-            }
-            /**
-             * Details
-             */
+        // Load Author img
+        loadUserImage(binding.imgAuthorIV, item.createdBy.imgSource){
+            imageLoadingListener.onImageLoaded()
+        }
+        /**
+         * Details
+         */
 
-            //Load Author name
-            binding.nameAuthorTV.text = formatNameToNameUpper(item.createdBy.name)
+        //Load Author name
+        binding.nameAuthorTV.text = formatNameToNameUpper(item.createdBy.name)
 
-            //Validate that the author is verified
-            if (item.createdBy.verified){
-                binding.verifyUserIV.visibility=View.VISIBLE
-            }else{
-                binding.verifyUserIV.visibility=View.INVISIBLE
-            }
+        //Validate that the author is verified
+        if (item.createdBy.verified){
+            binding.verifyUserIV.visibility=View.VISIBLE
+        }else{
+            binding.verifyUserIV.visibility=View.INVISIBLE
+        }
 
-            binding.dateTV.text = formatServerTimeToDateString(item.createdDate)
-            binding.recipeTitleTV.text = item.title
-            binding.idTV.text = item.id.toString()
+        binding.dateTV.text = formatServerTimeToDateString(item.createdDate)
+        binding.recipeTitleTV.text = item.title
+        binding.idTV.text = item.id.toString()
 
-            // string -> localTimeDate
-            binding.recipeDescriptionTV.text = item.description
-            binding.itemLayout.setOnClickListener {
+        // string -> localTimeDate
+        binding.recipeDescriptionTV.text = item.description
+        binding.itemLayout.setOnClickListener {
 
-                onItemClicked.invoke(position, item)
-            }
-            binding.nLikeTV.text = item.likes.toString()
+            onItemClicked.invoke(position, item)
+        }
+        binding.nLikeTV.text = item.likes.toString()
 
-            if (!item.verified){
-                binding.verifyRecipeIV.visibility= View.INVISIBLE
-                binding.verifyRecipeTV.visibility= View.INVISIBLE
-            }else{
-                binding.verifyRecipeIV.visibility= View.VISIBLE
-                binding.verifyRecipeTV.visibility= View.VISIBLE
-            }
-
-
-            binding.ratingRecipeRB.rating = item.sourceRating?.toFloat() ?: 0f
-            binding.ratingMedTV.text = item.sourceRating
+        if (!item.verified){
+            binding.verifyRecipeIV.visibility= View.INVISIBLE
+            binding.verifyRecipeTV.visibility= View.INVISIBLE
+        }else{
+            binding.verifyRecipeIV.visibility= View.VISIBLE
+            binding.verifyRecipeTV.visibility= View.VISIBLE
+        }
 
 
-            /**
-             * Likes Function
-             */
+        //--> RATING
+        binding.ratingRecipeRB.rating = item.sourceRating.toFloat()
+        binding.ratingMedTV.text = item.sourceRating.toString()
 
+
+
+         /**
+         * Likes Function
+         */
+
+        if(item.liked)
+            binding.likeIB.setImageResource(R.drawable.ic_like_active)
+        else
+            binding.likeIB.setImageResource(R.drawable.ic_like_black)
+
+
+        binding.likeIB.setOnClickListener {
             if(item.liked)
-                binding.likeIB.setImageResource(R.drawable.ic_like_active)
+                onLikeClicked.invoke(item, false)
             else
-                binding.likeIB.setImageResource(R.drawable.ic_like_black)
-
-
-            binding.likeIB.setOnClickListener {
-                if(item.liked)
-                    onLikeClicked.invoke(item, false)
-                else
-                    onLikeClicked.invoke(item, true)
-
-            }
-
-
-            /**
-             * Saves Function
-             */
-
-            if(item.saved)
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
-            else
-                binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
-
-            binding.favoritesIB.setOnClickListener {
-                if(item.saved)
-                    onSaveClicked.invoke(item, false)
-                else
-                    onSaveClicked.invoke(item, true)
-
-            }
+                onLikeClicked.invoke(item, true)
 
         }
+
+
+        /**
+         * Saves Function
+         */
+
+        if(item.saved)
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
+        else
+            binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
+
+        binding.favoritesIB.setOnClickListener {
+            if(item.saved)
+                onSaveClicked.invoke(item, false)
+            else
+                onSaveClicked.invoke(item, true)
+
+        }
+
+    }
 
 }

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Text sizes -->
+    <dimen name="text_small">12sp</dimen>
+    <dimen name="text_normal">14sp</dimen>
+    <dimen name="text_large">16sp</dimen>
+
+    <!-- Margins -->
+    <dimen name="margin_small">4dp</dimen>
+    <dimen name="margin_normal">6dp</dimen>
+    <dimen name="margin_large">8dp</dimen>
+
+    <!-- Padding -->
+    <dimen name="padding_small">4dp</dimen>
+    <dimen name="padding_normal">6dp</dimen>
+    <dimen name="padding_large">8dp</dimen>
+
+    <dimen name="h_250dp">100dp</dimen>
+    <dimen name="h_200dp">50dp</dimen>
+    <dimen name="h_100dp">150dp</dimen>
+    <dimen name="ginTop_100dp">100dp</dimen>
+    <dimen name="ginTop_50dp">40dp</dimen>
+    <dimen name="ginTop_1">35dp</dimen>
+    <dimen name="ginTop_2">10dp</dimen>
+
+
+    <dimen name="margin_xs">4dp</dimen>
+    <dimen name="margin_sm">8dp</dimen>
+    <dimen name="margin_md">12dp</dimen>
+    <dimen name="margin_lg">18dp</dimen>
+
+    <dimen name="text_xs">8sp</dimen>
+    <dimen name="text_sm">8sp</dimen>
+    <dimen name="text_md">8sp</dimen>
+    <dimen name="text_lg">12sp</dimen>
+
+
+
+
+    <dimen name="input_height">48dp</dimen>
+    <dimen name="button_height">52dp</dimen>
+    <dimen name="logo_height">120dp</dimen>
+
+
+    <dimen name="login_header_height">170dp</dimen>
+    <dimen name="login_card_height">120dp</dimen>
+    <dimen name="login_logo_size">150dp</dimen>
+    <dimen name="progress_size">30dp</dimen>
+
+    <!-- Margins -->
+
+    <dimen name="margin_xsmall">8dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="text_subtitle">14sp</dimen>
+    <dimen name="text_button">12sp</dimen>
+
+
+    <dimen name="login_image_width_180">150dp</dimen>
+    <dimen name="login_image_height_150">120dp</dimen>
+    <dimen name="title_2">24sp</dimen>
+
+
+    <dimen name="ib_50">40dp</dimen>
+    <dimen name="ts_11">11sp</dimen>
+
+
+    <dimen name="ts_16">12sp</dimen>
+    <dimen name="ts_20">16sp</dimen>
+    <dimen name="iv_30">20dp</dimen>
+    <dimen name="iv_60">50dp</dimen>
+    <dimen name="gt_30">10dp</dimen>
+
+
+    <dimen name="cv_w_240">160dp</dimen>
+    <dimen name="cv_h_200">120dp</dimen>
+
+    <dimen name="cv_w2_270">190dp</dimen>
+    <dimen name="cv_h2_250">130dp</dimen>
+
+
+    <dimen name="iv_40">26dp</dimen>
+    <dimen name="tv_h_25">16dp</dimen>
+    <dimen name="ts_13">10sp</dimen>
+    <dimen name="iv_20">15dp</dimen>
+    <dimen name="ib_40">25dp</dimen>
+    <dimen name="ib_gt_30">15dp</dimen>
+    <dimen name="h_300">250dp</dimen>
+    <dimen name="gt_50">5dp</dimen>
+    <dimen name="tv_w100">70dp</dimen>
+    <dimen name="tv_h20">10dp</dimen>
+    <dimen name="cv_h200">160dp</dimen>
+    <dimen name="tv_h70">50dp</dimen>
+    <dimen name="cv_370">300dp</dimen>
+    <dimen name="w_371">299dp</dimen>
+
+    <dimen name="gb_30">20dp</dimen>
+
+    <dimen name="iv_15">10dp</dimen>
+    <dimen name="ts_12">10sp</dimen>
+    <dimen name="ts_16_2">13sp</dimen>
+    <dimen name="ts_13_2">10sp</dimen>
+
+    <dimen name="nav_ginb_20">5dp</dimen>
+
+
+
+
+</resources>

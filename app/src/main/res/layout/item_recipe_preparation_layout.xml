@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -14,7 +13,7 @@
             android:background="@drawable/layout_item_prept"
             android:fontFamily="@font/fedoka"
             android:gravity="center"
-            android:text="1"
+            android:text="@string/ITEM_PREPARATION_STEP_PLACEHOLDER"
             android:textAlignment="center"
             android:textColor="#827717"
             android:textSize="15sp"
@@ -40,14 +39,14 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="2dp"
             android:fontFamily="@font/fedoka"
-            android:text="nº Step"
+            android:text="@string/ITEM_PREPARATION_NUMBER_STEP_PLACEHOLDER"
             android:textColor="@color/black"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/stepTV"
             app:layout_constraintTop_toTopOf="@+id/stepTV" />
 
         <TextView
-            android:id="@+id/discriptionTV"
+            android:id="@+id/descriptionTV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -56,7 +55,7 @@
             android:layout_marginBottom="30dp"
             android:fontFamily="@font/fredoka_regular"
             android:justificationMode="inter_word"
-            android:text="@string/ingredients"
+            android:text="@string/COMMON_DESCRIPTION"
             android:textColor="#546E7A"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -17,8 +17,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="370dp"
-            android:layout_height="240dp"
+            android:layout_width="@dimen/cv_370"
+            android:layout_height="@dimen/cv_h2_250"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -61,8 +61,8 @@
 
                 <ImageView
                     android:id="@+id/imgAuthorIV"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="@dimen/iv_40"
+                    android:layout_height="@dimen/iv_40"
                     android:src="@drawable/default_image_user"
                     android:scaleType="fitXY"/>
 
@@ -71,7 +71,7 @@
             <TextView
                 android:id="@+id/nameAuthorTV"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
+                android:layout_height="@dimen/tv_h_25"
                 android:layout_marginStart="-20dp"
                 android:background="@drawable/layout_bg_rounded_1"
                 android:backgroundTint="#252525"
@@ -84,15 +84,15 @@
                 android:paddingBottom="2dp"
                 android:text="Author"
                 android:textColor="@color/white"
-                android:textSize="13sp"
+                android:textSize="@dimen/ts_13"
                 app:layout_constraintBottom_toBottomOf="@+id/img_autor_CV"
                 app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
                 app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
 
             <ImageView
                 android:id="@+id/verifyUserIV"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/iv_20"
+                android:layout_height="@dimen/iv_20"
                 android:layout_marginStart="-10dp"
                 android:layout_marginTop="-5dp"
                 android:elevation="8dp"
@@ -117,9 +117,9 @@
 
             <ImageButton
                 android:id="@+id/favoritesIB"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="30dp"
+                android:layout_width="@dimen/ib_40"
+                android:layout_height="@dimen/ib_40"
+                android:layout_marginTop="@dimen/ib_gt_30"
                 android:layout_marginEnd="30dp"
                 android:background="@drawable/bg_action_btn"
                 android:elevation="9dp"
@@ -137,9 +137,9 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="371dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="100dp"
+        android:layout_width="@dimen/w_371"
+        android:layout_height="@dimen/h_300"
+        android:layout_marginTop="@dimen/gt_50"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/constraintLayout12"
         app:layout_constraintStart_toStartOf="@+id/constraintLayout12"
@@ -147,13 +147,13 @@
 
         <ImageButton
             android:id="@+id/likeIB"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/ib_40"
+            android:layout_height="@dimen/ib_40"
             android:layout_marginTop="-17dp"
             android:layout_marginEnd="45dp"
             android:background="@drawable/layout_circle_bg"
             android:backgroundTint="#EDEDED"
-            android:elevation="10dp"
+            android:elevation="20dp"
             android:padding="5dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_like_black"
@@ -181,8 +181,8 @@
 
         <ImageView
             android:id="@+id/verifyRecipeIV"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/iv_40"
+            android:layout_height="@dimen/iv_40"
             android:layout_marginStart="10dp"
             android:layout_marginTop="-20dp"
             android:elevation="11dp"
@@ -192,8 +192,8 @@
 
         <TextView
             android:id="@+id/verifyRecipeTV"
-            android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/tv_w100"
+            android:layout_height="@dimen/tv_h20"
             android:layout_marginStart="-18dp"
             android:background="@drawable/layout_bg_rounded_1"
             android:backgroundTint="#FFEBB0"
@@ -211,10 +211,10 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/cv_h200"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="@dimen/gb_30"
             android:background="@drawable/layout_item_recipes"
             android:backgroundTint="@color/white"
             app:cardCornerRadius="20dp"
@@ -229,8 +229,8 @@
 
                 <ImageView
                     android:id="@+id/imageView9"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="@dimen/iv_15"
+                    android:layout_height="@dimen/iv_15"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="30dp"
                     android:alpha="0.6"
@@ -249,7 +249,7 @@
                     android:padding="2dp"
                     android:text="02/03/2022"
                     android:textAlignment="center"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/ts_12"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView9"
                     app:layout_constraintStart_toEndOf="@+id/imageView9"
                     app:layout_constraintTop_toTopOf="@+id/imageView9" />
@@ -265,7 +265,7 @@
                     android:justificationMode="inter_word"
                     android:text="Recipe Title"
                     android:textColor="@color/black"
-                    android:textSize="16dp"
+                    android:textSize="@dimen/ts_16"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/dateTV" />
@@ -278,7 +278,7 @@
                     android:fontFamily="@font/fredoka_regular"
                     android:text="4,5"
                     android:textColor="#838383"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/ts_16_2"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/recipeTitleTV"
                     app:layout_constraintTop_toBottomOf="@+id/recipeTitleTV" />
@@ -299,8 +299,8 @@
 
                 <ImageView
                     android:id="@+id/imageVixxew9"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="@dimen/iv_15"
+                    android:layout_height="@dimen/iv_15"
                     android:layout_marginEnd="5dp"
                     android:alpha="0.6"
                     android:elevation="3dp"
@@ -327,7 +327,7 @@
                 <TextView
                     android:id="@+id/recipeDescriptionTV"
                     android:layout_width="0dp"
-                    android:layout_height="70dp"
+                    android:layout_height="@dimen/tv_h70"
                     android:layout_marginTop="10dp"
                     android:ellipsize="end"
                     android:fontFamily="@font/fredoka_regular"
@@ -335,7 +335,7 @@
                     android:maxLines="3"
                     android:text="Descrição"
                     android:textAlignment="gravity"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/ts_13_2"
                     app:layout_constraintEnd_toEndOf="@+id/recipeTitleTV"
                     app:layout_constraintStart_toStartOf="@+id/recipeTitleTV"
                     app:layout_constraintTop_toBottomOf="@+id/ratingRecipeRB" />

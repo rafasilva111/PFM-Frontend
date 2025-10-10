@@ -87,3 +87,5 @@ lint/tmp/
 .idea/deploymentTargetDropDown.xml
 
 .idea/
+
+app/google-services.json

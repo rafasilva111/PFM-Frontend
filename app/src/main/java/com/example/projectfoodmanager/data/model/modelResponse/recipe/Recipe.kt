@@ -15,11 +15,16 @@ data class Recipe(
     val verified: Boolean,
     val rating: Double = 0.0,
     @SerializedName("source_rating")
-    val sourceRating: String,
+    val sourceRating: Double  = 0.0,
     @SerializedName("source_link")
     val sourceLink: String,
-    val time: String,
-    val portion: String,
+    val time: Int,
+    @SerializedName("portion_lower")
+    val portionLower: String,
+    @SerializedName("portion_upper")
+    val portionUpper: String?,
+    @SerializedName("portion_units")
+    val portionUnits: String,
     val difficulty: String,
     @SerializedName("created_at")
     val createdDate: String,
@@ -33,7 +38,7 @@ data class Recipe(
     val ingredients: MutableList<IngredientQuantity> = mutableListOf(),
     var preparation: MutableList<Preparation> = mutableListOf(),
     @SerializedName("nutrition_information")
-    val nutritionInformation: NutritionInformations?,
+    val nutritionInformation: NutritionInformation?,
     @SerializedName("created_by")
     var createdBy: UserSimplified,
 
@@ -48,7 +53,9 @@ fun Recipe.toRecipeSimplified(): RecipeSimplified {
         description = this.description,
         imgSource = this.imgSource,
         difficulty = this.difficulty,
-        portion = this.portion,
+        portionLower = this.portionLower,
+        portionUpper = this.portionUpper,
+        portionUnits = this.portionUnits,
         time = this.time,
         likes = this.likes,
         views = this.views,

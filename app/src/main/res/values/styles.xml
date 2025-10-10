@@ -31,11 +31,7 @@
         <item name="android:visibility">gone</item>
     </style>
 
-    <style name="Widget.App.Chip" parent="Widget.Material3.Chip.Suggestion">
-        <item name="chipBackgroundColor">@color/stroke_tint</item>
-        <item name="chipStrokeColor">@color/stroke_tint</item>
-        <item name="android:textAppearance">@style/TextAppearance.App.BodyMedium</item>
-    </style>
+
 
     <style name="TextAppearance.App.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
         <item name="fontFamily">@font/fredoka_regular</item>

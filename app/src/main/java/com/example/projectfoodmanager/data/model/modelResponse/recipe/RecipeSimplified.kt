@@ -13,14 +13,19 @@ data class RecipeSimplified(
     @SerializedName("image")
     val imgSource: String,
     val difficulty: String,
-    val portion: String,
-    val time: String,
+    @SerializedName("portion_lower")
+    val portionLower: String,
+    @SerializedName("portion_upper")
+    val portionUpper: String?,
+    @SerializedName("portion_units")
+    val portionUnits: String,
+    val time: Int,
     val likes: Int,
     val views: Int,
     val verified: Boolean,
     val rating: Double = 0.0,
     @SerializedName("source_rating")
-    val sourceRating: String?,
+    val sourceRating: Double = 0.0,
     @SerializedName("source_link")
     val sourceLink: String,
     @SerializedName("created_by")

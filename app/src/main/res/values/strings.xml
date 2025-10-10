@@ -8,7 +8,7 @@
     <string name="COMMON_SAVE">Guardar</string>
     <string name="COMMON_REMOVE">Remover</string>
     <string name="COMMON_RESET">Reiniciar</string>
-
+    <string name="COMMON_DESCRIPTION">Descrição</string>
     <string name="COMMON_FOLLOWS">A seguir</string>
     <string name="COMMON_NO_FOLLOWS">Não segues ninguem</string>
     <string name="COMMON_FOLLOWERS">Seguidores</string>
@@ -17,6 +17,10 @@
     <string name="COMMON_FOLLOW_REQUESTS">Pedidos para seguir</string>
     <string name="COMMON_NO_FOLLOW_REQUESTS">Sem pedidos para seguir</string>
     <string name="COMMON_REMOVE_FOLLOW">Deixar de seguir</string>
+    <string name="COMMON_NUTRITION_KCAL">%1$.1f kcal</string>
+    <string name="COMMON_NUTRITION_PERC">%1$.1f %%</string>
+    <string name="COMMON_NUTRITION_GRAMS">%1$.1f g</string>
+
 
 
 
@@ -63,7 +67,9 @@
             Fragments String's
     -->
 
-    <!-- Comments Fragment -->
+    <!--
+            Comments Fragment
+    -->
 
     <string name="FRAGMENT_COMMENTS_TITLE">Comentários</string>
 
@@ -100,9 +106,47 @@
     <string name="ITEM_FOLLOWER_REQUEST_SENT">Pedido enviado</string>
     <string name="ITEM_FOLLOWER_REQUEST_CANCEL">Cancelar pedido</string>
 
-    <!-- FragmentRecipeDetail -->
+    <!--
+            FragmentRecipeDetail
+    -->
     <string name="FRAGMENT_RECIPE_DETAIL_NR_COMMENT">%1$d Comentário</string>
     <string name="FRAGMENT_RECIPE_DETAIL_NR_COMMENTS">%1$d Comentários</string>
+    <string name="ITEM_PREPARATION">%1$d Passo</string>
+    <string name="ITEM_PREPARATION_STEP_PLACEHOLDER">1</string>
+    <string name="ITEM_PREPARATION_NUMBER_STEP_PLACEHOLDER">nº Step</string>
+
+    <!--
+            Fragment Recipe Tab
+    -->
+    <string name="fragment_goal_create_goal_tab_ideal_weight_title">Peso Ideal</string>
+    <string name="FRAGMENT_RECIPE_TAB_CATEGORY_LABEL">Categorias</string>
+    <string name="FRAGMENT_RECIPE_TAB_NUMBER_CATEGORY_LABEL">nº Categorias</string>
+    <string name="FRAGMENT_RECIPE_TAB_NUMBER_INGREDIENTS_LABEL">nº Ingredients</string>
+    <string name="FRAGMENT_RECIPE_TAB_INGREDIENTS_LABEL">Ingridientes</string>
+    <string name="FRAGMENT_RECIPE_TAB_NUMBER_PREPARATION_LABEL">nº Passos</string>
+    <string name="FRAGMENT_RECIPE_TAB_PREPARATION_LABEL">Preparação</string>
+    <string name="FRAGMENT_RECIPE_TAB_NUMBER_CATEGORY">1 Categoria</string>
+    <string name="FRAGMENT_RECIPE_TAB_NUMBER_CATEGORIES">%1$d Categorias</string>
+    <string name="FRAGMENT_RECIPE_TAB_NUMBER_INGREDIENT">1 Ingrediente</string>
+    <string name="FRAGMENT_RECIPE_TAB_NUMBER_INGREDIENTS">%1$d Ingredientes</string>
+    <string name="FRAGMENT_RECIPE_TAB_NUMBER_PREPARATION">1 Passo</string>
+    <string name="FRAGMENT_RECIPE_TAB_NUMBER_PREPARATIONS">%1$d Passos</string>
+
+    <!--
+            Fragment Nutrition Tab
+    -->
+    <string name="FRAGMENT_NUTRITION_TAB_PERCENTAGE_PLACEHOLDER">0 %</string>
+    <string name="FRAGMENT_NUTRITION_TAB_GRAMS_PLACEHOLDER">0 g</string>
+    <string name="FRAGMENT_NUTRITION_TAB_ENERGY_LABEL">Energia</string>
+    <string name="FRAGMENT_NOTIFICATION_TITLE">Notificações</string>
+    <string name="FRAGMENT_NUTRITION_TAB_PROTEIN_LABEL">Proteina</string>
+    <string name="FRAGMENT_NUTRITION_TAB_FAT_LABEL">Gordura</string>
+    <string name="FRAGMENT_NUTRITION_TAB_FAT_SATURATED_LABEL">dos quais saturados</string>
+    <string name="FRAGMENT_NUTRITION_TAB_CARBOHYDRATES_LABEL">Hidratos de carbono</string>
+    <string name="FRAGMENT_NUTRITION_TAB_SUGAR_LABEL">dos quais açúcares</string>
+    <string name="FRAGMENT_NUTRITION_TAB_SALT_LABEL">Sal</string>
+    <string name="FRAGMENT_NUTRITION_TAB_FIBER_LABEL">Fibra</string>
+    <string name="FRAGMENT_NUTRITION_TAB_WARRANT">Leia atentamente o rótulo dos produtos que usar como ingredientes, estes valores são apenas estimativas e devem ser tomadas como tal.</string>
 
     <!-- Not Treated -->
 
@@ -239,8 +283,6 @@
     <string name="goals_check_dialog_desc">Ainda não defeniste um objectivo queres inserir agora?</string>
     <string name="fragment_update_biodata">Todos estes dados são necessários para aceder a esta aba.</string>
     <string name="fragment_goal_title">Objectivos</string>
-    <string name="fragment_goal_create_goal_tab_ideal_weight_title">Peso Ideal</string>
-    <string name="FRAGMENT_NOTIFICATION_TITLE">Notificações</string>
 
 
 

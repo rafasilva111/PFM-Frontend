@@ -112,9 +112,9 @@ class FavoritesRecipeListingAdapter(
             binding.verifyRecipeTV.visibility= View.VISIBLE
         }
 
-
-        binding.ratingRecipeRB.rating = item.sourceRating?.toFloat() ?: 0f
-        binding.ratingMedTV.text = item.sourceRating
+        //--> RATING
+        binding.ratingRecipeRB.rating = item.sourceRating.toFloat()
+        binding.ratingMedTV.text = item.sourceRating.toString()
 
 
         /**

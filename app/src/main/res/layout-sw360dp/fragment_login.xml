@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/h_100dp"
         android:background="@color/main_color"
         android:paddingBottom="20dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,8 +24,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout1"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginTop="150dp"
+        android:layout_height="@dimen/h_100dp"
+        android:layout_marginTop="@dimen/ginTop_50dp"
         android:background="@drawable/layout_rounded_login"
         android:backgroundTint="@color/color_2"
         android:paddingBottom="20dp"
@@ -39,7 +39,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="100dp"
         android:layout_marginTop="-100dp"
         android:background="@drawable/layout_rounded_login"
         android:backgroundTint="@color/color_1"
@@ -52,8 +52,8 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:layout_width="180dp"
-        android:layout_height="180dp"
+        android:layout_width="@dimen/login_image_width_180"
+        android:layout_height="@dimen/login_image_height_150"
         android:layout_marginStart="40dp"
         android:layout_marginBottom="20dp"
         android:src="@drawable/img_login"
@@ -91,29 +91,23 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email_TL"
-            style="@style/Widget.ProjectFoodManager.TextInputLayout.OutlinedBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="20dp"
             android:hint="Email"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/black"
-            app:hintTextColor="@color/black"
-            app:startIconDrawable="@drawable/ic_email"
-            app:startIconTint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name">
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            app:startIconDrawable="@drawable/ic_email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"/>
+                android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -160,7 +154,7 @@
             android:id="@+id/login_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="@dimen/ginTop_1"
             android:background="@drawable/bg_default"
             android:text="Login"
             android:textAllCaps="false"
@@ -194,7 +188,7 @@
             android:id="@+id/register_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/ginTop_2"
             android:background="@drawable/bg_default"
             android:text="@string/fragment_login_register_now"
             android:fontFamily="@font/fedoka"

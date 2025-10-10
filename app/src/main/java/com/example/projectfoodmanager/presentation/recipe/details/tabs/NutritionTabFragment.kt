@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentNutritionTabBinding
 
@@ -14,15 +15,14 @@ class NutritionTabFragment(recipe: Recipe) : Fragment() {
     var objRecipe: Recipe? = recipe
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        return if (this::binding.isInitialized){
+        return if (this::binding.isInitialized) {
             val layoutParams = binding.recipeTabParentConstraint.layoutParams
             layoutParams.height = 200 // Hardcoded value for height
             binding.recipeTabParentConstraint.layoutParams = layoutParams
             binding.root
-        }else {
+        } else {
 
             // Inflate the layout for this fragment
             binding = FragmentNutritionTabBinding.inflate(layoutInflater)
@@ -40,52 +40,51 @@ class NutritionTabFragment(recipe: Recipe) : Fragment() {
     }
 
     private fun updateUI() {
+        val nutrition = objRecipe?.nutritionInformation ?: return
 
-        //Nutrition
-        objRecipe?.let { recipe ->
-            recipe.nutritionInformation?.let {
-            binding.energiaDoseTV.text = recipe.nutritionInformation.energia
-            binding.energiaPercTV.text = recipe.nutritionInformation.energia_perc
-            recipe.nutritionInformation.energia_perc?.let {
-                binding.energiaPB.progress = it.toDouble().toInt()
-            }
+        // Energy
+        binding.energyDoseTV.text = getString(R.string.COMMON_NUTRITION_KCAL, nutrition.energyKcal)
+        binding.energyPercTV.text = getString(R.string.COMMON_NUTRITION_PERC, nutrition.energyPerc)
+        binding.energyPB.progress = nutrition.energyPerc.toInt()
 
+        // Fat
+        binding.fatDoseTV.text = getString(R.string.COMMON_NUTRITION_GRAMS, nutrition.fatG)
+        binding.fatPercTV.text = getString(R.string.COMMON_NUTRITION_PERC, nutrition.fatPerc)
+        binding.fatPB.progress = nutrition.fatPerc.toInt()
 
-            binding.fibraDoseTV.text = recipe.nutritionInformation.fibra
-            binding.fibraPercTV.text = recipe.nutritionInformation.fibra_perc
-            recipe.nutritionInformation.fibra_perc?.let {
-                binding.fibraPB.progress = it.toDouble().toInt()
-            }
+        // Saturated Fat
+        binding.fatSaturatedDoseTV.text =
+            getString(R.string.COMMON_NUTRITION_GRAMS, nutrition.saturatesG)
+        binding.fatSaturatedPercTV.text =
+            getString(R.string.COMMON_NUTRITION_PERC, nutrition.saturatesPerc)
+        binding.fatSaturatedPB.progress = nutrition.saturatesPerc.toInt()
 
-            binding.proteinaDoseTV.text = recipe.nutritionInformation.proteina
-            //binding.proteinaPercTV.text = recipe.nutrition_informations.proteina_perc
-            //binding.proteinaPB.progress = recipe.nutrition_informations.proteina_perc.dropLast(1).toInt()
+        // Carbohydrates
+        binding.carbohydrateDoseTV.text =
+            getString(R.string.COMMON_NUTRITION_GRAMS, nutrition.carbohydratesG)
+        binding.carbohydratePercTV.text =
+            getString(R.string.COMMON_NUTRITION_PERC, nutrition.carbohydratesPerc)
+        binding.carbohydratePB.progress = nutrition.carbohydratesPerc.toInt()
 
+        // Sugars
+        binding.sugarsDoseTV.text =
+            getString(R.string.COMMON_NUTRITION_GRAMS, nutrition.sugarsG)
+        binding.sugarsPercTV.text =
+            getString(R.string.COMMON_NUTRITION_PERC, nutrition.sugarsPerc)
+        binding.sugarsPB.progress = nutrition.sugarsPerc.toInt()
 
-            binding.gorduraDoseTV.text = recipe.nutritionInformation.gordura
-            binding.gorduraPercTV.text = recipe.nutritionInformation.gordura_perc
-            recipe.nutritionInformation.gordura_perc?.let {
-                binding.gorduraPB.progress = it.toDouble().toInt()
-            }
+        // Protein
+        binding.proteinDoseTV.text = getString(R.string.COMMON_NUTRITION_GRAMS, nutrition.proteinG)
+        binding.proteinPercTV.text =
+            getString(R.string.COMMON_NUTRITION_PERC, nutrition.proteinPerc)
+        binding.proteinPB.progress = nutrition.proteinPerc.toInt()
 
-            binding.gorduraSaturadosDoseTV.text = recipe.nutritionInformation.gordura_saturada
-            binding.gorduraSaturadosPercTV.text = recipe.nutritionInformation.gordura_saturada_perc
-            recipe.nutritionInformation.gordura_saturada_perc?.let {
-                binding.gorduraSaturadosPB.progress = it.toDouble().toInt()
-            }
+        // Salt
+        binding.salDoseTV.text = getString(R.string.COMMON_NUTRITION_GRAMS, nutrition.saltG)
+        binding.salPercTV.text = getString(R.string.COMMON_NUTRITION_PERC, nutrition.saltPerc)
+        binding.salPB.progress = nutrition.saltPerc.toInt()
 
-            binding.hidratosCarbonoDoseTV.text = recipe.nutritionInformation.hidratos_carbonos
-            //binding.hidratosCarbonoPercTV.text = recipe.nutrition_informations.hidratos_carbonos_perc
-            //binding.hidratosCarbonoPB.progress = recipe.nutrition_informations.hidratos_carbonos_perc.dropLast(1).toInt()
-
-            binding.hidratosAcucaresDoseTV.text = recipe.nutritionInformation.hidratos_carbonos_acucares
-            binding.hidratosAcucaresPercTV.text = recipe.nutritionInformation.hidratos_carbonos_acucares_perc
-            recipe.nutritionInformation.hidratos_carbonos_acucares_perc?.let {
-                binding.hidratosAcucaresPB.progress = it.toDouble().toInt()
-            }
-            }
-        }
-
-
+        // Fiber
+        binding.fiberDoseTV.text = getString(R.string.COMMON_NUTRITION_GRAMS, nutrition.fiberG)
     }
 }

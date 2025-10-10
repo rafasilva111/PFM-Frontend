@@ -84,7 +84,12 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
 
 
 
-            binding.numberCategoriasTV.text = mutList.size.toString() + " Categorias"
+            binding.numberCategoriesTV.text = if(mutList.size> 1){
+                getString(R.string.FRAGMENT_RECIPE_TAB_NUMBER_CATEGORIES, mutList.size)
+            } else {
+                getString(R.string.FRAGMENT_RECIPE_TAB_NUMBER_CATEGORY)
+            }
+
             for (item: Tag in mutList) {
 
                 val chip = Chip(context)
@@ -119,17 +124,6 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
                         RecipeListingFragmentFilters.SANDWICH -> chipBackgroundColor =
                             context.resources.getColorStateList(R.color.catg_sandes, null)
 
-                        //TODO: é para ser visto melhor
-                       /* RecipeListingFragmentFilters.LANCHE -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_lanche, null)
-                        RecipeListingFragmentFilters.PEQUENO_ALMOCO -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_peq_almoco, null)
-                        RecipeListingFragmentFilters.JANTAR -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_jantar, null)
-                        RecipeListingFragmentFilters.ALMOCO -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_almoco, null)
-                        RecipeListingFragmentFilters.PETISCO -> chipBackgroundColor =
-                            context.resources.getColorStateList(R.color.catg_petiscos, null)*/
                         else ->
                             chipBackgroundColor =
                                 context.resources.getColorStateList(R.color.grey, null)
@@ -145,80 +139,21 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
                     }
 
                 }
-//            *//*     chip.text = item.toString()
-//            chip.isCloseIconVisible = true
-//            chip.setBackgroundColor(resources.getColor(R.color.red))
-//            chip.setChipIconResource(R.drawable.ic_like_red)
-//            chip.setOnCloseIconClickListener{
-//                binding.CHTags.addView(chip)
-//            }*//*
-//
-//        }
-//
-//
-//        //List_Ingredients
-//        binding.LVIngridientsInfo.isClickable = false
-//        val itemsAdapterIngrtedients: IngridientsListingAdapter? =
-//            this.context?.let { IngridientsListingAdapter(it,recipe.ingredients) }
-//        binding.LVIngridientsInfo.adapter = itemsAdapterIngrtedients
-//        setListViewHeightBasedOnChildren(binding.LVIngridientsInfo)
-//
-//        binding.LLContIngredients.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-//        binding.CVTitleIngredients.setOnClickListener {
-//
-//            val state = if(binding.LVIngridientsInfo.visibility== View.GONE) View.VISIBLE else View.GONE
-//
-//
-//            TransitionManager.beginDelayedTransition(binding.LLContIngredients, AutoTransition())
-//            binding.LVIngridientsInfo.visibility= state
-//
-//
-//
-//            if(state==View.VISIBLE){
-//                binding.IVArrowIngrid.animate().rotationBy(90F).setDuration(5).start()
-//                binding.SRLDetails.fullScroll(View.FOCUS_DOWN)
-//            }else{
-//                binding.IVArrowIngrid.animate().rotationBy(-90F).setDuration(5).start()
-//
-//            }
-//
-//        }
-//
-//
-//
-//        //List_Preparation
-//        binding.LVPreparationInfo.isClickable = false
-//        val itemsAdapterPreparation: PreparationListingAdapter? =
-//            this.context?.let { PreparationListingAdapter(it,recipe.preparation) }
-//        binding.LVPreparationInfo.adapter = itemsAdapterPreparation
-//
-//        setListViewHeightBasedOnChildren(binding.LVPreparationInfo)
-//
-//        binding.LLContPreparation.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-//
-//        binding.CVTitlePreparation.setOnClickListener{
-//            val state = if(binding.LVPreparationInfo.visibility== View.GONE) View.VISIBLE else View.GONE
-//
-//
-//            TransitionManager.beginDelayedTransition(binding.LLContPreparation, AutoTransition())
-//            binding.LVPreparationInfo.visibility= state
-//
-//
-//
-//            if(state==View.VISIBLE){
-//                binding.IVArrowPrep.animate().rotationBy(90F).setDuration(5).start()
-//                //   binding.SRLDetails.fullScroll(View.AUTOFILL_TYPE_LIST)
-//            }else{
-//                binding.IVArrowPrep.animate().rotationBy(-90F).setDuration(5).start()
-//            }
-//        }
             }
 
-            binding.numberIngridientsTV.text = recipe.ingredients?.size.toString() + " Ingredientes"
+            binding.numberIngridientsTV.text = if (recipe.ingredients.size > 1){
+                getString(R.string.FRAGMENT_RECIPE_TAB_NUMBER_INGREDIENTS, recipe.ingredients.size)
+            } else {
+                getString(R.string.FRAGMENT_RECIPE_TAB_NUMBER_INGREDIENT)
+            }
 
             recipeIngredientsAdapter.updateList(recipe.ingredients)
 
-            binding.numberPreparationTV.text = recipe.preparation.size.toString() + " Passos"
+            binding.numberPreparationTV.text = if (recipe.preparation.size > 1){
+                getString(R.string.FRAGMENT_RECIPE_TAB_NUMBER_PREPARATIONS, recipe.preparation.size)
+            } else {
+                getString(R.string.FRAGMENT_RECIPE_TAB_NUMBER_PREPARATION)
+            }
 
             recipePreparationAdapter.updateList(recipe.preparation)
 
