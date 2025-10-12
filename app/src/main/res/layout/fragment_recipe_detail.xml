@@ -302,7 +302,7 @@
                 android:id="@+id/constraintLayout13"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-50dp"
+                android:layout_marginTop="-65dp"
                 android:background="@drawable/layout_rounded_topleft_topright"
                 android:backgroundTint="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
