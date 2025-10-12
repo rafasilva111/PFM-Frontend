@@ -150,12 +150,6 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
          *  General
          * */
 
-        // Remove status abr limits
-        requireActivity().window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
-
 
         /**
          *  Navigations
@@ -169,6 +163,7 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
     }
 
     private fun loadUI() {
+
         /**
          *  General
          * */
@@ -176,6 +171,11 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
         val activity = requireActivity()
         changeMenuVisibility(false, activity)
         changeTheme(false, activity, requireContext())
+
+        requireActivity().window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
 
     }
 

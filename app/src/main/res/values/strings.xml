@@ -23,6 +23,11 @@
 
 
 
+    <!-- Content Descriptors -->
+
+    <string name="COMMON_CONTENT_DESC_BACK_BUTTON">Botão de voltar</string>
+    <string name="COMMON_CONTENT_DESC_AUTHOR_IMAGE">Imagem de Autor</string>
+    <string name="COMMON_CONTENT_VERIFIED_SEAL">Sêlo de verificado</string>
 
     <!-- Dialogs -->
     <string name="COMMON_DIALOG_YES">Sim</string>
@@ -109,11 +114,14 @@
     <!--
             FragmentRecipeDetail
     -->
+    <string name="FRAGMENT_RECIPE_DETAIL_AUTHOR_PLACEHOLDER">Autor</string>
     <string name="FRAGMENT_RECIPE_DETAIL_NR_COMMENT">%1$d Comentário</string>
     <string name="FRAGMENT_RECIPE_DETAIL_NR_COMMENTS">%1$d Comentários</string>
     <string name="ITEM_PREPARATION">%1$d Passo</string>
     <string name="ITEM_PREPARATION_STEP_PLACEHOLDER">1</string>
     <string name="ITEM_PREPARATION_NUMBER_STEP_PLACEHOLDER">nº Step</string>
+
+    <string name="FRAGMENT_RECIPE_DETAIL_AUTHOR_FIRST_SURNAME_PLACEHOLDER">First and Last name</string>
 
     <!--
             Fragment Recipe Tab
@@ -283,7 +291,6 @@
     <string name="goals_check_dialog_desc">Ainda não defeniste um objectivo queres inserir agora?</string>
     <string name="fragment_update_biodata">Todos estes dados são necessários para aceder a esta aba.</string>
     <string name="fragment_goal_title">Objectivos</string>
-
 
 
     <string-array name="default_gender_array">

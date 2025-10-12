@@ -233,17 +233,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         app:layout_constraintEnd_toEndOf="@+id/preparation_LL"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/preparation_LL"
         app:layout_constraintTop_toBottomOf="@+id/preparation_LL">
 
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recipePreparationRV"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
@@ -255,7 +257,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/headerIngredientsListCatLL"
             app:layout_constraintVertical_bias="0.0" />
+
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
