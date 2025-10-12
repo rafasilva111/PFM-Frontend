@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/layout_rounded_topleft_topright"
+    android:background="@drawable/layout_rounded_white"
     android:backgroundTint="@color/main_color">
 
 
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
-            android:background="@drawable/layout_rounded_topleft_topright"
+            android:background="@drawable/layout_rounded_white"
             android:backgroundTint="@color/white"
             android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
