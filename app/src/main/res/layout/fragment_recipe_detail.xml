@@ -58,10 +58,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="325dp"
                     android:adjustViewBounds="true"
-                    android:contentDescription="recipe_image"
                     android:foreground="#77000000"
                     android:scaleType="fitXY"
                     android:src="@drawable/default_image_recipe"
+
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +74,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="45dp"
                     android:background="@drawable/bg_action_btn"
-                    android:contentDescription="back"
+                    android:contentDescription="@string/COMMON_CONTENT_DESC_BACK_BUTTON"
                     android:elevation="9dp"
                     android:padding="6dp"
                     android:rotation="180"
@@ -110,6 +110,7 @@
                             android:id="@+id/imageAuthorIV"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
+                            android:contentDescription="@string/COMMON_CONTENT_DESC_AUTHOR_IMAGE"
                             android:scaleType="fitXY"
                             android:src="@drawable/img_pingo_doce" />
 
@@ -121,6 +122,7 @@
                         android:layout_height="25dp"
                         android:layout_marginStart="-20dp"
                         android:layout_marginTop="-20dp"
+                        android:contentDescription="@string/COMMON_CONTENT_VERIFIED_SEAL"
                         android:elevation="8dp"
                         android:src="@drawable/verified"
                         android:visibility="visible"
@@ -134,24 +136,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/fredoka_semibold"
-                        android:text="Autor"
+                        android:text="@string/FRAGMENT_RECIPE_DETAIL_AUTHOR_PLACEHOLDER"
                         android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="13sp"
                         app:layout_constraintStart_toEndOf="@+id/img_autor_CV"
                         app:layout_constraintTop_toTopOf="@+id/img_autor_CV" />
 
-                    <!--               <ImageView
-                        android:id="@+id/IV_source"
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:layout_marginStart="10dp"
-                        android:clickable="true"
-                        android:src="@drawable/ic_link"
-                        app:layout_constraintBottom_toBottomOf="@+id/AutorLB"
-                        app:layout_constraintStart_toEndOf="@+id/AutorLB"
-                        app:layout_constraintTop_toTopOf="@+id/AutorLB"
-                        app:tint="#878787" />-->
 
                     <TextView
                         android:id="@+id/nameAuthorTV"
@@ -159,7 +150,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="@font/fredoka_regular"
-                        android:text="First and Last name"
+                        android:text="@string/FRAGMENT_RECIPE_DETAIL_AUTHOR_FIRST_SURNAME_PLACEHOLDER"
                         android:textAlignment="gravity"
                         android:textColor="@color/white"
                         android:textSize="16sp"
@@ -180,7 +171,7 @@
                         <ImageView
                             android:layout_width="35dp"
                             android:layout_height="35dp"
-                            android:contentDescription="back"
+                            android:contentDescription="@string/COMMON_CONTENT_DESC_BACK_BUTTON"
                             android:src="@drawable/ic_arrow_right"
                             app:tint="@color/white" />
 
@@ -302,8 +293,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-65dp"
-                android:background="@drawable/layout_rounded_topleft_topright"
-                android:backgroundTint="@color/white"
+                android:background="@drawable/layout_rounded_white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout8">
