@@ -13,9 +13,7 @@ data class Recipe(
     @SerializedName("image")
     val imgSource: String,
     val verified: Boolean,
-    val rating: Double = 0.0,
-    @SerializedName("source_rating")
-    val sourceRating: Double  = 0.0,
+    val rating: Double,
     @SerializedName("source_link")
     val sourceLink: String,
     val time: Int,
@@ -43,7 +41,8 @@ data class Recipe(
     var createdBy: UserSimplified,
 
     val saved: Boolean,
-    var liked: Boolean
+    var liked: Boolean,
+    var rated: Float?
 ) : Parcelable
 
 fun Recipe.toRecipeSimplified(): RecipeSimplified {
@@ -61,7 +60,6 @@ fun Recipe.toRecipeSimplified(): RecipeSimplified {
         views = this.views,
         verified = this.verified,
         rating = this.rating,
-        sourceRating = this.sourceRating,
         sourceLink = this.sourceLink,
         createdBy = this.createdBy,
         createdDate = this.createdDate,

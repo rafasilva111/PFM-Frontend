@@ -61,7 +61,6 @@
                     android:foreground="#77000000"
                     android:scaleType="fitXY"
                     android:src="@drawable/default_image_recipe"
-
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -330,42 +329,6 @@
                 </LinearLayout>
 
 
-                <LinearLayout
-                    android:id="@+id/linearLayout4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="@+id/ratingRecipeRB"
-                    app:layout_constraintEnd_toEndOf="@+id/titleTV"
-                    app:layout_constraintTop_toTopOf="@+id/ratingRecipeRB">
-
-                    <ImageView
-                        android:id="@+id/codeIV"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_weight="1"
-                        android:contentDescription="code"
-                        android:src="@drawable/ic_bars_code"
-                        app:layout_constraintBottom_toBottomOf="@+id/TV_Ref"
-                        app:layout_constraintEnd_toStartOf="@+id/TV_Ref"
-                        app:layout_constraintTop_toTopOf="@+id/TV_Ref" />
-
-                    <TextView
-                        android:id="@+id/TV_Ref"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:alpha="0.8"
-                        android:fontFamily="@font/fredoka_regular"
-                        android:gravity="center_vertical"
-                        android:text="0"
-                        android:textSize="13sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
-                </LinearLayout>
-
-
                 <TextView
                     android:id="@+id/titleTV"
                     android:layout_width="0dp"
@@ -382,111 +345,173 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
 
-                <TextView
-                    android:id="@+id/ratingMedTV"
+                <LinearLayout
+                    android:id="@+id/linearLayout4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/fredoka_regular"
-                    android:text="4,5"
-                    android:textColor="#838383"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
+                    android:layout_marginStart="6dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toEndOf="@+id/titleTV"
                     app:layout_constraintStart_toStartOf="@+id/titleTV"
-                    app:layout_constraintTop_toBottomOf="@+id/titleTV" />
+                    app:layout_constraintTop_toBottomOf="@+id/titleTV">
 
+                    <ImageView
+                        android:id="@+id/codeIV"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:contentDescription="code"
+                        android:src="@drawable/ic_bars_code"
+                        app:layout_constraintBottom_toBottomOf="@+id/TV_Ref"
+                        app:layout_constraintEnd_toStartOf="@+id/TV_Ref"
+                        app:layout_constraintTop_toTopOf="@+id/TV_Ref"
+                        app:tint="@color/light_gray" />
 
-                <RatingBar
-                    android:id="@+id/ratingRecipeRB"
-                    style="?android:attr/ratingBarStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:isIndicator="true"
-                    android:max="5"
-                    android:progressTint="#FFC107"
-                    app:layout_constraintBottom_toBottomOf="@+id/ratingMedTV"
-                    app:layout_constraintStart_toEndOf="@+id/ratingMedTV"
-                    app:layout_constraintTop_toTopOf="@+id/ratingMedTV" />
-
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/commentsCV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:cardElevation="0dp"
-                    app:layout_constraintStart_toStartOf="@+id/ratingMedTV"
-                    app:layout_constraintTop_toBottomOf="@+id/ratingMedTV">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <TextView
+                        android:id="@+id/TV_Ref"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="5dp">
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:alpha="0.8"
+                        android:fontFamily="@font/fredoka_regular"
+                        android:gravity="center_vertical"
+                        android:text="0"
+                        android:textColor="@color/grey"
+                        android:textSize="11sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                </LinearLayout>
 
-                        <!-- Container for overlapping user images -->
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/userImagesContainer"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/linearLayoutRatings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+
+                    <LinearLayout
+                        android:id="@+id/recipeRating_LL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/ratingMedTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            android:fontFamily="@font/fredoka_regular"
+                            android:text="4,5"
+                            android:textColor="#838383"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                            <ImageView
-                                android:id="@+id/userComent1IV"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
-                                android:contentDescription="userComent1"
-                                android:src="@drawable/default_image_user"
-                                android:visibility="visible"
+                        <RatingBar
+                            android:id="@+id/ratingRecipeRB"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:isIndicator="true"
+                            android:max="5"
+                            android:progressTint="#FFC107"
+                            app:layout_constraintBottom_toBottomOf="@+id/ratingMedTV"
+                            app:layout_constraintStart_toEndOf="@+id/ratingMedTV"
+                            app:layout_constraintTop_toTopOf="@+id/ratingMedTV" />
+                    </LinearLayout>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/commentsCV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        app:cardElevation="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp">
+
+                            <!-- Container for overlapping user images -->
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/userImagesContainer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
                                 app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <ImageView
+                                    android:id="@+id/userComent1IV"
+                                    android:layout_width="35dp"
+                                    android:layout_height="35dp"
+                                    android:contentDescription="userComent1"
+                                    android:src="@drawable/default_image_user"
+                                    android:visibility="visible"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <ImageView
+                                    android:id="@+id/userComent2IV"
+                                    android:layout_width="35dp"
+                                    android:layout_height="35dp"
+                                    android:layout_marginStart="-15dp"
+                                    android:contentDescription="userComent2"
+                                    android:src="@drawable/default_image_user"
+                                    app:layout_constraintStart_toEndOf="@+id/userComent1IV"
+                                    app:layout_constraintTop_toTopOf="@+id/userComent1IV" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <!-- More comments button -->
+                            <ImageView
+                                android:id="@+id/moreCommentsIV"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginBottom="2dp"
+                                android:background="@drawable/layout_circle_bg"
+                                android:contentDescription="more"
+                                android:elevation="1dp"
+                                android:padding="3dp"
+                                android:src="@drawable/ic_more"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/userImagesContainer"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <ImageView
-                                android:id="@+id/userComent2IV"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
-                                android:layout_marginStart="-15dp"
-                                android:contentDescription="userComent2"
-                                android:src="@drawable/default_image_user"
-                                app:layout_constraintStart_toEndOf="@+id/userComent1IV"
-                                app:layout_constraintTop_toTopOf="@+id/userComent1IV" />
+                            <!-- Comments text -->
+                            <TextView
+                                android:id="@+id/commentsTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:fontFamily="@font/fredoka_regular"
+                                android:text="@string/nr_comments"
+                                android:textSize="13sp"
+                                app:layout_constraintBottom_toBottomOf="@id/moreCommentsIV"
+                                app:layout_constraintStart_toEndOf="@id/moreCommentsIV"
+                                app:layout_constraintTop_toTopOf="@id/moreCommentsIV" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <!-- More comments button -->
-                        <ImageView
-                            android:id="@+id/moreCommentsIV"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_marginStart="0dp"
-                            android:background="@drawable/layout_circle_bg"
-                            android:backgroundTint="@color/main_color"
-                            android:contentDescription="more"
-                            android:elevation="1dp"
-                            android:padding="3dp"
-                            android:src="@drawable/ic_more"
-                            app:layout_constraintStart_toEndOf="@id/userImagesContainer"
-                            app:layout_constraintTop_toTopOf="parent" />
 
-                        <!-- Comments text -->
-                        <TextView
-                            android:id="@+id/commentsTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:fontFamily="@font/fredoka_regular"
-                            android:text="@string/nr_comments"
-                            android:textSize="13sp"
-                            app:layout_constraintBottom_toBottomOf="@id/moreCommentsIV"
-                            app:layout_constraintStart_toEndOf="@id/moreCommentsIV"
-                            app:layout_constraintTop_toTopOf="@id/moreCommentsIV" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.cardview.widget.CardView>
 
 
-                </androidx.cardview.widget.CardView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
 
 
                 <View
@@ -500,7 +525,7 @@
                     android:background="#E1E1E1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/commentsCV" />
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayoutRatings" />
 
 
                 <LinearLayout
@@ -508,7 +533,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="20dp"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
@@ -516,53 +541,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view5">
 
-                    <!--TIME-->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
 
-                        <ImageView
-                            android:id="@+id/IV_1"
-                            android:layout_width="40dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginEnd="5dp"
-                            android:background="@drawable/bg_card"
-                            android:contentDescription="time"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_clock"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/timeTV"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/fredoka_regular"
-                                android:text="0 min"
-                                android:textColor="@color/grey_2"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/fredoka_regular"
-                                android:text="Tempo"
-                                android:textColor="#757575"
-                                android:textSize="13sp" />
-
-                        </LinearLayout>
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -574,15 +553,15 @@
                         <!--DIFFICULTY-->
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="horizontal">
 
                             <ImageView
                                 android:id="@+id/IV_2"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
                                 android:layout_marginEnd="5dp"
                                 android:background="@drawable/bg_card"
                                 android:contentDescription="difficulty"
@@ -594,9 +573,8 @@
                                 tools:ignore="ImageContrastCheck,ImageContrastCheck,ImageContrastCheck" />
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -624,15 +602,15 @@
 
                         <!--PORTION-->
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="horizontal">
 
                             <ImageView
                                 android:id="@+id/IV_3"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
                                 android:layout_marginEnd="5dp"
                                 android:background="@drawable/bg_card"
                                 android:contentDescription="portion"
@@ -643,9 +621,8 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -670,11 +647,71 @@
 
                             </LinearLayout>
                         </LinearLayout>
+
+                        <!--TIME-->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/IV_1"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="5dp"
+                                android:background="@drawable/bg_card"
+                                android:contentDescription="time"
+                                android:padding="5dp"
+                                android:src="@drawable/ic_clock"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/timeTV"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/fredoka_regular"
+                                    android:text="0 min"
+                                    android:textColor="@color/grey_2"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:fontFamily="@font/fredoka_regular"
+                                    android:text="Tempo"
+                                    android:textColor="#757575"
+                                    android:textSize="13sp" />
+
+                            </LinearLayout>
+                        </LinearLayout>
                     </LinearLayout>
 
 
                 </LinearLayout>
 
+                <View
+                    android:id="@+id/view6"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_weight="1"
+                    android:background="#E1E1E1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -51,11 +51,11 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
     /** Constants */
     lateinit var objCalEntry: CalenderEntry
 
-    private var tagSelected: Int= -1
+    private var tagSelected: Int = -1
     private var imagesLoaded: Int = 0
 
-    private lateinit var tagsList:List<String>
-    private lateinit var tagsValuesList:List<String>
+    private lateinit var tagsList: List<String>
+    private lateinit var tagsValuesList: List<String>
 
     /** Injections */
 
@@ -129,154 +129,145 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
          *  General
          * */
 
-        //-> Load Author name
+        /** Author */
         binding.authorTV.text = objCalEntry.recipe.createdBy.name
 
-        //-> Load Author img
+        /** Author image */
         loadUserImage(binding.authorIV, objCalEntry.recipe.createdBy.imgSource) {
             onImageLoaded()
         }
 
-        //-> Load Recipe img
+        /** Recipe image */
         if (objCalEntry.recipe.imgSource.isNotEmpty())
-            loadRecipeImage(binding.imageView,objCalEntry.recipe.imgSource) {
+            loadRecipeImage(binding.imageView, objCalEntry.recipe.imgSource) {
                 onImageLoaded()
             }
         else
             onImageLoaded()
 
-
-        //--> AUTHOR NAME
-        binding.authorTV.text= objCalEntry.recipe.createdBy.name
-
-        //--> AUTHOR VERIFIED
-        if(objCalEntry.recipe.createdBy.verified){
+        /** Verified Badge */
+        if (objCalEntry.recipe.createdBy.verified) {
             binding.verifyUserIV.visibility = View.VISIBLE
-        }else{
+        } else {
             binding.verifyUserIV.visibility = View.INVISIBLE
         }
 
-        //--> DATE
-        binding.dateTV.text =formatServerTimeToDateString(objCalEntry.recipe.createdDate)
+        /** Date */
+        binding.dateTV.text = formatServerTimeToDateString(objCalEntry.recipe.createdDate)
 
-        //--> ID
+        /** ID */
         binding.idTV.text = objCalEntry.recipe.id.toString()
 
-        //--> VERIFIED
-
-        if (objCalEntry.recipe.verified){
-            binding.verifyRecipeIV.visibility= View.INVISIBLE
-            binding.verifyRecipeTV.visibility= View.INVISIBLE
-        }else{
-            binding.verifyRecipeIV.visibility= View.VISIBLE
-            binding.verifyRecipeTV.visibility= View.VISIBLE
+        /** Verified recipe */
+        if (objCalEntry.recipe.verified) {
+            binding.verifyRecipeIV.visibility = View.INVISIBLE
+            binding.verifyRecipeTV.visibility = View.INVISIBLE
+        } else {
+            binding.verifyRecipeIV.visibility = View.VISIBLE
+            binding.verifyRecipeTV.visibility = View.VISIBLE
         }
 
-        //--> RATING
-        binding.ratingRecipeRB.rating = objCalEntry.recipe.sourceRating.toFloat()
-        binding.ratingMedTV.text = objCalEntry.recipe.sourceRating.toString()
+        /** Rating */
+        binding.ratingRecipeRB.rating = objCalEntry.recipe.rating.toFloat()
+        binding.ratingMedTV.text = objCalEntry.recipe.rating.toString()
 
-        //--> TITLE
+        /** Title */
         binding.recipeTitleTV.text = objCalEntry.recipe.title
 
-        //--> DESCRIPTION
+        /** Description */
         binding.recipeDescriptionTV.text = objCalEntry.recipe.description
         binding.recipeCL.setOnClickListener {
-            findNavController().navigate(R.id.action_calendarEntryDetailFragment_to_receitaDetailFragment,Bundle().apply {
-                putInt("recipe_id",objCalEntry.recipe.id)
-                putFloat("user_portion",sharedPreference.getUserSession().userPortion.toFloat())
-            })
+            findNavController().navigate(
+                R.id.action_calendarEntryDetailFragment_to_receitaDetailFragment,
+                Bundle().apply {
+                    putInt("recipe_id", objCalEntry.recipe.id)
+                    putFloat(
+                        "user_portion",
+                        sharedPreference.getUserSession().userPortion.toFloat()
+                    )
+                })
         }
 
-
-        //--> SAVE
+        /** Favorites */
         binding.favoritesIB.isEnabled = false
-        if(objCalEntry.recipe.saved){
+        if (objCalEntry.recipe.saved) {
             binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
-        }
-        else
+        } else
             binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
 
-        //--> LIKE
+        /** Likes */
         binding.nLikeTV.text = objCalEntry.recipe.likes.toString()
 
         binding.likeIB.isEnabled = false
-        if(objCalEntry.recipe.liked){
+        if (objCalEntry.recipe.liked) {
             binding.likeIB.setImageResource(R.drawable.ic_like_active)
-        }
-        else
+        } else
             binding.likeIB.setImageResource(R.drawable.ic_like_black)
 
-        //--> SET TAG VALUE
+        /** Tag */
         tagsList = resources.getStringArray(R.array.tagEntryCalender_items).toList()
         tagsValuesList = resources.getStringArray(R.array.tagEntryCalender_values).toList()
         tagSelected = tagsValuesList.indexOfFirst { it.equals(objCalEntry.tag, ignoreCase = true) }
         binding.tagValTV.text = tagsList[tagSelected]
 
-        //--> SET ON CLICK TAG
+        /** Tag selection */
         binding.tagCV.setOnClickListener {
             showTagDialog()
         }
 
-
-
-        //--> SET DATE VALUE
+        /** Realization date */
         binding.dateValTV.text = formatServerTimeToDateString(objCalEntry.realizationDate)
 
-        //--> SET ON DATE CLICK
+        /** Date selection */
         binding.dateCV.setOnClickListener {
             showDatePickerDialog()
         }
 
-        //--> SET TIME VALUE
+        /** Realization time */
         binding.timeValTV.text = formatServerTimeToTimeString(objCalEntry.realizationDate)
 
-        //--> SET ON TIME CLICK
+        /** Time selection */
         binding.timeCV.setOnClickListener {
             showTimePickerDialog()
         }
 
-
+        /** Delete entry */
         binding.deleteRegIB.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
                 .setIcon(R.drawable.ic_trash)
-                .setTitle("Apagar o registo?")
-                .setMessage("Tem certeza de que deseja apagar o registo?")
-                .setPositiveButton("Sim") { dialog, which ->
-                    // Adicione aqui o código para apagar o registro
+                .setTitle("Delete entry?")
+                .setMessage("Are you sure you want to delete the entry?")
+                .setPositiveButton("Yes") { dialog, which ->
                     calendarViewModel.deleteCalendarEntry(objCalEntry)
-
                 }
-                .setNegativeButton("Não") { dialog, which ->
-                    // Adicione aqui o código para cancelar a exclusão do registro
+                .setNegativeButton("No") { dialog, which ->
                     dialog.dismiss()
                 }
                 .show()
         }
 
+        /** Update entry */
         binding.updateRegIB.setOnClickListener {
-            //TODO("Update register")
             MaterialAlertDialogBuilder(requireContext())
                 .setIcon(R.drawable.ic_recipe)
-                .setTitle("Atualizar o registo?")
-                .setMessage("Tem certeza de que deseja atualizar o registo?")
-                .setPositiveButton("Sim") { dialog, which ->
-                    // Adicione aqui o código para apagar o registro
-                    val (valid,message) = validation()
+                .setTitle("Update entry?")
+                .setMessage("Are you sure you want to update the entry?")
+                .setPositiveButton("Yes") { dialog, which ->
+                    val (valid, message) = validation()
                     if (valid) {
-                        calendarViewModel.patchCalendarEntry(calenderEntryId = objCalEntry.id, calenderPatchRequest = getCalenderEntryRequest())
-                    }
-                    else{
-                        Toast(context).showCustomToast (message, requireActivity(),ToastType.ALERT)
+                        calendarViewModel.patchCalendarEntry(
+                            calenderEntryId = objCalEntry.id,
+                            calenderPatchRequest = getCalenderEntryRequest()
+                        )
+                    } else {
+                        Toast(context).showCustomToast(message, requireActivity(), ToastType.ALERT)
                     }
                 }
-                .setNegativeButton("Não") { dialog, which ->
-                    // Adicione aqui o código para cancelar a exclusão do registro
+                .setNegativeButton("No") { dialog, which ->
                     dialog.dismiss()
                 }
                 .show()
         }
-
         /**
          *  Navigation
          * */
@@ -284,7 +275,6 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
         binding.backRegIB.setOnClickListener {
             findNavController().navigateUp()
         }
-
 
 
     }
@@ -297,9 +287,11 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
                         toast("Registo apagado com sucesso")
                         findNavController().navigateUp()
                     }
+
                     is NetworkResult.Error -> {
                         toast(it.message.toString(), type = ToastType.ERROR)
                     }
+
                     is NetworkResult.Loading -> {
                         //todo rui falta progress bar
                         //binding.progressBar.show()
@@ -316,9 +308,11 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
                         toast("Detalhes da refeição atualizados com sucesso")
                         findNavController().navigateUp()
                     }
+
                     is NetworkResult.Error -> {
                         toast(it.message.toString(), type = ToastType.ERROR)
                     }
+
                     is NetworkResult.Loading -> {
                         //todo rui falta progress bar
                         //binding.progressBar.show()
@@ -333,19 +327,25 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
      *  Functions
      * */
 
-    private fun validation():Pair<Boolean,String> {
+    private fun validation(): Pair<Boolean, String> {
 
 
         val oldDate = formatServerTimeToLocalDateTime(objCalEntry.realizationDate).toLocalDate()
-        val newDate = LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        val newDate =
+            LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
 
         val oldTime = formatServerTimeToLocalDateTime(objCalEntry.realizationDate).toLocalTime()
         val newTime = LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm"))
 
-        if(tagsValuesList[tagSelected]==objCalEntry.tag && newDate == oldDate && newTime == oldTime)
+        if (tagsValuesList[tagSelected] == objCalEntry.tag && newDate == oldDate && newTime == oldTime)
             return false to "Nothing changed"
 
-        val localDateTime  = LocalDateTime.of(LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm")))
+        val localDateTime = LocalDateTime.of(
+            LocalDate.parse(
+                binding.dateValTV.text,
+                DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            ), LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm"))
+        )
 
         if (localDateTime < LocalDateTime.now()) {
             return false to "Date should be before today."
@@ -361,7 +361,10 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
             tag = resources.getStringArray(R.array.tagEntryCalender_values).toList()[tagSelected],
             realizationDate = formatLocalDateTimeToServerTime(
                 LocalDateTime.of(
-                    LocalDate.parse(binding.dateValTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                    LocalDate.parse(
+                        binding.dateValTV.text,
+                        DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                    ),
                     LocalTime.parse(binding.timeValTV.text, DateTimeFormatter.ofPattern("HH:mm"))
                 )
             )
@@ -395,7 +398,7 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
     private fun showDatePickerDialog() {
 
         val currentDate = formatServerTimeToLocalDateTime(objCalEntry.realizationDate).toLocalDate()
-        val selectedMillis =  currentDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+        val selectedMillis = currentDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
 
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Selecione a data")
@@ -408,10 +411,10 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
         }
 
         datePicker.addOnPositiveButtonClickListener {
-            if(datePicker.headerText.length == 9){
-                binding.dateValTV.text= getString(R.string.date_text, "0" + datePicker.headerText)
-            }else{
-                binding.dateValTV.text= datePicker.headerText
+            if (datePicker.headerText.length == 9) {
+                binding.dateValTV.text = getString(R.string.date_text, "0" + datePicker.headerText)
+            } else {
+                binding.dateValTV.text = datePicker.headerText
             }
 
 
@@ -427,7 +430,7 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
         val clockFormat =
             if (DateFormat.is24HourFormat(context)) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H
 
-        val time= formatServerTimeToLocalDateTime(objCalEntry.realizationDate).toLocalTime()
+        val time = formatServerTimeToLocalDateTime(objCalEntry.realizationDate).toLocalTime()
 
         val picker =
             MaterialTimePicker.Builder()
@@ -437,7 +440,11 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
                 .setTitleText("Digite a que horário pretende")
                 .build()
         picker.addOnPositiveButtonClickListener {
-            binding.timeValTV.text= getString(R.string.calender_formated_date,String.format("%02d", picker.hour),String.format("%02d", picker.minute))
+            binding.timeValTV.text = getString(
+                R.string.calender_formated_date,
+                String.format("%02d", picker.hour),
+                String.format("%02d", picker.minute)
+            )
         }
 
         picker.addOnCancelListener {
@@ -451,7 +458,6 @@ class CalendarEntryDetailFragment : Fragment(), ImageLoadingListener {
         picker.show(parentFragmentManager, "TimePicker");
         picker.dialog?.setCanceledOnTouchOutside(false)
     }
-
 
 
 }

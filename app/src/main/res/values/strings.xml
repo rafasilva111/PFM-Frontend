@@ -20,6 +20,7 @@
     <string name="COMMON_NUTRITION_KCAL">%1$.1f kcal</string>
     <string name="COMMON_NUTRITION_PERC">%1$.1f %%</string>
     <string name="COMMON_NUTRITION_GRAMS">%1$.1f g</string>
+    <string name="COMMON_RATING">%1$.1F</string>
 
 
 

@@ -1,4 +1,4 @@
-package com.example.projectfoodmanager.data.model.modelRequest
+package com.example.projectfoodmanager.data.model.modelRequest.recipe
 
 import android.os.Parcelable
 import com.example.projectfoodmanager.data.model.modelResponse.ingredients.IngredientQuantity
@@ -6,19 +6,18 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.NutritionI
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Preparation
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
 @Parcelize
 data class RecipeRequest(
     @SerializedName("title")
     val title: String? = null,
     @SerializedName("img_source")
-    val img_source: String? = null,
+    val imgSource: String? = null,
     @SerializedName("description")
     val description: String? = null,
     @SerializedName("source_link")
-    val source_link: String? = null,
-    @SerializedName("source_rating")
-    val source_rating: String? = null,
+    val sourceLink: String? = null,
     @SerializedName("time")
     val time: String? = null,
     @SerializedName("difficulty")
@@ -32,5 +31,5 @@ data class RecipeRequest(
     @SerializedName("preparation")
     val preparation: List<Preparation> = arrayListOf(),
     @SerializedName("nutrition_information")
-    val nutrition_information: NutritionInformation? = null,
-    ): java.io.Serializable, Parcelable
+    val nutritionInformation: NutritionInformation? = null,
+    ): Serializable, Parcelable

@@ -5,11 +5,12 @@ import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderE
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CommentDTO
 import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.user.goal.GoalDTO
-import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
+import com.example.projectfoodmanager.data.model.modelRequest.recipe.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelRequest.recipe.rating.RecipeRatingRequest
 import com.example.projectfoodmanager.data.model.modelResponse.Id
 import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
 import com.example.projectfoodmanager.data.model.modelResponse.calender.CalenderDatedEntryList
@@ -32,6 +33,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthTok
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
 import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipesBackground
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRating
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRatingList
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import retrofit2.Response
@@ -58,9 +61,6 @@ interface ApiInterface {
     // You cant define a body in delete requests
     @HTTP(method = "DELETE", path = "$API_V1_BASE_URL/auth", hasBody = true)
     suspend fun logoutUser(@Body logoutRequest : RefreshToken): Response<Unit>
-
-
-
 
 
     @GET("$API_V1_BASE_URL/auth")
@@ -109,6 +109,7 @@ interface ApiInterface {
     @GET("$API_V1_BASE_URL/recipe/background")
     suspend fun getUserRecipesBackground(): Response<UserRecipesBackground>
 
+    /** Like Function */
     @GET("$API_V1_BASE_URL/recipe/like")
     suspend fun getLikedRecipes(@Query("page") page: Int, @Query("page_size") pageSize: Int,@Query("search_string") searchString: String,@Query("search_tag") searchTag: String): Response<RecipeList>
 
@@ -118,13 +119,22 @@ interface ApiInterface {
     @DELETE("$API_V1_BASE_URL/recipe/like")
     suspend fun removeLike(@Query("id") recipeId: Int): Response<Recipe>
 
+    /** Save Function */
     @POST("$API_V1_BASE_URL/recipe/save")
     suspend fun addSave(@Query("id") recipeId: Int): Response<Recipe>
 
     @DELETE("$API_V1_BASE_URL/recipe/save")
     suspend fun removeSave(@Query("id") recipeId: Int): Response<Recipe>
 
+    /** Rate Function */
+    @GET("$API_V1_BASE_URL/recipe/rating/list")
+    suspend fun getRecipeRatings(@Query("page") page: Int, @Query("page_size") pageSize: Int): Response<RecipeRatingList>
 
+    @POST("$API_V1_BASE_URL/recipe/rating")
+    suspend fun postRecipeRating(@Query("id") recipeId: Int, @Body rating: RecipeRatingRequest): Response<RecipeRating>
+
+    @DELETE("$API_V1_BASE_URL/recipe/rating")
+    suspend fun deleteRecipeRating(@Query("id") recipeId: Int): Response<RecipeRating>
 
     /**
      * Comments

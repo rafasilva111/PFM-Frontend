@@ -8,10 +8,11 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Co
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.user.goal.GoalDTO
-import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
+import com.example.projectfoodmanager.data.model.modelRequest.recipe.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelRequest.recipe.rating.RecipeRatingRequest
 import com.example.projectfoodmanager.data.model.modelResponse.Id
 import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
 import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
@@ -33,6 +34,8 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthTok
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
 import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipesBackground
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRating
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRatingList
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import retrofit2.Response
@@ -73,7 +76,10 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.getUserRecipesBackground()
 	}
 
-	//Recipe
+	/**
+	 * Recipe
+	 * */
+
 	override suspend fun createRecipe(recipe : RecipeRequest): Response<Recipe> {
 		return apiInterface.createRecipe(recipe = recipe)
 	}
@@ -92,6 +98,7 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.deleteRecipe(recipeId = recipeId)
 	}
 
+	/** Like Function */
 	override suspend fun getLikedRecipes(page: Int,pageSize: Int,searchString: String, searchTag: String): Response<RecipeList> {
 		return apiInterface.getLikedRecipes(page,pageSize,searchString,searchTag)
 	}
@@ -104,12 +111,24 @@ class RemoteDataSourceImpl @Inject constructor(
 		return apiInterface.removeLike(recipeId = recipeId)
 	}
 
+	/** Save Function */
 	override suspend fun addSave(recipeId: Int): Response<Recipe> {
 		return apiInterface.addSave(recipeId = recipeId)
 	}
 
 	override suspend fun removeSave(recipeId: Int): Response<Recipe> {
 		return apiInterface.removeSave(recipeId = recipeId)
+	}
+
+	/** Rate Function */
+	override suspend	fun getRecipeRatings(page: Int, pageSize: Int): Response<RecipeRatingList> {
+		return apiInterface.getRecipeRatings(page = page,pageSize = pageSize)
+	}
+	override suspend fun postRecipeRating(recipeId: Int, rating: RecipeRatingRequest): Response<RecipeRating> {
+		return apiInterface.postRecipeRating(recipeId = recipeId,rating = rating)
+	}
+	override suspend fun deleteRecipeRating(recipeId: Int): Response<RecipeRating> {
+		return apiInterface.deleteRecipeRating(recipeId = recipeId)
 	}
 
 	/**

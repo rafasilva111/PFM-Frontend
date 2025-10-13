@@ -2,10 +2,13 @@ package com.example.projectfoodmanager.data.repository
 
 import androidx.lifecycle.LiveData
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CommentDTO
+import com.example.projectfoodmanager.data.model.modelRequest.recipe.rating.RecipeRatingRequest
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRating
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRatingList
 import com.example.projectfoodmanager.util.network.Event
 import com.example.projectfoodmanager.util.network.NetworkResult
 
@@ -14,14 +17,14 @@ interface RecipeRepository {
 
 
 
-    // general
+    // General
     val functionGetRecipes: LiveData<Event<NetworkResult<RecipeList>>>
     val functionGetRecipe: LiveData<Event<NetworkResult<Recipe>>>
 
     suspend fun getRecipes(page: Int,pageSize: Int,userId:Int?,searchString:String,searchTag: String, by:String)
     suspend fun getRecipe(id: Int)
 
-    // like
+    // Like
     val functionGetLikedRecipes: LiveData<Event<NetworkResult<RecipeList>>>
     val functionLikeOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
     val functionRemoveLikeOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
@@ -30,14 +33,23 @@ interface RecipeRepository {
     suspend fun addLikeOnRecipe(recipeId: Int)
     suspend fun removeLikeOnRecipe(recipeId: Int)
 
-    // save
+    // Save
     val functionAddSaveOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
     val functionRemoveSaveOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
 
     suspend fun removeSaveOnRecipe(recipeId: Int)
     suspend fun addSaveOnRecipe(recipeId: Int)
 
-    // comment
+    // Rate
+    val functionGetRecipeRatings: LiveData<Event<NetworkResult<RecipeRatingList>>>
+    val functionPostRecipeRating: LiveData<Event<NetworkResult<RecipeRating>>>
+    val functionDeleteRecipeRating: LiveData<Event<NetworkResult<RecipeRating>>>
+
+    suspend fun getRecipeRatings(page: Int, pageSize: Int)
+    suspend fun postRecipeRating(recipeId: Int, recipeRating: RecipeRatingRequest)
+    suspend fun deleteRecipeRating(recipeId: Int)
+
+    // Comment
     val functionGetComments: LiveData<Event<NetworkResult<CommentList>>>
 
     val functionGetComment: LiveData<Event<NetworkResult<Comment>>>

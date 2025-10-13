@@ -1,6 +1,6 @@
 package com.example.projectfoodmanager.presentation.recipe.create.tabs.util
 
-import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
+import com.example.projectfoodmanager.data.model.modelRequest.recipe.RecipeRequest
 
 class StepUtil {
 

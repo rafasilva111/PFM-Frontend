@@ -4,10 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CommentDTO
+import com.example.projectfoodmanager.data.model.modelRequest.recipe.rating.RecipeRatingRequest
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRating
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRatingList
 import com.example.projectfoodmanager.data.repository.datasource.RemoteDataSource
 import com.example.projectfoodmanager.util.network.Event
 import com.example.projectfoodmanager.util.network.NetworkResult
@@ -27,31 +30,30 @@ class RecipeRepositoryImp @Inject constructor(
         liveData: MutableLiveData<Event<NetworkResult<T>>>,
         request: suspend () -> Response<T>
     ) {
-        // Notify observers that a loading operation is in progress
+        val tag = this::class.simpleName ?: "UnknownRepo"
+        val functionName = Throwable().stackTrace.firstOrNull()?.methodName ?: "UnknownFunction"
+
         liveData.postValue(Event(NetworkResult.Loading()))
-        Log.i(TAG, "Making API request.")
+        Log.i(tag, "$tag - $functionName: Making API request.")
 
         try {
-            // Invoke the API request using the provided lambda function
             val response = request.invoke()
 
             if (response.isSuccessful && response.body() != null) {
-                // Handle a successful API response
-                Log.d(TAG, "Request was successful.")
+                Log.d(tag, "$tag - $functionName: Request successful.")
                 liveData.postValue(Event(NetworkResult.Success(response.body()!!)))
+
             } else if (response.errorBody() != null) {
-                // Handle an error response with an error body
                 val errorObj = response.errorBody()!!.charStream().readText()
-                Log.d(TAG, "Request was not successful. \n$errorObj")
+                Log.w(tag, "$tag - $functionName: Error response: $errorObj.")
                 liveData.postValue(Event(NetworkResult.Error(errorObj)))
+
             } else {
-                // Handle an error response without an error body
-                liveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+                liveData.postValue(Event(NetworkResult.Error("$tag - $functionName: Something went wrong.")))
             }
         } catch (e: Exception) {
-            // Handle exceptions that may occur during the API request
-            Log.e(TAG, "Error making API request: ${e.message}")
-            liveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            Log.e(tag, "$tag - $functionName: Exception - ${e.message}", e)
+            liveData.postValue(Event(NetworkResult.Error(e.localizedMessage ?: "Something went wrong.")))
         }
     }
 
@@ -194,13 +196,13 @@ class RecipeRepositoryImp @Inject constructor(
      * Like Function
      */
 
-    private val _userLikedRecipesResponseLiveData = MutableLiveData<Event<NetworkResult<RecipeList>>>()
+    private val _userLikedRecipesResponse = MutableLiveData<Event<NetworkResult<RecipeList>>>()
     override val functionGetLikedRecipes: LiveData<Event<NetworkResult<RecipeList>>>
-        get() = _userLikedRecipesResponseLiveData
+        get() = _userLikedRecipesResponse
 
 
     override suspend fun getLikedRecipes(page: Int,pageSize: Int,searchString: String, searchTag: String) {
-        _userLikedRecipesResponseLiveData.postValue(Event(NetworkResult.Loading()))
+        _userLikedRecipesResponse.postValue(Event(NetworkResult.Loading()))
         Log.i(TAG, "AuthRepositoryImp - getUserLikedRecipes: Making request.")
         val response =remoteDataSource.getLikedRecipes(page,pageSize,searchString,searchTag)
 
@@ -209,7 +211,7 @@ class RecipeRepositoryImp @Inject constructor(
         if (response.isSuccessful && response.body() != null) {
             Log.i(TAG, "AuthRepositoryImp - getUserLikedRecipes: Request was sucessfull.")
             Log.i(TAG, "AuthRepositoryImp - getUserLikedRecipes: Response body -> ${response.body()}.")
-            _userLikedRecipesResponseLiveData.postValue(
+            _userLikedRecipesResponse.postValue(
                 Event(
                 NetworkResult.Success(
                 response.body()!!
@@ -221,14 +223,14 @@ class RecipeRepositoryImp @Inject constructor(
                 Log.i(TAG, "AuthRepositoryImp - getUserLikedRecipes: Request was not sucessfull.")
                 val errorObj = response.errorBody()!!.charStream().readText()
                 Log.i(TAG, "AuthRepositoryImp - getUserLikedRecipes: $errorObj")
-                _userLikedRecipesResponseLiveData.postValue(Event(NetworkResult.Error(errorObj)))
+                _userLikedRecipesResponse.postValue(Event(NetworkResult.Error(errorObj)))
             } catch (e: Exception) {
-                Log.i(TAG, "e")
+                Log.i(TAG, "$e")
             }
 
         }
         else{
-            _userLikedRecipesResponseLiveData.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+            _userLikedRecipesResponse.postValue(Event(NetworkResult.Error("Something Went Wrong")))
         }
     }
 
@@ -295,6 +297,9 @@ class RecipeRepositoryImp @Inject constructor(
 
     }
 
+    /**
+     * Save Function
+     */
 
     private val _functionAddSaveOnRecipe = MutableLiveData<Event<NetworkResult<Recipe>>>()
     override val functionAddSaveOnRecipe: LiveData<Event<NetworkResult<Recipe>>>
@@ -339,7 +344,7 @@ class RecipeRepositoryImp @Inject constructor(
         val response =remoteDataSource.removeSave(recipeId)
         if (response.isSuccessful && response.code() == 200) {
             Log.i(TAG, "handleResponse: request made was sucessfull.")
-            sharedPreference.removeSavedRecipe(response.body()!!)
+
             _functionRemoveSaveOnRecipe.postValue(
                 Event(
                 NetworkResult.Success(
@@ -352,9 +357,51 @@ class RecipeRepositoryImp @Inject constructor(
             Log.i(TAG, "handleResponse: request made was sucessfull. \n"+errorObj)
             _functionRemoveSaveOnRecipe.postValue(Event(NetworkResult.Error(errorObj)))
         }
-        else{
+        else {
             _functionRemoveSaveOnRecipe.postValue(Event(NetworkResult.Error("Something Went Wrong")))
+        }
+
+    }
+
+    /**
+     * Rating Function
+     */
+
+    private val _functionGetRecipeRatings = MutableLiveData<Event<NetworkResult<RecipeRatingList>>>()
+    override val functionGetRecipeRatings: LiveData<Event<NetworkResult<RecipeRatingList>>>
+        get() = _functionGetRecipeRatings
+
+    private val _functionPostRecipeRating = MutableLiveData<Event<NetworkResult<RecipeRating>>>()
+    override val functionPostRecipeRating: LiveData<Event<NetworkResult<RecipeRating>>>
+        get() = _functionPostRecipeRating
+
+    private val _functionDeleteRecipeRating = MutableLiveData<Event<NetworkResult<RecipeRating>>>()
+    override val functionDeleteRecipeRating: LiveData<Event<NetworkResult<RecipeRating>>>
+        get() = _functionDeleteRecipeRating
+
+    override suspend fun getRecipeRatings(page: Int, pageSize: Int) {
+
+        handleApiResponse(
+            _functionGetRecipeRatings
+        ) {
+            remoteDataSource.getRecipeRatings(page,pageSize)
         }
     }
 
+
+    override suspend fun postRecipeRating(recipeId: Int, recipeRating: RecipeRatingRequest) {
+        handleApiResponse(
+            _functionPostRecipeRating
+        ) {
+            remoteDataSource.postRecipeRating(recipeId, recipeRating)
+        }
+    }
+
+    override suspend fun deleteRecipeRating(recipeId: Int) {
+        handleApiResponse(
+            _functionDeleteRecipeRating
+        ) {
+            remoteDataSource.deleteRecipeRating(recipeId)
+        }
+    }
 }

@@ -7,10 +7,11 @@ import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Co
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
 import com.example.projectfoodmanager.data.model.modelRequest.user.goal.GoalDTO
-import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
+import com.example.projectfoodmanager.data.model.modelRequest.recipe.RecipeRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryCheckListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.calender.shoppingList.ShoppingListRequest
 import com.example.projectfoodmanager.data.model.modelRequest.geral.IdListRequest
+import com.example.projectfoodmanager.data.model.modelRequest.recipe.rating.RecipeRatingRequest
 import com.example.projectfoodmanager.data.model.modelResponse.Id
 import com.example.projectfoodmanager.data.model.modelResponse.PaginatedList
 import com.example.projectfoodmanager.data.model.modelResponse.auth.RefreshToken
@@ -32,13 +33,18 @@ import com.example.projectfoodmanager.data.model.modelResponse.user.auth.AuthTok
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
 import com.example.projectfoodmanager.data.model.user.UserList
 import com.example.projectfoodmanager.data.model.modelResponse.user.recipeBackground.UserRecipesBackground
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRating
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRatingList
 import com.example.projectfoodmanager.data.model.user.goal.FitnessReport
 import com.example.projectfoodmanager.data.model.user.goal.Goal
 import retrofit2.Response
 
 interface RemoteDataSource {
 
-	//user
+	/**
+	 * User
+	 * */
+
 	suspend fun registerUser(user: UserRequest) : Response<Unit>
 	suspend fun loginUser(email: String, password: String) : Response<AuthToken>
 	suspend fun logoutUser(logoutRequest: RefreshToken) : Response<Unit>
@@ -48,7 +54,10 @@ interface RemoteDataSource {
 	suspend fun deleteUser(): Response<String>
 	suspend fun getUserRecipesBackground(): Response<UserRecipesBackground>
 
-	//recipe
+	/**
+	 * Recipe
+	 * */
+
 	suspend fun createRecipe(recipe : RecipeRequest): Response<Recipe>
 	suspend fun getRecipe(recipeId: Int): Response<Recipe>
 
@@ -57,12 +66,19 @@ interface RemoteDataSource {
 	suspend fun updateRecipe(recipeId: Int,recipe: RecipeRequest): Response<Recipe>
 	suspend fun deleteRecipe(recipeId: Int): Response<String>
 
+	/** Like Function */
 	suspend fun getLikedRecipes(page: Int,pageSize: Int,searchString: String,searchTag:String): Response<RecipeList>
 	suspend fun addLike(recipeId: Int): Response<Recipe>
 	suspend fun removeLike(recipeId: Int): Response<Recipe>
 
+	/** Save Function */
 	suspend fun addSave(recipeId: Int): Response<Recipe>
 	suspend fun removeSave(recipeId: Int): Response<Recipe>
+
+	/** Rate Function */
+	suspend	fun getRecipeRatings(page: Int, pageSize: Int): Response<RecipeRatingList>
+	suspend fun postRecipeRating(recipeId: Int, rating: RecipeRatingRequest): Response<RecipeRating>
+	suspend fun deleteRecipeRating(recipeId: Int): Response<RecipeRating>
 	
 
 	/**

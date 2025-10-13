@@ -10,7 +10,7 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
-import com.example.projectfoodmanager.data.model.modelRequest.RecipeRequest
+import com.example.projectfoodmanager.data.model.modelRequest.recipe.RecipeRequest
 import com.example.projectfoodmanager.databinding.FragmentStepDetailBinding
 import com.example.projectfoodmanager.presentation.recipe.create.tabs.util.StepUtil.Companion.createRecipe
 import com.google.android.material.chip.Chip

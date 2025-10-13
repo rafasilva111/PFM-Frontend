@@ -5,10 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.projectfoodmanager.data.model.modelRequest.comment.CommentDTO
+import com.example.projectfoodmanager.data.model.modelRequest.recipe.rating.RecipeRatingRequest
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.Comment
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.comment.CommentList
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeList
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRating
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRatingList
 import com.example.projectfoodmanager.data.repository.RecipeRepository
 import com.example.projectfoodmanager.util.network.Event
 import com.example.projectfoodmanager.util.network.NetworkResult
@@ -108,6 +111,40 @@ class RecipeViewModel @Inject constructor (
             repository.removeSaveOnRecipe(recipeId)
         }
     }
+
+    /**
+     * Rate Function
+     */
+
+    val functionGetRecipeRatings: LiveData<Event<NetworkResult<RecipeRatingList>>>
+        get() = repository.functionGetRecipeRatings
+
+    val functionPostRecipeRating: LiveData<Event<NetworkResult<RecipeRating>>>
+        get() = repository.functionPostRecipeRating
+
+    val functionDeleteRecipeRating: LiveData<Event<NetworkResult<RecipeRating>>>
+        get() = repository.functionDeleteRecipeRating
+
+    fun getRecipeRatings(page: Int, pageSize: Int = PaginationNumber.DEFAULT){
+        viewModelScope.launch {
+            repository.getRecipeRatings(page, pageSize)
+        }
+    }
+
+    fun postRecipeRating(recipeId: Int, recipeRating: RecipeRatingRequest) {
+        viewModelScope.launch {
+            repository.postRecipeRating(recipeId, recipeRating)
+        }
+    }
+
+    fun deleteRecipeRating(recipeId: Int) {
+        viewModelScope.launch {
+            repository.deleteRecipeRating(recipeId)
+        }
+    }
+
+
+
 
     /**
      * Comments Section
