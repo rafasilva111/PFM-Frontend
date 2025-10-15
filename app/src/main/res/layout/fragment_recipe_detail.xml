@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.recipe.details.RecipeDetailFragment">
+    tools:context=".presentation.recipe.details.RecipeDetailFragment"
+    android:fitsSystemWindows="false"
+    android:clipToPadding="false"
+    android:clipChildren="false">
 
     <LinearLayout
         android:id="@+id/fragment_splash"
@@ -25,7 +28,6 @@
         android:id="@+id/main_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"

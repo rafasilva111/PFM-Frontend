@@ -4,11 +4,10 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.databinding.FragmentHomeNewBinding
-import com.example.projectfoodmanager.util.FragmentsToOpen
 import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
-import com.example.projectfoodmanager.util.toast
+import com.example.projectfoodmanager.util.Helper.Companion.enableEdgeToEdge
+import com.example.projectfoodmanager.util.Helper.Companion.restoreViewLimits
 
 class HomeFragment : Fragment() {
 
@@ -41,9 +40,8 @@ class HomeFragment : Fragment() {
         
         changeTheme(true, requireActivity(), requireContext())
 
-        /** no status bar limits */
-
-        requireActivity().window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        /** Remove Status Bar and Navigation Bar view limits */
+        enableEdgeToEdge(requireActivity())
 
         /**
          *  Navigation
@@ -61,9 +59,9 @@ class HomeFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+        /** Restore Status Bar and Navigation Bar view limits */
+        restoreViewLimits(requireActivity(), requireContext())
 
-        @Suppress("DEPRECATION")
-        requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
     }
 
 

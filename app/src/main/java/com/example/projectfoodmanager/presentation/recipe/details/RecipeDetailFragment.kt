@@ -14,7 +14,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.recipe.rating.RecipeRatingRequest
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRating
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.*
@@ -25,6 +24,8 @@ import com.example.projectfoodmanager.util.Helper.Companion.formatServerTimeToDa
 import com.example.projectfoodmanager.util.Helper.Companion.isOnline
 import com.example.projectfoodmanager.util.Helper.Companion.loadRecipeImage
 import com.example.projectfoodmanager.util.Helper.Companion.loadUserImage
+import com.example.projectfoodmanager.util.Helper.Companion.enableEdgeToEdge
+import com.example.projectfoodmanager.util.Helper.Companion.restoreViewLimits
 import com.example.projectfoodmanager.util.listeners.ImageLoadingListener
 import com.example.projectfoodmanager.util.network.NetworkResult
 import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
@@ -112,13 +113,6 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onPause() {
-        super.onPause()
-        //destroy variables
-        userPortion = -1F
-        recipePortion = -1F
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         if (isOnline(requireView().context)) {
@@ -139,6 +133,16 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
         super.onStart()
     }
 
+    override fun onPause() {
+        super.onPause()
+        //destroy variables
+        userPortion = -1F
+        recipePortion = -1F
+
+        /** Restore Status Bar and Navigation Bar view limits */
+        restoreViewLimits(requireActivity(), requireContext())
+    }
+
 
     /**
      *  General
@@ -151,12 +155,8 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
          *  General
          * */
 
-        // Remove status abr limits
-        requireActivity().window.setFlags(
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        )
-
+        /** Remove Status Bar and Navigation Bar view limits */
+        enableEdgeToEdge(requireActivity())
 
         /**
          *  Navigations

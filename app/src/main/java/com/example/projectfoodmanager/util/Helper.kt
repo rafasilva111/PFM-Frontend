@@ -1,24 +1,26 @@
 package com.example.projectfoodmanager.util
 
 import android.Manifest.permission.*
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.WindowInsetsController
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-import androidx.compose.foundation.pager.PageSize
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.Avatar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -343,6 +345,55 @@ class Helper {
                 @Suppress("DEPRECATION")
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
+        }
+
+        /**
+         * Restores the default system behavior for view limits and re-applies the theme's colors
+         * for the status bar and navigation bar.
+         *
+         * @param activity The `Activity` where the view limits will be restored.
+         * @param context The `Context` used to access the theme and its attributes.
+         */
+        fun restoreViewLimits(activity: Activity, context: Context) {
+            val window = activity.window
+            // Revert to default system behavior
+            WindowCompat.setDecorFitsSystemWindows(window, true)
+
+            // Optionally restore your theme’s colors
+            val typedValue = TypedValue()
+            val theme = context.theme
+
+            // Restore status bar color from theme
+            theme.resolveAttribute(android.R.attr.statusBarColor, typedValue, true)
+            window.statusBarColor = typedValue.data
+
+            // Restore navigation bar color from theme
+            theme.resolveAttribute(android.R.attr.navigationBarColor, typedValue, true)
+            window.navigationBarColor = typedValue.data
+        }
+
+        /**
+         * Removes the system-imposed view limits to enable a full-screen experience.
+         * Sets the status bar and navigation bar colors to transparent.
+         *
+         * @param activity The `Activity` where the view limits will be removed.
+         */
+        fun enableEdgeToEdge(activity: Activity) {
+            val window = activity.window
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+
+            window.statusBarColor = Color.TRANSPARENT
+            window.navigationBarColor = Color.TRANSPARENT
+
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    )
+
+            val controller = WindowInsetsControllerCompat(window, window.decorView)
+            controller.isAppearanceLightStatusBars = true
+            controller.isAppearanceLightNavigationBars = true
         }
 
 
