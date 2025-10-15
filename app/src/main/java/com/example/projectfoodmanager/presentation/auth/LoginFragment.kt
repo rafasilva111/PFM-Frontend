@@ -13,6 +13,7 @@ import com.example.projectfoodmanager.databinding.FragmentLoginBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
 import com.example.projectfoodmanager.util.Helper.Companion.changeTheme
+import com.example.projectfoodmanager.util.Helper.Companion.restoreViewLimits
 import com.example.projectfoodmanager.util.network.NetworkResult
 import com.example.projectfoodmanager.util.sharedpreferences.SharedPreference
 import com.example.projectfoodmanager.util.sharedpreferences.TokenManager
@@ -121,6 +122,9 @@ class LoginFragment : Fragment() {
         val activity = requireActivity()
         changeMenuVisibility(false, activity)
         changeTheme(true,activity,requireContext())
+
+        /** Remove Status Bar and Navigation Bar view limits */
+        restoreViewLimits(requireActivity(),requireContext(), requireView())
 
 
         /**

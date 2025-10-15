@@ -1,7 +1,10 @@
 package com.example.projectfoodmanager
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.databinding.FragmentHomeNewBinding
@@ -31,17 +34,16 @@ class HomeFragment : Fragment() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        loadUI()
+    }
+
     private fun setUI() {
 
         /**
          *  General
          * */
-
-        
-        changeTheme(true, requireActivity(), requireContext())
-
-        /** Remove Status Bar and Navigation Bar view limits */
-        enableEdgeToEdge(requireActivity())
 
         /**
          *  Navigation
@@ -56,13 +58,10 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-    override fun onPause() {
-        super.onPause()
-        /** Restore Status Bar and Navigation Bar view limits */
-        restoreViewLimits(requireActivity(), requireContext())
+    private fun loadUI(){
+        /** Remove Status Bar and Navigation Bar view limits */
+        enableEdgeToEdge(requireActivity(), requireView())
 
     }
-
 
 }

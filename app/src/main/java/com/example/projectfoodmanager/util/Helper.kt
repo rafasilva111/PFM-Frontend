@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
@@ -354,22 +355,23 @@ class Helper {
          * @param activity The `Activity` where the view limits will be restored.
          * @param context The `Context` used to access the theme and its attributes.
          */
-        fun restoreViewLimits(activity: Activity, context: Context) {
-            val window = activity.window
-            // Revert to default system behavior
-            WindowCompat.setDecorFitsSystemWindows(window, true)
+        fun restoreViewLimits(activity: Activity, context: Context, view: View) {
+            /** Restore Status Bar and Navigation Bar view limits */
 
-            // Optionally restore your theme’s colors
-            val typedValue = TypedValue()
-            val theme = context.theme
+            // Make layout fit *within* system windows again
+            WindowCompat.setDecorFitsSystemWindows(activity.window, true)
 
-            // Restore status bar color from theme
-            theme.resolveAttribute(android.R.attr.statusBarColor, typedValue, true)
-            window.statusBarColor = typedValue.data
+            // Restore default system bar colors (or your theme’s)
+            activity.window.statusBarColor = context.getColor(R.color.main_color)
+            activity.window.navigationBarColor = context.getColor(R.color.main_color)
 
-            // Restore navigation bar color from theme
-            theme.resolveAttribute(android.R.attr.navigationBarColor, typedValue, true)
-            window.navigationBarColor = typedValue.data
+            // Optionally, reset appearance (light/dark icons)
+            val controller = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
+            controller.isAppearanceLightStatusBars = true   // or false, depending on your theme
+            controller.isAppearanceLightNavigationBars = true
+
+            // Remove any custom inset listener you previously set
+            ViewCompat.setOnApplyWindowInsetsListener(view, null)
         }
 
         /**
@@ -378,22 +380,18 @@ class Helper {
          *
          * @param activity The `Activity` where the view limits will be removed.
          */
-        fun enableEdgeToEdge(activity: Activity) {
-            val window = activity.window
-            WindowCompat.setDecorFitsSystemWindows(window, false)
+        fun enableEdgeToEdge(activity: Activity, view: View) {
+            WindowCompat.setDecorFitsSystemWindows(activity.window, false)
 
-            window.statusBarColor = Color.TRANSPARENT
-            window.navigationBarColor = Color.TRANSPARENT
+            activity.window.statusBarColor = Color.TRANSPARENT
+            activity.window.navigationBarColor = Color.TRANSPARENT
 
-            window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    )
-
-            val controller = WindowInsetsControllerCompat(window, window.decorView)
-            controller.isAppearanceLightStatusBars = true
-            controller.isAppearanceLightNavigationBars = true
+            // Allow layout to draw behind system bars
+            ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+                // Remove any automatic padding
+                v.setPadding(0, 0, 0, 0)
+                insets
+            }
         }
 
 

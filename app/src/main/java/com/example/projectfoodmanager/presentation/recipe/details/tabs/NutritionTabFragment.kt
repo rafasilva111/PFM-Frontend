@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.databinding.FragmentNutritionTabBinding
+import com.example.projectfoodmanager.util.Helper.Companion.enableEdgeToEdge
 
 class NutritionTabFragment(recipe: Recipe) : Fragment() {
 
@@ -33,13 +34,15 @@ class NutritionTabFragment(recipe: Recipe) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
+        enableEdgeToEdge(requireActivity(),requireView())
         super.onViewCreated(view, savedInstanceState)
 
         updateUI()
     }
 
     private fun updateUI() {
+
+
         val nutrition = objRecipe?.nutritionInformation ?: return
 
         // Energy

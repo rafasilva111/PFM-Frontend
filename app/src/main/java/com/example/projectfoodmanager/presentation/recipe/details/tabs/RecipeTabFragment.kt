@@ -14,6 +14,7 @@ import com.example.projectfoodmanager.databinding.FragmentRecipeTabBinding
 import com.example.projectfoodmanager.presentation.recipe.details.IngredientListingAdapter
 import com.example.projectfoodmanager.presentation.recipe.details.PreparationListingAdapter
 import com.example.projectfoodmanager.util.Helper
+import com.example.projectfoodmanager.util.Helper.Companion.enableEdgeToEdge
 import com.example.projectfoodmanager.util.RecipeListingFragmentFilters
 import com.google.android.material.chip.Chip
 
@@ -64,7 +65,7 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-
+        enableEdgeToEdge(requireActivity(),requireView())
         updateUI()
         Log.d("TAG", "onViewCreated: ")
     }

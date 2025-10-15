@@ -1,10 +1,13 @@
 package com.example.projectfoodmanager.presentation.recipe.details
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,6 +18,7 @@ import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.recipe.rating.RecipeRatingRequest
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.rating.RecipeRating
+import com.example.projectfoodmanager.databinding.FragmentHomeNewBinding
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
@@ -65,16 +69,13 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
 
                 // If all visible images are loaded, hide the progress bar
                 if (imagesLoaded >= DEFAULT_NR_OF_IMAGES_BY_RECIPE_CARD) {
-                    showRecyclerView()
+                    //showRecyclerView()
                 }
             }
         }
     }
 
 
-    /**
-     *  Android LifeCycle
-     * */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -124,30 +125,8 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
         }
 
         setUI()
-        bindObservers()
         super.onViewCreated(view, savedInstanceState)
     }
-
-    override fun onStart() {
-        loadUI()
-        super.onStart()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        //destroy variables
-        userPortion = -1F
-        recipePortion = -1F
-
-        /** Restore Status Bar and Navigation Bar view limits */
-        restoreViewLimits(requireActivity(), requireContext())
-    }
-
-
-    /**
-     *  General
-     * */
-
 
     private fun setUI() {
 
@@ -155,31 +134,25 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
          *  General
          * */
 
-        /** Remove Status Bar and Navigation Bar view limits */
-        enableEdgeToEdge(requireActivity())
+
+        changeTheme(true, requireActivity(), requireContext())
+        changeMenuVisibility(false , requireActivity())
+        enableEdgeToEdge(requireActivity(),requireView())
 
         /**
-         *  Navigations
+         *  Navigation
          * */
-
-        binding.backIB.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
 
     }
 
-    private fun loadUI() {
 
-        /**
-         *  General
-         * */
-
-        val activity = requireActivity()
-        changeMenuVisibility(false, activity)
-        changeTheme(false, activity, requireContext())
+    override fun onPause() {
+        super.onPause()
+        /** Restore Status Bar and Navigation Bar view limits */
+        restoreViewLimits(requireActivity(), requireContext(), requireView())
 
     }
+
 
     private fun bindObservers() {
 
@@ -351,6 +324,7 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
         }
     }
 
+
     /**
      *  Functions
      * */
@@ -483,6 +457,7 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
             )
         }
 
+        return
         /** Tab Layout setup */
 
         /** Disables ViewPager2 state saving for back navigation from comments */
@@ -550,6 +525,76 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
 
     }
 
+
+    /*
+
+
+
+    /**
+     *  Android LifeCycle
+     * */
+
+
+
+
+
+
+    override fun onStart() {
+        loadUI()
+        super.onStart()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //destroy variables
+        userPortion = -1F
+        recipePortion = -1F
+
+        /** Restore Status Bar and Navigation Bar view limits */
+        restoreViewLimits(requireActivity(), requireContext())
+    }
+
+
+    /**
+     *  General
+     * */
+
+
+    private fun setUI() {
+
+        /**
+         *  General
+         * */
+
+        /** Remove Status Bar and Navigation Bar view limits */
+        enableEdgeToEdge(requireActivity())
+
+        /**
+         *  Navigations
+         * */
+        /*
+        binding.backIB.setOnClickListener {
+            findNavController().navigateUp()
+        }*/
+
+
+    }
+
+    private fun loadUI() {
+
+        /**
+         *  General
+         * */
+
+        val activity = requireActivity()
+        changeMenuVisibility(false, activity)
+        changeTheme(false, activity, requireContext())
+
+    }
+
+
+
+*/
     /**
      * UI Update
      */
