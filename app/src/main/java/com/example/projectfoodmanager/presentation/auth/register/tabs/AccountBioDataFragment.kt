@@ -250,17 +250,17 @@ class AccountBioDataFragment(private val parentBinding: FragmentRegisterBinding)
             binding.errorActivityLevelTV.visibility=View.VISIBLE
             binding.errorActivityLevelTV.text=getString(R.string.USER_ERROR_ACTIVITY_LEVEL_INVALID)
         }else{
-            binding.op1RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.op1RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.op1RB.setTextColor(resources.getColor(R.color.black,null))
-            binding.op2RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.op2RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.op2RB.setTextColor(resources.getColor(R.color.black,null))
-            binding.op3RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.op3RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.op3RB.setTextColor(resources.getColor(R.color.black,null))
-            binding.op4RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.op4RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.op4RB.setTextColor(resources.getColor(R.color.black,null))
-            binding.op5RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.op5RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.op5RB.setTextColor(resources.getColor(R.color.black,null))
-            binding.op6RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.op6RB.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.op6RB.setTextColor(resources.getColor(R.color.black,null))
             binding.errorActivityLevelTV.visibility=View.INVISIBLE
         }

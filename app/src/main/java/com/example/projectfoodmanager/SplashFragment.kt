@@ -170,7 +170,7 @@ class SplashFragment : Fragment() {
         else if (recipesBackground == false)
             TODO("update recipesBackground on db")
 
-
+        Log.d(TAG, "updateLocalSharedPreferences: 2")
     }
 
     private fun bindObservers() {
@@ -257,6 +257,7 @@ class SplashFragment : Fragment() {
         }
 
         updateSharedPreferenceTracker.addObserver { list ->
+            Log.d(TAG, "bindObservers: $list")
 
             if (list.isNotEmpty() && list.all { it != null && it }) {
                 findNavController().navigate(R.id.action_splashFragment_to_app_navigation)

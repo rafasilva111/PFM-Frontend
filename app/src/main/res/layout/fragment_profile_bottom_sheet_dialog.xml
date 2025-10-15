@@ -162,7 +162,7 @@
                             android:fontFamily="@font/fredoka_one"
                             android:gravity="center_vertical"
                             android:text="20k"
-                            android:textColor="@color/grey_2"
+                            android:textColor="@color/grey"
                             android:textSize="16sp" />
 
                         <TextView
@@ -212,7 +212,7 @@
                             android:fontFamily="@font/fredoka_one"
                             android:gravity="center_vertical"
                             android:text="50k"
-                            android:textColor="@color/grey_2"
+                            android:textColor="@color/grey"
                             android:textSize="16sp" />
 
                         <TextView
@@ -353,7 +353,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/fredoka_regular"
-            android:text="@string/no_recipes"
+            android:text="@string/COMMON_NO_RESULTS"
             android:textSize="15sp"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"

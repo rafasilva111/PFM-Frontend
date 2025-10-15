@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
-import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentRecipeDetailBinding
 import com.example.projectfoodmanager.util.*
 import com.example.projectfoodmanager.util.Helper.Companion.changeMenuVisibility
@@ -515,7 +514,7 @@ class RecipeDetailFragment : Fragment(), ImageLoadingListener {
     private fun updateSaveUI(recipe: Recipe) {
 
         if (recipe.saved)
-            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
+            binding.favoritesIB.setImageResource(R.drawable.ic_saved_active)
         else
             binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
 

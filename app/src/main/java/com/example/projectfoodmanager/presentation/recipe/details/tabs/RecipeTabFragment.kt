@@ -126,7 +126,7 @@ class RecipeTabFragment(recipe: Recipe) : Fragment() {
 
                         else ->
                             chipBackgroundColor =
-                                context.resources.getColorStateList(R.color.grey, null)
+                                context.resources.getColorStateList(R.color.light_grey, null)
                     }
 
                     isClickable = false

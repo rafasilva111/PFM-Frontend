@@ -14,9 +14,9 @@ data class RecipeSimplified(
     val imgSource: String,
     val difficulty: String,
     @SerializedName("portion_lower")
-    val portionLower: String,
+    val portionLower: Int,
     @SerializedName("portion_upper")
-    val portionUpper: String?,
+    val portionUpper: Int?,
     @SerializedName("portion_units")
     val portionUnits: String,
     val time: Int,

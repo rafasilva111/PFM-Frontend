@@ -20,7 +20,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF2700</color>
-    <color name="grey_2">#7A7A7A</color>
+
+    <color name="light_grey">#DADADA</color>
+    <color name="grey">#7A7A7A</color>
 
 
     <color name="transparent">#00FFFFFF</color>
@@ -74,8 +76,7 @@
     <color name="purple_500">#FF000000</color>
 
     <!--calendar colors-->
-    <color name="light_gray">#888</color>
-    <color name="grey">#DADADA</color>
+
     <color name="grayLightBTN">#F4F4F4</color>
 
 

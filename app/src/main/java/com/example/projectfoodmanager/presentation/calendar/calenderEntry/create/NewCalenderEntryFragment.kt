@@ -3,7 +3,6 @@ package com.example.projectfoodmanager.presentation.calendar.calenderEntry.creat
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.text.format.DateFormat.is24HourFormat
 import android.view.*
 import android.widget.ArrayAdapter
@@ -21,6 +20,7 @@ import androidx.recyclerview.widget.SnapHelper
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.calender.CalenderEntryRequest
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.Recipe
+import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.toRecipeSimplifiedList
 import com.example.projectfoodmanager.databinding.FragmentNewCalenderEntryBinding
 import com.example.projectfoodmanager.presentation.calendar.utils.CalendarUtils.Companion.selectedDate
@@ -330,7 +330,16 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
                         binding.portionValTv.text = getString(R.string.FRAGMENT_NEW_CALENDER_ENTRY, checkedPortion)
                     }
                     1 -> {
-                        checkedPortion = 1
+                        if (objRecipe == null) {
+                            val position = manager.findFirstVisibleItemPosition()
+                            if (position != RecyclerView.NO_POSITION) {
+
+                                checkedPortion = adapter.getList()[position] .portionLower
+                            }
+                        }
+                        else
+                            checkedPortion = objRecipe!!.portionLower
+
                         binding.portionValTv.text = getString(R.string.FRAGMENT_NEW_CALENDER_ENTRY, checkedPortion)
                     }
                     2 -> {
@@ -525,7 +534,6 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
 
                         if (result.data.result.isEmpty()) {
                             binding.tvNoRecipes.visibility = View.VISIBLE
-                            binding.tvNoRecipes.text = getString(R.string.no_recipes)
                         } else
                             binding.tvNoRecipes.visibility = View.INVISIBLE
 
@@ -697,7 +705,7 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
                 binding.previousBtn.visibility = View.GONE
 
                 binding.listingTV.text = "Guardados"
-                binding.listingIV.setImageResource(R.drawable.ic_favorito_active)
+                binding.listingIV.setImageResource(R.drawable.ic_saved_active)
 
 
                 // List
@@ -717,8 +725,7 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
                 binding.nextBtn.visibility = View.VISIBLE
 
                 binding.listingTV.text = "Criados"
-                // todo rui falta aqui um icon para os criados
-                binding.listingIV.setImageResource(R.drawable.ic_favorito_active)
+                binding.listingIV.setImageResource(R.drawable.ic_cookie)
 
 
                 // List
@@ -755,7 +762,7 @@ class NewCalenderEntryFragment : Fragment(), ImageLoadingListener {
                 // All Recipes
                 // General
                 binding.listingTV.text = "Todas as receitas"
-                binding.listingIV.setImageResource(R.drawable.ic_baseline_menu_book_24) // todo rui falta aqui um icon para todas as receitas
+                binding.listingIV.setImageResource(R.drawable.ic_baseline_menu_book_24)
 
                 binding.nextBtn.visibility = View.GONE
 

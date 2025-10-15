@@ -6,19 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.databinding.FragmentCreateGoalBinding
-import com.example.projectfoodmanager.databinding.FragmentGoalCreateGoalWeightBinding
 import com.example.projectfoodmanager.databinding.FragmentGoalFatBinding
-import com.example.projectfoodmanager.presentation.goals.createGoal.CreateGoalFragment
-import com.example.projectfoodmanager.presentation.goals.createGoal.CreateGoalFragment.Companion.fitnessReport
 import com.example.projectfoodmanager.presentation.goals.createGoal.CreateGoalFragment.Companion.goalGenericReport
 import com.example.projectfoodmanager.presentation.goals.createGoal.CreateGoalFragment.Companion.userGoal
-import com.example.projectfoodmanager.util.*
-import com.example.projectfoodmanager.viewmodels.GoalsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -151,9 +144,9 @@ class GoalFatFragment(private var parentBinding: FragmentCreateGoalBinding) : Fr
             binding.errorFatTV.visibility=View.VISIBLE
             binding.errorFatTV.text="You need to chose an option"
         }else{
-            binding.sevenPerc.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.sevenPerc.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.sevenPerc.setTextColor(resources.getColor(R.color.black,null))
-            binding.tenPerc.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.tenPerc.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.tenPerc.setTextColor(resources.getColor(R.color.black,null))
 
             binding.errorFatTV.visibility=View.INVISIBLE

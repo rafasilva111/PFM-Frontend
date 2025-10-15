@@ -82,7 +82,7 @@
                 android:fontFamily="@font/fredoka_medium"
                 android:text="@string/FRAGMENT_RECIPE_TAB_NUMBER_CATEGORY_LABEL"
                 android:textAlignment="textEnd"
-                android:textColor="@color/grey_2"
+                android:textColor="@color/grey"
                 android:textSize="13sp" />
         </LinearLayout>
 
@@ -140,7 +140,7 @@
                 android:fontFamily="@font/fredoka_medium"
                 android:text="@string/FRAGMENT_RECIPE_TAB_NUMBER_INGREDIENTS_LABEL"
                 android:textAlignment="textEnd"
-                android:textColor="@color/grey_2"
+                android:textColor="@color/grey"
                 android:textSize="13sp" />
         </LinearLayout>
 
@@ -215,7 +215,7 @@
                 android:fontFamily="@font/fredoka_medium"
                 android:text="@string/FRAGMENT_RECIPE_TAB_NUMBER_PREPARATION_LABEL"
                 android:textAlignment="textEnd"
-                android:textColor="@color/grey_2"
+                android:textColor="@color/grey"
                 android:textSize="13sp" />
         </LinearLayout>
 

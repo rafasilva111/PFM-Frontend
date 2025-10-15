@@ -169,20 +169,6 @@ class CalendarFragment : Fragment(), ImageLoadingListener {
 
     /** Interfaces */
 
-/*    override fun onImageLoaded() {
-        requireActivity().runOnUiThread {
-            adapterEntry.imagesLoaded++
-            if (adapterEntry.imagesLoaded >= manager.findLastCompletelyVisibleItemPosition()) {
-                binding.progressBar.hide()
-                binding.calEntrysRV.visibility = View.VISIBLE
-            }
-            else{
-                binding.calEntrysRV.visibility = View.INVISIBLE
-            }
-
-        }
-    }*/
-
     override fun onImageLoaded() {
         requireActivity().runOnUiThread {
             adapterEntry.imagesLoaded++
@@ -241,7 +227,6 @@ class CalendarFragment : Fragment(), ImageLoadingListener {
             )
 
         binding.calEntrysRV.visibility = View.INVISIBLE
-        binding.progressBar.show()
 
         super.onPause()
     }
@@ -355,7 +340,7 @@ class CalendarFragment : Fragment(), ImageLoadingListener {
 
                         binding.nRegistersTV.text = it.data.result.size.toString()
 
-                        if (it.data.result.size == 0){
+                        if (it.data.result.isEmpty()){
                             binding.emptyRegTV.show()
                         }
 

@@ -188,7 +188,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout3"
+        android:id="@+id/recipeCard_CL"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -261,7 +261,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="8dp"
-            android:text="@string/no_recipes"
+            android:text="@string/COMMON_NO_RESULTS"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/cardView8"
             app:layout_constraintEnd_toEndOf="parent"

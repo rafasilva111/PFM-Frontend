@@ -162,15 +162,15 @@ class GoalCarbohydratesFragment(private var parentBinding: FragmentCreateGoalBin
             binding.errorCarbohydratesTV.visibility=View.VISIBLE
             binding.errorCarbohydratesTV.text="You need to chose an option"
         }else{
-            binding.onlyOption.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.onlyOption.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.onlyOption.setTextColor(resources.getColor(R.color.black,null))
-            binding.fortyPerc.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.fortyPerc.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.fortyPerc.setTextColor(resources.getColor(R.color.black,null))
-            binding.fiftyPerc.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.fiftyPerc.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.fiftyPerc.setTextColor(resources.getColor(R.color.black,null))
-            binding.sixtyFivePerc.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.sixtyFivePerc.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.sixtyFivePerc.setTextColor(resources.getColor(R.color.black,null))
-            binding.seventyFivePerc.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.seventyFivePerc.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.seventyFivePerc.setTextColor(resources.getColor(R.color.black,null))
             binding.errorCarbohydratesTV.visibility=View.INVISIBLE
         }

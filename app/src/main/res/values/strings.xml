@@ -20,7 +20,8 @@
     <string name="COMMON_NUTRITION_KCAL">%1$.1f kcal</string>
     <string name="COMMON_NUTRITION_PERC">%1$.1f %%</string>
     <string name="COMMON_NUTRITION_GRAMS">%1$.1f g</string>
-
+    <string name="COMMON_OFFLINE">Estás offline…</string>
+    <string name="COMMON_NO_RESULTS">Sem resultados…</string>
 
 
     <!-- Content Descriptors -->
@@ -180,7 +181,7 @@
     <string name="invalid_password_2">The passwords are differents</string>
 
     <string name="txt_error_message">%1$S*</string>
-    <string name="no_recipes">No recipes found.</string>
+
     <string name="user_had_no_shared_preferences">User session invalid.</string>
     <string name="user_registered_successfully">User registered successfully.</string>
     <string name="logout_confirmation_description">Are you sure you want to exit?</string>

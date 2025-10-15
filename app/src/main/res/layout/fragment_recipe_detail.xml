@@ -548,7 +548,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/fredoka_regular"
                                 android:text="0 min"
-                                android:textColor="@color/grey_2"
+                                android:textColor="@color/grey"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -606,7 +606,7 @@
                                     android:layout_weight="1"
                                     android:fontFamily="@font/fredoka_regular"
                                     android:text="facil"
-                                    android:textColor="@color/grey_2"
+                                    android:textColor="@color/grey"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
 
@@ -655,7 +655,7 @@
                                     android:layout_weight="1"
                                     android:fontFamily="@font/fredoka_regular"
                                     android:text="2 pessoas"
-                                    android:textColor="@color/grey_2"
+                                    android:textColor="@color/grey"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
 

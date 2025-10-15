@@ -453,9 +453,11 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                         if(result.data.result.isEmpty()){
                             binding.progressBar.hide()
                             binding.noRecipesTV.visibility=View.VISIBLE
+                            binding.recipeCardCL.visibility=View.INVISIBLE
                             return@let
                         }else{
                             binding.noRecipesTV.visibility=View.GONE
+                            binding.recipeCardCL.visibility=View.VISIBLE
 
                         }
 

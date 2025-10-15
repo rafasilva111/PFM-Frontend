@@ -36,7 +36,7 @@ class CalendarAdapter(
         dayOfMonth.backgroundTintList = ColorStateList.valueOf(
             ContextCompat.getColor(
                 context,
-                R.color.light_gray
+                R.color.grey
             )
         )
 

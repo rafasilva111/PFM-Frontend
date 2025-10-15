@@ -164,7 +164,7 @@
             android:layout_weight="1"
             android:text="SUN"
             android:textAlignment="center"
-            android:textColor="@color/light_gray"
+            android:textColor="@color/grey"
             android:textSize="10sp" />
 
         <TextView
@@ -173,7 +173,7 @@
             android:layout_weight="1"
             android:text="MON"
             android:textAlignment="center"
-            android:textColor="@color/light_gray"
+            android:textColor="@color/grey"
             android:textSize="10sp" />
 
         <TextView
@@ -182,7 +182,7 @@
             android:layout_weight="1"
             android:text="TUE"
             android:textAlignment="center"
-            android:textColor="@color/light_gray"
+            android:textColor="@color/grey"
             android:textSize="10sp" />
 
         <TextView
@@ -191,7 +191,7 @@
             android:layout_weight="1"
             android:text="WED"
             android:textAlignment="center"
-            android:textColor="@color/light_gray"
+            android:textColor="@color/grey"
             android:textSize="10sp" />
 
         <TextView
@@ -200,7 +200,7 @@
             android:layout_weight="1"
             android:text="THUR"
             android:textAlignment="center"
-            android:textColor="@color/light_gray"
+            android:textColor="@color/grey"
             android:textSize="10sp" />
 
         <TextView
@@ -209,7 +209,7 @@
             android:layout_weight="1"
             android:text="FRI"
             android:textAlignment="center"
-            android:textColor="@color/light_gray"
+            android:textColor="@color/grey"
             android:textSize="10sp" />
 
         <TextView
@@ -218,7 +218,7 @@
             android:layout_weight="1"
             android:text="SAT"
             android:textAlignment="center"
-            android:textColor="@color/light_gray"
+            android:textColor="@color/grey"
             android:textSize="10sp" />
 
 
@@ -335,26 +335,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerDateCatLL" />
 
-    <TextView
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/emptyRegTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/fredoka_regular"
-        android:text="@string/sem_registos"
-        android:textSize="15sp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/main_color"
+        android:elevation="8dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="@string/COMMON_NO_RESULTS"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
         android:visibility="gone"
+        app:cornerRadius="24dp"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view4" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/fredoka_regular"
-        android:text="@string/sem_registos"
         android:textSize="15sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

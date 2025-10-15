@@ -205,15 +205,15 @@ class GoalCaloriesFragment(private var parentBinding: FragmentCreateGoalBinding)
             binding.errorActivityLevelTV.visibility=View.VISIBLE
             binding.errorActivityLevelTV.text="You need to chose an option"
         }else{
-            binding.gain1.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.gain1.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.gain1.setTextColor(resources.getColor(R.color.black,null))
-            binding.gain05.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.gain05.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.gain05.setTextColor(resources.getColor(R.color.black,null))
-            binding.lose05.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.lose05.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.lose05.setTextColor(resources.getColor(R.color.black,null))
-            binding.lose1.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.lose1.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.lose1.setTextColor(resources.getColor(R.color.black,null))
-            binding.maintainWeight.buttonTintList=context?.resources?.getColorStateList(R.color.grey_2,null)
+            binding.maintainWeight.buttonTintList=context?.resources?.getColorStateList(R.color.grey,null)
             binding.maintainWeight.setTextColor(resources.getColor(R.color.black,null))
             binding.errorActivityLevelTV.visibility=View.INVISIBLE
         }

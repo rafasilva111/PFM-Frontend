@@ -20,9 +20,9 @@ data class Recipe(
     val sourceLink: String,
     val time: Int,
     @SerializedName("portion_lower")
-    val portionLower: String,
+    val portionLower: Int,
     @SerializedName("portion_upper")
-    val portionUpper: String?,
+    val portionUpper: Int?,
     @SerializedName("portion_units")
     val portionUnits: String,
     val difficulty: String,

@@ -8,12 +8,11 @@ import kotlinx.parcelize.Parcelize
 data class UserSimplified(
     val id: Int,
     val name: String,
-    val username: String,
     val description: String,
-    val profile_type: String,
+    @SerializedName("profile_type")
+    val profileType: String,
     val verified: Boolean,
-    @SerializedName("user_type")
-    var userType: String,
+    var type: String,
     @SerializedName("image")
     val imgSource: String="",
     @SerializedName("follows_c")

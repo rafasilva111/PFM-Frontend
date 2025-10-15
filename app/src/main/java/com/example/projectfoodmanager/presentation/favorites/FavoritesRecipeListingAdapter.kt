@@ -140,7 +140,7 @@ class FavoritesRecipeListingAdapter(
          */
 
         if(item.saved)
-            binding.favoritesIB.setImageResource(R.drawable.ic_favorito_active)
+            binding.favoritesIB.setImageResource(R.drawable.ic_saved_active)
         else
             binding.favoritesIB.setImageResource(R.drawable.ic_favorite_black)
 
