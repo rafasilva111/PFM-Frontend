@@ -11,6 +11,7 @@ import android.view.WindowInsetsController
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.example.projectfoodmanager.R
+import com.example.projectfoodmanager.data.model.modelResponse.user.ProfileType
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentProfileBottomSheetDialogBinding
 import com.example.projectfoodmanager.util.*
@@ -129,7 +130,7 @@ class ProfileBottomSheetDialog : BottomSheetDialogFragment() {
         //TODO: O numero de receitas
         //binding.nRecipesTV.text=
 
-        if (objUser.profileType=="PRIVATE"){
+        if (objUser.profileType== ProfileType.PRIVATE){
             binding.privateAccountLL.visibility=View.VISIBLE
 
         }else{
@@ -173,7 +174,7 @@ class ProfileBottomSheetDialog : BottomSheetDialogFragment() {
             //TODO: Verificar se o utilizador é ou não seguidor
             userViewModel.postFollowRequest(objUser.id)
 
-            if (objUser.profileType=="PRIVATE"){
+            if (objUser.profileType== ProfileType.PRIVATE){
                 binding.followBTN.text = "Aguardar confirmação"
             }else{
                 binding.followBTN.text = "A seguir"

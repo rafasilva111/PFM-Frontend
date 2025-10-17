@@ -25,6 +25,8 @@
     <color name="light_grey">#DADADA</color>
     <color name="grey">#7A7A7A</color>
 
+    <color name="tag_off_color">#F3F3F3</color>
+
 
     <color name="transparent">#00FFFFFF</color>
 

@@ -332,7 +332,7 @@
         android:backgroundTint="@color/light_main_color"
         android:elevation="8dp"
         android:ellipsize="end"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/fedoka"
         android:gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"

@@ -1,6 +1,8 @@
 package com.example.projectfoodmanager.data.model.modelResponse.user.profile
 
 import android.os.Parcelable
+import com.example.projectfoodmanager.data.model.modelResponse.user.ProfileType
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserType
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
@@ -11,10 +13,11 @@ data class UserProfile(
     val name: String,
     val username: String,
     val description: String,
-    val profile_type: String,
+    @SerializedName("profile_type")
+    val profileType: ProfileType,
     val verified: Boolean,
     @SerializedName("user_type")
-    var userType: String,
+    var userType: UserType,
     @SerializedName("img_source")
     val imgSource: String="",
     @SerializedName("follows_c")

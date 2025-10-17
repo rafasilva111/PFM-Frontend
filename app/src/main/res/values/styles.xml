@@ -1,27 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!--    <style name="ThemeOverlay.App.MaterialTimePicker" parent="@style/ThemeOverlay.Material3.MaterialTimePicker">
-            <item name="colorSurface">@color/background_1</item>
-        </style>-->
-<!--    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
-        <item name="queryHintTextAppearance">@style/SearchViewQueryHintTextAppearance</item>
+    <!--    Search view     -->
+    <style name="SearchViewHintStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textColorHint">@color/main_color</item>
+        <item name="android:textColor">@color/main_color</item> <!-- optional: text color -->
+        <item name="android:fontFamily">@font/fedoka</item> <!-- optional: font -->
     </style>
 
-    <style name="SearchViewQueryHintTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">7sp</item> &lt;!&ndash; Adjust the text size as per your requirement &ndash;&gt;
-    </style>-->
-
-
-    <!--<style name="Theme.App" parent="Theme.M"
-        <item name="colorPrimary">@color/main_color</item>
-        <item name="colorOnSurface">@color/main_color</item>
-        <item name="colorError">@color/main_color</item>
-        <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
-        <item name="textAppearanceCaption">@style/TextAppearance.App.Caption</item>
-        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
-
-    </style>-->
 
     <style name="Widget.AppTheme.MaterialDatePicker" parent="ThemeOverlay.Material3.MaterialCalendar">
         <item name="materialCalendarHeaderToggleButton">@style/Widget.AppTheme.MaterialCalendar.HeaderToggleButton</item>
@@ -101,7 +87,27 @@
     </style>
 -->
 
+    <!--    <style name="ThemeOverlay.App.MaterialTimePicker" parent="@style/ThemeOverlay.Material3.MaterialTimePicker">
+            <item name="colorSurface">@color/background_1</item>
+        </style>-->
+    <!--    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+            <item name="queryHintTextAppearance">@style/SearchViewQueryHintTextAppearance</item>
+        </style>
 
+        <style name="SearchViewQueryHintTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+            <item name="android:textSize">7sp</item> &lt;!&ndash; Adjust the text size as per your requirement &ndash;&gt;
+        </style>-->
+
+
+    <!--<style name="Theme.App" parent="Theme.M"
+        <item name="colorPrimary">@color/main_color</item>
+        <item name="colorOnSurface">@color/main_color</item>
+        <item name="colorError">@color/main_color</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.App.Caption</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+
+    </style>-->
 
 
 

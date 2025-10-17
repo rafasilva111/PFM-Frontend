@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserType
 import com.example.projectfoodmanager.data.model.modelResponse.user.profile.UserProfile
 import com.example.projectfoodmanager.databinding.FragmentProfileBinding
 import com.example.projectfoodmanager.util.*
@@ -186,7 +187,7 @@ class ProfileFragment : Fragment() {
 
         binding.nameTV.text = getString(R.string.full_name, user.name)
 
-        if (user.userType == UserType.VIP) {
+        if (user.userType == UserType.PREMIUM) {
             binding.profileCV.foreground = ContextCompat.getDrawable(requireContext(), R.drawable.border_vip);
             binding.vipIV.visibility = View.VISIBLE
         }
@@ -200,7 +201,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun showValidationErrors(error: String) {
-        toast(String.format(resources.getString(R.string.txt_error_message, error)))
+        toast(resources.getString(R.string.txt_error_message, error))
     }
 
     private fun bindObservers() {

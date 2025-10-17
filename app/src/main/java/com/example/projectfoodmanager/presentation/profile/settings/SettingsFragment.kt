@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.MainActivity
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelRequest.user.UserRequest
+import com.example.projectfoodmanager.data.model.modelResponse.user.ProfileType
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
 import com.example.projectfoodmanager.databinding.FragmentSettingsBinding
 import com.example.projectfoodmanager.util.*
@@ -38,7 +39,7 @@ class SettingsFragment : Fragment() {
 
     // constants
     private lateinit var user: User
-    private var profileType: String? = null
+    private var profileType: ProfileType? = null
     private var fmcToken: String? = null
 
     // injects
@@ -130,7 +131,7 @@ class SettingsFragment : Fragment() {
 
         binding.SWNotify.isChecked = user.fmcToken == "-1"
 
-        binding.SWPrivacy.isChecked = user.profileType== "PRIVATE"
+        binding.SWPrivacy.isChecked = user.profileType == ProfileType.PRIVATE
 
         // todo
         binding.SWCarinhosMode.isChecked = false

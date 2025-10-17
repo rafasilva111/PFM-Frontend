@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.user.User
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserType
 import com.example.projectfoodmanager.data.model.util.ValidationError
 import com.example.projectfoodmanager.databinding.FragmentSessionProfileBinding
 import com.example.projectfoodmanager.presentation.follower.FollowerFragment
@@ -88,7 +89,7 @@ class UserSessionFragment : Fragment() {
 
         binding.nameTV.text =  getString(R.string.full_name, user.name)
 
-        if (user.userType!=UserType.VIP)
+        if (user.userType != UserType.PREMIUM)
             binding.premiumLL.visibility = View.GONE
 
         if (!user.verified)

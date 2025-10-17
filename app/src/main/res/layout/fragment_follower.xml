@@ -172,7 +172,7 @@
                         android:fontFamily="@font/fredoka_regular"
                         android:paddingStart="5dp"
                         android:paddingEnd="5dp"
-                        android:text="@string/fragment_follower_follower_request_count"
+                        android:text="@string/COMMON_ZERO"
                         android:textColor="@color/white"
                         android:textSize="11sp"
                         app:layout_constraintStart_toEndOf="@+id/imgFirstReqCV"

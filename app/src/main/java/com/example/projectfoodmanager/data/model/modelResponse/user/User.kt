@@ -18,10 +18,10 @@ data class User(
     @SerializedName("fmc_token")
     var fmcToken: String?,
     @SerializedName("profile_type")
-    val profileType: String,
+    val profileType: ProfileType,
     val verified: Boolean,
     @SerializedName("user_type")
-    var userType: String,
+    var userType: UserType,
     @SerializedName("user_portion")
     val userPortion: Int,
     @SerializedName("image")
@@ -45,3 +45,20 @@ data class User(
     var fitnessGoal: Goal? = null
 
 ) : Parcelable
+
+enum class UserType(val value: String) {
+    PLACEHOLDER("Placeholder"),
+    COMPANY("Company"),
+    NORMAL("Normal"),
+    PREMIUM("Premium"),
+    APP_STAFF("Application Staff"),
+    APP_ADMIN("Application Admin"),
+    COMPANY_STAFF("Company Staff"),
+    COMPANY_ADMIN("Company Admin")
+}
+
+enum class ProfileType(val value: String) {
+    PROTECT("PROTECT"),
+    PRIVATE("PRIVATE"),
+    PUBLIC("PUBLIC")
+}

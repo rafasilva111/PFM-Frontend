@@ -237,7 +237,19 @@ class CalendarFragment : Fragment(), ImageLoadingListener {
             setMonthView()
 
         /** Load data for selected date */
-        getCalendarEntriesForDate(selectedDate)
+        if (isOnline(requireContext()))
+            getCalendarEntriesForDate(selectedDate)
+        else{
+            // Load from Shared Preferences when offline
+            val calendarEntry = sharedPreference.getEntryOnCalendar(selectedDate.atStartOfDay())
+            calendarEntry?.let {
+                adapterCalenderEntries.setItems(it)
+                binding.nRegistersTV.text = adapterCalenderEntries.itemCount.toString()
+
+                if (it.isEmpty()) binding.emptyRegTV.show()
+                else binding.emptyRegTV.hide()
+            }
+        }
     }
 
     private fun bindObservers() {
@@ -298,7 +310,6 @@ class CalendarFragment : Fragment(), ImageLoadingListener {
 
         hideCalendarEntriesRecyclerView()
     }
-
 
     private fun showCalendarEntriesRecyclerView() {
         binding.progressBar.hide()
@@ -445,6 +456,7 @@ class CalendarFragment : Fragment(), ImageLoadingListener {
     // -----------------------------------------------------------------------------------------
     // 🔹 Companion Object
     // -----------------------------------------------------------------------------------------
+
     companion object {
         var weeklyViewSelected: Boolean = true
     }

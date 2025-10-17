@@ -20,6 +20,7 @@
 
         <!-- TextView Style -->
         <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/fedoka</item>
 
         <!-- TextInputLayout Style -->
         <item name="textInputStyle">@style/Widget.ProjectFoodManager.TextInputLayout.OutlinedBox</item>
@@ -40,6 +41,7 @@
         <item name="chipStrokeColor">@color/stroke_tint</item>
         <item name="android:textAppearance">@style/TextAppearance.App.BodyMedium</item>
     </style>
+
 
     <style name="SubTitleStyle">
         <item name="android:fontFamily">@font/titillium_web_bold</item>

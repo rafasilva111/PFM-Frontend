@@ -1,6 +1,7 @@
 package com.example.projectfoodmanager.data.model.modelRequest.user
 
 import android.os.Parcelable
+import com.example.projectfoodmanager.data.model.modelResponse.user.ProfileType
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
@@ -14,7 +15,7 @@ data class UserRequest(
     @SerializedName("birth_date")
     var birth_date: String? = null,
     @SerializedName("profile_type")
-    val profileType: String? = null,
+    val profileType: ProfileType? = null,
     @SerializedName("fmc_token")
     var fmc_token: String? = null,
     @SerializedName("email")

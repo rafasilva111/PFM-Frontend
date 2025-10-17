@@ -94,14 +94,6 @@ object RecipesSortingType {
     const val RANDOM = "RANDOM"
 }
 
-object UserType{
-    const val NORMAL = "N"
-    const val COMPANY = "C"
-    const val VIP = "V"
-    const val ADMIN = "A"
-
-}
-
 object SEX{
     const val M = "M"
     const val F = "F"
@@ -173,11 +165,6 @@ object FragmentRecipeLikesChipsTag{
     val CREATED =  3
     val COMMENTED =  4
     val LAST_SEEN =  5
-}
-
-object ProfileType{
-    const val PUBLIC = "PUBLIC"
-    const val PRIVATE = "PRIVATE"
 }
 
 

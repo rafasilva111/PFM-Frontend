@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -29,6 +30,7 @@ import com.bumptech.glide.util.ViewPreloadSizeProvider
 import com.example.projectfoodmanager.R
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.RecipeSimplified
 import com.example.projectfoodmanager.data.model.modelResponse.recipe.toRecipeSimplified
+import com.example.projectfoodmanager.data.model.modelResponse.user.UserType
 import com.example.projectfoodmanager.data.model.notification.Notification
 import com.example.projectfoodmanager.databinding.FragmentRecipeListingBinding
 import com.example.projectfoodmanager.di.notification.MyFirebaseMessagingService
@@ -68,29 +70,26 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     /** Constants */
     private val TAG: String = "RecipeListingFragment"
 
-    // RecyclerView
+    /** Layout Manager & Preloader */
     private var snapHelper : SnapHelper = PagerSnapHelper()
     private lateinit var manager: LinearLayoutManager
     private lateinit var scrollListener: RecyclerView.OnScrollListener
     private lateinit var preloadModelProvider: RecipePreloadModelProvider
 
-    // Pagination
+    /** Pagination */
     private var noMoreRecipesMessagePresented = false
 
-    // Filters
-
-    // Chip Filters
+    /** Chip Filters */
     private var selectedTab: String = SelectedTab.VERIFIED
     private lateinit var chipSelected: Chip
 
-    // Tag Filters
+    /** Tag Filters */
     private var previousSelectTag: String =""
 
-    // Search
-    // Debounce
+    /** Search Debouncer */
     private var debounceJob: Job? = null
 
-    // Notifications
+    /** Notifications */
     private var numberOfNotifications: Int = 0
     private val notificationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -100,7 +99,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     }
 
     /** Injections */
-
     @Inject
     lateinit var sharedPreference: SharedPreference
     @Inject
@@ -108,7 +106,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
 
     /** Adapters */
-
     private val adapter by lazy {
         RecipeListingAdapter(
             onItemClicked = {pos,recipe ->
@@ -149,7 +146,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     }
 
     /** Interfaces */
-
     override fun onImageLoaded() {
         requireActivity().runOnUiThread {
             if (binding.recyclerView.visibility != View.VISIBLE && binding.recyclerView.visibility != View.GONE) {
@@ -167,9 +163,9 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         }
     }
 
-    /**
-     *  Android LifeCycle
-     * */
+    // -----------------------------------------------------------------------------------------
+    // 🔹 Android Lifecycle
+    // -----------------------------------------------------------------------------------------
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -177,26 +173,25 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     ): View {
         bindObservers()
 
+        /** Inflate binding */
+        binding = FragmentRecipeListingBinding.inflate(inflater, container, false)
 
-        return if (this::binding.isInitialized){
-            binding.root
-        }else {
-
-
-            binding = FragmentRecipeListingBinding.inflate(layoutInflater)
-            manager = LinearLayoutManager(activity)
-            manager.orientation=LinearLayoutManager.HORIZONTAL
-            manager.reverseLayout=false
-            binding.recyclerView.layoutManager = manager
-            binding.recyclerView.itemAnimator = null
-            snapHelper.attachToRecyclerView(binding.recyclerView)
-
-            binding.root
+        /** Set up RecyclerView LayoutManager */
+        manager = LinearLayoutManager(requireContext()).apply {
+            orientation = LinearLayoutManager.HORIZONTAL
+            reverseLayout = false
         }
+        binding.recyclerView.layoutManager = manager
+        binding.recyclerView.itemAnimator = null
+        snapHelper.attachToRecyclerView(binding.recyclerView)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        /** Setup UI and bind observers */
         setUI()
+        bindObservers()
         super.onViewCreated(view, savedInstanceState)
 
     }
@@ -229,55 +224,86 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onPause() {
+    override fun onStart() {
 
-
-        // Unregister the broadcast receiver to avoid memory leaks
-        context?.unregisterReceiver(notificationReceiver)
-        super.onPause()
+        /** Load data into UI */
+        loadUI()
+        super.onStart()
     }
 
     override fun onResume() {
 
-
-        // Register the broadcast receiver
+        /** Register the broadcast receiver */
         context?.registerReceiver(notificationReceiver, IntentFilter(MyFirebaseMessagingService.ACTION_NOTIFICATION_RECEIVED))
         super.onResume()
     }
 
-    /**
-     *  General
-     * */
+    override fun onPause() {
 
-    private fun setUI() {
+        /** Unregister the broadcast receiver to avoid memory leaks */
+        context?.unregisterReceiver(notificationReceiver)
+        super.onPause()
+    }
 
-        /**
-         * General
-         */
+    // -----------------------------------------------------------------------------------------
+    // 🔹 UI Setup
+    // -----------------------------------------------------------------------------------------
 
+    private fun loadUI() {
+
+        /** General */
         val activity = requireActivity()
         changeMenuVisibility(true, activity)
         changeTheme(false,activity,requireContext())
 
+        /** Check Internet Connection */
+        if (!isOnline(requireContext())) {
+            binding.offlineTV.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
+        }else{
+
+            /** Update Recipe List */
+            if (currentPosition == -1)
+                fetchRecipes()
+            else{
+                // If user is coming back from entering in a recipe, update the item in the list
+                recipeViewModel.getRecipe(adapter.getItems()[currentPosition].id)
+            }
+
+            /** Update Notifications */
+            userViewModel.getNotifications(pageSize = 1)
+        }
+
+
+    }
+
+
+    private fun setUI() {
+
+        /** General */
+        val activity = requireActivity()
+        changeMenuVisibility(true, activity)
+        changeTheme(false,activity,requireContext())
+
+        /** Set Adapters */
+        binding.recyclerView.adapter = adapter
 
         setRecyclerViewScrollListener()
 
-        //Get User in SharedPreferences
+        /** Load User Info */
         val user = sharedPreference.getUserSession()
 
+        /** Set User Info */
         binding.tvName.text = formatNameToNameUpper(getString(R.string.full_name, user.name))
 
-        //VIP HEADER
-        if (user.userType != "V") {
-            binding.profileCV.foreground = null
-            binding.vipIV.visibility = View.INVISIBLE
+        if (user.userType == UserType.PREMIUM) {
+            binding.profileCV.foreground = getDrawable(requireContext(), R.drawable.border_vip)
+            binding.vipIV.visibility = View.VISIBLE
         }
 
-        //VERIFIED HEADER
         if (user.verified)
             binding.verifyUserHeaderIV.visibility = View.VISIBLE
 
-        //Set Profile Image
         loadUserImage(binding.ivProfilePic, user.imgSource)
 
         /**
@@ -368,7 +394,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                     chipSelected = it
 
                     selectedTab = chipSelected.tag as String
-                    updateView()
+                    fetchRecipes()
                 }
             } else {
                 // If no chip is selected, select the last selected one
@@ -376,11 +402,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             }
         }
 
-        /**
-         * Notifications
-         */
-
-        userViewModel.getNotifications(pageSize = 1)
 
         /**
          * Bottom Tag Filters
@@ -409,25 +430,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         }
 
 
-        if (isOnline(requireContext())) {
-            binding.recyclerView.adapter = adapter
 
-
-
-            // if firstTime
-            if (currentPosition == -1)
-                updateView()
-            else{
-                // If user entered in a recipe, update the item in the list
-                recipeViewModel.getRecipe(adapter.getItems()[currentPosition].id)
-            }
-
-            // get recipes for first time
-
-        } else {
-            binding.offlineTV.visibility = View.VISIBLE
-            binding.recyclerView.visibility = View.GONE
-        }
     }
 
     private fun bindObservers() {
@@ -623,9 +626,9 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
 
 
-    /**
-     *  Functions
-     * */
+    // -----------------------------------------------------------------------------------------
+    // 🔹 Core Logic
+    // -----------------------------------------------------------------------------------------
 
     private fun setRecyclerViewScrollListener() {
         scrollListener = object : RecyclerView.OnScrollListener() {
@@ -689,7 +692,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     }
 
-    private fun updateView() {
+    private fun fetchRecipes() {
 
         hideRecyclerView()
 
@@ -725,8 +728,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
             }
         }
 
-        // If first loading
-
         recipeViewModel.getRecipes(
             page = 1,
             searchString = searchString,
@@ -738,24 +739,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
 
 
-    }
-
-    private fun setItemsToImagePreload(recipeList: MutableList<RecipeSimplified>) {
-        if (! ::preloadModelProvider.isInitialized){
-            initImagePreload(recipeList)
-        }
-        preloadModelProvider.setItems(recipeList)
-    }
-
-    private fun initImagePreload(recipeList: MutableList<RecipeSimplified>) {
-        preloadModelProvider = RecipePreloadModelProvider(recipeList, requireContext())
-        val preloader = RecyclerViewPreloader(
-            Glide.with(this),
-            preloadModelProvider,
-            ViewPreloadSizeProvider(),
-            10, /* maxPreload */
-        )
-        binding.recyclerView.addOnScrollListener(preloader)
     }
 
     private fun changeNotificationNumber(){
@@ -787,9 +770,31 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         binding.recyclerView.visibility = View.INVISIBLE
     }
 
-    /** Filters */
+    // -----------------------------------------------------------------------------------------
+    // 🔹 Preloading Helpers
+    // -----------------------------------------------------------------------------------------
 
-    /** Chip Filters */
+    private fun setItemsToImagePreload(recipeList: MutableList<RecipeSimplified>) {
+        if (! ::preloadModelProvider.isInitialized){
+            initImagePreload(recipeList)
+        }
+        preloadModelProvider.setItems(recipeList)
+    }
+
+    private fun initImagePreload(recipeList: MutableList<RecipeSimplified>) {
+        preloadModelProvider = RecipePreloadModelProvider(recipeList, requireContext())
+        val preloader = RecyclerViewPreloader(
+            Glide.with(this),
+            preloadModelProvider,
+            ViewPreloadSizeProvider(),
+            10, /* maxPreload */
+        )
+        binding.recyclerView.addOnScrollListener(preloader)
+    }
+
+    // -----------------------------------------------------------------------------------------
+    // 🔹 Filters Controls
+    // -----------------------------------------------------------------------------------------
 
     private fun ChipGroup.selectChipByTag(desiredTag: String): Chip? {
         for (index in 0 until childCount) {
@@ -802,8 +807,6 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         return null
     }
 
-    /** Tab Filters */
-
     private fun changeTagFilter(tag: String){
 
         // Alter Tag
@@ -815,7 +818,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
         }
 
         // Update Recipe List
-        updateView()
+        fetchRecipes()
 
         // Scroll to 0 position
         binding.recyclerView.layoutManager?.smoothScrollToPosition(binding.recyclerView, null, 0)
@@ -867,12 +870,12 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
         tvToUpdate?.setTextColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.main_color)))
 
-        ibToUpdate?.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#F3F3F3"))
+        ibToUpdate?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.tag_off_color))
     }
 
-    /**
-     *  Object
-     * */
+    // -----------------------------------------------------------------------------------------
+    // 🔹 Companion Object
+    // -----------------------------------------------------------------------------------------
 
     companion object {
 

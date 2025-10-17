@@ -108,6 +108,7 @@
     <string name="FRAGMENT_RECIPE_LISTING_USER_NAME_PLACEHOLDER">Nome Proprio</string>
     <string name="FRAGMENT_RECIPE_LISTING_SEARCH_HINT">Procurar receita</string>
     <string name="FRAGMENT_RECIPE_LISTING_SEARCH_DESC">Campo de pesquisa de receitas</string>
+    <string name="FRAGMENT_RECIPE_LISTING_NO_RECIPES">Não há receitas…</string>
 
     <!-- =============== Recipe Detail COMPONENT  =============== -->
 
