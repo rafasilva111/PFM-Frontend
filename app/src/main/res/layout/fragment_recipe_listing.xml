@@ -14,6 +14,7 @@
         android:layout_height="@dimen/iv_30"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="4dp"
+        android:contentDescription="@string/COMMON_CONTENT_DESC_NOTIFICATIONS_BUTTON"
         android:src="@drawable/ic_notification"
         app:layout_constraintBottom_toBottomOf="@+id/profileCV"
         app:layout_constraintEnd_toStartOf="@+id/profileCV"
@@ -30,7 +31,7 @@
         android:fontFamily="@font/fredoka_regular"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
-        android:text="@string/fragment_follower_follower_request_count"
+        android:text="@string/COMMON_ZERO"
         android:textColor="@color/white"
         android:textSize="11sp"
         android:visibility="gone"
@@ -43,6 +44,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="-25dp"
         android:layout_marginBottom="-25dp"
+        android:contentDescription="@string/COMMON_CONTENT_VERIFIED_SEAL"
         android:elevation="8dp"
         android:src="@drawable/verified"
         android:visibility="invisible"
@@ -57,6 +59,7 @@
         android:layout_marginTop="-15dp"
         android:background="@drawable/layout_circle_bg"
         android:backgroundTint="#FDEFC5"
+        android:contentDescription="@string/COMMON_CONTENT_PREMIUM_SEAL"
         android:elevation="8dp"
         android:padding="5dp"
         android:src="@drawable/vip"
@@ -81,11 +84,12 @@
             android:layout_width="@dimen/iv_60"
             android:layout_height="@dimen/iv_60"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/COMMON_CONTENT_DESC_AUTHOR_IMAGE"
             android:scaleType="fitXY"
             android:src="@drawable/default_image_user" />
     </androidx.cardview.widget.CardView>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
@@ -99,7 +103,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/fedoka"
-            android:text="@string/recipe_listing_welcome"
+            android:text="@string/FRAGMENT_RECIPE_LISTING_WELCOME"
             android:textColor="#000000"
             android:textSize="@dimen/ts_16"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/fredoka_regular"
-            android:text="@string/recipe_listing_name"
+            android:text="@string/FRAGMENT_RECIPE_LISTING_USER_NAME_PLACEHOLDER"
             android:textColor="#000000"
             android:textSize="@dimen/ts_20"
             android:textStyle="bold"
@@ -119,208 +123,203 @@
             app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <android.widget.SearchView
+        android:id="@+id/SVsearch"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:queryBackground="@android:color/transparent"
+        android:background="@drawable/layout_bg_low"
+        android:backgroundTint="#ECECEC"
+        android:layout_marginTop="@dimen/gt_30"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:padding="5dp"
+        android:iconifiedByDefault="false"
+        android:queryHint="@string/FRAGMENT_RECIPE_LISTING_SEARCH_HINT"
+        android:contentDescription="@string/FRAGMENT_RECIPE_LISTING_SEARCH_DESC"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header" />
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/SVsearch">
 
-
-        <android.widget.SearchView
-            android:id="@+id/SVsearch"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:queryBackground="@android:color/transparent"
-            android:background="@drawable/layout_bg_low"
-            android:backgroundTint="#ECECEC"
-            android:layout_marginTop="@dimen/gt_30"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:padding="5dp"
-            android:iconifiedByDefault="false"
-            android:queryHint="Search Recipe"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header" />
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/coordinatorLayout"
+        <HorizontalScrollView
+            android:id="@+id/HSV_filter_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:scrollbars="none"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="10dp"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/SVsearch">
+            app:layout_constraintTop_toBottomOf="@+id/tvName">
 
-            <HorizontalScrollView
-                android:id="@+id/HSV_filter_1"
-                android:layout_width="match_parent"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroup"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scrollbars="none"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvName">
+                app:layout_constraintTop_toBottomOf="@+id/SVsearch"
+                app:singleSelection="true"
+                app:selectionRequired="true">
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroup"
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/recipe_listing_filter_verified"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/SVsearch"
-                    app:singleSelection="true"
-                    app:selectionRequired="true">
+                    android:text="@string/FRAGMENT_RECIPE_LISTING_FILTER_VERIFIED"
+                    android:tag="VERIFIED"
+                    android:checked="true"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/Widget.App.Chip"
-                        android:id="@+id/recipe_listing_filter_verified"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/recipes_verified"
-                        android:tag="VERIFIED"
-                        android:checked="true"
-                        android:textSize="15sp"
-                        app:chipMinHeight="20dp" />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/recipe_listing_filter_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/FRAGMENT_RECIPE_LISTING_FILTER_ALL"
+                    android:tag="ALL"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/Widget.App.Chip"
-                        android:id="@+id/recipe_listing_filter_all"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/recipes_all"
-                        android:tag="ALL"
-                        android:textSize="15sp"
-                        app:chipMinHeight="20dp" />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/recipe_listing_filter_sugestions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/FRAGMENT_RECIPE_LISTING_FILTER_SUGGESTIONS"
+                    android:tag="SUGGESTIONS"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/Widget.App.Chip"
-                        android:id="@+id/recipe_listing_filter_sugestions"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/recipe_listing_filter_sugestions"
-                        android:tag="SUGGESTIONS"
-                        android:textSize="15sp"
-                        app:chipMinHeight="20dp" />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/recipe_listing_filter_most_saved"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/FRAGMENT_RECIPE_LISTING_FILTER_SAVED"
+                    android:tag="MOST_SAVED"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/Widget.App.Chip"
-                        android:id="@+id/recipe_listing_filter_most_saved"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/most_saved"
-                        android:tag="MOST_SAVED"
-                        android:textSize="15sp"
-                        app:chipMinHeight="20dp" />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/recipe_listing_filter_most_liked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/FRAGMENT_RECIPE_LISTING_FILTER_LIKED"
+                    android:tag="MOST_LIKED"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/Widget.App.Chip"
-                        android:id="@+id/recipe_listing_filter_most_liked"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/most_liked"
-                        android:tag="MOST_LIKED"
-                        android:textSize="15sp"
-                        app:chipMinHeight="20dp" />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/recipe_listing_filter_recent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/FRAGMENT_RECIPE_LISTING_FILTER_RECENT"
+                    android:tag="MOST_RECENT"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/Widget.App.Chip"
-                        android:id="@+id/recipe_listing_filter_recent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/recipe_listing_filter_recent"
-                        android:tag="MOST_RECENT"
-                        android:textSize="15sp"
-                        app:chipMinHeight="20dp" />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/recipe_listing_filter_random"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/FRAGMENT_RECIPE_LISTING_FILTER_RANDOM"
+                    android:tag="RANDOM"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/Widget.App.Chip"
-                        android:id="@+id/recipe_listing_filter_random"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/random"
-                        android:tag="RANDOM"
-                        android:textSize="15sp"
-                        app:chipMinHeight="20dp" />
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.App.Chip"
+                    android:id="@+id/recipe_listing_filter_personalized_suggestions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/FRAGMENT_RECIPE_LISTING_FILTER_PERSONALIZED_SUGGESTIONS"
+                    android:tag="PERSONALIZED_SUGGESTIONS"
+                    android:textSize="15sp"
+                    app:chipMinHeight="20dp" />
 
-                    <com.google.android.material.chip.Chip
-                        style="@style/Widget.App.Chip"
-                        android:id="@+id/recipe_listing_filter_personalized_sugestions"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/recipe_listing_filter_personalized_sugestions"
-                        android:tag="PERSONALIZED_SUGGESTIONS"
-                        android:textSize="15sp"
-                        app:chipMinHeight="20dp" />
+            </com.google.android.material.chip.ChipGroup>
 
-                </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
 
-            </HorizontalScrollView>
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/recipeCard_CL"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recipeCard_CL"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:elevation="7dp"
+            android:indeterminateTint="@color/main_color"
+            android:outlineProvider="none"
             android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/cardView8"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:elevation="7dp"
-                android:indeterminateTint="@color/main_color"
-                android:outlineProvider="none"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/cardView8"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView6"
-                android:layout_width="@dimen/cv_w_240"
-                android:layout_height="@dimen/cv_h_200"
-                app:cardBackgroundColor="@color/main_color"
-                app:cardCornerRadius="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView6"
+            android:layout_width="@dimen/cv_w_240"
+            android:layout_height="@dimen/cv_h_200"
+            app:cardBackgroundColor="@color/main_color"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView8"
-                android:layout_width="@dimen/cv_w2_270"
-                android:layout_height="@dimen/cv_h2_250"
-                android:layout_marginTop="15dp"
-                app:cardBackgroundColor="@color/color_1"
-                app:cardCornerRadius="20dp"
-                app:layout_constraintEnd_toEndOf="@+id/cardView6"
-                app:layout_constraintStart_toStartOf="@+id/cardView6"
-                app:layout_constraintTop_toTopOf="@+id/cardView6" />
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:elevation="8dp"
-                android:orientation="vertical"
-                android:visibility="invisible"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/cardView8" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView8"
+            android:layout_width="@dimen/cv_w2_270"
+            android:layout_height="@dimen/cv_h2_250"
+            android:layout_marginTop="15dp"
+            app:cardBackgroundColor="@color/color_1"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/cardView6"
+            app:layout_constraintStart_toStartOf="@+id/cardView6"
+            app:layout_constraintTop_toTopOf="@+id/cardView6" />
 
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:elevation="8dp"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/cardView8" />
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/offlineTV"
@@ -328,7 +327,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/main_color"
+        android:backgroundTint="@color/light_main_color"
         android:elevation="8dp"
         android:ellipsize="end"
         android:fontFamily="sans-serif-medium"
@@ -355,7 +354,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/main_color"
+        android:backgroundTint="@color/light_main_color"
         android:elevation="8dp"
         android:ellipsize="end"
         android:fontFamily="sans-serif-medium"
@@ -385,7 +384,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-        <!--FILT_MEAT-->
+
+        <!--FILTER_MEAT-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -409,7 +409,7 @@
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
                     android:tag="carneTV"
-                    android:text="Carne"
+                    android:text="@string/COMMON_FILTER_MEAT"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/main_color"
@@ -427,6 +427,7 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/card_cat"
                     android:backgroundTint="#F3F3F3"
+                    android:contentDescription="@string/COMMON_FILTER_MEAT"
                     android:padding="11dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_meat"
@@ -462,7 +463,7 @@
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
                     android:tag="peixeTV"
-                    android:text="Peixe"
+                    android:text="@string/COMMON_FILTER_FISH"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/main_color"
@@ -480,6 +481,7 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/card_cat"
                     android:backgroundTint="#F3F3F3"
+                    android:contentDescription="@string/COMMON_FILTER_FISH"
                     android:padding="8dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_fish"
@@ -514,7 +516,7 @@
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
                     android:tag="sopasTV"
-                    android:text="Sopa"
+                    android:text="@string/COMMON_FILTER_SOUP"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/main_color"
@@ -532,6 +534,7 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/card_cat"
                     android:backgroundTint="#F3F3F3"
+                    android:contentDescription="@string/COMMON_FILTER_SOUP"
                     android:padding="11dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_soup"
@@ -566,7 +569,7 @@
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
                     android:tag="vegTV"
-                    android:text="Salada"
+                    android:text="@string/COMMON_FILTER_VEGI"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/main_color"
@@ -584,6 +587,7 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/card_cat"
                     android:backgroundTint="#F3F3F3"
+                    android:contentDescription="@string/COMMON_FILTER_VEGI"
                     android:padding="11dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_veget"
@@ -619,7 +623,7 @@
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
                     android:tag="frutaTV"
-                    android:text="Fruta"
+                    android:text="@string/COMMON_FILTER_FRUIT"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/main_color"
@@ -637,6 +641,7 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/card_cat"
                     android:backgroundTint="#F3F3F3"
+                    android:contentDescription="@string/COMMON_FILTER_FRUIT"
                     android:padding="11dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_fruit"
@@ -671,7 +676,7 @@
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/fedoka"
                     android:tag="bebidaTV"
-                    android:text="Bebida"
+                    android:text="@string/COMMON_FILTER_DRINK"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/main_color"
@@ -689,6 +694,7 @@
                     android:adjustViewBounds="true"
                     android:background="@drawable/card_cat"
                     android:backgroundTint="#F3F3F3"
+                    android:contentDescription="@string/COMMON_FILTER_DRINK"
                     android:padding="11dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/img_drink"
@@ -701,11 +707,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-
-
-
-<!--        </HorizontalScrollView>-->
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

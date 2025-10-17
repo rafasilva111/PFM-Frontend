@@ -22,13 +22,31 @@
     <string name="COMMON_NUTRITION_GRAMS">%1$.1f g</string>
     <string name="COMMON_OFFLINE">Estás offline…</string>
     <string name="COMMON_NO_RESULTS">Sem resultados…</string>
+    <string name="COMMON_ZERO">0</string>
+
+    <!-- Filters -->
+    <string name="COMMON_FILTER_MEAT">Carne</string>
+    <string name="COMMON_FILTER_FISH">Peixe</string>
+    <string name="COMMON_FILTER_SOUP">Sopa</string>
+    <string name="COMMON_FILTER_VEGI">Salada</string>
+    <string name="COMMON_FILTER_FRUIT">Fruta</string>
+    <string name="COMMON_FILTER_DRINK">Bebida</string>
+
 
 
     <!-- Content Descriptors -->
-
     <string name="COMMON_CONTENT_DESC_BACK_BUTTON">Botão de voltar</string>
+    <string name="COMMON_CONTENT_DESC_NOTIFICATIONS_BUTTON">Botão de notificações</string>
     <string name="COMMON_CONTENT_DESC_AUTHOR_IMAGE">Imagem de Autor</string>
     <string name="COMMON_CONTENT_VERIFIED_SEAL">Sêlo de verificado</string>
+    <string name="COMMON_CONTENT_PREMIUM_SEAL">Sêlo de Premium</string>
+    <string name="COMMON_CONTENT_DESC_ADD_REGISTER">Adicionar registo</string>
+    <string name="COMMON_CONTENT_DESC_ADD_BASKET">Abrir lista de compras</string>
+    <string name="COMMON_CONTENT_DESC_PREVIOUS_MONTH">Mês anterior</string>
+    <string name="COMMON_CONTENT_DESC_NEXT_MONTH">Mês seguinte</string>
+    <string name="COMMON_CONTENT_DESC_MONTH_VIEW">Ver mês</string>
+    <string name="COMMON_CONTENT_DESC_WEEK_VIEW">Ver semana</string>
+    <string name="COMMON_CONTENT_DESC_CALENDAR_ICON">Ícone de calendário</string>
 
     <!-- Dialogs -->
     <string name="COMMON_DIALOG_YES">Sim</string>
@@ -50,84 +68,59 @@
 
     <!-- User Model Response -->
     <string name="USER_ERROR_GENDER_INVALID">Insira um sexo válido.</string>
-
     <string name="USER_ERROR_HEIGHT_INVALID">Insira uma altura.</string>
     <string name="USER_ERROR_HEIGHT_INVALID_2">Insira uma entre %1$.1f m and %2$.1f m.</string>
-
     <string name="USER_ERROR_WEIGHT_INVALID">Insira um peso.</string>
     <string name="USER_ERROR_WEIGHT_INVALID_2">Insira um peso entre %1$.1f kg a %2$.1f kg.</string>
-
     <string name="USER_ERROR_ACTIVITY_LEVEL_INVALID">Insira um nivel de atividade.</string>
 
     <!-- Place holder -->
-
-
     <string name="NAME">Nome</string>
     <string name="USERNAME">Nome de Utilizador</string>
     <string name="DATE">Data</string>
-
     <string name="PLACEHOLDER_DEFAULT_IMAGE_DESCRIPTION">Sem descrição.</string>
 
 
     <!--
-            Fragments String's
+            ==================================================
+            =              Fragment's Strings             =
+            ==================================================
     -->
+
 
     <!--
-            Comments Fragment
-    -->
+            =======================================================
+                SECTION: Recipe Listing Tab Fragments
+            =======================================================
+     -->
 
-    <string name="FRAGMENT_COMMENTS_TITLE">Comentários</string>
+    <!-- =============== Recipe Listing COMPONENT  =============== -->
 
-    <!-- Comment Item Layout -->
-    <string name="COMMENT_ITEM_LAYOUT_COMMENT_TEXT">Comentário…</string>
-    <string name="COMMENT_ITEM_LAYOUT_COMMENT">Comentar</string>
-    <string name="COMMENT_ITEM_LAYOUT_EDIT">Editar</string>
-    <string name="COMMENT_ITEM_LAYOUT_DELETE">Apagar</string>
-    <string name="COMMENT_ITEM_LAYOUT_DELETE_DIALOG_TITLE">Apagar Comentário</string>
-    <string name="COMMENT_ITEM_LAYOUT_DELETE_DIALOG_MESSAGE">Tens a certeza que queres apagar este comentário?</string>
-    <string name="COMMENT_ITEM_LAYOUT_LIKES_DEFAULT">0 Gostos</string>
-    <string name="COMMENT_ITEM_LAYOUT_LIKES">%1$d Gostos</string>
+    <string name="FRAGMENT_RECIPE_LISTING_FILTER_VERIFIED">Verificadas</string>
+    <string name="FRAGMENT_RECIPE_LISTING_FILTER_ALL">Todas</string>
+    <string name="FRAGMENT_RECIPE_LISTING_FILTER_SUGGESTIONS">Sugestões</string>
+    <string name="FRAGMENT_RECIPE_LISTING_FILTER_RECENT">Mais recentes</string>
+    <string name="FRAGMENT_RECIPE_LISTING_FILTER_SAVED">Mais guardadas</string>
+    <string name="FRAGMENT_RECIPE_LISTING_FILTER_RANDOM">Ao calhas</string>
+    <string name="FRAGMENT_RECIPE_LISTING_FILTER_LIKED">Mais gostadas</string>
+    <string name="FRAGMENT_RECIPE_LISTING_FILTER_PERSONALIZED_SUGGESTIONS">Sugestões personalizadas</string>
+    <string name="FRAGMENT_RECIPE_LISTING_WELCOME">Bem vindo</string>
+    <string name="FRAGMENT_RECIPE_LISTING_USER_NAME_PLACEHOLDER">Nome Proprio</string>
+    <string name="FRAGMENT_RECIPE_LISTING_SEARCH_HINT">Procurar receita</string>
+    <string name="FRAGMENT_RECIPE_LISTING_SEARCH_DESC">Campo de pesquisa de receitas</string>
 
-    <!-- Calender Fragment -->
+    <!-- =============== Recipe Detail COMPONENT  =============== -->
 
-    <!-- Calender Portion Dialog -->
-    <string name="CALENDER_PORTION_DIALOG_TITLE">Preferencias de porção</string>
-    <string name="CALENDER_PORTION_DIALOG_MAIN_DESCRIPTION">Notamos que és um novo membro, e ainda não tens uma porção pré-definida.Queres Adicionar?</string>
-    <string name="CALENDER_PORTION_DIALOG_PRIMARY_DESCRIPTION">Escolhe o numero de pessoas para a porção pré-defenida:</string>
-    <string name="CALENDER_PORTION_DIALOG_FOOTER_DESCRIPTION">Esta opção é usada para ajustar a quantidade de uma receita de acordo com as preferências do usuário, facilitando o cálculo dos ingredientes necessários. Mesmo que não definas agora podereas sempre alterar através do perfil, ou ao adicionar uma receita ao calendário.</string>
-
-    <!-- New Calender Entry Fragment -->
-
-    <string name="FRAGMENT_NEW_CALENDER_ENTRY">%1$d Pessoas</string>
-
-    <!-- Calender Portion Dialog -->
-    <string name="CALENDER_PORTION_DIALOG_NUMBER_TITLE">Seleciona o numero de pessoas</string>
-
-    <!-- FollowerFragment -->
-    <string name="FRAGMENT_FOLLOWER_SEARCH_HINT">Procurar utilizadores …</string>
-
-    <!-- FollowerRequestFragment -->
-    <string name="ITEM_FOLLOWER_REQUEST_SEND">Seguir</string>
-    <string name="ITEM_FOLLOWER_REQUEST_SENT">Pedido enviado</string>
-    <string name="ITEM_FOLLOWER_REQUEST_CANCEL">Cancelar pedido</string>
-
-    <!--
-            FragmentRecipeDetail
-    -->
     <string name="FRAGMENT_RECIPE_DETAIL_AUTHOR_PLACEHOLDER">Autor</string>
     <string name="FRAGMENT_RECIPE_DETAIL_NR_COMMENT">%1$d Comentário</string>
     <string name="FRAGMENT_RECIPE_DETAIL_NR_COMMENTS">%1$d Comentários</string>
     <string name="ITEM_PREPARATION">%1$d Passo</string>
     <string name="ITEM_PREPARATION_STEP_PLACEHOLDER">1</string>
     <string name="ITEM_PREPARATION_NUMBER_STEP_PLACEHOLDER">nº Step</string>
-
     <string name="FRAGMENT_RECIPE_DETAIL_AUTHOR_FIRST_SURNAME_PLACEHOLDER">First and Last name</string>
 
-    <!--
-            Fragment Recipe Tab
-    -->
-    <string name="fragment_goal_create_goal_tab_ideal_weight_title">Peso Ideal</string>
+    <!-- =============== Recipe Detail Recipe Tab COMPONENT  =============== -->
+
     <string name="FRAGMENT_RECIPE_TAB_CATEGORY_LABEL">Categorias</string>
     <string name="FRAGMENT_RECIPE_TAB_NUMBER_CATEGORY_LABEL">nº Categorias</string>
     <string name="FRAGMENT_RECIPE_TAB_NUMBER_INGREDIENTS_LABEL">nº Ingredients</string>
@@ -141,9 +134,8 @@
     <string name="FRAGMENT_RECIPE_TAB_NUMBER_PREPARATION">1 Passo</string>
     <string name="FRAGMENT_RECIPE_TAB_NUMBER_PREPARATIONS">%1$d Passos</string>
 
-    <!--
-            Fragment Nutrition Tab
-    -->
+    <!-- =============== Recipe Detail Nutrition Tab COMPONENT  =============== -->
+
     <string name="FRAGMENT_NUTRITION_TAB_PERCENTAGE_PLACEHOLDER">0 %</string>
     <string name="FRAGMENT_NUTRITION_TAB_GRAMS_PLACEHOLDER">0 g</string>
     <string name="FRAGMENT_NUTRITION_TAB_ENERGY_LABEL">Energia</string>
@@ -157,8 +149,90 @@
     <string name="FRAGMENT_NUTRITION_TAB_FIBER_LABEL">Fibra</string>
     <string name="FRAGMENT_NUTRITION_TAB_WARRANT">Leia atentamente o rótulo dos produtos que usar como ingredientes, estes valores são apenas estimativas e devem ser tomadas como tal.</string>
 
-    <!-- Not Treated -->
 
+    <!-- ===============  Recipe Detail Comment COMPONENT  =============== -->
+
+    <string name="FRAGMENT_COMMENTS_TITLE">Comentários</string>
+
+    <!-- === Comment Item Layout === -->
+    <string name="COMMENT_ITEM_LAYOUT_COMMENT_TEXT">Comentário…</string>
+    <string name="COMMENT_ITEM_LAYOUT_COMMENT">Comentar</string>
+    <string name="COMMENT_ITEM_LAYOUT_EDIT">Editar</string>
+    <string name="COMMENT_ITEM_LAYOUT_DELETE">Apagar</string>
+    <string name="COMMENT_ITEM_LAYOUT_DELETE_DIALOG_TITLE">Apagar Comentário</string>
+    <string name="COMMENT_ITEM_LAYOUT_DELETE_DIALOG_MESSAGE">Tens a certeza que queres apagar este comentário?</string>
+    <string name="COMMENT_ITEM_LAYOUT_LIKES_DEFAULT">0 Gostos</string>
+    <string name="COMMENT_ITEM_LAYOUT_LIKES">%1$d Gostos</string>
+
+
+
+    <!--
+            =======================================================
+                SECTION: Calendar Tab Fragments
+            =======================================================
+     -->
+
+    <!-- =============== Calendar  COMPONENT  =============== -->
+
+    <string name="FRAGMENT_CALENDAR_TITLE">Calendário</string>
+    <string name="FRAGMENT_CALENDAR_MONTH_YEAR">Julho de 2023</string>
+    <string name="FRAGMENT_CALENDAR_VIEW_MONTH">Mês</string>
+    <string name="FRAGMENT_CALENDAR_VIEW_WEEK">Semana</string>
+    <string name="FRAGMENT_CALENDAR_DAY_SUN">DOM</string>
+    <string name="FRAGMENT_CALENDAR_DAY_MON">SEG</string>
+    <string name="FRAGMENT_CALENDAR_DAY_TUE">TER</string>
+    <string name="FRAGMENT_CALENDAR_DAY_WED">QUA</string>
+    <string name="FRAGMENT_CALENDAR_DAY_THU">QUI</string>
+    <string name="FRAGMENT_CALENDAR_DAY_FRI">SEX</string>
+    <string name="FRAGMENT_CALENDAR_DAY_SAT">SAB</string>
+    <string name="FRAGMENT_CALENDAR_DATE_PLACEHOLDER">00/00/0000</string>
+    <string name="FRAGMENT_CALENDAR_REGISTERS_COUNT">(0)</string>
+    <string name="FRAGMENT_CALENDAR_MEALS">Refeições</string>
+    <string name="FRAGMENT_CALENDAR_NO_RESULTS">Sem refeições…</string>
+
+    <!-- === Calender Portion Dialog === -->
+
+    <string name="CALENDER_PORTION_DIALOG_TITLE">Preferencias de porção</string>
+    <string name="CALENDER_PORTION_DIALOG_MAIN_DESCRIPTION">Notamos que és um novo membro, e ainda não tens uma porção pré-definida.Queres Adicionar?</string>
+    <string name="CALENDER_PORTION_DIALOG_PRIMARY_DESCRIPTION">Escolhe o numero de pessoas para a porção pré-defenida:</string>
+    <string name="CALENDER_PORTION_DIALOG_FOOTER_DESCRIPTION">Esta opção é usada para ajustar a quantidade de uma receita de acordo com as preferências do usuário, facilitando o cálculo dos ingredientes necessários. Mesmo que não definas agora podereas sempre alterar através do perfil, ou ao adicionar uma receita ao calendário.</string>
+    <string name="CALENDER_PORTION_DIALOG_NUMBER_TITLE">Seleciona o numero de pessoas</string>
+
+    <!-- New Calender Entry Fragment -->
+
+    <string name="FRAGMENT_NEW_CALENDER_ENTRY">%1$d Pessoas</string>
+
+    <!--
+            =======================================================
+                SECTION: Profile Tab Fragments
+            =======================================================
+     -->
+
+    <string name="FRAGMENT_RECIPE_LISTING_TAB_COMMENT">Comentados</string>
+    <string name="tab_created">Criados</string>
+    <string name="tab_saved">Guardados</string>
+    <string name="tab_liked">Curtidas</string>
+    <string name="tab_last_seen">Ultimas receitas vistas</string>
+
+    <!--
+            =======================================================
+                SECTION: Profile Tab Fragments
+            =======================================================
+     -->
+
+
+    <!-- FollowerFragment -->
+    <string name="FRAGMENT_FOLLOWER_SEARCH_HINT">Procurar utilizadores …</string>
+
+    <!-- FollowerRequestFragment -->
+    <string name="ITEM_FOLLOWER_REQUEST_SEND">Seguir</string>
+    <string name="ITEM_FOLLOWER_REQUEST_SENT">Pedido enviado</string>
+    <string name="ITEM_FOLLOWER_REQUEST_CANCEL">Cancelar pedido</string>
+
+
+
+    <!-- Not Treated -->
+    <string name="fragment_goal_create_goal_tab_ideal_weight_title">Peso Ideal</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="enter_first_name">Enter first name</string>
     <string name="enter_last_name">Enter last name</string>
@@ -185,16 +259,7 @@
     <string name="user_had_no_shared_preferences">User session invalid.</string>
     <string name="user_registered_successfully">User registered successfully.</string>
     <string name="logout_confirmation_description">Are you sure you want to exit?</string>
-    <string name="tab_coment">Comentados</string>
-    <string name="tab_created">Criados</string>
-    <string name="tab_saved">Guardados</string>
-    <string name="tab_liked">Curtidas</string>
-    <string name="tab_last_seen">Ultimas receitas vistas</string>
-    <string name="recipe_listing_filter_sugestions">Sugestões</string>
-    <string name="recipe_listing_filter_recent">Mais recentes</string>
-    <string name="recipe_listing_filter_personalized_sugestions">Sugestões personalizadas</string>
-    <string name="recipe_listing_welcome">Bem vindo</string>
-    <string name="recipe_listing_name">Nome Proprio</string>
+
     <string name="goodbites">GoodBites</string>
     <string name="register_string">Registar</string>
     <string name="login_string">Entrar</string>
@@ -213,9 +278,7 @@
     <string name="none">Nenhum</string>
     <string name="no_recipes_liked">No recipes liked…</string>
     <string name="no_recipes_created">No recipes created…</string>
-    <string name="most_saved">Mais guardadas</string>
-    <string name="random">Ao calhas</string>
-    <string name="most_liked">Mais gostadas</string>
+
     <string name="date_text">%1$s</string>
 
     <string name="name">Name</string>
@@ -245,15 +308,14 @@
     <string name="chip_tag_created">3</string>
     <string name="chip_tag_commented">4</string>
     <string name="chip_tag_last_seen">5</string>
-    <string name="recipes_verified">Verificadas</string>
-    <string name="recipes_all">Todas</string>
+
     <string name="fragment_settings_delete_account">Delete Acount</string>
     <string name="profile_fragment_logout_dialog_title">Logout</string>
 
     <string name="settings_fragment_dialog_desc">Are you sure you want to delete this account, and all its content?</string>
     <string name="settings_fragment_dialog_title">Deleting account…</string>
     <string name="fragment_followers_find_follows">Find</string>
-    <string name="fragment_follower_follower_request_count">0</string>
+
     <string name="follower_fragment_no_more_people_to_follow">Sem mais pessoas para seguir…</string>
 
     <string name="fragment_follower_remove_follow_request_title">Cancelar request?</string>

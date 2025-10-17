@@ -24,6 +24,8 @@ import com.example.projectfoodmanager.data.model.Avatar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAdjusters
 import java.util.*
@@ -78,8 +80,7 @@ class Helper {
 
         fun formatLocalDateTimeToServerTime(localTime: LocalDateTime): String {
 
-            return localTime.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneOffset.UTC)
-                .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+            return localTime.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         }
 
         fun formatLocalDateTimeToDateString(localDateTime: LocalDateTime): String {

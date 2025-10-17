@@ -36,7 +36,7 @@ abstract class BaseAdapter<T, VB : ViewBinding>(
     fun setItems(items: MutableList<T>) {
         removeItems()
         this.itemList = items
-        notifyItemRangeChanged(0,this.itemList.size)
+        notifyItemRangeInserted(0,this.itemList.size)
     }
 
     fun addItem(item: T) {

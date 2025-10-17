@@ -478,8 +478,8 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
                         toast(result.message.toString(), type = ToastType.ERROR)
                     }
                     is NetworkResult.Loading -> {
-                        binding.noRecipesTV.visibility = View.GONE
-                        binding.offlineTV.visibility = View.GONE
+                        binding.noRecipesTV.hide()
+                        binding.offlineTV.hide()
                     }
                 }
             }
@@ -621,32 +621,7 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     }
 
-    private fun appendItemsToImagePreload(recipeList: MutableList<RecipeSimplified>) {
-        if (! ::preloadModelProvider.isInitialized){
-            initImagePreload(recipeList)
-            return
-        }
-        preloadModelProvider.addItems(recipeList)
 
-    }
-
-    private fun setItemsToImagePreload(recipeList: MutableList<RecipeSimplified>) {
-        if (! ::preloadModelProvider.isInitialized){
-            initImagePreload(recipeList)
-        }
-        preloadModelProvider.setItems(recipeList)
-    }
-
-    private fun initImagePreload(recipeList: MutableList<RecipeSimplified>) {
-        preloadModelProvider = RecipePreloadModelProvider(recipeList, requireContext())
-        val preloader = RecyclerViewPreloader(
-            Glide.with(this),
-            preloadModelProvider,
-            ViewPreloadSizeProvider(),
-            10, /* maxPreload */
-        )
-        binding.recyclerView.addOnScrollListener(preloader)
-    }
 
     /**
      *  Functions
@@ -765,6 +740,24 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
 
     }
 
+    private fun setItemsToImagePreload(recipeList: MutableList<RecipeSimplified>) {
+        if (! ::preloadModelProvider.isInitialized){
+            initImagePreload(recipeList)
+        }
+        preloadModelProvider.setItems(recipeList)
+    }
+
+    private fun initImagePreload(recipeList: MutableList<RecipeSimplified>) {
+        preloadModelProvider = RecipePreloadModelProvider(recipeList, requireContext())
+        val preloader = RecyclerViewPreloader(
+            Glide.with(this),
+            preloadModelProvider,
+            ViewPreloadSizeProvider(),
+            10, /* maxPreload */
+        )
+        binding.recyclerView.addOnScrollListener(preloader)
+    }
+
     private fun changeNotificationNumber(){
         if (numberOfNotifications>0 ) {
             binding.notificationsBadgeTV.visibility = View.VISIBLE
@@ -789,8 +782,8 @@ class RecipeListingFragment : Fragment(), ImageLoadingListener {
     }
 
     private fun hideRecyclerView() {
-
         binding.progressBar.show()
+        // note: don't use hide() here, because hide sets the visibility to GONE, and then the preloader can't calculate the visible items
         binding.recyclerView.visibility = View.INVISIBLE
     }
 

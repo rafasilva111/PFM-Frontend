@@ -60,6 +60,7 @@
 		android:fontFamily="@font/fredoka_one"
 		android:text="@string/login_string"
 		android:textSize="@dimen/textBTN"
+		android:textColor="@color/white"
 		app:layout_constraintBottom_toTopOf="@+id/registerBTN"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent" />
@@ -72,6 +73,7 @@
 		android:fontFamily="@font/fredoka_one"
 		android:text="@string/register_string"
 		android:textSize="@dimen/textBTN"
+		android:textColor="@color/white"
 		app:backgroundTint="#9A818181"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"

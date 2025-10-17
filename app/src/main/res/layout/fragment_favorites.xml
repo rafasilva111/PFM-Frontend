@@ -129,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:tag="@string/chip_tag_commented"
-                    android:text="@string/tab_coment"
+                    android:text="@string/FRAGMENT_RECIPE_LISTING_TAB_COMMENT"
                     android:textSize="15sp"
                     app:chipMinHeight="20dp" />
 
